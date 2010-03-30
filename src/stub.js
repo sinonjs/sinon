@@ -1,31 +1,18 @@
 (function () {
   function stub (object, property, func) {
-    if (!object) {
-      throw new TypeError("Should stub property of object");
-    }
-
     if (!!func && typeof func != "function") {
       throw new TypeError("Custom stub should be function");
     }
 
-    var method = object[property];
-    var type = typeof method;
+    var wrapper;
 
-    if (!!method && type != "function") {
-      throw new TypeError("Attempted to stub " + type + " as function");
-    }
-
-    if (typeof func == "function") {
-      object[property] = !!sinon.spy ? sinon.spy(func) : func;
+    if (func) {
+      wrapper = !!sinon.spy ? sinon.spy(func) : func;
     } else {
-      object[property] = stub.create();
+      wrapper = stub.create();
     }
 
-    object[property].restore = function () {
-      object[property] = method;
-    };
-
-    return object[property];
+    return sinon.wrapMethod(object, property, wrapper);
   }
 
   Object.extend(stub, (function () {

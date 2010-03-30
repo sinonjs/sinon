@@ -1,4 +1,9 @@
 (function () {
+  function stub (object, property) {
+    var method = object[property];
+    return sinon.wrapMethod(object, property, spy.create(method));
+  }
+
   function spy (func) {
     return spy.create(func);
   }
