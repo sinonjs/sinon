@@ -1,17 +1,17 @@
-TestCase("SpyTest", {
+TestCase("SpyCreateTest", {
   "test should be function": function () {
-    assertFunction(sinon.spy);
+    assertFunction(sinon.spy.create);
   },
 
   "test should throw if called without function": function () {
     assertException(function () {
-      sinon.spy();
+      sinon.spy.create();
     }, "TypeError");
   },
 
   "test should return spy function": function () {
     var func = function () {};
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
 
     assertFunction(spy);
     assertNotSame(spy, func);
@@ -20,9 +20,23 @@ TestCase("SpyTest", {
   "test should mirror custom properties on function": function () {
     var func = function () {};
     func.myProp = 42;
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
 
     assertEquals(func.myProp, spy.myProp);
+  },
+
+  "test should not define create method": function () {
+    var spy = sinon.spy.create(function () {});
+
+    assertUndefined(spy.create);
+  },
+
+  "test should not overwrite original create property": function () {
+    var func = function () {};
+    var object = func.create = {};
+    var spy = sinon.spy.create(func);
+
+    assertSame(object, spy.create);
   }
 });
 
@@ -30,7 +44,7 @@ TestCase("SpyCallTest", {
   "test should call underlying function": function () {
     var called = false;
     var func = function () { called = true; };
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
     spy();
 
     assert(called);
@@ -40,7 +54,7 @@ TestCase("SpyCallTest", {
     var actualArgs;
     var func = function () { actualArgs = arguments; };
     var args = [1, {}, [], ""];
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
     spy(args[0], args[1], args[2], args[3]);
 
     assertEquals(args, actualArgs);
@@ -50,7 +64,7 @@ TestCase("SpyCallTest", {
     var actualThis;
     var func = function () { actualThis = this; };
     var object = {};
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
     spy.call(object);
 
     assertSame(object, actualThis);
@@ -59,7 +73,7 @@ TestCase("SpyCallTest", {
   "test should return function's return value": function () {
     var object = {};
     var func = function () { return object; };
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
     var actualReturn = spy();
 
     assertSame(object, actualReturn);
@@ -67,7 +81,7 @@ TestCase("SpyCallTest", {
 
   "test should throw if function throws": function () {
     var err = new Error();
-    var spy = sinon.spy(function () { throw err; });
+    var spy = sinon.spy.create(function () { throw err; });
 
     try {
       spy();
@@ -79,236 +93,343 @@ TestCase("SpyCallTest", {
 });
 
 TestCase("SpyCalledTest", {
-  "test should return boolean": function () {
-    var spy = sinon.spy(function () {});
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+  },
 
-    assertBoolean(spy.called());
+  "test should return boolean": function () {
+    assertBoolean(this.spy.called());
   },
 
   "test should be false prior to calling the spy": function () {
-    var spy = sinon.spy(function () {});
-
-    assertFalse(spy.called());
+    assertFalse(this.spy.called());
   },
 
   "test should be true after calling the spy once": function () {
-    var spy = sinon.spy(function () {});
-    spy();
+    this.spy();
 
-    assert(spy.called());
+    assert(this.spy.called());
   },
 
   "test should be true after calling the spy twice": function () {
-    var spy = sinon.spy(function () {});
-    spy();
-    spy();
+    this.spy();
+    this.spy();
 
-    assert(spy.called());
+    assert(this.spy.called());
   }
 });
 
 TestCase("SpyCallCountTest", {
-  "test should record number of calls": function () {
-    var spy = sinon.spy(function () {});
-    spy();
-    spy();
-    spy();
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+  },
 
-    assertEquals(3, spy.callCount());
+  "test should record one call": function () {
+    this.spy();
+
+    assertEquals(1, this.spy.callCount());
+  },
+
+  "test should record two calls": function () {
+    this.spy();
+    this.spy();
+
+    assertEquals(2, this.spy.callCount());
+  },
+
+  "test should increase call count for each call": function () {
+    this.spy();
+    this.spy();
+    assertEquals(2, this.spy.callCount());
+
+    this.spy();
+    assertEquals(3, this.spy.callCount());
   }
 });
 
 TestCase("SpyCalledOnTest", {
-  "test should be false if spy wasn't called": function () {
-    var spy = sinon.spy(function () {});
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+  },
 
-    assertFalse(spy.calledOn({}));
+  "test should be false if spy wasn't called": function () {
+    assertFalse(this.spy.calledOn({}));
   },
 
   "test should be true if called with thisObj": function () {
-    var spy = sinon.spy(function () {});
     var object = {};
-    spy.call(object);
+    this.spy.call(object);
 
-    assert(spy.calledOn(object));
+    assert(this.spy.calledOn(object));
   },
 
   "test should be true if called on object at least once": function () {
-    var spy = sinon.spy(function () {});
     var object = {};
-    spy();
-    spy.call({});
-    spy.call(object);
-    spy.call(window);
+    this.spy();
+    this.spy.call({});
+    this.spy.call(object);
+    this.spy.call(window);
 
-    assert(spy.calledOn(object));
+    assert(this.spy.calledOn(object));
   },
 
   "test should return false if not called on object": function () {
-    var spy = sinon.spy(function () {});
     var object = {};
-    spy.call(object);
-    spy();
+    this.spy.call(object);
+    this.spy();
 
-    assertFalse(spy.calledOn({}));
+    assertFalse(this.spy.calledOn({}));
   }
 });
 
 TestCase("SpyCalledWithTest", {
-  "test should return false if spy was not called": function () {
-    var spy = sinon.spy(function () {});
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+  },
 
-    assertFalse(spy.calledWith(1, 2, 3));
+  "test should return false if spy was not called": function () {
+    assertFalse(this.spy.calledWith(1, 2, 3));
   },
 
   "test should return true if spy was called with args": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 2, 3);
+    this.spy(1, 2, 3);
 
-    assert(spy.calledWith(1, 2, 3));
+    assert(this.spy.calledWith(1, 2, 3));
   },
 
   "test should return true if called with args at least once": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 3, 3);
-    spy(1, 2, 3);
-    spy(3, 2, 3);
+    this.spy(1, 3, 3);
+    this.spy(1, 2, 3);
+    this.spy(3, 2, 3);
 
-    assert(spy.calledWith(1, 2, 3));
+    assert(this.spy.calledWith(1, 2, 3));
   },
 
   "test should return false if not called with args": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 3, 3);
-    spy(2);
-    spy();
+    this.spy(1, 3, 3);
+    this.spy(2);
+    this.spy();
 
-    assertFalse(spy.calledWith(1, 2, 3));
+    assertFalse(this.spy.calledWith(1, 2, 3));
   },
 
   "test should return true for partial match": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 3, 3);
-    spy(2);
-    spy();
+    this.spy(1, 3, 3);
+    this.spy(2);
+    this.spy();
 
-    assert(spy.calledWith(1, 3));
+    assert(this.spy.calledWith(1, 3));
   },
 
   "test should match all arguments individually, not as array": function () {
-    var spy = sinon.spy(function () {});
-    spy([1, 2, 3]);
+    this.spy([1, 2, 3]);
 
-    assertFalse(spy.calledWith(1, 2, 3));
+    assertFalse(this.spy.calledWith(1, 2, 3));
   },
 
   "test should match arguments strictly": function () {
-    var spy = sinon.spy(function () {});
-    spy({}, []);
+    this.spy({}, []);
 
-    assertFalse(spy.calledWith({}, []));
+    assertFalse(this.spy.calledWith({}, []));
   }
 });
 
 TestCase("CalledWithExactlyTest", {
-  "test should return false for partial match": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 2, 3);
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+  },
 
-    assertFalse(spy.calledWithExactly(1, 2));
+  "test should return false for partial match": function () {
+    this.spy(1, 2, 3);
+
+    assertFalse(this.spy.calledWithExactly(1, 2));
   },
 
   "test should return false for missing arguments": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 2, 3);
+    this.spy(1, 2, 3);
 
-    assertFalse(spy.calledWithExactly(1, 2, 3, 4));
+    assertFalse(this.spy.calledWithExactly(1, 2, 3, 4));
   },
 
   "test should return true for exact match": function () {
-    var spy = sinon.spy(function () {});
-    spy(1, 2, 3);
+    this.spy(1, 2, 3);
 
-    assert(spy.calledWithExactly(1, 2, 3));
+    assert(this.spy.calledWithExactly(1, 2, 3));
   },
 
   "test should match by strict comparison": function () {
-    var spy = sinon.spy(function () {});
-    spy({}, []);
+    this.spy({}, []);
 
-    assertFalse(spy.calledWithExactly({}, []));
+    assertFalse(this.spy.calledWithExactly({}, []));
   },
 
   "test should return true for one exact match": function () {
-    var spy = sinon.spy(function () {});
     var object = {};
     var array = [];
-    spy({}, []);
-    spy(object, []);
-    spy(object, array);
+    this.spy({}, []);
+    this.spy(object, []);
+    this.spy(object, array);
 
-    assert(spy.calledWithExactly(object, array));
+    assert(this.spy.calledWithExactly(object, array));
   }
 });
 
 TestCase("SpyThrewTest", {
+  setUp: function () {
+    this.spy = sinon.spy.create(function () {});
+
+    this.spyWithTypeError = sinon.spy.create(function () {
+      throw new TypeError();
+    });
+  },
+
   "test should return exception thrown by function": function () {
     var err = new Error();
     var func = function () { throw err; };
-    var spy = sinon.spy(func);
+    var spy = sinon.spy.create(func);
     try { spy(); } catch (e) {}
 
     assert(spy.threw(err));
   },
 
   "test should return false if spy did not throw": function () {
-    var func = function () {};
-    var spy = sinon.spy(func);
-    spy();
+    this.spy();
 
-    assertFalse(spy.threw());
+    assertFalse(this.spy.threw());
   },
 
   "test should return true if spy threw": function () {
-    var func = function () { throw new Error(); };
-    var spy = sinon.spy(func);
-    try { spy(); } catch (e) {}
+    try { this.spyWithTypeError(); } catch (e) {}
 
-    assert(spy.threw());
+    assert(this.spyWithTypeError.threw());
   },
 
   "test should return true if string type matches": function () {
-    var func = function () { throw new TypeError(); };
-    var spy = sinon.spy(func);
-    try { spy(); } catch (e) {}
+    try { this.spyWithTypeError(); } catch (e) {}
 
-    assert(spy.threw("TypeError"));
+    assert(this.spyWithTypeError.threw("TypeError"));
   },
 
   "test should return false if string did not match": function () {
-    var func = function () { throw new TypeError(); };
-    var spy = sinon.spy(func);
-    try { spy(); } catch (e) {}
+    try { this.spyWithTypeError(); } catch (e) {}
 
-    assertFalse(spy.threw("Error"));
+    assertFalse(this.spyWithTypeError.threw("Error"));
   },
 
   "test should return false if spy did not throw": function () {
-    var spy = sinon.spy(function () {});
-    spy();
+    this.spy();
 
-    assertFalse(spy.threw("Error"));
+    assertFalse(this.spy.threw("Error"));
   }
 });
 
+function spyCallSetUp () {
+  this.thisObj = {};
+  this.args = [{}, [], function () {}, 3];
+  this.returnValue = function () {};
+  this.call = sinon.spyCall.create(this.thisObj, this.args, this.returnValue);
+}
+
 TestCase("SpyCallObjectTest", {
+  setUp: spyCallSetUp,
+
   "test should get call object": function () {
-    var spy = sinon.spy(function () {});
+    var spy = sinon.spy.create(function () {});
     spy();
     var firstCall = spy.getCall(0);
 
     assertFunction(firstCall.calledOn);
     assertFunction(firstCall.calledWith);
     assertFunction(firstCall.returned);
+  }
+});
+
+TestCase("SpyCallCalledOnTest", {
+  setUp: spyCallSetUp,
+
+  "test calledOn should return true": function () {
+    assert(this.call.calledOn(this.thisObj));
+  },
+
+  "test calledOn should return false": function () {
+    assertFalse(this.call.calledOn({}));
+  }
+});
+
+TestCase("SpyCallCalledWithTest", {
+  setUp: spyCallSetUp,
+
+  "test should return true if all args match": function () {
+    var args = this.args;
+
+    assert(this.call.calledWith(args[0], args[1], args[2]));
+  },
+
+  "test should return true if first args match": function () {
+    var args = this.args;
+
+    assert(this.call.calledWith(args[0], args[1]));
+  },
+
+  "test should return true if first arg match": function () {
+    var args = this.args;
+
+    assert(this.call.calledWith(args[0]));
+  },
+
+  "test should return true for no args": function () {
+    assert(this.call.calledWith());
+  },
+
+  "test should return false for too many args": function () {
+    var args = this.args;
+
+    assertFalse(this.call.calledWith(args[0], args[1], args[2], {}));
+  },
+
+  "test should return false for wrong arg": function () {
+    var args = this.args;
+
+    assertFalse(this.call.calledWith(args[0], args[2]));
+  }
+});
+
+TestCase("SpyCallCalledWithExactlyTest", {
+  setUp: spyCallSetUp,
+
+  "test should return true when all args match": function () {
+    var args = this.args;
+
+    assert(this.call.calledWithExactly(args[0], args[1], args[2], args[3]));
+  },
+
+  "test should return false for too many args": function () {
+    var args = this.args;
+
+    assertFalse(this.call.calledWithExactly(args[0], args[1], args[2], {}));
+  },
+
+  "test should return false for too few args": function () {
+    var args = this.args;
+
+    assertFalse(this.call.calledWithExactly(args[0], args[1]));
+  },
+
+  "test should return false for unmatching args": function () {
+    var args = this.args;
+
+    assertFalse(this.call.calledWithExactly(args[0], args[1], args[1]));
+  },
+
+  "test should return true for no arguments": function () {
+    var call = sinon.spyCall.create({}, []);
+
+    assert(call.calledWithExactly());
+  },
+
+  "test should return false when called with no args but matching one": function () {
+    var call = sinon.spyCall.create({}, []);
+
+    assertFalse(call.calledWithExactly({}));
   }
 });

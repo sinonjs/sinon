@@ -1,11 +1,7 @@
 (function () {
-  function stub (object, property) {
+  function spy (object, property, func) {
     var method = object[property];
     return sinon.wrapMethod(object, property, spy.create(method));
-  }
-
-  function spy (func) {
-    return spy.create(func);
   }
 
   Object.extend(spy, (function () {
@@ -96,10 +92,16 @@
       calledOn: calledOn,
       calledWith: calledWith,
       calledWithExactly: calledWithExactly,
+      threw: threw,
+      /* TODO:
+         alwaysCalledOn: alwaysCalledOn,
+         alwaysCalledWith: alwaysCalledWith,
+         alwaysCalledWithExactly: alwaysCalledWithExactly,
+         alwaysThrew: alwaysThrew,
+       */
       callCount: callCount,
       getCall: getCall,
-      invoke: invoke,
-      threw: threw
+      invoke: invoke
     };
   }()));
 
