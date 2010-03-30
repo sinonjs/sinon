@@ -7,7 +7,7 @@
     var wrapper;
 
     if (func) {
-      wrapper = !!sinon.spy ? sinon.spy(func) : func;
+      wrapper = sinon.spy && sinon.spy.create ? sinon.spy.create(func) : func;
     } else {
       wrapper = stub.create();
     }

@@ -85,52 +85,31 @@ TestCase("StubObjectMethodTest", {
   setUp: function () {
     this.method = function () {};
     this.object = { method: this.method };
+    this.wrapMethod = sinon.wrapMethod;
+  },
+
+  tearDown: function () {
+    sinon.wrapMethod = this.wrapMethod;
   },
 
   "test should be function": function () {
     assertFunction(sinon.stub);
   },
 
-  "test should throw if first argument is not object": function () {
-    assertException(function () {
-      sinon.stub();
-    }, "TypeError");
-  },
+  "test should return function from wrapMethod": function () {
+    var wrapper = function () {};
+    var args;
 
-  "test should throw if object defines property but is not function": function () {
-    this.object.prop = 42;
-    var object = this.object;
+    sinon.wrapMethod = function () {
+      args = arguments;
+      return wrapper;
+    };
 
-    assertException(function () {
-      sinon.stub(object, "prop");
-    }, "TypeError");
-  },
+    var result = sinon.stub(this.object, "method");
 
-  "test should not throw if object does not define property": function () {
-    var object = this.object;
-
-    assertNoException(function () {
-      sinon.stub(object, "prop");
-    });
-  },
-
-  "test should replace object method": function () {
-    sinon.stub(this.object, "method");
-
-    assertNotSame(this.method, this.object.method);
-    assertFunction(this.object.method);
-  },
-
-  "test should define restore method": function () {
-    sinon.stub(this.object, "method");
-
-    assertFunction(this.object.method.restore);
-  },
-
-  "test should return stub": function () {
-    var stub = sinon.stub(this.object, "method");
-
-    assertSame(stub, this.object.method);
+    assertSame(this.object, args[0]);
+    assertSame("method", args[1]);
+    assertSame(wrapper, result);
   },
 
   "test should use provided function as stub": function () {
@@ -149,13 +128,6 @@ TestCase("StubObjectMethodTest", {
     assertException(function () {
       sinon.stub(object, "method", {});
     }, "TypeError");
-  },
-
-  "test restore should bring back original method": function () {
-    sinon.stub(this.object, "method");
-    this.object.method.restore();
-
-    assertSame(this.method, this.object.method);
   },
 
   "test stubbed method should be proper stub": function () {
