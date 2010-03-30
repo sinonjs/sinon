@@ -433,3 +433,13 @@ TestCase("SpyCallCalledWithExactlyTest", {
     assertFalse(call.calledWithExactly({}));
   }
 });
+
+TestCase("SpyCallbackTest", {
+  "test should defined beforeCall callback": function () {
+    assert("beforeCall" in sinon.spy);
+  },
+
+  "test should defined afterCall callback": function () {
+    assert("afterCall" in sinon.spy);
+  }
+});

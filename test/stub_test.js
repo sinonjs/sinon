@@ -144,12 +144,31 @@ TestCase("StubObjectMethodTest", {
     assertUndefined(stub.throws);
   },
 
+  "test stub should be spy": function () {
+    var stub = sinon.stub(this.object, "method");
+    this.object.method();
+
+    assert(stub.called());
+    assert(stub.calledOn(this.object));
+  },
+
   "test custom stubbed method should be spy": function () {
     var stub = sinon.stub(this.object, "method", function () {});
+    this.object.method();
 
-    assertFunction(stub.called);
-    assertFunction(stub.calledWith);
-    assertFunction(stub.calledWithExactly);
-    assertFunction(stub.calledOn);
+    assert(stub.called());
+    assert(stub.calledOn(this.object));
+  },
+
+  "test stub should affect spy": function () {
+    var stub = sinon.stub(this.object, "method");
+    var someObj = {};
+    stub.throws("TypeError");
+
+    try {
+      this.object.method();
+    } catch (e) {}
+
+    assert(stub.threw("TypeError"));
   }
 });

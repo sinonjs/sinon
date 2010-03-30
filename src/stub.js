@@ -25,11 +25,11 @@
         return functionStub.returnValue;
       }
 
-      Object.extend(functionStub, stub);
-
       if (sinon.spy) {
-        Object.extend(functionStub, sinon.spy);
+        functionStub = sinon.spy.create(functionStub);
       }
+
+      Object.extend(functionStub, stub);
 
       return functionStub;
     }

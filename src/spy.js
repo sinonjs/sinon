@@ -94,6 +94,7 @@
       calledWithExactly: calledWithExactly,
       threw: threw,
       /* TODO:
+         returned: returned,
          alwaysCalledOn: alwaysCalledOn,
          alwaysCalledWith: alwaysCalledWith,
          alwaysCalledWithExactly: alwaysCalledWithExactly,
