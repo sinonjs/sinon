@@ -1,5 +1,9 @@
+/* @depend ../sinon.js */
+/*jslint indent: 2, eqeqeq: false, onevar: false*/
+/*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
+  var spyCall;
 
   if (!sinon && commonJSModule) {
     sinon = require("sinon");
@@ -9,7 +13,7 @@
     return;
   }
 
-  function spy (object, property, func) {
+  function spy(object, property, func) {
     var method = object[property];
     return sinon.wrapMethod(object, property, spy.create(method));
   }
@@ -17,12 +21,12 @@
   sinon.extend(spy, (function () {
     var slice = Array.prototype.slice;
 
-    function create (func) {
+    function create(func) {
       if (typeof func != "function") {
         throw new TypeError("spy needs a function to spy on");
       }
 
-      function proxy () {
+      function proxy() {
         return proxy.invoke(func, this, slice.call(arguments));
       }
 
@@ -33,7 +37,7 @@
       return proxy;
     }
 
-    function invoke (func, thisObj, args) {
+    function invoke(func, thisObj, args) {
       if (!this.calls) {
         this.calls = [];
       }
@@ -52,42 +56,26 @@
       return call.returnValue;
     }
 
-    function getCall (i) {
+    function getCall(i) {
       return this.calls && this.calls[i];
     }
 
-    function called () {
+    function called() {
       return this.callCount() > 0;
     }
 
-    function callCount () {
+    function callCount() {
       return this.calls && this.calls.length || 0;
     }
 
-    function calledOn (thisObj) {
-      return matchAnyCall(this, "calledOn", arguments);
-    }
-
-    function calledWith () {
-      return matchAnyCall(this, "calledWith", arguments);
-    }
-
-    function calledWithExactly () {
-      return matchAnyCall(this, "calledWithExactly", arguments);
-    }
-
-    function threw (error) {
-      return matchAnyCall(this, "threw", arguments);
-    }
-
-    function matchAnyCall (proxy, method, args) {
+    function matchAnyCall(proxy, method, args) {
       if (!proxy.calls) {
         return false;
       }
 
       var spyCall;
 
-      for (var i = 0, l = proxy.calls.length; i < l; i++) {
+      for (var i = 0, l = proxy.calls.length; i < l; i += 1) {
         spyCall = proxy.calls[i];
 
         if (spyCall[method].apply(spyCall, args)) {
@@ -96,6 +84,22 @@
       }
 
       return false;
+    }
+
+    function calledOn(thisObj) {
+      return matchAnyCall(this, "calledOn", arguments);
+    }
+
+    function calledWith() {
+      return matchAnyCall(this, "calledWith", arguments);
+    }
+
+    function calledWithExactly() {
+      return matchAnyCall(this, "calledWithExactly", arguments);
+    }
+
+    function threw(error) {
+      return matchAnyCall(this, "threw", arguments);
     }
 
     return {
@@ -118,13 +122,13 @@
     };
   }()));
 
-  var spyCall = (function () {
-    function calledOn (thisObj) {
+  spyCall = (function () {
+    function calledOn(thisObj) {
       return this.thisObj === thisObj;
     }
 
-    function calledWith () {
-      for (var i = 0, l = arguments.length; i < l; i++) {
+    function calledWith() {
+      for (var i = 0, l = arguments.length; i < l; i += 1) {
         if (!sinon.deepEqual(arguments[i], this.args[i])) {
           return false;
         }
@@ -133,16 +137,16 @@
       return true;
     }
 
-    function calledWithExactly () {
+    function calledWithExactly() {
       return arguments.length == this.args.length &&
                this.calledWith.apply(this, arguments);
     }
 
-    function returned (value) {
+    function returned(value) {
       return this.returnValue === value;
     }
 
-    function threw (error) {
+    function threw(error) {
       if (typeof error == "undefined" || !this.exception) {
         return !!this.exception;
       }
@@ -154,7 +158,7 @@
       return this.exception === error;
     }
 
-    function create (thisObj, args, returnValue) {
+    function create(thisObj, args, returnValue) {
       var proxyCall = sinon.create(spyCall);
       delete proxyCall.create;
       proxyCall.thisObj = thisObj;

@@ -1,5 +1,7 @@
+/*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
+/*global module, require*/
 var sinon = (function () {
-  function wrapMethod (object, property, method) {
+  function wrapMethod(object, property, method) {
     if (!object) {
       throw new TypeError("Should wrap property of object");
     }
@@ -24,8 +26,8 @@ var sinon = (function () {
     return method;
   }
 
-  function extend (target) {
-    for (var i = 1, l = arguments.length; i < l; i++) {
+  function extend(target) {
+    for (var i = 1, l = arguments.length; i < l; i += 1) {
       for (var prop in arguments[i]) {
         if (arguments[i].hasOwnProperty(prop)) {
           target[prop] = arguments[i][prop];
@@ -36,17 +38,17 @@ var sinon = (function () {
     return target;
   }
 
-  function create (proto) {
+  function create(proto) {
     if (Object.create) {
       return Object.create(proto);
     } else {
-      function F () {}
+      var F = function () {};
       F.prototype = proto;
       return new F();
     }
   }
 
-  function deepEqual (a, b) {
+  function deepEqual(a, b) {
     if (typeof a != "object" || typeof b != "object") {
       return a === b;
     }
@@ -60,7 +62,7 @@ var sinon = (function () {
         return false;
       }
 
-      for (var i = 0, l = a.length; i < l; i++) {
+      for (var i = 0, l = a.length; i < l; i += 1) {
         if (!deepEqual(a[i], b[i])) {
           return false;
         }
@@ -90,10 +92,10 @@ var sinon = (function () {
     return true;
   }
 
-  function test (callback) {
+  function test(callback) {
     return function () {
       var fakes = [];
-      var exception;
+      var exception, result;
       var realArgs = Array.prototype.slice.call(arguments);
       var args = [function () {
         fakes.push(sinon.stub.apply(sinon, arguments));
@@ -104,18 +106,18 @@ var sinon = (function () {
       }];
 
       try {
-        var result = callback.apply(this, realArgs.concat(args));
+        result = callback.apply(this, realArgs.concat(args));
       } catch (e) {
         exception = e;
       }
 
-      for (var i = 0, l = fakes.length; i < l; i++) {
+      for (var i = 0, l = fakes.length; i < l; i += 1) {
         if (!exception) {
           if (typeof fakes[i].verify == "function") {
             try {
               fakes[i].verify();
-            } catch (e) {
-              exception = e;
+            } catch (ex) {
+              exception = ex;
             }
           }
         }

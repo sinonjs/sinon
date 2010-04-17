@@ -1,3 +1,9 @@
+/**
+ * @depend ../sinon.js
+ * @depend stub.js
+ */
+/*jslint indent: 2, eqeqeq: false, onevar: false, nomen: false*/
+/*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
 
@@ -9,7 +15,7 @@
     return;
   }
 
-  function mock (object) {
+  function mock(object) {
     if (!object) {
       return sinon.expectation.create("Anonymous mock");
     }
@@ -20,7 +26,7 @@
   sinon.mock = mock;
 
   sinon.extend(mock, function () {
-    function create (object) {
+    function create(object) {
       if (!object) {
         throw new TypeError("object is null");
       }
@@ -32,7 +38,7 @@
       return mockObject;
     }
 
-    function expects (method) {
+    function expects(method) {
       if (!method) {
         throw new TypeError("method is falsy");
       }
@@ -59,17 +65,17 @@
       return expectation;
     }
 
-    function each (collection, callback) {
+    function each(collection, callback) {
       if (!collection) {
         return;
       }
 
-      for (var i = 0, l = collection.length; i < l; i++) {
+      for (var i = 0, l = collection.length; i < l; i += 1) {
         callback(collection[i]);
       }
     }
 
-    function restore () {
+    function restore() {
       var object = this.object;
 
       each(this.proxies, function (proxy) {
@@ -79,7 +85,7 @@
       });
     }
 
-    function verify () {
+    function verify() {
       var expectations = this.expectations || {};
       var exception;
 
@@ -102,11 +108,11 @@
       return true;
     }
 
-    function invokeMethod (method, thisObj, args) {
+    function invokeMethod(method, thisObj, args) {
       var expectations = this.expectations && this.expectations[method];
       var length = expectations && expectations.length || 0;
 
-      for (var i = 0; i < length; i++) {
+      for (var i = 0; i < length; i += 1) {
         if (!expectations[i].met()) {
           return expectations[i].apply(thisObj, args);
         }
@@ -121,10 +127,10 @@
       restore: restore,
       verify: verify,
       invokeMethod: invokeMethod
-    }
+    };
   }());
 
-  function err (message) {
+  function err(message) {
     var exception = new Error(message);
     exception.name = "ExpectationError";
 
@@ -132,7 +138,7 @@
   }
 
   sinon.expectation = (function () {
-    function create (methodName) {
+    function create(methodName) {
       var expectation = sinon.extend(sinon.stub.create(), sinon.expectation);
       delete expectation.create;
       expectation.method = methodName;
@@ -142,13 +148,13 @@
 
     var _invoke = sinon.spy.invoke;
 
-    function invoke (func, thisObj, args) {
+    function invoke(func, thisObj, args) {
       this.verifyCallAllowed(thisObj, args);
 
       return _invoke.apply(this, arguments);
     }
 
-    function atLeast (num) {
+    function atLeast(num) {
       if (typeof num != "number") {
         throw new TypeError("'" + num + "' is not number");
       }
@@ -161,7 +167,7 @@
       this.minCalls = num;
     }
 
-    function atMost (num) {
+    function atMost(num) {
       if (typeof num != "number") {
         throw new TypeError("'" + num + "' is not number");
       }
@@ -174,23 +180,23 @@
       this.maxCalls = num;
     }
 
-    function never () {
+    function never() {
       this.exactly(0);
     }
 
-    function once () {
+    function once() {
       this.exactly(1);
     }
 
-    function twice () {
+    function twice() {
       this.exactly(2);
     }
 
-    function thrice () {
+    function thrice() {
       this.exactly(3);
     }
 
-    function exactly (num) {
+    function exactly(num) {
       if (typeof num != "number") {
         throw new TypeError("'" + num + "' is not a number");
       }
@@ -199,7 +205,7 @@
       this.atMost(num);
     }
 
-    function timesInWords (times) {
+    function timesInWords(times) {
       if (times == 1) {
         return "once";
       } else if (times == 2) {
@@ -211,7 +217,20 @@
       return times + " times";
     }
 
-    function verifyCallAllowed (thisObj, args) {
+    function receivedMinCalls(expectation) {
+      var hasMinLimit = typeof expectation.minCalls == "number";
+      return !hasMinLimit || expectation.callCount() >= expectation.minCalls;
+    }
+
+    function receivedMaxCalls(expectation) {
+      if (typeof expectation.maxCalls != "number") {
+        return false;
+      }
+
+      return expectation.callCount() == expectation.maxCalls;
+    }
+
+    function verifyCallAllowed(thisObj, args) {
       if (receivedMaxCalls(this)) {
         this.failed = true;
         err(this.method + " already called " + timesInWords(this.maxCalls));
@@ -226,7 +245,7 @@
         return true;
       }
 
-      if (!args || args.length == 0) {
+      if (!args || args.length === 0) {
         err(this.method + " received no arguments, expected " +
             this.expectedArguments.join());
       }
@@ -241,7 +260,7 @@
             "), expected " + this.expectedArguments.join());
       }
 
-      for (var i = 0, l = this.expectedArguments.length; i < l; i++) {
+      for (var i = 0, l = this.expectedArguments.length; i < l; i += 1) {
         if (!sinon.deepEqual(this.expectedArguments[i], args[i])) {
           err(this.method + " received wrong arguments (" + args.join() +
               "), expected " + this.expectedArguments.join());
@@ -249,39 +268,26 @@
       }
     }
 
-    function met () {
+    function met() {
       return !this.failed && receivedMinCalls(this);
-    }
-
-    function receivedMinCalls (expectation) {
-      var hasMinLimit = typeof expectation.minCalls == "number";
-      return !hasMinLimit || expectation.callCount() >= expectation.minCalls;
-    }
-
-    function receivedMaxCalls (expectation) {
-      if (typeof expectation.maxCalls != "number") {
-        return false;
-      }
-
-      return expectation.callCount() == expectation.maxCalls;
     }
 
     var slice = Array.prototype.slice;
 
-    function withArgs () {
+    function withArgs() {
       this.expectedArguments = slice.call(arguments);
     }
 
-    function withExactArgs () {
+    function withExactArgs() {
       withArgs.apply(this, arguments);
       this.expectsExactArgCount = true;
     }
 
-    function on (thisObj) {
+    function on(thisObj) {
       this.expectedThis = thisObj;
     }
 
-    function verify () {
+    function verify() {
       if (!this.met()) {
         err(this.method + " expected to be called " + timesInWords(this.minCalls) +
             ", but was called " + timesInWords(this.callCount));

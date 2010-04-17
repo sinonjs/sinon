@@ -1,3 +1,9 @@
+/**
+ * @depend ../sinon.js
+ * @depend spy.js
+ */
+/*jslint indent: 2, eqeqeq: false, onevar: false*/
+/*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
 
@@ -9,7 +15,7 @@
     return;
   }
 
-  function stub (object, property, func) {
+  function stub(object, property, func) {
     if (!!func && typeof func != "function") {
       throw new TypeError("Custom stub should be function");
     }
@@ -26,8 +32,8 @@
   }
 
   sinon.extend(stub, (function () {
-    function create () {
-      function functionStub () {
+    function create() {
+      function functionStub() {
         if (functionStub.exception) {
           throw functionStub.exception;
         }
@@ -44,13 +50,13 @@
       return functionStub;
     }
 
-    function returns (value) {
+    function returns(value) {
       this.returnValue = value;
 
       return this;
     }
 
-    function throws (error, message) {
+    function throwsException(error, message) {
       if (typeof error == "string") {
         this.exception = new Error(message);
         this.exception.name = error;
@@ -64,7 +70,7 @@
     return {
       create: create,
       returns: returns,
-      throws: throws
+      throwsException: throwsException
     };
   }()));
 
