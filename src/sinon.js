@@ -24,7 +24,127 @@ var sinon = (function () {
     return method;
   }
 
+  function extend (target) {
+    for (var i = 1, l = arguments.length; i < l; i++) {
+      for (var prop in arguments[i]) {
+        if (arguments[i].hasOwnProperty(prop)) {
+          target[prop] = arguments[i][prop];
+        }
+      }
+    }
+
+    return target;
+  }
+
+  function create (proto) {
+    if (Object.create) {
+      return Object.create(proto);
+    } else {
+      function F () {}
+      F.prototype = proto;
+      return new F();
+    }
+  }
+
+  function deepEqual (a, b) {
+    if (typeof a != "object" || typeof b != "object") {
+      return a === b;
+    }
+
+    if (a === b) {
+      return true;
+    }
+
+    if (Object.prototype.toString.call(a) == "[object Array]") {
+      if (a.length !== b.length) {
+        return false;
+      }
+
+      for (var i = 0, l = a.length; i < l; i++) {
+        if (!deepEqual(a[i], b[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    var prop, aLength = 0, bLength = 0;
+
+    for (prop in a) {
+      aLength += 1;
+
+      if (!deepEqual(a[prop], b[prop])) {
+        return false;
+      }
+    }
+
+    for (prop in b) {
+      bLength += 1;
+    }
+
+    if (aLength != bLength) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function test (callback) {
+    return function () {
+      var fakes = [];
+      var exception;
+      var realArgs = Array.prototype.slice.call(arguments);
+      var args = [function () {
+        fakes.push(sinon.stub.apply(sinon, arguments));
+        return fakes[fakes.length - 1];
+      }, function () {
+        fakes.push(sinon.mock.apply(sinon, arguments));
+        return fakes[fakes.length - 1];
+      }];
+
+      try {
+        var result = callback.apply(this, realArgs.concat(args));
+      } catch (e) {
+        exception = e;
+      }
+
+      for (var i = 0, l = fakes.length; i < l; i++) {
+        if (!exception) {
+          if (typeof fakes[i].verify == "function") {
+            try {
+              fakes[i].verify();
+            } catch (e) {
+              exception = e;
+            }
+          }
+        }
+
+        if (typeof fakes[i].restore == "function") {
+          fakes[i].restore();
+        }
+      }
+
+      if (exception) {
+        throw exception;
+      }
+
+      return result;
+    };
+  }
+
   return {
-    wrapMethod: wrapMethod
+    wrapMethod: wrapMethod,
+    extend: extend,
+    create: create,
+    deepEqual: deepEqual,
+    test: test
   };
 }());
+
+if (typeof module == "object" && typeof require == "function") {
+  module.exports = sinon;
+  module.exports.spy = require("sinon/spy");
+  module.exports.stub = require("sinon/stub");
+  module.exports.mock = require("sinon/mock");
+}

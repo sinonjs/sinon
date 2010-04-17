@@ -1,8 +1,19 @@
-TestCase("StubFunctionTest", {
+TestCase("StubCreateTest", {
   "test should return function": function () {
     assertFunction(sinon.stub.create());
   },
 
+  "test should be spy": function () {
+    var stub = sinon.stub.create();
+
+    assertFunction(stub.called);
+    assertFunction(stub.calledWith);
+    assertFunction(stub.calledWith);
+    assertFunction(stub.calledOn);
+  }
+});
+
+TestCase("StubReturnsTest", {
   "test should have returns method": function () {
     var stub = sinon.stub.create();
 
@@ -27,8 +38,10 @@ TestCase("StubFunctionTest", {
     var stub = sinon.stub.create();
 
     assertUndefined(stub());
-  },
+  }
+});
 
+TestCase("StubThrowsTest", {
   "test should throw specified exception": function () {
     var stub = sinon.stub.create();
     var error = new Error();
@@ -42,13 +55,13 @@ TestCase("StubFunctionTest", {
     }
   },
 
-  "test throws should return stub": function () {
+  "test should return stub": function () {
     var stub = sinon.stub.create();
 
     assertSame(stub, stub.throws({}));
   },
 
-  "test throws should set type of exception to throw": function () {
+  "test should set type of exception to throw": function () {
     var stub = sinon.stub.create();
     var exceptionType = "TypeError";
     stub.throws(exceptionType);
@@ -58,7 +71,7 @@ TestCase("StubFunctionTest", {
     }, exceptionType);
   },
 
-  "test throws should specify exception message": function () {
+  "test should specify exception message": function () {
     var stub = sinon.stub.create();
     var message = "Oh no!";
     stub.throws("Error", message);
@@ -69,15 +82,6 @@ TestCase("StubFunctionTest", {
     } catch (e) {
       assertEquals(message, e.message);
     }
-  },
-
-  "test stub should be spy": function () {
-    var stub = sinon.stub.create();
-
-    assertFunction(stub.called);
-    assertFunction(stub.calledWith);
-    assertFunction(stub.calledWith);
-    assertFunction(stub.calledOn);
   }
 });
 
@@ -98,6 +102,15 @@ TestCase("StubObjectMethodTest", {
 
   "test should return function from wrapMethod": function () {
     var wrapper = function () {};
+    sinon.wrapMethod = function () { return wrapper; };
+
+    var result = sinon.stub(this.object, "method");
+
+    assertSame(wrapper, result);
+  },
+
+  "test should pass object and method to wrapMethod": function () {
+    var wrapper = function () {};
     var args;
 
     sinon.wrapMethod = function () {
@@ -109,7 +122,6 @@ TestCase("StubObjectMethodTest", {
 
     assertSame(this.object, args[0]);
     assertSame("method", args[1]);
-    assertSame(wrapper, result);
   },
 
   "test should use provided function as stub": function () {
@@ -117,9 +129,16 @@ TestCase("StubObjectMethodTest", {
     var customStub = function () { called = true; };
     var stub = sinon.stub(this.object, "method", customStub);
 
-    assertFunction(stub.restore);
     stub();
     assert(called);
+  },
+
+  "test should wrap provided function": function () {
+    var customStub = function () {};
+    var stub = sinon.stub(this.object, "method", customStub);
+
+    assertNotSame(customStub, stub);
+    assertFunction(stub.restore);
   },
 
   "test should throw if third argument is provided but not function": function () {

@@ -1,4 +1,14 @@
-(function () {
+(function (sinon) {
+  var commonJSModule = typeof module == "object" && typeof require == "function";
+
+  if (!sinon && commonJSModule) {
+    sinon = require("sinon");
+  }
+
+  if (!sinon) {
+    return;
+  }
+
   function stub (object, property, func) {
     if (!!func && typeof func != "function") {
       throw new TypeError("Custom stub should be function");
@@ -15,7 +25,7 @@
     return sinon.wrapMethod(object, property, wrapper);
   }
 
-  Object.extend(stub, (function () {
+  sinon.extend(stub, (function () {
     function create () {
       function functionStub () {
         if (functionStub.exception) {
@@ -29,7 +39,7 @@
         functionStub = sinon.spy.create(functionStub);
       }
 
-      Object.extend(functionStub, stub);
+      sinon.extend(functionStub, stub);
 
       return functionStub;
     }
@@ -58,7 +68,9 @@
     };
   }()));
 
-  if (typeof sinon == "object") {
+  if (commonJSModule) {
+    module.exports = stub;
+  } else {
     sinon.stub = stub;
   }
-}());
+}(typeof sinon == "object" && sinon || null));
