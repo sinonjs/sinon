@@ -45,7 +45,7 @@ TestCase("StubThrowsTest", {
   "test should throw specified exception": function () {
     var stub = sinon.stub.create();
     var error = new Error();
-    stub.throws(error);
+    stub.throwsException(error);
 
     try {
       stub();
@@ -58,13 +58,13 @@ TestCase("StubThrowsTest", {
   "test should return stub": function () {
     var stub = sinon.stub.create();
 
-    assertSame(stub, stub.throws({}));
+    assertSame(stub, stub.throwsException({}));
   },
 
   "test should set type of exception to throw": function () {
     var stub = sinon.stub.create();
     var exceptionType = "TypeError";
-    stub.throws(exceptionType);
+    stub.throwsException(exceptionType);
 
     assertException(function () {
       stub();
@@ -74,7 +74,7 @@ TestCase("StubThrowsTest", {
   "test should specify exception message": function () {
     var stub = sinon.stub.create();
     var message = "Oh no!";
-    stub.throws("Error", message);
+    stub.throwsException("Error", message);
 
     try {
       stub();
@@ -153,14 +153,14 @@ TestCase("StubObjectMethodTest", {
     var stub = sinon.stub(this.object, "method");
 
     assertFunction(stub.returns);
-    assertFunction(stub.throws);
+    assertFunction(stub.throwsException);
   },
 
   "test custom stubbed method should not be proper stub": function () {
     var stub = sinon.stub(this.object, "method", function () {});
 
     assertUndefined(stub.returns);
-    assertUndefined(stub.throws);
+    assertUndefined(stub.throwsException);
   },
 
   "test stub should be spy": function () {
@@ -182,7 +182,7 @@ TestCase("StubObjectMethodTest", {
   "test stub should affect spy": function () {
     var stub = sinon.stub(this.object, "method");
     var someObj = {};
-    stub.throws("TypeError");
+    stub.throwsException("TypeError");
 
     try {
       this.object.method();
