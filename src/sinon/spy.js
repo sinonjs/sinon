@@ -1,22 +1,34 @@
-(function () {
+(function (sinon) {
+  var commonJSModule = typeof module == "object" && typeof require == "function";
+
+  if (!sinon && commonJSModule) {
+    sinon = require("sinon");
+  }
+
+  if (!sinon) {
+    return;
+  }
+
   function spy (object, property, func) {
     var method = object[property];
     return sinon.wrapMethod(object, property, spy.create(method));
   }
 
-  Object.extend(spy, (function () {
+  sinon.extend(spy, (function () {
+    var slice = Array.prototype.slice;
+
     function create (func) {
       if (typeof func != "function") {
         throw new TypeError("spy needs a function to spy on");
       }
 
       function proxy () {
-        return proxy.invoke(func, this, arguments);
+        return proxy.invoke(func, this, slice.call(arguments));
       }
 
-      Object.extend(proxy, spy);
+      sinon.extend(proxy, spy);
       delete proxy.create;
-      Object.extend(proxy, func);
+      sinon.extend(proxy, func);
 
       return proxy;
     }
@@ -49,7 +61,7 @@
     }
 
     function callCount () {
-      return this.calls && this.calls.length;
+      return this.calls && this.calls.length || 0;
     }
 
     function calledOn (thisObj) {
@@ -113,7 +125,7 @@
 
     function calledWith () {
       for (var i = 0, l = arguments.length; i < l; i++) {
-        if (arguments[i] !== this.args[i]) {
+        if (!sinon.deepEqual(arguments[i], this.args[i])) {
           return false;
         }
       }
@@ -143,7 +155,7 @@
     }
 
     function create (thisObj, args, returnValue) {
-      var proxyCall = Object.create(spyCall);
+      var proxyCall = sinon.create(spyCall);
       delete proxyCall.create;
       proxyCall.thisObj = thisObj;
       proxyCall.args = args;
@@ -162,8 +174,10 @@
     };
   }());
 
-  if (typeof sinon != "undefined") {
+  if (commonJSModule) {
+    module.exports = spy;
+  } else {
     sinon.spy = spy;
     sinon.spyCall = spyCall;
   }
-}());
+}(typeof sinon == "object" && sinon || null));

@@ -124,6 +124,10 @@ TestCase("SpyCallCountTest", {
     this.spy = sinon.spy.create(function () {});
   },
 
+  "test should report 0 calls": function () {
+    assertEquals(0, this.spy.callCount());
+  },
+
   "test should record one call": function () {
     this.spy();
 
@@ -225,12 +229,6 @@ TestCase("SpyCalledWithTest", {
     this.spy([1, 2, 3]);
 
     assertFalse(this.spy.calledWith(1, 2, 3));
-  },
-
-  "test should match arguments strictly": function () {
-    this.spy({}, []);
-
-    assertFalse(this.spy.calledWith({}, []));
   }
 });
 
@@ -260,7 +258,7 @@ TestCase("CalledWithExactlyTest", {
   "test should match by strict comparison": function () {
     this.spy({}, []);
 
-    assertFalse(this.spy.calledWithExactly({}, []));
+    assertFalse(this.spy.calledWithExactly({}, [], null));
   },
 
   "test should return true for one exact match": function () {
@@ -431,15 +429,5 @@ TestCase("SpyCallCalledWithExactlyTest", {
     var call = sinon.spyCall.create({}, []);
 
     assertFalse(call.calledWithExactly({}));
-  }
-});
-
-TestCase("SpyCallbackTest", {
-  "test should defined beforeCall callback": function () {
-    assert("beforeCall" in sinon.spy);
-  },
-
-  "test should defined afterCall callback": function () {
-    assert("afterCall" in sinon.spy);
   }
 });
