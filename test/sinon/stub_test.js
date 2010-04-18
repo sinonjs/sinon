@@ -82,6 +82,15 @@ TestCase("StubThrowsTest", {
     } catch (e) {
       assertEquals(message, e.message);
     }
+  },
+
+  "test should throw generic error": function () {
+    var stub = sinon.stub.create();
+    stub.throwsException();
+
+    assertException(function () {
+      stub();
+    }, "Error");
   }
 });
 
@@ -189,5 +198,12 @@ TestCase("StubObjectMethodTest", {
     } catch (e) {}
 
     assert(stub.threw("TypeError"));
+  },
+
+  "test should return standalone stub without arguments": function () {
+    var stub = sinon.stub();
+
+    assertFunction(stub);
+    assertFalse(stub.called());
   }
 });
