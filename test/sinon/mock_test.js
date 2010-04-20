@@ -424,6 +424,10 @@ TestCase("MockExpectationWithArgsTest", {
     assertFunction(this.expectation.withArgs);
   },
 
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.withArgs(1));
+  },
+
   "test should accept call with expected args": function () {
     this.expectation.withArgs(1, 2, 3);
     this.expectation(1, 2, 3);
@@ -475,6 +479,10 @@ TestCase("MockExpectationWithExactArgsTest", {
     assertFunction(this.expectation.withExactArgs);
   },
 
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.withExactArgs(1));
+  },
+
   "test should accept call with expected args": function () {
     this.expectation.withExactArgs(1, 2, 3);
     this.expectation(1, 2, 3);
@@ -524,6 +532,10 @@ TestCase("MockExpectationOnTest", {
 
   "test should be method": function () {
     assertFunction(this.expectation.on);
+  },
+
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.on({}));
   },
 
   "test should allow calls on object": function () {

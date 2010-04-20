@@ -280,15 +280,18 @@
 
     function withArgs() {
       this.expectedArguments = slice.call(arguments);
+      return this;
     }
 
     function withExactArgs() {
       withArgs.apply(this, arguments);
       this.expectsExactArgCount = true;
+      return this;
     }
 
     function on(thisObj) {
       this.expectedThis = thisObj;
+      return this;
     }
 
     function verify() {
