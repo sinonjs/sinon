@@ -165,6 +165,8 @@
       }
 
       this.minCalls = num;
+
+      return this;
     }
 
     function atMost(num) {
@@ -178,23 +180,24 @@
       }
 
       this.maxCalls = num;
-    }
 
-    function never() {
-      this.exactly(0);
       return this;
     }
 
+    function never() {
+      return this.exactly(0);
+    }
+
     function once() {
-      this.exactly(1);
+      return this.exactly(1);
     }
 
     function twice() {
-      this.exactly(2);
+      return this.exactly(2);
     }
 
     function thrice() {
-      this.exactly(3);
+      return this.exactly(3);
     }
 
     function exactly(num) {
@@ -203,7 +206,7 @@
       }
 
       this.atLeast(num);
-      this.atMost(num);
+      return this.atMost(num);
     }
 
     function timesInWords(times) {

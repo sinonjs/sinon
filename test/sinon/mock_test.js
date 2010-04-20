@@ -87,10 +87,21 @@ TestCase("ExpectationReturnsTest", {
   }
 });
 
+TestCase("ExpectationCallTest", {
+  setUp: expectationSetUp,
+
+  "test should be called with correct this value": function () {
+    var object = { method: this.expectation };
+    object.method();
+
+    assert(this.expectation.calledOn(object));
+  }
+});
+
 TestCase("ExpectationCallCountTest", {
   setUp: expectationSetUp,
 
-  "test should only be invokable once": function () {
+  "test should only be invokable once by default": function () {
     var expectation = this.expectation;
     expectation();
 
@@ -109,14 +120,11 @@ TestCase("ExpectationCallCountTest", {
     } catch(e) {
       assertEquals("myMeth already called once", e.message);
     }
-  },
+  }
+});
 
-  "test should be called with correct this value": function () {
-    var object = { method: this.expectation };
-    object.method();
-
-    assert(this.expectation.calledOn(object));
-  },
+TestCase("ExpectationCallCountNeverTest", {
+  setUp: expectationSetUp,
 
   "test should not be callable": function () {
     var expectation = this.expectation;
@@ -127,9 +135,13 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
-  "test never should return expectation for chaining": function () {
+  "test should return expectation for chaining": function () {
     assertSame(this.expectation, this.expectation.never());
-  },
+  }
+});
+
+TestCase("ExpectationCallCountOnceTest", {
+  setUp: expectationSetUp,
 
   "test should allow one call": function () {
     var expectation = this.expectation;
@@ -141,15 +153,13 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
-  "test should allow one call": function () {
-    var expectation = this.expectation;
-    expectation.once();
-    expectation();
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.once());
+  }
+});
 
-    assertException(function () {
-      expectation();
-    }, "ExpectationError");
-  },
+TestCase("ExpectationCallCountTwiceTest", {
+  setUp: expectationSetUp,
 
   "test should allow two calls": function () {
     var expectation = this.expectation;
@@ -161,6 +171,14 @@ TestCase("ExpectationCallCountTest", {
       expectation();
     }, "ExpectationError");
   },
+
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.twice());
+  }
+});
+
+TestCase("ExpectationCallCountThriceTest", {
+  setUp: expectationSetUp,
 
   "test should allow three calls": function () {
     var expectation = this.expectation;
@@ -174,6 +192,14 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.thrice());
+  }
+});
+
+TestCase("ExpectationCallCountExactlyTest", {
+  setUp: expectationSetUp,
+
   "test should allow specified number of calls": function () {
     var expectation = this.expectation;
     expectation.exactly(2);
@@ -185,7 +211,11 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
-  "test exactly should throw without argument": function () {
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.exactly(2));
+  },
+
+  "test should throw without argument": function () {
     var expectation = this.expectation;
 
     assertException(function () {
@@ -193,36 +223,12 @@ TestCase("ExpectationCallCountTest", {
     }, "TypeError");
   },
 
-  "test exactly should throw without number": function () {
+  "test should throw without number": function () {
     var expectation = this.expectation;
 
     assertException(function () {
       expectation.exactly("12");
     }, "TypeError");
-  }
-});
-
-TestCase("MockExpectationMetTest", {
-  setUp: expectationSetUp,
-
-  "test should not be met when not called enough times": function () {
-    assertFalse(this.expectation.met());
-  },
-
-  "test should be met when called enough times": function () {
-    this.expectation();
-
-    assert(this.expectation.met());
-  },
-
-  "test should not be met when called too many times": function () {
-    this.expectation();
-
-    try {
-      this.expectation();
-    } catch (e) {};
-
-    assertFalse(this.expectation.met());
   }
 });
 
@@ -243,6 +249,10 @@ TestCase("MockExpectationAtLeastTest", {
     assertException(function () {
       expectation.atLeast({});
     }, "TypeError");
+  },
+
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.atLeast(2));
   },
 
   "test should allow any number of calls": function () {
@@ -299,6 +309,10 @@ TestCase("MockExpectationAtMostTest", {
     assertException(function () {
       expectation.atMost({});
     }, "TypeError");
+  },
+
+  "test should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.atMost(2));
   },
 
   "test should allow fewer calls": function () {
@@ -376,6 +390,30 @@ TestCase("MockExpectationAtMostAndAtLeastTest", {
     assertException(function () {
       expectation();
     }, "ExpectationError");
+  }
+});
+
+TestCase("MockExpectationMetTest", {
+  setUp: expectationSetUp,
+
+  "test should not be met when not called enough times": function () {
+    assertFalse(this.expectation.met());
+  },
+
+  "test should be met when called enough times": function () {
+    this.expectation();
+
+    assert(this.expectation.met());
+  },
+
+  "test should not be met when called too many times": function () {
+    this.expectation();
+
+    try {
+      this.expectation();
+    } catch (e) {};
+
+    assertFalse(this.expectation.met());
   }
 });
 
