@@ -127,6 +127,10 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
+  "test never should return expectation for chaining": function () {
+    assertSame(this.expectation, this.expectation.never());
+  },
+
   "test should allow one call": function () {
     var expectation = this.expectation;
     expectation.once();
