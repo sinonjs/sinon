@@ -76,6 +76,17 @@ function mockSetUp () {
   this.mock = sinon.mock.create(this.object);
 }
 
+TestCase("ExpectationReturnsTest", {
+  setUp: expectationSetUp,
+
+  "test should return configured return value": function () {
+    var object = {};
+    this.expectation.returns(object);
+
+    assertSame(object, this.expectation());
+  }
+});
+
 TestCase("ExpectationCallCountTest", {
   setUp: expectationSetUp,
 
@@ -98,13 +109,6 @@ TestCase("ExpectationCallCountTest", {
     } catch(e) {
       assertEquals("myMeth already called once", e.message);
     }
-  },
-
-  "test should return configured return value": function () {
-    var object = {};
-    this.expectation.returns(object);
-
-    assertSame(object, this.expectation());
   },
 
   "test should be called with correct this value": function () {
