@@ -88,6 +88,18 @@ TestCase("ExpectationCallCountTest", {
     }, "ExpectationError");
   },
 
+  "test throw readable error": function () {
+    var expectation = this.expectation;
+    expectation();
+
+    try {
+      expectation();
+      fail("Expected to throw");
+    } catch(e) {
+      assertEquals("myMeth already called once", e.message);
+    }
+  },
+
   "test should return configured return value": function () {
     var object = {};
     this.expectation.returns(object);
@@ -494,7 +506,19 @@ TestCase("MockExpectationVerifyTest", {
     assertException(function () {
       expectation.verify();
     }, "ExpectationError");
-  }});
+  },
+
+  "test should throw readable error": function () {
+    var expectation = this.expectation;
+
+    try {
+      expectation.verify();
+      fail("Expected to throw");
+    } catch(e) {
+      assertEquals("myMeth expected to be called once, but was called 0 times", e.message);
+    }
+  }
+});
 
 TestCase("MockVerifyTest", {
   setUp: mockSetUp,

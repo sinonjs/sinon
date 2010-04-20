@@ -290,7 +290,7 @@
     function verify() {
       if (!this.met()) {
         err(this.method + " expected to be called " + timesInWords(this.minCalls) +
-            ", but was called " + timesInWords(this.callCount));
+            ", but was called " + timesInWords(this.callCount()));
       }
 
       return true;
