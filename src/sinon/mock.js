@@ -182,6 +182,7 @@
 
     function never() {
       this.exactly(0);
+      return this;
     }
 
     function once() {
