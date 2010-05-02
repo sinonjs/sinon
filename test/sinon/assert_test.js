@@ -14,6 +14,14 @@ function stubTearDown () {
 }
 
 TestCase("SinonAssertFailTest", {
+  setUp: function () {
+    this.exceptionName = sinon.assert.failException;
+  },
+
+  tearDown: function () {
+    sinon.assert.failException = this.exceptionName;
+  },
+
   "test should throw exception": function () {
     var failed = false;
     var exception;

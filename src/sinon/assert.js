@@ -31,7 +31,7 @@
     }
   }
 
-  function failAssertion (object, msg) {
+  function failAssertion(object, msg) {
     var failMethod = object.fail || sinon.assert.fail;
     failMethod.call(object, msg);
   }
@@ -40,7 +40,7 @@
     verifyIsStub.call(this, method);
 
     if (!method.called()) {
-      failAssertion(this, method + " was not called as expected");
+      failAssertion(this, "fake was not called as expected");
     }
   }
 
@@ -86,7 +86,7 @@
     }
   }
 
-  function expose (target, prefix, includeFail) {
+  function expose(target, prefix, includeFail) {
     if (!target) {
       throw new TypeError("target is null or undefined");
     }
@@ -99,7 +99,7 @@
       }
 
       return "assert" + prop.substring(0, 1).toUpperCase() + prop.substring(1);
-    }
+    };
 
     for (var assert in this) {
       if (!/^(fail|expose)/.test(assert)) {
