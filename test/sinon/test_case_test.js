@@ -159,6 +159,26 @@
       testCase.testA();
 
       assertSame(myMeth, myObj.meth);
+    },
+
+    "test should unstub objects stubbed in setUp": function () {
+      var myMeth = function () {};
+      var myObj = { meth: myMeth };
+
+      var testCase = sinon.testCase({
+        setUp: function(stub) {
+          stub(myObj, "meth");
+        },
+
+        testA: function (stub) {
+          assertFunction(stub);
+          assertNotSame(myMeth, myObj.meth);
+        }
+      });
+
+      testCase.testA();
+
+      assertSame(myMeth, myObj.meth);
     }
   });
 }());
