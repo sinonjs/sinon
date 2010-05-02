@@ -26,6 +26,7 @@
 
     var setUp = tests.setUp;
     var tearDown = tests.tearDown;
+    var method;
 
     for (testName in tests) {
       property = tests[testName];
@@ -46,11 +47,13 @@
           methods[context + name] = nested[name];
         }
       } else {
+        method = property;
+
         if (setUp || tearDown) {
-          methods[testName] = createTest(property, setUp, tearDown);
-        } else {
-          methods[testName] = property;
+          method = createTest(property, setUp, tearDown);
         }
+
+        methods[testName] = sinon.test(method);
       }
     }
 

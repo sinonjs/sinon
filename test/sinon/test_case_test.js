@@ -16,7 +16,7 @@
       }, "TypeError");
     },
 
-    "test when properties start with test should return unmodified test case": function () {
+    "test when properties start with test should not modify property names": function () {
       var tests = {
         testSomething: function () {},
         helper2: "hey",
@@ -24,45 +24,43 @@
         "test should do something": function () {}
       };
 
-      assertEquals(tests, sinon.testCase(tests));
+      assertEquals(sinon.keys(tests), sinon.keys(sinon.testCase(tests)));
     },
 
     "test should prefix function properties with test": function () {
-      var tests = { shouldFixIt: function () {} };
+      var tests = { shouldFixIt: sinon.stub() };
       var result = sinon.testCase(tests);
+      result["test shouldFixIt"]();
 
-      assertEquals(tests.shouldFixIt, result["test shouldFixIt"]);
+      assert(tests.shouldFixIt.called());
     },
 
     "test should flatten test object": function () {
       var tests = {
-        "my context": {
-          "should do something": function () {
-          }
-        }
+        "my context": { "should do something": sinon.stub() }
       };
 
       var result = sinon.testCase(tests);
+      result["test my context should do something"]();
 
-      assertSame(tests["my context"]["should do something"],
-                 result["test my context should do something"]);
+      assert(tests["my context"]["should do something"].called());
       assertUndefined(result["my context"]);
     },
 
     "test should flatten deeply nested test object": function () {
       var tests = {
         "ctx": {
-          "ctx2": { "ctx3": { "should do": function () {} } },
-          "test something": function () {}
+          "ctx2": { "ctx3": { "should do": sinon.stub() } },
+          "test something": sinon.stub()
         }
       };
 
       var result = sinon.testCase(tests);
+      result["test ctx ctx2 ctx3 should do"]();
+      result["test ctx test something"]();
 
-      assertSame(tests.ctx.ctx2.ctx3["should do"],
-                 result["test ctx ctx2 ctx3 should do"]);
-      assertSame(tests.ctx["test something"],
-                 result["test ctx test something"]);
+      assert(tests.ctx.ctx2.ctx3["should do"].called());
+      assert(tests.ctx["test something"].called());
       assertUndefined(result["ctx"]);
     },
 
@@ -143,6 +141,24 @@
       } catch(e) {}
 
       sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
+    },
+
+    "test should unstub objects after test is run": function () {
+      var myMeth = function () {};
+      var myObj = { meth: myMeth };
+
+      var testCase = sinon.testCase({
+        testA: function (stub) {
+          stub(myObj, "meth");
+
+          assertFunction(stub);
+          assertNotSame(myMeth, myObj.meth);
+        }
+      });
+
+      testCase.testA();
+
+      assertSame(myMeth, myObj.meth);
     }
   });
 }());
