@@ -321,6 +321,82 @@ TestCase("SpyThrewTest", {
   }
 });
 
+TestCase("SpyCalledBeforeTest", {
+  setUp: function () {
+    this.spy1 = sinon.spy();
+    this.spy2 = sinon.spy();
+  },
+
+  "test should be function": function () {
+    assertFunction(this.spy1.calledBefore);
+  },
+
+  "test should return true if first call to A was before first to B": function () {
+    this.spy1();
+    this.spy2();
+
+    assert(this.spy1.calledBefore(this.spy2));
+  },
+
+  "test should return false if not called": function () {
+    this.spy2();
+
+    assertFalse(this.spy1.calledBefore(this.spy2));
+  },
+
+  "test should return true if other not called": function () {
+    this.spy1();
+
+    assert(this.spy1.calledBefore(this.spy2));
+  },
+
+  "test should return false if other called first": function () {
+    this.spy2();
+    this.spy1();
+    this.spy2();
+
+    assertFalse(this.spy1.calledBefore(this.spy2));
+  }
+});
+
+TestCase("SpyCalledAfterTest", {
+  setUp: function () {
+    this.spy1 = sinon.spy();
+    this.spy2 = sinon.spy();
+  },
+
+  "test should be function": function () {
+    assertFunction(this.spy1.calledAfter);
+  },
+
+  "test should return true if first call to A was after first to B": function () {
+    this.spy2();
+    this.spy1();
+
+    assert(this.spy1.calledAfter(this.spy2));
+  },
+
+  "test should return false if not called": function () {
+    this.spy2();
+
+    assertFalse(this.spy1.calledAfter(this.spy2));
+  },
+
+  "test should return false if other not called": function () {
+    this.spy1();
+
+    assertFalse(this.spy1.calledAfter(this.spy2));
+  },
+
+  "test should return false if other called last": function () {
+    this.spy2();
+    this.spy1();
+    this.spy2();
+
+    assertFalse(this.spy1.calledAfter(this.spy2));
+  }
+});
+
 function spyCallSetUp () {
   this.thisObj = {};
   this.args = [{}, [], function () {}, 3];
@@ -339,6 +415,17 @@ TestCase("SpyCallObjectTest", {
     assertFunction(firstCall.calledOn);
     assertFunction(firstCall.calledWith);
     assertFunction(firstCall.returned);
+  },
+
+  "test should record call id": function () {
+    assertNumber(this.call.callId);
+  },
+
+  "test should record ascending call id's": function () {
+    var spy = sinon.spy();
+    spy();
+
+    assert(this.call.callId < spy.getCall(0).callId);
   }
 });
 
