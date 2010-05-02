@@ -4,6 +4,7 @@
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
   var spyCall;
+  var callId = 0;
 
   if (!sinon && commonJSModule) {
     sinon = require("sinon");
@@ -13,7 +14,11 @@
     return;
   }
 
-  function spy(object, property, func) {
+  function spy(object, property) {
+    if (!object || !property) {
+      return spy.create(function () {});
+    }
+
     var method = object[property];
     return sinon.wrapMethod(object, property, spy.create(method));
   }
@@ -86,6 +91,32 @@
       return false;
     }
 
+    function calledBefore(spy) {
+      var ownFirst = this.getCall(0);
+      var first = spy.getCall(0);
+
+      if (!ownFirst) {
+        return false;
+      }
+
+      if (!first) {
+        return true;
+      }
+
+      return ownFirst.callId < first.callId;
+    }
+
+    function calledAfter(spy) {
+      var ownLast = this.getCall(this.callCount() - 1);
+      var last = spy.getCall(spy.callCount() - 1);
+
+      if (!last || !ownLast) {
+        return false;
+      }
+
+      return ownLast.callId > last.callId;
+    }
+
     function calledOn(thisObj) {
       return matchAnyCall(this, "calledOn", arguments);
     }
@@ -105,6 +136,8 @@
     return {
       create: create,
       called: called,
+      calledBefore: calledBefore,
+      calledAfter: calledAfter,
       calledOn: calledOn,
       calledWith: calledWith,
       calledWithExactly: calledWithExactly,
@@ -164,6 +197,7 @@
       proxyCall.thisObj = thisObj;
       proxyCall.args = args;
       proxyCall.returnValue = returnValue;
+      proxyCall.callId = callId++;
 
       return proxyCall;
     }
