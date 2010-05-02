@@ -17,7 +17,7 @@
     var property, testName, nested, name, context;
 
     if (!tests) {
-      throw new TypeError("tests is null");
+      throw new TypeError("test case object is null");
     }
 
     if (typeof prefix == "undefined") {

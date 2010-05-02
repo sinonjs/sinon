@@ -94,12 +94,14 @@
     },
 
     "test should call tearDown after any test": function () {
-      var test = { tearDown: sinon.stub(), test: sinon.stub() };
+      var test = { tearDown: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
       var result = sinon.testCase(test);
       result.test();
+      result.test2();
 
       sinon.assert.called(test.tearDown);
       sinon.assert.called(test.test);
+      sinon.assert.called(test.test2);
     },
 
     "test should call tearDown even if test throws": function () {
@@ -112,6 +114,36 @@
 
       sinon.assert.called(test.tearDown);
       sinon.assert.called(test.test);
+    },
+
+    "test should call setUp test tearDown in order": function () {
+      var calls = [];
+
+      var testCase = sinon.testCase({
+        setUp: function () { calls.push("setUp"); },
+        tearDown: function () { calls.push("tearDown"); },
+        test: function () { calls.push("test"); }
+      });
+
+      testCase.test();
+
+      assertEquals(["setUp", "test", "tearDown"], calls);
+    },
+
+    "test should call in order when test throws": function () {
+      var calls = [];
+
+      var testCase = sinon.testCase({
+        setUp: function () { calls.push("setUp"); },
+        tearDown: function () { calls.push("tearDown"); },
+        test: function () { calls.push("test"); throw new Error("Oh noes"); }
+      });
+
+      try {
+        testCase.test();
+      } catch(e) {}
+
+      assertEquals(["setUp", "test", "tearDown"], calls);
     }
   });
 }());
