@@ -44,6 +44,18 @@
     }
   }
 
+  function assertCallOrder() {
+    verifyIsStub.call(this, arguments[0]);
+
+    for (var i = 1, l = arguments.length; i < l; i++) {
+      verifyIsStub.call(this, arguments[i]);
+
+      if (!arguments[i - 1].calledBefore(arguments[i])) {
+        failAssertion(this, "fakes were not called in expected order");
+      }
+    }
+  }
+
   function assertCalledOn(thisObj, method) {
     verifyIsStub.call(this, method);
 
@@ -119,6 +131,7 @@
     fail: fail,
     failException: "AssertError",
     called: assertCalled,
+    callOrder: assertCallOrder,
     calledOn: assertCalledOn,
     calledWith: assertCalledWith,
     calledWithExactly: assertCalledWithExactly,
