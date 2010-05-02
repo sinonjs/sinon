@@ -117,20 +117,6 @@
     },
 
     "test should call setUp test tearDown in order": function () {
-      var calls = [];
-
-      var testCase = sinon.testCase({
-        setUp: function () { calls.push("setUp"); },
-        tearDown: function () { calls.push("tearDown"); },
-        test: function () { calls.push("test"); }
-      });
-
-      testCase.test();
-
-      assertEquals(["setUp", "test", "tearDown"], calls);
-    },
-
-    "test should call in order when test throws": function () {
       var testCase = {
         setUp: sinon.stub(), test: sinon.stub(), tearDown: sinon.stub()
       };
@@ -141,8 +127,22 @@
         result.test();
       } catch(e) {}
 
-      assert(testCase.setUp.calledBefore(testCase.test));
-      assert(testCase.test.calledBefore(testCase.tearDown));
+      sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
+    },
+
+    "test should call in order when test throws": function () {
+      var testCase = {
+        setUp: sinon.stub(), tearDown: sinon.stub(),
+        test: sinon.stub().throwsException()
+      };
+
+      var result = sinon.testCase(testCase);
+
+      try {
+        result.test();
+      } catch(e) {}
+
+      sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
     }
   });
 }());
