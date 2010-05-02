@@ -149,6 +149,24 @@ TestCase("SinonDeepEqualTest", {
   }
 });
 
+TestCase("SinonKeysTest", {
+  "test should be method": function () {
+    assertFunction(sinon.keys);
+  },
+
+  "test should return enumerable keys": function () {
+    var obj = { a: 0, b: "", c: null, d: function () {}, e: {}, f: false };
+
+    assertEquals(["a", "b", "c", "d", "e", "f"], sinon.keys(obj));
+  },
+
+  "test should return sorted keys": function () {
+    var obj = { d: function () {}, e: {}, f: false, a: 0, b: "", c: null };
+
+    assertEquals(["a", "b", "c", "d", "e", "f"], sinon.keys(obj));
+  }
+});
+
 TestCase("SinonFunctionTest", {
   "test should pass stub function to callback": function () {
     sinon.test(function (stub) {

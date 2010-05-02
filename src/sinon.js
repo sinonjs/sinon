@@ -135,11 +135,24 @@ var sinon = (function () {
     };
   }
 
+  function keys(object) {
+    var objectKeys = [];
+
+    for (var prop in object) {
+      if (object.hasOwnProperty(prop)) {
+        objectKeys.push(prop);
+      }
+    }
+
+    return objectKeys.sort();
+  }
+
   return {
     wrapMethod: wrapMethod,
     extend: extend,
     create: create,
     deepEqual: deepEqual,
+    keys: keys,
     test: test
   };
 }());
