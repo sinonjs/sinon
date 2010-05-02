@@ -131,19 +131,18 @@
     },
 
     "test should call in order when test throws": function () {
-      var calls = [];
+      var testCase = {
+        setUp: sinon.stub(), test: sinon.stub(), tearDown: sinon.stub()
+      };
 
-      var testCase = sinon.testCase({
-        setUp: function () { calls.push("setUp"); },
-        tearDown: function () { calls.push("tearDown"); },
-        test: function () { calls.push("test"); throw new Error("Oh noes"); }
-      });
+      var result = sinon.testCase(testCase);
 
       try {
-        testCase.test();
+        result.test();
       } catch(e) {}
 
-      assertEquals(["setUp", "test", "tearDown"], calls);
+      assert(testCase.setUp.calledBefore(testCase.test));
+      assert(testCase.test.calledBefore(testCase.tearDown));
     }
   });
 }());

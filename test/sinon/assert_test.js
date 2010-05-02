@@ -92,6 +92,71 @@ TestCase("SinonAssertCalledTest", {
   }
 });
 
+TestCase("SinonAssertCallOrderTest", {
+  setUp: stubSetUp,
+  tearDown: stubTearDown,
+
+  "test should be function": function () {
+    assertFunction(sinon.assert.callOrder);
+  },
+
+  "test should not fail when calls where done in right order": function () {
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+    spy1();
+    spy2();
+
+    assertNoException(function () {
+      sinon.assert.callOrder(spy1, spy2);
+    });
+  },
+
+  "test should fail when calls where done in wrong order": function () {
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+    spy2();
+    spy1();
+
+    assertException(function () {
+      sinon.assert.callOrder(spy1, spy2);
+    });
+
+    assert(sinon.assert.fail.called());
+  },
+
+  "test should not fail when many calls where done in right order": function () {
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+    var spy3 = sinon.spy();
+    var spy4 = sinon.spy();
+    spy1();
+    spy2();
+    spy3();
+    spy4();
+
+    assertNoException(function () {
+      sinon.assert.callOrder(spy1, spy2, spy3, spy4);
+    });
+  },
+
+  "test should fail when one of many calls where done in wrong order": function () {
+    var spy1 = sinon.spy();
+    var spy2 = sinon.spy();
+    var spy3 = sinon.spy();
+    var spy4 = sinon.spy();
+    spy1();
+    spy2();
+    spy4();
+    spy3();
+
+    assertException(function () {
+      sinon.assert.callOrder(spy1, spy2, spy3, spy4);
+    });
+
+    assert(sinon.assert.fail.called());
+  }
+});
+
 TestCase("SinonAssertCalledOnTest", {
   setUp: stubSetUp,
   tearDown: stubTearDown,
