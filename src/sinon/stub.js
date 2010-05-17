@@ -36,47 +36,43 @@
   }
 
   sinon.extend(stub, (function () {
-    function create() {
-      function functionStub() {
-        if (functionStub.exception) {
-          throw functionStub.exception;
+    return {
+      create: function create() {
+        function functionStub() {
+          if (functionStub.exception) {
+            throw functionStub.exception;
+          }
+
+          return functionStub.returnValue;
         }
 
-        return functionStub.returnValue;
+        if (sinon.spy) {
+          functionStub = sinon.spy.create(functionStub);
+        }
+
+        sinon.extend(functionStub, stub);
+
+        return functionStub;
+      },
+
+      returns: function returns(value) {
+        this.returnValue = value;
+
+        return this;
+      },
+
+      throwsException: function throwsException(error, message) {
+        if (typeof error == "string") {
+          this.exception = new Error(message);
+          this.exception.name = error;
+        } else if (!error) {
+          this.exception = new Error("Error");
+        } else {
+          this.exception = error;
+        }
+
+        return this;
       }
-
-      if (sinon.spy) {
-        functionStub = sinon.spy.create(functionStub);
-      }
-
-      sinon.extend(functionStub, stub);
-
-      return functionStub;
-    }
-
-    function returns(value) {
-      this.returnValue = value;
-
-      return this;
-    }
-
-    function throwsException(error, message) {
-      if (typeof error == "string") {
-        this.exception = new Error(message);
-        this.exception.name = error;
-      } else if (!error) {
-        this.exception = new Error("Error");
-      } else {
-        this.exception = error;
-      }
-
-      return this;
-    }
-
-    return {
-      create: create,
-      returns: returns,
-      throwsException: throwsException
     };
   }()));
 
