@@ -1,159 +1,152 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
 /*global module, require*/
 var sinon = (function () {
-  function wrapMethod(object, property, method) {
-    if (!object) {
-      throw new TypeError("Should wrap property of object");
-    }
+  return {
+    wrapMethod: function wrapMethod(object, property, method) {
+      if (!object) {
+        throw new TypeError("Should wrap property of object");
+      }
 
-    if (typeof method != "function") {
-      throw new TypeError("Method wrapper should be function");
-    }
+      if (typeof method != "function") {
+        throw new TypeError("Method wrapper should be function");
+      }
 
-    var wrappedMethod = object[property];
-    var type = typeof wrappedMethod;
+      var wrappedMethod = object[property];
+      var type = typeof wrappedMethod;
 
-    if (!!wrappedMethod && type != "function") {
-      throw new TypeError("Attempted to wrap " + type + " as function");
-    }
+      if (!!wrappedMethod && type != "function") {
+        throw new TypeError("Attempted to wrap " + type + " as function");
+      }
 
-    object[property] = method;
+      object[property] = method;
 
-    method.restore = function () {
-      object[property] = wrappedMethod;
-    };
+      method.restore = function () {
+        object[property] = wrappedMethod;
+      };
 
-    return method;
-  }
+      return method;
+    },
 
-  function extend(target) {
-    for (var i = 1, l = arguments.length; i < l; i += 1) {
-      for (var prop in arguments[i]) {
-        if (arguments[i].hasOwnProperty(prop)) {
-          target[prop] = arguments[i][prop];
+    extend: function extend(target) {
+      for (var i = 1, l = arguments.length; i < l; i += 1) {
+        for (var prop in arguments[i]) {
+          if (arguments[i].hasOwnProperty(prop)) {
+            target[prop] = arguments[i][prop];
+          }
         }
       }
-    }
 
-    return target;
-  }
+      return target;
+    },
 
-  function create(proto) {
-    if (Object.create) {
-      return Object.create(proto);
-    } else {
-      var F = function () {};
-      F.prototype = proto;
-      return new F();
-    }
-  }
+    create: function create(proto) {
+      if (Object.create) {
+        return Object.create(proto);
+      } else {
+        var F = function () {};
+        F.prototype = proto;
+        return new F();
+      }
+    },
 
-  function deepEqual(a, b) {
-    if (typeof a != "object" || typeof b != "object") {
-      return a === b;
-    }
-
-    if (a === b) {
-      return true;
-    }
-
-    if (Object.prototype.toString.call(a) == "[object Array]") {
-      if (a.length !== b.length) {
-        return false;
+    deepEqual: function deepEqual(a, b) {
+      if (typeof a != "object" || typeof b != "object") {
+        return a === b;
       }
 
-      for (var i = 0, l = a.length; i < l; i += 1) {
-        if (!deepEqual(a[i], b[i])) {
+      if (a === b) {
+        return true;
+      }
+
+      if (Object.prototype.toString.call(a) == "[object Array]") {
+        if (a.length !== b.length) {
+          return false;
+        }
+
+        for (var i = 0, l = a.length; i < l; i += 1) {
+          if (!deepEqual(a[i], b[i])) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      var prop, aLength = 0, bLength = 0;
+
+      for (prop in a) {
+        aLength += 1;
+
+        if (!deepEqual(a[prop], b[prop])) {
           return false;
         }
       }
 
-      return true;
-    }
+      for (prop in b) {
+        bLength += 1;
+      }
 
-    var prop, aLength = 0, bLength = 0;
-
-    for (prop in a) {
-      aLength += 1;
-
-      if (!deepEqual(a[prop], b[prop])) {
+      if (aLength != bLength) {
         return false;
       }
-    }
 
-    for (prop in b) {
-      bLength += 1;
-    }
+      return true;
+    },
 
-    if (aLength != bLength) {
-      return false;
-    }
+    keys: function keys(object) {
+      var objectKeys = [];
 
-    return true;
-  }
-
-  function test(callback) {
-    return function () {
-      var fakes = [];
-      var exception, result;
-      var realArgs = Array.prototype.slice.call(arguments);
-      var args = [function () {
-        fakes.push(sinon.stub.apply(sinon, arguments));
-        return fakes[fakes.length - 1];
-      }, function () {
-        fakes.push(sinon.mock.apply(sinon, arguments));
-        return fakes[fakes.length - 1];
-      }];
-
-      try {
-        result = callback.apply(this, realArgs.concat(args));
-      } catch (e) {
-        exception = e;
+      for (var prop in object) {
+        if (object.hasOwnProperty(prop)) {
+          objectKeys.push(prop);
+        }
       }
 
-      for (var i = 0, l = fakes.length; i < l; i += 1) {
-        if (!exception) {
-          if (typeof fakes[i].verify == "function") {
-            try {
-              fakes[i].verify();
-            } catch (ex) {
-              exception = ex;
+      return objectKeys.sort();
+    },
+
+    test: function test(callback) {
+      return function () {
+        var fakes = [];
+        var exception, result;
+        var realArgs = Array.prototype.slice.call(arguments);
+        var args = [function () {
+          fakes.push(sinon.stub.apply(sinon, arguments));
+          return fakes[fakes.length - 1];
+        }, function () {
+          fakes.push(sinon.mock.apply(sinon, arguments));
+          return fakes[fakes.length - 1];
+        }];
+
+        try {
+          result = callback.apply(this, realArgs.concat(args));
+        } catch (e) {
+          exception = e;
+        }
+
+        for (var i = 0, l = fakes.length; i < l; i += 1) {
+          if (!exception) {
+            if (typeof fakes[i].verify == "function") {
+              try {
+                fakes[i].verify();
+              } catch (ex) {
+                exception = ex;
+              }
             }
+          }
+
+          if (typeof fakes[i].restore == "function") {
+            fakes[i].restore();
           }
         }
 
-        if (typeof fakes[i].restore == "function") {
-          fakes[i].restore();
+        if (exception) {
+          throw exception;
         }
-      }
 
-      if (exception) {
-        throw exception;
-      }
-
-      return result;
-    };
-  }
-
-  function keys(object) {
-    var objectKeys = [];
-
-    for (var prop in object) {
-      if (object.hasOwnProperty(prop)) {
-        objectKeys.push(prop);
-      }
+        return result;
+      };
     }
-
-    return objectKeys.sort();
-  }
-
-  return {
-    wrapMethod: wrapMethod,
-    extend: extend,
-    create: create,
-    deepEqual: deepEqual,
-    keys: keys,
-    test: test
   };
 }());
 
