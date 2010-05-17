@@ -59,7 +59,7 @@ TestCase("SinonAssertCalledTest", {
       sinon.assert.called();
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should fail when method is not stub": function () {
@@ -67,7 +67,7 @@ TestCase("SinonAssertCalledTest", {
       sinon.assert.called(function () {});
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should fail when method was not called": function () {
@@ -77,7 +77,7 @@ TestCase("SinonAssertCalledTest", {
       sinon.assert.called(stub);
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method was called": function () {
@@ -88,7 +88,7 @@ TestCase("SinonAssertCalledTest", {
       sinon.assert.called(stub);
     });
 
-    assertFalse(sinon.assert.fail.called());
+    assertFalse(sinon.assert.fail.called);
   }
 });
 
@@ -121,7 +121,7 @@ TestCase("SinonAssertCallOrderTest", {
       sinon.assert.callOrder(spy1, spy2);
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when many calls where done in right order": function () {
@@ -153,7 +153,7 @@ TestCase("SinonAssertCallOrderTest", {
       sinon.assert.callOrder(spy1, spy2, spy3, spy4);
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   }
 });
 
@@ -174,7 +174,7 @@ TestCase("SinonAssertCalledOnTest", {
     });
 
     assertFalse(this.stub.calledOn.calledWith(object));
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should fail when method is not stub": function () {
@@ -186,7 +186,7 @@ TestCase("SinonAssertCalledOnTest", {
     });
 
     assertFalse(this.stub.calledOn.calledWith(object));
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should fail when method fails": function () {
@@ -198,7 +198,7 @@ TestCase("SinonAssertCalledOnTest", {
       sinon.assert.calledOn(object, stub);
     });
 
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
@@ -210,7 +210,7 @@ TestCase("SinonAssertCalledOnTest", {
       sinon.assert.calledOn(object, stub);
     });
 
-    assertFalse(sinon.assert.fail.called());
+    assertFalse(sinon.assert.fail.called);
   }
 });
 
@@ -228,7 +228,7 @@ TestCase("SinonAssertCalledWithTest", {
     });
 
     assert(this.stub.calledWith.calledWith(object, 1));
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
@@ -241,7 +241,7 @@ TestCase("SinonAssertCalledWithTest", {
     });
 
     assert(this.stub.calledWith.calledWith(object, 1));
-    assertFalse(sinon.assert.fail.called());
+    assertFalse(sinon.assert.fail.called);
   }
 });
 
@@ -259,7 +259,7 @@ TestCase("SinonAssertCalledWithExactlyTest", {
     });
 
     assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
@@ -272,7 +272,7 @@ TestCase("SinonAssertCalledWithExactlyTest", {
     });
 
     assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
-    assertFalse(sinon.assert.fail.called());
+    assertFalse(sinon.assert.fail.called);
   }
 });
 
@@ -289,7 +289,7 @@ TestCase("SinonAssertThrewTest", {
     });
 
     assert(this.stub.threw.calledWithExactly(1, 2));
-    assert(sinon.assert.fail.called());
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
@@ -301,7 +301,7 @@ TestCase("SinonAssertThrewTest", {
     });
 
     assert(this.stub.threw.calledWithExactly(1, 2));
-    assertFalse(sinon.assert.fail.called());
+    assertFalse(sinon.assert.fail.called);
   }
 });
 
@@ -317,8 +317,8 @@ TestCase("SinonAssertCallCountTest", {
       sinon.assert.callCount(3, stub);
     });
 
-    assert(this.stub.callCount.called());
-    assert(sinon.assert.fail.called());
+    assert(this.stub.callCount.called);
+    assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
@@ -329,8 +329,8 @@ TestCase("SinonAssertCallCountTest", {
       sinon.assert.callCount(3, stub);
     });
 
-    assert(this.stub.callCount.called());
-    assertFalse(sinon.assert.fail.called());
+    assert(this.stub.callCount.called);
+    assertFalse(sinon.assert.fail.called);
   }
 });
 

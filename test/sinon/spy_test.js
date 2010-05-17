@@ -97,25 +97,21 @@ TestCase("SpyCalledTest", {
     this.spy = sinon.spy.create(function () {});
   },
 
-  "test should return boolean": function () {
-    assertBoolean(this.spy.called());
-  },
-
   "test should be false prior to calling the spy": function () {
-    assertFalse(this.spy.called());
+    assertFalse(this.spy.called);
   },
 
   "test should be true after calling the spy once": function () {
     this.spy();
 
-    assert(this.spy.called());
+    assert(this.spy.called);
   },
 
   "test should be true after calling the spy twice": function () {
     this.spy();
     this.spy();
 
-    assert(this.spy.called());
+    assert(this.spy.called);
   }
 });
 

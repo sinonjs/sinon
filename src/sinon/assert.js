@@ -26,7 +26,7 @@
       this.fail(method + " is not a function");
     }
 
-    if (typeof method.called != "function") {
+    if (typeof method.getCall != "function") {
       this.fail(method + " is not stubbed");
     }
   }
@@ -39,7 +39,7 @@
   function assertCalled(method) {
     verifyIsStub.call(this, method);
 
-    if (!method.called()) {
+    if (!method.called) {
       failAssertion(this, "fake was not called as expected");
     }
   }

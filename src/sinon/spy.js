@@ -15,6 +15,10 @@
   }
 
   function spy(object, property) {
+    if (!property && typeof object == "function") {
+      return spy.create(object);
+    }
+
     if (!object || !property) {
       return spy.create(function () {});
     }
@@ -48,6 +52,7 @@
       }
 
       var call = spyCall.create(thisObj, args);
+      this.called = true;
 
       try {
         call.returnValue = func.apply(thisObj, args);
@@ -63,10 +68,6 @@
 
     function getCall(i) {
       return this.calls && this.calls[i];
-    }
-
-    function called() {
-      return this.callCount() > 0;
     }
 
     function callCount() {
@@ -135,7 +136,7 @@
 
     return {
       create: create,
-      called: called,
+      called: false,
       calledBefore: calledBefore,
       calledAfter: calledAfter,
       calledOn: calledOn,
@@ -148,6 +149,9 @@
          alwaysCalledWith: alwaysCalledWith,
          alwaysCalledWithExactly: alwaysCalledWithExactly,
          alwaysThrew: alwaysThrew,
+         calledOnce: calledOnce,
+         calledTwice: calledTwice,
+         calledThrice: calledThrice
        */
       callCount: callCount,
       getCall: getCall,
