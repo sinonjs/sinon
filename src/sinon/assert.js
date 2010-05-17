@@ -96,7 +96,7 @@
     callCount: function assertCallCount(count, method) {
       verifyIsStub.call(this, method);
 
-      if (method.callCount() != count) {
+      if (method.callCount != count) {
         failAssertion(this, method + " was not called " + count + " times");
       }
     },

@@ -86,7 +86,7 @@
       result.test();
       result.test2();
 
-      assertEquals(2, test.setUp.callCount());
+      assertEquals(2, test.setUp.callCount);
       sinon.assert.called(test.test);
       sinon.assert.called(test.test2);
     },

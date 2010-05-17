@@ -51,6 +51,7 @@
     // Public API
     return {
       called: false,
+      callCount: 0,
 
       create: function create(func) {
         if (typeof func != "function") {
@@ -64,17 +65,15 @@
         sinon.extend(proxy, spy);
         delete proxy.create;
         sinon.extend(proxy, func);
+        proxy.calls = [];
 
         return proxy;
       },
 
       invoke: function invoke(func, thisObj, args) {
-        if (!this.calls) {
-          this.calls = [];
-        }
-
         var call = spyCall.create(thisObj, args);
         this.called = true;
+        this.callCount += 1;
 
         try {
           call.returnValue = func.apply(thisObj, args);
@@ -90,10 +89,6 @@
 
       getCall: function getCall(i) {
         return this.calls && this.calls[i];
-      },
-
-      callCount: function callCount() {
-        return this.calls && this.calls.length || 0;
       },
 
       calledBefore: function calledBefore(spy) {
@@ -112,8 +107,8 @@
       },
 
       calledAfter: function calledAfter(spy) {
-        var ownLast = this.getCall(this.callCount() - 1);
-        var last = spy.getCall(spy.callCount() - 1);
+        var ownLast = this.getCall(this.callCount - 1);
+        var last = spy.getCall(spy.callCount - 1);
 
         if (!last || !ownLast) {
           return false;

@@ -317,19 +317,17 @@ TestCase("SinonAssertCallCountTest", {
       sinon.assert.callCount(3, stub);
     });
 
-    assert(this.stub.callCount.called);
     assert(sinon.assert.fail.called);
   },
 
   "test should not fail when method doesn't fail": function () {
-    sinon.stub(this.stub, "callCount").returns(3);
     var stub = this.stub;
+    this.stub.callCount = 3;
     
     assertNoException(function () {
       sinon.assert.callCount(3, stub);
     });
 
-    assert(this.stub.callCount.called);
     assertFalse(sinon.assert.fail.called);
   }
 });
