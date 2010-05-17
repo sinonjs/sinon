@@ -1,5 +1,5 @@
 /* @depend ../sinon.js */
-/*jslint indent: 2, eqeqeq: false, onevar: false*/
+/*jslint indent: 2, eqeqeq: false, onevar: false, plusplus: false*/
 /*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
