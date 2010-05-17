@@ -6,7 +6,7 @@ TestCase("StubCreateTest", {
   "test should be spy": function () {
     var stub = sinon.stub.create();
 
-    assertFunction(stub.called);
+    assertBoolean(stub.called);
     assertFunction(stub.calledWith);
     assertFunction(stub.calledWith);
     assertFunction(stub.calledOn);
@@ -176,7 +176,7 @@ TestCase("StubObjectMethodTest", {
     var stub = sinon.stub(this.object, "method");
     this.object.method();
 
-    assert(stub.called());
+    assert(stub.called);
     assert(stub.calledOn(this.object));
   },
 
@@ -184,7 +184,7 @@ TestCase("StubObjectMethodTest", {
     var stub = sinon.stub(this.object, "method", function () {});
     this.object.method();
 
-    assert(stub.called());
+    assert(stub.called);
     assert(stub.calledOn(this.object));
   },
 
@@ -204,6 +204,6 @@ TestCase("StubObjectMethodTest", {
     var stub = sinon.stub();
 
     assertFunction(stub);
-    assertFalse(stub.called());
+    assertFalse(stub.called);
   }
 });

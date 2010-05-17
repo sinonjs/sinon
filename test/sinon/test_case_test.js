@@ -32,7 +32,7 @@
       var result = sinon.testCase(tests);
       result["test shouldFixIt"]();
 
-      assert(tests.shouldFixIt.called());
+      assert(tests.shouldFixIt.called);
     },
 
     "test should flatten test object": function () {
@@ -43,7 +43,7 @@
       var result = sinon.testCase(tests);
       result["test my context should do something"]();
 
-      assert(tests["my context"]["should do something"].called());
+      assert(tests["my context"]["should do something"].called);
       assertUndefined(result["my context"]);
     },
 
@@ -59,8 +59,8 @@
       result["test ctx ctx2 ctx3 should do"]();
       result["test ctx test something"]();
 
-      assert(tests.ctx.ctx2.ctx3["should do"].called());
-      assert(tests.ctx["test something"].called());
+      assert(tests.ctx.ctx2.ctx3["should do"].called);
+      assert(tests.ctx["test something"].called);
       assertUndefined(result["ctx"]);
     },
 

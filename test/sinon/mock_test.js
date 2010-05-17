@@ -53,7 +53,7 @@ TestCase("ExpectationTest", {
     this.expectation();
 
     assertFunction(this.expectation.invoke);
-    assert(this.expectation.called());
+    assert(this.expectation.called);
   },
 
   "test should be invokable": function () {
