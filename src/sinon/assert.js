@@ -2,7 +2,7 @@
  * @depend ../sinon.js
  * @depend stub.js
  */
-/*jslint indent: 2, eqeqeq: false, onevar: false, nomen: false*/
+/*jslint indent: 2, eqeqeq: false, onevar: false, nomen: false, plusplus: false*/
 /*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";

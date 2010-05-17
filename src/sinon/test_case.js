@@ -12,6 +12,30 @@
     return;
   }
 
+  function createTest(property, setUp, tearDown) {
+    return function () {
+      if (setUp) {
+        setUp.apply(this, arguments);
+      }
+
+      var exception;
+
+      try {
+        property.apply(this, arguments);
+      } catch (e) {
+        exception = e;
+      }
+
+      if (tearDown) {
+        tearDown.apply(this, arguments);
+      }
+
+      if (exception) {
+        throw exception;
+      }
+    };
+  }
+
   function testCase(tests, prefix) {
     var methods = {};
     var property, testName, nested, name, context;
@@ -58,30 +82,6 @@
     }
 
     return methods;
-  }
-
-  function createTest(property, setUp, tearDown) {
-    return function () {
-      if (setUp) {
-        setUp.apply(this, arguments);
-      }
-
-      var exception;
-
-      try {
-        property.apply(this, arguments);
-      } catch(e) {
-        exception = e;
-      }
-
-      if (tearDown) {
-        tearDown.apply(this, arguments);
-      }
-
-      if (exception) {
-        throw exception;
-      }
-    };
   }
 
   if (commonJSModule) {
