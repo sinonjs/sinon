@@ -149,7 +149,7 @@
 
     function receivedMinCalls(expectation) {
       var hasMinLimit = typeof expectation.minCalls == "number";
-      return !hasMinLimit || expectation.callCount() >= expectation.minCalls;
+      return !hasMinLimit || expectation.callCount >= expectation.minCalls;
     }
 
     function receivedMaxCalls(expectation) {
@@ -157,7 +157,7 @@
         return false;
       }
 
-      return expectation.callCount() == expectation.maxCalls;
+      return expectation.callCount == expectation.maxCalls;
     }
 
     return {
@@ -295,7 +295,7 @@
       verify: function verify() {
         if (!this.met()) {
           err(this.method + " expected to be called " + timesInWords(this.minCalls) +
-              ", but was called " + timesInWords(this.callCount()));
+              ", but was called " + timesInWords(this.callCount));
         }
 
         return true;

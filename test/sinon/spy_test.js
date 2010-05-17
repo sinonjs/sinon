@@ -121,29 +121,29 @@ TestCase("SpyCallCountTest", {
   },
 
   "test should report 0 calls": function () {
-    assertEquals(0, this.spy.callCount());
+    assertEquals(0, this.spy.callCount);
   },
 
   "test should record one call": function () {
     this.spy();
 
-    assertEquals(1, this.spy.callCount());
+    assertEquals(1, this.spy.callCount);
   },
 
   "test should record two calls": function () {
     this.spy();
     this.spy();
 
-    assertEquals(2, this.spy.callCount());
+    assertEquals(2, this.spy.callCount);
   },
 
   "test should increase call count for each call": function () {
     this.spy();
     this.spy();
-    assertEquals(2, this.spy.callCount());
+    assertEquals(2, this.spy.callCount);
 
     this.spy();
-    assertEquals(3, this.spy.callCount());
+    assertEquals(3, this.spy.callCount);
   }
 });
 
