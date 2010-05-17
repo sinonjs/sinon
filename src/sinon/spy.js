@@ -30,50 +30,6 @@
   sinon.extend(spy, (function () {
     var slice = Array.prototype.slice;
 
-    function create(func) {
-      if (typeof func != "function") {
-        throw new TypeError("spy needs a function to spy on");
-      }
-
-      function proxy() {
-        return proxy.invoke(func, this, slice.call(arguments));
-      }
-
-      sinon.extend(proxy, spy);
-      delete proxy.create;
-      sinon.extend(proxy, func);
-
-      return proxy;
-    }
-
-    function invoke(func, thisObj, args) {
-      if (!this.calls) {
-        this.calls = [];
-      }
-
-      var call = spyCall.create(thisObj, args);
-      this.called = true;
-
-      try {
-        call.returnValue = func.apply(thisObj, args);
-      } catch (e) {
-        call.exception = e;
-        throw e;
-      } finally {
-        this.calls.push(call);
-      }
-
-      return call.returnValue;
-    }
-
-    function getCall(i) {
-      return this.calls && this.calls[i];
-    }
-
-    function callCount() {
-      return this.calls && this.calls.length || 0;
-    }
-
     function matchAnyCall(proxy, method, args) {
       if (!proxy.calls) {
         return false;
@@ -92,57 +48,96 @@
       return false;
     }
 
-    function calledBefore(spy) {
-      var ownFirst = this.getCall(0);
-      var first = spy.getCall(0);
-
-      if (!ownFirst) {
-        return false;
-      }
-
-      if (!first) {
-        return true;
-      }
-
-      return ownFirst.callId < first.callId;
-    }
-
-    function calledAfter(spy) {
-      var ownLast = this.getCall(this.callCount() - 1);
-      var last = spy.getCall(spy.callCount() - 1);
-
-      if (!last || !ownLast) {
-        return false;
-      }
-
-      return ownLast.callId > last.callId;
-    }
-
-    function calledOn(thisObj) {
-      return matchAnyCall(this, "calledOn", arguments);
-    }
-
-    function calledWith() {
-      return matchAnyCall(this, "calledWith", arguments);
-    }
-
-    function calledWithExactly() {
-      return matchAnyCall(this, "calledWithExactly", arguments);
-    }
-
-    function threw(error) {
-      return matchAnyCall(this, "threw", arguments);
-    }
-
+    // Public API
     return {
-      create: create,
       called: false,
-      calledBefore: calledBefore,
-      calledAfter: calledAfter,
-      calledOn: calledOn,
-      calledWith: calledWith,
-      calledWithExactly: calledWithExactly,
-      threw: threw,
+
+      create: function create(func) {
+        if (typeof func != "function") {
+          throw new TypeError("spy needs a function to spy on");
+        }
+
+        function proxy() {
+          return proxy.invoke(func, this, slice.call(arguments));
+        }
+
+        sinon.extend(proxy, spy);
+        delete proxy.create;
+        sinon.extend(proxy, func);
+
+        return proxy;
+      },
+
+      invoke: function invoke(func, thisObj, args) {
+        if (!this.calls) {
+          this.calls = [];
+        }
+
+        var call = spyCall.create(thisObj, args);
+        this.called = true;
+
+        try {
+          call.returnValue = func.apply(thisObj, args);
+        } catch (e) {
+          call.exception = e;
+          throw e;
+        } finally {
+          this.calls.push(call);
+        }
+
+        return call.returnValue;
+      },
+
+      getCall: function getCall(i) {
+        return this.calls && this.calls[i];
+      },
+
+      callCount: function callCount() {
+        return this.calls && this.calls.length || 0;
+      },
+
+      calledBefore: function calledBefore(spy) {
+        var ownFirst = this.getCall(0);
+        var first = spy.getCall(0);
+
+        if (!ownFirst) {
+          return false;
+        }
+
+        if (!first) {
+          return true;
+        }
+
+        return ownFirst.callId < first.callId;
+      },
+
+      calledAfter: function calledAfter(spy) {
+        var ownLast = this.getCall(this.callCount() - 1);
+        var last = spy.getCall(spy.callCount() - 1);
+
+        if (!last || !ownLast) {
+          return false;
+        }
+
+        return ownLast.callId > last.callId;
+      },
+
+      calledOn: function calledOn(thisObj) {
+        return matchAnyCall(this, "calledOn", arguments);
+      },
+
+      calledWith: function calledWith() {
+        return matchAnyCall(this, "calledWith", arguments);
+      },
+
+      calledWithExactly: function calledWithExactly() {
+        return matchAnyCall(this, "calledWithExactly", arguments);
+      },
+
+      threw: function threw(error) {
+        return matchAnyCall(this, "threw", arguments);
+      }
+
       /* TODO:
          returned: returned,
          alwaysCalledOn: alwaysCalledOn,
@@ -153,9 +148,6 @@
          calledTwice: calledTwice,
          calledThrice: calledThrice
        */
-      callCount: callCount,
-      getCall: getCall,
-      invoke: invoke
     };
   }()));
 
