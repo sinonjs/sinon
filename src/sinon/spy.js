@@ -31,14 +31,14 @@
     var slice = Array.prototype.slice;
 
     function matchAnyCall(proxy, method, args) {
-      if (!proxy.calls) {
+      if (!proxy.called) {
         return false;
       }
 
       var spyCall;
 
-      for (var i = 0, l = proxy.calls.length; i < l; i += 1) {
-        spyCall = proxy.calls[i];
+      for (var i = 0, l = proxy.callCount; i < l; i += 1) {
+        spyCall = proxy.getCall(i);
 
         if (spyCall[method].apply(spyCall, args)) {
           return true;
@@ -55,7 +55,7 @@
 
       create: function create(func) {
         if (typeof func != "function") {
-          throw new TypeError("spy needs a function to spy on");
+          func = function () {};
         }
 
         function proxy() {
@@ -65,56 +65,67 @@
         sinon.extend(proxy, spy);
         delete proxy.create;
         sinon.extend(proxy, func);
-        proxy.calls = [];
+
+        proxy.args = [];
+        proxy.returnValues = [];
+        proxy.thisValues = [];
+        proxy.exceptions = [];
+        proxy.callIds = [];
 
         return proxy;
       },
 
       invoke: function invoke(func, thisObj, args) {
-        var call = spyCall.create(thisObj, args);
+        var exception, returnValue;
         this.called = true;
         this.callCount += 1;
+        this.thisValues.push(thisObj);
+        this.args.push(args);
+        this.callIds.push(callId++);
 
         try {
-          call.returnValue = func.apply(thisObj, args);
+          returnValue = func.apply(thisObj, args);
         } catch (e) {
-          call.exception = e;
+          this.returnValues.push(undefined);
+          exception = e;
           throw e;
         } finally {
-          this.calls.push(call);
+          this.exceptions.push(exception);
         }
 
-        return call.returnValue;
+        this.returnValues.push(returnValue);
+
+        return returnValue;
       },
 
       getCall: function getCall(i) {
-        return this.calls && this.calls[i];
+        if (i < 0 || i >= this.callCount) {
+          return null;
+        }
+
+        return spyCall.create(this.thisValues[i], this.args[i],
+                              this.returnValues[i], this.exceptions[i],
+                              this.callIds[i]);
       },
 
       calledBefore: function calledBefore(spy) {
-        var ownFirst = this.getCall(0);
-        var first = spy.getCall(0);
-
-        if (!ownFirst) {
+        if (!this.called) {
           return false;
         }
 
-        if (!first) {
+        if (!spy.called) {
           return true;
         }
 
-        return ownFirst.callId < first.callId;
+        return this.callIds[0] < spy.callIds[0];
       },
 
       calledAfter: function calledAfter(spy) {
-        var ownLast = this.getCall(this.callCount - 1);
-        var last = spy.getCall(spy.callCount - 1);
-
-        if (!last || !ownLast) {
+        if (!this.called || !spy.called) {
           return false;
         }
 
-        return ownLast.callId > last.callId;
+        return this.callIds[this.callCount - 1] > spy.callIds[spy.callCount - 1 ];
       },
 
       calledOn: function calledOn(thisObj) {
@@ -147,59 +158,53 @@
   }()));
 
   spyCall = (function () {
-    function calledOn(thisObj) {
-      return this.thisObj === thisObj;
-    }
-
-    function calledWith() {
-      for (var i = 0, l = arguments.length; i < l; i += 1) {
-        if (!sinon.deepEqual(arguments[i], this.args[i])) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    function calledWithExactly() {
-      return arguments.length == this.args.length &&
-               this.calledWith.apply(this, arguments);
-    }
-
-    function returned(value) {
-      return this.returnValue === value;
-    }
-
-    function threw(error) {
-      if (typeof error == "undefined" || !this.exception) {
-        return !!this.exception;
-      }
-
-      if (typeof error == "string") {
-        return this.exception.name == error;
-      }
-
-      return this.exception === error;
-    }
-
-    function create(thisObj, args, returnValue) {
-      var proxyCall = sinon.create(spyCall);
-      delete proxyCall.create;
-      proxyCall.thisObj = thisObj;
-      proxyCall.args = args;
-      proxyCall.returnValue = returnValue;
-      proxyCall.callId = callId++;
-
-      return proxyCall;
-    }
-
     return {
-      create: create,
-      calledOn: calledOn,
-      calledWith: calledWith,
-      calledWithExactly: calledWithExactly,
-      returned: returned,
-      threw: threw
+      create: function create(thisObj, args, returnValue, exception, _callId) {
+        var proxyCall = sinon.create(spyCall);
+        delete proxyCall.create;
+        proxyCall.thisObj = thisObj;
+        proxyCall.args = args;
+        proxyCall.returnValue = returnValue;
+        proxyCall.exception = exception;
+        proxyCall.callId = typeof _callId == "number" && _callId || callId++;
+
+        return proxyCall;
+      },
+
+      calledOn: function calledOn(thisObj) {
+        return this.thisObj === thisObj;
+      },
+
+      calledWith: function calledWith() {
+        for (var i = 0, l = arguments.length; i < l; i += 1) {
+          if (!sinon.deepEqual(arguments[i], this.args[i])) {
+            return false;
+          }
+        }
+
+        return true;
+      },
+
+      calledWithExactly: function calledWithExactly() {
+        return arguments.length == this.args.length &&
+          this.calledWith.apply(this, arguments);
+      },
+
+      returned: function returned(value) {
+        return this.returnValue === value;
+      },
+
+      threw: function threw(error) {
+        if (typeof error == "undefined" || !this.exception) {
+          return !!this.exception;
+        }
+
+        if (typeof error == "string") {
+          return this.exception.name == error;
+        }
+
+        return this.exception === error;
+      }
     };
   }());
 
