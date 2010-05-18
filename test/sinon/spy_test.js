@@ -3,10 +3,20 @@ TestCase("SpyCreateTest", {
     assertFunction(sinon.spy.create);
   },
 
-  "test should throw if called without function": function () {
-    assertException(function () {
+  "test should not throw if called without function": function () {
+    assertNoException(function () {
       sinon.spy.create();
-    }, "TypeError");
+    });
+  },
+
+  "test should not throw when calling anonymous spy": function () {
+    var spy = sinon.spy.create();
+
+    assertNoException(function () {
+      spy();
+    });
+
+    assert(spy.called);
   },
 
   "test should return spy function": function () {
@@ -26,7 +36,7 @@ TestCase("SpyCreateTest", {
   },
 
   "test should not define create method": function () {
-    var spy = sinon.spy.create(function () {});
+    var spy = sinon.spy.create();
 
     assertUndefined(spy.create);
   },
@@ -37,6 +47,15 @@ TestCase("SpyCreateTest", {
     var spy = sinon.spy.create(func);
 
     assertSame(object, spy.create);
+  },
+
+  "test should setup logging arrays": function () {
+    var spy = sinon.spy.create();
+
+    assertArray(spy.args);
+    assertArray(spy.returnValues);
+    assertArray(spy.thisValues);
+    assertArray(spy.exceptions);
   }
 });
 
@@ -94,7 +113,7 @@ TestCase("SpyCallTest", {
 
 TestCase("SpyCalledTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
   },
 
   "test should be false prior to calling the spy": function () {
@@ -117,7 +136,7 @@ TestCase("SpyCalledTest", {
 
 TestCase("SpyCallCountTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
   },
 
   "test should report 0 calls": function () {
@@ -149,7 +168,7 @@ TestCase("SpyCallCountTest", {
 
 TestCase("SpyCalledOnTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
   },
 
   "test should be false if spy wasn't called": function () {
@@ -182,9 +201,34 @@ TestCase("SpyCalledOnTest", {
   }
 });
 
+TestCase("SpyThisValueTest", {
+  setUp: function () {
+    this.spy = sinon.spy.create();
+  },
+
+  "test should contain one object": function () {
+    var object = {};
+    this.spy.call(object);
+
+    assertEquals([object], this.spy.thisValues);
+  },
+
+  "test should stack up objects": function () {
+    function MyConstructor() {}
+    var objects = [{}, [], new MyConstructor(), { id: 243 }];
+    this.spy();
+    this.spy.call(objects[0]);
+    this.spy.call(objects[1]);
+    this.spy.call(objects[2]);
+    this.spy.call(objects[3]);
+
+    assertEquals([this].concat(objects), this.spy.thisValues);
+  }
+});
+
 TestCase("SpyCalledWithTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
   },
 
   "test should return false if spy was not called": function () {
@@ -228,9 +272,44 @@ TestCase("SpyCalledWithTest", {
   }
 });
 
+TestCase("SpyArgsTest", {
+  setUp: function () {
+    this.spy = sinon.spy.create();
+  },
+
+  "test should contain real arrays": function () {
+    this.spy();
+
+    assertArray(this.spy.args[0]);
+  },
+
+  "test should contain empty array when no arguments": function () {
+    this.spy();
+
+    assertEquals([[]], this.spy.args);
+  },
+
+  "test should contain array with first call's arguments": function () {
+    this.spy(1, 2, 3);
+
+    assertEquals([[1, 2, 3]], this.spy.args);
+  },
+
+  "test should stack up arguments in nested array": function () {
+    var objects = [{}, [], { id: 324 }];
+    this.spy(1, objects[0], 3);
+    this.spy(1, 2, objects[1]);
+    this.spy(objects[2], 2, 3);
+
+    assertEquals([[1, objects[0], 3],
+                  [1, 2, objects[1]],
+                  [objects[2], 2, 3]], this.spy.args);
+  }
+});
+
 TestCase("CalledWithExactlyTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
   },
 
   "test should return false for partial match": function () {
@@ -270,7 +349,7 @@ TestCase("CalledWithExactlyTest", {
 
 TestCase("SpyThrewTest", {
   setUp: function () {
-    this.spy = sinon.spy.create(function () {});
+    this.spy = sinon.spy.create();
 
     this.spyWithTypeError = sinon.spy.create(function () {
       throw new TypeError();
@@ -314,6 +393,98 @@ TestCase("SpyThrewTest", {
     this.spy();
 
     assertFalse(this.spy.threw("Error"));
+  }
+});
+
+TestCase("SpyExceptionsTest", {
+  setUp: function () {
+    this.spy = sinon.spy.create();
+    var error = this.error = {};
+
+    this.spyWithTypeError = sinon.spy.create(function () {
+      throw error;
+    });
+  },
+
+  "test should contain exception thrown by function": function () {
+    try { this.spyWithTypeError(); } catch (e) {}
+
+    assertEquals([this.error], this.spyWithTypeError.exceptions);
+  },
+
+  "test should contain undefined entry when function did not throw": function () {
+    this.spy();
+
+    assertEquals([undefined], this.spy.exceptions);
+  },
+
+  "test should stack up exceptions and undefined": function () {
+    var calls = 0;
+    var err = this.error;
+
+    var spy = sinon.spy.create(function () {
+      calls += 1;
+
+      if (calls % 2 == 0) {
+        throw err;
+      }
+    });
+
+    spy();
+    try { spy(); } catch (e) {}
+    spy();
+    try { spy(); } catch (e) {}
+    spy();
+
+    assertEquals([undefined, err, undefined, err, undefined], spy.exceptions);
+  }
+});
+
+TestCase("SpyReturnValuesTest", {
+  "test should contain undefined when function does not return explicitly": function () {
+    var spy = sinon.spy.create();
+    spy();
+
+    assertEquals([undefined], spy.returnValues);
+  },
+
+  "test should contain return value": function () {
+    var object = { id: 42 };
+    var spy = sinon.spy.create(function () { return object; });
+    spy();
+
+    assertEquals([object], spy.returnValues);
+  },
+
+  "test should contain undefined when function throws": function () {
+    var spy = sinon.spy.create(function () {
+      throw new Error();
+      return {};
+    });
+
+    try { spy(); } catch (e) {}
+
+    assertEquals([undefined], spy.returnValues);
+  },
+
+  "test should stack up return values": function () {
+    var calls = 0;
+
+    var spy = sinon.spy.create(function () {
+      calls += 1;
+
+      if (calls % 2 == 0) {
+        return calls;
+      }
+    });
+
+    spy();
+    spy();
+    spy();
+    spy();
+    spy();
+
+    assertEquals([undefined, 2, undefined, 4, undefined], spy.returnValues);
   }
 });
 
@@ -404,7 +575,7 @@ TestCase("SpyCallObjectTest", {
   setUp: spyCallSetUp,
 
   "test should get call object": function () {
-    var spy = sinon.spy.create(function () {});
+    var spy = sinon.spy.create();
     spy();
     var firstCall = spy.getCall(0);
 
