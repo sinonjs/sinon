@@ -166,6 +166,10 @@
 
       alwaysCalledWith: function alwaysCalledWith() {
         return matchCalls(this, "calledWith", arguments, false);
+      },
+
+      alwaysCalledWithExactly: function alwaysCalledWithExactly() {
+        return matchCalls(this, "calledWithExactly", arguments, false);
       }
 
       /* TODO:

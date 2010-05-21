@@ -570,6 +570,68 @@
     }
   });
 
+  testCase("AlwaysCalledWithExactlyTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should return false for partial match": function () {
+      this.spy(1, 2, 3);
+
+      assertFalse(this.spy.alwaysCalledWithExactly(1, 2));
+    },
+
+    "test should return false for missing arguments": function () {
+      this.spy(1, 2, 3);
+
+      assertFalse(this.spy.alwaysCalledWithExactly(1, 2, 3, 4));
+    },
+
+    "test should return true for exact match": function () {
+      this.spy(1, 2, 3);
+
+      assert(this.spy.alwaysCalledWithExactly(1, 2, 3));
+    },
+
+    "test should return false for excess arguments": function () {
+      this.spy({}, []);
+
+      assertFalse(this.spy.alwaysCalledWithExactly({}, [], null));
+    },
+
+    "test should return false for one exact match": function () {
+      var object = {};
+      var array = [];
+      this.spy({}, []);
+      this.spy(object, []);
+      this.spy(object, array);
+
+      assert(this.spy.alwaysCalledWithExactly(object, array));
+    },
+
+    "test should return true for only exact matches": function () {
+      var object = {};
+      var array = [];
+
+      this.spy(object, array);
+      this.spy(object, array);
+      this.spy(object, array);
+
+      assert(this.spy.alwaysCalledWithExactly(object, array));
+    },
+
+    "test should return false for no exact matches": function () {
+      var object = {};
+      var array = [];
+
+      this.spy(object, array, null);
+      this.spy(object, array, undefined);
+      this.spy(object, array, "");
+
+      assertFalse(this.spy.alwaysCalledWithExactly(object, array));
+    }
+  });
+
   testCase("SpyThrewTest", {
     setUp: function () {
       this.spy = sinon.spy.create();
