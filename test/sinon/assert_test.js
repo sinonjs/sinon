@@ -192,7 +192,7 @@
       sinon.stub(this.stub, "calledOn");
 
       assertException(function () {
-        sinon.assert.calledOn(object, null);
+        sinon.assert.calledOn(null, object);
       });
 
       assertFalse(this.stub.calledOn.calledWith(object));
@@ -204,7 +204,7 @@
       sinon.stub(this.stub, "calledOn");
 
       assertException(function () {
-        sinon.assert.calledOn(object, function () {});
+        sinon.assert.calledOn(function () {}, object);
       });
 
       assertFalse(this.stub.calledOn.calledWith(object));
@@ -217,7 +217,7 @@
       var stub = this.stub;
       
       assertException(function () {
-        sinon.assert.calledOn(object, stub);
+        sinon.assert.calledOn(stub, object);
       });
 
       assert(sinon.assert.fail.called);
@@ -228,9 +228,7 @@
       sinon.stub(this.stub, "calledOn").returns(true);
       var stub = this.stub;
       
-      assertNoException(function () {
-        sinon.assert.calledOn(object, stub);
-      });
+      sinon.assert.calledOn(stub, object);
 
       assertFalse(sinon.assert.fail.called);
     }
@@ -336,7 +334,7 @@
       var stub = this.stub;
       
       assertException(function () {
-        sinon.assert.callCount(3, stub);
+        sinon.assert.callCount(stub, 3);
       });
 
       assert(sinon.assert.fail.called);
@@ -347,8 +345,116 @@
       this.stub.callCount = 3;
       
       assertNoException(function () {
-        sinon.assert.callCount(3, stub);
+        sinon.assert.callCount(stub, 3);
       });
+
+      assertFalse(sinon.assert.fail.called);
+    }
+  });
+
+  testCase("AssertAlwaysCalledOnTest", {
+    setUp: function () {
+      sinon.stub(sinon.assert, "fail");
+    },
+
+    tearDown: function () {
+      sinon.assert.fail.restore();
+    },
+
+    "test should fail if method is missing": function () {
+      assertException(function () {
+        sinon.assert.alwaysCalledOn();
+      });
+    },
+
+    "test should fail if method is not fake": function () {
+      assertException(function () {
+        sinon.assert.alwaysCalledOn(function () {}, {});
+      });
+    },
+
+    "test should fail if stub returns false": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledOn").returns(false);
+
+      sinon.assert.alwaysCalledOn(stub, {});
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "test should not fail if stub returns true": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledOn").returns(true);
+
+      sinon.assert.alwaysCalledOn(stub, {});
+
+      assertFalse(sinon.assert.fail.called);
+    }
+  });
+
+  testCase("AssertAlwaysCalledWithTest", {
+    setUp: function () {
+      sinon.stub(sinon.assert, "fail");
+    },
+
+    tearDown: function () {
+      sinon.assert.fail.restore();
+    },
+
+    "test should fail if method is missing": function () {
+      assertException(function () {
+        sinon.assert.alwaysCalledWith();
+      });
+    },
+
+    "test should fail if method is not fake": function () {
+      assertException(function () {
+        sinon.assert.alwaysCalledWith(function () {});
+      });
+    },
+
+    "test should fail if stub returns false": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledWith").returns(false);
+
+      sinon.assert.alwaysCalledWith(stub, {}, []);
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "test should not fail if stub returns true": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledWith").returns(true);
+
+      sinon.assert.alwaysCalledWith(stub, {}, []);
+
+      assertFalse(sinon.assert.fail.called);
+    }
+  });
+
+  testCase("AssertAlwaysCalledWithExactlyTest", {
+    setUp: function () {
+      sinon.stub(sinon.assert, "fail");
+    },
+
+    tearDown: function () {
+      sinon.assert.fail.restore();
+    },
+
+    "test should fail if stub returns false": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledWithExactly").returns(false);
+
+      sinon.assert.alwaysCalledWithExactly(stub, {}, []);
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "test should not fail if stub returns true": function () {
+      var stub = sinon.stub.create();
+      sinon.stub(stub, "alwaysCalledWithExactly").returns(true);
+
+      sinon.assert.alwaysCalledWithExactly(stub, {}, []);
 
       assertFalse(sinon.assert.fail.called);
     }

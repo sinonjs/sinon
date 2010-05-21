@@ -30,32 +30,33 @@
   sinon.extend(spy, (function () {
     var slice = Array.prototype.slice;
 
-    function matchCalls(proxy, method, args, matchAny) {
-      if (!proxy.called) {
-        return false;
-      }
+    function delegateToCalls(api, method, matchAny, actual) {
+      api[method] = function () {
+        if (!this.called) {
+          return false;
+        }
 
-      matchAny = arguments.length < 4 ? true : matchAny;
-      var spyCall;
-      var matches = 0;
+        var spyCall;
+        var matches = 0;
 
-      for (var i = 0, l = proxy.callCount; i < l; i += 1) {
-        spyCall = proxy.getCall(i);
+        for (var i = 0, l = this.callCount; i < l; i += 1) {
+          spyCall = this.getCall(i);
 
-        if (spyCall[method].apply(spyCall, args)) {
-          matches += 1;
+          if (spyCall[actual || method].apply(spyCall, arguments)) {
+            matches += 1;
 
-          if (matchAny) {
-            return true;
+            if (matchAny) {
+              return true;
+            }
           }
         }
-      }
 
-      return matches === proxy.callCount;
+        return matches === this.callCount;
+      };
     }
 
     // Public API
-    return {
+    var spyApi = {
       called: false,
       calledOnce: false,
       calledTwice: false,
@@ -138,44 +139,21 @@
         }
 
         return this.callIds[this.callCount - 1] > spy.callIds[spy.callCount - 1];
-      },
-
-      calledOn: function calledOn(thisObj) {
-        return matchCalls(this, "calledOn", arguments);
-      },
-
-      calledWith: function calledWith() {
-        return matchCalls(this, "calledWith", arguments);
-      },
-
-      calledWithExactly: function calledWithExactly() {
-        return matchCalls(this, "calledWithExactly", arguments);
-      },
-
-      threw: function threw(error) {
-        return matchCalls(this, "threw", arguments);
-      },
-
-      returned: function returned(returnValue) {
-        return matchCalls(this, "returned", arguments);
-      },
-
-      alwaysCalledOn: function alwaysCalledOn(thisObj) {
-        return matchCalls(this, "calledOn", arguments, false);
-      },
-
-      alwaysCalledWith: function alwaysCalledWith() {
-        return matchCalls(this, "calledWith", arguments, false);
-      },
-
-      alwaysCalledWithExactly: function alwaysCalledWithExactly() {
-        return matchCalls(this, "calledWithExactly", arguments, false);
-      },
-
-      alwaysThrew: function alwaysThrew() {
-        return matchCalls(this, "threw", arguments, false);
       }
     };
+
+    delegateToCalls(spyApi, "calledOn", true);
+    delegateToCalls(spyApi, "alwaysCalledOn", false, "calledOn");
+    delegateToCalls(spyApi, "calledWith", true);
+    delegateToCalls(spyApi, "alwaysCalledWith", false, "calledWith");
+    delegateToCalls(spyApi, "calledWithExactly", true);
+    delegateToCalls(spyApi, "alwaysCalledWithExactly", false, "calledWithExactly");
+    delegateToCalls(spyApi, "threw", true);
+    delegateToCalls(spyApi, "alwaysThrew", false, "threw");
+    delegateToCalls(spyApi, "returned", true);
+    delegateToCalls(spyApi, "alwaysReturned", false, "returned");
+
+    return spyApi;
   }()));
 
   spyCall = (function () {
