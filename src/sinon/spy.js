@@ -170,12 +170,11 @@
 
       alwaysCalledWithExactly: function alwaysCalledWithExactly() {
         return matchCalls(this, "calledWithExactly", arguments, false);
-      }
+      },
 
-      /* TODO:
-         alwaysCalledWithExactly: alwaysCalledWithExactly,
-         alwaysThrew: alwaysThrew,
-       */
+      alwaysThrew: function alwaysThrew() {
+        return matchCalls(this, "threw", arguments, false);
+      }
     };
   }()));
 
