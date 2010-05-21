@@ -103,49 +103,6 @@ var sinon = (function () {
       }
 
       return objectKeys.sort();
-    },
-
-    test: function test(callback) {
-      return function () {
-        var fakes = [];
-        var exception, result;
-        var realArgs = Array.prototype.slice.call(arguments);
-        var args = [function () {
-          fakes.push(sinon.stub.apply(sinon, arguments));
-          return fakes[fakes.length - 1];
-        }, function () {
-          fakes.push(sinon.mock.apply(sinon, arguments));
-          return fakes[fakes.length - 1];
-        }];
-
-        try {
-          result = callback.apply(this, realArgs.concat(args));
-        } catch (e) {
-          exception = e;
-        }
-
-        for (var i = 0, l = fakes.length; i < l; i += 1) {
-          if (!exception) {
-            if (typeof fakes[i].verify == "function") {
-              try {
-                fakes[i].verify();
-              } catch (ex) {
-                exception = ex;
-              }
-            }
-          }
-
-          if (typeof fakes[i].restore == "function") {
-            fakes[i].restore();
-          }
-        }
-
-        if (exception) {
-          throw exception;
-        }
-
-        return result;
-      };
     }
   };
 }());
@@ -155,4 +112,7 @@ if (typeof module == "object" && typeof require == "function") {
   module.exports.spy = require("sinon/spy");
   module.exports.stub = require("sinon/stub");
   module.exports.mock = require("sinon/mock");
+  module.exports.assert = require("sinon/assert");
+  module.exports.test = require("sinon/test");
+  module.exports.testCase = require("sinon/test_case");
 }
