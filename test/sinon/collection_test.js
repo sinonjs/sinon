@@ -1,4 +1,4 @@
-/*jslint indent: 2, onevar: false, eqeqeq: false*/
+/*jslint indent: 2, onevar: false, eqeqeq: false, plusplus: false*/
 /*globals TestCase,
           sinon,
           fail,
