@@ -30,22 +30,28 @@
   sinon.extend(spy, (function () {
     var slice = Array.prototype.slice;
 
-    function matchAnyCall(proxy, method, args) {
+    function matchCalls(proxy, method, args, matchAny) {
       if (!proxy.called) {
         return false;
       }
 
+      matchAny = arguments.length < 4 ? true : matchAny;
       var spyCall;
+      var matches = 0;
 
       for (var i = 0, l = proxy.callCount; i < l; i += 1) {
         spyCall = proxy.getCall(i);
 
         if (spyCall[method].apply(spyCall, args)) {
-          return true;
+          matches += 1;
+
+          if (matchAny) {
+            return true;
+          }
         }
       }
 
-      return false;
+      return matches === proxy.callCount;
     }
 
     // Public API
@@ -135,26 +141,27 @@
       },
 
       calledOn: function calledOn(thisObj) {
-        return matchAnyCall(this, "calledOn", arguments);
+        return matchCalls(this, "calledOn", arguments);
       },
 
       calledWith: function calledWith() {
-        return matchAnyCall(this, "calledWith", arguments);
+        return matchCalls(this, "calledWith", arguments);
       },
 
       calledWithExactly: function calledWithExactly() {
-        return matchAnyCall(this, "calledWithExactly", arguments);
+        return matchCalls(this, "calledWithExactly", arguments);
       },
 
       threw: function threw(error) {
-        return matchAnyCall(this, "threw", arguments);
+        return matchCalls(this, "threw", arguments);
       },
 
       returned: function returned(returnValue) {
-        return matchAnyCall(this, "returned", arguments);
+        return matchCalls(this, "returned", arguments);
       },
 
       alwaysCalledOn: function alwaysCalledOn(thisObj) {
+        return matchCalls(this, "calledOn", arguments, false);
       }
 
       /* TODO:

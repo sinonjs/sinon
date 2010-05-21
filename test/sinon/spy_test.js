@@ -324,6 +324,53 @@
     }
   });
 
+  testCase("SpyAlwaysCalledOnTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should be false prior to calling the spy": function () {
+      assertFalse(this.spy.alwaysCalledOn({}));
+    },
+
+    "test should be true if called with thisObj once": function () {
+      var object = {};
+      this.spy.call(object);
+
+      assert(this.spy.alwaysCalledOn(object));
+    },
+
+    "test should be true if called with thisObj many times": function () {
+      var object = {};
+      this.spy.call(object);
+      this.spy.call(object);
+      this.spy.call(object);
+      this.spy.call(object);
+
+      assert(this.spy.alwaysCalledOn(object));
+    },
+
+    "test should be false if called with another object atleast once": function () {
+      var object = {};
+      this.spy.call(object);
+      this.spy.call(object);
+      this.spy.call(object);
+      this.spy();
+      this.spy.call(object);
+
+      assertFalse(this.spy.alwaysCalledOn(object));
+    },
+
+    "test should be false if never called with expected object": function () {
+      var object = {};
+      this.spy();
+      this.spy();
+      this.spy();
+
+      assertFalse(this.spy.alwaysCalledOn(object));
+    }
+  });
+
   testCase("SpyThisValueTest", {
     setUp: function () {
       this.spy = sinon.spy.create();
