@@ -112,6 +112,7 @@ if (typeof module == "object" && typeof require == "function") {
   module.exports.spy = require("sinon/spy");
   module.exports.stub = require("sinon/stub");
   module.exports.mock = require("sinon/mock");
+  module.exports.collection = require("sinon/collection");
   module.exports.assert = require("sinon/assert");
   module.exports.test = require("sinon/test");
   module.exports.testCase = require("sinon/test_case");

@@ -2,6 +2,7 @@
  * @depend ../sinon.js
  * @depend stub.js
  * @depend mock.js
+ * @depend collection.js
  */
 /*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
 /*global module, require, sinon*/
@@ -18,38 +19,21 @@
 
   function test(callback) {
     return function () {
-      var fakes = [];
+      var collection = sinon.collection.create();
       var exception, result;
       var realArgs = Array.prototype.slice.call(arguments);
-      var args = [function () {
-        fakes.push(sinon.stub.apply(sinon, arguments));
-        return fakes[fakes.length - 1];
-      }, function () {
-        fakes.push(sinon.mock.apply(sinon, arguments));
-        return fakes[fakes.length - 1];
-      }];
 
       try {
-        result = callback.apply(this, realArgs.concat(args));
+        result = callback.apply(this, realArgs.concat([function () {
+          return collection.stub.apply(collection, arguments);
+        }, function () {
+          return collection.mock.apply(collection, arguments);
+        }]));
       } catch (e) {
         exception = e;
       }
 
-      for (var i = 0, l = fakes.length; i < l; i += 1) {
-        if (!exception) {
-          if (typeof fakes[i].verify == "function") {
-            try {
-              fakes[i].verify();
-            } catch (ex) {
-              exception = ex;
-            }
-          }
-        }
-
-        if (typeof fakes[i].restore == "function") {
-          fakes[i].restore();
-        }
-      }
+      collection.verifyAndRestore();
 
       if (exception) {
         throw exception;
