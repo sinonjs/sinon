@@ -770,11 +770,11 @@
     "test should return true if all calls threw": function () {
       try {
         this.spyWithTypeError();
-      } catch (e) {}
+      } catch (e1) {}
 
       try {
         this.spyWithTypeError();
-      } catch (e) {}
+      } catch (e2) {}
 
       assert(this.spyWithTypeError.alwaysThrew());
     },
@@ -782,11 +782,11 @@
     "test should return true if all calls threw same type": function () {
       try {
         this.spyWithTypeError();
-      } catch (e) {}
+      } catch (e1) {}
 
       try {
         this.spyWithTypeError();
-      } catch (e) {}
+      } catch (e2) {}
 
       assert(this.spyWithTypeError.alwaysThrew("TypeError"));
     }
@@ -851,7 +851,7 @@
       var spy = sinon.spy.create();
       spy();
 
-      assertTrue(spy.returned());
+      assert(spy.returned());
     },
 
     "test should return true for undefined when no explicit return": function () {
