@@ -125,7 +125,7 @@
           return false;
         }
 
-        return this.callIds[this.callCount - 1] > spy.callIds[spy.callCount - 1 ];
+        return this.callIds[this.callCount - 1] > spy.callIds[spy.callCount - 1];
       },
 
       calledOn: function calledOn(thisObj) {
@@ -159,14 +159,14 @@
 
   spyCall = (function () {
     return {
-      create: function create(thisObj, args, returnValue, exception, _callId) {
+      create: function create(thisObj, args, returnValue, exception, id) {
         var proxyCall = sinon.create(spyCall);
         delete proxyCall.create;
         proxyCall.thisObj = thisObj;
         proxyCall.args = args;
         proxyCall.returnValue = returnValue;
         proxyCall.exception = exception;
-        proxyCall.callId = typeof _callId == "number" && _callId || callId++;
+        proxyCall.callId = typeof id == "number" && id || callId++;
 
         return proxyCall;
       },

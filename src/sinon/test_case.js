@@ -8,7 +8,7 @@
     sinon = require("sinon");
   }
 
-  if (!sinon) {
+  if (!sinon || !Object.prototype.hasOwnProperty) {
     return;
   }
 
@@ -53,31 +53,35 @@
     var method;
 
     for (testName in tests) {
-      property = tests[testName];
+      if (tests.hasOwnProperty(testName)) {
+        property = tests[testName];
 
-      if (/^(setUp|tearDown)$/.test(testName)) {
-        continue;
-      }
-
-      if (typeof property == "function" && !/^test/.test(testName)) {
-        testName = prefix + testName;
-      }
-
-      if (typeof property == "object") {
-        nested = testCase(property, "");
-        context = prefix + testName + " ";
-
-        for (name in nested) {
-          methods[context + name] = nested[name];
-        }
-      } else {
-        method = property;
-
-        if (setUp || tearDown) {
-          method = createTest(property, setUp, tearDown);
+        if (/^(setUp|tearDown)$/.test(testName)) {
+          continue;
         }
 
-        methods[testName] = sinon.test(method);
+        if (typeof property == "function" && !/^test/.test(testName)) {
+          testName = prefix + testName;
+        }
+
+        if (typeof property == "object") {
+          nested = testCase(property, "");
+          context = prefix + testName + " ";
+
+          for (name in nested) {
+            if (nested.hasOwnProperty(name)) {
+              methods[context + name] = nested[name];
+            }
+          }
+        } else {
+          method = property;
+
+          if (setUp || tearDown) {
+            method = createTest(property, setUp, tearDown);
+          }
+
+          methods[testName] = sinon.test(method);
+        }
       }
     }
 
