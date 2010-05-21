@@ -1,5 +1,17 @@
+/*jslint indent: 2, onevar: false*/
+/*globals TestCase,
+          sinon,
+          assert,
+          assertUndefined,
+          assertFunction,
+          assertSame,
+          assertNotSame,
+          assertEquals,
+          assertException*/
 (function () {
-  TestCase("SinonTestCaseTest", {
+  var testCase = TestCase; // Avoid JsLint warning
+
+  testCase("SinonTestCaseTest", {
     "test should be function": function () {
       assertFunction(sinon.testCase);
     },
@@ -61,7 +73,7 @@
 
       assert(tests.ctx.ctx2.ctx3["should do"].called);
       assert(tests.ctx["test something"].called);
-      assertUndefined(result["ctx"]);
+      assertUndefined(result.ctx);
     },
 
     "test should remove setUp method": function () {
@@ -116,21 +128,24 @@
 
     "test should call setUp test tearDown in order": function () {
       var testCase = {
-        setUp: sinon.stub(), test: sinon.stub(), tearDown: sinon.stub()
+        setUp: sinon.stub(),
+        test: sinon.stub(),
+        tearDown: sinon.stub()
       };
 
       var result = sinon.testCase(testCase);
 
       try {
         result.test();
-      } catch(e) {}
+      } catch (e) {}
 
       sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
     },
 
     "test should call in order when test throws": function () {
       var testCase = {
-        setUp: sinon.stub(), tearDown: sinon.stub(),
+        setUp: sinon.stub(),
+        tearDown: sinon.stub(),
         test: sinon.stub().throwsException()
       };
 
@@ -138,7 +153,7 @@
 
       try {
         result.test();
-      } catch(e) {}
+      } catch (e) {}
 
       sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
     },
@@ -166,7 +181,7 @@
       var myObj = { meth: myMeth };
 
       var testCase = sinon.testCase({
-        setUp: function(stub) {
+        setUp: function (stub) {
           stub(myObj, "meth");
         },
 
