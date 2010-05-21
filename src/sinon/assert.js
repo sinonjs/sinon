@@ -6,6 +6,8 @@
 /*global module, require, sinon*/
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
+  var slice = Array.prototype.slice;
+  var assert;
 
   if (!sinon && commonJSModule) {
     sinon = require("sinon");
@@ -17,30 +19,44 @@
 
   function verifyIsStub(method) {
     if (typeof method != "function") {
-      this.fail(method + " is not a function");
+      assert.fail(method + " is not a function");
     }
 
     if (typeof method.getCall != "function") {
-      this.fail(method + " is not stubbed");
+      assert.fail(method + " is not stubbed");
     }
   }
 
   function failAssertion(object, msg) {
-    var failMethod = object.fail || sinon.assert.fail;
+    var failMethod = object.fail || assert.fail;
     failMethod.call(object, msg);
   }
 
-  sinon.assert = {
+  function mirrorAssertion(method, message) {
+    assert[method] = function (fake) {
+      verifyIsStub(fake);
+
+      if (!fake[method].apply(fake, slice.call(arguments, 1))) {
+        for (var i = 0, l = arguments.length; i < l; i++) {
+          message = message.replace("%" + i, arguments[i]);
+        }
+
+        failAssertion(this, message);
+      }
+    };
+  }
+
+  assert = {
     failException: "AssertError",
 
     fail: function fail(message) {
       var error = new Error(message);
-      error.name = this.failException || sinon.assert.failException;
+      error.name = this.failException || assert.failException;
       throw error;
     },
 
     called: function assertCalled(method) {
-      verifyIsStub.call(this, method);
+      verifyIsStub(method);
 
       if (!method.called) {
         failAssertion(this, "fake was not called as expected");
@@ -48,10 +64,10 @@
     },
 
     callOrder: function assertCallOrder() {
-      verifyIsStub.call(this, arguments[0]);
+      verifyIsStub(arguments[0]);
 
       for (var i = 1, l = arguments.length; i < l; i++) {
-        verifyIsStub.call(this, arguments[i]);
+        verifyIsStub(arguments[i]);
 
         if (!arguments[i - 1].calledBefore(arguments[i])) {
           failAssertion(this, "fakes were not called in expected order");
@@ -59,42 +75,8 @@
       }
     },
 
-    calledOn: function assertCalledOn(thisObj, method) {
-      verifyIsStub.call(this, method);
-
-      if (!method.calledOn(thisObj)) {
-        failAssertion(this, method + " was not called with " + thisObj + " as this");
-      }
-    },
-
-    calledWith: function assertCalledWith(method) {
-      verifyIsStub.call(this, method);
-      var args = Array.prototype.slice.call(arguments, 1);
-
-      if (!method.calledWith.apply(method, args)) {
-        failAssertion(this, method + " was not called with arguments " + args.join());
-      }
-    },
-
-    calledWithExactly: function assertCalledWithExactly(method) {
-      verifyIsStub.call(this, method);
-      var args = Array.prototype.slice.call(arguments, 1);
-
-      if (!method.calledWithExactly.apply(method, args)) {
-        failAssertion(this, method + " was not called with exact arguments " + args.join());
-      }
-    },
-
-    threw: function assertThrew(method, exception, message) {
-      verifyIsStub.call(this, method);
-
-      if (!method.threw(exception, message)) {
-        failAssertion(this, method + " did not throw exception");
-      }
-    },
-
-    callCount: function assertCallCount(count, method) {
-      verifyIsStub.call(this, method);
+    callCount: function assertCallCount(method, count) {
+      verifyIsStub(method);
 
       if (method.callCount != count) {
         failAssertion(this, method + " was not called " + count + " times");
@@ -130,4 +112,18 @@
       return target;
     }
   };
+
+  mirrorAssertion("calledOn", "%0 was not called with %1 as this");
+  mirrorAssertion("alwaysCalledOn", "%0 was not always called with %1 as this");
+  mirrorAssertion("calledWith", "%0 was not called with arguments %1");
+  mirrorAssertion("alwaysCalledWith", "%0 was not always called with arguments %1");
+  mirrorAssertion("calledWithExactly", "%0 was not called with exact arguments %1");
+  mirrorAssertion("alwaysCalledWithExactly", "%0 was not always called with exact arguments %1");
+  mirrorAssertion("threw", "%0 did not throw exception");
+
+  if (commonJSModule) {
+    module.exports = assert;
+  } else {
+    sinon.assert = assert;
+  }
 }(typeof sinon == "object" && sinon || null));
