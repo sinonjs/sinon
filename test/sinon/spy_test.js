@@ -169,6 +169,94 @@
     }
   });
 
+  testCase("SpyCalledOnceTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should be false prior to calling the spy": function () {
+      assertFalse(this.spy.calledOnce);
+    },
+
+    "test should be true after calling the spy once": function () {
+      this.spy();
+
+      assert(this.spy.calledOnce);
+    },
+
+    "test should be false after calling the spy twice": function () {
+      this.spy();
+      this.spy();
+
+      assertFalse(this.spy.calledOnce);
+    }
+  });
+
+  testCase("SpyCalledTwiceTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should be false prior to calling the spy": function () {
+      assertFalse(this.spy.calledTwice);
+    },
+
+    "test should be false after calling the spy once": function () {
+      this.spy();
+
+      assertFalse(this.spy.calledTwice);
+    },
+
+    "test should be true after calling the spy twice": function () {
+      this.spy();
+      this.spy();
+
+      assert(this.spy.calledTwice);
+    },
+
+    "test should be false after calling the spy thrice": function () {
+      this.spy();
+      this.spy();
+      this.spy();
+
+      assertFalse(this.spy.calledTwice);
+    }
+  });
+
+  testCase("SpyCalledThriceTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should be false prior to calling the spy": function () {
+      assertFalse(this.spy.calledThrice);
+    },
+
+    "test should be false after calling the spy twice": function () {
+      this.spy();
+      this.spy();
+
+      assertFalse(this.spy.calledThrice);
+    },
+
+    "test should be true after calling the spy thrice": function () {
+      this.spy();
+      this.spy();
+      this.spy();
+
+      assert(this.spy.calledThrice);
+    },
+
+    "test should be false after calling the spy four times": function () {
+      this.spy();
+      this.spy();
+      this.spy();
+      this.spy();
+
+      assertFalse(this.spy.calledThrice);
+    }
+  });
+
   testCase("SpyCallCountTest", {
     setUp: function () {
       this.spy = sinon.spy.create();
@@ -493,6 +581,74 @@
       spy();
 
       assertEquals([undefined, err, undefined, err, undefined], spy.exceptions);
+    }
+  });
+
+  testCase("SpyReturnedTest", {
+    "test should return true when no argument": function () {
+      var spy = sinon.spy.create();
+      spy();
+
+      assertTrue(spy.returned());
+    },
+
+    "test should return true for undefined when no explicit return": function () {
+      var spy = sinon.spy.create();
+      spy();
+
+      assert(spy.returned(undefined));
+    },
+
+    "test should return true when returned value once": function () {
+      var values = [{}, 2, "hey", function () {}];
+      var spy = sinon.spy.create(function () {
+        return values[spy.callCount];
+      });
+
+      spy();
+      spy();
+      spy();
+      spy();
+
+      assert(spy.returned(values[3]));
+    },
+
+    "test should return false when value is never returned": function () {
+      var values = [{}, 2, "hey", function () {}];
+      var spy = sinon.spy.create(function () {
+        return values[spy.callCount];
+      });
+
+      spy();
+      spy();
+      spy();
+      spy();
+
+      assertFalse(spy.returned({ id: 42 }));
+    },
+
+    "test should return true when value is returned several times": function () {
+      var object = { id: 42 };
+      var spy = sinon.spy.create(function () {
+        return object;
+      });
+
+      spy();
+      spy();
+      spy();
+
+      assert(spy.returned(object));
+    },
+
+    "test should compare values strictly": function () {
+      var object = { id: 42 };
+      var spy = sinon.spy.create(function () {
+        return object;
+      });
+
+      spy();
+
+      assertFalse(spy.returned({ id: 42 }));
     }
   });
 
