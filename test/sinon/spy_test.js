@@ -442,6 +442,59 @@
     }
   });
 
+  testCase("SpyAlwaysCalledWithTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+    },
+
+    "test should return false if spy was not called": function () {
+      assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
+    },
+
+    "test should return true if spy was called with args": function () {
+      this.spy(1, 2, 3);
+
+      assert(this.spy.alwaysCalledWith(1, 2, 3));
+    },
+
+    "test should return false if called with args only once": function () {
+      this.spy(1, 3, 3);
+      this.spy(1, 2, 3);
+      this.spy(3, 2, 3);
+
+      assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
+    },
+
+    "test should return false if not called with args": function () {
+      this.spy(1, 3, 3);
+      this.spy(2);
+      this.spy();
+
+      assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
+    },
+
+    "test should return true for partial match": function () {
+      this.spy(1, 3, 3);
+
+      assert(this.spy.alwaysCalledWith(1, 3));
+    },
+
+    "test should return true for partial match on many calls": function () {
+      this.spy(1, 3, 3);
+      this.spy(1, 3);
+      this.spy(1, 3, 4, 5);
+      this.spy(1, 3, 1);
+
+      assert(this.spy.alwaysCalledWith(1, 3));
+    },
+
+    "test should match all arguments individually, not as array": function () {
+      this.spy([1, 2, 3]);
+
+      assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
+    }
+  });
+
   testCase("SpyArgsTest", {
     setUp: function () {
       this.spy = sinon.spy.create();
