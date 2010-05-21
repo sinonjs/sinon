@@ -36,11 +36,24 @@
   }
 
   sinon.extend(stub, (function () {
+    var slice = Array.prototype.slice;
+
     return {
       create: function create() {
         function functionStub() {
           if (functionStub.exception) {
             throw functionStub.exception;
+          }
+
+          if (typeof functionStub.callArgAt == "number") {
+            var func = arguments[functionStub.callArgAt];
+
+            if (typeof func != "function") {
+              throw new TypeError("argument at index " + functionStub.callArgAt +
+                                  " is not a function: " + func);
+            }
+
+            func.apply(null, functionStub.callbackArguments);
           }
 
           return functionStub.returnValue;
@@ -72,6 +85,23 @@
         }
 
         return this;
+      },
+
+      callsArg: function callsArg(pos) {
+        if (typeof pos != "number") {
+          throw new TypeError("argument index is not number");
+        }
+
+        this.callArgAt = pos;
+      },
+
+      callsArgWith: function callsArgWith(pos) {
+        if (typeof pos != "number") {
+          throw new TypeError("argument index is not number");
+        }
+
+        this.callArgAt = pos;
+        this.callbackArguments = slice.call(arguments, 1);
       }
     };
   }()));
