@@ -110,6 +110,98 @@
     }
   });
 
+  testCase("StubCallsArgTest", {
+    setUp: function () {
+      this.stub = sinon.stub.create();
+    },
+
+    "test should call argument at specified index": function () {
+      this.stub.callsArg(2);
+      var callback = sinon.stub.create();
+
+      this.stub(1, 2, callback);
+
+      assert(callback.called);
+    },
+
+    "test should throw if argument at specified index is not callable": function () {
+      this.stub.callsArg(0);
+      var callback = sinon.stub.create();
+
+      assertException(function () {
+        this.stub(1);
+      }, "TypeError");
+    },
+
+    "test should throw if no index is specified": function () {
+      var stub = this.stub;
+
+      assertException(function () {
+        stub.callsArg();
+      }, "TypeError");
+    },
+
+    "test should throw if index is not number": function () {
+      var stub = this.stub;
+
+      assertException(function () {
+        stub.callsArg({});
+      }, "TypeError");
+    }
+  });
+
+  testCase("StubCallsArgWithTest", {
+    setUp: function () {
+      this.stub = sinon.stub.create();
+    },
+
+    "test should call argument at specified index with provided args": function () {
+      var object = {};
+      this.stub.callsArgWith(1, object);
+      var callback = sinon.stub.create();
+
+      this.stub(1, callback);
+
+      assert(callback.calledWith(object));
+    },
+
+    "test should call callback without args": function () {
+      this.stub.callsArgWith(1);
+      var callback = sinon.stub.create();
+
+      this.stub(1, callback);
+
+      assert(callback.calledWith());
+    },
+
+    "test should call callback wit multiple args": function () {
+      var object = {};
+      var array = [];
+      this.stub.callsArgWith(1, object, array);
+      var callback = sinon.stub.create();
+
+      this.stub(1, callback);
+
+      assert(callback.calledWith(object, array));
+    },
+
+    "test should throw if no index is specified": function () {
+      var stub = this.stub;
+
+      assertException(function () {
+        stub.callsArgWith();
+      }, "TypeError");
+    },
+
+    "test should throw if index is not number": function () {
+      var stub = this.stub;
+
+      assertException(function () {
+        stub.callsArgWith({});
+      }, "TypeError");
+    }
+  });
+
   testCase("StubObjectMethodTest", {
     setUp: function () {
       this.method = function () {};
