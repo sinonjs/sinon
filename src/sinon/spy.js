@@ -162,15 +162,15 @@
 
       alwaysCalledOn: function alwaysCalledOn(thisObj) {
         return matchCalls(this, "calledOn", arguments, false);
+      },
+
+      alwaysCalledWith: function alwaysCalledWith() {
+        return matchCalls(this, "calledWith", arguments, false);
       }
 
       /* TODO:
-         alwaysCalledWith: alwaysCalledWith,
          alwaysCalledWithExactly: alwaysCalledWithExactly,
          alwaysThrew: alwaysThrew,
-         calledOnce: calledOnce,
-         calledTwice: calledTwice,
-         calledThrice: calledThrice
        */
     };
   }()));
