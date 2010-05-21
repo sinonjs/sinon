@@ -1,4 +1,7 @@
-/* @depend ../sinon.js */
+/**
+ * @depend ../sinon.js
+ * @depend test.js
+ */
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global module, require, sinon*/
 (function (sinon) {
