@@ -51,6 +51,9 @@
     // Public API
     return {
       called: false,
+      calledOnce: false,
+      calledTwice: false,
+      calledThrice: false,
       callCount: 0,
 
       create: function create(func) {
@@ -79,6 +82,9 @@
         var exception, returnValue;
         this.called = true;
         this.callCount += 1;
+        this.calledOnce = this.callCount == 1;
+        this.calledTwice = this.callCount == 2;
+        this.calledThrice = this.callCount == 3;
         this.thisValues.push(thisObj);
         this.args.push(args);
         this.callIds.push(callId++);
@@ -142,11 +148,16 @@
 
       threw: function threw(error) {
         return matchAnyCall(this, "threw", arguments);
+      },
+
+      returned: function returned(returnValue) {
+        return matchAnyCall(this, "returned", arguments);
+      },
+
+      alwaysCalledOn: function alwaysCalledOn(thisObj) {
       }
 
       /* TODO:
-         returned: returned,
-         alwaysCalledOn: alwaysCalledOn,
          alwaysCalledWith: alwaysCalledWith,
          alwaysCalledWithExactly: alwaysCalledWithExactly,
          alwaysThrew: alwaysThrew,
