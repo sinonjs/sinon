@@ -692,6 +692,106 @@
     }
   });
 
+  testCase("SpyAlwaysThrewTest", {
+    setUp: function () {
+      this.spy = sinon.spy.create();
+
+      this.spyWithTypeError = sinon.spy.create(function () {
+        throw new TypeError();
+      });
+    },
+
+    "test should return true when spy threw": function () {
+      var err = new Error();
+
+      var spy = sinon.spy.create(function () {
+        throw err;
+      });
+
+      try {
+        spy();
+      } catch (e) {}
+
+      assert(spy.alwaysThrew(err));
+    },
+
+    "test should return false if spy did not throw": function () {
+      this.spy();
+
+      assertFalse(this.spy.alwaysThrew());
+    },
+
+    "test should return true if spy threw": function () {
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      assert(this.spyWithTypeError.alwaysThrew());
+    },
+
+    "test should return true if string type matches": function () {
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      assert(this.spyWithTypeError.alwaysThrew("TypeError"));
+    },
+
+    "test should return false if string did not match": function () {
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      assertFalse(this.spyWithTypeError.alwaysThrew("Error"));
+    },
+
+    "test should return false if spy did not throw specified error": function () {
+      this.spy();
+
+      assertFalse(this.spy.alwaysThrew("Error"));
+    },
+
+    "test should return false if some calls did not throw": function () {
+      var spy = sinon.stub.create(function () {
+        if (spy.callCount === 0) {
+          throw new Error();
+        }
+      });
+
+      try {
+        this.spy();
+      } catch (e) {}
+
+      this.spy();
+
+      assertFalse(this.spy.alwaysThrew());
+    },
+
+    "test should return true if all calls threw": function () {
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      assert(this.spyWithTypeError.alwaysThrew());
+    },
+
+    "test should return true if all calls threw same type": function () {
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      try {
+        this.spyWithTypeError();
+      } catch (e) {}
+
+      assert(this.spyWithTypeError.alwaysThrew("TypeError"));
+    }
+  });
+
   testCase("SpyExceptionsTest", {
     setUp: function () {
       this.spy = sinon.spy.create();
