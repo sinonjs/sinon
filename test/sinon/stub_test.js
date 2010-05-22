@@ -319,4 +319,38 @@
       assertFalse(stub.called);
     }
   });
+
+  testCase("StubEverythingTest", {
+    "test should stub all methods of object without property": function () {
+      var obj = {
+        func1: function () {},
+        func2: function () {},
+        func3: function () {}
+      };
+
+      var stub = sinon.stub(obj);
+
+      assertFunction(obj.func1.restore);
+      assertFunction(obj.func2.restore);
+      assertFunction(obj.func3.restore);
+    },
+
+    "test should return object": function () {
+      var object = {};
+
+      assertSame(object, sinon.stub(object));
+    },
+
+    "test should not stub inherited methods": function () {
+      var getName = function () {};
+      var person = { getName: getName };
+      var dude = sinon.create(person);
+
+      sinon.stub(dude);
+
+      assertUndefined(dude.toString.restore);
+      assertUndefined(dude.valueOf.restore);
+      assertSame(getName, dude.getName);
+    }
+  });
 }());

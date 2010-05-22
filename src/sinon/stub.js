@@ -28,8 +28,18 @@
       wrapper = stub.create();
     }
 
-    if (!object || !property) {
+    if (!object && !property) {
       return sinon.stub.create();
+    }
+
+    if (!property && !!object) {
+      for (var prop in object) {
+        if (object.hasOwnProperty(prop) && typeof object[prop] == "function") {
+          stub(object, prop);
+        }
+      }
+
+      return object;
     }
 
     return sinon.wrapMethod(object, property, wrapper);
