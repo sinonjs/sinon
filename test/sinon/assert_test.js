@@ -28,7 +28,7 @@
 
   function stubSetUp() {
     this.stub = sinon.stub.create();
-    sinon.stub(sinon.assert, "fail").throwsException();
+    sinon.stub(sinon.assert, "fail").throws();
   }
 
   function stubTearDown() {

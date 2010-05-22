@@ -115,7 +115,7 @@
     },
 
     "test should call tearDown even if test throws": function () {
-      var test = { tearDown: sinon.stub(), test: sinon.stub().throwsException() };
+      var test = { tearDown: sinon.stub(), test: sinon.stub().throws() };
       var result = sinon.testCase(test);
 
       assertException(function () {
@@ -146,7 +146,7 @@
       var testCase = {
         setUp: sinon.stub(),
         tearDown: sinon.stub(),
-        test: sinon.stub().throwsException()
+        test: sinon.stub().throws()
       };
 
       var result = sinon.testCase(testCase);
