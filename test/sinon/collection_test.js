@@ -209,7 +209,7 @@
 
     "test should throw when restore throws": function () {
       this.collection.verify = sinon.spy.create();
-      this.collection.restore = sinon.stub.create().throwsException();
+      this.collection.restore = sinon.stub.create().throws();
 
       assertException(function () {
         this.collection.verifyAndRestore();
@@ -218,7 +218,7 @@
 
     "test should call restore when restore throws": function () {
       this.collection.verify = sinon.spy.create();
-      this.collection.restore = sinon.stub.create().throwsException();
+      this.collection.restore = sinon.stub.create().throws();
 
       try {
         this.collection.verifyAndRestore();

@@ -74,7 +74,7 @@
         return this;
       },
 
-      throwsException: function throwsException(error, message) {
+      throws: function throws(error, message) {
         if (typeof error == "string") {
           this.exception = new Error(message);
           this.exception.name = error;
