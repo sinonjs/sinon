@@ -1,5 +1,5 @@
-/*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
-/*global module, require*/
+/*jslint indent: 2, eqeqeq: false, onevar: false, forin: true, nomen: false*/
+/*global module, require, __dirname*/
 var sinon = (function () {
   return {
     wrapMethod: function wrapMethod(object, property, method) {
@@ -108,6 +108,7 @@ var sinon = (function () {
 }());
 
 if (typeof module == "object" && typeof require == "function") {
+  require.paths.unshift(__dirname);
   module.exports = sinon;
   module.exports.spy = require("sinon/spy");
   module.exports.stub = require("sinon/stub");
@@ -116,4 +117,5 @@ if (typeof module == "object" && typeof require == "function") {
   module.exports.assert = require("sinon/assert");
   module.exports.test = require("sinon/test");
   module.exports.testCase = require("sinon/test_case");
+  require.paths.shift();
 }
