@@ -1,5 +1,5 @@
 /*jslint indent: 2, onevar: false*/
-/*globals TestCase,
+/*globals testCase,
           sinon,
           assert,
           assertSame,
@@ -12,15 +12,13 @@
           assertObject,
           assertFunction*/
 (function () {
-  var testCase = TestCase; // Avoid JsLint warning
-
   testCase("FakeXMLHttpRequestTest", {
-    "test should be constructor": function () {
+    "should be constructor": function () {
       assertFunction(sinon.FakeXMLHttpRequest);
       assertSame(sinon.FakeXMLHttpRequest, sinon.FakeXMLHttpRequest.prototype.constructor);
     },
 
-    "test should implement status constants": function () {
+    "should implement status constants": function () {
       assertSame(1, sinon.FakeXMLHttpRequest.OPENED);
       assertSame(2, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
       assertSame(3, sinon.FakeXMLHttpRequest.LOADING);
@@ -33,11 +31,11 @@
       this.xhr = new sinon.FakeXMLHttpRequest();
     },
 
-    "test should be method": function () {
+    "should be method": function () {
       assertFunction(this.xhr.open);
     },
 
-    "test should set properties on object": function () {
+    "should set properties on object": function () {
       this.xhr.open("GET", "/my/url", true, "cjno", "pass");
 
       assertEquals("GET", this.xhr.method);
@@ -47,44 +45,44 @@
       assertEquals("pass", this.xhr.password);
     },
 
-    "test should be async by default": function () {
+    "should be async by default": function () {
       this.xhr.open("GET", "/my/url");
 
       assertTrue(this.xhr.async);
     },
 
-    "test should set async to false": function () {
+    "should set async to false": function () {
       this.xhr.open("GET", "/my/url", false);
 
       assertFalse(this.xhr.async);
     },
 
-    "test should set responseText to null": function () {
+    "should set responseText to null": function () {
       this.xhr.open("GET", "/my/url");
 
       assertNull(this.xhr.responseText);
     },
 
-    "test should set requestHeaders to blank object": function () {
+    "should set requestHeaders to blank object": function () {
       this.xhr.open("GET", "/my/url");
 
       assertObject(this.xhr.requestHeaders);
       assertEquals({}, this.xhr.requestHeaders);
     },
 
-    "test should set readyState to OPENED": function () {
+    "should set readyState to OPENED": function () {
       this.xhr.open("GET", "/my/url");
 
       assertSame(sinon.FakeXMLHttpRequest.OPENED, this.xhr.readyState);
     },
 
-    "test should set send flag to false": function () {
+    "should set send flag to false": function () {
       this.xhr.open("GET", "/my/url");
 
       assertFalse(this.xhr.sendFlag);
     },
 
-    "test should dispatch onreadystatechange with reset state": function () {
+    "should dispatch onreadystatechange with reset state": function () {
       var state = {};
 
       this.xhr.onreadystatechange = function () {
@@ -111,7 +109,7 @@
       this.xhr.open("GET", "/");
     },
 
-    "test should throw exception if readyState is not OPENED": function () {
+    "should throw exception if readyState is not OPENED": function () {
       var xhr = new sinon.FakeXMLHttpRequest();
 
       assertException(function () {
@@ -119,7 +117,7 @@
       });
     },
 
-    "test should throw exception if send fag is true": function () {
+    "should throw exception if send fag is true": function () {
       var xhr = this.xhr;
       xhr.sendFlag = true;
 
@@ -128,7 +126,7 @@
       });
     },
 
-    "test should disallow unsafe headers": function () {
+    "should disallow unsafe headers": function () {
       var xhr = this.xhr;
 
       assertException(function () {
@@ -212,13 +210,13 @@
       });
     },
 
-    "test should set header and value": function () {
+    "should set header and value": function () {
       this.xhr.setRequestHeader("X-Fake", "Yeah!");
 
       assertEquals({ "X-Fake": "Yeah!" }, this.xhr.requestHeaders);
     },
 
-    "test should append same-named header values": function () {
+    "should append same-named header values": function () {
       this.xhr.setRequestHeader("X-Fake", "Oh");
       this.xhr.setRequestHeader("X-Fake", "yeah!");
 
@@ -231,7 +229,7 @@
       this.xhr = new sinon.FakeXMLHttpRequest();
     },
 
-    "test should throw if request is not open": function () {
+    "should throw if request is not open": function () {
       var xhr = new sinon.FakeXMLHttpRequest();
 
       assertException(function () {
@@ -239,7 +237,7 @@
       });
     },
 
-    "test should throw if send flag is true": function () {
+    "should throw if send flag is true": function () {
       var xhr = this.xhr;
       xhr.open("GET", "/");
       xhr.sendFlag = true;
@@ -249,28 +247,28 @@
       });
     },
 
-    "test should set GET body to null": function () {
+    "should set GET body to null": function () {
       this.xhr.open("GET", "/");
       this.xhr.send("Data");
 
       assertNull(this.xhr.requestBody);
     },
 
-    "test should set HEAD body to null": function () {
+    "should set HEAD body to null": function () {
       this.xhr.open("HEAD", "/");
       this.xhr.send("Data");
 
       assertNull(this.xhr.requestBody);
     },
 
-    "test should set mime to text/plain": function () {
+    "should set mime to text/plain": function () {
       this.xhr.open("POST", "/");
       this.xhr.send("Data");
 
       assertEquals("text/plain;charset=utf-8", this.xhr.requestHeaders["Content-Type"]);
     },
 
-    "test should not override mime": function () {
+    "should not override mime": function () {
       this.xhr.open("POST", "/");
       this.xhr.setRequestHeader("Content-Type", "text/html");
       this.xhr.send("Data");
@@ -278,35 +276,35 @@
       assertEquals("text/html;charset=utf-8", this.xhr.requestHeaders["Content-Type"]);
     },
 
-    "test should set request body to string data": function () {
+    "should set request body to string data": function () {
       this.xhr.open("POST", "/");
       this.xhr.send("Data");
 
       assertEquals("Data", this.xhr.requestBody);
     },
 
-    "test should set error flag to false": function () {
+    "should set error flag to false": function () {
       this.xhr.open("POST", "/");
       this.xhr.send("Data");
 
       assertFalse(this.xhr.errorFlag);
     },
 
-    "test should set send flag to true": function () {
+    "should set send flag to true": function () {
       this.xhr.open("POST", "/");
       this.xhr.send("Data");
 
       assertTrue(this.xhr.sendFlag);
     },
 
-    "test should not set send flag to true if sync": function () {
+    "should not set send flag to true if sync": function () {
       this.xhr.open("POST", "/", false);
       this.xhr.send("Data");
 
       assertFalse(this.xhr.sendFlag);
     },
 
-    "test should dispatch onreadystatechange": function () {
+    "should dispatch onreadystatechange": function () {
       var state;
       this.xhr.open("POST", "/", false);
 
@@ -326,7 +324,7 @@
       this.xhr.open("GET", "/");
     },
 
-    "test should set request headers": function () {
+    "should set request headers": function () {
       var object = { id: 42 };
       this.xhr.send();
       this.xhr.setResponseHeaders(object);
@@ -334,7 +332,7 @@
       assertSame(object, this.xhr.responseHeaders);
     },
 
-    "test should throw if send flag is not set": function () {
+    "should throw if send flag is not set": function () {
       var object = { id: 42 };
       var xhr = this.xhr;
 
@@ -343,7 +341,7 @@
       });
     },
 
-    "test should call readyStateChange with HEADERS_RECEIVED": function () {
+    "should call readyStateChange with HEADERS_RECEIVED": function () {
       var object = { id: 42 };
       this.xhr.send();
       var stub = this.xhr.readyStateChange = sinon.stub.create();
@@ -360,30 +358,30 @@
       this.xhr.open("GET", "/");
     },
 
-    "test should return null if request is not finished": function () {
+    "should return null if request is not finished": function () {
       assertNull(this.xhr.getResponseHeader("Content-Type"));
     },
 
-    "test should return null if header is Set-Cookie": function () {
+    "should return null if header is Set-Cookie": function () {
       this.xhr.send();
 
       assertNull(this.xhr.getResponseHeader("Set-Cookie"));
     },
 
-    "test should return null if header is Set-Cookie2": function () {
+    "should return null if header is Set-Cookie2": function () {
       this.xhr.send();
 
       assertNull(this.xhr.getResponseHeader("Set-Cookie2"));
     },
 
-    "test should return header value": function () {
+    "should return header value": function () {
       this.xhr.send();
       this.xhr.setResponseHeaders({ "Content-Type": "text/html" });
 
       assertEquals("text/html", this.xhr.getResponseHeader("Content-Type"));
     },
 
-    "test should return null if header is not set": function () {
+    "should return null if header is not set": function () {
       this.xhr.send();
 
       assertNull(this.xhr.getResponseHeader("Content-Type"));
@@ -396,11 +394,11 @@
       this.xhr.open("GET", "/");
     },
 
-    "test should return null if request is not finished": function () {
+    "should return null if request is not finished": function () {
       assertNull(this.xhr.getAllResponseHeaders());
     },
 
-    "test should not return Set-Cookie and Set-Cookie2 headers": function () {
+    "should not return Set-Cookie and Set-Cookie2 headers": function () {
       this.xhr.send();
       this.xhr.setResponseHeaders({
         "Set-Cookie": "Hey",
@@ -410,7 +408,7 @@
       assertEquals({}, this.xhr.getAllResponseHeaders());
     },
 
-    "test should return headers": function () {
+    "should return headers": function () {
       this.xhr.send();
       this.xhr.setResponseHeaders({
         "Content-Type": "text/html",

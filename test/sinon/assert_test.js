@@ -1,5 +1,5 @@
 /*jslint indent: 2, onevar: false*/
-/*globals TestCase,
+/*globals testCase,
           sinon,
           fail,
           failException,
@@ -18,10 +18,8 @@
           assertThrew,
           assertCallCount*/
 (function (global) {
-  var testCase = TestCase; // Avoid JsLint warning
-
   testCase("SinonAssertTest", {
-    "test should be object": function () {
+    "should be object": function () {
       assertObject(sinon.assert);
     }
   });
@@ -44,7 +42,7 @@
       sinon.assert.failException = this.exceptionName;
     },
 
-    "test should throw exception": function () {
+    "should throw exception": function () {
       var failed = false;
       var exception;
 
@@ -59,7 +57,7 @@
       assertEquals("AssertError", exception.name);
     },
 
-    "test should throw configured exception type": function () {
+    "should throw configured exception type": function () {
       sinon.assert.failException = "RetardError";
 
       assertException(function () {
@@ -72,11 +70,11 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should be function": function () {
+    "should be function": function () {
       assertFunction(sinon.assert.called);
     },
 
-    "test should fail when method does not exist": function () {
+    "should fail when method does not exist": function () {
       assertException(function () {
         sinon.assert.called();
       });
@@ -84,7 +82,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should fail when method is not stub": function () {
+    "should fail when method is not stub": function () {
       assertException(function () {
         sinon.assert.called(function () {});
       });
@@ -92,7 +90,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should fail when method was not called": function () {
+    "should fail when method was not called": function () {
       var stub = this.stub;
 
       assertException(function () {
@@ -102,7 +100,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method was called": function () {
+    "should not fail when method was called": function () {
       var stub = this.stub;
       stub();
 
@@ -118,11 +116,11 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should be function": function () {
+    "should be function": function () {
       assertFunction(sinon.assert.callOrder);
     },
 
-    "test should not fail when calls where done in right order": function () {
+    "should not fail when calls where done in right order": function () {
       var spy1 = sinon.spy();
       var spy2 = sinon.spy();
       spy1();
@@ -133,7 +131,7 @@
       });
     },
 
-    "test should fail when calls where done in wrong order": function () {
+    "should fail when calls where done in wrong order": function () {
       var spy1 = sinon.spy();
       var spy2 = sinon.spy();
       spy2();
@@ -146,7 +144,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when many calls where done in right order": function () {
+    "should not fail when many calls where done in right order": function () {
       var spy1 = sinon.spy();
       var spy2 = sinon.spy();
       var spy3 = sinon.spy();
@@ -161,7 +159,7 @@
       });
     },
 
-    "test should fail when one of many calls where done in wrong order": function () {
+    "should fail when one of many calls where done in wrong order": function () {
       var spy1 = sinon.spy();
       var spy2 = sinon.spy();
       var spy3 = sinon.spy();
@@ -183,11 +181,11 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should be function": function () {
+    "should be function": function () {
       assertFunction(sinon.assert.calledOn);
     },
 
-    "test should fail when method does not exist": function () {
+    "should fail when method does not exist": function () {
       var object = {};
       sinon.stub(this.stub, "calledOn");
 
@@ -199,7 +197,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should fail when method is not stub": function () {
+    "should fail when method is not stub": function () {
       var object = {};
       sinon.stub(this.stub, "calledOn");
 
@@ -211,7 +209,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should fail when method fails": function () {
+    "should fail when method fails": function () {
       var object = {};
       sinon.stub(this.stub, "calledOn").returns(false);
       var stub = this.stub;
@@ -223,7 +221,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method doesn't fail": function () {
+    "should not fail when method doesn't fail": function () {
       var object = {};
       sinon.stub(this.stub, "calledOn").returns(true);
       var stub = this.stub;
@@ -238,7 +236,7 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should fail when method fails": function () {
+    "should fail when method fails": function () {
       var object = {};
       sinon.stub(this.stub, "calledWith").returns(false);
       var stub = this.stub;
@@ -251,7 +249,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method doesn't fail": function () {
+    "should not fail when method doesn't fail": function () {
       var object = {};
       sinon.stub(this.stub, "calledWith").returns(true);
       var stub = this.stub;
@@ -269,7 +267,7 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should fail when method fails": function () {
+    "should fail when method fails": function () {
       var object = {};
       sinon.stub(this.stub, "calledWithExactly").returns(false);
       var stub = this.stub;
@@ -282,7 +280,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method doesn't fail": function () {
+    "should not fail when method doesn't fail": function () {
       var object = {};
       sinon.stub(this.stub, "calledWithExactly").returns(true);
       var stub = this.stub;
@@ -300,7 +298,7 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should fail when method fails": function () {
+    "should fail when method fails": function () {
       sinon.stub(this.stub, "threw").returns(false);
       var stub = this.stub;
       
@@ -312,7 +310,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method doesn't fail": function () {
+    "should not fail when method doesn't fail": function () {
       sinon.stub(this.stub, "threw").returns(true);
       var stub = this.stub;
       
@@ -329,7 +327,7 @@
     setUp: stubSetUp,
     tearDown: stubTearDown,
 
-    "test should fail when method fails": function () {
+    "should fail when method fails": function () {
       sinon.stub(this.stub, "callCount").returns(2);
       var stub = this.stub;
       
@@ -340,7 +338,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail when method doesn't fail": function () {
+    "should not fail when method doesn't fail": function () {
       var stub = this.stub;
       this.stub.callCount = 3;
       
@@ -361,19 +359,19 @@
       sinon.assert.fail.restore();
     },
 
-    "test should fail if method is missing": function () {
+    "should fail if method is missing": function () {
       assertException(function () {
         sinon.assert.alwaysCalledOn();
       });
     },
 
-    "test should fail if method is not fake": function () {
+    "should fail if method is not fake": function () {
       assertException(function () {
         sinon.assert.alwaysCalledOn(function () {}, {});
       });
     },
 
-    "test should fail if stub returns false": function () {
+    "should fail if stub returns false": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledOn").returns(false);
 
@@ -382,7 +380,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail if stub returns true": function () {
+    "should not fail if stub returns true": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledOn").returns(true);
 
@@ -401,19 +399,19 @@
       sinon.assert.fail.restore();
     },
 
-    "test should fail if method is missing": function () {
+    "should fail if method is missing": function () {
       assertException(function () {
         sinon.assert.alwaysCalledWith();
       });
     },
 
-    "test should fail if method is not fake": function () {
+    "should fail if method is not fake": function () {
       assertException(function () {
         sinon.assert.alwaysCalledWith(function () {});
       });
     },
 
-    "test should fail if stub returns false": function () {
+    "should fail if stub returns false": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledWith").returns(false);
 
@@ -422,7 +420,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail if stub returns true": function () {
+    "should not fail if stub returns true": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledWith").returns(true);
 
@@ -441,7 +439,7 @@
       sinon.assert.fail.restore();
     },
 
-    "test should fail if stub returns false": function () {
+    "should fail if stub returns false": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledWithExactly").returns(false);
 
@@ -450,7 +448,7 @@
       assert(sinon.assert.fail.called);
     },
 
-    "test should not fail if stub returns true": function () {
+    "should not fail if stub returns true": function () {
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledWithExactly").returns(true);
 
@@ -461,7 +459,7 @@
   });
 
   testCase("SinonAssertExposeTest", {
-    "test should expose asserts into object": function () {
+    "should expose asserts into object": function () {
       var test = {};
       sinon.assert.expose(test);
 
@@ -475,7 +473,7 @@
       assertFunction(test.assertCallCount);
     },
 
-    "test should expose asserts into global": function () {
+    "should expose asserts into global": function () {
       var test = {};
       sinon.assert.expose(global, true, false);
 
@@ -488,7 +486,7 @@
       assertFunction(assertCallCount);
     },
 
-    "test should expose asserts into object without prefixes": function () {
+    "should expose asserts into object without prefixes": function () {
       var test = {};
       sinon.assert.expose(test, false);
 
@@ -502,13 +500,13 @@
       assertFunction(test.callCount);
     },
 
-    "test should throw if target is undefined": function () {
+    "should throw if target is undefined": function () {
       assertException(function () {
         sinon.assert.expose();
       }, "TypeError");
     },
 
-    "test should throw if target is null": function () {
+    "should throw if target is null": function () {
       assertException(function () {
         sinon.assert.expose(null);
       }, "TypeError");

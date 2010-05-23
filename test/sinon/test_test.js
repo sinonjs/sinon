@@ -1,5 +1,5 @@
 /*jslint indent: 2, onevar: false, eqeqeq: false*/
-/*globals TestCase,
+/*globals testCase,
           sinon,
           fail,
           assert,
@@ -11,16 +11,14 @@
           assertException,
           assertNoException*/
 (function () {
-  var testCase = TestCase; // Avoid JsLint warning
-
   testCase("SinonTestTest", {
-    "test should pass stub function to callback": function () {
+    "should pass stub function to callback": function () {
       sinon.test(function (stub) {
         assertFunction(stub);
       })();
     },
 
-    "test should proxy return value": function () {
+    "should proxy return value": function () {
       var object = {};
 
       var result = sinon.test(function (stub) {
@@ -30,7 +28,7 @@
       assertSame(object, result);
     },
 
-    "test should stub inside sandbox": function () {
+    "should stub inside sandbox": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -41,7 +39,7 @@
       })();
     },
 
-    "test should restore stubs": function () {
+    "should restore stubs": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -52,7 +50,7 @@
       assertSame(method, object.method);
     },
 
-    "test should throw when method throws": function () {
+    "should throw when method throws": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -64,7 +62,7 @@
       }, "Error");
     },
 
-    "test should restore stub when method throws": function () {
+    "should restore stub when method throws": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -78,7 +76,7 @@
       assertSame(method, object.method);
     },
 
-    "test should mock inside sandbox": function () {
+    "should mock inside sandbox": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -89,7 +87,7 @@
       })();
     },
 
-    "test should verify mocks": function () {
+    "should verify mocks": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -102,7 +100,7 @@
       assertSame(method, object.method);
     },
 
-    "test should restore mocks": function () {
+    "should restore mocks": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -115,7 +113,7 @@
       assertSame(method, object.method);
     },
 
-    "test should restore mock when method throws": function () {
+    "should restore mock when method throws": function () {
       var method = function () {};
       var object = { method: method };
 
@@ -129,7 +127,7 @@
       assertSame(method, object.method);
     },
 
-    "test should append helpers after normal arguments": function () {
+    "should append helpers after normal arguments": function () {
       var object = { method: function () {} };
 
       sinon.test(function (obj, stub, mock) {
@@ -140,7 +138,7 @@
       })(object);
     },
 
-    "test should append maintain this object": function () {
+    "should append maintain this object": function () {
       var testCase = {
         someTest: sinon.test(function (obj, stub, mock) {
           return this;
