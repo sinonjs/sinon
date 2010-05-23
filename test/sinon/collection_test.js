@@ -1,5 +1,5 @@
 /*jslint indent: 2, onevar: false, eqeqeq: false, plusplus: false*/
-/*globals TestCase,
+/*globals testCase,
           sinon,
           fail,
           assert,
@@ -12,10 +12,8 @@
           assertException,
           assertNoException*/
 (function () {
-  var testCase = TestCase; // Avoid JsLint warning
-
   testCase("CollectionCreateTest", {
-    "test should create fake collection": function () {
+    "should create fake collection": function () {
       var collection = sinon.collection.create();
 
       assertFunction(collection.verify);
@@ -37,7 +35,7 @@
       sinon.stub = this.stub;
     },
 
-    "test should call stub": function () {
+    "should call stub": function () {
       var object = { id: 42 };
       var args;
 
@@ -50,7 +48,7 @@
       assertEquals([object, "method"], args);
     },
 
-    "test should add stub to fake array": function () {
+    "should add stub to fake array": function () {
       var object = { id: 42 };
 
       sinon.stub = function () {
@@ -62,7 +60,7 @@
       assertEquals([object], this.collection.fakes);
     },
 
-    "test should append stubs to fake array": function () {
+    "should append stubs to fake array": function () {
       var objects = [{ id: 42 }, { id: 17 }];
       var i = 0;
 
@@ -87,7 +85,7 @@
       sinon.mock = this.mock;
     },
 
-    "test should call mock": function () {
+    "should call mock": function () {
       var object = { id: 42 };
       var args;
 
@@ -100,7 +98,7 @@
       assertEquals([object, "method"], args);
     },
 
-    "test should add mock to fake array": function () {
+    "should add mock to fake array": function () {
       var object = { id: 42 };
 
       sinon.mock = function () {
@@ -112,7 +110,7 @@
       assertEquals([object], this.collection.fakes);
     },
 
-    "test should append mocks to fake array": function () {
+    "should append mocks to fake array": function () {
       var objects = [{ id: 42 }, { id: 17 }];
       var i = 0;
 
@@ -139,7 +137,7 @@
       sinon.stub = this.stub;
     },
 
-    "test should append mocks and stubs to fake array": function () {
+    "should append mocks and stubs to fake array": function () {
       var objects = [{ id: 42 }, { id: 17 }];
       var i = 0;
 
@@ -159,7 +157,7 @@
       this.collection = sinon.collection.create();
     },
 
-    "test should call verify on all fakes": function () {
+    "should call verify on all fakes": function () {
       this.collection.fakes = [{
         verify: sinon.spy.create()
       }, {
@@ -178,7 +176,7 @@
       this.collection = sinon.collection.create();
     },
 
-    "test should call restore on all fakes": function () {
+    "should call restore on all fakes": function () {
       this.collection.fakes = [{
         restore: sinon.spy.create()
       }, {
@@ -197,7 +195,7 @@
       this.collection = sinon.collection.create();
     },
 
-    "test should call verify and restore": function () {
+    "should call verify and restore": function () {
       this.collection.verify = sinon.spy.create();
       this.collection.restore = sinon.spy.create();
 
@@ -207,7 +205,7 @@
       assert(this.collection.restore.called);
     },
 
-    "test should throw when restore throws": function () {
+    "should throw when restore throws": function () {
       this.collection.verify = sinon.spy.create();
       this.collection.restore = sinon.stub.create().throws();
 
@@ -216,7 +214,7 @@
       });
     },
 
-    "test should call restore when restore throws": function () {
+    "should call restore when restore throws": function () {
       this.collection.verify = sinon.spy.create();
       this.collection.restore = sinon.stub.create().throws();
 
