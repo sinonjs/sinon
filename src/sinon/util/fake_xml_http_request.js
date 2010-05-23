@@ -1,6 +1,10 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global sinon, module, require*/
-(function (sinon) {
+if (typeof sinon == "undefined") {
+  this.sinon = {};
+}
+
+sinon.FakeXMLHttpRequest = (function () {
   var unsafeHeaders = {
     "Accept-Charset": true,
     "Accept-Encoding": true,
@@ -146,17 +150,15 @@
   FakeXMLHttpRequest.prototype.getResponseHeader = getResponseHeader;
   FakeXMLHttpRequest.prototype.getAllResponseHeaders = getAllResponseHeaders;
 
-  FakeXMLHttpRequest.methods = [];
-
   FakeXMLHttpRequest.UNSENT = 0;
   FakeXMLHttpRequest.OPENED = 1;
   FakeXMLHttpRequest.HEADERS_RECEIVED = 2;
   FakeXMLHttpRequest.LOADING = 3;
   FakeXMLHttpRequest.DONE = 4;
 
-  if (typeof module == "object" && typeof require == "function") {
-    module.FakeXMLHttpRequest = FakeXMLHttpRequest;
-  } else {
-    sinon.FakeXMLHttpRequest = FakeXMLHttpRequest;
-  }
-}(typeof sinon == "object" && sinon || {}));
+  return FakeXMLHttpRequest;
+}());
+
+if (typeof module == "object" && typeof require == "function") {
+  module.exports = sinon;
+}
