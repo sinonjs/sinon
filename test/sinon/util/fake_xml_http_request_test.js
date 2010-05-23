@@ -1,11 +1,15 @@
 /*jslint indent: 2, onevar: false*/
 /*globals TestCase,
           sinon,
+          assert,
           assertSame,
           assertEquals,
           assertTrue,
           assertFalse,
           assertNull,
+          assertException,
+          assertUndefined,
+          assertObject,
           assertFunction*/
 (function () {
   var testCase = TestCase; // Avoid JsLint warning
@@ -77,7 +81,7 @@
     "test should set send flag to false": function () {
       this.xhr.open("GET", "/my/url");
 
-      assertFalse(this.xhr._send);
+      assertFalse(this.xhr.sendFlag);
     },
 
     "test should dispatch onreadystatechange with reset state": function () {
@@ -97,7 +101,7 @@
       assertNull(state.responseText);
       assertEquals({}, state.responseHeaders);
       assertEquals(sinon.FakeXMLHttpRequest.OPENED, state.readyState);
-      assertFalse(state._send);
+      assertFalse(state.sendFlag);
     }
   });
 
