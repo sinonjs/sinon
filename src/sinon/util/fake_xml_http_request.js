@@ -1,3 +1,5 @@
+/*jslint indent: 2, eqeqeq: false, onevar: false*/
+/*global sinon, module, require*/
 (function (sinon) {
   var unsafeHeaders = {
     "Accept-Charset": true,
@@ -20,6 +22,14 @@
     "Via": true
   };
 
+  function FakeXMLHttpRequest() {
+    this.readyState = FakeXMLHttpRequest.UNSENT;
+    this.requestHeaders = {};
+    this.requestBody = null;
+    this.status = 0;
+    this.statusText = "";
+  }
+
   function verifyState(xhr) {
     if (xhr.readyState !== FakeXMLHttpRequest.OPENED) {
       throw new Error("INVALID_STATE_ERR");
@@ -30,14 +40,6 @@
     }
   }
 
-  function FakeXMLHttpRequest() {
-    this.readyState = FakeXMLHttpRequest.UNSENT;
-    this.requestHeaders = {};
-    this.requestBody = null;
-    this.status = 0;
-    this.statusText = "";
-  }
-
   function open(method, url, async, username, password) {
     this.method = method;
     this.url = url;
@@ -46,7 +48,7 @@
     this.password = password;
     this.responseText = null;
     this.requestHeaders = {};
-    this._send = false;
+    this.sendFlag = false;
     this.readyStateChange(FakeXMLHttpRequest.OPENED);
   }
 
@@ -90,9 +92,6 @@
     this.errorFlag = false;
     this.sendFlag = this.async;
     this.readyStateChange(FakeXMLHttpRequest.OPENED);
-
-    // Should continue asynchronously if async == true at this point,
-    // consider complying
   }
 
   function abort() {
