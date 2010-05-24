@@ -12,10 +12,6 @@
       this.clock = sinon.clock.create();
     },
 
-    tearDown: function () {
-      this.clock.reset();
-    },
-
     "should be function": function () {
       assertFunction(this.clock.setTimeout);
     },
@@ -39,16 +35,25 @@
       var id2 = this.clock.setTimeout("");
 
       assertNotEquals(id1, id2);
+    },
+
+    "should set timers on instance": function () {
+      var clock1 = sinon.clock.create();
+      var clock2 = sinon.clock.create();
+      var stubs = [sinon.stub.create(), sinon.stub.create()];
+
+      clock1.setTimeout(stubs[0], 100);
+      clock2.setTimeout(stubs[1], 100);
+      clock2.tick(200);
+
+      assertFalse(stubs[0].called);
+      assert(stubs[1].called);
     }
   });
 
   testCase("ClockTickTest", {
     setUp: function () {
       this.clock = sinon.clock.create();
-    },
-
-    tearDown: function () {
-      this.clock.reset();
     },
 
     "should trigger immediately without specified delay": function () {
@@ -130,10 +135,6 @@
       this.clock = sinon.clock.create();
     },
 
-    tearDown: function () {
-      this.clock.reset();
-    },
-
     "should remove timeout": function () {
       var stub = sinon.stub.create();
       var id = this.clock.setTimeout(stub, 50);
@@ -149,10 +150,6 @@
       this.clock = sinon.clock.create();
     },
 
-    tearDown: function () {
-      this.clock.reset();
-    },
-
     "should empty timeouts queue": function () {
       var stub = sinon.stub.create();
       this.clock.setTimeout(stub);
@@ -166,10 +163,6 @@
   testCase("SetIntervalTest", {
     setUp: function () {
       this.clock = sinon.clock.create();
-    },
-
-    tearDown: function () {
-      this.clock.reset();
     },
 
     "should be function": function () {
