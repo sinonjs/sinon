@@ -21,7 +21,6 @@ if (typeof sinon == "undefined") {
 
 sinon.clock = (function () {
   var id = 0;
-  var timeouts = {};
 
   function addTimer(args, recurring) {
     if (args.length === 0) {
@@ -31,50 +30,43 @@ sinon.clock = (function () {
     var toId = id++;
     var delay = args[1] || 0;
 
-    timeouts[toId] = {
+    if (!this.timeouts) {
+      this.timeouts = {};
+    }
+
+    this.timeouts[toId] = {
       func: args[0],
       callAt: this.now + delay
     };
 
     if (recurring === true) {
-      timeouts[toId].interval = delay;
+      this.timeouts[toId].interval = delay;
     }
 
     return toId;
   }
 
-  function runTimers(from, to) {
-    var found, timer, prop;
-
-    while (found !== 0) {
-      found = 0;
-
-      for (prop in timeouts) {
-        if (timeouts.hasOwnProperty(prop)) {
-          timer = timeouts[prop];
-
-          if (timer.callAt >= from && timer.callAt <= to) {
-            try {
-              timer.func.call(null);
-            } catch (e) {}
-
-            if (typeof timer.interval == "number") {
-              found += 1;
-              timer.callAt += timer.interval;
-            } else {
-              delete timeouts[prop];
-            }
-          }
-        }
-      }
+  function createObject(object) {
+    if (Object.create) {
+      return Object.create(object);
+    } else {
+      var F = function () {};
+      F.prototype = object;
+      return new F();
     }
   }
 
   return {
     now: 0,
 
-    create: function create() {
-      return this;
+    create: function create(now) {
+      var clock = createObject(this);
+
+      if (typeof now == "number") {
+        this.now = now;
+      }
+
+      return clock;
     },
 
     setTimeout: function setTimeout(callback, timeout) {
@@ -82,7 +74,11 @@ sinon.clock = (function () {
     },
 
     clearTimeout: function clearTimeout(id) {
-      delete timeouts[id];
+      if (!this.timeouts) {
+        this.timeouts = [];
+      }
+
+      delete this.timeouts[id];
     },
 
     setInterval: function setInterval(callback, timeout) {
@@ -90,16 +86,40 @@ sinon.clock = (function () {
     },
 
     clearInterval: function clearInterval(id) {
-      delete timeouts[id];
+      this.clearTimeout(id);
     },
 
     tick: function tick(ms) {
-      runTimers(this.now, this.now + ms);
+      var found, timer, prop;
+
+      while (this.timeouts && found !== 0) {
+        found = 0;
+
+        for (prop in this.timeouts) {
+          if (this.timeouts.hasOwnProperty(prop)) {
+            timer = this.timeouts[prop];
+
+            if (timer.callAt >= this.now && timer.callAt <= this.now + ms) {
+              try {
+                timer.func.call(null);
+              } catch (e) {}
+
+              if (typeof timer.interval == "number") {
+                found += 1;
+                timer.callAt += timer.interval;
+              } else {
+                delete this.timeouts[prop];
+              }
+            }
+          }
+        }
+      }
+
       this.now += ms;
     },
 
     reset: function reset() {
-      timeouts = {};
+      this.timeouts = {};
     }
   };
 }());
