@@ -7,102 +7,110 @@
           assertException
           assertFunction*/
 (function (global) {
-  var clock = sinon.clock;
-
   testCase("SetTimeOutTest", {
+    setUp: function () {
+      this.clock = sinon.clock.create();
+    },
+
     tearDown: function () {
-      sinon.clock.reset();
+      this.clock.reset();
     },
 
     "should be function": function () {
-      assertFunction(clock.setTimeout);
+      assertFunction(this.clock.setTimeout);
     },
 
     "should throw if no arguments": function () {
+      var clock = this.clock;
+
       assertException(function () {
         clock.setTimeout();
       });
     },
 
     "should return numeric id": function () {
-      var result = clock.setTimeout("");
+      var result = this.clock.setTimeout("");
 
       assertNumber(result);
     },
 
     "should return unique id": function () {
-      var id1 = clock.setTimeout("");
-      var id2 = clock.setTimeout("");
+      var id1 = this.clock.setTimeout("");
+      var id2 = this.clock.setTimeout("");
 
       assertNotEquals(id1, id2);
     }
   });
 
   testCase("ClockTickTest", {
+    setUp: function () {
+      this.clock = sinon.clock.create();
+    },
+
     tearDown: function () {
-      sinon.clock.reset();
+      this.clock.reset();
     },
 
     "should trigger immediately without specified delay": function () {
       var stub = sinon.stub.create();
-      clock.setTimeout(stub);
-      clock.tick(0);
+      this.clock.setTimeout(stub);
+      this.clock.tick(0);
 
       assert(stub.called);
     },
 
     "should not trigger without sufficient delay": function () {
       var stub = sinon.stub.create();
-      clock.setTimeout(stub, 100);
-      clock.tick(10);
+      this.clock.setTimeout(stub, 100);
+      this.clock.tick(10);
 
       assertFalse(stub.called);
     },
 
     "should trigger after sufficient delay": function () {
       var stub = sinon.stub.create();
-      clock.setTimeout(stub, 100);
-      clock.tick(100);
+      this.clock.setTimeout(stub, 100);
+      this.clock.tick(100);
 
       assert(stub.called);
     },
 
     "should wait after setTimeout was called": function () {
-      clock.tick(100);
+      this.clock.tick(100);
       var stub = sinon.stub.create();
-      clock.setTimeout(stub, 150);
-      clock.tick(50);
+      this.clock.setTimeout(stub, 150);
+      this.clock.tick(50);
 
       assertFalse(stub.called);
-      clock.tick(100);
+      this.clock.tick(100);
       assert(stub.called);
     },
 
     "mini integration test": function () {
       var stubs = [sinon.stub.create(), sinon.stub.create(), sinon.stub.create()];
-      clock.setTimeout(stubs[0], 100);
-      clock.setTimeout(stubs[1], 120);
-      clock.tick(10);
-      clock.tick(89);
+      this.clock.setTimeout(stubs[0], 100);
+      this.clock.setTimeout(stubs[1], 120);
+      this.clock.tick(10);
+      this.clock.tick(89);
       assertFalse(stubs[0].called);
       assertFalse(stubs[1].called);
-      clock.setTimeout(stubs[2], 20);
-      clock.tick(1);
+      this.clock.setTimeout(stubs[2], 20);
+      this.clock.tick(1);
       assert(stubs[0].called);
       assertFalse(stubs[1].called);
       assertFalse(stubs[2].called);
-      clock.tick(19);
+      this.clock.tick(19);
       assertFalse(stubs[1].called);
       assert(stubs[2].called);
-      clock.tick(1);
+      this.clock.tick(1);
       assert(stubs[1].called);
     },
 
     "should trigger even when some throw": function () {
       var stubs = [sinon.stub.create().throws(), sinon.stub.create()];
-      clock.setTimeout(stubs[0], 100);
-      clock.setTimeout(stubs[1], 120);
-      clock.tick(120);
+      this.clock.setTimeout(stubs[0], 100);
+      this.clock.setTimeout(stubs[1], 120);
+      this.clock.tick(120);
 
       assert(stubs[0].called);
       assert(stubs[1].called);
@@ -110,76 +118,95 @@
 
     "should call function with global object as this": function () {
       var stub = sinon.stub.create().throws();
-      clock.setTimeout(stub, 100);
-      clock.tick(100);
+      this.clock.setTimeout(stub, 100);
+      this.clock.tick(100);
 
       assert(stub.calledOn(global));
     }
   });
 
   testCase("ClockClearTimeoutTest", {
+    setUp: function () {
+      this.clock = sinon.clock.create();
+    },
+
     tearDown: function () {
-      sinon.clock.reset();
+      this.clock.reset();
     },
 
     "should remove timeout": function () {
       var stub = sinon.stub.create();
-      var id = clock.setTimeout(stub, 50);
-      clock.clearTimeout(id);
-      clock.tick(50);
+      var id = this.clock.setTimeout(stub, 50);
+      this.clock.clearTimeout(id);
+      this.clock.tick(50);
 
       assertFalse(stub.called);
     }
   });
 
   testCase("ClockResetTest", {
+    setUp: function () {
+      this.clock = sinon.clock.create();
+    },
+
+    tearDown: function () {
+      this.clock.reset();
+    },
+
     "should empty timeouts queue": function () {
       var stub = sinon.stub.create();
-      clock.setTimeout(stub);
-      clock.reset();
-      clock.tick(0);
+      this.clock.setTimeout(stub);
+      this.clock.reset();
+      this.clock.tick(0);
 
       assertFalse(stub.called);
     }
   });
 
   testCase("SetIntervalTest", {
+    setUp: function () {
+      this.clock = sinon.clock.create();
+    },
+
     tearDown: function () {
-      sinon.clock.reset();
+      this.clock.reset();
     },
 
     "should be function": function () {
-      assertFunction(clock.setInterval);
+      assertFunction(this.clock.setInterval);
     },
 
     "should throw if no arguments": function () {
+      var clock = this.clock;
+
       assertException(function () {
         clock.setInterval();
       });
     },
 
     "should return numeric id": function () {
-      var result = clock.setInterval("");
+      var result = this.clock.setInterval("");
 
       assertNumber(result);
     },
 
     "should return unique id": function () {
-      var id1 = clock.setInterval("");
-      var id2 = clock.setInterval("");
+      var id1 = this.clock.setInterval("");
+      var id2 = this.clock.setInterval("");
 
       assertNotEquals(id1, id2);
     },
 
     "should schedule recurring timeout": function () {
       var stub = sinon.stub.create();
-      clock.setInterval(stub, 10);
-      clock.tick(99);
+      this.clock.setInterval(stub, 10);
+      this.clock.tick(99);
 
       assertEquals(9, stub.callCount);
     },
 
     "should not schedule recurring timeout when cleared": function () {
+      var clock = this.clock;
       var id;
       var stub = sinon.spy.create(function () {
         if (stub.callCount == 3) {
@@ -187,8 +214,8 @@
         }
       });
 
-      id = clock.setInterval(stub, 10);
-      clock.tick(100);
+      id = this.clock.setInterval(stub, 10);
+      this.clock.tick(100);
 
       assertEquals(3, stub.callCount);
     }
