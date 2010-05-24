@@ -1,0 +1,37 @@
+* Refactor spy [4/4]
+** DONE Introduce args, returnValues, thisValues, exceptions arrays
+** DONE Move getCall() to build calls on-the-fly
+** DONE Remove this.calls
+** DONE NFE in SpyCall
+* JsLint [3/3]
+** DONE Update lint configuration on source files
+** DONE Add configuration to and clean up test files
+** DONE Alias TestCase to testCase to avoid annoying warning
+* Add missing spy functionality [8/8]
+** DONE returned
+** DONE alwaysCalledOn
+** DONE alwaysCalledWith
+** DONE alwaysCalledWithExactly
+** DONE alwaysThrew
+** DONE calledOnce
+** DONE calledTwice
+** DONE calledThrice
+* Stubs [3/4]
+** DONE Add callsArg/invokesCallback/callsCallback
+** DONE Add callsArgWith
+** TODO Find a better API for the two above methods
+** DONE Add stub(object) to stub everything
+* Collections [3/3]
+** DONE Add sinon.collection
+** DONE Refactor sinon.test to use sinon.collection
+** DONE Extract sinon.test to own file
+* Asserts [2/2]
+** DONE Find all spy methods not exposed as asserts
+** DONE Reduce duplication
+* Fakes/Utilities [3/6]
+** DONE Add FakeXMLHttpRequest
+** TODO Add Sinon tools to work with FakeXMLHttpRequest
+** DONE Add fake timers
+** TODO Add fake Date
+** DONE Add Clock to control timers and date
+** TODO Add Sinon tools to work with fake timers
