@@ -1,4 +1,4 @@
-/*jslint indent: 2, eqeqeq: false, plusplus: false*/
+/*jslint indent: 2, eqeqeq: false, plusplus: false, evil: true, onevar: false*/
 /*global sinon, module, require*/
 /**
  * Fake timer API
@@ -101,7 +101,11 @@ sinon.clock = (function () {
 
             if (timer.callAt >= this.now && timer.callAt <= this.now + ms) {
               try {
-                timer.func.call(null);
+                if (typeof timer.func == "function") {
+                  timer.func.call(null);
+                } else {
+                  eval(timer.func);
+                }
               } catch (e) {}
 
               if (typeof timer.interval == "number") {
