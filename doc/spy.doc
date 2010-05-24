@@ -1,0 +1,73 @@
+== Sinon Test Spies
+
+:Author:    Christian Johansen
+:Email:     <christian@cjohansen.no>
+:Date:      2010-05-03
+:Revision:  1.0
+
+A test spy is a function that wraps another function. Whenever the spy is
+called, it records the +this+ value, received arguments, return value and
+possible exceptions. Test spies also record meta data such as the number of
+calls as well as a call id which can be used to determine call order. The spy
+acts exactly as the wrapped function and the wrapped function will not behave
+differently when wrapped.
+
+Test spies expose a rich API to meta data related to calls. Sinon stubs and
+mocks are also test spies. For the most part you probably won't need to use test
+spies directly.
+
+=== Creating test spies
+
+==== Anonymous spies
+
+It is very likely you actual want stubs, which can also be programmed to return
+values and throw exceptions.
+
+[source,javascript]
+----
+var mySpy = sinon.spy();
+----
+
+==== Spy on any function
+
+[source,javascript]
+----
+var spiedAlert = sinon.spy(alert);
+----
+
+You can also pass a method to the +sinon.spy+ method. By assigning the spy back
+to the object, the method will behave as expected (i.e. with correct +this+
+value and so on).
+
+[source,javascript]
+----
+var person = {
+  name: "Christian",
+
+  getName: function () {
+    return name;
+  }
+};
+
+person.getName = sinon.spy(person.getName);
+----
+
+==== Spy on methods
+
+Even though the above example works on methods, Sinon offers another way to spy
+on methods which allows you to un-spy at a later point.
+
+[source,javascript]
+----
+var person = {
+  name: "Christian",
+
+  getName: function () {
+    return name;
+  }
+};
+
+sinon.spy(person, "getName");
+// ...
+person.getName.restore(); // Restores the original method
+----
