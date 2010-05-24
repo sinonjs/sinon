@@ -1,8 +1,11 @@
-/*jslint indent: 2, onevar: false*/
-/*globals TestCase
+/*jslint indent: 2, onevar: false, eqeqeq: false*/
+/*globals testCase
           sinon
+          called
           assert
           assertFalse
+          assertEquals
+          assertNotEquals
           assertNumber
           assertException
           assertFunction*/
@@ -10,6 +13,10 @@
   testCase("SetTimeOutTest", {
     setUp: function () {
       this.clock = sinon.clock.create();
+    },
+
+    tearDown: function () {
+      delete global.called;
     },
 
     "should be function": function () {
@@ -48,6 +55,15 @@
 
       assertFalse(stubs[0].called);
       assert(stubs[1].called);
+    },
+
+    "should eval non-function callbacks": function () {
+      global.called = false;
+
+      this.clock.setTimeout("called = true", 10);
+      this.clock.tick(10);
+
+      assert(called);
     }
   });
 
