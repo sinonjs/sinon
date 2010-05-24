@@ -44,38 +44,38 @@ sinon.clock = (function () {
   }
 
   function runTimers(from, to) {
-    var toCall = [];
-    var timer, callAt;
+    var found, timer, prop;
 
-    for (var prop in timeouts) {
-      if (timeouts.hasOwnProperty(prop)) {
-        timer = timeouts[prop];
+    while (found !== 0) {
+      found = 0;
 
-        if (timer.callAt >= from && timer.callAt <= to) {
-          toCall.push(timer);
+      for (prop in timeouts) {
+        if (timeouts.hasOwnProperty(prop)) {
+          timer = timeouts[prop];
 
-          if (typeof timer.interval == "number") {
-            timer.callAt += timer.interval;
-          } else {
-            delete timeouts[prop];
+          if (timer.callAt >= from && timer.callAt <= to) {
+            try {
+              timer.func.call(null);
+            } catch (e) {}
+
+            if (typeof timer.interval == "number") {
+              found += 1;
+              timer.callAt += timer.interval;
+            } else {
+              delete timeouts[prop];
+            }
           }
         }
       }
-    }
-
-    for (var i = 0, l = toCall.length; i < l; i++) {
-      try {
-        toCall[i].func.call(null);
-      } catch (e) {}
-    }
-
-    if (toCall.length > 0) {
-      runTimers(from, to);
     }
   }
 
   return {
     now: 0,
+
+    create: function create() {
+      return this;
+    },
 
     setTimeout: function setTimeout(callback, timeout) {
       return addTimer.call(this, arguments, false);
