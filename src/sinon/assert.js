@@ -120,6 +120,7 @@
   mirrorAssertion("calledWithExactly", "%0 was not called with exact arguments %1");
   mirrorAssertion("alwaysCalledWithExactly", "%0 was not always called with exact arguments %1");
   mirrorAssertion("threw", "%0 did not throw exception");
+  mirrorAssertion("alwaysThrew", "%0 did not always throw exception");
 
   if (commonJSModule) {
     module.exports = assert;
