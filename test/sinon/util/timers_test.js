@@ -415,7 +415,7 @@
       if (Date.toSource) {
         assertSame(Date.toSource(), this.clock.Date.toSource());
       } else {
-        jstestdriver.console.log("Browser does not support toSource");
+        jstestdriver.console.log("Browser does not support Date.toSource");
         assertUndefined(this.clock.Date.toSource);
       }
     },
