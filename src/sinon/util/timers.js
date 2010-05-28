@@ -134,9 +134,55 @@ sinon.clock = (function () {
     Date: (function () {
       var NativeDate = Date;
 
-      function ClockDate() {
-        return new NativeDate(ClockDate.clock.now);
+      function ClockDate(year, month, date, hour, minute, second, ms) {
+        // Defensive and verbose to avoid potential harm in passing
+        // explicit undefined when user does not pass argument
+        switch (arguments.length) {
+        case 0:
+          return new NativeDate(ClockDate.clock.now);
+          break;
+        case 1:
+          return new NativeDate(year);
+          break;
+        case 2:
+          return new NativeDate(year, month);
+          break;
+        case 3:
+          return new NativeDate(year, month, date);
+          break;
+        case 4:
+          return new NativeDate(year, month, date, hour);
+          break;
+        case 5:
+          return new NativeDate(year, month, date, hour, minute);
+          break;
+        case 6:
+          return new NativeDate(year, month, date, hour, minute, second);
+          break;
+        default:
+          return new NativeDate(year, month, date, hour, minute, second, ms);
+        }
       }
+
+      if (NativeDate.now) {
+        ClockDate.now = function now() {
+          return ClockDate.clock.now;
+        };
+      }
+
+      if (NativeDate.toSource) {
+        ClockDate.toSource = function toSource() {
+          return NativeDate.toSource();
+        };
+      }
+
+      ClockDate.toString = function toString() {
+        return NativeDate.toString();
+      };
+
+      ClockDate.prototype = NativeDate.prototype;
+      ClockDate.parse = NativeDate.parse;
+      ClockDate.UTC = NativeDate.UTC;
 
       return ClockDate;
     }())

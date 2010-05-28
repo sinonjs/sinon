@@ -251,6 +251,12 @@
       assert(Date.prototype.isPrototypeOf(date));
     },
 
+    "should create real Date objects when called as function": function () {
+      var date = this.clock.Date();
+
+      assert(Date.prototype.isPrototypeOf(date));
+    },
+
     "should create real Date objects when Date constructor is gone": function () {
       Date = function () {};
       var date = new this.clock.Date();
@@ -262,6 +268,156 @@
       var date = new this.clock.Date();
 
       assertEquals(new Date(this.now).getTime(), date.getTime());
+    },
+
+    "should return Date object representing clock time": function () {
+      var date = this.clock.Date();
+
+      assertEquals(new Date(this.now).getTime(), date.getTime());
+    },
+
+    "should listen to ticking clock": function () {
+      var date1 = new this.clock.Date();
+      this.clock.tick(3);
+      var date2 = new this.clock.Date();
+
+      assertEquals(3, date2.getTime() - date1.getTime());
+    },
+
+    "should create regular date when passing timestamp": function () {
+      var date = new Date();
+      var fakeDate = new this.clock.Date(date.getTime());
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with timestamp": function () {
+      var date = new Date();
+      var fakeDate = this.clock.Date(date.getTime());
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing year, month": function () {
+      var date = new Date(2010, 4);
+      var fakeDate = new this.clock.Date(2010, 4);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with year, month": function () {
+      var date = new Date(2010, 4);
+      var fakeDate = this.clock.Date(2010, 4);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing y, m, d": function () {
+      var date = new Date(2010, 4, 2);
+      var fakeDate = new this.clock.Date(2010, 4, 2);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with y, m, d": function () {
+      var date = new Date(2010, 4, 2);
+      var fakeDate = this.clock.Date(2010, 4, 2);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing y, m, d, h": function () {
+      var date = new Date(2010, 4, 2, 12);
+      var fakeDate = new this.clock.Date(2010, 4, 2, 12);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with y, m, d, h": function () {
+      var date = new Date(2010, 4, 2, 12);
+      var fakeDate = this.clock.Date(2010, 4, 2, 12);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing y, m, d, h, m": function () {
+      var date = new Date(2010, 4, 2, 12, 42);
+      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with y, m, d, h, m": function () {
+      var date = new Date(2010, 4, 2, 12, 42);
+      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing y, m, d, h, m, s": function () {
+      var date = new Date(2010, 4, 2, 12, 42, 53);
+      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with y, m, d, h, m, s": function () {
+      var date = new Date(2010, 4, 2, 12, 42, 53);
+      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should create regular date when passing y, m, d, h, m, s, ms": function () {
+      var date = new Date(2010, 4, 2, 12, 42, 53, 498);
+      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should return regular date when calling with y, m, d, h, m, s, ms": function () {
+      var date = new Date(2010, 4, 2, 12, 42, 53, 498);
+      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
+
+      assertEquals(date.getTime(), fakeDate.getTime());
+    },
+
+    "should mirror native Date.prototype": function () {
+      assertSame(Date.prototype, this.clock.Date.prototype);
+    },
+
+    "should support now method if present": function () {
+      assertSame(typeof Date.now, typeof this.clock.Date.now);
+    },
+
+    "now should return clock.now if native date supports it": function () {
+      if (Date.now) {
+        assertEquals(this.now, this.clock.Date.now());
+      } else {
+        jstestdriver.console.log("Browser does not support Date.now");
+        assertUndefined(this.clock.Date.now);
+      }
+    },
+
+    "should mirror parse method": function () {
+      assertSame(Date.parse, this.clock.Date.parse);
+    },
+
+    "should mirror UTC method": function () {
+      assertSame(Date.UTC, this.clock.Date.UTC);
+    },
+
+    "should mirror toSource if supported": function () {
+      if (Date.toSource) {
+        assertSame(Date.toSource(), this.clock.Date.toSource());
+      } else {
+        jstestdriver.console.log("Browser does not support toSource");
+        assertUndefined(this.clock.Date.toSource);
+      }
+    },
+
+    "should mirror toString": function () {
+      assertSame(Date.toString(), this.clock.Date.toString());
     }
   });
 }(this));
