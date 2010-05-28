@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+def ok
+  "\033[32mOK\033[39m"
+end
+
+print "Resetting"
+`jstestdriver --reset`
+print " - #{ok}\n"
+
+(Dir.glob("test/**/*.js").collect do |test|
+  File.read(test).scan(/estCase\("(.+)"/)
+end).flatten.each do |testCase|
+  print testCase
+  `jstestdriver --tests #{testCase}`
+  print " - #{ok}\n"
+end
