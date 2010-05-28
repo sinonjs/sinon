@@ -811,7 +811,8 @@
     "should contain undefined entry when function did not throw": function () {
       this.spy();
 
-      assertEquals([undefined], this.spy.exceptions);
+      assertEquals(1, this.spy.exceptions.length);
+      assertUndefined(this.spy.exceptions[0]);
     },
 
     "should stack up exceptions and undefined": function () {
@@ -840,7 +841,12 @@
 
       spy();
 
-      assertEquals([undefined, err, undefined, err, undefined], spy.exceptions);
+      assertEquals(5, spy.exceptions.length);
+      assertUndefined(spy.exceptions[0]);
+      assertEquals(err, spy.exceptions[1]);
+      assertUndefined(spy.exceptions[2]);
+      assertEquals(err, spy.exceptions[3]);
+      assertUndefined(spy.exceptions[4]);
     }
   });
 
@@ -917,7 +923,8 @@
       var spy = sinon.spy.create();
       spy();
 
-      assertEquals([undefined], spy.returnValues);
+      assertEquals(1, spy.returnValues.length);
+      assertUndefined(spy.returnValues[0]);
     },
 
     "should contain return value": function () {
@@ -942,7 +949,8 @@
       } catch (e) {
       }
 
-      assertEquals([undefined], spy.returnValues);
+      assertEquals(1, spy.returnValues.length);
+      assertUndefined(spy.returnValues[0]);
     },
 
     "should stack up return values": function () {
@@ -962,7 +970,12 @@
       spy();
       spy();
 
-      assertEquals([undefined, 2, undefined, 4, undefined], spy.returnValues);
+      assertEquals(5, spy.returnValues.length);
+      assertUndefined(spy.returnValues[0]);
+      assertEquals(2, spy.returnValues[1]);
+      assertUndefined(spy.returnValues[2]);
+      assertEquals(4, spy.returnValues[3]);
+      assertUndefined(spy.returnValues[4]);
     }
   });
 
