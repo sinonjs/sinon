@@ -35,8 +35,8 @@
 ** DONE Add fake Date
 ** DONE Add Clock to control timers and date
 ** TODO Add Sinon tools to work with fake timers
-* Fix failing test cases in IE [1/4]
+* Fix failing test cases in IE [2/4]
 ** DONE StubCallsArgTest
-** TODO SetTimeOutTest
+** DONE SetTimeOutTest
 ** TODO SpyExceptionsTest
 ** TODO SpyReturnValuesTest
