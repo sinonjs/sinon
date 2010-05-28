@@ -13,10 +13,11 @@
   testCase("SetTimeOutTest", {
     setUp: function () {
       this.clock = sinon.clock.create();
+      sinon.clock.evalCalled = false;
     },
 
     tearDown: function () {
-      delete global.called;
+      delete sinon.clock.evalCalled;
     },
 
     "should be function": function () {
@@ -60,10 +61,10 @@
     "should eval non-function callbacks": function () {
       global.called = false;
 
-      this.clock.setTimeout("called = true", 10);
+      this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
       this.clock.tick(10);
 
-      assert(called);
+      assert(sinon.clock.evalCalled);
     }
   });
 
