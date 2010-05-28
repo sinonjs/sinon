@@ -103,6 +103,7 @@
         }
 
         this.callArgAt = pos;
+        this.callbackArguments = [];
       },
 
       callsArgWith: function callsArgWith(pos) {
