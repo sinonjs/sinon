@@ -47,18 +47,18 @@ sinon.clock = (function () {
   }
 
   function createObject(object) {
-    var object;
+    var newObject;
 
     if (Object.create) {
-      object = Object.create(object);
+      newObject = Object.create(object);
     } else {
       var F = function () {};
       F.prototype = object;
-      object = new F();
+      newObject = new F();
     }
 
-    object.Date.clock = object;
-    return object;
+    newObject.Date.clock = newObject;
+    return newObject;
   }
 
   return {
@@ -140,25 +140,18 @@ sinon.clock = (function () {
         switch (arguments.length) {
         case 0:
           return new NativeDate(ClockDate.clock.now);
-          break;
         case 1:
           return new NativeDate(year);
-          break;
         case 2:
           return new NativeDate(year, month);
-          break;
         case 3:
           return new NativeDate(year, month, date);
-          break;
         case 4:
           return new NativeDate(year, month, date, hour);
-          break;
         case 5:
           return new NativeDate(year, month, date, hour, minute);
-          break;
         case 6:
           return new NativeDate(year, month, date, hour, minute, second);
-          break;
         default:
           return new NativeDate(year, month, date, hour, minute, second, ms);
         }
