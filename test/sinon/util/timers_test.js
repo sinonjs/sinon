@@ -2,12 +2,15 @@
 /*globals testCase
           sinon
           called
+          jstestdriver
           assert
           assertFalse
           assertEquals
           assertNotEquals
           assertNumber
           assertException
+          assertSame
+          assertUndefined
           assertFunction*/
 (function (global) {
   testCase("SetTimeOutTest", {
@@ -235,11 +238,11 @@
     setUp: function () {
       this.now = new Date().getTime() - 3000;
       this.clock = sinon.clock.create(this.now);
-      this.Date = Date;
+      this.Date = global.Date;
     },
 
     tearDown: function () {
-      Date = this.Date;
+      global.Date = this.Date;
     },
 
     "should provide date constructor": function () {
@@ -259,7 +262,7 @@
     },
 
     "should create real Date objects when Date constructor is gone": function () {
-      Date = function () {};
+      global.Date = function () {};
       var date = new this.clock.Date();
 
       assert(this.Date.prototype.isPrototypeOf(date));
