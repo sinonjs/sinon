@@ -47,13 +47,18 @@ sinon.clock = (function () {
   }
 
   function createObject(object) {
+    var object;
+
     if (Object.create) {
-      return Object.create(object);
+      object = Object.create(object);
     } else {
       var F = function () {};
       F.prototype = object;
-      return new F();
+      object = new F();
     }
+
+    object.Date.clock = object;
+    return object;
   }
 
   return {
@@ -124,7 +129,17 @@ sinon.clock = (function () {
 
     reset: function reset() {
       this.timeouts = {};
-    }
+    },
+
+    Date: (function () {
+      var NativeDate = Date;
+
+      function ClockDate() {
+        return new NativeDate(ClockDate.clock.now);
+      }
+
+      return ClockDate;
+    }())
   };
 }());
 
