@@ -5,6 +5,14 @@
  */
 /*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
 /*global module, require, sinon*/
+/**
+ * Collections of stubs, spies and mocks.
+ *
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
 

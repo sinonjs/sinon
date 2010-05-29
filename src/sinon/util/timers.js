@@ -10,10 +10,12 @@
  * reset
  * Date
  *
- * Partially inspired by jsUnitMockTimeOut from JsUnit
+ * Inspired by jsUnitMockTimeOut from JsUnit
  *
  * @author Christian Johansen (christian@cjohansen.no)
- * http://cjohansen.no/sinon/time/
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
  */
 if (typeof sinon == "undefined") {
   this.sinon = {};

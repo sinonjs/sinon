@@ -17,6 +17,12 @@
           assertCalledWithExactly,
           assertThrew,
           assertCallCount*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function (global) {
   testCase("SinonAssertTest", {
     "should be object": function () {

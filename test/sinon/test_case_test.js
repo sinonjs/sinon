@@ -8,6 +8,12 @@
           assertNotSame,
           assertEquals,
           assertException*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function () {
   testCase("SinonTestCaseTest", {
     "should be function": function () {

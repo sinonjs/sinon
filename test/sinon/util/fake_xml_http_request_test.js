@@ -11,6 +11,12 @@
           assertUndefined,
           assertObject,
           assertFunction*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function () {
   testCase("FakeXMLHttpRequestTest", {
     "should be constructor": function () {

@@ -1,5 +1,13 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global sinon, module, require*/
+/**
+ * Fake XMLHttpRequest object
+ *
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 if (typeof sinon == "undefined") {
   this.sinon = {};
 }
