@@ -12,6 +12,12 @@
           assertSame
           assertUndefined
           assertFunction*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function (global) {
   testCase("SetTimeOutTest", {
     setUp: function () {

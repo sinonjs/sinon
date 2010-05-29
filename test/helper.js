@@ -1,5 +1,11 @@
 /*jslint indent: 2, onevar: false, eqeqeq: false*/
 /*global TestCase*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 function testCase(name, tests) {
   var jstdCase = {};
   var jstdTestCase = TestCase; // Silence JsLint...

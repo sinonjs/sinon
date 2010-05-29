@@ -4,6 +4,14 @@
  */
 /*jslint indent: 2, eqeqeq: false, onevar: false, nomen: false*/
 /*global module, require, sinon*/
+/**
+ * Mock functions.
+ *
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function (sinon) {
   var commonJSModule = typeof module == "object" && typeof require == "function";
 

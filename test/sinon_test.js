@@ -10,6 +10,12 @@
           assertObject,
           assertException,
           assertNoException*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 (function () {
   testCase("SinonTest", {
     "sinon should be object": function () {

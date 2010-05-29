@@ -1,5 +1,13 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false, forin: true, nomen: false*/
 /*global module, require, __dirname*/
+/**
+ * Sinon core utilities. For internal use only.
+ *
+ * @author Christian Johansen (christian@cjohansen.no)
+ * @license BSD
+ *
+ * Copyright (c) 2010 Christian Johansen
+ */
 var sinon = (function () {
   return {
     wrapMethod: function wrapMethod(object, property, method) {
