@@ -430,4 +430,118 @@
       assertSame(Date.toString(), this.clock.Date.toString());
     }
   });
+
+  var global = this;
+  var globalSetTimeout = setTimeout;
+  var globalSetInterval = setInterval;
+  var globalClearTimeout = clearTimeout;
+  var globalClearInterval = clearInterval;
+
+  testCase("SinonStubTimersTest", {
+    tearDown: function () {
+      this.clock.restore();
+    },
+
+    "should return clock object": function () {
+      this.clock = sinon.useFakeTimers();
+
+      assertObject(this.clock);
+      assertFunction(this.clock.tick);
+    },
+
+    "should set initial timestamp": function () {
+      this.clock = sinon.useFakeTimers(1400);
+
+      assertEquals(1400, this.clock.now);
+    },
+
+    "should replace global setTimeout": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+
+      setTimeout(stub, 1000);
+      this.clock.tick(1000);
+
+      assert(stub.called);
+    },
+
+    "global fake setTimeout should return id": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+
+      var id = setTimeout(stub, 1000);
+
+      assertNumber(id);
+    },
+
+    "should replace global clearTimeout": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+
+      clearTimeout(setTimeout(stub, 1000));
+      this.clock.tick(1000);
+
+      assertFalse(stub.called);
+    },
+
+    "should restore global setTimeout": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+      this.clock.restore();
+
+      setTimeout(stub, 1000);
+      this.clock.tick(1000);
+
+      assertFalse(stub.called);
+      assertSame(globalSetTimeout, setTimeout);
+    },
+
+    "should restore global clearTimeout": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+      this.clock.restore();
+
+      assertSame(globalClearTimeout, clearTimeout);
+    },
+
+    "should replace global setInterval": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+
+      setInterval(stub, 500);
+      this.clock.tick(1000);
+
+      assert(stub.calledTwice);
+    },
+
+    "should replace global clearInterval": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+
+      clearInterval(setInterval(stub, 500));
+      this.clock.tick(1000);
+
+      assertFalse(stub.called);
+    },
+
+    "should restore global setInterval": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+      this.clock.restore();
+
+      setInterval(stub, 1000);
+      this.clock.tick(1000);
+
+      assertFalse(stub.called);
+      assertSame(globalSetInterval, setInterval);
+    },
+
+    "should restore global clearInterval": function () {
+      this.clock = sinon.useFakeTimers();
+      var stub = sinon.stub.create();
+      this.clock.restore();
+
+      assertSame(globalClearInterval, clearInterval);
+    },
+  });
 }(this));
