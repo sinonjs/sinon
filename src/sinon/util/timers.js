@@ -184,6 +184,34 @@ sinon.clock = (function () {
   };
 }());
 
+sinon.useFakeTimers = (function () {
+  var global = this;
+  var methods = ["setTimeout", "setInterval", "clearTimeout", "clearInterval"];
+
+  function restore() {
+    for (var i = 0, l = methods.length; i < l; i++) {
+      global[methods[i]] = this["_" + methods[i]];
+    }
+  }
+
+  return function useFakeTimers(now) {
+    var clock = sinon.clock.create(now);
+    clock.restore = restore;
+
+    for (var i = 0, l = methods.length; i < l; i++) {
+      (function (method) {
+        clock["_" + method] = global[method];
+
+        global[method] = function () {
+          return clock[method].apply(clock, arguments);
+        };
+      }(methods[i]));
+    }
+
+    return clock;
+  };
+}());
+
 if (typeof module == "object" && typeof require == "function") {
-  module.exports = sinon;
+  module = sinon;
 }
