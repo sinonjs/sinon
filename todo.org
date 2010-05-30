@@ -40,3 +40,9 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
+* Sandboxes [0/1]
+** TODO Add sinon.sandbox
+*** Should create collection
+*** Should offer to fake timers
+*** Should offer to fake XHR
+*** Should return object with bound spy, stub and mock functions as well as clock and server properties
