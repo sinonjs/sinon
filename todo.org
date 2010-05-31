@@ -16,11 +16,13 @@
 ** DONE calledOnce
 ** DONE calledTwice
 ** DONE calledThrice
-* Stubs [3/4]
+* Stubs [3/6]
 ** DONE Add callsArg/invokesCallback/callsCallback
 ** DONE Add callsArgWith
 ** TODO Find a better API for the two above methods
 ** DONE Add stub(object) to stub everything
+** TODO Fail or warn when trying to stub a method that does not exist (avoid typos in stubbed methods etc)
+** TODO Fail or warn when calling stub with a function: sinon.stub(function () {}); to avoid mistaking sinon.stub for sinon.test
 * Collections [3/3]
 ** DONE Add sinon.collection
 ** DONE Refactor sinon.test to use sinon.collection
@@ -46,3 +48,6 @@
 *** Should offer to fake timers
 *** Should offer to fake XHR
 *** Should return object with bound spy, stub and mock functions as well as clock and server properties
+* Tools [0/2]
+** TODO Add sinon.log to issue warnings etc to
+** TODO Add sinon.log.output or similar to hook logger into test frameworks outputting mechanism
