@@ -27,7 +27,7 @@
 
   function test(callback) {
     return function () {
-      var collection = sinon.collection.create();
+      var collection = sinon.create(sinon.collection);
       var exception, result;
       var realArgs = Array.prototype.slice.call(arguments);
 

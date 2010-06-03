@@ -20,21 +20,20 @@
 (function () {
   testCase("CollectionCreateTest", {
     "should create fake collection": function () {
-      var collection = sinon.collection.create();
+      var collection = sinon.create(sinon.collection);
 
       assertFunction(collection.verify);
       assertFunction(collection.restore);
       assertFunction(collection.verifyAndRestore);
       assertFunction(collection.stub);
       assertFunction(collection.mock);
-      assertArray(collection.fakes);
     }
   });
 
   testCase("CollectionStubTest", {
     setUp: function () {
       this.stub = sinon.stub;
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     tearDown: function () {
@@ -84,7 +83,7 @@
   testCase("CollectionMockTest", {
     setUp: function () {
       this.mock = sinon.mock;
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     tearDown: function () {
@@ -135,7 +134,7 @@
     setUp: function () {
       this.mock = sinon.mock;
       this.stub = sinon.stub;
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     tearDown: function () {
@@ -160,7 +159,7 @@
 
   testCase("CollectionVerifyTest", {
     setUp: function () {
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     "should call verify on all fakes": function () {
@@ -179,7 +178,7 @@
 
   testCase("CollectionRestoreTest", {
     setUp: function () {
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     "should call restore on all fakes": function () {
@@ -198,7 +197,7 @@
 
   testCase("CollectionVerifyAndRestoreTest", {
     setUp: function () {
-      this.collection = sinon.collection.create();
+      this.collection = sinon.create(sinon.collection);
     },
 
     "should call verify and restore": function () {
