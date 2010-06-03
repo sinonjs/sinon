@@ -24,27 +24,38 @@
     return;
   }
 
-  var collection = {
-    create: function create() {
-      return sinon.extend(sinon.create(collection), {
-        fakes: []
-      });
-    },
+  function getFakes(collection) {
+    if (!collection.fakes) {
+      collection.fakes = [];
+    }
 
-    verify: function resolve() {
-      for (var i = 0, l = this.fakes.length; i < l; i += 1) {
-        if (typeof this.fakes[i].verify == "function") {
-          this.fakes[i].verify();
-        }
+    return collection.fakes;
+  }
+
+  function addFake(type) {
+    var fake = sinon[type].apply(sinon, arguments);
+    getFakes(this).push(fake);
+
+    return fake;
+  }
+
+  function each(collection, method) {
+    var fakes = getFakes(collection);
+
+    for (var i = 0, l = fakes.length; i < l; i += 1) {
+      if (typeof fakes[i][method] == "function") {
+        fakes[i][method]();
       }
+    }
+  }
+
+  var collection = {
+    verify: function resolve() {
+      each(this, "verify");
     },
 
     restore: function restore() {
-      for (var i = 0, l = this.fakes.length; i < l; i += 1) {
-        if (typeof this.fakes[i].restore == "function") {
-          this.fakes[i].restore();
-        }
-      }
+      each(this, "restore");
     },
 
     verifyAndRestore: function verifyAndRestore() {
@@ -65,15 +76,16 @@
 
     stub: function stub() {
       var fake = sinon.stub.apply(sinon, arguments);
-      this.fakes.push(fake);
+      getFakes(this).push(fake);
 
       return fake;
     },
 
     mock: function mock() {
-      this.fakes.push(sinon.mock.apply(sinon, arguments));
+      var fake = sinon.mock.apply(sinon, arguments);
+      getFakes(this).push(fake);
 
-      return this.fakes[this.fakes.length - 1];
+      return fake;
     }
   };
 

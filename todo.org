@@ -42,8 +42,8 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [0/5]
-** TODO Add sinon.sandbox
+* Sandboxes [1/5]
+** DONE Add sinon.sandbox
 ** TODO Should create collection
 ** TODO Should offer to fake timers
 ** TODO Should offer to fake XHR
