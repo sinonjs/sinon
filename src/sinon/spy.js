@@ -89,6 +89,7 @@
         proxy.thisValues = [];
         proxy.exceptions = [];
         proxy.callIds = [];
+        proxy.prototype = func.prototype;
 
         return proxy;
       },
