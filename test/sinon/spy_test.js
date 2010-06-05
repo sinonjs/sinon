@@ -1182,4 +1182,30 @@
       assertFalse(call.calledWithExactly({}));
     }
   });
+
+  testCase("SpyConstructorTest", {
+    setUp: function () {
+      this.CustomConstructor = function () {};
+      this.customPrototype = this.CustomConstructor.prototype;
+      this.StubConstructor = sinon.spy(this, "CustomConstructor");
+    },
+
+    "should create original object": function () {
+      var myInstance = new this.CustomConstructor();
+
+      assert(this.customPrototype.isPrototypeOf(myInstance));
+    },
+
+    "should not interfere with instanceof": function () {
+      var myInstance = new this.CustomConstructor();
+
+      assert(myInstance instanceof this.CustomConstructor);
+    },
+
+    "should record usage": function () {
+      var myInstance = new this.CustomConstructor();
+
+      assert(this.CustomConstructor.called);
+    }
+  });
 }());
