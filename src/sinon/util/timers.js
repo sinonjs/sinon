@@ -189,23 +189,33 @@ sinon.useFakeTimers = (function () {
   var methods = ["setTimeout", "setInterval", "clearTimeout", "clearInterval"];
 
   function restore() {
-    for (var i = 0, l = methods.length; i < l; i++) {
-      global[methods[i]] = this["_" + methods[i]];
+    var method;
+
+    for (var i = 0, l = this.methods.length; i < l; i++) {
+      method = this.methods[i];
+      global[method] = this["_" + method];
     }
+  }
+
+  function stubGlobal(method, clock) {
+    clock["_" + method] = global[method];
+
+    global[method] = function () {
+      return clock[method].apply(clock, arguments);
+    };
   }
 
   return function useFakeTimers(now) {
     var clock = sinon.clock.create(now);
     clock.restore = restore;
+    clock.methods = Array.prototype.slice.call(arguments, typeof now == "number" ? 1 : 0);
 
-    for (var i = 0, l = methods.length; i < l; i++) {
-      (function (method) {
-        clock["_" + method] = global[method];
+    if (clock.methods.length === 0) {
+      clock.methods = methods;
+    }
 
-        global[method] = function () {
-          return clock[method].apply(clock, arguments);
-        };
-      }(methods[i]));
+    for (var i = 0, l = clock.methods.length; i < l; i++) {
+      stubGlobal(clock.methods[i], clock);
     }
 
     return clock;
