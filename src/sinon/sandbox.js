@@ -3,7 +3,7 @@
  * @depend collection.js
  * @depend util/timers.js
  */
-/*jslint indent: 2*/
+/*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global module, require, sinon*/
 /**
  * Sandboxes are like collections, except they also handle 

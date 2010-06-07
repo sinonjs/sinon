@@ -1,8 +1,10 @@
 /*jslint indent: 2*/
 /*global testCase
+         setTimeout
          sinon
          assert
          assertObject
+         assertSame
          assertFunction*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
