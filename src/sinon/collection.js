@@ -32,13 +32,6 @@
     return collection.fakes;
   }
 
-  function addFake(type) {
-    var fake = sinon[type].apply(sinon, arguments);
-    getFakes(this).push(fake);
-
-    return fake;
-  }
-
   function each(collection, method) {
     var fakes = getFakes(collection);
 
@@ -74,18 +67,18 @@
       }
     },
 
-    stub: function stub() {
-      var fake = sinon.stub.apply(sinon, arguments);
+    add: function add(fake) {
       getFakes(this).push(fake);
 
       return fake;
     },
 
-    mock: function mock() {
-      var fake = sinon.mock.apply(sinon, arguments);
-      getFakes(this).push(fake);
+    stub: function stub() {
+      return this.add(sinon.stub.apply(sinon, arguments));
+    },
 
-      return fake;
+    mock: function mock() {
+      return this.add(sinon.mock.apply(sinon, arguments));
     }
   };
 
