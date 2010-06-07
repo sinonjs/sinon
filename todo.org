@@ -30,22 +30,22 @@
 * Asserts [2/2]
 ** DONE Find all spy methods not exposed as asserts
 ** DONE Reduce duplication
-* Fakes/Utilities [4/6]
+* Fakes/Utilities [5/6]
 ** DONE Add FakeXMLHttpRequest
 ** TODO Add Sinon tools to work with FakeXMLHttpRequest
 ** DONE Add fake timers
 ** DONE Add fake Date
 ** DONE Add Clock to control timers and date
-** TODO Add Sinon tools to work with fake timers
+** DONE Add Sinon tools to work with fake timers
 * Fix failing test cases in IE [4/4]
 ** DONE StubCallsArgTest
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [1/5]
+* Sandboxes [3/5]
 ** DONE Add sinon.sandbox
-** TODO Should create collection
-** TODO Should offer to fake timers
+** DONE Should inherit collection
+** DONE Should offer to fake timers
 ** TODO Should offer to fake XHR
 ** TODO Should return object with bound spy, stub and mock functions as well as clock and server properties
 * Logger [0/2]
