@@ -223,5 +223,5 @@ sinon.useFakeTimers = (function () {
 }());
 
 if (typeof module == "object" && typeof require == "function") {
-  module = sinon;
+  module.exports = sinon;
 }

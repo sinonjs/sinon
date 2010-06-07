@@ -10,8 +10,14 @@
           assertNumber
           assertException
           assertSame
+          assertNotSame
           assertUndefined
-          assertFunction*/
+          assertObject
+          assertFunction
+          setTimeout
+          setInterval
+          clearTimeout
+          clearInterval*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -431,7 +437,6 @@
     }
   });
 
-  var global = this;
   var globalSetTimeout = setTimeout;
   var globalSetInterval = setInterval;
   var globalClearTimeout = clearTimeout;
