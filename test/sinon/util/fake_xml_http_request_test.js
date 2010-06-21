@@ -17,7 +17,7 @@
  *
  * Copyright (c) 2010 Christian Johansen
  */
-(function () {
+(function (global) {
   testCase("FakeXMLHttpRequestTest", {
     "should be constructor": function () {
       assertFunction(sinon.FakeXMLHttpRequest);
@@ -428,4 +428,73 @@
       }, this.xhr.getAllResponseHeaders());
     }
   });
-}());
+
+  var globalXMLHttpRequest = this.XMLHttpRequest;
+  var globalActiveXObject = this.ActiveXObject;
+
+  testCase("SinonStubXHRTest", {
+    setUp: function () {
+      this.fakeXhr = sinon.useFakeXMLHttpRequest();
+    },
+
+    tearDown: function () {
+      if (typeof this.fakeXhr.restore == "function") {
+        this.fakeXhr.restore();
+      }
+    },
+
+    "should return FakeXMLHttpRequest constructor": function () {
+      assertSame(sinon.FakeXMLHttpRequest, this.fakeXhr);
+    },
+
+    "should temporarily bless FakeXMLHttpRequest with restore method": function () {
+      assertFunction(this.fakeXhr.restore);
+    },
+
+    "calling restore should remove temporary method": function () {
+      this.fakeXhr.restore();
+
+      assertUndefined(this.fakeXhr.restore);
+    },
+
+    "should replace global XMLHttpRequest": function () {
+      assertSame(sinon.FakeXMLHttpRequest, XMLHttpRequest);
+    },
+
+    "should restore global XMLHttpRequest": function () {
+      this.fakeXhr.restore();
+
+      assertSame(globalXMLHttpRequest, XMLHttpRequest);
+    },
+
+    "should restore global ActiveXObject": function () {
+      this.fakeXhr.restore();
+
+      assertSame(globalActiveXObject, global.ActiveXObject);
+    },
+
+    "should throw when creating ActiveX Microsoft.XMLHTTP": function () {
+      assertException(function () {
+        new ActiveXObject("Microsoft.XMLHTTP");
+      });
+    },
+
+    "should throw when creating ActiveX Msxml2.XMLHTTP": function () {
+      assertException(function () {
+        new ActiveXObject("Msxml2.XMLHTTP");
+      });
+    },
+
+    "should throw when creating ActiveX Msxml2.XMLHTTP.3.0": function () {
+      assertException(function () {
+        new ActiveXObject("Msxml2.XMLHTTP.3.0");
+      });
+    },
+
+    "should throw when creating ActiveX Msxml2.XMLHTTP.6.0": function () {
+      assertException(function () {
+        new ActiveXObject("Msxml2.XMLHTTP.6.0");
+      });
+    }
+  });
+}(this));
