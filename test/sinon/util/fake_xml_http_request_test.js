@@ -19,6 +19,10 @@
  */
 (function (global) {
   testCase("FakeXMLHttpRequestTest", {
+    tearDown: function () {
+      delete sinon.FakeXMLHttpRequest.onCreate;
+    },
+
     "should be constructor": function () {
       assertFunction(sinon.FakeXMLHttpRequest);
       assertSame(sinon.FakeXMLHttpRequest, sinon.FakeXMLHttpRequest.prototype.constructor);
@@ -29,6 +33,24 @@
       assertSame(2, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
       assertSame(3, sinon.FakeXMLHttpRequest.LOADING);
       assertSame(4, sinon.FakeXMLHttpRequest.DONE);
+    },
+
+    "should call onCreate if listener is set": function () {
+      var onCreate = sinon.stub();
+      sinon.FakeXMLHttpRequest.onCreate = onCreate;
+
+      var xhr = new sinon.FakeXMLHttpRequest();
+
+      assert(onCreate.called);
+    },
+
+    "should pass new object to onCreate if set": function () {
+      var onCreate = sinon.stub();
+      sinon.FakeXMLHttpRequest.onCreate = onCreate;
+
+      var xhr = new sinon.FakeXMLHttpRequest();
+
+      assertSame(xhr, onCreate.getCall(0).args[0]);
     }
   });
 
@@ -465,6 +487,23 @@
       this.fakeXhr.restore();
 
       assertSame(globalXMLHttpRequest, XMLHttpRequest);
+    },
+
+    "should remove XMLHttpRequest onCreate listener": function () {
+      sinon.FakeXMLHttpRequest.onCreate = function () {};
+
+      this.fakeXhr.restore();
+
+      assertUndefined(sinon.FakeXMLHttpRequest.onCreate);
+    },
+
+    "should optionally keep XMLHttpRequest onCreate listener": function () {
+      var onCreate = function () {};
+      sinon.FakeXMLHttpRequest.onCreate = onCreate;
+
+      this.fakeXhr.restore(true);
+
+      assertSame(onCreate, sinon.FakeXMLHttpRequest.onCreate);
     },
 
     "should restore global ActiveXObject": function () {

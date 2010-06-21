@@ -40,6 +40,10 @@ sinon.FakeXMLHttpRequest = (function () {
     this.requestBody = null;
     this.status = 0;
     this.statusText = "";
+
+    if (typeof FakeXMLHttpRequest.onCreate == "function") {
+      FakeXMLHttpRequest.onCreate(this);
+    }
   }
 
   function verifyState(xhr) {
@@ -172,10 +176,14 @@ sinon.FakeXMLHttpRequest = (function () {
   var globalActiveXObject = global.ActiveXObject;
 
   sinon.useFakeXMLHttpRequest = function () {
-    sinon.FakeXMLHttpRequest.restore = function restore() {
+    sinon.FakeXMLHttpRequest.restore = function restore(keepOnCreate) {
       global.XMLHttpRequest = globalXMLHttpRequest;
       global.ActiveXObject = globalActiveXObject;
       delete sinon.FakeXMLHttpRequest.restore;
+
+      if (keepOnCreate !== true) {
+        delete sinon.FakeXMLHttpRequest.onCreate;
+      }
     };
 
     global.XMLHttpRequest = sinon.FakeXMLHttpRequest;
