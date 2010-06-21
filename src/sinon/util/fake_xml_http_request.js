@@ -167,6 +167,31 @@ sinon.FakeXMLHttpRequest = (function () {
   return FakeXMLHttpRequest;
 }());
 
+(function (global) {
+  var globalXMLHttpRequest = global.XMLHttpRequest;
+  var globalActiveXObject = global.ActiveXObject;
+
+  sinon.useFakeXMLHttpRequest = function () {
+    sinon.FakeXMLHttpRequest.restore = function restore() {
+      global.XMLHttpRequest = globalXMLHttpRequest;
+      global.ActiveXObject = globalActiveXObject;
+      delete sinon.FakeXMLHttpRequest.restore;
+    };
+
+    global.XMLHttpRequest = sinon.FakeXMLHttpRequest;
+
+    global.ActiveXObject = function ActiveXObject(objId) {
+      if (objId == "Microsoft.XMLHTTP" || /^Msxml2\.XMLHTTP/.test(objId)) {
+        throw new Error("Not supported");
+      }
+
+      return new globalActiveXObject(objId);
+    };
+
+    return sinon.FakeXMLHttpRequest;
+  };
+}(this));
+
 if (typeof module == "object" && typeof require == "function") {
   module.exports = sinon;
 }
