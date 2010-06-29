@@ -1,0 +1,13 @@
+= Sinon.JS
+
+Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
+
+== Goals
+* No global pollution
+* Easy to use
+* Require minimal “integration”
+* Easy to embed seamlessly with any testing framework
+* Easily fake any interface
+* Ship with ready-to-use fakes for XMLHttpRequest, timers and more
+
+See http://cjohansen.no/sinon/
