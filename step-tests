@@ -21,16 +21,17 @@ def ok
 end
 
 problems = []
+server = ARGV.length > 0 ? " --server #{ARGV[0]}" : ""
 
 print "Resetting"
-`jstestdriver --reset`
+`jstestdriver --reset#{server}`
 print " - #{ok}\n"
 
 (Dir.glob("test/**/*.js").collect do |test|
   File.read(test).scan(/estCase\("(.+)"/)
 end).flatten.each do |testCase|
   print testCase
-  `jstestdriver --tests #{testCase}` =~ /Fails: (\d+); Errors: (\d+)/
+  `jstestdriver --tests #{testCase}#{server}` =~ /Fails: (\d+); Errors: (\d+)/
 
   if $1.to_i > 0 || $2.to_i > 0
     problems << testCase
