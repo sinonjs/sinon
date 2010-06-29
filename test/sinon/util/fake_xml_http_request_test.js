@@ -36,7 +36,7 @@
     },
 
     "should call onCreate if listener is set": function () {
-      var onCreate = sinon.stub();
+      var onCreate = sinon.spy();
       sinon.FakeXMLHttpRequest.onCreate = onCreate;
 
       var xhr = new sinon.FakeXMLHttpRequest();
@@ -45,7 +45,7 @@
     },
 
     "should pass new object to onCreate if set": function () {
-      var onCreate = sinon.stub();
+      var onCreate = sinon.spy();
       sinon.FakeXMLHttpRequest.onCreate = onCreate;
 
       var xhr = new sinon.FakeXMLHttpRequest();
@@ -145,7 +145,7 @@
       });
     },
 
-    "should throw exception if send fag is true": function () {
+    "should throw exception if send flag is true": function () {
       var xhr = this.xhr;
       xhr.sendFlag = true;
 
@@ -343,40 +343,271 @@
       this.xhr.send("Data");
 
       assertEquals(sinon.FakeXMLHttpRequest.OPENED, state);
+    },
+
+    "should dispatch onSend callback if set": function () {
+      this.xhr.open("POST", "/", true);
+      var callback = sinon.spy();
+      this.xhr.onSend = callback;
+
+      this.xhr.send("Data");
+
+      assert(callback.called);
+    },
+
+    "should dispatch onSend with request as argument": function () {
+      this.xhr.open("POST", "/", true);
+      var callback = sinon.spy();
+      this.xhr.onSend = callback;
+
+      this.xhr.send("Data");
+
+      assert(callback.calledWith(this.xhr));
+    },
+
+    "should dispatch onSend when async": function () {
+      this.xhr.open("POST", "/", false);
+      var callback = sinon.spy();
+      this.xhr.onSend = callback;
+
+      this.xhr.send("Data");
+
+      assert(callback.calledWith(this.xhr));
     }
   });
 
   testCase("FakeXMLHttpRequestSetResponseHeadersTest", {
     setUp: function () {
       this.xhr = new sinon.FakeXMLHttpRequest();
-      this.xhr.open("GET", "/");
     },
 
     "should set request headers": function () {
       var object = { id: 42 };
+      this.xhr.open("GET", "/");
       this.xhr.send();
       this.xhr.setResponseHeaders(object);
 
       assertSame(object, this.xhr.responseHeaders);
     },
 
-    "should throw if send flag is not set": function () {
-      var object = { id: 42 };
-      var xhr = this.xhr;
-
-      assertException(function () {
-        xhr.setResponseHeaders(object);
-      });
-    },
-
     "should call readyStateChange with HEADERS_RECEIVED": function () {
       var object = { id: 42 };
+      this.xhr.open("GET", "/");
       this.xhr.send();
-      var stub = this.xhr.readyStateChange = sinon.stub.create();
+      var spy = this.xhr.readyStateChange = sinon.spy();
 
       this.xhr.setResponseHeaders(object);
 
-      assert(stub.calledWith(sinon.FakeXMLHttpRequest.HEADERS_RECEIVED));
+      assert(spy.calledWith(sinon.FakeXMLHttpRequest.HEADERS_RECEIVED));
+    },
+
+    "should not call readyStateChange if sync": function () {
+      var object = { id: 42 };
+      this.xhr.open("GET", "/", false);
+      this.xhr.send();
+      var spy = this.xhr.readyStateChange = sinon.spy();
+
+      this.xhr.setResponseHeaders(object);
+
+      assertFalse(spy.called);
+    }
+  });
+
+  testCase("FakeXMLHttpRequestSetResponseBodyAsyncTest", {
+    setUp: function () {
+      this.xhr = new sinon.FakeXMLHttpRequest();
+      this.xhr.open("GET", "/");
+      this.xhr.send();
+      this.xhr.setResponseHeaders({});
+    },
+
+    "should invoke onreadystatechange handler with LOADING state": function () {
+      var spy = sinon.spy();
+      this.xhr.readyStateChange = spy;
+
+      this.xhr.setResponseBody("Some text goes in here ok?");
+
+      assert(spy.calledWith(sinon.FakeXMLHttpRequest.LOADING));
+    },
+
+    "should invoke onreadystatechange handler for each 10 byte chunk": function () {
+      var spy = sinon.spy();
+      this.xhr.readyStateChange = spy;
+      this.xhr.chunkSize = 10;
+
+      this.xhr.setResponseBody("Some text goes in here ok?");
+
+      assertEquals(4, spy.callCount);
+    },
+
+    "should invoke onreadystatechange handler for each x byte chunk": function () {
+      var spy = sinon.spy();
+      this.xhr.readyStateChange = spy;
+      this.xhr.chunkSize = 20;
+
+      this.xhr.setResponseBody("Some text goes in here ok?");
+
+      assertEquals(3, spy.callCount);
+    },
+
+    "should invoke onreadystatechange handler with partial data": function () {
+      var pieces = [];
+      var spy = sinon.spy(function () { pieces.push(this.responseText); });
+      this.xhr.readyStateChange = spy;
+      this.xhr.chunkSize = 9;
+
+      this.xhr.setResponseBody("Some text goes in here ok?");
+
+      assertEquals("Some text", pieces[1]);
+    },
+
+    "should call onreadystatechange with DONE state": function () {
+      var spy = sinon.spy();
+      this.xhr.readyStateChange = spy;
+
+      this.xhr.setResponseBody("Some text goes in here ok?");
+
+      assert(spy.calledWith(sinon.FakeXMLHttpRequest.DONE));
+    },
+
+    "should throw if not open": function () {
+      var xhr = new sinon.FakeXMLHttpRequest();
+
+      assertException(function () {
+        xhr.setResponseBody("");
+      });
+    },
+
+    "should throw if no headers received": function () {
+      var xhr = new sinon.FakeXMLHttpRequest();
+      xhr.open("GET", "/");
+      xhr.send();
+
+      assertException(function () {
+        xhr.setResponseBody("");
+      });
+    },
+
+    "should throw if body was already sent": function () {
+      var xhr = new sinon.FakeXMLHttpRequest();
+      xhr.open("GET", "/");
+      xhr.send();
+      xhr.setResponseHeaders({});
+      xhr.setResponseBody("");
+
+      assertException(function () {
+        xhr.setResponseBody("");
+      });
+    }
+  });
+
+  testCase("FakeXMLHttpRequestSetResponseBodySyncTest", {
+    setUp: function () {
+      this.xhr = new sinon.FakeXMLHttpRequest();
+      this.xhr.open("GET", "/", false);
+      this.xhr.send();
+      this.xhr.setResponseHeaders({});
+    },
+
+    "should not throw": function () {
+      var xhr = this.xhr;
+
+      assertNoException(function () {
+        xhr.setResponseBody("");
+      });
+    },
+
+    "should set readyState to DONE": function () {
+      this.xhr.setResponseBody("");
+
+      assertEquals(sinon.FakeXMLHttpRequest.DONE, this.xhr.readyState);
+    },
+
+    "should throw if responding to request twice": function () {
+      var xhr = this.xhr;
+      this.xhr.setResponseBody("");
+
+      assertException(function () {
+        xhr.setResponseBody("");
+      });
+    },
+
+    "should not call onreadystatechange for sync request": function () {
+      var xhr = new sinon.FakeXMLHttpRequest();
+      var spy = sinon.spy();
+      xhr.onreadystatechange = spy;
+      xhr.open("GET", "/", false);
+      xhr.send();
+      var callCount = spy.callCount;
+
+      xhr.setResponseHeaders({});
+      xhr.setResponseBody("");
+
+      assertEquals(0, callCount - spy.callCount);
+    },
+
+    "should simulate synchronous request": function () {
+      var xhr = new sinon.FakeXMLHttpRequest();
+
+      xhr.onSend = function () {
+        this.setResponseHeaders({});
+        this.setResponseBody("Oh yeah");
+      };
+
+      xhr.open("GET", "/", false);
+      xhr.send();
+
+      assertEquals("Oh yeah", xhr.responseText);
+    }
+  });
+
+  testCase("FakeXMLHttpRequestRespondTest", {
+    setUp: function () {
+      this.xhr = new sinon.FakeXMLHttpRequest();
+      this.xhr.open("GET", "/");
+      var spy = this.spy = sinon.spy();
+
+      this.xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          spy.call(this);
+        }
+      };
+
+      this.xhr.send();
+    },
+
+    "should call readystate handler with readyState DONE once": function () {
+      this.xhr.respond(200, {}, "");
+
+      assertEquals(1, this.spy.callCount);
+    },
+
+    "should default to status 200, no headers, and blank body": function () {
+      this.xhr.respond();
+
+      assertEquals(200, this.xhr.status);
+      assertEquals({}, this.xhr.getAllResponseHeaders());
+      assertEquals("", this.xhr.responseText);
+    },
+
+    "should set status": function () {
+      this.xhr.respond(201);
+
+      assertEquals(201, this.xhr.status);
+    },
+
+    "should set headers": function () {
+      sinon.spy(this.xhr, "setResponseHeaders");
+      var responseHeaders = { some: "header", value: "over here" };
+      this.xhr.respond(200, responseHeaders);
+
+      assertEquals(responseHeaders, this.xhr.setResponseHeaders.args[0][0]);
+    },
+
+    "should set response text": function () {
+      this.xhr.respond(200, {}, "'tis some body text");
+
+      assertEquals("'tis some body text", this.xhr.responseText);
     }
   });
 

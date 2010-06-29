@@ -108,6 +108,10 @@ sinon.FakeXMLHttpRequest = (function () {
     this.errorFlag = false;
     this.sendFlag = this.async;
     this.readyStateChange(FakeXMLHttpRequest.OPENED);
+
+    if (typeof this.onSend == "function") {
+      this.onSend(this);
+    }
   }
 
   function abort() {
@@ -145,28 +149,69 @@ sinon.FakeXMLHttpRequest = (function () {
   // Helps testing
 
   function setResponseHeaders(headers) {
-    if (!this.sendFlag) {
-      throw new Error("INVALID_STATE_ERR");
-    }
-
     this.responseHeaders = headers;
-    this.readyStateChange(FakeXMLHttpRequest.HEADERS_RECEIVED);
+
+    if (this.async) {
+      this.readyStateChange(FakeXMLHttpRequest.HEADERS_RECEIVED);
+    }
   }
 
-  FakeXMLHttpRequest.prototype.open = open;
-  FakeXMLHttpRequest.prototype.readyStateChange = readyStateChange;
-  FakeXMLHttpRequest.prototype.setRequestHeader = setRequestHeader;
-  FakeXMLHttpRequest.prototype.setResponseHeaders = setResponseHeaders;
-  FakeXMLHttpRequest.prototype.send = send;
-  FakeXMLHttpRequest.prototype.abort = abort;
-  FakeXMLHttpRequest.prototype.getResponseHeader = getResponseHeader;
-  FakeXMLHttpRequest.prototype.getAllResponseHeaders = getAllResponseHeaders;
+  function setResponseBody(body) {
+    if (this.readyState == FakeXMLHttpRequest.DONE) {
+      throw new Error("Request done");
+    }
 
-  FakeXMLHttpRequest.UNSENT = 0;
-  FakeXMLHttpRequest.OPENED = 1;
-  FakeXMLHttpRequest.HEADERS_RECEIVED = 2;
-  FakeXMLHttpRequest.LOADING = 3;
-  FakeXMLHttpRequest.DONE = 4;
+    if (this.async && this.readyState != FakeXMLHttpRequest.HEADERS_RECEIVED) {
+      throw new Error("No headers received");
+    }
+
+    var chunkSize = this.chunkSize || 10;
+    var index = 0;
+    this.responseText = "";
+
+    do {
+      if (this.async) {
+        this.readyStateChange(FakeXMLHttpRequest.LOADING);
+      }
+
+      this.responseText += body.substring(index, index + chunkSize);
+      index += chunkSize;
+    } while (index < body.length);
+
+    if (this.async) {
+      this.readyStateChange(FakeXMLHttpRequest.DONE);
+    } else {
+      this.readyState = FakeXMLHttpRequest.DONE;
+    }
+  }
+
+  function respond(status, headers, body) {
+    this.setResponseHeaders(headers || {});
+    this.status = typeof status == "number" ? status : 200;
+    this.setResponseBody(body || "");
+  }
+
+  sinon.extend(FakeXMLHttpRequest.prototype, {
+    async: true,
+    open: open,
+    readyStateChange: readyStateChange,
+    setRequestHeader: setRequestHeader,
+    setResponseHeaders: setResponseHeaders,
+    send: send,
+    abort: abort,
+    getResponseHeader: getResponseHeader,
+    getAllResponseHeaders: getAllResponseHeaders,
+    setResponseBody: setResponseBody,
+    respond: respond
+  });
+
+  sinon.extend(FakeXMLHttpRequest, {
+    UNSENT: 0,
+    OPENED: 1,
+    HEADERS_RECEIVED: 2,
+    LOADING: 3,
+    DONE: 4
+  });
 
   return FakeXMLHttpRequest;
 }());
