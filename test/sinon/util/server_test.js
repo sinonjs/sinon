@@ -118,6 +118,29 @@
   testCase("ServerRespondWithTest", {
     setUp: function () {
       this.server = sinon.server.create();
+
+      this.getRootAsync = new sinon.FakeXMLHttpRequest();
+      this.getRootAsync.open("GET", "/", true);
+      this.getRootAsync.send();
+      sinon.spy(this.getRootAsync, "respond");
+
+      this.postRootAsync = new sinon.FakeXMLHttpRequest();
+      this.postRootAsync.open("POST", "/", true);
+      this.postRootAsync.send();
+      sinon.spy(this.postRootAsync, "respond");
+
+      this.getRootSync = new sinon.FakeXMLHttpRequest();
+      this.getRootSync.open("GET", "/", false);
+
+      this.getPathAsync = new sinon.FakeXMLHttpRequest();
+      this.getPathAsync.open("GET", "/path", true);
+      this.getPathAsync.send();
+      sinon.spy(this.getPathAsync, "respond");
+
+      this.postPathAsync = new sinon.FakeXMLHttpRequest();
+      this.postPathAsync.open("POST", "/path", true);
+      this.postPathAsync.send();
+      sinon.spy(this.postPathAsync, "respond");
     },
 
     tearDown: function () {
@@ -125,100 +148,152 @@
     },
 
     "should respond to queued async requests": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", true);
-      xhr.send();
-      sinon.spy(xhr, "respond");
-
       this.server.respondWith("Oh yeah! Duffman!");
+
       this.server.processQueue();
 
-      assert(xhr.respond.called);
-      assertEquals(200, xhr.respond.args[0][0]);
-      assertEquals({}, xhr.respond.args[0][1]);
-      assertEquals("Oh yeah! Duffman!", xhr.respond.args[0][2]);
+      assert(this.getRootAsync.respond.called);
+      assertEquals([200, {}, "Oh yeah! Duffman!"], this.getRootAsync.respond.args[0]);
     },
 
     "should respond to all queued async requests": function () {
-      var xhrs = [new sinon.FakeXMLHttpRequest(), new sinon.FakeXMLHttpRequest()];
-      xhrs[0].open("GET", "/", true);
-      xhrs[0].send();
-      xhrs[1].open("GET", "/somewhere/else", true);
-      xhrs[1].send();
-      sinon.spy(xhrs[0], "respond");
-      sinon.spy(xhrs[1], "respond");
-
       this.server.respondWith("Oh yeah! Duffman!");
+
       this.server.processQueue();
 
-      assert(xhrs[0].respond.called);
-      assert(xhrs[1].respond.called);
+      assert(this.getRootAsync.respond.called);
+      assert(this.getPathAsync.respond.called);
     },
 
     "should respond with status, headers, and body": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", true);
-      xhr.send();
-      sinon.spy(xhr, "respond");
+      var headers = { "Content-Type": "X-test" };
+      this.server.respondWith([201, headers, "Oh yeah!"]);
 
-      this.server.respondWith([201, { "Content-Type": "X-test" }, "Oh yeah!"]);
       this.server.processQueue();
 
-      assertEquals(201, xhr.respond.args[0][0]);
-      assertEquals({ "Content-Type": "X-test" }, xhr.respond.args[0][1]);
-      assertEquals("Oh yeah!", xhr.respond.args[0][2]);
+      assertEquals([201, headers, "Oh yeah!"], this.getRootAsync.respond.args[0]);
     },
 
     "should respond to sync request with canned answers": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", false);
-
       this.server.respondWith([210, { "X-Ops": "Yeah" }, "Body, man"]);
-      xhr.send();
 
-      assertEquals(210, xhr.status);
-      assertEquals({ "X-Ops": "Yeah" }, xhr.getAllResponseHeaders());
-      assertEquals("Body, man", xhr.responseText);
+      this.getRootSync.send();
+
+      assertEquals(210, this.getRootSync.status);
+      assertEquals({ "X-Ops": "Yeah" }, this.getRootSync.getAllResponseHeaders());
+      assertEquals("Body, man", this.getRootSync.responseText);
     },
 
     "should respond to sync request with 404 if no response is set": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", false);
+      this.getRootSync.send();
 
-      xhr.send();
-
-      assertEquals(404, xhr.status);
-      assertEquals({}, xhr.getAllResponseHeaders());
-      assertEquals("", xhr.responseText);
+      assertEquals(404, this.getRootSync.status);
+      assertEquals({}, this.getRootSync.getAllResponseHeaders());
+      assertEquals("", this.getRootSync.responseText);
     },
 
     "should respond to async request with 404 if no response is set": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", true);
-      xhr.send();
-      sinon.spy(xhr, "respond");
-
       this.server.processQueue();
 
-      assertEquals([404, {}, ""], xhr.respond.args[0]);
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
     },
 
     "should respond to specific URL": function () {
-      var xhr = new sinon.FakeXMLHttpRequest();
-      xhr.open("GET", "/", true);
-      xhr.send();
-      sinon.spy(xhr, "respond");
+      this.server.respondWith("/path", "Duffman likes Duff beer");
 
-      var xhr2 = new sinon.FakeXMLHttpRequest();
-      xhr2.open("GET", "/some/url", true);
-      xhr2.send();
-      sinon.spy(xhr2, "respond");
-
-      this.server.respondWith("/some/url", "Duffman likes Duff beer");
       this.server.processQueue();
 
-      assertEquals([404, {}, ""], xhr.respond.args[0]);
-      assertEquals([200, {}, "Duffman likes Duff beer"], xhr2.respond.args[0]);
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+      assertEquals([200, {}, "Duffman likes Duff beer"], this.getPathAsync.respond.args[0]);
+    },
+
+    "should respond to URL matched by regexp": function () {
+      this.server.respondWith(/^\/p.*/, "Regexp");
+
+      this.server.processQueue();
+
+      assertEquals([200, {}, "Regexp"], this.getPathAsync.respond.args[0]);
+    },
+
+    "should not respond to URL not matched by regexp": function () {
+      this.server.respondWith(/^\/p.*/, "No regexp match");
+
+      this.server.processQueue();
+
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+    },
+
+    "should respond to all URLs matched by regexp": function () {
+      this.server.respondWith(/^\/.*/, "Match all URLs");
+
+      this.server.processQueue();
+
+      assertEquals([200, {}, "Match all URLs"], this.getRootAsync.respond.args[0]);
+      assertEquals([200, {}, "Match all URLs"], this.getPathAsync.respond.args[0]);
+    },
+
+    "should respond to all requests when match URL is falsy": function () {
+      this.server.respondWith("", "Falsy URL");
+
+      this.server.processQueue();
+
+      assertEquals([200, {}, "Falsy URL"], this.getRootAsync.respond.args[0]);
+      assertEquals([200, {}, "Falsy URL"], this.getPathAsync.respond.args[0]);
+    },
+
+    "should respond to all GET requests": function () {
+      this.server.respondWith("GET", "", "All GETs");
+
+      this.server.processQueue();
+
+      assertEquals([200, {}, "All GETs"], this.getRootAsync.respond.args[0]);
+      assertEquals([200, {}, "All GETs"], this.getPathAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postPathAsync.respond.args[0]);
+    },
+
+    "should respond to all PUT requests": function () {
+      this.server.respondWith("PUT", "", "All PUTs");
+
+      this.server.processQueue();
+
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postPathAsync.respond.args[0]);
+    },
+
+    "should respond to all POST requests": function () {
+      this.server.respondWith("POST", "", "All POSTs");
+
+      this.server.processQueue();
+
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
+      assertEquals([200, {}, "All POSTs"], this.postRootAsync.respond.args[0]);
+      assertEquals([200, {}, "All POSTs"], this.postPathAsync.respond.args[0]);
+    },
+
+    "should respond to all POST requests to /path": function () {
+      this.server.respondWith("POST", "/path", "All POSTs");
+
+      this.server.processQueue();
+
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
+      assertEquals([200, {}, "All POSTs"], this.postPathAsync.respond.args[0]);
+    },
+
+    "should respond to all POST requests matching regexp": function () {
+      this.server.respondWith("POST", /^\/path(\?.*)?/, "All POSTs");
+
+      this.server.processQueue();
+
+      assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
+      assertEquals([200, {}, "All POSTs"], this.postPathAsync.respond.args[0]);
     }
   });
 }());

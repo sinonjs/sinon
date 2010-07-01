@@ -34,15 +34,13 @@ sinon.server = (function () {
     return [200, {}, strOrArray];
   }
 
-  var responder = {
-    match: function (request) {
-      var matchMethod = !this.method || this.method == request.method;
-      var url = request.url;
-      var matchUrl = typeof this.url.test == "function" && this.url.test(url) || this.url == url;
+  function match(method, url, request) {
+    var matchMethod = !method || method == request.method;
+    var matchUrl = (typeof url.test == "function" && url.test(request.url)) ||
+                   url == request.url || !url;
 
       return matchMethod && matchUrl;
-    }
-  };
+  }
 
   return {
     create: function () {
@@ -88,11 +86,11 @@ sinon.server = (function () {
           method = null;
         }
 
-        this.responses.push(sinon.extend(sinon.create(responder), {
+        this.responses.push({
           method: method,
           url: url,
           response: responseArray(body)
-        }));
+        });
       }
     },
 
@@ -107,7 +105,7 @@ sinon.server = (function () {
 
       if (this.responses) {
         for (var i = 0, l = this.responses.length; i < l; i++) {
-          if (this.responses[i].match(request)) {
+          if (match(this.responses[i].method, this.responses[i].url, request)) {
             response = this.responses[i].response;
             break;
           }
