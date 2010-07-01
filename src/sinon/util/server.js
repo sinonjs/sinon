@@ -101,6 +101,10 @@ sinon.server = (function () {
     },
 
     processRequest: function processRequest(request) {
+      if (request.aborted) {
+        return;
+      }
+
       var response = this.response || [404, {}, ""];
 
       if (this.responses) {
