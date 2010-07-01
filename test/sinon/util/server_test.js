@@ -294,6 +294,15 @@
       assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
       assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
       assertEquals([200, {}, "All POSTs"], this.postPathAsync.respond.args[0]);
+    },
+
+    "should not respond to aborted requests": function () {
+      this.server.respondWith("/", "That's my homepage!");
+      this.getRootAsync.aborted = true;
+
+      this.server.processQueue();
+
+      assertFalse(this.getRootAsync.respond.called);
     }
   });
 }());
