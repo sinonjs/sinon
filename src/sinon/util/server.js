@@ -27,7 +27,7 @@ sinon.server = (function () {
   }
 
   function responseArray(strOrArray) {
-    if (sinon.isArray(strOrArray)) {
+    if (Object.prototype.toString.call(strOrArray) == "[object Array]") {
       return strOrArray;
     }
 

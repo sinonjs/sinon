@@ -57,16 +57,6 @@ var sinon = (function () {
       }
     },
 
-    isArray: (function () {
-      if (Array.isArray) {
-        return Array.isArray;
-      } else {
-        return function (arr) {
-          return Object.prototype.toString.call(arr) == "[object Array]";
-        };
-      }
-    }()),
-
     deepEqual: function deepEqual(a, b) {
       if (typeof a != "object" || typeof b != "object") {
         return a === b;
