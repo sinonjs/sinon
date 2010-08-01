@@ -1,5 +1,7 @@
-/*jslint indent: 2, onevar: false*/
-/*globals testCase,
+/*jslint indent: 2, onevar: false, eqeqeq: false*/
+/*globals XMLHttpRequest,
+          ActiveXObject,
+          testCase,
           sinon,
           assert,
           assertSame,
@@ -8,6 +10,7 @@
           assertFalse,
           assertNull,
           assertException,
+          assertNoException,
           assertUndefined,
           assertObject,
           assertFunction*/
@@ -387,7 +390,7 @@
       this.xhr.send();
       this.xhr.setResponseHeaders(object);
 
-      assertSame(object, this.xhr.responseHeaders);
+      assertEquals(object, this.xhr.responseHeaders);
     },
 
     "should call readyStateChange with HEADERS_RECEIVED": function () {
@@ -452,7 +455,11 @@
 
     "should invoke onreadystatechange handler with partial data": function () {
       var pieces = [];
-      var spy = sinon.spy(function () { pieces.push(this.responseText); });
+
+      var spy = sinon.spy(function () {
+        pieces.push(this.responseText);
+      });
+
       this.xhr.readyStateChange = spy;
       this.xhr.chunkSize = 9;
 
@@ -644,6 +651,13 @@
       this.xhr.send();
 
       assertNull(this.xhr.getResponseHeader("Content-Type"));
+    },
+
+    "should return headers case insensitive": function () {
+      this.xhr.send();
+      this.xhr.setResponseHeaders({ "Content-Type": "text/html" });
+
+      assertEquals("text/html", this.xhr.getResponseHeader("content-type"));
     }
   });
 
@@ -676,9 +690,178 @@
       });
 
       assertEquals({
-        "Content-Type": "text/html",
-        "Content-Length": "32"
+        "content-type": "text/html",
+        "content-length": "32"
       }, this.xhr.getAllResponseHeaders());
+    }
+  });
+
+  testCase("FakeXMLHttpRequestAbortTest", {
+    setUp: function () {
+      this.xhr = new sinon.FakeXMLHttpRequest();
+    },
+
+    "should set aborted flag to true": function () {
+      this.xhr.aborted = true;
+
+      this.xhr.abort();
+
+      assertTrue(this.xhr.aborted);
+    },
+
+    "should set responseText to null": function () {
+      this.xhr.responseText = "Partial data";
+
+      this.xhr.abort();
+
+      assertNull(this.xhr.responseText);
+    },
+
+    "should set errorFlag to true": function () {
+      this.xhr.errorFlag = true;
+
+      this.xhr.abort();
+
+      assertTrue(this.xhr.errorFlag);
+    },
+
+    "should null request headers": function () {
+      this.xhr.open("GET", "/");
+      this.xhr.setRequestHeader("X-Test", "Sumptn");
+
+      this.xhr.abort();
+
+      assertEquals({}, this.xhr.requestHeaders);
+    },
+
+    "should set state to DONE if headers received": function () {
+      var readyState;
+      this.xhr.open("GET", "/");
+      this.xhr.send();
+      this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
+
+      this.xhr.onreadystatechange = function () {
+        readyState = this.readyState;
+      };
+
+      this.xhr.abort();
+
+      assertEquals(sinon.FakeXMLHttpRequest.DONE, readyState);
+    },
+
+    "should set send flag to false if headers received": function () {
+      this.xhr.open("GET", "/");
+      this.xhr.send();
+      this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
+
+      this.xhr.abort();
+
+      assertFalse(this.xhr.sendFlag);
+    },
+
+    "should dispatch readystatechange event if headers received": function () {
+      this.xhr.open("GET", "/");
+      this.xhr.send();
+      this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
+      this.xhr.onreadystatechange = sinon.stub();
+
+      this.xhr.abort();
+
+      assert(this.xhr.onreadystatechange.called);
+    },
+
+    "should set readyState to unsent if headers received": function () {
+      this.xhr.open("GET", "/");
+      this.xhr.send();
+      this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
+
+      this.xhr.abort();
+
+      assertEquals(sinon.FakeXMLHttpRequest.UNSENT, this.xhr.readyState);
+    },
+
+    "should not dispatch readystatechange event if readyState is unsent": function () {
+      this.xhr.onreadystatechange = sinon.stub();
+
+      this.xhr.abort();
+
+      assertFalse(this.xhr.onreadystatechange.called);
+    },
+
+    "should not dispatch readystatechange event if readyState is opened": function () {
+      this.xhr.onreadystatechange = sinon.stub();
+
+      this.xhr.abort();
+
+      assertFalse(this.xhr.onreadystatechange.called);
+    }
+  });
+
+  testCase("FakeXMLHttpRequestResponseXMLTest", {
+    setUp: function () {
+      this.xhr = new sinon.FakeXMLHttpRequest();
+      this.xhr.open("GET", "/");
+    },
+
+    "should initially be null": function () {
+      assertNull(this.xhr.responseXML);
+    },
+
+    "should be null when the response body is empty": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, {}, "");
+
+      assertNull(this.xhr.responseXML);
+    },
+
+    "should parse XML for application/xml": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, { "Content-Type": "application/xml" },
+                       "<div><h1>Hola!</h1></div>");
+
+      var doc = this.xhr.responseXML;
+      var elements = doc.documentElement.getElementsByTagName("h1");
+      assertEquals(1, elements.length);
+      assertEquals("h1", elements[0].tagName);
+    },
+
+    "should parse XML for text/xml": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, { "Content-Type": "text/xml" },
+                       "<div><h1>Hola!</h1></div>");
+
+      assertNotNull(this.xhr.responseXML);
+    },
+
+    "should parse XML for custom xml content type": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, { "Content-Type": "application/text+xml" },
+                       "<div><h1>Hola!</h1></div>");
+
+      assertNotNull(this.xhr.responseXML);
+    },
+
+    "should parse XML with no Content-Type": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, {}, "<div><h1>Hola!</h1></div>");
+
+      var doc = this.xhr.responseXML;
+      var elements = doc.documentElement.getElementsByTagName("h1");
+      assertEquals(1, elements.length);
+      assertEquals("h1", elements[0].tagName);
+    },
+
+    "should not parse XML with Content-Type text/plain": function () {
+      this.xhr.send();
+
+      this.xhr.respond(200, { "Content-Type": "text/plain" }, "<div></div>");
+
+      assertNull(this.xhr.responseXML);
     }
   });
 
@@ -745,25 +928,25 @@
 
     "should throw when creating ActiveX Microsoft.XMLHTTP": function () {
       assertException(function () {
-        new ActiveXObject("Microsoft.XMLHTTP");
+        var xhr = new ActiveXObject("Microsoft.XMLHTTP");
       });
     },
 
     "should throw when creating ActiveX Msxml2.XMLHTTP": function () {
       assertException(function () {
-        new ActiveXObject("Msxml2.XMLHTTP");
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP");
       });
     },
 
     "should throw when creating ActiveX Msxml2.XMLHTTP.3.0": function () {
       assertException(function () {
-        new ActiveXObject("Msxml2.XMLHTTP.3.0");
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0");
       });
     },
 
     "should throw when creating ActiveX Msxml2.XMLHTTP.6.0": function () {
       assertException(function () {
-        new ActiveXObject("Msxml2.XMLHTTP.6.0");
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0");
       });
     }
   });
