@@ -291,11 +291,19 @@ sinon.FakeXMLHttpRequest = (function () {
 (function (global) {
   var GlobalXMLHttpRequest = global.XMLHttpRequest;
   var GlobalActiveXObject = global.ActiveXObject;
+  var supportsActiveX = typeof ActiveXObject != "undefined";
+  var supportsXHR = typeof XMLHttpRequest != "undefined";
 
   sinon.useFakeXMLHttpRequest = function () {
     sinon.FakeXMLHttpRequest.restore = function restore(keepOnCreate) {
-      global.XMLHttpRequest = GlobalXMLHttpRequest;
-      global.ActiveXObject = GlobalActiveXObject;
+      if (supportsXHR) {
+        global.XMLHttpRequest = GlobalXMLHttpRequest;
+      }
+
+      if (supportsActiveX) {
+        global.ActiveXObject = GlobalActiveXObject;
+      }
+
       delete sinon.FakeXMLHttpRequest.restore;
 
       if (keepOnCreate !== true) {
@@ -303,15 +311,19 @@ sinon.FakeXMLHttpRequest = (function () {
       }
     };
 
-    global.XMLHttpRequest = sinon.FakeXMLHttpRequest;
+    if (supportsXHR) {
+      global.XMLHttpRequest = sinon.FakeXMLHttpRequest;
+    }
 
-    global.ActiveXObject = function ActiveXObject(objId) {
-      if (objId == "Microsoft.XMLHTTP" || /^Msxml2\.XMLHTTP/.test(objId)) {
-        throw new Error("Not supported");
-      }
+    if (supportsActiveX) {
+      global.ActiveXObject = function ActiveXObject(objId) {
+        if (objId == "Microsoft.XMLHTTP" || /^Msxml2\.XMLHTTP/.test(objId)) {
+          return new sinon.FakeXMLHttpRequest();
+        }
 
-      return new GlobalActiveXObject(objId);
-    };
+        return new GlobalActiveXObject(objId);
+      };
+    }
 
     return sinon.FakeXMLHttpRequest;
   };

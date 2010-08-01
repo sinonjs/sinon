@@ -134,7 +134,7 @@
     }
   });
 
-  testCase("setRequestHeader", {
+  testCase("FakeXMLHttpRequestSetRequestHeaderTest", {
     setUp: function () {
       this.xhr = new sinon.FakeXMLHttpRequest();
       this.xhr.open("GET", "/");
@@ -868,16 +868,19 @@
   var globalXMLHttpRequest = this.XMLHttpRequest;
   var globalActiveXObject = this.ActiveXObject;
 
-  testCase("SinonStubXHRTest", {
-    setUp: function () {
-      this.fakeXhr = sinon.useFakeXMLHttpRequest();
-    },
+  var fakeXhrSetUp = function () {
+    this.fakeXhr = sinon.useFakeXMLHttpRequest();
+  };
 
-    tearDown: function () {
-      if (typeof this.fakeXhr.restore == "function") {
-        this.fakeXhr.restore();
-      }
-    },
+  var fakeXhrTearDown = function () {
+    if (typeof this.fakeXhr.restore == "function") {
+      this.fakeXhr.restore();
+    }
+  };
+
+  testCase("StubXHRTest", {
+    setUp: fakeXhrSetUp,
+    tearDown: fakeXhrTearDown,
 
     "should return FakeXMLHttpRequest constructor": function () {
       assertSame(sinon.FakeXMLHttpRequest, this.fakeXhr);
@@ -891,16 +894,6 @@
       this.fakeXhr.restore();
 
       assertUndefined(this.fakeXhr.restore);
-    },
-
-    "should replace global XMLHttpRequest": function () {
-      assertSame(sinon.FakeXMLHttpRequest, XMLHttpRequest);
-    },
-
-    "should restore global XMLHttpRequest": function () {
-      this.fakeXhr.restore();
-
-      assertSame(globalXMLHttpRequest, XMLHttpRequest);
     },
 
     "should remove XMLHttpRequest onCreate listener": function () {
@@ -918,36 +911,106 @@
       this.fakeXhr.restore(true);
 
       assertSame(onCreate, sinon.FakeXMLHttpRequest.onCreate);
-    },
-
-    "should restore global ActiveXObject": function () {
-      this.fakeXhr.restore();
-
-      assertSame(globalActiveXObject, global.ActiveXObject);
-    },
-
-    "should throw when creating ActiveX Microsoft.XMLHTTP": function () {
-      assertException(function () {
-        var xhr = new ActiveXObject("Microsoft.XMLHTTP");
-      });
-    },
-
-    "should throw when creating ActiveX Msxml2.XMLHTTP": function () {
-      assertException(function () {
-        var xhr = new ActiveXObject("Msxml2.XMLHTTP");
-      });
-    },
-
-    "should throw when creating ActiveX Msxml2.XMLHTTP.3.0": function () {
-      assertException(function () {
-        var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0");
-      });
-    },
-
-    "should throw when creating ActiveX Msxml2.XMLHTTP.6.0": function () {
-      assertException(function () {
-        var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0");
-      });
     }
   });
+
+  if (typeof ActiveXObject == "undefined") {
+    testCase("StubXHRActiveXTest", {
+      setUp: fakeXhrSetUp,
+      tearDown: fakeXhrTearDown,
+
+      "should notify user of missing ActiveXObject": function () {
+        jstestdriver.console.log("Browser does not support ActiveXObject");
+      },
+
+      "should not expose ActiveXObject": function () {
+        assertEquals("undefined", typeof ActiveXObject);
+      },
+
+      "should not expose ActiveXObject when restored": function () {
+        this.fakeXhr.restore();
+
+        assertEquals("undefined", typeof ActiveXObject);
+      }
+    });
+  } else {
+    testCase("StubXHRActiveXTest", {
+      setUp: fakeXhrSetUp,
+      tearDown: fakeXhrTearDown,
+
+      "should hijack ActiveXObject": function () {
+        assertNotSame(globalActiveXObject, global.ActiveXObject);
+        assertNotSame(globalActiveXObject, window.ActiveXObject);
+        assertNotSame(globalActiveXObject, ActiveXObject);
+      },
+
+      "should restore global ActiveXObject": function () {
+        this.fakeXhr.restore();
+
+        assertSame(globalActiveXObject, global.ActiveXObject);
+        assertSame(globalActiveXObject, window.ActiveXObject);
+        assertSame(globalActiveXObject, ActiveXObject);
+      },
+
+      "should create FakeXHR object with ActiveX Microsoft.XMLHTTP": function () {
+        var xhr = new ActiveXObject("Microsoft.XMLHTTP");
+
+        assert(xhr instanceof sinon.FakeXMLHttpRequest);
+      },
+
+      "should create FakeXHR object with ActiveX Msxml2.XMLHTTP": function () {
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP");
+
+        assert(xhr instanceof sinon.FakeXMLHttpRequest);
+      },
+
+      "should create FakeXHR object with ActiveX Msxml2.XMLHTTP.3.0": function () {
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+
+        assert(xhr instanceof sinon.FakeXMLHttpRequest);
+      },
+
+      "should create FakeXHR object with ActiveX Msxml2.XMLHTTP.3.0": function () {
+        var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0");
+
+        assert(xhr instanceof sinon.FakeXMLHttpRequest);
+      }
+    });
+  }
+
+  if (typeof XMLHttpRequest == "undefined") {
+    testCase("StubXHRNativeTest", {
+      setUp: fakeXhrSetUp,
+      tearDown: fakeXhrTearDown,
+
+      "should notify user of missing XMLHttpRequest": function () {
+        jstestdriver.console.log("Browser does not support XMLHttpRequest");
+      },
+
+      "should not expose XMLHttpRequest": function () {
+        assertEquals("undefined", typeof XMLHttpRequest);
+      },
+
+      "should not expose XMLHttpRequest after restore": function () {
+        this.fakeXhr.restore();
+
+        assertEquals("undefined", typeof XMLHttpRequest);
+      }
+    });
+  } else {
+    testCase("StubXHRNativeTest", {
+      setUp: fakeXhrSetUp,
+      tearDown: fakeXhrTearDown,
+
+      "should replace global XMLHttpRequest": function () {
+        assertSame(sinon.FakeXMLHttpRequest, XMLHttpRequest);
+      },
+
+      "should restore global XMLHttpRequest": function () {
+        this.fakeXhr.restore();
+
+        assertSame(globalXMLHttpRequest, XMLHttpRequest);
+      }
+    });
+  }
 }(this));
