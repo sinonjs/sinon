@@ -31,7 +31,7 @@
       assertSame(sinon.FakeXMLHttpRequest, sinon.FakeXMLHttpRequest.prototype.constructor);
     },
 
-    "should implement status constants": function () {
+    "should implement readyState constants": function () {
       assertSame(1, sinon.FakeXMLHttpRequest.OPENED);
       assertSame(2, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
       assertSame(3, sinon.FakeXMLHttpRequest.LOADING);
@@ -601,6 +601,12 @@
       this.xhr.respond(201);
 
       assertEquals(201, this.xhr.status);
+    },
+
+    "should set status text": function () {
+      this.xhr.respond(201);
+
+      assertEquals("Created", this.xhr.statusText);
     },
 
     "should set headers": function () {
