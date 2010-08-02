@@ -180,7 +180,7 @@
       this.getRootSync.send();
 
       assertEquals(210, this.getRootSync.status);
-      assertEquals({ "X-Ops": "Yeah" }, this.getRootSync.getAllResponseHeaders());
+      assertEquals({ "x-ops": "Yeah" }, this.getRootSync.getAllResponseHeaders());
       assertEquals("Body, man", this.getRootSync.responseText);
     },
 

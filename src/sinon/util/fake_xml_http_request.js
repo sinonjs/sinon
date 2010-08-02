@@ -213,6 +213,7 @@ sinon.FakeXMLHttpRequest = (function () {
     respond: function respond(status, headers, body) {
       this.setResponseHeaders(headers || {});
       this.status = typeof status == "number" ? status : 200;
+      this.statusText = FakeXMLHttpRequest.statusCodes[this.status];
       this.setResponseBody(body || "");
     }
   });
