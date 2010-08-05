@@ -94,9 +94,11 @@ sinon.server = (function () {
       }
     },
 
-    processQueue: function processQueue() {
-      for (var i = 0, l = this.queue.length; i < l; i++) {
-        this.processRequest(this.queue[i]);
+    respond: function respond() {
+      var queue = this.queue || [];
+
+      for (var i = 0, l = queue.length; i < l; i++) {
+        this.processRequest(queue[i]);
       }
     },
 
