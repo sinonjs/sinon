@@ -6,7 +6,6 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global module, require, sinon*/
 /**
- * Sandboxes are like collections, except they also handle 
  * Manages fake collections as well as fake utilities such as Sinon's
  * timers and fake XHR implementation in one convenient object.
  *
