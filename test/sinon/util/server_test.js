@@ -150,7 +150,7 @@
     "should respond to queued async requests": function () {
       this.server.respondWith("Oh yeah! Duffman!");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assert(this.getRootAsync.respond.called);
       assertEquals([200, {}, "Oh yeah! Duffman!"], this.getRootAsync.respond.args[0]);
@@ -159,7 +159,7 @@
     "should respond to all queued async requests": function () {
       this.server.respondWith("Oh yeah! Duffman!");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assert(this.getRootAsync.respond.called);
       assert(this.getPathAsync.respond.called);
@@ -169,9 +169,18 @@
       var headers = { "Content-Type": "X-test" };
       this.server.respondWith([201, headers, "Oh yeah!"]);
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([201, headers, "Oh yeah!"], this.getRootAsync.respond.args[0]);
+    },
+
+    "should handle responding with empty queue": function () {
+        delete this.server.queue;
+        var server = this.server;
+
+        assertNoException(function () {
+            server.respond();
+        });
     },
 
     "should respond to sync request with canned answers": function () {
@@ -193,7 +202,7 @@
     },
 
     "should respond to async request with 404 if no response is set": function () {
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
     },
@@ -201,7 +210,7 @@
     "should respond to specific URL": function () {
       this.server.respondWith("/path", "Duffman likes Duff beer");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
       assertEquals([200, {}, "Duffman likes Duff beer"], this.getPathAsync.respond.args[0]);
@@ -210,7 +219,7 @@
     "should respond to URL matched by regexp": function () {
       this.server.respondWith(/^\/p.*/, "Regexp");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([200, {}, "Regexp"], this.getPathAsync.respond.args[0]);
     },
@@ -218,7 +227,7 @@
     "should not respond to URL not matched by regexp": function () {
       this.server.respondWith(/^\/p.*/, "No regexp match");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
     },
@@ -226,7 +235,7 @@
     "should respond to all URLs matched by regexp": function () {
       this.server.respondWith(/^\/.*/, "Match all URLs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([200, {}, "Match all URLs"], this.getRootAsync.respond.args[0]);
       assertEquals([200, {}, "Match all URLs"], this.getPathAsync.respond.args[0]);
@@ -235,7 +244,7 @@
     "should respond to all requests when match URL is falsy": function () {
       this.server.respondWith("", "Falsy URL");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([200, {}, "Falsy URL"], this.getRootAsync.respond.args[0]);
       assertEquals([200, {}, "Falsy URL"], this.getPathAsync.respond.args[0]);
@@ -244,7 +253,7 @@
     "should respond to all GET requests": function () {
       this.server.respondWith("GET", "", "All GETs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([200, {}, "All GETs"], this.getRootAsync.respond.args[0]);
       assertEquals([200, {}, "All GETs"], this.getPathAsync.respond.args[0]);
@@ -255,7 +264,7 @@
     "should respond to all PUT requests": function () {
       this.server.respondWith("PUT", "", "All PUTs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
       assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
@@ -266,7 +275,7 @@
     "should respond to all POST requests": function () {
       this.server.respondWith("POST", "", "All POSTs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
       assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
@@ -277,7 +286,7 @@
     "should respond to all POST requests to /path": function () {
       this.server.respondWith("POST", "/path", "All POSTs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
       assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
@@ -288,7 +297,7 @@
     "should respond to all POST requests matching regexp": function () {
       this.server.respondWith("POST", /^\/path(\?.*)?/, "All POSTs");
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertEquals([404, {}, ""], this.getRootAsync.respond.args[0]);
       assertEquals([404, {}, ""], this.getPathAsync.respond.args[0]);
@@ -300,7 +309,7 @@
       this.server.respondWith("/", "That's my homepage!");
       this.getRootAsync.aborted = true;
 
-      this.server.processQueue();
+      this.server.respond();
 
       assertFalse(this.getRootAsync.respond.called);
     }
