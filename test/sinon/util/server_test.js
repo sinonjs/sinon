@@ -261,6 +261,17 @@
       assertEquals([404, {}, ""], this.postPathAsync.respond.args[0]);
     },
 
+    "should respond to all 'get' requests (case-insensitivity)": function () {
+      this.server.respondWith("get", "", "All GETs");
+
+      this.server.respond();
+
+      assertEquals([200, {}, "All GETs"], this.getRootAsync.respond.args[0]);
+      assertEquals([200, {}, "All GETs"], this.getPathAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postRootAsync.respond.args[0]);
+      assertEquals([404, {}, ""], this.postPathAsync.respond.args[0]);
+    },
+
     "should respond to all PUT requests": function () {
       this.server.respondWith("PUT", "", "All PUTs");
 
@@ -312,6 +323,59 @@
       this.server.respond();
 
       assertFalse(this.getRootAsync.respond.called);
+    }
+  });
+
+  testCase("ServerRespondFakeHTTPVerbTest", {
+    setUp: function () {
+      this.server = sinon.server.create();
+
+      this.request = new sinon.FakeXMLHttpRequest();
+      this.request.open("post", "/path", true);
+      this.request.send("_method=delete");
+      sinon.spy(this.request, "respond");
+    },
+
+    tearDown: function () {
+      this.server.restore();
+    },
+
+    "should not respond to DELETE request with _method parameter": function () {
+      this.server.respondWith("DELETE", "", "");
+
+      this.server.respond();
+
+      assertEquals([404, {}, ""], this.request.respond.args[0]);
+    },
+
+    "should respond to 'fake' DELETE request": function () {
+      this.server.fakeHTTPMethods = true;
+      this.server.respondWith("DELETE", "", "OK");
+
+      this.server.respond();
+
+      assertEquals([200, {}, "OK"], this.request.respond.args[0]);
+    },
+
+    "should not respond to POST when faking DELETE": function () {
+      this.server.fakeHTTPMethods = true;
+      this.server.respondWith("POST", "", "OK");
+
+      this.server.respond();
+
+      assertEquals([404, {}, ""], this.request.respond.args[0]);
+    },
+
+    "should customize HTTP method extraction": function () {
+      this.server.getHTTPMethod = function (request) {
+        return "PUT";
+      };
+
+      this.server.respondWith("PUT", "", "OK");
+
+      this.server.respond();
+
+      assertEquals([200, {}, "OK"], this.request.respond.args[0]);
     }
   });
 }());
