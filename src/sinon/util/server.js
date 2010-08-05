@@ -34,12 +34,12 @@ sinon.server = (function () {
     return [200, {}, strOrArray];
   }
 
-  function match(method, url, request) {
-    var matchMethod = !method || method == request.method;
-    var matchUrl = (typeof url.test == "function" && url.test(request.url)) ||
-                   url == request.url || !url;
+  function match(response, requestMethod, requestUrl) {
+    var matchMethod = !response.method || response.method.toLowerCase() == requestMethod.toLowerCase();
+    var url = response.url;
+    var matchUrl = !url || url == requestUrl || (typeof url.test == "function" && url.test(requestUrl));
 
-      return matchMethod && matchUrl;
+    return matchMethod && matchUrl;
   }
 
   return {
@@ -58,6 +58,15 @@ sinon.server = (function () {
       };
 
       return server;
+    },
+
+    getHTTPMethod: function (request) {
+      if (this.fakeHTTPMethods) {
+        var match = request.requestBody.match(/_method=([^\b;]+)/);
+        return !!match ? match[1] : request.method;
+      }
+
+      return request.method;
     },
 
     handleRequest: function handleRequest(xhr) {
@@ -111,7 +120,7 @@ sinon.server = (function () {
 
       if (this.responses) {
         for (var i = 0, l = this.responses.length; i < l; i++) {
-          if (match(this.responses[i].method, this.responses[i].url, request)) {
+          if (match(this.responses[i], this.getHTTPMethod(request), request.url)) {
             response = this.responses[i].response;
             break;
           }
