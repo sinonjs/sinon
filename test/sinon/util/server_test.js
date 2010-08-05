@@ -378,4 +378,54 @@
       assertEquals([200, {}, "OK"], this.request.respond.args[0]);
     }
   });
+
+  testCase("ServerJQueryCompatMode", {
+    setUp: function () {
+      this.server = sinon.server.create();
+
+      this.request = new sinon.FakeXMLHttpRequest();
+      this.request.open("get", "/", true);
+      this.request.send();
+      sinon.spy(this.request, "respond");
+    },
+
+    tearDown: function () {
+      if (this.server.restore) {
+        this.server.restore();
+      }
+    },
+
+    "respond should tick clock if given one": function () {
+      this.server.respondWith("OK");
+      this.server.clock = { tick: sinon.spy() };
+
+      this.server.respond();
+
+      assert(this.server.clock.tick.calledWith(13));
+    },
+
+    "respond should tick clock specified number of ms": function () {
+      this.server.respondWith("OK");
+      this.server.clock = { tick: sinon.spy() };
+      this.server.tickMsOnRespond = 18;
+
+      this.server.respond();
+
+      assert(this.server.clock.tick.calledWith(18));
+    },
+
+    "respond should handle clock automatically": function () {
+      var globalSt = setTimeout;
+      this.server.respondWith("OK");
+      this.server.handleAndPassTime();
+      var spy = sinon.spy();
+
+      setTimeout(spy, 13);
+      this.server.respond();
+      this.server.restore();
+
+      assert(spy.called);
+      assertSame(globalSt, setTimeout);
+    }
+  });
 }());

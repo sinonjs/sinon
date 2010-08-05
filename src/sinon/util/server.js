@@ -109,6 +109,10 @@ sinon.server = (function () {
       for (var i = 0, l = queue.length; i < l; i++) {
         this.processRequest(queue[i]);
       }
+
+      if (this.clock && typeof this.clock.tick == "function") {
+        this.clock.tick(this.tickMsOnRespond || 13);
+      }
     },
 
     processRequest: function processRequest(request) {
@@ -128,6 +132,17 @@ sinon.server = (function () {
       }
 
       request.respond(response[0], response[1], response[2]);
+    },
+
+    handleAndPassTime: function handleAndPassTime() {
+      this.clock = sinon.useFakeTimers();
+
+      var oldRestore = this.restore;
+
+      this.restore = function () {
+        oldRestore.apply(this, arguments);
+        this.clock.restore();
+      };
     }
   };
 }());
