@@ -437,10 +437,6 @@
     }
   });
 
-  var globalSetTimeout = setTimeout;
-  var globalSetInterval = setInterval;
-  var globalClearTimeout = clearTimeout;
-  var globalClearInterval = clearInterval;
   var globalDate = Date;
 
   testCase("SinonStubTimersTest", {
@@ -499,7 +495,7 @@
       this.clock.tick(1000);
 
       assertFalse(stub.called);
-      assertSame(globalSetTimeout, setTimeout);
+      assertSame(sinon.timers.setTimeout, setTimeout);
     },
 
     "should restore global clearTimeout": function () {
@@ -507,7 +503,7 @@
       var stub = sinon.stub.create();
       this.clock.restore();
 
-      assertSame(globalClearTimeout, clearTimeout);
+      assertSame(sinon.timers.clearTimeout, clearTimeout);
     },
 
     "should replace global setInterval": function () {
@@ -539,7 +535,7 @@
       this.clock.tick(1000);
 
       assertFalse(stub.called);
-      assertSame(globalSetInterval, setInterval);
+      assertSame(sinon.timers.setInterval, setInterval);
     },
 
     "should restore global clearInterval": function () {
@@ -547,14 +543,14 @@
       var stub = sinon.stub.create();
       this.clock.restore();
 
-      assertSame(globalClearInterval, clearInterval);
+      assertSame(sinon.timers.clearInterval, clearInterval);
     },
 
     "should fake Date constructor": function () {
       this.clock = sinon.useFakeTimers(0, "Date");
       var now = new Date();
 
-      assertNotSame(globalDate, Date);
+      assertNotSame(sinon.timers.Date, Date);
       assertEquals(0, now.getTime());
     },
 
@@ -562,30 +558,30 @@
       this.clock = sinon.useFakeTimers(0, "Date");
       this.clock.restore();
 
-      assertSame(globalDate, Date);
+      assertSame(sinon.timers.Date, Date);
     },
 
     "should fake provided methods": function () {
       this.clock = sinon.useFakeTimers("setTimeout", "Date");
 
-      assertNotSame(globalSetTimeout, setTimeout);
-      assertNotSame(globalDate, Date);
+      assertNotSame(sinon.timers.setTimeout, setTimeout);
+      assertNotSame(sinon.timers.Date, Date);
     },
 
     "should reset faked methods": function () {
       this.clock = sinon.useFakeTimers("setTimeout", "Date");
       this.clock.restore();
 
-      assertSame(globalSetTimeout, setTimeout);
-      assertSame(globalDate, Date);
+      assertSame(sinon.timers.setTimeout, setTimeout);
+      assertSame(sinon.timers.Date, Date);
     },
 
     "should not fake methods not provided": function () {
       this.clock = sinon.useFakeTimers("setTimeout", "Date");
 
-      assertSame(globalClearTimeout, clearTimeout);
-      assertSame(globalSetInterval, setInterval);
-      assertSame(globalClearInterval, clearInterval);
+      assertSame(sinon.timers.clearTimeout, clearTimeout);
+      assertSame(sinon.timers.setInterval, setInterval);
+      assertSame(sinon.timers.clearInterval, clearInterval);
     }
   });
 }(this));
