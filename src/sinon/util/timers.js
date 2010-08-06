@@ -184,6 +184,14 @@ sinon.clock = (function () {
   };
 }());
 
+sinon.timers = {
+  setTimeout: setTimeout,
+  clearTimeout: clearTimeout,
+  setInterval: setInterval,
+  clearInterval: clearInterval,
+  Date: Date
+};
+
 sinon.useFakeTimers = (function () {
   var global = this;
   var methods = ["setTimeout", "setInterval", "clearTimeout", "clearInterval"];
@@ -208,7 +216,8 @@ sinon.useFakeTimers = (function () {
   return function useFakeTimers(now) {
     var clock = sinon.clock.create(now);
     clock.restore = restore;
-    clock.methods = Array.prototype.slice.call(arguments, typeof now == "number" ? 1 : 0);
+    clock.methods = Array.prototype.slice.call(arguments,
+                                               typeof now == "number" ? 1 : 0);
 
     if (clock.methods.length === 0) {
       clock.methods = methods;
