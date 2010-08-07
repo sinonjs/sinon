@@ -74,12 +74,14 @@
     },
 
     "should eval non-function callbacks": function () {
-      global.called = false;
-
       this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
       this.clock.tick(10);
 
       assert(sinon.clock.evalCalled);
+    },
+
+    "should have clock property": function () {
+      assertSame(this.clock, this.clock.setTimeout.clock);
     }
   });
 
