@@ -73,8 +73,6 @@ sinon.clock = (function () {
         this.now = now;
       }
 
-      clock.setTimeout.clock = clock;
-
       return clock;
     },
 
@@ -213,6 +211,8 @@ sinon.useFakeTimers = (function () {
     global[method] = function () {
       return clock[method].apply(clock, arguments);
     };
+
+    global[method].clock = clock;
   }
 
   return function useFakeTimers(now) {

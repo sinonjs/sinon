@@ -78,10 +78,6 @@
       this.clock.tick(10);
 
       assert(sinon.clock.evalCalled);
-    },
-
-    "should have clock property": function () {
-      assertSame(this.clock, this.clock.setTimeout.clock);
     }
   });
 
@@ -451,6 +447,15 @@
 
       assertObject(this.clock);
       assertFunction(this.clock.tick);
+    },
+
+    "should have clock property": function () {
+      this.clock = sinon.useFakeTimers();
+
+      assertSame(this.clock, setTimeout.clock);
+      assertSame(this.clock, clearTimeout.clock);
+      assertSame(this.clock, setInterval.clock);
+      assertSame(this.clock, clearInterval.clock);
     },
 
     "should set initial timestamp": function () {
