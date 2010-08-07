@@ -333,6 +333,27 @@ testCase("ServerRespondWithTest", {
     this.server.respond();
 
     assertFalse(this.getRootAsync.respond.called);
+  },
+
+  "should reset requests": function () {
+    this.server.respondWith("/", "That's my homepage!");
+
+    this.server.respond();
+
+    assertEquals([], this.server.queue);
+  },
+
+  "should notify all requests when some throw": function () {
+    this.getRootAsync.respond = function () {
+      throw new Error("Oops!");
+    };
+
+    this.server.respondWith("");
+    this.server.respond();
+
+    assertEquals([200, {}, ""], this.getPathAsync.respond.args[0]);
+    assertEquals([200, {}, ""], this.postRootAsync.respond.args[0]);
+    assertEquals([200, {}, ""], this.postPathAsync.respond.args[0]);
   }
 });
 
