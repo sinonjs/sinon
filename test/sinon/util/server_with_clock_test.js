@@ -64,6 +64,14 @@ testCase("ServerWithClockTest", {
     setTimeout(function () {}, 27);
 
     assertEquals(132, this.server.longestTimeout);
+  },
+
+  "should reset clock": function () {
+    this.server.addRequest({ async: true });
+
+    this.server.respond("");
+
+    assertSame(sinon.timers.setTimeout, setTimeout);
   }
 });
 
@@ -104,6 +112,12 @@ testCase("ServerWithClockExistingClockTest", {
     setInterval(function () {}, 12);
 
     assertSame(92, this.server.longestTimeout);
+  },
+
+  "should not reset clock": function () {
+    this.server.respond("");
+
+    assertSame(this.clock, setTimeout.clock);
   }
 });
 
@@ -133,12 +147,6 @@ testCase("ServerWithClockRespondTest", {
     assertEquals(0, this.server.longestTimeout);
   },
 
-  "should reset clock": function () {
-    this.server.respond("");
-
-    assertSame(sinon.timers.setTimeout, setTimeout);
-  },
-
   "should call original respond": sinon.test(function (stub) {
     var obj = {};
     var respond = stub(sinon.server, "respond").returns(obj);
@@ -161,13 +169,7 @@ testCase("ServerJQueryCompatMode", {
     sinon.spy(this.request, "respond");
   },
 
-  tearDown: function () {
-    if (this.server.restore) {
-      this.server.restore();
-    }
-  },
-
-  "respond should handle clock automatically": function () {
+  "should handle clock automatically": function () {
     this.server.respondWith("OK");
     var spy = sinon.spy();
 

@@ -45,11 +45,10 @@ sinon.server = (function () {
   return {
     create: function () {
       var server = create(this);
-      var xhr = sinon.useFakeXMLHttpRequest();
-      server.restore = xhr.restore;
+      this.xhr = sinon.useFakeXMLHttpRequest();
       server.requests = [];
 
-      xhr.onCreate = function (xhrObj) {
+      this.xhr.onCreate = function (xhrObj) {
         server.addRequest(xhrObj);
       };
 
@@ -133,6 +132,10 @@ sinon.server = (function () {
       }
 
       request.respond(response[0], response[1], response[2]);
+    },
+
+    restore: function restore() {
+      return this.xhr.restore.apply(this.xhr, arguments);
     }
   };
 }());
