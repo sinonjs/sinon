@@ -1,14 +1,18 @@
-/*jslint indent: 2, onevar: false, eqeqeq: false*/
-/*globals XMLHttpRequest,
+/*jslint indent: 2, onevar: false, eqeqeq: false, browser: true*/
+/*globals window,
+          jstestdriver,
+          XMLHttpRequest,
           ActiveXObject,
           testCase,
           sinon,
           assert,
           assertSame,
+          assertNotSame,
           assertEquals,
           assertTrue,
           assertFalse,
           assertNull,
+          assertNotNull,
           assertException,
           assertNoException,
           assertUndefined,
@@ -976,7 +980,7 @@
         assert(xhr instanceof sinon.FakeXMLHttpRequest);
       },
 
-      "should create FakeXHR object with ActiveX Msxml2.XMLHTTP.3.0": function () {
+      "should create FakeXHR object with ActiveX Msxml2.XMLHTTP.6.0": function () {
         var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0");
 
         assert(xhr instanceof sinon.FakeXMLHttpRequest);

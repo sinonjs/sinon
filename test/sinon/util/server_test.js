@@ -1,4 +1,4 @@
-/*jslint indent: 2, onevar: false*/
+/*jslint indent: 2, onevar: false, browser: false, regexp: false, browser: true*/
 /*globals testCase,
           sinon,
           assert,
@@ -8,6 +8,7 @@
           assertFalse,
           assertNull,
           assertException,
+          assertNoException,
           assertUndefined,
           assertObject,
           assertFunction*/
@@ -175,12 +176,12 @@
     },
 
     "should handle responding with empty queue": function () {
-        delete this.server.queue;
-        var server = this.server;
+      delete this.server.queue;
+      var server = this.server;
 
-        assertNoException(function () {
-            server.respond();
-        });
+      assertNoException(function () {
+        server.respond();
+      });
     },
 
     "should respond to sync request with canned answers": function () {
