@@ -1,7 +1,7 @@
 /**
  * @depend fake_xml_http_request.js
  */
-/*jslint indent: 2, eqeqeq: false, onevar: false*/
+/*jslint indent: 2, eqeqeq: false, onevar: false, regexp: false, plusplus: false*/
 /*global sinon, module, require*/
 /**
  * The Sinon "server" mimics a web server that receives requests from

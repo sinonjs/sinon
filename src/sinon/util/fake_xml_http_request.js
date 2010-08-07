@@ -1,5 +1,5 @@
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
-/*global sinon, module, require*/
+/*global sinon, module, require, ActiveXObject, XMLHttpRequest, DOMParser*/
 /**
  * Fake XMLHttpRequest object
  *
@@ -99,7 +99,9 @@ sinon.FakeXMLHttpRequest = (function () {
       this.responseHeaders = {};
 
       for (var header in headers) {
-        this.responseHeaders[header.toLowerCase()] = headers[header];
+        if (headers.hasOwnProperty(header)) {
+          this.responseHeaders[header.toLowerCase()] = headers[header];
+        }
       }
 
       if (this.async) {
@@ -230,7 +232,7 @@ sinon.FakeXMLHttpRequest = (function () {
   FakeXMLHttpRequest.parseXML = function parseXML(text) {
     var xmlDoc;
 
-    if (window.DOMParser) {
+    if (typeof DOMParser != "undefined") {
       var parser = new DOMParser();
       xmlDoc = parser.parseFromString(text, "text/xml");
     } else {
@@ -239,7 +241,7 @@ sinon.FakeXMLHttpRequest = (function () {
       xmlDoc.loadXML(text);
     }
 
-    return xmlDoc
+    return xmlDoc;
   };
 
   FakeXMLHttpRequest.statusCodes = {

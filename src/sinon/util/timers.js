@@ -1,4 +1,4 @@
-/*jslint indent: 2, eqeqeq: false, plusplus: false, evil: true, onevar: false*/
+/*jslint indent: 2, eqeqeq: false, plusplus: false, evil: true, onevar: false, browser: true*/
 /*global sinon, module, require*/
 /**
  * Fake timer API
