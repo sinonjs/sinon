@@ -113,25 +113,29 @@ sinon.server = (function () {
       for (var i = 0, l = queue.length; i < l; i++) {
         this.processRequest(queue[i]);
       }
+
+      this.queue = [];
     },
 
     processRequest: function processRequest(request) {
-      if (request.aborted) {
-        return;
-      }
+      try {
+        if (request.aborted) {
+          return;
+        }
 
-      var response = this.response || [404, {}, ""];
+        var response = this.response || [404, {}, ""];
 
-      if (this.responses) {
-        for (var i = 0, l = this.responses.length; i < l; i++) {
-          if (match(this.responses[i], this.getHTTPMethod(request), request.url)) {
-            response = this.responses[i].response;
-            break;
+        if (this.responses) {
+          for (var i = 0, l = this.responses.length; i < l; i++) {
+            if (match(this.responses[i], this.getHTTPMethod(request), request.url)) {
+              response = this.responses[i].response;
+              break;
+            }
           }
         }
-      }
 
-      request.respond(response[0], response[1], response[2]);
+        request.respond(response[0], response[1], response[2]);
+      } catch (e) {}
     },
 
     restore: function restore() {
