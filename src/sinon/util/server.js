@@ -50,17 +50,22 @@ sinon.server = (function () {
       server.requests = [];
 
       xhr.onCreate = function (xhrObj) {
-        server.requests.push(xhrObj);
-
-        xhrObj.onSend = function () {
-          server.handleRequest(this);
-        };
+        server.addRequest(xhrObj);
       };
 
       return server;
     },
 
-    getHTTPMethod: function (request) {
+    addRequest: function addRequest(xhrObj) {
+      var server = this;
+      this.requests.push(xhrObj);
+
+      xhrObj.onSend = function () {
+        server.handleRequest(this);
+      };
+    },
+
+    getHTTPMethod: function getHTTPMethod(request) {
       if (this.fakeHTTPMethods) {
         var match = request.requestBody.match(/_method=([^\b;]+)/);
         return !!match ? match[1] : request.method;
