@@ -73,6 +73,8 @@ sinon.clock = (function () {
         this.now = now;
       }
 
+      clock.setTimeout.clock = clock;
+
       return clock;
     },
 
