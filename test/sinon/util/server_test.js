@@ -45,11 +45,13 @@ testCase("ServerCreateTest", {
     assert(sinon.useFakeXMLHttpRequest.called);
   }),
 
-  "should mirror FakeXMLHttpRequest restore method": function () {
+  "should mirror FakeXMLHttpRequest restore method": sinon.test(function (stub) {
     this.server = sinon.server.create();
+    var restore = stub(sinon.FakeXMLHttpRequest, "restore");
+    this.server.restore();
 
-    assertSame(sinon.FakeXMLHttpRequest.restore, this.server.restore);
-  }
+    assert(restore.called);
+  })
 });
 
 testCase("ServerRequestsTest", {

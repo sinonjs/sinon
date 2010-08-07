@@ -31,6 +31,7 @@
         this.clock = setTimeout.clock;
       } else {
         this.clock = sinon.useFakeTimers();
+        this.resetClock = true;
       }
 
       if (typeof this.longestTimeout != "number") {
@@ -59,7 +60,10 @@
     if (this.clock) {
       this.clock.tick(this.longestTimeout);
       this.longestTimeout = 0;
-      this.clock.restore();
+
+      if (this.resetClock) {
+        this.clock.restore();
+      }
     }
 
     return sinon.server.respond.apply(this, arguments);
@@ -70,6 +74,6 @@
       this.clock.restore();
     }
 
-    return sinon.server.restore.call(this);
-  }
+    return sinon.server.restore.apply(this, arguments);
+  };
 }());
