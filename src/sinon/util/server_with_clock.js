@@ -63,6 +63,7 @@
 
       if (this.resetClock) {
         this.clock.restore();
+        this.resetClock = false;
       }
     }
 

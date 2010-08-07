@@ -26,6 +26,10 @@ testCase("ServerWithClockTest", {
 
   tearDown: function () {
     this.server.restore();
+
+    if (this.clock) {
+      this.clock.restore();
+    }
   },
 
   "should call 'super' when adding requests": sinon.test(function (stub) {
@@ -72,6 +76,16 @@ testCase("ServerWithClockTest", {
     this.server.respond("");
 
     assertSame(sinon.timers.setTimeout, setTimeout);
+  },
+
+  "should not reset clock second time": function () {
+    this.server.addRequest({ async: true });
+    this.server.respond("");
+    this.clock = sinon.useFakeTimers();
+    this.server.addRequest({ async: true });
+    this.server.respond("");
+
+    assertNotSame(sinon.timers.setTimeout, setTimeout);
   }
 });
 
