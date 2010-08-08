@@ -31,10 +31,10 @@
 * Asserts [2/2]
 ** DONE Find all spy methods not exposed as asserts
 ** DONE Reduce duplication
-* Fakes/Utilities [6/7]
+* Fakes/Utilities [7/7]
 ** DONE Add FakeXMLHttpRequest
 ** DONE Add Sinon tools to work with FakeXMLHttpRequest
-** TODO Add fake server
+** DONE Add fake server
 ** DONE Add fake timers
 ** DONE Add fake Date
 ** DONE Add Clock to control timers and date
@@ -44,11 +44,11 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [3/5]
+* Sandboxes [4/5]
 ** DONE Add sinon.sandbox
 ** DONE Should inherit collection
 ** DONE Should offer to fake timers
-** TODO Should offer to fake XHR
+** DONE Should offer to fake XHR
 ** TODO Should return object with bound spy, stub and mock functions as well as clock and server properties
 * Logger [0/2]
 ** TODO Add sinon.log to issue warnings etc to
