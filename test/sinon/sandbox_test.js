@@ -82,19 +82,6 @@
       this.sandbox.restore();
     },
 
-    "should return fake xhr object": function () {
-      var xhr = this.sandbox.useFakeXMLHttpRequest();
-
-      assertFunction(xhr);
-      assertFunction(xhr.restore);
-    },
-
-    "should expose fakeXMLHttpRequest property": function () {
-      var xhr = this.sandbox.useFakeXMLHttpRequest();
-
-      assertSame(xhr, this.sandbox.fakeXMLHttpRequest);
-    },
-
     "should call sinon.useFakeXMLHttpRequest": sinon.test(function (stub) {
       stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
       this.sandbox.useFakeXMLHttpRequest();
@@ -152,6 +139,12 @@
 
       assertSame(globalXHR, global.XMLHttpRequest);
       assertSame(globalAXO, global.ActiveXObject);
+    }
+  });
+
+  testCase("SandboxInjectTest", {
+    "test todo": function () {
+      jstestdriver.console.log("Fill me out, please");
     }
   });
 }());
