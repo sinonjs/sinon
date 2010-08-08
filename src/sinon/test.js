@@ -25,15 +25,66 @@
     return;
   }
 
+  function createSandbox() {
+    var sandbox = sinon.create(sinon.sandbox);
+    var config = sinon.config || {};
+
+    if (config.useFakeServer) {
+      sandbox.useServer();
+    }
+
+    if (config.useFakeTimers) {
+      sandbox.useFakeTimers();
+    }
+
+    return sandbox;
+  }
+
+  function getConfig() {
+    var config = {};
+    var sConf = sinon.config || {};
+    var tConf = test.config;
+
+    for (var prop in sinon.test.config) {
+      if (tConf.hasOwnProperty(prop)) {
+        config[prop] = sConf.hasOwnProperty(prop) ? sConf[prop] : tConf[prop];
+      }
+    }
+
+    return config;
+  }
+
   function test(callback) {
     return function () {
-      var sandbox = sinon.create(sinon.sandbox);
+      var sandbox = createSandbox();
       var exposed = sandbox.inject({});
-      var exception, result;
-      var realArgs = Array.prototype.slice.call(arguments);
+      var exception, result, prop;
+      var args = Array.prototype.slice.call(arguments);
+      var config = getConfig();
+      var object = config.injectIntoThis && this || config.injectInto;
+
+      if (config.properties) {
+        for (var i = 0, l = config.properties.length; i < l; i++) {
+          prop = config.properties[i];
+
+          if (exposed[prop]) {
+            if (object) {
+              object[prop] = exposed[prop];
+            } else {
+              args.push(exposed[config.properties[i]]);
+            }
+          }
+        }
+      } else {
+        if (object) {
+          object.sandbox = exposed;
+        } else {
+          args.push(exposed);
+        }
+      }
 
       try {
-        result = callback.apply(this, realArgs.concat([exposed.stub, exposed.mock]));
+        result = callback.apply(this, args);
       } catch (e) {
         exception = e;
       }
@@ -47,6 +98,14 @@
       return result;
     };
   }
+
+  test.config = {
+    injectIntoThis: false,
+    injectInto: null,
+    properties: ["stub", "mock"],
+    useFakeTimers: false,
+    useFakeServer: false
+  };
 
   if (commonJSModule) {
     module.exports = test;
