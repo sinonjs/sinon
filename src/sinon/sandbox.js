@@ -15,8 +15,8 @@
  *
  * Copyright (c) 2010 Christian Johansen
  */
-(function (sinon) {
-  if (!sinon) {
+(function () {
+  if (typeof sinon == "undefined") {
     return;
   }
 
@@ -27,18 +27,27 @@
       return this.add(this.clock);
     },
 
-    useFakeXMLHttpRequest: function useFakeXMLHttpRequest() {
-      this.fakeXMLHttpRequest = sinon.useFakeXMLHttpRequest();
-
-      return this.add(this.fakeXMLHttpRequest);
-    },
-
     serverPrototype: sinon.server,
 
     useServer: function useServer() {
       this.server = (this.serverPrototype || sinon.server).create();
 
       return this.add(this.server);
+    },
+
+    inject: function (obj) {
+      sinon.collection.call(this, obj);
+
+      if (this.clock) {
+        obj.clock = this.clock;
+      }
+
+      if (this.server) {
+        obj.server = this.server;
+        obj.requests = this.server.requests;
+      }
     }
   });
-}(typeof sinon == "object" && sinon || null));
+
+  sinon.sandbox.useFakeXMLHttpRequest = sinon.sandbox.useServer;
+}());
