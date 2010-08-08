@@ -4,7 +4,7 @@
  * @depend mock.js
  * @depend sandbox.js
  */
-/*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
+/*jslint indent: 2, eqeqeq: false, onevar: false, forin: true, plusplus: false*/
 /*global module, require, sinon*/
 /**
  * Test function, sandboxes fakes
@@ -43,7 +43,7 @@
   function getConfig() {
     var config = {};
     var sConf = sinon.config || {};
-    var tConf = test.config;
+    var tConf = sinon.test.config;
 
     for (var prop in sinon.test.config) {
       if (tConf.hasOwnProperty(prop)) {

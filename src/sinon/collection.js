@@ -87,9 +87,18 @@
 
     inject: function inject(obj) {
       var col = this;
-      obj.spy = function () { return col.spy.apply(col, arguments); };
-      obj.stub = function () { return col.stub.apply(col, arguments); };
-      obj.mock = function () { return col.mock.apply(col, arguments); };
+
+      obj.spy = function () {
+        return col.spy.apply(col, arguments);
+      };
+
+      obj.stub = function () {
+        return col.stub.apply(col, arguments);
+      };
+
+      obj.mock = function () {
+        return col.mock.apply(col, arguments);
+      };
 
       return obj;
     }

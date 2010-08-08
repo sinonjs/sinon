@@ -2,7 +2,7 @@
  * @depend server.js
  * @depend timers.js
  */
-/*jslint indent: 2*/
+/*jslint indent: 2, browser: true, eqeqeq: false, onevar: false*/
 /*global sinon*/
 /**
  * Add-on for sinon.server that automatically handles a fake timer along with
