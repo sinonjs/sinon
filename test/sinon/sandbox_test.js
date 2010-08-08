@@ -209,6 +209,13 @@
       assert(spy.called);
       assertObject(this.obj.server);
       assertEquals([xhr], this.obj.requests);
+    },
+
+    "should return object": function () {
+      var injected = this.sandbox.inject({});
+
+      assertObject(injected);
+      assertFunction(injected.spy);
     }
   });
 }());

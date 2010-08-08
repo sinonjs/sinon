@@ -2,7 +2,7 @@
  * @depend ../sinon.js
  * @depend stub.js
  * @depend mock.js
- * @depend collection.js
+ * @depend sandbox.js
  */
 /*jslint indent: 2, eqeqeq: false, onevar: false, forin: true*/
 /*global module, require, sinon*/
@@ -27,21 +27,18 @@
 
   function test(callback) {
     return function () {
-      var collection = sinon.create(sinon.collection);
+      var sandbox = sinon.create(sinon.sandbox);
+      var exposed = sandbox.inject({});
       var exception, result;
       var realArgs = Array.prototype.slice.call(arguments);
 
       try {
-        result = callback.apply(this, realArgs.concat([function () {
-          return collection.stub.apply(collection, arguments);
-        }, function () {
-          return collection.mock.apply(collection, arguments);
-        }]));
+        result = callback.apply(this, realArgs.concat([exposed.stub, exposed.mock]));
       } catch (e) {
         exception = e;
       }
 
-      collection.verifyAndRestore();
+      sandbox.verifyAndRestore();
 
       if (exception) {
         throw exception;
