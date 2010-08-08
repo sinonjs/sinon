@@ -21,7 +21,7 @@
  */
 (function () {
   testCase("SinonTestTest", {
-    setUp: function () {
+    tearDown: function () {
       sinon.config = {};
     },
 
@@ -210,6 +210,10 @@
   }
 
   testCase("ConfigurableTestWithSandboxTest", {
+    tearDown: function () {
+      sinon.config = {};
+    },
+
     "should yield stub, mock as arguments by default": function () {
       var stubbed, mocked;
       var obj = { meth: function () {} };
