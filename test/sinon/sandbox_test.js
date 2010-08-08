@@ -23,8 +23,6 @@
     }
   });
 
-  var globalSetTimeout = setTimeout;
-
   testCase("SandboxUseFakeTimersTest", {
     setUp: function () {
       this.sandbox = sinon.create(sinon.sandbox);
@@ -67,7 +65,93 @@
       this.sandbox.useFakeTimers();
       this.sandbox.restore();
 
-      assertSame(globalSetTimeout, setTimeout);
+      assertSame(sinon.timers.setTimeout, setTimeout);
+    }
+  });
+
+  var global = this;
+  var globalXHR = this.XMLHttpRequest;
+  var globalAXO = this.ActiveXObject;
+
+  testCase("SandboxUseFakeXMLHttpRequestTest", {
+    setUp: function () {
+      this.sandbox = sinon.create(sinon.sandbox);
+    },
+
+    tearDown: function () {
+      this.sandbox.restore();
+    },
+
+    "should return fake xhr object": function () {
+      var xhr = this.sandbox.useFakeXMLHttpRequest();
+
+      assertFunction(xhr);
+      assertFunction(xhr.restore);
+    },
+
+    "should expose fakeXMLHttpRequest property": function () {
+      var xhr = this.sandbox.useFakeXMLHttpRequest();
+
+      assertSame(xhr, this.sandbox.fakeXMLHttpRequest);
+    },
+
+    "should call sinon.useFakeXMLHttpRequest": sinon.test(function (stub) {
+      stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
+      this.sandbox.useFakeXMLHttpRequest();
+
+      assert(sinon.useFakeXMLHttpRequest.called);
+    }),
+
+    "should add fake xhr to fake collection": function () {
+      this.sandbox.useFakeXMLHttpRequest();
+      this.sandbox.restore();
+
+      assertSame(globalXHR, global.XMLHttpRequest);
+      assertSame(globalAXO, global.ActiveXObject);
+    }
+  });
+
+  testCase("SandboxUseServer", {
+    setUp: function () {
+      this.sandbox = sinon.create(sinon.sandbox);
+    },
+
+    tearDown: function () {
+      this.sandbox.restore();
+    },
+
+    "should return server": function () {
+      var server = this.sandbox.useServer();
+
+      assertObject(server);
+      assertFunction(server.restore);
+    },
+
+    "should expose server property": function () {
+      var server = this.sandbox.useServer();
+
+      assertSame(server, this.sandbox.server);
+    },
+
+    "should create server": function () {
+      var server = this.sandbox.useServer();
+
+      assert(sinon.server.isPrototypeOf(server));
+    },
+
+    "should create server with cock": function () {
+      this.sandbox.serverPrototype = sinon.serverWithClock;
+      var server = this.sandbox.useServer();
+
+      assert(sinon.serverWithClock.isPrototypeOf(server));
+    },
+
+    "should add server to fake collection": function () {
+      this.sandbox.useServer();
+      this.sandbox.restore();
+
+      assertSame(globalXHR, global.XMLHttpRequest);
+      assertSame(globalAXO, global.ActiveXObject);
     }
   });
 }());
