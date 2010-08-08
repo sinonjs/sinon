@@ -230,4 +230,49 @@
       assert(this.collection.restore.called);
     }
   });
+
+  testCase("CollectionInjectTest", {
+    setUp: function () {
+      this.collection = sinon.create(sinon.collection);
+    },
+
+    "should inject fakes into object": function () {
+      var obj = {};
+      this.collection.inject(obj);
+
+      assertFunction(obj.spy);
+      assertFunction(obj.stub);
+      assertFunction(obj.mock);
+    },
+
+    "should return argument": function () {
+      var obj = {};
+
+      assertSame(obj, this.collection.inject(obj));
+    },
+
+    "should inject spy, stub, mock bound to collection": sinon.test(function (stub) {
+      var obj = {};
+      this.collection.inject(obj);
+      stub(this.collection, "spy");
+      stub(this.collection, "stub");
+      stub(this.collection, "mock");
+
+      obj.spy();
+      var fn = obj.spy;
+      fn();
+
+      obj.stub();
+      fn = obj.stub;
+      fn();
+
+      obj.mock();
+      fn = obj.mock;
+      fn();
+
+      assert(this.collection.spy.calledTwice);
+      assert(this.collection.stub.calledTwice);
+      assert(this.collection.mock.calledTwice);
+    })
+  });
 }());
