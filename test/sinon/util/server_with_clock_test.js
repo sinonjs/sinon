@@ -3,6 +3,7 @@
           sinon,
           assert,
           assertSame,
+          assertNotSame,
           assertEquals,
           assertTrue,
           assertFalse,

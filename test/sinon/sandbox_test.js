@@ -1,8 +1,13 @@
-/*jslint indent: 2*/
+/*jslint indent: 2, onevar: false*/
 /*global testCase
+         XMLHttpRequest
+         ActiveXObject
+         window
          setTimeout
          sinon
          assert
+         assertFalse
+         assertEquals
          assertObject
          assertSame
          assertFunction*/
@@ -153,11 +158,11 @@
     },
 
     "should inject spy, stub, mock": function () {
-        this.sandbox.inject(this.obj);
+      this.sandbox.inject(this.obj);
 
-        assertFunction(this.obj.spy);
-        assertFunction(this.obj.stub);
-        assertFunction(this.obj.mock);
+      assertFunction(this.obj.spy);
+      assertFunction(this.obj.stub);
+      assertFunction(this.obj.mock);
     },
 
     "should not define clock, server and requests objects": function () {

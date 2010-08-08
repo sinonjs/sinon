@@ -1,8 +1,11 @@
-/*jslint indent: 2, onevar: false, eqeqeq: false*/
+/*jslint indent: 2, onevar: false, eqeqeq: false, browser: true*/
 /*globals testCase,
           sinon,
           fail,
           assert,
+          assertNotNull,
+          assertUndefined,
+          assertArray,
           assertEquals,
           assertSame,
           assertNotSame,
@@ -18,6 +21,10 @@
  */
 (function () {
   testCase("SinonTestTest", {
+    setUp: function () {
+      sinon.config = {};
+    },
+
     "should pass stub function to callback": function () {
       sinon.test(function (stub) {
         assertFunction(stub);
