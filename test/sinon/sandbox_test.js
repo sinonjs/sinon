@@ -143,8 +143,72 @@
   });
 
   testCase("SandboxInjectTest", {
-    "test todo": function () {
-      jstestdriver.console.log("Fill me out, please");
+    setUp: function () {
+      this.obj = {};
+      this.sandbox = sinon.create(sinon.sandbox);
+    },
+
+    tearDown: function () {
+      this.sandbox.restore();
+    },
+
+    "should inject spy, stub, mock": function () {
+        this.sandbox.inject(this.obj);
+
+        assertFunction(this.obj.spy);
+        assertFunction(this.obj.stub);
+        assertFunction(this.obj.mock);
+    },
+
+    "should not define clock, server and requests objects": function () {
+      this.sandbox.inject(this.obj);
+
+      assertFalse("clock" in this.obj);
+      assertFalse("server" in this.obj);
+      assertFalse("requests" in this.obj);
+    },
+
+    "should define clock when using fake time": function () {
+      this.sandbox.useFakeTimers();
+      this.sandbox.inject(this.obj);
+
+      assertFunction(this.obj.spy);
+      assertFunction(this.obj.stub);
+      assertFunction(this.obj.mock);
+      assertObject(this.obj.clock);
+      assertFalse("server" in this.obj);
+      assertFalse("requests" in this.obj);
+    },
+
+    "should define server and requests when using fake time": function () {
+      this.sandbox.useServer();
+      this.sandbox.inject(this.obj);
+
+      assertFunction(this.obj.spy);
+      assertFunction(this.obj.stub);
+      assertFunction(this.obj.mock);
+      assertFalse("clock" in this.obj);
+      assertObject(this.obj.server);
+      assertEquals([], this.obj.requests);
+    },
+
+    "should define all possible fakes": function () {
+      this.sandbox.useServer();
+      this.sandbox.useFakeTimers();
+      this.sandbox.inject(this.obj);
+
+      var spy = sinon.spy();
+      setTimeout(spy, 10);
+
+      this.sandbox.clock.tick(10);
+      var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+      assertFunction(this.obj.spy);
+      assertFunction(this.obj.stub);
+      assertFunction(this.obj.mock);
+      assert(spy.called);
+      assertObject(this.obj.server);
+      assertEquals([xhr], this.obj.requests);
     }
   });
 }());
