@@ -46,6 +46,8 @@
         obj.server = this.server;
         obj.requests = this.server.requests;
       }
+
+      return obj;
     }
   });
 
