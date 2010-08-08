@@ -36,7 +36,7 @@
     },
 
     inject: function (obj) {
-      sinon.collection.call(this, obj);
+      sinon.collection.inject.call(this, obj);
 
       if (this.clock) {
         obj.clock = this.clock;
