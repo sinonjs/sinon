@@ -139,7 +139,7 @@ sinon.server = (function () {
     },
 
     restore: function restore() {
-      return this.xhr.restore.apply(this.xhr, arguments);
+      return this.xhr.restore && this.xhr.restore.apply(this.xhr, arguments);
     }
   };
 }());
