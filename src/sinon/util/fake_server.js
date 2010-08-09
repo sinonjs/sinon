@@ -18,7 +18,7 @@ if (typeof sinon == "undefined") {
   this.sinon = {};
 }
 
-sinon.server = (function () {
+sinon.fakeServer = (function () {
   function F() {}
 
   function create(proto) {
@@ -65,7 +65,7 @@ sinon.server = (function () {
     },
 
     getHTTPMethod: function getHTTPMethod(request) {
-      if (this.fakeHTTPMethods) {
+      if (this.fakeHTTPMethods && /post/i.test(request.method)) {
         var match = request.requestBody.match(/_method=([^\b;]+)/);
         return !!match ? match[1] : request.method;
       }

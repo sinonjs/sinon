@@ -167,10 +167,10 @@
       var myObj = { meth: myMeth };
 
       var testCase = sinon.testCase({
-        testA: function (stub) {
-          stub(myObj, "meth");
+        testA: function () {
+          this.stub(myObj, "meth");
 
-          assertFunction(stub);
+          assertFunction(this.stub);
           assertNotSame(myMeth, myObj.meth);
         }
       });
@@ -185,12 +185,12 @@
       var myObj = { meth: myMeth };
 
       var testCase = sinon.testCase({
-        setUp: function (stub) {
-          stub(myObj, "meth");
+        setUp: function () {
+          this.stub(myObj, "meth");
         },
 
-        testA: function (stub) {
-          assertFunction(stub);
+        testA: function () {
+          assertFunction(this.stub);
           assertNotSame(myMeth, myObj.meth);
         }
       });

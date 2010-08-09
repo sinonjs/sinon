@@ -27,10 +27,10 @@
       return this.add(this.clock);
     },
 
-    serverPrototype: sinon.server,
+    serverPrototype: sinon.fakeServer,
 
-    useServer: function useServer() {
-      this.server = (this.serverPrototype || sinon.server).create();
+    useFakeServer: function useFakeServer() {
+      this.server = (this.serverPrototype || sinon.fakeServer).create();
 
       return this.add(this.server);
     },
@@ -51,5 +51,5 @@
     }
   });
 
-  sinon.sandbox.useFakeXMLHttpRequest = sinon.sandbox.useServer;
+  sinon.sandbox.useFakeXMLHttpRequest = sinon.sandbox.useFakeServer;
 }());

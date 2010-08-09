@@ -57,8 +57,8 @@
       assertFunction(this.sandbox.clock.restore);
     },
 
-    "should pass arguments to sinon.useFakeTimers": sinon.test(function (stub) {
-      stub(sinon, "useFakeTimers").returns({ restore: function () {} });
+    "should pass arguments to sinon.useFakeTimers": sinon.test(function () {
+      this.stub(sinon, "useFakeTimers").returns({ restore: function () {} });
       this.sandbox.useFakeTimers("Date", "setTimeout");
       this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
 
@@ -87,8 +87,8 @@
       this.sandbox.restore();
     },
 
-    "should call sinon.useFakeXMLHttpRequest": sinon.test(function (stub) {
-      stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
+    "should call sinon.useFakeXMLHttpRequest": sinon.test(function () {
+      this.stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
       this.sandbox.useFakeXMLHttpRequest();
 
       assert(sinon.useFakeXMLHttpRequest.called);
@@ -113,33 +113,33 @@
     },
 
     "should return server": function () {
-      var server = this.sandbox.useServer();
+      var server = this.sandbox.useFakeServer();
 
       assertObject(server);
       assertFunction(server.restore);
     },
 
     "should expose server property": function () {
-      var server = this.sandbox.useServer();
+      var server = this.sandbox.useFakeServer();
 
       assertSame(server, this.sandbox.server);
     },
 
     "should create server": function () {
-      var server = this.sandbox.useServer();
+      var server = this.sandbox.useFakeServer();
 
-      assert(sinon.server.isPrototypeOf(server));
+      assert(sinon.fakeServer.isPrototypeOf(server));
     },
 
     "should create server with cock": function () {
-      this.sandbox.serverPrototype = sinon.serverWithClock;
-      var server = this.sandbox.useServer();
+      this.sandbox.serverPrototype = sinon.fakeServerWithClock;
+      var server = this.sandbox.useFakeServer();
 
-      assert(sinon.serverWithClock.isPrototypeOf(server));
+      assert(sinon.fakeServerWithClock.isPrototypeOf(server));
     },
 
     "should add server to fake collection": function () {
-      this.sandbox.useServer();
+      this.sandbox.useFakeServer();
       this.sandbox.restore();
 
       assertSame(globalXHR, global.XMLHttpRequest);
@@ -186,7 +186,7 @@
     },
 
     "should define server and requests when using fake time": function () {
-      this.sandbox.useServer();
+      this.sandbox.useFakeServer();
       this.sandbox.inject(this.obj);
 
       assertFunction(this.obj.spy);
@@ -198,7 +198,7 @@
     },
 
     "should define all possible fakes": function () {
-      this.sandbox.useServer();
+      this.sandbox.useFakeServer();
       this.sandbox.useFakeTimers();
       this.sandbox.inject(this.obj);
 

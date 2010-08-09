@@ -30,7 +30,7 @@
     var config = sinon.config || {};
 
     if (config.useFakeServer) {
-      sandbox.useServer();
+      sandbox.useFakeServer();
     }
 
     if (config.useFakeTimers) {
@@ -100,9 +100,9 @@
   }
 
   test.config = {
-    injectIntoThis: false,
+    injectIntoThis: true,
     injectInto: null,
-    properties: ["stub", "mock"],
+    properties: ["spy", "stub", "mock", "clock", "server", "requests"],
     useFakeTimers: false,
     useFakeServer: false
   };

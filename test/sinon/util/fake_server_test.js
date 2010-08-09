@@ -25,29 +25,31 @@ testCase("ServerCreateTest", {
   },
 
   "should return server object": function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
 
     assertObject(this.server);
-    assert(sinon.server.isPrototypeOf(this.server));
+    assert(sinon.fakeServer.isPrototypeOf(this.server));
   },
 
   "should provide restore method": function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
 
     assertFunction(this.server.restore);
   },
 
-  "should fake XMLHttpRequest": sinon.test(function (stub) {
-    stub(sinon, "useFakeXMLHttpRequest").returns({ restore: stub() });
+  "should fake XMLHttpRequest": sinon.test(function () {
+    this.stub(sinon, "useFakeXMLHttpRequest").returns({
+      restore: this.stub()
+    });
 
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
 
     assert(sinon.useFakeXMLHttpRequest.called);
   }),
 
-  "should mirror FakeXMLHttpRequest restore method": sinon.test(function (stub) {
-    this.server = sinon.server.create();
-    var restore = stub(sinon.FakeXMLHttpRequest, "restore");
+  "should mirror FakeXMLHttpRequest restore method": sinon.test(function () {
+    this.server = sinon.fakeServer.create();
+    var restore = this.stub(sinon.FakeXMLHttpRequest, "restore");
     this.server.restore();
 
     assert(restore.called);
@@ -56,7 +58,7 @@ testCase("ServerCreateTest", {
 
 testCase("ServerRequestsTest", {
   setUp: function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
   },
 
   tearDown: function () {
@@ -97,7 +99,7 @@ testCase("ServerRequestsTest", {
 
 testCase("ServerHandleRequestTest", {
   setUp: function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
   },
 
   tearDown: function () {
@@ -127,7 +129,7 @@ testCase("ServerHandleRequestTest", {
 
 testCase("ServerRespondWithTest", {
   setUp: function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
 
     this.getRootAsync = new sinon.FakeXMLHttpRequest();
     this.getRootAsync.open("GET", "/", true);
@@ -359,7 +361,7 @@ testCase("ServerRespondWithTest", {
 
 testCase("ServerRespondFakeHTTPVerbTest", {
   setUp: function () {
-    this.server = sinon.server.create();
+    this.server = sinon.fakeServer.create();
 
     this.request = new sinon.FakeXMLHttpRequest();
     this.request.open("post", "/path", true);
@@ -395,6 +397,19 @@ testCase("ServerRespondFakeHTTPVerbTest", {
     this.server.respond();
 
     assertEquals([404, {}, ""], this.request.respond.args[0]);
+  },
+
+  "should not fake method when not POSTing": function () {
+    this.server.fakeHTTPMethods = true;
+    this.server.respondWith("DELETE", "", "OK");
+
+    var request = new sinon.FakeXMLHttpRequest();
+    request.open("GET", "/");
+    request.send();
+    request.respond = sinon.spy();
+    this.server.respond();
+
+    assertEquals([404, {}, ""], request.respond.args[0]);
   },
 
   "should customize HTTP method extraction": function () {
