@@ -1,0 +1,21 @@
+== 0.6.0 / 2010-08-10
+* FakeXMLHttpRequest
+* sinon.useFakeXMLHttpRequest
+* sinon.fakeServer
+* sinon.fakeServerWithClock
+* Improved fake timers implementation, made them work properly in IE 6-8
+* Improved sinon.sandbox
+  * Added useFakeServer
+  * Added inject method
+* Improved sinon.test method
+  * Made configuration aware
+  * Now uses sinon.sandbox in place of sinon.collection
+* Changed default configuration for sinon.test, breaking compatibility
+  with 0.5.0 - can be changed through sinon.config
+
+== 0.5.0 / 2010-06-09
+* Initial release
+* Spies, stubs, mocks
+* Assertions
+* collections, test, testCase
+* Fake timers (half-baked)
