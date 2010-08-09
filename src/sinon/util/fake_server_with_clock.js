@@ -5,7 +5,7 @@
 /*jslint indent: 2, browser: true, eqeqeq: false, onevar: false*/
 /*global sinon*/
 /**
- * Add-on for sinon.server that automatically handles a fake timer along with
+ * Add-on for sinon.fakeServer that automatically handles a fake timer along with
  * the FakeXMLHttpRequest. The direct inspiration for this add-on is jQuery
  * 1.3.x, which does not use xhr object's onreadystatehandler at all - instead,
  * it polls the object for completion with setInterval. Dispite the direct
@@ -21,11 +21,11 @@
 
 (function () {
   function Server() {}
-  Server.prototype = sinon.server;
+  Server.prototype = sinon.fakeServer;
 
-  sinon.serverWithClock = new Server();
+  sinon.fakeServerWithClock = new Server();
 
-  sinon.serverWithClock.addRequest = function addRequest(xhr) {
+  sinon.fakeServerWithClock.addRequest = function addRequest(xhr) {
     if (xhr.async) {
       if (typeof setTimeout.clock == "object") {
         this.clock = setTimeout.clock;
@@ -53,10 +53,10 @@
       }
     }
 
-    return sinon.server.addRequest.call(this, xhr);
+    return sinon.fakeServer.addRequest.call(this, xhr);
   };
 
-  sinon.serverWithClock.respond = function respond() {
+  sinon.fakeServerWithClock.respond = function respond() {
     if (this.clock) {
       this.clock.tick(this.longestTimeout);
       this.longestTimeout = 0;
@@ -67,14 +67,14 @@
       }
     }
 
-    return sinon.server.respond.apply(this, arguments);
+    return sinon.fakeServer.respond.apply(this, arguments);
   };
 
-  sinon.serverWithClock.restore = function restore() {
+  sinon.fakeServerWithClock.restore = function restore() {
     if (this.clock) {
       this.clock.restore();
     }
 
-    return sinon.server.restore.apply(this, arguments);
+    return sinon.fakeServer.restore.apply(this, arguments);
   };
 }());

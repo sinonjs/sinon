@@ -251,12 +251,12 @@
       assertSame(obj, this.collection.inject(obj));
     },
 
-    "should inject spy, stub, mock bound to collection": sinon.test(function (stub) {
+    "should inject spy, stub, mock bound to collection": sinon.test(function () {
       var obj = {};
       this.collection.inject(obj);
-      stub(this.collection, "spy");
-      stub(this.collection, "stub");
-      stub(this.collection, "mock");
+      this.stub(this.collection, "spy");
+      this.stub(this.collection, "stub");
+      this.stub(this.collection, "mock");
 
       obj.spy();
       var fn = obj.spy;

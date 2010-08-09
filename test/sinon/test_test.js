@@ -25,16 +25,10 @@
       sinon.config = {};
     },
 
-    "should pass stub function to callback": function () {
-      sinon.test(function (stub) {
-        assertFunction(stub);
-      })();
-    },
-
     "should proxy return value": function () {
       var object = {};
 
-      var result = sinon.test(function (stub) {
+      var result = sinon.test(function () {
         return object;
       })();
 
@@ -45,8 +39,8 @@
       var method = function () {};
       var object = { method: method };
 
-      sinon.test(function (stub) {
-        stub(object, "method").returns(object);
+      sinon.test(function () {
+        this.stub(object, "method").returns(object);
 
         assertSame(object, object.method());
       })();
@@ -56,8 +50,8 @@
       var method = function () {};
       var object = { method: method };
 
-      sinon.test(function (stub) {
-        stub(object, "method");
+      sinon.test(function () {
+        this.stub(object, "method");
       })();
 
       assertSame(method, object.method);
@@ -68,8 +62,8 @@
       var object = { method: method };
 
       assertException(function () {
-        sinon.test(function (stub) {
-          stub(object, "method");
+        sinon.test(function () {
+          this.stub(object, "method");
           throw new Error();
         })();
       }, "Error");
@@ -80,8 +74,8 @@
       var object = { method: method };
 
       try {
-        sinon.test(function (stub) {
-          stub(object, "method");
+        sinon.test(function () {
+          this.stub(object, "method");
           throw new Error();
         })();
       } catch (e) {}
@@ -93,8 +87,8 @@
       var method = function () {};
       var object = { method: method };
 
-      sinon.test(function (stub, mock) {
-        mock(object).expects("method").returns(object);
+      sinon.test(function () {
+        this.mock(object).expects("method").returns(object);
 
         assertSame(object, object.method());
       })();
@@ -105,8 +99,8 @@
       var object = { method: method };
 
       assertException(function () {
-        sinon.test(function (stub, mock) {
-          mock(object).expects("method");
+        sinon.test(function () {
+          this.mock(object).expects("method");
         })();
       }, "ExpectationError");
 
@@ -118,8 +112,8 @@
       var object = { method: method };
 
       try {
-        sinon.test(function (stub, mock) {
-          mock(object).expects("method");
+        sinon.test(function () {
+          this.mock(object).expects("method");
         })();
       } catch (e) {}
 
@@ -131,8 +125,8 @@
       var object = { method: method };
 
       try {
-        sinon.test(function (stub, mock) {
-          mock(object).expects("method").never();
+        sinon.test(function () {
+          this.mock(object).expects("method").never();
           object.method();
         })();
       } catch (e) {}
@@ -142,6 +136,11 @@
 
     "should append helpers after normal arguments": function () {
       var object = { method: function () {} };
+
+      sinon.config = {
+        injectIntoThis: false,
+        properties: ["stub", "mock"]
+      };
 
       sinon.test(function (obj, stub, mock) {
         mock(object).expects("method").once();
@@ -214,9 +213,14 @@
       sinon.config = {};
     },
 
-    "should yield stub, mock as arguments by default": function () {
+    "should yield stub, mock as arguments": function () {
       var stubbed, mocked;
       var obj = { meth: function () {} };
+
+      sinon.config = {
+        injectIntoThis: false,
+        properties: ["stub", "mock"]
+      };
 
       sinon.test(function (stub, mock) {
         stubbed = stub(obj, "meth");
@@ -234,6 +238,7 @@
       var obj = { meth: function () {} };
 
       sinon.config = {
+        injectIntoThis: false,
         properties: ["spy", "stub", "mock"]
       };
 
@@ -255,6 +260,7 @@
       var obj = { meth: function () {} };
 
       sinon.config = {
+        injectIntoThis: false,
         properties: ["server", "stub", "mock"]
       };
 
@@ -274,6 +280,7 @@
       var obj = { meth: function () {} };
 
       sinon.config = {
+        injectIntoThis: false,
         properties: ["server", "stub", "mock"],
         useFakeServer: true
       };
@@ -295,6 +302,7 @@
       var server, clock;
 
       sinon.config = {
+        injectIntoThis: false,
         properties: ["server", "clock"],
         useFakeTimers: true,
         useFakeServer: true
@@ -315,7 +323,6 @@
       var testCase = boundTestCase();
 
       sinon.config = {
-        injectIntoThis: true,
         properties: ["server", "clock"],
         useFakeTimers: true,
         useFakeServer: true
@@ -338,6 +345,7 @@
       var obj = {};
 
       sinon.config = {
+        injectIntoThis: false,
         injectInto: obj,
         properties: ["server", "clock", "spy", "stub", "mock", "requests"],
         useFakeTimers: true,
@@ -361,10 +369,43 @@
       assertArray(obj.requests);
     },
 
+    "should inject functions into test case by default": function () {
+      var testCase = boundTestCase();
+      var obj = {};
+
+      sinon.test(testCase.fn).call(testCase);
+
+      assertEquals(0, testCase.args.length);
+      assertFunction(testCase.spy);
+      assertFunction(testCase.stub);
+      assertFunction(testCase.mock);
+      assertUndefined(testCase.requests);
+      assertUndefined(testCase.server);
+      assertUndefined(testCase.clock);
+    },
+
+    "should inject server and clock when only enabling them": function () {
+      var testCase = boundTestCase();
+      var obj = {};
+
+      sinon.config = {
+        useFakeTimers: true,
+        useFakeServer: true
+      };
+
+      sinon.test(testCase.fn).call(testCase);
+
+      assertEquals(0, testCase.args.length);
+      assertFunction(testCase.spy);
+      assertFunction(testCase.stub);
+      assertFunction(testCase.mock);
+      assertFakeServer(testCase.server);
+      assertArray(testCase.requests);
+      assertClock(testCase.clock);
+    },
+
     "should use sinon.test to fake time": function () {
       sinon.config = {
-        injectIntoThis: true,
-        properties: ["clock", "spy", "stub", "mock"],
         useFakeTimers: true
       };
 

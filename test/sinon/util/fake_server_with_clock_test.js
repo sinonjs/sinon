@@ -22,7 +22,7 @@
 
 testCase("ServerWithClockTest", {
   setUp: function () {
-    this.server = sinon.serverWithClock.create();
+    this.server = sinon.fakeServerWithClock.create();
   },
 
   tearDown: function () {
@@ -33,8 +33,8 @@ testCase("ServerWithClockTest", {
     }
   },
 
-  "should call 'super' when adding requests": sinon.test(function (stub) {
-    var addRequest = stub(sinon.server, "addRequest");
+  "should call 'super' when adding requests": sinon.test(function () {
+    var addRequest = this.stub(sinon.fakeServer, "addRequest");
     var xhr = {};
     this.server.addRequest(xhr);
 
@@ -93,7 +93,7 @@ testCase("ServerWithClockTest", {
 testCase("ServerWithClockExistingClockTest", {
   setUp: function () {
     this.clock = sinon.useFakeTimers();
-    this.server = sinon.serverWithClock.create();
+    this.server = sinon.fakeServerWithClock.create();
   },
 
   tearDown: function () {
@@ -138,7 +138,7 @@ testCase("ServerWithClockExistingClockTest", {
 
 testCase("ServerWithClockRespondTest", {
   setUp: function () {
-    this.server = sinon.serverWithClock.create();
+    this.server = sinon.fakeServerWithClock.create();
     this.server.addRequest({ async: true });
   },
 
@@ -162,9 +162,9 @@ testCase("ServerWithClockRespondTest", {
     assertEquals(0, this.server.longestTimeout);
   },
 
-  "should call original respond": sinon.test(function (stub) {
+  "should call original respond": sinon.test(function () {
     var obj = {};
-    var respond = stub(sinon.server, "respond").returns(obj);
+    var respond = this.stub(sinon.fakeServer, "respond").returns(obj);
 
     var result = this.server.respond("GET", "/", "");
 
@@ -176,7 +176,7 @@ testCase("ServerWithClockRespondTest", {
 
 testCase("ServerJQueryCompatMode", {
   setUp: function () {
-    this.server = sinon.serverWithClock.create();
+    this.server = sinon.fakeServerWithClock.create();
 
     this.request = new sinon.FakeXMLHttpRequest();
     this.request.open("get", "/", true);
