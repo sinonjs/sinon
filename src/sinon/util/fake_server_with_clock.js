@@ -1,6 +1,6 @@
 /**
- * @depend server.js
- * @depend timers.js
+ * @depend fake_server.js
+ * @depend fake_timers.js
  */
 /*jslint indent: 2, browser: true, eqeqeq: false, onevar: false*/
 /*global sinon*/

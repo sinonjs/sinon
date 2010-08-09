@@ -1,8 +1,8 @@
 /**
  * @depend ../sinon.js
  * @depend collection.js
- * @depend util/timers.js
- * @depend util/server_with_clock.js
+ * @depend util/fake_timers.js
+ * @depend util/fake_server_with_clock.js
  */
 /*jslint indent: 2, eqeqeq: false, onevar: false*/
 /*global sinon*/
