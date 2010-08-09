@@ -1013,6 +1013,7 @@
       tearDown: fakeXhrTearDown,
 
       "should replace global XMLHttpRequest": function () {
+        assertNotSame(globalXMLHttpRequest, XMLHttpRequest);
         assertSame(sinon.FakeXMLHttpRequest, XMLHttpRequest);
       },
 

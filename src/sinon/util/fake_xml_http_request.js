@@ -12,6 +12,8 @@ if (typeof sinon == "undefined") {
   this.sinon = {};
 }
 
+sinon.xhr = { XMLHttpRequest: this.XMLHttpRequest };
+
 sinon.FakeXMLHttpRequest = (function () {
   var unsafeHeaders = {
     "Accept-Charset": true,
