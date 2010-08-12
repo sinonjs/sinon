@@ -184,6 +184,10 @@ testCase("ServerJQueryCompatMode", {
     sinon.spy(this.request, "respond");
   },
 
+  tearDown: function () {
+    this.server.restore();
+  },
+
   "should handle clock automatically": function () {
     this.server.respondWith("OK");
     var spy = sinon.spy();
@@ -194,5 +198,24 @@ testCase("ServerJQueryCompatMode", {
 
     assert(spy.called);
     assertSame(sinon.timers.setTimeout, setTimeout);
+  },
+
+  "should finish xhr from setInterval like jQuery 1.3.x does": function () {
+    this.server.respondWith("Hello World");
+    var xhr = new sinon.FakeXMLHttpRequest();
+    xhr.open("GET", "/");
+    xhr.send();
+
+    var spy = sinon.spy();
+
+    setInterval(function () {
+      spy(xhr.responseText, xhr.statusText, xhr);
+    }, 13);
+
+    this.server.respond();
+
+    assertEquals("Hello World", spy.args[0][0]);
+    assertEquals("OK", spy.args[0][1]);
+    assertEquals(200, spy.args[0][2].status);
   }
 });

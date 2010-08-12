@@ -57,6 +57,8 @@
   };
 
   sinon.fakeServerWithClock.respond = function respond() {
+    var returnVal = sinon.fakeServer.respond.apply(this, arguments);
+
     if (this.clock) {
       this.clock.tick(this.longestTimeout);
       this.longestTimeout = 0;
@@ -67,7 +69,7 @@
       }
     }
 
-    return sinon.fakeServer.respond.apply(this, arguments);
+    return returnVal;
   };
 
   sinon.fakeServerWithClock.restore = function restore() {
