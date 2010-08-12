@@ -1,3 +1,8 @@
+== 0.6.1 / 2010-08-12
+* Fixed a bug in sinon.fakeServerWithClock where the clock was ticked
+  before the server had responded to all requests, resulting in
+  objects not having been responded to by the time the timeout ran.
+
 == 0.6.0 / 2010-08-10
 * FakeXMLHttpRequest
 * sinon.useFakeXMLHttpRequest
