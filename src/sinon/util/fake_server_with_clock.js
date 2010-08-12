@@ -34,7 +34,7 @@
         this.resetClock = true;
       }
 
-      if (typeof this.longestTimeout != "number") {
+      if (!this.longestTimeout) {
         var clockSetTimeout = this.clock.setTimeout;
         var clockSetInterval = this.clock.setInterval;
         var server = this;

@@ -149,15 +149,25 @@ testCase("ServerWithClockRespondTest", {
   "should tick the clock to fire the longest timeout": function () {
     this.server.longestTimeout = 96;
 
-    this.server.respond("");
+    this.server.respond();
 
     assertEquals(96, this.server.clock.now);
+  },
+
+  "should tick the clock to fire the longest timeout when multiple responds": function () {
+    setInterval(function () {}, 13);
+    this.server.respond();
+    var xhr = new sinon.FakeXMLHttpRequest();
+    setInterval(function () {}, 17);
+    this.server.respond();
+
+    assertEquals(17, this.server.clock.now);
   },
 
   "should reset longest timeout": function () {
     this.server.longestTimeout = 96;
 
-    this.server.respond("");
+    this.server.respond();
 
     assertEquals(0, this.server.longestTimeout);
   },
