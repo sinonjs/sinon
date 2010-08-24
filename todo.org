@@ -60,7 +60,7 @@
 * Logger [0/2]
 ** TODO Add sinon.log to issue warnings etc to
 ** TODO Add sinon.log.output or similar to hook logger into test frameworks outputting mechanism
-* Fake timers [0/3]
-** TODO Fake Date by default
+* Fake timers [1/3]
+** DONE Fake Date by default
 ** TODO Timers should be executed in the order they are scheduled
 ** TODO Ticking the clock should keep Date up to date on every timer

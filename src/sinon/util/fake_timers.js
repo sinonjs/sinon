@@ -194,7 +194,7 @@ sinon.timers = {
 
 sinon.useFakeTimers = (function () {
   var global = this;
-  var methods = ["setTimeout", "setInterval", "clearTimeout", "clearInterval"];
+  var methods = ["setTimeout", "setInterval", "clearTimeout", "clearInterval", "Date"];
 
   function restore() {
     var method;

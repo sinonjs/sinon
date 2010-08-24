@@ -554,7 +554,7 @@
     },
 
     "should fake Date constructor": function () {
-      this.clock = sinon.useFakeTimers(0, "Date");
+      this.clock = sinon.useFakeTimers(0);
       var now = new Date();
 
       assertNotSame(sinon.timers.Date, Date);
@@ -562,7 +562,7 @@
     },
 
     "should restore Date constructor": function () {
-      this.clock = sinon.useFakeTimers(0, "Date");
+      this.clock = sinon.useFakeTimers(0);
       this.clock.restore();
 
       assertSame(sinon.timers.Date, Date);
