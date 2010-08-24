@@ -83,7 +83,11 @@
 
   testCase("ClockTickTest", {
     setUp: function () {
-      this.clock = sinon.clock.create();
+      this.clock = sinon.useFakeTimers(0);
+    },
+
+    tearDown: function () {
+      this.clock.restore();
     },
 
     "should trigger immediately without specified delay": function () {
@@ -157,6 +161,38 @@
       this.clock.tick(100);
 
       assert(stub.calledOn(global));
+    },
+
+    "should trigger in the order scheduled": function () {
+      var spies = [sinon.spy.create(), sinon.spy.create()];
+      this.clock.setTimeout(spies[0], 13);
+      this.clock.setTimeout(spies[1], 11);
+
+      this.clock.tick(15);
+
+      assert(spies[1].calledBefore(spies[0]));
+    },
+
+    "should create updated Date while ticking": function () {
+      var spy = sinon.spy.create();
+
+      this.clock.setInterval(function () {
+        spy(new Date().getTime());
+      }, 10);
+
+      this.clock.tick(100);
+
+      assertEquals(10, spy.callCount);
+      assert(spy.calledWith(10));
+      assert(spy.calledWith(20));
+      assert(spy.calledWith(30));
+      assert(spy.calledWith(40));
+      assert(spy.calledWith(50));
+      assert(spy.calledWith(60));
+      assert(spy.calledWith(70));
+      assert(spy.calledWith(80));
+      assert(spy.calledWith(90));
+      assert(spy.calledWith(100));
     }
   });
 

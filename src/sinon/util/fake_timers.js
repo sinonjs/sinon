@@ -48,6 +48,24 @@ sinon.clock = (function () {
     return toId;
   }
 
+  function timersInRange(timeouts, from, to) {
+    var timers = [], timer;
+
+    for (var prop in timeouts) {
+      if (timeouts.hasOwnProperty(prop)) {
+        timer = timeouts[prop];
+
+        if (timer.callAt >= from && timer.callAt <= to) {
+          timers.push(timer);
+        }
+      }
+    }
+
+    return timers.sort(function (a, b) {
+      return a.callAt > b.callAt;
+    });
+  }
+
   function createObject(object) {
     var newObject;
 
@@ -97,36 +115,35 @@ sinon.clock = (function () {
     },
 
     tick: function tick(ms) {
-      var found, timer, prop;
+      var found, timer, prop, timers, i, l, num = 0, tickTo = this.now + ms;
 
-      while (this.timeouts && found !== 0) {
+      while (this.timeouts && found !== 0 && num < 15) {
         found = 0;
+        num++;
+        timers = timersInRange(this.timeouts, this.now, tickTo);
 
-        for (prop in this.timeouts) {
-          if (this.timeouts.hasOwnProperty(prop)) {
-            timer = this.timeouts[prop];
+        for (i = 0, l = timers.length; i < l; i++) {
+          timer = timers[i];
+          this.now = timer.callAt;
 
-            if (timer.callAt >= this.now && timer.callAt <= this.now + ms) {
-              try {
-                if (typeof timer.func == "function") {
-                  timer.func.call(null);
-                } else {
-                  eval(timer.func);
-                }
-              } catch (e) {}
-
-              if (typeof timer.interval == "number") {
-                found += 1;
-                timer.callAt += timer.interval;
-              } else {
-                delete this.timeouts[prop];
-              }
+          try {
+            if (typeof timer.func == "function") {
+              timer.func.call(null);
+            } else {
+              eval(timer.func);
             }
+          } catch (e) {}
+
+          if (typeof timer.interval == "number") {
+            found += 1;
+            timer.callAt += timer.interval;
+          } else {
+            delete this.timeouts[prop];
           }
         }
       }
 
-      this.now += ms;
+      this.now = tickTo;
     },
 
     reset: function reset() {
