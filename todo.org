@@ -66,3 +66,5 @@
 ** DONE Ticking the clock should keep Date up to date on every timer
 ** TODO tick: Don't recalculate starting point to avoid dropping timers
 ** TODO tick: Don't fire any callbacks until all timers have been figured out to ensure call order
+* Spies [0/1]
+** TODO Implement called before on individual calls
