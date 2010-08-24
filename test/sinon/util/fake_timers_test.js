@@ -193,6 +193,40 @@
       assert(spy.calledWith(80));
       assert(spy.calledWith(90));
       assert(spy.calledWith(100));
+    },
+
+    "should fire timer in intervals of 13": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 13);
+
+      this.clock.tick(500);
+
+      assertEquals(38, spy.callCount);
+    },
+
+    "should fire timers in correct order": function () {
+      var spy13 = sinon.spy.create();
+      var spy10 = sinon.spy.create();
+
+      this.clock.setInterval(function () {
+        spy13(new Date().getTime());
+      }, 13);
+
+      this.clock.setInterval(function () {
+        spy10(new Date().getTime());
+      }, 10);
+
+      this.clock.tick(500);
+
+      assertEquals(38, spy13.callCount);
+      assertEquals(50, spy10.callCount);
+
+      assert(spy13.calledWith(416));
+      assert(spy10.calledWith(320));
+
+      // Todo: Use calledBefore when implented
+      assert(spy13.getCall(0).callId > spy10.getCall(0).callId);
+      assert(spy13.getCall(3).callId > spy10.getCall(4).callId);
     }
   });
 
