@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+juicer merge -s -m "" -o sinon-all.js src/sinon/test_case.js src/sinon/assert.js
