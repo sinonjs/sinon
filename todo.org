@@ -49,14 +49,14 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [5/7]
+* Sandboxes [7/7]
 ** DONE Add sinon.sandbox
 ** DONE Should inherit collection
 ** DONE Should offer to fake timers
 ** DONE Should offer to fake XHR
 ** DONE Should return object with bound spy, stub and mock functions as well as clock and server properties
-** TODO Allow configuration to provide timer properties to fake
-** TODO Allow configuration to provide which fake server to use
+** DONE Allow configuration to provide timer properties to fake
+** DONE Allow configuration to provide which fake server to use
 * Logger [0/2]
 ** TODO Add sinon.log to issue warnings etc to
 ** TODO Add sinon.log.output or similar to hook logger into test frameworks outputting mechanism

@@ -298,6 +298,23 @@
       assertMock(mocked);
     },
 
+    "should use serverWithClock when faking xhr": function () {
+      var server;
+
+      sinon.config = {
+        injectIntoThis: false,
+        properties: ["server"],
+        useFakeServer: sinon.fakeServerWithClock
+      };
+
+      sinon.test(function (serv) {
+        server = serv;
+      })();
+
+      assertFakeServer(server);
+      assert(sinon.fakeServerWithClock.isPrototypeOf(server));
+    },
+
     "should yield clock when faking timers": function () {
       var server, clock;
 
@@ -317,6 +334,33 @@
 
       assertFakeServer(server);
       assertClock(clock);
+    },
+
+    "should fake specified timers": function () {
+      var props;
+
+      sinon.config = {
+        injectIntoThis: false,
+        properties: ["clock"],
+        useFakeTimers: ["Date", "setTimeout"]
+      };
+
+      sinon.test(function (c) {
+        props = {
+          clock: c,
+          Date: Date,
+          setTimeout: setTimeout,
+          clearTimeout: clearTimeout,
+          setInterval: setInterval,
+          clearInterval: clearInterval
+        };
+      })();
+
+      assertNotSame(sinon.timers.Date, props.Date);
+      assertNotSame(sinon.timers.setTimeout, props.setTimeout);
+      assertSame(sinon.timers.clearTimeout, props.clearTimeout);
+      assertSame(sinon.timers.setInterval, props.setInterval);
+      assertSame(sinon.timers.clearInterval, props.clearInterval);
     },
 
     "should inject properties into test case": function () {
