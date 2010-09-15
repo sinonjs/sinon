@@ -526,6 +526,7 @@
       assertSame(this.clock, clearTimeout.clock);
       assertSame(this.clock, setInterval.clock);
       assertSame(this.clock, clearInterval.clock);
+      assertSame(this.clock, Date.clock);
     },
 
     "should set initial timestamp": function () {
