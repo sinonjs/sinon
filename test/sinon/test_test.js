@@ -261,7 +261,8 @@
 
       sinon.config = {
         injectIntoThis: false,
-        properties: ["server", "stub", "mock"]
+        properties: ["server", "stub", "mock"],
+        useFakeServer: false
       };
 
       sinon.test(function (stub, mock) {
@@ -281,8 +282,7 @@
 
       sinon.config = {
         injectIntoThis: false,
-        properties: ["server", "stub", "mock"],
-        useFakeServer: true
+        properties: ["server", "stub", "mock"]
       };
 
       sinon.test(function (serv, stub, mock) {
@@ -320,9 +320,7 @@
 
       sinon.config = {
         injectIntoThis: false,
-        properties: ["server", "clock"],
-        useFakeTimers: true,
-        useFakeServer: true
+        properties: ["server", "clock"]
       };
 
       sinon.test(function (s, c) {
@@ -367,9 +365,7 @@
       var testCase = boundTestCase();
 
       sinon.config = {
-        properties: ["server", "clock"],
-        useFakeTimers: true,
-        useFakeServer: true
+        properties: ["server", "clock"]
       };
 
       sinon.test(testCase.fn).call(testCase);
@@ -391,9 +387,7 @@
       sinon.config = {
         injectIntoThis: false,
         injectInto: obj,
-        properties: ["server", "clock", "spy", "stub", "mock", "requests"],
-        useFakeTimers: true,
-        useFakeServer: true
+        properties: ["server", "clock", "spy", "stub", "mock", "requests"]
       };
 
       sinon.test(testCase.fn).call(testCase);
@@ -423,9 +417,9 @@
       assertFunction(testCase.spy);
       assertFunction(testCase.stub);
       assertFunction(testCase.mock);
-      assertUndefined(testCase.requests);
-      assertUndefined(testCase.server);
-      assertUndefined(testCase.clock);
+      assertObject(testCase.requests);
+      assertObject(testCase.server);
+      assertObject(testCase.clock);
     },
 
     "should inject server and clock when only enabling them": function () {
