@@ -16,15 +16,15 @@
 ** DONE calledOnce
 ** DONE calledTwice
 ** DONE calledThrice
-* Stubs [5/8]
+* Stubs [6/8]
 ** DONE Add callsArg/invokesCallback/callsCallback
 ** DONE Add callsArgWith
-** TODO Find a better API for the two above methods
 ** DONE Add stub(object) to stub everything
 ** DONE Fail or warn when trying to stub a method that does not exist (avoid typos in stubbed methods etc)
 ** DONE Fail or warn when calling stub with a function: sinon.stub(function () {}); to avoid mistaking sinon.stub for sinon.test
 ** TODO Rethrow errors in sinon.test
-** TODO Better naming in error messages
+** DONE Better naming in error messages
+** TODO Guess name of fake
 * Assertions [4/4]
 ** DONE assertNotCalled
 ** DONE assertCalledOnce
@@ -50,7 +50,7 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [7/7]
+* Sandboxes [7/9]
 ** DONE Add sinon.sandbox
 ** DONE Should inherit collection
 ** DONE Should offer to fake timers
@@ -58,9 +58,8 @@
 ** DONE Should return object with bound spy, stub and mock functions as well as clock and server properties
 ** DONE Allow configuration to provide timer properties to fake
 ** DONE Allow configuration to provide which fake server to use
-* Logger [0/2]
-** TODO Add sinon.log to issue warnings etc to
-** TODO Add sinon.log.output or similar to hook logger into test frameworks outputting mechanism
+** TODO Check argument to sinon.test()
+** TODO Check arguments to sinon.testCase()
 * Fake timers [6/6]
 ** DONE Fake Date by default
 ** DONE Timers should be executed in the order they are scheduled
