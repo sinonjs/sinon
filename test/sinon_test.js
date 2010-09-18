@@ -48,10 +48,10 @@
       }, "TypeError");
     },
 
-    "should not throw if object does not define property": function () {
+    "should throw if object does not define property": function () {
       var object = this.object;
 
-      assertNoException(function () {
+      assertException(function () {
         sinon.wrapMethod(object, "prop", function () {});
       });
     },

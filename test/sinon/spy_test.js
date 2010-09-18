@@ -1222,4 +1222,16 @@
       assert(this.CustomConstructor.called);
     }
   });
+
+  testCase("SpyFunctionTest", {
+    "should throw if spying on non-existent property": function () {
+      var myObj = {};
+
+      assertException(function () {
+        sinon.spy(myObj, "ouch");
+      });
+
+      assertUndefined(myObj.ouch);
+    }
+  });
 }());

@@ -44,7 +44,7 @@
 
   testCase("MockExpectsTest", {
     setUp: function () {
-      this.mock = sinon.mock.create({});
+      this.mock = sinon.mock.create({ someMethod: function () {} });
     },
 
     "should throw without method": function () {
@@ -60,6 +60,14 @@
 
       assertFunction(result);
       assertEquals("someMethod", result.method);
+    },
+
+    "should throw if expecting a non-existent method": function () {
+      var mock = this.mock;
+
+      assertException(function () {
+        mock.expects("someMethod2");
+      });
     }
   });
 

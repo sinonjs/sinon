@@ -16,12 +16,12 @@
 ** DONE calledOnce
 ** DONE calledTwice
 ** DONE calledThrice
-* Stubs [3/8]
+* Stubs [4/8]
 ** DONE Add callsArg/invokesCallback/callsCallback
 ** DONE Add callsArgWith
 ** TODO Find a better API for the two above methods
 ** DONE Add stub(object) to stub everything
-** TODO Fail or warn when trying to stub a method that does not exist (avoid typos in stubbed methods etc)
+** DONE Fail or warn when trying to stub a method that does not exist (avoid typos in stubbed methods etc)
 ** TODO Fail or warn when calling stub with a function: sinon.stub(function () {}); to avoid mistaking sinon.stub for sinon.test
 ** TODO Rethrow errors in sinon.test
 ** TODO Better naming in error messages

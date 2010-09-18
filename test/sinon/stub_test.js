@@ -130,7 +130,6 @@
 
     "should throw if argument at specified index is not callable": function () {
       this.stub.callsArg(0);
-      var callback = sinon.stub.create();
 
       assertException(function () {
         this.stub(1);
@@ -321,6 +320,16 @@
 
       assertFunction(stub);
       assertFalse(stub.called);
+    },
+
+    "should throw if property is not a function": function () {
+      var obj = { someProp: 42 };
+
+      assertException(function () {
+        sinon.stub(obj, "someProp");
+      });
+
+      assertEquals(42, obj.someProp);
     }
   });
 

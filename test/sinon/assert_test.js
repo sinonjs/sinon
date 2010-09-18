@@ -487,7 +487,7 @@
     tearDown: stubTearDown,
 
     "should fail when method fails": function () {
-      sinon.stub(this.stub, "callCount").returns(2);
+      this.stub.callCount = 2;
       var stub = this.stub;
       
       assertException(function () {
