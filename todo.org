@@ -60,11 +60,12 @@
 * Logger [0/2]
 ** TODO Add sinon.log to issue warnings etc to
 ** TODO Add sinon.log.output or similar to hook logger into test frameworks outputting mechanism
-* Fake timers [5/5]
+* Fake timers [6/6]
 ** DONE Fake Date by default
 ** DONE Timers should be executed in the order they are scheduled
 ** DONE Ticking the clock should keep Date up to date on every timer
 ** DONE tick: Don't recalculate starting point to avoid dropping timers
 ** DONE tick: Don't fire any callbacks until all timers have been figured out to ensure call order
+** DONE Add simple parser to grok time strings
 * Spies [0/1]
 ** TODO Implement called before on individual calls

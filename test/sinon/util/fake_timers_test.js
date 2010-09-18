@@ -227,6 +227,69 @@
       // Todo: Use calledBefore when implented
       assert(spy13.getCall(0).callId > spy10.getCall(0).callId);
       assert(spy13.getCall(3).callId > spy10.getCall(4).callId);
+    },
+
+    "should pass 6 seconds": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 4000);
+
+      this.clock.tick("08");
+
+      assertEquals(2, spy.callCount);
+    },
+
+    "should pass 1 minute": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 6000);
+
+      this.clock.tick("01:00");
+
+      assertEquals(10, spy.callCount);
+    },
+
+    "should pass 2 hours, 34 minutes and 12 seconds": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 10000);
+
+      this.clock.tick("02:34:10");
+
+      assertEquals(925, spy.callCount);
+    },
+
+    "should throw for invalid format": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 10000);
+      var test = this;
+
+      assertException(function () {
+        test.clock.tick("12:02:34:10");
+      });
+
+      assertEquals(0, spy.callCount);
+    },
+
+    "should throw for invalid minutes": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 10000);
+      var test = this;
+
+      assertException(function () {
+        test.clock.tick("67:10");
+      });
+
+      assertEquals(0, spy.callCount);
+    },
+
+    "should throw for negative minutes": function () {
+      var spy = sinon.spy.create();
+      this.clock.setInterval(spy, 10000);
+      var test = this;
+
+      assertException(function () {
+        test.clock.tick("-7:10");
+      });
+
+      assertEquals(0, spy.callCount);
     }
   });
 
