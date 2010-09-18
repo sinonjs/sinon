@@ -16,7 +16,7 @@
 ** DONE calledOnce
 ** DONE calledTwice
 ** DONE calledThrice
-* Stubs [3/7]
+* Stubs [3/8]
 ** DONE Add callsArg/invokesCallback/callsCallback
 ** DONE Add callsArgWith
 ** TODO Find a better API for the two above methods
@@ -24,11 +24,12 @@
 ** TODO Fail or warn when trying to stub a method that does not exist (avoid typos in stubbed methods etc)
 ** TODO Fail or warn when calling stub with a function: sinon.stub(function () {}); to avoid mistaking sinon.stub for sinon.test
 ** TODO Rethrow errors in sinon.test
-* Assertions [0/4]
-** TODO assertNotCalled
-** TODO assertCalledOnce
-** TODO assertCalledTwice
-** TODO assertCalledThrice
+** TODO Better naming in error messages
+* Assertions [4/4]
+** DONE assertNotCalled
+** DONE assertCalledOnce
+** DONE assertCalledTwice
+** DONE assertCalledThrice
 * Collections [3/3]
 ** DONE Add sinon.collection
 ** DONE Refactor sinon.test to use sinon.collection

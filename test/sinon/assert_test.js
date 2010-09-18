@@ -118,6 +118,159 @@
     }
   });
 
+  testCase("SinonAssertNotCalledTest", {
+    setUp: stubSetUp,
+    tearDown: stubTearDown,
+
+    "should be function": function () {
+      assertFunction(sinon.assert.notCalled);
+    },
+
+    "should fail when method does not exist": function () {
+      assertException(function () {
+        sinon.assert.notCalled();
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should fail when method is not stub": function () {
+      assertException(function () {
+        sinon.assert.notCalled(function () {});
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should fail when method was called": function () {
+      var stub = this.stub;
+      stub();
+
+      assertException(function () {
+        sinon.assert.notCalled(stub);
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should not fail when method was not called": function () {
+      var stub = this.stub;
+
+      assertNoException(function () {
+        sinon.assert.notCalled(stub);
+      });
+
+      assertFalse(sinon.assert.fail.called);
+    }
+  });
+
+  testCase("SinonAssertCalledOnceTest", {
+    setUp: stubSetUp,
+    tearDown: stubTearDown,
+
+    "should be function": function () {
+      assertFunction(sinon.assert.calledOnce);
+    },
+
+    "should fail when method does not exist": function () {
+      assertException(function () {
+        sinon.assert.calledOnce();
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should fail when method is not stub": function () {
+      assertException(function () {
+        sinon.assert.calledOnce(function () {});
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should fail when method was not called": function () {
+      var stub = this.stub;
+
+      assertException(function () {
+        sinon.assert.calledOnce(stub);
+      });
+
+      assert(sinon.assert.fail.called);
+    },
+
+    "should not fail when method was called": function () {
+      var stub = this.stub;
+      stub();
+
+      assertNoException(function () {
+        sinon.assert.calledOnce(stub);
+      });
+
+      assertFalse(sinon.assert.fail.called);
+    },
+
+    "should fail when method was called more than once": function () {
+      var stub = this.stub;
+      stub();
+      stub();
+
+      assertException(function () {
+        sinon.assert.calledOnce(stub);
+      });
+
+      assert(sinon.assert.fail.called);
+    }
+  });
+
+  testCase("SinonAssertCalledTwiceTest", {
+    setUp: stubSetUp,
+    tearDown: stubTearDown,
+
+    "should fail if called once": function () {
+      var stub = this.stub;
+      this.stub();
+
+      assertException(function () {
+        sinon.assert.calledTwice(stub);
+      });
+    },
+
+    "should not fail if called twice": function () {
+      var stub = this.stub;
+      this.stub();
+      this.stub();
+
+      assertNoException(function () {
+        sinon.assert.calledTwice(stub);
+      });
+    }
+  });
+
+  testCase("SinonAssertCalledThriceTest", {
+    setUp: stubSetUp,
+    tearDown: stubTearDown,
+
+    "should fail if called once": function () {
+      var stub = this.stub;
+      this.stub();
+
+      assertException(function () {
+        sinon.assert.calledThrice(stub);
+      });
+    },
+
+    "should not fail if called thrice": function () {
+      var stub = this.stub;
+      this.stub();
+      this.stub();
+      this.stub();
+
+      assertNoException(function () {
+        sinon.assert.calledThrice(stub);
+      });
+    }
+  });
+
   testCase("SinonAssertCallOrderTest", {
     setUp: stubSetUp,
     tearDown: stubTearDown,
@@ -357,13 +510,8 @@
   });
 
   testCase("AssertAlwaysCalledOnTest", {
-    setUp: function () {
-      sinon.stub(sinon.assert, "fail");
-    },
-
-    tearDown: function () {
-      sinon.assert.fail.restore();
-    },
+    setUp: stubSetUp,
+    tearDown: stubTearDown,
 
     "should fail if method is missing": function () {
       assertException(function () {
@@ -378,10 +526,11 @@
     },
 
     "should fail if stub returns false": function () {
-      var stub = sinon.stub.create();
-      sinon.stub(stub, "alwaysCalledOn").returns(false);
+      sinon.stub(this.stub, "alwaysCalledOn").returns(false);
 
-      sinon.assert.alwaysCalledOn(stub, {});
+      assertException(function () {
+        sinon.assert.alwaysCalledOn(this.stub, {});
+      });
 
       assert(sinon.assert.fail.called);
     },
@@ -398,7 +547,7 @@
 
   testCase("AssertAlwaysCalledWithTest", {
     setUp: function () {
-      sinon.stub(sinon.assert, "fail");
+      sinon.stub(sinon.assert, "fail").throws();
     },
 
     tearDown: function () {
@@ -421,7 +570,9 @@
       var stub = sinon.stub.create();
       sinon.stub(stub, "alwaysCalledWith").returns(false);
 
-      sinon.assert.alwaysCalledWith(stub, {}, []);
+      assertException(function () {
+        sinon.assert.alwaysCalledWith(stub, {}, []);
+      });
 
       assert(sinon.assert.fail.called);
     },
