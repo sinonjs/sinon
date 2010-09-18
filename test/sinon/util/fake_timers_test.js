@@ -224,9 +224,8 @@
       assert(spy13.calledWith(416));
       assert(spy10.calledWith(320));
 
-      // Todo: Use calledBefore when implented
-      assert(spy13.getCall(0).callId > spy10.getCall(0).callId);
-      assert(spy13.getCall(3).callId > spy10.getCall(4).callId);
+      assert(spy10.getCall(0).calledBefore(spy13.getCall(0)));
+      assert(spy10.getCall(4).calledBefore(spy13.getCall(3)));
     },
 
     "should pass 6 seconds": function () {
@@ -290,6 +289,12 @@
       });
 
       assertEquals(0, spy.callCount);
+    },
+
+    "should treat missing argument as 0": function () {
+      this.clock.tick();
+
+      assertEquals(0, this.clock.now);
     }
   });
 
