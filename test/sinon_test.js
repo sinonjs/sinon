@@ -220,4 +220,25 @@
       assertEquals(expected, result);
     }
   });
+
+  testCase("FakeNameTest", {
+    "should return function's originalName property": function () {
+      var fn = function () {};
+      fn.originalName = "Larry";
+
+      assertEquals("Larry", sinon.fakeName(fn));
+    },
+
+    "should guess name from last call's this object": function () {
+      var obj = {
+        doStuff: function () {}
+      };
+
+      obj.doStuff = sinon.spy();
+      obj.doStuff.call({});
+      obj.doStuff();
+
+      assertEquals("doStuff", sinon.fakeName(obj.doStuff));
+    }
+  });
 }());
