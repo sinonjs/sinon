@@ -330,6 +330,12 @@
       });
 
       assertEquals(42, obj.someProp);
+    },
+
+    "should not stub function object": function () {
+      assertException(function () {
+        sinon.stub(function () {});
+      });
     }
   });
 
