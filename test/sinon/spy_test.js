@@ -1232,6 +1232,13 @@
       });
 
       assertUndefined(myObj.ouch);
+    },
+
+    "should have toString method": function () {
+      var obj = { meth: function () {} };
+      sinon.spy(obj, "meth");
+
+      assertEquals("meth", obj.meth.toString());
     }
   });
 }());
