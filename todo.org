@@ -67,5 +67,5 @@
 ** DONE tick: Don't recalculate starting point to avoid dropping timers
 ** DONE tick: Don't fire any callbacks until all timers have been figured out to ensure call order
 ** DONE Add simple parser to grok time strings
-* Spies [0/1]
-** TODO Implement called before on individual calls
+* Spies [1/1]
+** DONE Implement called before on individual calls

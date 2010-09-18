@@ -1002,6 +1002,13 @@
       assert(this.spy1.calledBefore(this.spy2));
     },
 
+    "should compare call order of calls directly": function () {
+      this.spy1();
+      this.spy2();
+
+      assert(this.spy1.getCall(0).calledBefore(this.spy2.getCall(0)));
+    },
+
     "should return false if not called": function () {
       this.spy2();
 
@@ -1038,6 +1045,13 @@
       this.spy1();
 
       assert(this.spy1.calledAfter(this.spy2));
+    },
+
+    "should compare calls directly": function () {
+      this.spy2();
+      this.spy1();
+
+      assert(this.spy1.getCall(0).calledAfter(this.spy2.getCall(0)));
     },
 
     "should return false if not called": function () {
