@@ -1,3 +1,29 @@
+== 0.7.0 / 2010-09-19
+* sinon.useFakeTimers now fakes the Date constructor by default
+* sinon.testCase now fakes XHR and timers by default
+* sinon.config controls the behavior of sinon.testCase
+* Fixed bug in clock.tick - now fires timers in correct order
+* Added the ability to tick a clock string for longer ticks.
+  Passing a number causes the clock to tick the specified amount of
+  milliseconds, passing a string like "12:32" ticks 12 minutes and 32
+  seconds.
+* calledBefore and calledAfter for individual calls
+* New assertions
+  sinon.assert.notCalled
+  sinon.assert.calledOnce
+  sinon.assert.calledTwice
+  sinon.assert.calledThrice
+* sinon.test now throws if passed anything other than a function
+* sinon.testCase now throws if passed anything other than an object
+* sinon.{spy,stub}(obj, method) now throws if the property is not an
+  existing function - helps avoid perpetuating typo bugs
+* Vastly improved error messages from assertions
+* Spies/stubs/expectations can have their names resolved in many cases
+* Removed feature where sinon.testCase allowed for nested test cases
+  (does not belong in Sinon.JS)
+* Organizational change: src/ becomes lib/ Helps npm compatibility
+* Thanks to Cory Flanigan for help on npm compatibility
+
 == 0.6.2 / 2010-08-12
 * Fixed another bug in sinon.fakeServerWithClock where consecutive
   respond() calls did not trigger timeouts.
