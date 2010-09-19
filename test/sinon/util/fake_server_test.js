@@ -356,6 +356,19 @@ testCase("ServerRespondWithTest", {
     assertEquals([200, {}, ""], this.getPathAsync.respond.args[0]);
     assertEquals([200, {}, ""], this.postRootAsync.respond.args[0]);
     assertEquals([200, {}, ""], this.postPathAsync.respond.args[0]);
+  },
+
+  "should recognize request with hostname": function () {
+    this.server.respondWith("/", [200, {}, "Yep"]);
+    var xhr = new sinon.FakeXMLHttpRequest();
+    var loc = window.location;
+    xhr.open("GET", loc.protocol + "//" + loc.host + "/", true);
+    xhr.send();
+    sinon.spy(xhr, "respond");
+
+    this.server.respond();
+
+    assertEquals([200, {}, "Yep"], xhr.respond.args[0]);
   }
 });
 
