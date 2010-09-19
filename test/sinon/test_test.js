@@ -25,6 +25,12 @@
       sinon.config = {};
     },
 
+    "should throw if argument is not a function": function () {
+      assertException(function () {
+        sinon.test({});
+      });
+    },
+
     "should proxy return value": function () {
       var object = {};
 

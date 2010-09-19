@@ -26,59 +26,32 @@
       assertEquals({}, tests);
     },
 
-    "should throw without object": function () {
+    "should throw without argument": function () {
       assertException(function () {
         sinon.testCase();
       }, "TypeError");
     },
 
-    "when properties start with test should not modify property names": function () {
-      var tests = {
-        testSomething: function () {},
-        helper2: "hey",
-        testSomethingElse: function () {},
-        "test should do something": function () {}
+    "should throw without object": function () {
+      assertException(function () {
+        sinon.testCase(function () {});
+      }, "TypeError");
+    },
+
+    "should only wrap functions with test prefix": sinon.test(function () {
+      this.spy(sinon, "test");
+
+      var testc = {
+        testA: function () {},
+        doB: function () {}
       };
 
-      assertEquals(sinon.keys(tests), sinon.keys(sinon.testCase(tests)));
-    },
+      sinon.testCase(testc);
 
-    "should prefix function properties with test": function () {
-      var tests = { shouldFixIt: sinon.stub() };
-      var result = sinon.testCase(tests);
-      result["test shouldFixIt"]();
-
-      assert(tests.shouldFixIt.called);
-    },
-
-    "should flatten test object": function () {
-      var tests = {
-        "my context": { "should do something": sinon.stub() }
-      };
-
-      var result = sinon.testCase(tests);
-      result["test my context should do something"]();
-
-      assert(tests["my context"]["should do something"].called);
-      assertUndefined(result["my context"]);
-    },
-
-    "should flatten deeply nested test object": function () {
-      var tests = {
-        "ctx": {
-          "ctx2": { "ctx3": { "should do": sinon.stub() } },
-          "test something": sinon.stub()
-        }
-      };
-
-      var result = sinon.testCase(tests);
-      result["test ctx ctx2 ctx3 should do"]();
-      result["test ctx test something"]();
-
-      assert(tests.ctx.ctx2.ctx3["should do"].called);
-      assert(tests.ctx["test something"].called);
-      assertUndefined(result.ctx);
-    },
+      assertFunction(testc.doB);
+      assert(sinon.test.calledWith(testc.testA));
+      assertFalse(sinon.test.calledWith(testc.doB));
+    }),
 
     "should remove setUp method": function () {
       var test = { setUp: function () {} };

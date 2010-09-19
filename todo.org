@@ -49,7 +49,7 @@
 ** DONE SetTimeOutTest
 ** DONE SpyExceptionsTest
 ** DONE SpyReturnValuesTest
-* Sandboxes [7/9]
+* Sandboxes [10/10]
 ** DONE Add sinon.sandbox
 ** DONE Should inherit collection
 ** DONE Should offer to fake timers
@@ -57,8 +57,9 @@
 ** DONE Should return object with bound spy, stub and mock functions as well as clock and server properties
 ** DONE Allow configuration to provide timer properties to fake
 ** DONE Allow configuration to provide which fake server to use
-** TODO Check argument to sinon.test()
-** TODO Check arguments to sinon.testCase()
+** DONE Check argument to sinon.test()
+** DONE Check arguments to sinon.testCase()
+** DONE Remove sinon.testCase nesting feature
 * Fake timers [6/6]
 ** DONE Fake Date by default
 ** DONE Timers should be executed in the order they are scheduled
