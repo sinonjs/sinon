@@ -132,7 +132,7 @@
       assertUndefined(state.username);
       assertUndefined(state.password);
       assertNull(state.responseText);
-      assertEquals({}, state.responseHeaders);
+      assertUndefined(state.responseHeaders);
       assertEquals(sinon.FakeXMLHttpRequest.OPENED, state.readyState);
       assertFalse(state.sendFlag);
     }
