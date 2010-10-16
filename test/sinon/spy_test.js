@@ -1239,6 +1239,35 @@
       sinon.spy(obj, "meth");
 
       assertEquals("meth", obj.meth.toString());
+    },
+
+    "toString should say 'spy' when unable to infer name": function () {
+      var spy = sinon.spy();
+
+      assertEquals("spy", spy.toString());
+    },
+
+    "toString should report name of spied function": function () {
+      function myTestFunc() {}
+      var spy = sinon.spy(myTestFunc);
+
+      assertEquals("myTestFunc", spy.toString());
+    },
+
+    "toString should prefer displayName property if available": function () {
+      function myTestFunc() {}
+      myTestFunc.displayName = "My custom method";
+      var spy = sinon.spy(myTestFunc);
+
+      assertEquals("My custom method", spy.toString());
+    },
+
+    "toString should prefer property name if possible": function () {
+      var obj = {};
+      obj.meth = sinon.spy();
+      obj.meth();
+
+      assertEquals("meth", obj.meth.toString());
     }
   });
 }());

@@ -221,24 +221,31 @@
     }
   });
 
-  testCase("FakeNameTest", {
-    "should return function's originalName property": function () {
+  testCase("FunctionToStringTest", {
+    "should return function's displayName property": function () {
       var fn = function () {};
-      fn.originalName = "Larry";
+      fn.displayName = "Larry";
 
-      assertEquals("Larry", sinon.fakeName(fn));
+      assertEquals("Larry", sinon.functionToString.call(fn));
     },
 
     "should guess name from last call's this object": function () {
-      var obj = {
-        doStuff: function () {}
-      };
-
+      var obj = {};
       obj.doStuff = sinon.spy();
       obj.doStuff.call({});
       obj.doStuff();
 
-      assertEquals("doStuff", sinon.fakeName(obj.doStuff));
+      assertEquals("doStuff", sinon.functionToString.call(obj.doStuff));
+    },
+
+    "should guess name from any call where property can be located": function () {
+      var obj = {}, otherObj = { id: 42 };
+      obj.doStuff = sinon.spy();
+      obj.doStuff.call({});
+      obj.doStuff();
+      obj.doStuff.call(otherObj);
+
+      assertEquals("doStuff", sinon.functionToString.call(obj.doStuff));
     }
   });
 }());

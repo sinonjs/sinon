@@ -372,4 +372,37 @@
       assertSame(getName, dude.getName);
     }
   });
+
+  testCase("StubFunctionTest", {
+    "should throw if stubbing non-existent property": function () {
+      var myObj = {};
+
+      assertException(function () {
+        sinon.stub(myObj, "ouch");
+      });
+
+      assertUndefined(myObj.ouch);
+    },
+
+    "should have toString method": function () {
+      var obj = { meth: function () {} };
+      sinon.stub(obj, "meth");
+
+      assertEquals("meth", obj.meth.toString());
+    },
+
+    "toString should say 'stub' when unable to infer name": function () {
+      var stub = sinon.stub();
+
+      assertEquals("stub", stub.toString());
+    },
+
+    "toString should prefer property name if possible": function () {
+      var obj = {};
+      obj.meth = sinon.stub();
+      obj.meth();
+
+      assertEquals("meth", obj.meth.toString());
+    }
+  });
 }());
