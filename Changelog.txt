@@ -1,3 +1,10 @@
+== 0.7.1 / 2010-10-16
+* The fake server will now match paths against full URLs, meaning that
+  server.respondWith("/", "OK"); will match requests for
+  "http://currentHost/".
+* Improved toString method for spies and stubs which leads to more
+  precise error messages from sinon.assert.*
+
 == 0.7.0 / 2010-09-19
 * sinon.useFakeTimers now fakes the Date constructor by default
 * sinon.testCase now fakes XHR and timers by default
