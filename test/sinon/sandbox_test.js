@@ -25,6 +25,13 @@
 
     "should inherit collection": function () {
       assert(sinon.collection.isPrototypeOf(sinon.sandbox));
+    },
+
+    "should create sandboxes": function () {
+      var sandbox = sinon.sandbox.create();
+
+      assertObject(sandbox);
+      assert(sinon.sandbox.isPrototypeOf(sandbox));
     }
   });
 
