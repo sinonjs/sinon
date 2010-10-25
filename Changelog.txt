@@ -1,3 +1,8 @@
+== 0.7.2 / 2010-10-25
+* Add sinon.sandbox.create back in
+* Fix bug where clock.tick would fire timeouts in intervals when
+  setInterval was also called
+
 == 0.7.1 / 2010-10-16
 * The fake server will now match paths against full URLs, meaning that
   server.respondWith("/", "OK"); will match requests for
