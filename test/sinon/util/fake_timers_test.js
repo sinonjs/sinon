@@ -228,6 +228,32 @@
       assert(spy10.getCall(4).calledBefore(spy13.getCall(3)));
     },
 
+    "should trigger timeouts and intervals in the order scheduled": function () {
+      var spies = [sinon.spy.create(), sinon.spy.create()];
+      this.clock.setInterval(spies[0], 10);
+      this.clock.setTimeout(spies[1], 50);
+
+      this.clock.tick(100);
+
+      assert(spies[0].calledBefore(spies[1]));
+      assertEquals(10, spies[0].callCount);
+      assertEquals(1, spies[1].callCount);
+    },
+
+    "should not fire canceled intervals": function () {
+      var id;
+      var callback = sinon.spy(function () {
+        if (callback.callCount == 3) {
+          clearTimeout(id);
+        }
+      });
+
+      var id = this.clock.setInterval(callback, 10);
+      this.clock.tick(100);
+
+      assertEquals(3, callback.callCount);
+    },
+
     "should pass 6 seconds": function () {
       var spy = sinon.spy.create();
       this.clock.setInterval(spy, 4000);
