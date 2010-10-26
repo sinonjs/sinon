@@ -77,6 +77,23 @@
 
       assertNotSame(this.method, this.object.method);
       assertFunction(this.object.method);
+    },
+
+    "should throw if method is already wrapped": function () {
+      var object = { method: function () {} };
+      sinon.wrapMethod(object, "method", function () {});
+
+      assertException(function () {
+        sinon.wrapMethod(object, "method", function () {});
+      }, "TypeError");
+    },
+
+    "should throw if method is already a spy": function () {
+      var object = { method: sinon.spy() };
+
+      assertException(function () {
+        sinon.wrapMethod(object, "method", function () {});
+      }, "TypeError");
     }
   });
 

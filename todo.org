@@ -16,7 +16,7 @@
 ** DONE calledOnce
 ** DONE calledTwice
 ** DONE calledThrice
-* Stubs [7/7]
+* Stubs [8/8]
 ** DONE Add callsArg/invokesCallback/callsCallback
 ** DONE Add callsArgWith
 ** DONE Add stub(object) to stub everything
@@ -24,6 +24,7 @@
 ** DONE Fail or warn when calling stub with a function: sinon.stub(function () {}); to avoid mistaking sinon.stub for sinon.test
 ** DONE Better naming in error messages
 ** DONE Guess name of fake
+** DONE Should not be able to stub stubbed/spied/mocked method
 * Assertions [4/4]
 ** DONE assertNotCalled
 ** DONE assertCalledOnce
@@ -67,5 +68,6 @@
 ** DONE tick: Don't recalculate starting point to avoid dropping timers
 ** DONE tick: Don't fire any callbacks until all timers have been figured out to ensure call order
 ** DONE Add simple parser to grok time strings
-* Spies [1/1]
+* Spies [2/2]
 ** DONE Implement called before on individual calls
+** DONE Should not be able to spy stubbed/spied/mocked method
