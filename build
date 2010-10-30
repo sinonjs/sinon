@@ -68,7 +68,7 @@ add_license(output, version)
 FileUtils.cp("lib/sinon/util/timers_xhr_ie.js", "pkg/sinon-ie-#{version}.js")
 add_license("pkg/sinon-ie-#{version}.js", version)
 
-FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/qunit-sinon-#{version}.js")
-add_license("pkg/qunit-sinon-#{version}.js", version)
+FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit-#{version}.js")
+add_license("pkg/sinon-qunit-#{version}.js", version)
 
 puts "Built Sinon.JS #{version}"

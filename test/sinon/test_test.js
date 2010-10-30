@@ -208,6 +208,7 @@
         properties.clock = this.clock;
         properties.server = this.server;
         properties.requests = this.requests;
+        properties.sandbox = this.sandbox;
       }
     };
 
@@ -447,6 +448,22 @@
       assertFakeServer(testCase.server);
       assertArray(testCase.requests);
       assertClock(testCase.clock);
+      assertUndefined(testCase.sandbox);
+    },
+
+    "should inject sandbox": function () {
+      var testCase = boundTestCase();
+      var obj = {};
+
+      sinon.config = {
+          properties: ["sandbox", "spy"]
+      };
+
+      sinon.test(testCase.fn).call(testCase);
+
+      assertEquals(0, testCase.args.length);
+      assertFunction(testCase.spy);
+      assertObject(testCase.sandbox);
     },
 
     "should use sinon.test to fake time": function () {

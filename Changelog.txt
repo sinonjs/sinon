@@ -1,3 +1,8 @@
+== 0.8.0 / 2010-10-30
+* sinon.wrapMethod no longer accepts faking already faked methods
+* sinon-qunit 'plugin'
+* sinon.test / sinon.config can now expose the sandbox object
+
 == 0.7.2 / 2010-10-25
 * Add sinon.sandbox.create back in
 * Fix bug where clock.tick would fire timeouts in intervals when
