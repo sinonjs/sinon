@@ -250,6 +250,7 @@
 
       sinon.test(function (spy, stub, mock) {
         spied = spy(obj, "meth");
+        spied.restore();
         stubbed = stub(obj, "meth");
         mocked = mock(obj);
 
