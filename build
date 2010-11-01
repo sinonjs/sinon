@@ -55,20 +55,22 @@ PREAMBLE
   end
 end
 
-version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
-output = "pkg/sinon-#{version}.js"
+Dir.chdir(File.dirname(__FILE__)) do
+  version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
+  output = "pkg/sinon-#{version}.js"
 
-FileUtils.mkdir("pkg") unless File.exists?("pkg")
-merger = Juicer::Merger::JavaScriptMerger.new
-merger << "lib/sinon/test_case.js"
-merger << "lib/sinon/assert.js"
-merger.save(output)
-add_license(output, version)
+  FileUtils.mkdir("pkg") unless File.exists?("pkg")
+  merger = Juicer::Merger::JavaScriptMerger.new
+  merger << "lib/sinon/test_case.js"
+  merger << "lib/sinon/assert.js"
+  merger.save(output)
+  add_license(output, version)
 
-FileUtils.cp("lib/sinon/util/timers_xhr_ie.js", "pkg/sinon-ie-#{version}.js")
-add_license("pkg/sinon-ie-#{version}.js", version)
+  FileUtils.cp("lib/sinon/util/timers_xhr_ie.js", "pkg/sinon-ie-#{version}.js")
+  add_license("pkg/sinon-ie-#{version}.js", version)
 
-FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit-#{version}.js")
-add_license("pkg/sinon-qunit-#{version}.js", version)
+  FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit-#{version}.js")
+  add_license("pkg/sinon-qunit-#{version}.js", version)
 
-puts "Built Sinon.JS #{version}"
+  puts "Built Sinon.JS #{version}"
+end
