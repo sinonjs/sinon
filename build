@@ -3,6 +3,9 @@ begin
   require "juicer/merger/javascript_merger"
 rescue LoadError => err
   puts "Install juicer to build Sinon.JS"
+  if !defined?(Gem)
+    puts "RubyGems isn't loaded. Perhaps that's why juicer can't be found?"
+  end
   exit
 end
 
