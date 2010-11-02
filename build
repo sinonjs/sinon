@@ -60,7 +60,8 @@ end
 
 Dir.chdir(File.dirname(__FILE__)) do
   version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
-  output = "pkg/sinon-#{version}.js"
+  version_string = ARGV[0] == "plain" ? "" : "-#{version}"
+  output = "pkg/sinon#{version_string}.js"
 
   FileUtils.mkdir("pkg") unless File.exists?("pkg")
   merger = Juicer::Merger::JavaScriptMerger.new
@@ -69,11 +70,11 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger.save(output)
   add_license(output, version)
 
-  FileUtils.cp("lib/sinon/util/timers_xhr_ie.js", "pkg/sinon-ie-#{version}.js")
-  add_license("pkg/sinon-ie-#{version}.js", version)
+  FileUtils.cp("lib/sinon/util/timers_xhr_ie.js", "pkg/sinon-ie#{version_string}.js")
+  add_license("pkg/sinon-ie#{version_string}.js", version)
 
-  FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit-#{version}.js")
-  add_license("pkg/sinon-qunit-#{version}.js", version)
+  FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit#{version_string}.js")
+  add_license("pkg/sinon-qunit#{version_string}.js", version)
 
   puts "Built Sinon.JS #{version}"
 end
