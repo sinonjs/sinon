@@ -248,7 +248,7 @@
         }
       });
 
-      var id = this.clock.setInterval(callback, 10);
+      id = this.clock.setInterval(callback, 10);
       this.clock.tick(100);
 
       assertEquals(3, callback.callCount);
@@ -599,8 +599,6 @@
     }
   });
 
-  var globalDate = Date;
-
   testCase("SinonStubTimersTest", {
     tearDown: function () {
       this.clock.restore();
@@ -672,7 +670,7 @@
 
     "should restore global clearTimeout": function () {
       this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+      sinon.stub.create();
       this.clock.restore();
 
       assertSame(sinon.timers.clearTimeout, clearTimeout);
@@ -712,7 +710,7 @@
 
     "should restore global clearInterval": function () {
       this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+      sinon.stub.create();
       this.clock.restore();
 
       assertSame(sinon.timers.clearInterval, clearInterval);

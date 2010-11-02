@@ -634,7 +634,7 @@
       var test = {};
       sinon.assert.expose(global, true, false);
 
-      assertEquals("undefined", typeof failException);
+      assertEquals("undefined", typeof test.failException);
       assertFunction(assertCalled);
       assertFunction(assertCalledOn);
       assertFunction(assertCalledWith);

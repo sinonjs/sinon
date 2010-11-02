@@ -77,7 +77,7 @@
       this.expectation = sinon.expectation.create(this.methodName);
     },
 
-    "call": function () {
+    call: function () {
       this.expectation();
 
       assertFunction(this.expectation.invoke);
