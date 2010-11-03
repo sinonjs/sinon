@@ -724,6 +724,13 @@
       assertEquals(0, now.getTime());
     },
 
+    "fake Date constructor should mirror Date's properties": function () {
+      this.clock = sinon.useFakeTimers(0);
+
+      assert(!!Date.parse);
+      assert(!!Date.UTC);
+    },
+
     "should restore Date constructor": function () {
       this.clock = sinon.useFakeTimers(0);
       this.clock.restore();
