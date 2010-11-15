@@ -160,6 +160,19 @@
       assert(sinon.deepEqual(obj1, obj2));
     },
 
+    "should pass same DOM elements": function () {
+      /*:DOC element = <div class="hey"></div> */
+
+      assert(sinon.deepEqual(this.element, this.element));
+    },
+
+    "should not pass different DOM elements": function () {
+      /*:DOC element = <div class="hey"></div> */
+      var el = document.createElement("div");
+
+      assertFalse(sinon.deepEqual(this.element, el));
+    },
+
     "should pass deep objects": function () {
       var func = function () {};
 
