@@ -93,6 +93,7 @@
     "should trigger immediately without specified delay": function () {
       var stub = sinon.stub.create();
       this.clock.setTimeout(stub);
+
       this.clock.tick(0);
 
       assert(stub.called);
@@ -112,6 +113,32 @@
       this.clock.tick(100);
 
       assert(stub.called);
+    },
+
+    "should trigger simultaneous timers": function () {
+      var spies = [sinon.spy(), sinon.spy()];
+      this.clock.setTimeout(spies[0], 100);
+      this.clock.setTimeout(spies[1], 100);
+
+      this.clock.tick(100);
+
+      assert(spies[0].called);
+      assert(spies[1].called);
+    },
+
+    "should trigger multiple simultaneous timers": function () {
+      var spies = [sinon.spy(), sinon.spy(), sinon.spy(), sinon.spy()];
+      this.clock.setTimeout(spies[0], 100);
+      this.clock.setTimeout(spies[1], 100);
+      this.clock.setTimeout(spies[2], 99);
+      this.clock.setTimeout(spies[3], 100);
+
+      this.clock.tick(100);
+
+      assert(spies[0].called);
+      assert(spies[1].called);
+      assert(spies[2].called);
+      assert(spies[3].called);
     },
 
     "should wait after setTimeout was called": function () {
@@ -149,6 +176,7 @@
       var stubs = [sinon.stub.create().throws(), sinon.stub.create()];
       this.clock.setTimeout(stubs[0], 100);
       this.clock.setTimeout(stubs[1], 120);
+
       this.clock.tick(120);
 
       assert(stubs[0].called);
@@ -321,6 +349,24 @@
       this.clock.tick();
 
       assertEquals(0, this.clock.now);
+    },
+
+    "should fire nested setTimeout calls properly": function () {
+      var i = 0;
+      var clock = this.clock;
+
+      var callback = function () {
+        ++i;
+        clock.setTimeout(function () {
+          callback();
+        }, 100);
+      };
+
+      callback();
+
+      clock.tick(1000);
+
+      assertEquals(11, i);
     }
   });
 
