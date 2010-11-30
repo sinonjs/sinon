@@ -278,4 +278,31 @@
       assertEquals("doStuff", sinon.functionToString.call(obj.doStuff));
     }
   });
+
+  testCase("ConfigTest", {
+    "should get copy of default config": function () {
+      var config = sinon.getConfig();
+
+      assertNotSame(sinon.defaultConfig, config);
+      assertEquals(sinon.defaultConfig.injectIntoThis, config.injectIntoThis);
+      assertEquals(sinon.defaultConfig.injectInto, config.injectInto);
+      assertEquals(sinon.defaultConfig.properties, config.properties);
+      assertEquals(sinon.defaultConfig.useFakeTimers, config.useFakeTimers);
+      assertEquals(sinon.defaultConfig.useFakeServer, config.useFakeServer);
+    },
+
+    "should override specified properties": function () {
+      var config = sinon.getConfig({
+        properties: ["stub", "mock"],
+        useFakeServer: false
+      });
+
+      assertNotSame(sinon.defaultConfig, config);
+      assertEquals(sinon.defaultConfig.injectIntoThis, config.injectIntoThis);
+      assertEquals(sinon.defaultConfig.injectInto, config.injectInto);
+      assertEquals(["stub", "mock"], config.properties);
+      assertEquals(sinon.defaultConfig.useFakeTimers, config.useFakeTimers);
+      assertEquals(false, config.useFakeServer);
+    }
+  });
 }());

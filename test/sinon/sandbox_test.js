@@ -230,4 +230,185 @@
       assertFunction(injected.spy);
     }
   });
+
+  function assertSpy(obj) {
+    assertNotNull(obj);
+    assertFunction(obj.calledWith);
+    assertUndefined(obj.returns);
+  }
+
+  function assertStub(obj) {
+    assertNotNull(obj);
+    assertFunction(obj.calledWith);
+    assertFunction(obj.returns);
+  }
+
+  function assertMock(obj) {
+    assertObject(obj);
+    assertFunction(obj.verify);
+    assertFunction(obj.expects);
+  }
+
+  function assertFakeServerWithClock(testCase, obj) {
+    assertEquals(testCase.fakeServer, obj);
+    assert(sinon.fakeServer.create.calledOn(sinon.fakeServerWithClock));
+  }
+
+  function boundTestCase() {
+    var properties = {
+      fn: function () {
+        properties.self = this;
+        properties.args = arguments;
+        properties.spy = this.spy;
+        properties.stub = this.stub;
+        properties.mock = this.mock;
+        properties.clock = this.clock;
+        properties.server = this.server;
+        properties.requests = this.requests;
+        properties.sandbox = this.sandbox;
+      }
+    };
+
+    return properties;
+  }
+
+  testCase("ConfigurableSandboxTest", {
+    setUp: function () {
+      this.requests = [];
+      this.fakeServer = { requests: this.requests };
+      this.clock = {};
+      sinon.stub(sinon.fakeServer, "create").returns(this.fakeServer);
+      sinon.stub(sinon, "useFakeTimers").returns(this.clock);
+    },
+
+    tearDown: function () {
+      sinon.fakeServer.create.restore();
+      sinon.useFakeTimers.restore();
+    },
+
+    "should yield stub, mock as arguments": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["stub", "mock"]
+      }));
+
+      assertEquals(2, sandbox.args.length);
+      assertStub(sandbox.args[0]());
+      assertMock(sandbox.args[1]({}));
+    },
+
+    "should yield spy, stub, mock as arguments": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["spy", "stub", "mock"]
+      }));
+
+      assertSpy(sandbox.args[0]());
+      assertStub(sandbox.args[1]());
+      assertMock(sandbox.args[2]({}));
+    },
+
+    "should not yield server when not faking xhr": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["server", "stub", "mock"],
+        useFakeServer: false
+      }));
+
+      assertEquals(2, sandbox.args.length);
+      assertStub(sandbox.args[0]());
+      assertMock(sandbox.args[1]({}));
+    },
+
+    "should yield server when faking xhr": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["server", "stub", "mock"]
+      }));
+
+      assertEquals(3, sandbox.args.length);
+      assertEquals(this.fakeServer, sandbox.args[0]);
+      assertStub(sandbox.args[1]());
+      assertMock(sandbox.args[2]({}));
+    },
+
+    "should use serverWithClock when faking xhr": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["server"],
+        useFakeServer: sinon.fakeServerWithClock
+      }));
+
+      assertFakeServerWithClock(this, sandbox.args[0]);
+    },
+
+    "should yield clock when faking timers": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["server", "clock"]
+      }));
+
+      assertSame(this.fakeServer, sandbox.args[0]);
+      assertSame(this.clock, sandbox.args[1]);
+    },
+
+    "should fake specified timers": function () {
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectIntoThis: false,
+        properties: ["clock"],
+        useFakeTimers: ["Date", "setTimeout"]
+      }));
+
+      assert(sinon.useFakeTimers.calledWith("Date", "setTimeout"));
+    },
+
+    "should inject properties into object": function () {
+      var object = {};
+
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        properties: ["server", "clock"],
+        injectInto: object
+      }));
+
+      assertEquals(0, sandbox.args.length);
+      assertEquals(this.fakeServer, object.server);
+      assertEquals(this.clock, object.clock);
+      assertUndefined(object.spy);
+      assertUndefined(object.stub);
+      assertUndefined(object.mock);
+      assertUndefined(object.requests);
+    },
+
+    "should inject server and clock when only enabling them": function () {
+      var object = {};
+
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        injectInto: object,
+        useFakeTimers: true,
+        useFakeServer: true
+      }));
+
+      assertEquals(0, sandbox.args.length);
+      assertEquals(this.fakeServer, object.server);
+      assertEquals(this.clock, object.clock);
+      assertFunction(object.spy);
+      assertFunction(object.stub);
+      assertFunction(object.mock);
+      assertArray(object.requests);
+      assertUndefined(object.sandbox);
+    },
+
+    "should inject sandbox": function () {
+      var object = {};
+
+      var sandbox = sinon.sandbox.create(sinon.getConfig({
+        properties: ["sandbox", "spy"],
+        injectInto: object
+      }));
+
+      assertEquals(0, sandbox.args.length);
+      assertFunction(object.spy);
+      assertObject(object.sandbox);
+    }
+  });
 }());
