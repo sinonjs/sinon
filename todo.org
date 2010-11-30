@@ -71,3 +71,5 @@
 * Spies [2/2]
 ** DONE Implement called before on individual calls
 ** DONE Should not be able to spy stubbed/spied/mocked method
+* Configurable sandboxes [0/1]
+** TODO Go through tests for sinon.test after sandbox refactoring
