@@ -33,10 +33,12 @@
   function stubSetUp() {
     this.stub = sinon.stub.create();
     sinon.stub(sinon.assert, "fail").throws();
+    sinon.stub(sinon.assert, "pass");
   }
 
   function stubTearDown() {
     sinon.assert.fail.restore();
+    sinon.assert.pass.restore();
   }
 
   testCase("SinonAssertFailTest", {
@@ -115,6 +117,18 @@
       });
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var stub = this.stub;
+      stub();
+
+      assertNoException(function () {
+        sinon.assert.called(stub);
+      });
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("called"));
     }
   });
 
@@ -161,6 +175,14 @@
       });
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var stub = this.stub;
+      sinon.assert.notCalled(stub);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("notCalled"));
     }
   });
 
@@ -219,6 +241,15 @@
       });
 
       assert(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var stub = this.stub;
+      stub();
+      sinon.assert.calledOnce(stub);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledOnce"));
     }
   });
 
@@ -243,6 +274,16 @@
       assertNoException(function () {
         sinon.assert.calledTwice(stub);
       });
+    },
+
+    "should call pass callback": function () {
+      var stub = this.stub;
+      stub();
+      stub();
+      sinon.assert.calledTwice(stub);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledTwice"));
     }
   });
 
@@ -268,6 +309,17 @@
       assertNoException(function () {
         sinon.assert.calledThrice(stub);
       });
+    },
+
+    "should call pass callback": function () {
+      var stub = this.stub;
+      stub();
+      stub();
+      stub();
+      sinon.assert.calledThrice(stub);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledThrice"));
     }
   });
 
@@ -333,6 +385,16 @@
       });
 
       assert(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var stubs = [sinon.spy(), sinon.spy()];
+      stubs[0]();
+      stubs[1]();
+      sinon.assert.callOrder(stubs[0], stubs[1]);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("callOrder"));
     }
   });
 
@@ -388,6 +450,15 @@
       sinon.assert.calledOn(stub, object);
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var obj = {};
+      this.stub.call(obj);
+      sinon.assert.calledOn(this.stub, obj);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledOn"));
     }
   });
 
@@ -419,6 +490,14 @@
 
       assert(this.stub.calledWith.calledWith(object, 1));
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      this.stub("yeah");
+      sinon.assert.calledWith(this.stub, "yeah");
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledWith"));
     }
   });
 
@@ -450,6 +529,14 @@
 
       assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      this.stub("yeah");
+      sinon.assert.calledWithExactly(this.stub, "yeah");
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("calledWithExactly"));
     }
   });
 
@@ -479,6 +566,15 @@
 
       assert(this.stub.threw.calledWithExactly(1, 2));
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      sinon.stub(this.stub, "threw").returns(true);
+      this.stub();
+      sinon.assert.threw(this.stub);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("threw"));
     }
   });
 
@@ -506,6 +602,14 @@
       });
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      this.stub();
+      sinon.assert.callCount(this.stub, 1);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("callCount"));
     }
   });
 
@@ -542,16 +646,26 @@
       sinon.assert.alwaysCalledOn(stub, {});
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      this.stub();
+      sinon.assert.alwaysCalledOn(this.stub, this);
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("alwaysCalledOn"));
     }
   });
 
   testCase("AssertAlwaysCalledWithTest", {
     setUp: function () {
       sinon.stub(sinon.assert, "fail").throws();
+      sinon.stub(sinon.assert, "pass");
     },
 
     tearDown: function () {
       sinon.assert.fail.restore();
+      sinon.assert.pass.restore();
     },
 
     "should fail if method is missing": function () {
@@ -584,16 +698,27 @@
       sinon.assert.alwaysCalledWith(stub, {}, []);
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var spy = sinon.spy();
+      spy("Hello");
+      sinon.assert.alwaysCalledWith(spy, "Hello");
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("alwaysCalledWith"));
     }
   });
 
   testCase("AssertAlwaysCalledWithExactlyTest", {
     setUp: function () {
       sinon.stub(sinon.assert, "fail");
+      sinon.stub(sinon.assert, "pass");
     },
 
     tearDown: function () {
       sinon.assert.fail.restore();
+      sinon.assert.pass.restore();
     },
 
     "should fail if stub returns false": function () {
@@ -612,6 +737,15 @@
       sinon.assert.alwaysCalledWithExactly(stub, {}, []);
 
       assertFalse(sinon.assert.fail.called);
+    },
+
+    "should call pass callback": function () {
+      var spy = sinon.spy();
+      spy("Hello");
+      sinon.assert.alwaysCalledWithExactly(spy, "Hello");
+
+      assert(sinon.assert.pass.calledOnce);
+      assert(sinon.assert.pass.calledWith("alwaysCalledWithExactly"));
     }
   });
 
