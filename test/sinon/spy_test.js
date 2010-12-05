@@ -302,7 +302,7 @@
       assertFalse(this.spy.calledOn({}));
     },
 
-    "should be true if called with thisObj": function () {
+    "should be true if called with thisValue": function () {
       var object = {};
       this.spy.call(object);
 
@@ -337,14 +337,14 @@
       assertFalse(this.spy.alwaysCalledOn({}));
     },
 
-    "should be true if called with thisObj once": function () {
+    "should be true if called with thisValue once": function () {
       var object = {};
       this.spy.call(object);
 
       assert(this.spy.alwaysCalledOn(object));
     },
 
-    "should be true if called with thisObj many times": function () {
+    "should be true if called with thisValue many times": function () {
       var object = {};
       this.spy.call(object);
       this.spy.call(object);
@@ -1076,10 +1076,10 @@
   });
 
   function spyCallSetUp() {
-    this.thisObj = {};
+    this.thisValue = {};
     this.args = [{}, [], function () {}, 3];
     this.returnValue = function () {};
-    this.call = sinon.spyCall.create(this.thisObj, this.args, this.returnValue);
+    this.call = sinon.spyCall.create(this.thisValue, this.args, this.returnValue);
   }
 
   testCase("SpyCallObjectTest", {
@@ -1104,6 +1104,14 @@
       spy();
 
       assert(this.call.callId < spy.getCall(0).callId);
+    },
+
+    "should expose thisValue property": function () {
+      var spy = sinon.spy();
+      var obj = {};
+      spy.call(obj);
+
+      assertSame(obj, spy.getCall(0).thisValue);
     }
   });
 
@@ -1111,7 +1119,7 @@
     setUp: spyCallSetUp,
 
     "calledOn should return true": function () {
-      assert(this.call.calledOn(this.thisObj));
+      assert(this.call.calledOn(this.thisValue));
     },
 
     "calledOn should return false": function () {

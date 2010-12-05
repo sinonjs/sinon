@@ -611,7 +611,7 @@
 
     "should restore mocks": function () {
       this.object.method();
-      this.object.method.call(this.thisObj);
+      this.object.method.call(this.thisValue);
       this.mock.verify();
 
       assertSame(this.method, this.object.method);
@@ -682,12 +682,12 @@
 
   testCase("MockMethodMultipleTimesTest", {
     setUp: function () {
-      this.thisObj = {};
+      this.thisValue = {};
       this.method = function () {};
       this.object = { method: this.method };
       this.mock = sinon.mock.create(this.object);
       this.mock1 = this.mock.expects("method");
-      this.mock2 = this.mock.expects("method").on(this.thisObj);
+      this.mock2 = this.mock.expects("method").on(this.thisValue);
     },
 
     "should queue expectations": function () {
@@ -710,7 +710,7 @@
     "should fail on last expectation": function () {
       var object = this.object;
       object.method();
-      object.method.call(this.thisObj);
+      object.method.call(this.thisValue);
 
       assertException(function () {
         object.method();
