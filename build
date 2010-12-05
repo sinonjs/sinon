@@ -4,7 +4,7 @@ begin
 rescue LoadError => err
   puts "Install juicer to build Sinon.JS"
   if !defined?(Gem)
-    puts "RubyGems isn't loaded. Perhaps that's why juicer can't be found?"
+    puts "RubyGems is not loaded. Perhaps that is why juicer can not be found?"
   end
   exit
 end
@@ -77,6 +77,17 @@ Dir.chdir(File.dirname(__FILE__)) do
   end
 
   add_license("pkg/sinon-ie#{version_string}.js", version)
+
+  FileUtils.cp("lib/sinon/util/fake_timers.js", "pkg/sinon-timers#{version_string}.js")
+  add_license("pkg/sinon-timers#{version_string}.js", version)
+  FileUtils.cp("lib/sinon/util/timers_ie.js", "pkg/sinon-timers-ie#{version_string}.js")
+  add_license("pkg/sinon-timers-ie#{version_string}.js", version)
+
+  merger = Juicer::Merger::JavaScriptMerger.new
+  merger << "lib/sinon/util/fake_server_with_clock.js"
+  merger.save("pkg/sinon-server#{version_string}.js")
+  add_license("pkg/sinon-server#{version_string}.js", version)
+
   FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit#{version_string}.js")
   add_license("pkg/sinon-qunit#{version_string}.js", version)
 
