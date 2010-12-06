@@ -765,10 +765,11 @@
     },
 
     "should expose asserts into global": function () {
-      var test = {};
-      sinon.assert.expose(global, true, false);
+      sinon.assert.expose(global, {
+        includeFail: false
+      });
 
-      assertEquals("undefined", typeof test.failException);
+      assertEquals("undefined", typeof failException);
       assertFunction(assertCalled);
       assertFunction(assertCalledOn);
       assertFunction(assertCalledWith);
@@ -779,7 +780,10 @@
 
     "should expose asserts into object without prefixes": function () {
       var test = {};
-      sinon.assert.expose(test, false);
+
+      sinon.assert.expose(test, {
+        prefix: ""
+      });
 
       assertFunction(test.fail);
       assertString(test.failException);
