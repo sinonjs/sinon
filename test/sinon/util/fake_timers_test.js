@@ -1,4 +1,4 @@
-/*jslint indent: 2, onevar: false, eqeqeq: false, plusplus: false*/
+/*jslint onevar: false, eqeqeq: false, plusplus: false*/
 /*globals testCase
           sinon
           called
@@ -22,789 +22,789 @@
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010 Christian Johansen
+ * Copyright (c) 2010-2011 Christian Johansen
  */
 (function (global) {
-  testCase("SetTimeOutTest", {
-    setUp: function () {
-      this.clock = sinon.clock.create();
-      sinon.clock.evalCalled = false;
-    },
+    testCase("SetTimeOutTest", {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+            sinon.clock.evalCalled = false;
+        },
 
-    tearDown: function () {
-      delete sinon.clock.evalCalled;
-    },
+        tearDown: function () {
+            delete sinon.clock.evalCalled;
+        },
 
-    "should be function": function () {
-      assertFunction(this.clock.setTimeout);
-    },
+        "should be function": function () {
+            assertFunction(this.clock.setTimeout);
+        },
 
-    "should throw if no arguments": function () {
-      var clock = this.clock;
+        "should throw if no arguments": function () {
+            var clock = this.clock;
 
-      assertException(function () {
-        clock.setTimeout();
-      });
-    },
+            assertException(function () {
+                clock.setTimeout();
+            });
+        },
 
-    "should return numeric id": function () {
-      var result = this.clock.setTimeout("");
+        "should return numeric id": function () {
+            var result = this.clock.setTimeout("");
 
-      assertNumber(result);
-    },
+            assertNumber(result);
+        },
 
-    "should return unique id": function () {
-      var id1 = this.clock.setTimeout("");
-      var id2 = this.clock.setTimeout("");
+        "should return unique id": function () {
+            var id1 = this.clock.setTimeout("");
+            var id2 = this.clock.setTimeout("");
 
-      assertNotEquals(id1, id2);
-    },
+            assertNotEquals(id1, id2);
+        },
 
-    "should set timers on instance": function () {
-      var clock1 = sinon.clock.create();
-      var clock2 = sinon.clock.create();
-      var stubs = [sinon.stub.create(), sinon.stub.create()];
+        "should set timers on instance": function () {
+            var clock1 = sinon.clock.create();
+            var clock2 = sinon.clock.create();
+            var stubs = [sinon.stub.create(), sinon.stub.create()];
 
-      clock1.setTimeout(stubs[0], 100);
-      clock2.setTimeout(stubs[1], 100);
-      clock2.tick(200);
+            clock1.setTimeout(stubs[0], 100);
+            clock2.setTimeout(stubs[1], 100);
+            clock2.tick(200);
 
-      assertFalse(stubs[0].called);
-      assert(stubs[1].called);
-    },
+            assertFalse(stubs[0].called);
+            assert(stubs[1].called);
+        },
 
-    "should eval non-function callbacks": function () {
-      this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
-      this.clock.tick(10);
+        "should eval non-function callbacks": function () {
+            this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
+            this.clock.tick(10);
 
-      assert(sinon.clock.evalCalled);
-    }
-  });
-
-  testCase("ClockTickTest", {
-    setUp: function () {
-      this.clock = sinon.useFakeTimers(0);
-    },
-
-    tearDown: function () {
-      this.clock.restore();
-    },
-
-    "should trigger immediately without specified delay": function () {
-      var stub = sinon.stub.create();
-      this.clock.setTimeout(stub);
-
-      this.clock.tick(0);
-
-      assert(stub.called);
-    },
-
-    "should not trigger without sufficient delay": function () {
-      var stub = sinon.stub.create();
-      this.clock.setTimeout(stub, 100);
-      this.clock.tick(10);
-
-      assertFalse(stub.called);
-    },
-
-    "should trigger after sufficient delay": function () {
-      var stub = sinon.stub.create();
-      this.clock.setTimeout(stub, 100);
-      this.clock.tick(100);
-
-      assert(stub.called);
-    },
-
-    "should trigger simultaneous timers": function () {
-      var spies = [sinon.spy(), sinon.spy()];
-      this.clock.setTimeout(spies[0], 100);
-      this.clock.setTimeout(spies[1], 100);
-
-      this.clock.tick(100);
-
-      assert(spies[0].called);
-      assert(spies[1].called);
-    },
-
-    "should trigger multiple simultaneous timers": function () {
-      var spies = [sinon.spy(), sinon.spy(), sinon.spy(), sinon.spy()];
-      this.clock.setTimeout(spies[0], 100);
-      this.clock.setTimeout(spies[1], 100);
-      this.clock.setTimeout(spies[2], 99);
-      this.clock.setTimeout(spies[3], 100);
-
-      this.clock.tick(100);
-
-      assert(spies[0].called);
-      assert(spies[1].called);
-      assert(spies[2].called);
-      assert(spies[3].called);
-    },
-
-    "should wait after setTimeout was called": function () {
-      this.clock.tick(100);
-      var stub = sinon.stub.create();
-      this.clock.setTimeout(stub, 150);
-      this.clock.tick(50);
-
-      assertFalse(stub.called);
-      this.clock.tick(100);
-      assert(stub.called);
-    },
-
-    "mini integration test": function () {
-      var stubs = [sinon.stub.create(), sinon.stub.create(), sinon.stub.create()];
-      this.clock.setTimeout(stubs[0], 100);
-      this.clock.setTimeout(stubs[1], 120);
-      this.clock.tick(10);
-      this.clock.tick(89);
-      assertFalse(stubs[0].called);
-      assertFalse(stubs[1].called);
-      this.clock.setTimeout(stubs[2], 20);
-      this.clock.tick(1);
-      assert(stubs[0].called);
-      assertFalse(stubs[1].called);
-      assertFalse(stubs[2].called);
-      this.clock.tick(19);
-      assertFalse(stubs[1].called);
-      assert(stubs[2].called);
-      this.clock.tick(1);
-      assert(stubs[1].called);
-    },
-
-    "should trigger even when some throw": function () {
-      var stubs = [sinon.stub.create().throws(), sinon.stub.create()];
-      this.clock.setTimeout(stubs[0], 100);
-      this.clock.setTimeout(stubs[1], 120);
-
-      this.clock.tick(120);
-
-      assert(stubs[0].called);
-      assert(stubs[1].called);
-    },
-
-    "should call function with global object as this": function () {
-      var stub = sinon.stub.create().throws();
-      this.clock.setTimeout(stub, 100);
-      this.clock.tick(100);
-
-      assert(stub.calledOn(global));
-    },
-
-    "should trigger in the order scheduled": function () {
-      var spies = [sinon.spy.create(), sinon.spy.create()];
-      this.clock.setTimeout(spies[0], 13);
-      this.clock.setTimeout(spies[1], 11);
-
-      this.clock.tick(15);
-
-      assert(spies[1].calledBefore(spies[0]));
-    },
-
-    "should create updated Date while ticking": function () {
-      var spy = sinon.spy.create();
-
-      this.clock.setInterval(function () {
-        spy(new Date().getTime());
-      }, 10);
-
-      this.clock.tick(100);
-
-      assertEquals(10, spy.callCount);
-      assert(spy.calledWith(10));
-      assert(spy.calledWith(20));
-      assert(spy.calledWith(30));
-      assert(spy.calledWith(40));
-      assert(spy.calledWith(50));
-      assert(spy.calledWith(60));
-      assert(spy.calledWith(70));
-      assert(spy.calledWith(80));
-      assert(spy.calledWith(90));
-      assert(spy.calledWith(100));
-    },
-
-    "should fire timer in intervals of 13": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 13);
-
-      this.clock.tick(500);
-
-      assertEquals(38, spy.callCount);
-    },
-
-    "should fire timers in correct order": function () {
-      var spy13 = sinon.spy.create();
-      var spy10 = sinon.spy.create();
-
-      this.clock.setInterval(function () {
-        spy13(new Date().getTime());
-      }, 13);
-
-      this.clock.setInterval(function () {
-        spy10(new Date().getTime());
-      }, 10);
-
-      this.clock.tick(500);
-
-      assertEquals(38, spy13.callCount);
-      assertEquals(50, spy10.callCount);
-
-      assert(spy13.calledWith(416));
-      assert(spy10.calledWith(320));
-
-      assert(spy10.getCall(0).calledBefore(spy13.getCall(0)));
-      assert(spy10.getCall(4).calledBefore(spy13.getCall(3)));
-    },
-
-    "should trigger timeouts and intervals in the order scheduled": function () {
-      var spies = [sinon.spy.create(), sinon.spy.create()];
-      this.clock.setInterval(spies[0], 10);
-      this.clock.setTimeout(spies[1], 50);
-
-      this.clock.tick(100);
-
-      assert(spies[0].calledBefore(spies[1]));
-      assertEquals(10, spies[0].callCount);
-      assertEquals(1, spies[1].callCount);
-    },
-
-    "should not fire canceled intervals": function () {
-      var id;
-      var callback = sinon.spy(function () {
-        if (callback.callCount == 3) {
-          clearTimeout(id);
+            assert(sinon.clock.evalCalled);
         }
-      });
+    });
 
-      id = this.clock.setInterval(callback, 10);
-      this.clock.tick(100);
+    testCase("ClockTickTest", {
+        setUp: function () {
+            this.clock = sinon.useFakeTimers(0);
+        },
 
-      assertEquals(3, callback.callCount);
-    },
+        tearDown: function () {
+            this.clock.restore();
+        },
 
-    "should pass 6 seconds": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 4000);
+        "should trigger immediately without specified delay": function () {
+            var stub = sinon.stub.create();
+            this.clock.setTimeout(stub);
 
-      this.clock.tick("08");
+            this.clock.tick(0);
 
-      assertEquals(2, spy.callCount);
-    },
+            assert(stub.called);
+        },
 
-    "should pass 1 minute": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 6000);
+        "should not trigger without sufficient delay": function () {
+            var stub = sinon.stub.create();
+            this.clock.setTimeout(stub, 100);
+            this.clock.tick(10);
 
-      this.clock.tick("01:00");
+            assertFalse(stub.called);
+        },
 
-      assertEquals(10, spy.callCount);
-    },
+        "should trigger after sufficient delay": function () {
+            var stub = sinon.stub.create();
+            this.clock.setTimeout(stub, 100);
+            this.clock.tick(100);
 
-    "should pass 2 hours, 34 minutes and 12 seconds": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 10000);
+            assert(stub.called);
+        },
 
-      this.clock.tick("02:34:10");
+        "should trigger simultaneous timers": function () {
+            var spies = [sinon.spy(), sinon.spy()];
+            this.clock.setTimeout(spies[0], 100);
+            this.clock.setTimeout(spies[1], 100);
 
-      assertEquals(925, spy.callCount);
-    },
+            this.clock.tick(100);
 
-    "should throw for invalid format": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 10000);
-      var test = this;
+            assert(spies[0].called);
+            assert(spies[1].called);
+        },
 
-      assertException(function () {
-        test.clock.tick("12:02:34:10");
-      });
+        "should trigger multiple simultaneous timers": function () {
+            var spies = [sinon.spy(), sinon.spy(), sinon.spy(), sinon.spy()];
+            this.clock.setTimeout(spies[0], 100);
+            this.clock.setTimeout(spies[1], 100);
+            this.clock.setTimeout(spies[2], 99);
+            this.clock.setTimeout(spies[3], 100);
 
-      assertEquals(0, spy.callCount);
-    },
+            this.clock.tick(100);
 
-    "should throw for invalid minutes": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 10000);
-      var test = this;
+            assert(spies[0].called);
+            assert(spies[1].called);
+            assert(spies[2].called);
+            assert(spies[3].called);
+        },
 
-      assertException(function () {
-        test.clock.tick("67:10");
-      });
+        "should wait after setTimeout was called": function () {
+            this.clock.tick(100);
+            var stub = sinon.stub.create();
+            this.clock.setTimeout(stub, 150);
+            this.clock.tick(50);
 
-      assertEquals(0, spy.callCount);
-    },
+            assertFalse(stub.called);
+            this.clock.tick(100);
+            assert(stub.called);
+        },
 
-    "should throw for negative minutes": function () {
-      var spy = sinon.spy.create();
-      this.clock.setInterval(spy, 10000);
-      var test = this;
+        "mini integration test": function () {
+            var stubs = [sinon.stub.create(), sinon.stub.create(), sinon.stub.create()];
+            this.clock.setTimeout(stubs[0], 100);
+            this.clock.setTimeout(stubs[1], 120);
+            this.clock.tick(10);
+            this.clock.tick(89);
+            assertFalse(stubs[0].called);
+            assertFalse(stubs[1].called);
+            this.clock.setTimeout(stubs[2], 20);
+            this.clock.tick(1);
+            assert(stubs[0].called);
+            assertFalse(stubs[1].called);
+            assertFalse(stubs[2].called);
+            this.clock.tick(19);
+            assertFalse(stubs[1].called);
+            assert(stubs[2].called);
+            this.clock.tick(1);
+            assert(stubs[1].called);
+        },
 
-      assertException(function () {
-        test.clock.tick("-7:10");
-      });
+        "should trigger even when some throw": function () {
+            var stubs = [sinon.stub.create().throws(), sinon.stub.create()];
+            this.clock.setTimeout(stubs[0], 100);
+            this.clock.setTimeout(stubs[1], 120);
 
-      assertEquals(0, spy.callCount);
-    },
+            this.clock.tick(120);
 
-    "should treat missing argument as 0": function () {
-      this.clock.tick();
+            assert(stubs[0].called);
+            assert(stubs[1].called);
+        },
 
-      assertEquals(0, this.clock.now);
-    },
+        "should call function with global object as this": function () {
+            var stub = sinon.stub.create().throws();
+            this.clock.setTimeout(stub, 100);
+            this.clock.tick(100);
 
-    "should fire nested setTimeout calls properly": function () {
-      var i = 0;
-      var clock = this.clock;
+            assert(stub.calledOn(global));
+        },
 
-      var callback = function () {
-        ++i;
-        clock.setTimeout(function () {
-          callback();
-        }, 100);
-      };
+        "should trigger in the order scheduled": function () {
+            var spies = [sinon.spy.create(), sinon.spy.create()];
+            this.clock.setTimeout(spies[0], 13);
+            this.clock.setTimeout(spies[1], 11);
 
-      callback();
+            this.clock.tick(15);
 
-      clock.tick(1000);
+            assert(spies[1].calledBefore(spies[0]));
+        },
 
-      assertEquals(11, i);
-    }
-  });
+        "should create updated Date while ticking": function () {
+            var spy = sinon.spy.create();
 
-  testCase("ClockClearTimeoutTest", {
-    setUp: function () {
-      this.clock = sinon.clock.create();
-    },
+            this.clock.setInterval(function () {
+                spy(new Date().getTime());
+            }, 10);
 
-    "should remove timeout": function () {
-      var stub = sinon.stub.create();
-      var id = this.clock.setTimeout(stub, 50);
-      this.clock.clearTimeout(id);
-      this.clock.tick(50);
+            this.clock.tick(100);
 
-      assertFalse(stub.called);
-    }
-  });
+            assertEquals(10, spy.callCount);
+            assert(spy.calledWith(10));
+            assert(spy.calledWith(20));
+            assert(spy.calledWith(30));
+            assert(spy.calledWith(40));
+            assert(spy.calledWith(50));
+            assert(spy.calledWith(60));
+            assert(spy.calledWith(70));
+            assert(spy.calledWith(80));
+            assert(spy.calledWith(90));
+            assert(spy.calledWith(100));
+        },
 
-  testCase("ClockResetTest", {
-    setUp: function () {
-      this.clock = sinon.clock.create();
-    },
+        "should fire timer in intervals of 13": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 13);
 
-    "should empty timeouts queue": function () {
-      var stub = sinon.stub.create();
-      this.clock.setTimeout(stub);
-      this.clock.reset();
-      this.clock.tick(0);
+            this.clock.tick(500);
 
-      assertFalse(stub.called);
-    }
-  });
+            assertEquals(38, spy.callCount);
+        },
 
-  testCase("SetIntervalTest", {
-    setUp: function () {
-      this.clock = sinon.clock.create();
-    },
+        "should fire timers in correct order": function () {
+            var spy13 = sinon.spy.create();
+            var spy10 = sinon.spy.create();
 
-    "should be function": function () {
-      assertFunction(this.clock.setInterval);
-    },
+            this.clock.setInterval(function () {
+                spy13(new Date().getTime());
+            }, 13);
 
-    "should throw if no arguments": function () {
-      var clock = this.clock;
+            this.clock.setInterval(function () {
+                spy10(new Date().getTime());
+            }, 10);
 
-      assertException(function () {
-        clock.setInterval();
-      });
-    },
+            this.clock.tick(500);
 
-    "should return numeric id": function () {
-      var result = this.clock.setInterval("");
+            assertEquals(38, spy13.callCount);
+            assertEquals(50, spy10.callCount);
 
-      assertNumber(result);
-    },
+            assert(spy13.calledWith(416));
+            assert(spy10.calledWith(320));
 
-    "should return unique id": function () {
-      var id1 = this.clock.setInterval("");
-      var id2 = this.clock.setInterval("");
+            assert(spy10.getCall(0).calledBefore(spy13.getCall(0)));
+            assert(spy10.getCall(4).calledBefore(spy13.getCall(3)));
+        },
 
-      assertNotEquals(id1, id2);
-    },
+        "should trigger timeouts and intervals in the order scheduled": function () {
+            var spies = [sinon.spy.create(), sinon.spy.create()];
+            this.clock.setInterval(spies[0], 10);
+            this.clock.setTimeout(spies[1], 50);
 
-    "should schedule recurring timeout": function () {
-      var stub = sinon.stub.create();
-      this.clock.setInterval(stub, 10);
-      this.clock.tick(99);
+            this.clock.tick(100);
 
-      assertEquals(9, stub.callCount);
-    },
+            assert(spies[0].calledBefore(spies[1]));
+            assertEquals(10, spies[0].callCount);
+            assertEquals(1, spies[1].callCount);
+        },
 
-    "should not schedule recurring timeout when cleared": function () {
-      var clock = this.clock;
-      var id;
-      var stub = sinon.spy.create(function () {
-        if (stub.callCount == 3) {
-          clock.clearInterval(id);
+        "should not fire canceled intervals": function () {
+            var id;
+            var callback = sinon.spy(function () {
+                if (callback.callCount == 3) {
+                    clearTimeout(id);
+                }
+            });
+
+            id = this.clock.setInterval(callback, 10);
+            this.clock.tick(100);
+
+            assertEquals(3, callback.callCount);
+        },
+
+        "should pass 6 seconds": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 4000);
+
+            this.clock.tick("08");
+
+            assertEquals(2, spy.callCount);
+        },
+
+        "should pass 1 minute": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 6000);
+
+            this.clock.tick("01:00");
+
+            assertEquals(10, spy.callCount);
+        },
+
+        "should pass 2 hours, 34 minutes and 12 seconds": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 10000);
+
+            this.clock.tick("02:34:10");
+
+            assertEquals(925, spy.callCount);
+        },
+
+        "should throw for invalid format": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 10000);
+            var test = this;
+
+            assertException(function () {
+                test.clock.tick("12:02:34:10");
+            });
+
+            assertEquals(0, spy.callCount);
+        },
+
+        "should throw for invalid minutes": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 10000);
+            var test = this;
+
+            assertException(function () {
+                test.clock.tick("67:10");
+            });
+
+            assertEquals(0, spy.callCount);
+        },
+
+        "should throw for negative minutes": function () {
+            var spy = sinon.spy.create();
+            this.clock.setInterval(spy, 10000);
+            var test = this;
+
+            assertException(function () {
+                test.clock.tick("-7:10");
+            });
+
+            assertEquals(0, spy.callCount);
+        },
+
+        "should treat missing argument as 0": function () {
+            this.clock.tick();
+
+            assertEquals(0, this.clock.now);
+        },
+
+        "should fire nested setTimeout calls properly": function () {
+            var i = 0;
+            var clock = this.clock;
+
+            var callback = function () {
+                ++i;
+                clock.setTimeout(function () {
+                    callback();
+                }, 100);
+            };
+
+            callback();
+
+            clock.tick(1000);
+
+            assertEquals(11, i);
         }
-      });
+    });
+
+    testCase("ClockClearTimeoutTest", {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+        },
+
+        "should remove timeout": function () {
+            var stub = sinon.stub.create();
+            var id = this.clock.setTimeout(stub, 50);
+            this.clock.clearTimeout(id);
+            this.clock.tick(50);
+
+            assertFalse(stub.called);
+        }
+    });
+
+    testCase("ClockResetTest", {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+        },
+
+        "should empty timeouts queue": function () {
+            var stub = sinon.stub.create();
+            this.clock.setTimeout(stub);
+            this.clock.reset();
+            this.clock.tick(0);
+
+            assertFalse(stub.called);
+        }
+    });
+
+    testCase("SetIntervalTest", {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+        },
+
+        "should be function": function () {
+            assertFunction(this.clock.setInterval);
+        },
 
-      id = this.clock.setInterval(stub, 10);
-      this.clock.tick(100);
+        "should throw if no arguments": function () {
+            var clock = this.clock;
+
+            assertException(function () {
+                clock.setInterval();
+            });
+        },
 
-      assertEquals(3, stub.callCount);
-    }
-  });
+        "should return numeric id": function () {
+            var result = this.clock.setInterval("");
 
-  testCase("ClockDateTest", {
-    setUp: function () {
-      this.now = new Date().getTime() - 3000;
-      this.clock = sinon.clock.create(this.now);
-      this.Date = global.Date;
-    },
+            assertNumber(result);
+        },
 
-    tearDown: function () {
-      global.Date = this.Date;
-    },
+        "should return unique id": function () {
+            var id1 = this.clock.setInterval("");
+            var id2 = this.clock.setInterval("");
 
-    "should provide date constructor": function () {
-      assertFunction(this.clock.Date);
-    },
+            assertNotEquals(id1, id2);
+        },
 
-    "should create real Date objects": function () {
-      var date = new this.clock.Date();
+        "should schedule recurring timeout": function () {
+            var stub = sinon.stub.create();
+            this.clock.setInterval(stub, 10);
+            this.clock.tick(99);
 
-      assert(Date.prototype.isPrototypeOf(date));
-    },
+            assertEquals(9, stub.callCount);
+        },
 
-    "should create real Date objects when called as function": function () {
-      var date = this.clock.Date();
+        "should not schedule recurring timeout when cleared": function () {
+            var clock = this.clock;
+            var id;
+            var stub = sinon.spy.create(function () {
+                if (stub.callCount == 3) {
+                    clock.clearInterval(id);
+                }
+            });
 
-      assert(Date.prototype.isPrototypeOf(date));
-    },
+            id = this.clock.setInterval(stub, 10);
+            this.clock.tick(100);
 
-    "should create real Date objects when Date constructor is gone": function () {
-      global.Date = function () {};
-      var date = new this.clock.Date();
+            assertEquals(3, stub.callCount);
+        }
+    });
 
-      assert(this.Date.prototype.isPrototypeOf(date));
-    },
+    testCase("ClockDateTest", {
+        setUp: function () {
+            this.now = new Date().getTime() - 3000;
+            this.clock = sinon.clock.create(this.now);
+            this.Date = global.Date;
+        },
 
-    "should create Date objects representing clock time": function () {
-      var date = new this.clock.Date();
+        tearDown: function () {
+            global.Date = this.Date;
+        },
 
-      assertEquals(new Date(this.now).getTime(), date.getTime());
-    },
+        "should provide date constructor": function () {
+            assertFunction(this.clock.Date);
+        },
 
-    "should return Date object representing clock time": function () {
-      var date = this.clock.Date();
+        "should create real Date objects": function () {
+            var date = new this.clock.Date();
 
-      assertEquals(new Date(this.now).getTime(), date.getTime());
-    },
+            assert(Date.prototype.isPrototypeOf(date));
+        },
 
-    "should listen to ticking clock": function () {
-      var date1 = new this.clock.Date();
-      this.clock.tick(3);
-      var date2 = new this.clock.Date();
+        "should create real Date objects when called as function": function () {
+            var date = this.clock.Date();
 
-      assertEquals(3, date2.getTime() - date1.getTime());
-    },
+            assert(Date.prototype.isPrototypeOf(date));
+        },
 
-    "should create regular date when passing timestamp": function () {
-      var date = new Date();
-      var fakeDate = new this.clock.Date(date.getTime());
+        "should create real Date objects when Date constructor is gone": function () {
+            global.Date = function () {};
+            var date = new this.clock.Date();
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+            assert(this.Date.prototype.isPrototypeOf(date));
+        },
 
-    "should return regular date when calling with timestamp": function () {
-      var date = new Date();
-      var fakeDate = this.clock.Date(date.getTime());
+        "should create Date objects representing clock time": function () {
+            var date = new this.clock.Date();
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+            assertEquals(new Date(this.now).getTime(), date.getTime());
+        },
 
-    "should create regular date when passing year, month": function () {
-      var date = new Date(2010, 4);
-      var fakeDate = new this.clock.Date(2010, 4);
+        "should return Date object representing clock time": function () {
+            var date = this.clock.Date();
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+            assertEquals(new Date(this.now).getTime(), date.getTime());
+        },
 
-    "should return regular date when calling with year, month": function () {
-      var date = new Date(2010, 4);
-      var fakeDate = this.clock.Date(2010, 4);
+        "should listen to ticking clock": function () {
+            var date1 = new this.clock.Date();
+            this.clock.tick(3);
+            var date2 = new this.clock.Date();
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+            assertEquals(3, date2.getTime() - date1.getTime());
+        },
 
-    "should create regular date when passing y, m, d": function () {
-      var date = new Date(2010, 4, 2);
-      var fakeDate = new this.clock.Date(2010, 4, 2);
+        "should create regular date when passing timestamp": function () {
+            var date = new Date();
+            var fakeDate = new this.clock.Date(date.getTime());
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-    "should return regular date when calling with y, m, d": function () {
-      var date = new Date(2010, 4, 2);
-      var fakeDate = this.clock.Date(2010, 4, 2);
-
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
-
-    "should create regular date when passing y, m, d, h": function () {
-      var date = new Date(2010, 4, 2, 12);
-      var fakeDate = new this.clock.Date(2010, 4, 2, 12);
+        "should return regular date when calling with timestamp": function () {
+            var date = new Date();
+            var fakeDate = this.clock.Date(date.getTime());
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
-
-    "should return regular date when calling with y, m, d, h": function () {
-      var date = new Date(2010, 4, 2, 12);
-      var fakeDate = this.clock.Date(2010, 4, 2, 12);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
-
-    "should create regular date when passing y, m, d, h, m": function () {
-      var date = new Date(2010, 4, 2, 12, 42);
-      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42);
-
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
-
-    "should return regular date when calling with y, m, d, h, m": function () {
-      var date = new Date(2010, 4, 2, 12, 42);
-      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42);
-
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+        "should create regular date when passing year, month": function () {
+            var date = new Date(2010, 4);
+            var fakeDate = new this.clock.Date(2010, 4);
 
-    "should create regular date when passing y, m, d, h, m, s": function () {
-      var date = new Date(2010, 4, 2, 12, 42, 53);
-      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+        "should return regular date when calling with year, month": function () {
+            var date = new Date(2010, 4);
+            var fakeDate = this.clock.Date(2010, 4);
 
-    "should return regular date when calling with y, m, d, h, m, s": function () {
-      var date = new Date(2010, 4, 2, 12, 42, 53);
-      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+        "should create regular date when passing y, m, d": function () {
+            var date = new Date(2010, 4, 2);
+            var fakeDate = new this.clock.Date(2010, 4, 2);
 
-    "should create regular date when passing y, m, d, h, m, s, ms": function () {
-      var date = new Date(2010, 4, 2, 12, 42, 53, 498);
-      var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+        "should return regular date when calling with y, m, d": function () {
+            var date = new Date(2010, 4, 2);
+            var fakeDate = this.clock.Date(2010, 4, 2);
 
-    "should return regular date when calling with y, m, d, h, m, s, ms": function () {
-      var date = new Date(2010, 4, 2, 12, 42, 53, 498);
-      var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(date.getTime(), fakeDate.getTime());
-    },
+        "should create regular date when passing y, m, d, h": function () {
+            var date = new Date(2010, 4, 2, 12);
+            var fakeDate = new this.clock.Date(2010, 4, 2, 12);
 
-    "should mirror native Date.prototype": function () {
-      assertSame(Date.prototype, this.clock.Date.prototype);
-    },
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-    "should support now method if present": function () {
-      assertSame(typeof Date.now, typeof this.clock.Date.now);
-    },
+        "should return regular date when calling with y, m, d, h": function () {
+            var date = new Date(2010, 4, 2, 12);
+            var fakeDate = this.clock.Date(2010, 4, 2, 12);
 
-    "now should return clock.now if native date supports it": function () {
-      if (Date.now) {
-        assertEquals(this.now, this.clock.Date.now());
-      } else {
-        jstestdriver.console.log("Browser does not support Date.now");
-        assertUndefined(this.clock.Date.now);
-      }
-    },
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-    "should mirror parse method": function () {
-      assertSame(Date.parse, this.clock.Date.parse);
-    },
+        "should create regular date when passing y, m, d, h, m": function () {
+            var date = new Date(2010, 4, 2, 12, 42);
+            var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42);
 
-    "should mirror UTC method": function () {
-      assertSame(Date.UTC, this.clock.Date.UTC);
-    },
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-    "should mirror toSource if supported": function () {
-      if (Date.toSource) {
-        assertSame(Date.toSource(), this.clock.Date.toSource());
-      } else {
-        jstestdriver.console.log("Browser does not support Date.toSource");
-        assertUndefined(this.clock.Date.toSource);
-      }
-    },
+        "should return regular date when calling with y, m, d, h, m": function () {
+            var date = new Date(2010, 4, 2, 12, 42);
+            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42);
 
-    "should mirror toString": function () {
-      assertSame(Date.toString(), this.clock.Date.toString());
-    }
-  });
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-  testCase("SinonStubTimersTest", {
-    tearDown: function () {
-      this.clock.restore();
-    },
+        "should create regular date when passing y, m, d, h, m, s": function () {
+            var date = new Date(2010, 4, 2, 12, 42, 53);
+            var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53);
 
-    "should return clock object": function () {
-      this.clock = sinon.useFakeTimers();
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertObject(this.clock);
-      assertFunction(this.clock.tick);
-    },
+        "should return regular date when calling with y, m, d, h, m, s": function () {
+            var date = new Date(2010, 4, 2, 12, 42, 53);
+            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53);
 
-    "should have clock property": function () {
-      this.clock = sinon.useFakeTimers();
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertSame(this.clock, setTimeout.clock);
-      assertSame(this.clock, clearTimeout.clock);
-      assertSame(this.clock, setInterval.clock);
-      assertSame(this.clock, clearInterval.clock);
-      assertSame(this.clock, Date.clock);
-    },
+        "should create regular date when passing y, m, d, h, m, s, ms": function () {
+            var date = new Date(2010, 4, 2, 12, 42, 53, 498);
+            var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
-    "should set initial timestamp": function () {
-      this.clock = sinon.useFakeTimers(1400);
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      assertEquals(1400, this.clock.now);
-    },
+        "should return regular date when calling with y, m, d, h, m, s, ms": function () {
+            var date = new Date(2010, 4, 2, 12, 42, 53, 498);
+            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
-    "should replace global setTimeout": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+            assertEquals(date.getTime(), fakeDate.getTime());
+        },
 
-      setTimeout(stub, 1000);
-      this.clock.tick(1000);
+        "should mirror native Date.prototype": function () {
+            assertSame(Date.prototype, this.clock.Date.prototype);
+        },
 
-      assert(stub.called);
-    },
+        "should support now method if present": function () {
+            assertSame(typeof Date.now, typeof this.clock.Date.now);
+        },
 
-    "global fake setTimeout should return id": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+        "now should return clock.now if native date supports it": function () {
+            if (Date.now) {
+                assertEquals(this.now, this.clock.Date.now());
+            } else {
+                jstestdriver.console.log("Browser does not support Date.now");
+                assertUndefined(this.clock.Date.now);
+            }
+        },
 
-      var id = setTimeout(stub, 1000);
+        "should mirror parse method": function () {
+            assertSame(Date.parse, this.clock.Date.parse);
+        },
 
-      assertNumber(id);
-    },
+        "should mirror UTC method": function () {
+            assertSame(Date.UTC, this.clock.Date.UTC);
+        },
 
-    "should replace global clearTimeout": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+        "should mirror toSource if supported": function () {
+            if (Date.toSource) {
+                assertSame(Date.toSource(), this.clock.Date.toSource());
+            } else {
+                jstestdriver.console.log("Browser does not support Date.toSource");
+                assertUndefined(this.clock.Date.toSource);
+            }
+        },
 
-      clearTimeout(setTimeout(stub, 1000));
-      this.clock.tick(1000);
+        "should mirror toString": function () {
+            assertSame(Date.toString(), this.clock.Date.toString());
+        }
+    });
 
-      assertFalse(stub.called);
-    },
+    testCase("SinonStubTimersTest", {
+        tearDown: function () {
+            this.clock.restore();
+        },
 
-    "should restore global setTimeout": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
-      this.clock.restore();
+        "should return clock object": function () {
+            this.clock = sinon.useFakeTimers();
 
-      setTimeout(stub, 1000);
-      this.clock.tick(1000);
+            assertObject(this.clock);
+            assertFunction(this.clock.tick);
+        },
 
-      assertFalse(stub.called);
-      assertSame(sinon.timers.setTimeout, setTimeout);
-    },
+        "should have clock property": function () {
+            this.clock = sinon.useFakeTimers();
 
-    "should restore global clearTimeout": function () {
-      this.clock = sinon.useFakeTimers();
-      sinon.stub.create();
-      this.clock.restore();
+            assertSame(this.clock, setTimeout.clock);
+            assertSame(this.clock, clearTimeout.clock);
+            assertSame(this.clock, setInterval.clock);
+            assertSame(this.clock, clearInterval.clock);
+            assertSame(this.clock, Date.clock);
+        },
 
-      assertSame(sinon.timers.clearTimeout, clearTimeout);
-    },
+        "should set initial timestamp": function () {
+            this.clock = sinon.useFakeTimers(1400);
 
-    "should replace global setInterval": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+            assertEquals(1400, this.clock.now);
+        },
 
-      setInterval(stub, 500);
-      this.clock.tick(1000);
+        "should replace global setTimeout": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
 
-      assert(stub.calledTwice);
-    },
+            setTimeout(stub, 1000);
+            this.clock.tick(1000);
 
-    "should replace global clearInterval": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
+            assert(stub.called);
+        },
 
-      clearInterval(setInterval(stub, 500));
-      this.clock.tick(1000);
+        "global fake setTimeout should return id": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
 
-      assertFalse(stub.called);
-    },
+            var id = setTimeout(stub, 1000);
 
-    "should restore global setInterval": function () {
-      this.clock = sinon.useFakeTimers();
-      var stub = sinon.stub.create();
-      this.clock.restore();
+            assertNumber(id);
+        },
 
-      setInterval(stub, 1000);
-      this.clock.tick(1000);
+        "should replace global clearTimeout": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
 
-      assertFalse(stub.called);
-      assertSame(sinon.timers.setInterval, setInterval);
-    },
+            clearTimeout(setTimeout(stub, 1000));
+            this.clock.tick(1000);
 
-    "should restore global clearInterval": function () {
-      this.clock = sinon.useFakeTimers();
-      sinon.stub.create();
-      this.clock.restore();
+            assertFalse(stub.called);
+        },
 
-      assertSame(sinon.timers.clearInterval, clearInterval);
-    },
+        "should restore global setTimeout": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
+            this.clock.restore();
 
-    "should fake Date constructor": function () {
-      this.clock = sinon.useFakeTimers(0);
-      var now = new Date();
+            setTimeout(stub, 1000);
+            this.clock.tick(1000);
 
-      assertNotSame(sinon.timers.Date, Date);
-      assertEquals(0, now.getTime());
-    },
+            assertFalse(stub.called);
+            assertSame(sinon.timers.setTimeout, setTimeout);
+        },
 
-    "fake Date constructor should mirror Date's properties": function () {
-      this.clock = sinon.useFakeTimers(0);
+        "should restore global clearTimeout": function () {
+            this.clock = sinon.useFakeTimers();
+            sinon.stub.create();
+            this.clock.restore();
 
-      assert(!!Date.parse);
-      assert(!!Date.UTC);
-    },
+            assertSame(sinon.timers.clearTimeout, clearTimeout);
+        },
 
-    "should restore Date constructor": function () {
-      this.clock = sinon.useFakeTimers(0);
-      this.clock.restore();
+        "should replace global setInterval": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
 
-      assertSame(sinon.timers.Date, Date);
-    },
+            setInterval(stub, 500);
+            this.clock.tick(1000);
 
-    "should fake provided methods": function () {
-      this.clock = sinon.useFakeTimers("setTimeout", "Date");
+            assert(stub.calledTwice);
+        },
 
-      assertNotSame(sinon.timers.setTimeout, setTimeout);
-      assertNotSame(sinon.timers.Date, Date);
-    },
+        "should replace global clearInterval": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
 
-    "should reset faked methods": function () {
-      this.clock = sinon.useFakeTimers("setTimeout", "Date");
-      this.clock.restore();
+            clearInterval(setInterval(stub, 500));
+            this.clock.tick(1000);
 
-      assertSame(sinon.timers.setTimeout, setTimeout);
-      assertSame(sinon.timers.Date, Date);
-    },
+            assertFalse(stub.called);
+        },
 
-    "should not fake methods not provided": function () {
-      this.clock = sinon.useFakeTimers("setTimeout", "Date");
+        "should restore global setInterval": function () {
+            this.clock = sinon.useFakeTimers();
+            var stub = sinon.stub.create();
+            this.clock.restore();
 
-      assertSame(sinon.timers.clearTimeout, clearTimeout);
-      assertSame(sinon.timers.setInterval, setInterval);
-      assertSame(sinon.timers.clearInterval, clearInterval);
-    }
-  });
+            setInterval(stub, 1000);
+            this.clock.tick(1000);
+
+            assertFalse(stub.called);
+            assertSame(sinon.timers.setInterval, setInterval);
+        },
+
+        "should restore global clearInterval": function () {
+            this.clock = sinon.useFakeTimers();
+            sinon.stub.create();
+            this.clock.restore();
+
+            assertSame(sinon.timers.clearInterval, clearInterval);
+        },
+
+        "should fake Date constructor": function () {
+            this.clock = sinon.useFakeTimers(0);
+            var now = new Date();
+
+            assertNotSame(sinon.timers.Date, Date);
+            assertEquals(0, now.getTime());
+        },
+
+        "fake Date constructor should mirror Date's properties": function () {
+            this.clock = sinon.useFakeTimers(0);
+
+            assert(!!Date.parse);
+            assert(!!Date.UTC);
+        },
+
+        "should restore Date constructor": function () {
+            this.clock = sinon.useFakeTimers(0);
+            this.clock.restore();
+
+            assertSame(sinon.timers.Date, Date);
+        },
+
+        "should fake provided methods": function () {
+            this.clock = sinon.useFakeTimers("setTimeout", "Date");
+
+            assertNotSame(sinon.timers.setTimeout, setTimeout);
+            assertNotSame(sinon.timers.Date, Date);
+        },
+
+        "should reset faked methods": function () {
+            this.clock = sinon.useFakeTimers("setTimeout", "Date");
+            this.clock.restore();
+
+            assertSame(sinon.timers.setTimeout, setTimeout);
+            assertSame(sinon.timers.Date, Date);
+        },
+
+        "should not fake methods not provided": function () {
+            this.clock = sinon.useFakeTimers("setTimeout", "Date");
+
+            assertSame(sinon.timers.clearTimeout, clearTimeout);
+            assertSame(sinon.timers.setInterval, setInterval);
+            assertSame(sinon.timers.clearInterval, clearInterval);
+        }
+    });
 }(this));
