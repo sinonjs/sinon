@@ -26,4 +26,4 @@ See the [sinon project homepage](http://cjohansen.no/sinon/)
 
 ## Develop? 
 
-Check out [todo.org](http://github.com/cjohansen/Sinon.JS/raw/0.6.2/todo.org) in the project repository
+Check out [todo.org](http://github.com/cjohansen/Sinon.JS/raw/1.0.0/todo.org) in the project repository

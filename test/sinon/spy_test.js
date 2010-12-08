@@ -1,17 +1,18 @@
 /*jslint indent: 2, onevar: false, eqeqeq: false*/
-/*globals testCase,
-          window,
-          sinon,
-          fail,
-          assert,
-          assertUndefined,
-          assertFalse,
-          assertArray,
-          assertFunction,
-          assertNumber,
-          assertNoException,
-          assertSame,
-          assertNotSame,
+/*globals testCase
+          window
+          sinon
+          fail
+          assert
+          assertUndefined
+          assertFalse
+          assertArray
+          assertFunction
+          assertNumber
+          assertNoException
+          assertSame
+          assertNotSame
+          assertException
           assertEquals*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)

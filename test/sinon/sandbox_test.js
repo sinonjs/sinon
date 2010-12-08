@@ -6,6 +6,10 @@
          setTimeout
          sinon
          assert
+         assertNull
+         assertNotNull
+         assertUndefined
+         assertArray
          assertFalse
          assertEquals
          assertObject

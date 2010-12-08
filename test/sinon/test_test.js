@@ -456,7 +456,7 @@
       var obj = {};
 
       sinon.config = {
-          properties: ["sandbox", "spy"]
+        properties: ["sandbox", "spy"]
       };
 
       sinon.test(testCase.fn).call(testCase);

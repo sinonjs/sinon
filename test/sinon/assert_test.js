@@ -1,21 +1,21 @@
 /*jslint indent: 2, onevar: false*/
-/*globals testCase,
-          sinon,
-          fail,
-          failException,
-          assert,
-          assertString,
-          assertFunction,
-          assertObject,
-          assertFalse,
-          assertEquals,
-          assertNoException,
-          assertException,
-          assertCalled,
-          assertCalledOn,
-          assertCalledWith,
-          assertCalledWithExactly,
-          assertThrew,
+/*globals testCase
+          sinon
+          fail
+          failException
+          assert
+          assertString
+          assertFunction
+          assertObject
+          assertFalse
+          assertEquals
+          assertNoException
+          assertException
+          assertCalled
+          assertCalledOn
+          assertCalledWith
+          assertCalledWithExactly
+          assertThrew
           assertCallCount*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
@@ -899,23 +899,6 @@
 
       assertEquals("expected doSomething to be called thrice but was called 4 times",
                    this.message("calledThrice", this.obj.doSomething));
-    },
-
-    "assert.calledOn exception message": function () {
-      this.obj.toString = function () {
-        return "[Oh yeah]";
-      };
-
-      var obj = {
-        toString: function () {
-          return "[Oh no]";
-        }
-      };
-
-      this.obj.doSomething.call(obj);
-
-      assertEquals("expected doSomething to be called with [Oh yeah] as this",
-                   this.message("calledOn", this.obj.doSomething, this.obj));
     },
 
     "assert.calledOn exception message": function () {
