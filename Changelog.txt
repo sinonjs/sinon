@@ -1,3 +1,40 @@
+== 1.0.0 / 2010-12-08
+* Switched indentation from 2 to 4 spaces :)
+* Node.js compatibility improvements
+* Remove magic booleans from sinon.assert.expose, replace with option object
+* Put QUnit adapter in it's own repository
+* Update build script to build standalone timers and server files
+* Breaking change: thisObj -> thisValue
+  Change brings consistency to the code-base, always use thisValue
+* Add sinon.assert.pass callback for successful assertions
+* Extract sandbox configuration from sinon.test
+
+  Refactored sinon.test to not do all the heavy lifting in creating sandbox
+  objects from sinon.config. Now sinon.sandbox.create accepts an optional
+  configuration that can be retrieved through sinon.getConfig({ ... }) - or, to
+  match previous behavior, through sinon.getConfig(sinon.config);
+    
+  The default configuration now lives in sinon.defaultConfig rather than the
+  previous sinon.test.
+    
+  This change enables external tools, such as test framework adapters, to easily
+  create configurable sandboxes without going through sinon.test
+* Rewrite sinon.clock.tick to fix bug and make implementation clearer
+* Test config load correct files
+* Make timers and XHR truly standalone by splitting the IE work-around in two files
+* Don't fail when comparing DOM elements in sinon.deepEqual (used in calledWith(...))
+* Should mirror properties on Date when faking it
+* Added and updated configuration for both JsLint and JavaScript lint
+* [August Lilleaas] The build script can optionally build a file without the
+  version name in it, by passing 'plain', i.e. './build plain'.
+
+  Useful when using the build script to build and use sinon programatically, so
+  one can 'cp path/to/sinon/pkg/sinon.js my/scripts/'
+* [August Lilleaas] Checking and warning if we got a load error and rubygems
+  isn't present.
+* [August Lilleaas] Updating build script to be runnable from any
+  directory. Current working directory doesn't have to be repo root.
+
 == 0.8.0 / 2010-10-30
 * sinon.wrapMethod no longer accepts faking already faked methods
 * sinon-qunit 'plugin'
