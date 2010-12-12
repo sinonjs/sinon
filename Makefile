@@ -1,5 +1,5 @@
 default: test lint
-build:
+build: lib/sinon.js
 	./build
 test: lib/sinon.js
 	jstestdriver --tests all --reset

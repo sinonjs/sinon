@@ -60,8 +60,5 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger.save("pkg/sinon-server#{version_string}.js")
   add_license("pkg/sinon-server#{version_string}.js", version)
 
-  FileUtils.cp("lib/sinon/plugin/qunit.js", "pkg/sinon-qunit#{version_string}.js")
-  add_license("pkg/sinon-qunit#{version_string}.js", version)
-
   puts "Built Sinon.JS #{version}"
 end
