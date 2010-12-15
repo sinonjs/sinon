@@ -369,6 +369,33 @@ testCase("ServerRespondWithTest", {
         this.server.respond();
 
         assertEquals([200, {}, "Yep"], xhr.respond.args[0]);
+    },
+
+    "should throw understandable error if response is not a string": function () {
+        var error;
+
+        try {
+            this.server.respondWith("/", {});
+        } catch (e) {
+            error = e;
+        }
+
+        assertObject(error);
+        assertEquals("Fake server response body should be string, but was object", error.message);
+    },
+
+    "should throw understandable error if response in array is not a string": function () {
+        var error;
+
+        try {
+            this.server.respondWith("/", [200, {}]);
+        } catch (e) {
+            error = e;
+        }
+
+        assertObject(error);
+        assertEquals("Fake server response body should be string, but was undefined",
+                     error.message);
     }
 });
 
