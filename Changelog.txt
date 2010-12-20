@@ -1,3 +1,6 @@
+== 1.0.1 / 2010-12-20
+* Make sure sinon.sandbox is exposed in node.js (fix by Gord Tanner)
+
 == 1.0.0 / 2010-12-08
 * Switched indentation from 2 to 4 spaces :)
 * Node.js compatibility improvements
