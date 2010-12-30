@@ -175,6 +175,15 @@
             assertFalse(sinon.deepEqual(this.element, el));
         },
 
+        "should not modify DOM elements when comparing them": function () {
+            /*:DOC += <div id="hey"></div> */
+            var el = document.getElementById("hey");
+            sinon.deepEqual(el, {})
+
+            assertSame(document.body, el.parentNode);
+            assertEquals(0, el.childNodes.length);
+        },
+
         "should pass deep objects": function () {
             var func = function () {};
 
