@@ -464,3 +464,77 @@ testCase("ServerRespondFakeHTTPVerbTest", {
         assertEquals([200, {}, "OK"], this.request.respond.args[0]);
     }
 });
+
+(function () {
+    function get(url) {
+        var request = new sinon.FakeXMLHttpRequest();
+        sinon.spy(request, "respond");
+        request.open("get", "/path", true);
+        request.send();
+
+        return request;
+    }
+
+    testCase("ServerAutoResponseTest", {
+        setUp: function () {
+            this.server = sinon.fakeServer.create();
+            this.clock = sinon.useFakeTimers();
+        },
+
+        tearDown: function () {
+            this.server.restore();
+            this.clock.restore();
+        },
+
+        "should respond async automatically after 10ms": function () {
+            this.server.autoRespond = true;
+            var request = get("/path");
+
+            this.clock.tick(10);
+
+            assertTrue(request.respond.calledOnce);
+        },
+
+        "normal server should not respond automatically": function () {
+            var request = get("/path");
+
+            this.clock.tick(100);
+
+            assertTrue(!request.respond.called);
+        },
+
+        "should only auto-respond once": function () {
+            this.server.autoRespond = true;
+            var requests = [get("/path")];
+            this.clock.tick(5);
+            requests.push(get("/other"));
+            this.clock.tick(5);
+
+            assertTrue(requests[0].respond.calledOnce);
+            assertTrue(requests[1].respond.calledOnce);
+        },
+
+        "should auto-respond after having already responded": function () {
+            this.server.autoRespond = true;
+            var requests = [get("/path")];
+            this.clock.tick(10);
+            requests.push(get("/other"));
+            this.clock.tick(10);
+
+            assertTrue(requests[0].respond.calledOnce);
+            assertTrue(requests[1].respond.calledOnce);
+        },
+
+        "should set auto-respond timeout to 50ms": function () {
+            this.server.autoRespond = true;
+            this.server.autoRespondAfter = 50;
+
+            var request = get("/path");
+            this.clock.tick(49);
+            assertFalse(request.respond.called);
+
+            this.clock.tick(1);
+            assertTrue(request.respond.calledOnce);
+        }
+    });
+}());
