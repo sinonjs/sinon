@@ -405,4 +405,42 @@
             assertEquals("meth", obj.meth.toString());
         }
     });
+
+    testCase("StubWithArgsTest", {
+        "should define withArgs method": function () {
+            var stub = sinon.stub();
+
+            assertFunction(stub.withArgs);
+        },
+
+        "should create filtered stub": function () {
+            var stub = sinon.stub();
+            var other = stub.withArgs(23);
+
+            assertNotSame(stub, other);
+            assertFunction(stub.returns);
+            assertFunction(other.returns);
+        },
+
+        "should filter return values based on arguments": function () {
+            var stub = sinon.stub().returns(23);
+            stub.withArgs(42).returns(99);
+
+            assertEquals(23, stub());
+            assertEquals(99, stub(42));
+        },
+
+        "should filter exceptions based on arguments": function () {
+            var stub = sinon.stub().returns(23);
+            stub.withArgs(42).throws();
+
+            assertNoException(function () {
+                stub();
+            });
+
+            assertException(function () {
+                stub(42);
+            });
+        }
+    });
 }());

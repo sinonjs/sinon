@@ -1342,6 +1342,32 @@
 
             assertEquals(2, spy.callCount);
             assertEquals(1, argSpy.callCount);
+        },
+
+        "should return existing override for arguments": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs({}, []);
+            var another = spy.withArgs({}, []);
+            spy();
+            spy({}, []);
+            spy({}, [], 2);
+
+            assertSame(argSpy, another);
+            assertNotSame(spy, another);
+            assertEquals(3, spy.callCount);
+            assertEquals(2, spy.withArgs({}, []).callCount);
+        },
+
+        "should chain withArgs calls on original spy": function () {
+            var spy = sinon.spy();
+            var numArgSpy = spy.withArgs({}, []).withArgs(3);
+            spy();
+            spy({}, []);
+            spy(3);
+
+            assertEquals(3, spy.callCount);
+            assertEquals(1, numArgSpy.callCount);
+            assertEquals(1, spy.withArgs({}, []).callCount);
         }
     });
 }());
