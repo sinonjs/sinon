@@ -201,7 +201,7 @@ testCase("ServerRespondWithTest", {
         this.getRootSync.send();
 
         assertEquals(210, this.getRootSync.status);
-        assertEquals({ "x-ops": "Yeah" }, this.getRootSync.getAllResponseHeaders());
+        assertEquals("X-Ops: Yeah\r\n", this.getRootSync.getAllResponseHeaders());
         assertEquals("Body, man", this.getRootSync.responseText);
     },
 
@@ -209,7 +209,7 @@ testCase("ServerRespondWithTest", {
         this.getRootSync.send();
 
         assertEquals(404, this.getRootSync.status);
-        assertEquals({}, this.getRootSync.getAllResponseHeaders());
+        assertEquals("", this.getRootSync.getAllResponseHeaders());
         assertEquals("", this.getRootSync.responseText);
     },
 

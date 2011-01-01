@@ -597,7 +597,7 @@
             this.xhr.respond();
 
             assertEquals(200, this.xhr.status);
-            assertEquals({}, this.xhr.getAllResponseHeaders());
+            assertEquals("", this.xhr.getAllResponseHeaders());
             assertEquals("", this.xhr.responseText);
         },
 
@@ -677,8 +677,8 @@
             this.xhr.open("GET", "/");
         },
 
-        "should return null if request is not finished": function () {
-            assertNull(this.xhr.getAllResponseHeaders());
+        "should return empty string if request is not finished": function () {
+            assertEquals("", this.xhr.getAllResponseHeaders());
         },
 
         "should not return Set-Cookie and Set-Cookie2 headers": function () {
@@ -688,7 +688,7 @@
                 "Set-Cookie2": "There"
             });
 
-            assertEquals({}, this.xhr.getAllResponseHeaders());
+            assertEquals("", this.xhr.getAllResponseHeaders());
         },
 
         "should return headers": function () {
@@ -699,10 +699,7 @@
                 "Content-Length": "32"
             });
 
-            assertEquals({
-                "content-type": "text/html",
-                "content-length": "32"
-            }, this.xhr.getAllResponseHeaders());
+            assertEquals("Content-Type: text/html\r\nContent-Length: 32\r\n", this.xhr.getAllResponseHeaders());
         }
     });
 
