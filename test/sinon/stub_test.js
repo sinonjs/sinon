@@ -128,6 +128,12 @@
             assert(callback.called);
         },
 
+        "should return stub": function () {
+            var stub = this.stub.callsArg(2);
+
+            assertFunction(stub);
+        },
+
         "should throw if argument at specified index is not callable": function () {
             this.stub.callsArg(0);
 
@@ -166,6 +172,12 @@
             this.stub(1, callback);
 
             assert(callback.calledWith(object));
+        },
+
+        "should return function": function () {
+            var stub = this.stub.callsArgWith(2, 3);
+
+            assertFunction(stub);
         },
 
         "should call callback without args": function () {
