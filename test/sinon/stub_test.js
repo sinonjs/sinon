@@ -494,6 +494,7 @@
         }
     });
 
+    // yieldsTo burde kunne kalles flere ganger?
     testCase("StubYieldsToTest", {
         "should yield to property of object argument": function () {
             var stub = sinon.stub().yieldsTo("success");
