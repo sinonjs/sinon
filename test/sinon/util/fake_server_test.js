@@ -399,6 +399,108 @@ testCase("ServerRespondWithTest", {
     }
 });
 
+testCase("ServerRespondWithFunctionHandlerTest", {
+    setUp: function () {
+        this.server = sinon.fakeServer.create();
+    },
+
+    tearDown: function () {
+        this.server.restore();
+    },
+
+    "should yield response to request function handler": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+        assert(handler.calledWith(xhr));
+    },
+
+    "should respond to request from function handler": function () {
+        this.server.respondWith("/hello", function (xhr) {
+            xhr.respond(200, { "Content-Type": "application/json" }, '{"id":42}');
+        });
+
+        var request = new sinon.FakeXMLHttpRequest();
+        request.open("GET", "/hello");
+        request.send();
+
+        this.server.respond();
+
+        assertEquals(200, request.status);
+        assertEquals({ "Content-Type": "application/json" }, request.responseHeaders);
+        assertEquals('{"id":42}', request.responseText);
+    },
+
+    "should yield response to request function handler when method matches": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", "/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+    },
+
+    "should not yield response to request function handler when method does not match": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", "/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("POST", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(!handler.called);
+    },
+
+    "should yield response to request function handler when regexp url matches": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/.*/, handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+    },
+
+    "should not yield response to request function handler when regexp url does not match": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/a.*/, handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(!handler.called);
+    },
+
+    "should not process request further if processed by function": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/a.*/, handler);
+        this.server.respondWith("GET", "/aloha", [200, {}, "Oh hi"]);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.respond = sinon.spy();
+        xhr.open("GET", "/aloha");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.called);
+        assert(xhr.respond.calledOnce);
+    }
+});
+
 testCase("ServerRespondFakeHTTPVerbTest", {
     setUp: function () {
         this.server = sinon.fakeServer.create();
