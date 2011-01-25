@@ -737,4 +737,28 @@
             assertFunction(mock.verify);
         }
     });
+
+    testCase("MockExpectationYieldsTest", {
+        "should invoke only argument as callback": function () {
+            var mock = sinon.mock().yields();
+            var spy = sinon.spy();
+            mock(spy);
+
+            assert(spy.calledOnce);
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should throw understandable error if no callback is passed": function () {
+            var mock = sinon.mock().yields();
+            var spy = sinon.spy();
+
+            try {
+                mock();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield, but no callback was passed.",
+                             e.message);
+            }
+        }
+    });
 }());
