@@ -399,6 +399,108 @@ testCase("ServerRespondWithTest", {
     }
 });
 
+testCase("ServerRespondWithFunctionHandlerTest", {
+    setUp: function () {
+        this.server = sinon.fakeServer.create();
+    },
+
+    tearDown: function () {
+        this.server.restore();
+    },
+
+    "should yield response to request function handler": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+        assert(handler.calledWith(xhr));
+    },
+
+    "should respond to request from function handler": function () {
+        this.server.respondWith("/hello", function (xhr) {
+            xhr.respond(200, { "Content-Type": "application/json" }, '{"id":42}');
+        });
+
+        var request = new sinon.FakeXMLHttpRequest();
+        request.open("GET", "/hello");
+        request.send();
+
+        this.server.respond();
+
+        assertEquals(200, request.status);
+        assertEquals({ "Content-Type": "application/json" }, request.responseHeaders);
+        assertEquals('{"id":42}', request.responseText);
+    },
+
+    "should yield response to request function handler when method matches": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", "/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+    },
+
+    "should not yield response to request function handler when method does not match": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", "/hello", handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("POST", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(!handler.called);
+    },
+
+    "should yield response to request function handler when regexp url matches": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/.*/, handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.calledOnce);
+    },
+
+    "should not yield response to request function handler when regexp url does not match": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/a.*/, handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.open("GET", "/hello");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(!handler.called);
+    },
+
+    "should not process request further if processed by function": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/a.*/, handler);
+        this.server.respondWith("GET", "/aloha", [200, {}, "Oh hi"]);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.respond = sinon.spy();
+        xhr.open("GET", "/aloha");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.called);
+        assert(xhr.respond.calledOnce);
+    }
+});
+
 testCase("ServerRespondFakeHTTPVerbTest", {
     setUp: function () {
         this.server = sinon.fakeServer.create();
@@ -464,3 +566,77 @@ testCase("ServerRespondFakeHTTPVerbTest", {
         assertEquals([200, {}, "OK"], this.request.respond.args[0]);
     }
 });
+
+(function () {
+    function get(url) {
+        var request = new sinon.FakeXMLHttpRequest();
+        sinon.spy(request, "respond");
+        request.open("get", "/path", true);
+        request.send();
+
+        return request;
+    }
+
+    testCase("ServerAutoResponseTest", {
+        setUp: function () {
+            this.server = sinon.fakeServer.create();
+            this.clock = sinon.useFakeTimers();
+        },
+
+        tearDown: function () {
+            this.server.restore();
+            this.clock.restore();
+        },
+
+        "should respond async automatically after 10ms": function () {
+            this.server.autoRespond = true;
+            var request = get("/path");
+
+            this.clock.tick(10);
+
+            assertTrue(request.respond.calledOnce);
+        },
+
+        "normal server should not respond automatically": function () {
+            var request = get("/path");
+
+            this.clock.tick(100);
+
+            assertTrue(!request.respond.called);
+        },
+
+        "should only auto-respond once": function () {
+            this.server.autoRespond = true;
+            var requests = [get("/path")];
+            this.clock.tick(5);
+            requests.push(get("/other"));
+            this.clock.tick(5);
+
+            assertTrue(requests[0].respond.calledOnce);
+            assertTrue(requests[1].respond.calledOnce);
+        },
+
+        "should auto-respond after having already responded": function () {
+            this.server.autoRespond = true;
+            var requests = [get("/path")];
+            this.clock.tick(10);
+            requests.push(get("/other"));
+            this.clock.tick(10);
+
+            assertTrue(requests[0].respond.calledOnce);
+            assertTrue(requests[1].respond.calledOnce);
+        },
+
+        "should set auto-respond timeout to 50ms": function () {
+            this.server.autoRespond = true;
+            this.server.autoRespondAfter = 50;
+
+            var request = get("/path");
+            this.clock.tick(49);
+            assertFalse(request.respond.called);
+
+            this.clock.tick(1);
+            assertTrue(request.respond.calledOnce);
+        }
+    });
+}());
