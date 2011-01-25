@@ -15,6 +15,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("SinonTestCaseTest", {
         "should be function": function () {

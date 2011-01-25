@@ -18,6 +18,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("SinonTest", {
         "sinon should be object": function () {

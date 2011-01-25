@@ -19,6 +19,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("SinonTestTest", {
         tearDown: function () {
@@ -49,7 +51,7 @@
                 this.stub(object, "method").returns(object);
 
                 assertSame(object, object.method());
-            })();
+            }).call({});
         },
 
         "should restore stubs": function () {
@@ -58,7 +60,7 @@
 
             sinon.test(function () {
                 this.stub(object, "method");
-            })();
+            }).call({});
 
             assertSame(method, object.method);
         },
@@ -71,7 +73,7 @@
                 sinon.test(function () {
                     this.stub(object, "method");
                     throw new Error();
-                })();
+                }).call({});
             }, "Error");
         },
 
@@ -83,7 +85,7 @@
                 sinon.test(function () {
                     this.stub(object, "method");
                     throw new Error();
-                })();
+                }).call({});
             } catch (e) {}
 
             assertSame(method, object.method);
@@ -97,7 +99,7 @@
                 this.mock(object).expects("method").returns(object);
 
                 assertSame(object, object.method());
-            })();
+            }).call({});
         },
 
         "should verify mocks": function () {
@@ -107,7 +109,7 @@
             assertException(function () {
                 sinon.test(function () {
                     this.mock(object).expects("method");
-                })();
+                }).call({});
             }, "ExpectationError");
 
             assertSame(method, object.method);
@@ -120,7 +122,7 @@
             try {
                 sinon.test(function () {
                     this.mock(object).expects("method");
-                })();
+                }).call({});
             } catch (e) {}
 
             assertSame(method, object.method);
@@ -134,7 +136,7 @@
                 sinon.test(function () {
                     this.mock(object).expects("method").never();
                     object.method();
-                })();
+                }).call({});
             } catch (e) {}
 
             assertSame(method, object.method);

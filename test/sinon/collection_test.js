@@ -17,6 +17,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("CollectionCreateTest", {
         "should create fake collection": function () {

@@ -24,6 +24,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function (global) {
     testCase("FakeXMLHttpRequestTest", {
         tearDown: function () {
@@ -872,8 +874,8 @@
         }
     });
 
-    var globalXMLHttpRequest = this.XMLHttpRequest;
-    var globalActiveXObject = this.ActiveXObject;
+    var globalXMLHttpRequest = global.XMLHttpRequest;
+    var globalActiveXObject = global.ActiveXObject;
 
     var fakeXhrSetUp = function () {
         this.fakeXhr = sinon.useFakeXMLHttpRequest();

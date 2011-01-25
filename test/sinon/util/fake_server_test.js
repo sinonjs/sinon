@@ -19,6 +19,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 testCase("ServerCreateTest", {
     tearDown: function () {
         this.server.restore();

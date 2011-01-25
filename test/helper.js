@@ -6,6 +6,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 function testCase(name, tests) {
     var jstdCase = {};
     var jstdTestCase = TestCase; // Silence JsLint...

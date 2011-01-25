@@ -17,6 +17,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("MockCreateTest", {
         "should be function": function () {

@@ -23,6 +23,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function (global) {
     testCase("SinonAssertTest", {
         "should be object": function () {
@@ -630,10 +632,11 @@
         },
 
         "should fail if stub returns false": function () {
-            sinon.stub(this.stub, "alwaysCalledOn").returns(false);
+            var stub = sinon.stub();
+            sinon.stub(stub, "alwaysCalledOn").returns(false);
 
             assertException(function () {
-                sinon.assert.alwaysCalledOn(this.stub, {});
+                sinon.assert.alwaysCalledOn(stub, {});
             });
 
             assert(sinon.assert.fail.called);

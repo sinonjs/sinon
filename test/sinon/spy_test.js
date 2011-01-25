@@ -20,6 +20,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function () {
     testCase("SpyCreateTest", {
         "should be function": function () {

@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -rubygems
 begin
   require "juicer/merger/javascript_merger"
 rescue LoadError => err
@@ -24,9 +24,11 @@ def add_license(file, version)
  *
  * #{File.read("LICENSE").split("\n").join("\n * ")}
  */
+
+"use strict";
 PREAMBLE
 
-    f.puts(contents)
+    f.puts(contents.gsub("\"use strict\";\n", ""))
   end
 end
 

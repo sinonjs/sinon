@@ -24,6 +24,8 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
+"use strict";
+
 (function (global) {
     testCase("SetTimeOutTest", {
         setUp: function () {
@@ -183,12 +185,12 @@
             assert(stubs[1].called);
         },
 
-        "should call function with global object as this": function () {
+        "should call function with global object or null (strict mode) as this": function () {
             var stub = sinon.stub.create().throws();
             this.clock.setTimeout(stub, 100);
             this.clock.tick(100);
 
-            assert(stub.calledOn(global));
+            assert(stub.calledOn(global) || stub.calledOn(null));
         },
 
         "should trigger in the order scheduled": function () {

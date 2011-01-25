@@ -21,7 +21,9 @@
  *
  * Copyright (c) 2010-2011 Christian Johansen
  */
-(function () {
+"use strict";
+
+(function (global) {
     testCase("SandboxTest", {
         "should be object": function () {
             assertObject(sinon.sandbox);
@@ -85,9 +87,8 @@
         }
     });
 
-    var global = this;
-    var globalXHR = this.XMLHttpRequest;
-    var globalAXO = this.ActiveXObject;
+    var globalXHR = global.XMLHttpRequest;
+    var globalAXO = global.ActiveXObject;
 
     testCase("SandboxUseFakeXMLHttpRequestTest", {
         setUp: function () {
@@ -415,4 +416,4 @@
             assertObject(object.sandbox);
         }
     });
-}());
+}(this));
