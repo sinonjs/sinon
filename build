@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -rubygems
+#!/usr/bin/env ruby
 begin
   require "juicer/merger/javascript_merger"
 rescue LoadError => err
