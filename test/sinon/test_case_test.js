@@ -174,6 +174,24 @@
             testCase.testA();
 
             assertSame(myMeth, myObj.meth);
+        },
+
+        "should allow the use of helper methods": function () {
+            var helper = sinon.spy();
+
+            var testC = sinon.testCase({
+                doIt: helper,
+
+                testIt: function () {
+                    this.doIt();
+                }
+            });
+
+            assertNoException(function () {
+                testC.testIt();
+            });
+
+            assert(helper.calledOnce);
         }
     });
 }());
