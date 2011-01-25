@@ -192,6 +192,7 @@
             });
 
             assert(helper.calledOnce);
+            assert(helper.calledOn(testC));
         }
     });
 }());
