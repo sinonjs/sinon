@@ -1281,4 +1281,30 @@
             assertEquals("meth", obj.meth.toString());
         }
     });
+
+    testCase("SpyResetTest", {
+        "should reset spy state": function () {
+            var spy = sinon.spy();
+            spy();
+
+            spy.reset();
+
+            assert(!spy.called);
+            assert(!spy.calledOnce);
+            assertEquals(0, spy.args.length);
+            assertEquals(0, spy.returnValues.length);
+            assertEquals(0, spy.exceptions.length);
+            assertEquals(0, spy.thisValues.length);
+        },
+
+        "should reset call order state": function () {
+            var spies = [sinon.spy(), sinon.spy()];
+            spies[0]();
+            spies[1]();
+
+            spies[0].reset();
+
+            assert(!spies[0].calledBefore(spies[1]));
+        }
+    });
 }());
