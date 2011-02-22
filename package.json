@@ -1,7 +1,7 @@
 { 
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "http://cjohansen.no/sinon/",
   "author": "Christian Johansen",
   "repository": { 
@@ -14,7 +14,7 @@
   },
   "licenses": [ 
      { "type": "BSD",
-       "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE",
+       "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
      }
   ],
   "main": "./lib/sinon.js",
