@@ -14,7 +14,7 @@
   },
   "licenses": [ 
      { "type": "BSD",
-       "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE",
+       "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
      }
   ],
   "main": "./lib/sinon.js",

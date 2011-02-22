@@ -1,3 +1,8 @@
+== 1.0.2 / 2011-02-22
+* Fix JSON bug in package.json
+* Sandbox no longer tries to use a fake server if config says so, but
+  server is not loaded
+
 == 1.0.1 / 2010-12-20
 * Make sure sinon.sandbox is exposed in node.js (fix by Gord Tanner)
 
