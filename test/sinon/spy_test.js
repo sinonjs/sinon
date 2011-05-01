@@ -1307,4 +1307,95 @@
             assert(!spies[0].calledBefore(spies[1]));
         }
     });
+
+    testCase("WithArgsTest", {
+        "should define withArgs method": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.withArgs);
+        },
+
+        "should record single call": function () {
+            var spy = sinon.spy().withArgs(1);
+            spy(1);
+
+            assertEquals(1, spy.callCount);
+        },
+
+        "should record non-matching call on original spy": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1);
+            spy(1);
+            spy(2);
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should record non-matching call with several arguments separately": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1, "str", {});
+            spy(1);
+            spy(1, "str", {});
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should record for partial argument match": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1, "str", {});
+            spy(1);
+            spy(1, "str", {});
+            spy(1, "str", {}, []);
+
+            assertEquals(3, spy.callCount);
+            assertEquals(2, argSpy.callCount);
+        },
+
+        "should record filtered spy when original throws": function () {
+            var spy = sinon.spy(function () {
+                throw new Error("Oops");
+            });
+
+            var argSpy = spy.withArgs({}, []);
+
+            assertException(function () {
+                spy(1);
+            });
+
+            assertException(function () {
+                spy({}, []);
+            });
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should return existing override for arguments": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs({}, []);
+            var another = spy.withArgs({}, []);
+            spy();
+            spy({}, []);
+            spy({}, [], 2);
+
+            assertSame(argSpy, another);
+            assertNotSame(spy, another);
+            assertEquals(3, spy.callCount);
+            assertEquals(2, spy.withArgs({}, []).callCount);
+        },
+
+        "should chain withArgs calls on original spy": function () {
+            var spy = sinon.spy();
+            var numArgSpy = spy.withArgs({}, []).withArgs(3);
+            spy();
+            spy({}, []);
+            spy(3);
+
+            assertEquals(3, spy.callCount);
+            assertEquals(1, numArgSpy.callCount);
+            assertEquals(1, spy.withArgs({}, []).callCount);
+        }
+    });
 }());
