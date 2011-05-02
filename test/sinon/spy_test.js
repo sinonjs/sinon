@@ -1082,7 +1082,7 @@
         this.thisValue = {};
         this.args = [{}, [], function () {}, 3];
         this.returnValue = function () {};
-        this.call = sinon.spyCall.create(this.thisValue, this.args, this.returnValue);
+        this.call = sinon.spyCall.create(function () {}, this.thisValue, this.args, this.returnValue);
     }
 
     testCase("SpyCallObjectTest", {
@@ -1196,15 +1196,101 @@
         },
 
         "should return true for no arguments": function () {
-            var call = sinon.spyCall.create({}, []);
+            var call = sinon.spyCall.create(function () {}, {}, []);
 
             assert(call.calledWithExactly());
         },
 
         "should return false when called with no args but matching one": function () {
-            var call = sinon.spyCall.create({}, []);
+            var call = sinon.spyCall.create(function () {}, {}, []);
 
             assertFalse(call.calledWithExactly({}));
+        }
+    });
+
+    testCase("SpyCallToStringTest", {
+        setUp: function () {
+            this.format = sinon.format;
+        },
+
+        tearDown: function () {
+            sinon.format = this.format;
+        },
+
+        "should include spy name": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt();
+
+            assertEquals("doIt()", object.doIt.getCall(0).toString());
+        },
+
+        "should include single argument": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt(42);
+
+            assertEquals("doIt(42)", object.doIt.getCall(0).toString());
+        },
+
+        "should include all arguments": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey)", object.doIt.getCall(0).toString());
+        },
+
+        "should include explicit return value": function () {
+            var object = { doIt: sinon.stub().returns(42) };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey) => 42", object.doIt.getCall(0).toString());
+        },
+
+        "should include empty string return value": function () {
+            var object = { doIt: sinon.stub().returns("") };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey) => ", object.doIt.getCall(0).toString());
+        },
+
+        "should include exception": function () {
+            var object = { doIt: sinon.stub().throws("TypeError") };
+
+            try {
+                object.doIt();
+            } catch (e) {}
+
+            assertEquals("doIt() !TypeError", object.doIt.getCall(0).toString());
+        },
+
+        "should include exception message if any": function () {
+            var object = { doIt: sinon.stub().throws("TypeError", "Oh noes!") };
+
+            try {
+                object.doIt();
+            } catch (e) {}
+
+            assertEquals("doIt() !TypeError(Oh noes!)",
+                         object.doIt.getCall(0).toString());
+        },
+
+        "should format arguments with sinon.format": function () {
+            sinon.format = sinon.stub().returns("Forty-two");
+            var object = { doIt: sinon.spy() };
+
+            object.doIt(42);
+
+            assertEquals("doIt(Forty-two)", object.doIt.getCall(0).toString());
+            assert(sinon.format.calledWith(42));
+        },
+
+        "should format return value with sinon.format": function () {
+            sinon.format = sinon.stub().returns("Forty-two");
+            var object = { doIt: sinon.stub().returns(42) };
+
+            object.doIt();
+
+            assertEquals("doIt() => Forty-two", object.doIt.getCall(0).toString());
+            assert(sinon.format.calledWith(42));
         }
     });
 
