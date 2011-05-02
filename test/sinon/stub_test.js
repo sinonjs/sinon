@@ -106,6 +106,18 @@
             }
         },
 
+        "should not specify exception message if not provided": function () {
+            var stub = sinon.stub.create();
+            stub.throws("Error");
+
+            try {
+                stub();
+                fail("Expected stub to throw");
+            } catch (e) {
+                assertEquals("", e.message);
+            }
+        },
+
         "should throw generic error": function () {
             var stub = sinon.stub.create();
             stub.throws();
