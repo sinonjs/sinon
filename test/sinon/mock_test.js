@@ -603,7 +603,7 @@
                 expectation.verify();
                 fail("Expected to throw");
             } catch (e) {
-                assertEquals("myMeth expected to be called once, but was called 0 times", e.message);
+                assertEquals("Expected myMeth([...]) once (never called)", e.message);
             }
         }
     });
@@ -628,6 +628,165 @@
             }, "ExpectationError");
 
             assertSame(this.method, this.object.method);
+        },
+
+        "should include all calls in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").thrice();
+            mock.expects("method").once().withArgs(42);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)", message);
+        },
+
+        "should include exact expected arguments in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").once().withExactArgs(42);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method(42) once (never called)", message);
+        },
+
+        "should include received call count in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").thrice().withExactArgs(42);
+            this.object.method(42);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method(42) thrice (called once)", message);
+        },
+
+        "should include unexpected calls in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").thrice().withExactArgs(42);
+            var message;
+
+            try {
+                this.object.method();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Unexpected call: method()\n" +
+                         "    Expected method(42) thrice (never called)", message);
+        },
+
+        "should include met expectations in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").once().withArgs(1);
+            mock.expects("method").thrice().withExactArgs(42);
+            this.object.method(1);
+            var message;
+
+            try {
+                this.object.method();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Unexpected call: method()\n" +
+                         "    Expectation met: method(1[, ...]) once\n" +
+                         "    Expected method(42) thrice (never called)", message);
+        },
+
+        "should include met expectations in error message from verify": function () {
+            var mock = this.mock;
+            mock.expects("method").once().withArgs(1);
+            mock.expects("method").thrice().withExactArgs(42);
+            this.object.method(1);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method(42) thrice (never called)\n" +
+                         "Expectation met: method(1[, ...]) once", message);
+        },
+
+        "should report min calls in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").atLeast(1);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method([...]) at least once (never called)", message);
+        },
+
+        "should report max calls in error message": function () {
+            var mock = this.mock;
+            mock.expects("method").atMost(2);
+            var message;
+
+            try {
+                this.object.method();
+                this.object.method();
+                this.object.method();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Unexpected call: method()\n" +
+                         "    Expectation met: method([...]) at most twice", message);
+        },
+
+        "should report min calls in met expectation": function () {
+            var mock = this.mock;
+            mock.expects("method").atLeast(1);
+            mock.expects("method").withArgs(2).once();
+            var message;
+
+            try {
+                this.object.method();
+                this.object.method(2);
+                this.object.method(2);
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Unexpected call: method(2)\n" +
+                         "    Expectation met: method([...]) at least once\n" +
+                         "    Expectation met: method(2[, ...]) once", message);
+        },
+
+        "should report max and min calls in error messages": function () {
+            var mock = this.mock;
+            mock.expects("method").atLeast(1).atMost(2);
+            var message;
+
+            try {
+                mock.verify();
+            } catch (e) {
+                message = e.message;
+            }
+
+            assertEquals("Expected method([...]) at least once and at most twice " +
+                         "(never called)", message);
         }
     });
 
@@ -717,6 +876,33 @@
             assertException(function () {
                 object.method();
             }, "ExpectationError");
+        },
+
+        "should allow mock calls in any order": function () {
+            var object = { method: function () {} };
+            var mock = sinon.mock(object);
+            mock.expects("method").once().withArgs(42);
+            mock.expects("method").twice().withArgs("Yeah");
+
+            assertNoException(function () {
+                object.method("Yeah");
+            });
+
+            assertNoException(function () {
+                object.method(42);
+            });
+
+            assertException(function () {
+                object.method(1);
+            });
+
+            assertNoException(function () {
+                object.method("Yeah");
+            });
+
+            assertException(function () {
+                object.method(42);
+            });
         }
     });
 
