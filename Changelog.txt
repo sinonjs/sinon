@@ -4,6 +4,9 @@
   development
 * Stubs and spies now has a withArgs method. Using it allows you to create
   several spies/stubs for the same method, filtered by received arguments
+* Stubs now has yields and yieldsTo methods for fuzzily invoking callbacks.
+  They work like callsArgAt only by inferring what callback to invoke, and
+  yieldsTo can invoke callbacks in object "options" arguments.
 * Allow sandboxes/collections to stub any property so long as the object
   has the property as an own property
 * Significantly improve error reporting from failed mock expecations. Now prints
