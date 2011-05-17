@@ -1,3 +1,7 @@
+== 1.1.1 / 2011-05-17
+* Fix broken mock verification in CommonJS when not including the full Sinon
+  package.
+
 == 1.1.0 / 2011-05-04
 * The fake server now has a autoRespond method which allows it to respond to
   requests on the fly (asynchronously), making it a good fit for mockup
