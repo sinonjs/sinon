@@ -354,6 +354,17 @@
             assertEquals(sinon.FakeXMLHttpRequest.OPENED, state);
         },
 
+        "should dispatch event using DOM Event interface": function () {
+            var listener = sinon.spy();
+            this.xhr.open("POST", "/", false);
+            this.xhr.addEventListener("readystatechange", listener);
+
+            this.xhr.send("Data");
+
+            assert(listener.calledOnce);
+            assertEquals("readystatechange", listener.args[0][0].type);
+        },
+
         "should dispatch onSend callback if set": function () {
             this.xhr.open("POST", "/", true);
             var callback = sinon.spy();
