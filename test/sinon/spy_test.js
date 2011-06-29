@@ -378,6 +378,75 @@
         }
     });
 
+    testCase("SpyCalledWithNewTest", {
+        setUp: function () {
+            this.spy = sinon.spy.create();
+        },
+
+        "should be false if spy wasn't called": function () {
+            assertFalse(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new": function () {
+            var result = new this.spy();
+
+            assert(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new on custom constructor": function () {
+            function MyThing() {}
+            MyThing.prototype = {};
+            var ns = { MyThing: MyThing };
+            sinon.spy(ns, "MyThing");
+
+            var result = new ns.MyThing();
+            assert(ns.MyThing.calledWithNew());
+        },
+
+        "should be false if called as function": function () {
+            var object = {};
+            this.spy();
+
+            assertFalse(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new at least once": function () {
+            var object = {};
+            this.spy();
+            var a = new this.spy();
+            this.spy(object);
+            this.spy(window);
+
+            assert(this.spy.calledWithNew());
+        }
+    });
+
+    testCase("SpyAlwaysCalledWithNewTest", {
+        setUp: function () {
+            this.spy = sinon.spy.create();
+        },
+
+        "should be false if spy wasn't called": function () {
+            assertFalse(this.spy.alwaysCalledWithNew());
+        },
+
+        "should be true if always called with new": function () {
+            var result = new this.spy();
+            var result2 = new this.spy();
+            var result3 = new this.spy();
+
+            assert(this.spy.alwaysCalledWithNew());
+        },
+
+        "should be false if called as function once": function () {
+            var result = new this.spy();
+            var result2 = new this.spy();
+            this.spy();
+
+            assertFalse(this.spy.alwaysCalledWithNew());
+        }
+    });
+
     testCase("SpyThisValueTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
