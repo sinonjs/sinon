@@ -410,6 +410,7 @@
         },
 
         "should be true if called with new at least once": function () {
+            var object = {};
             this.spy();
             var a = new this.spy();
             this.spy(object);
