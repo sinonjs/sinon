@@ -404,14 +404,12 @@
         },
 
         "should be false if called as function": function () {
-            var object = {};
             this.spy();
 
             assertFalse(this.spy.calledWithNew());
         },
 
         "should be true if called with new at least once": function () {
-            var object = {};
             this.spy();
             var a = new this.spy();
             this.spy(object);
