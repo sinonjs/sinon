@@ -417,6 +417,16 @@
             this.spy(window);
 
             assert(this.spy.calledWithNew());
+        },
+
+        "should be true newed constructor returns object": function () {
+            function MyThing() { return {}; }
+            var object = { MyThing: MyThing };
+            sinon.spy(object, "MyThing");
+
+            var result = new object.MyThing;
+
+            assert(object.MyThing.calledWithNew());
         }
     });
 
