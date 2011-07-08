@@ -23,7 +23,14 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function (global) {
+    var supportsAjax = typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined";
+
     testCase("SandboxTest", {
         "should be object": function () {
             assertObject(sinon.sandbox);
@@ -90,74 +97,76 @@
     var globalXHR = global.XMLHttpRequest;
     var globalAXO = global.ActiveXObject;
 
-    testCase("SandboxUseFakeXMLHttpRequestTest", {
-        setUp: function () {
-            this.sandbox = sinon.create(sinon.sandbox);
-        },
+    if (globalXHR || globalAXO) {
+        testCase("SandboxUseFakeXMLHttpRequestTest", {
+            setUp: function () {
+                this.sandbox = sinon.create(sinon.sandbox);
+            },
 
-        tearDown: function () {
-            this.sandbox.restore();
-        },
+            tearDown: function () {
+                this.sandbox.restore();
+            },
 
-        "should call sinon.useFakeXMLHttpRequest": sinon.test(function () {
-            this.stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
-            this.sandbox.useFakeXMLHttpRequest();
+            "should call sinon.useFakeXMLHttpRequest": sinon.test(function () {
+                this.stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
+                this.sandbox.useFakeXMLHttpRequest();
 
-            assert(sinon.useFakeXMLHttpRequest.called);
-        }),
+                assert(sinon.useFakeXMLHttpRequest.called);
+            }),
 
-        "should add fake xhr to fake collection": function () {
-            this.sandbox.useFakeXMLHttpRequest();
-            this.sandbox.restore();
+            "should add fake xhr to fake collection": function () {
+                this.sandbox.useFakeXMLHttpRequest();
+                this.sandbox.restore();
 
-            assertSame(globalXHR, global.XMLHttpRequest);
-            assertSame(globalAXO, global.ActiveXObject);
-        }
-    });
+                assertSame(globalXHR, global.XMLHttpRequest);
+                assertSame(globalAXO, global.ActiveXObject);
+            }
+        });
 
-    testCase("SandboxUseServer", {
-        setUp: function () {
-            this.sandbox = sinon.create(sinon.sandbox);
-        },
+        testCase("SandboxUseServer", {
+            setUp: function () {
+                this.sandbox = sinon.create(sinon.sandbox);
+            },
 
-        tearDown: function () {
-            this.sandbox.restore();
-        },
+            tearDown: function () {
+                this.sandbox.restore();
+            },
 
-        "should return server": function () {
-            var server = this.sandbox.useFakeServer();
+            "should return server": function () {
+                var server = this.sandbox.useFakeServer();
 
-            assertObject(server);
-            assertFunction(server.restore);
-        },
+                assertObject(server);
+                assertFunction(server.restore);
+            },
 
-        "should expose server property": function () {
-            var server = this.sandbox.useFakeServer();
+            "should expose server property": function () {
+                var server = this.sandbox.useFakeServer();
 
-            assertSame(server, this.sandbox.server);
-        },
+                assertSame(server, this.sandbox.server);
+            },
 
-        "should create server": function () {
-            var server = this.sandbox.useFakeServer();
+            "should create server": function () {
+                var server = this.sandbox.useFakeServer();
 
-            assert(sinon.fakeServer.isPrototypeOf(server));
-        },
+                assert(sinon.fakeServer.isPrototypeOf(server));
+            },
 
-        "should create server with cock": function () {
-            this.sandbox.serverPrototype = sinon.fakeServerWithClock;
-            var server = this.sandbox.useFakeServer();
+            "should create server with cock": function () {
+                this.sandbox.serverPrototype = sinon.fakeServerWithClock;
+                var server = this.sandbox.useFakeServer();
 
-            assert(sinon.fakeServerWithClock.isPrototypeOf(server));
-        },
+                assert(sinon.fakeServerWithClock.isPrototypeOf(server));
+            },
 
-        "should add server to fake collection": function () {
-            this.sandbox.useFakeServer();
-            this.sandbox.restore();
+            "should add server to fake collection": function () {
+                this.sandbox.useFakeServer();
+                this.sandbox.restore();
 
-            assertSame(globalXHR, global.XMLHttpRequest);
-            assertSame(globalAXO, global.ActiveXObject);
-        }
-    });
+                assertSame(globalXHR, global.XMLHttpRequest);
+                assertSame(globalAXO, global.ActiveXObject);
+            }
+        });
+    }
 
     testCase("SandboxInjectTest", {
         setUp: function () {
@@ -198,6 +207,11 @@
         },
 
         "should define server and requests when using fake time": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             this.sandbox.useFakeServer();
             this.sandbox.inject(this.obj);
 
@@ -210,6 +224,11 @@
         },
 
         "should define all possible fakes": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             this.sandbox.useFakeServer();
             this.sandbox.useFakeTimers();
             this.sandbox.inject(this.obj);
@@ -282,13 +301,20 @@
             this.requests = [];
             this.fakeServer = { requests: this.requests };
             this.clock = {};
-            sinon.stub(sinon.fakeServer, "create").returns(this.fakeServer);
+
             sinon.stub(sinon, "useFakeTimers").returns(this.clock);
+
+            if (sinon.fakeServer) {
+                sinon.stub(sinon.fakeServer, "create").returns(this.fakeServer);
+            }
         },
 
         tearDown: function () {
-            sinon.fakeServer.create.restore();
             sinon.useFakeTimers.restore();
+
+            if (sinon.fakeServer) {
+                sinon.fakeServer.create.restore();
+            }
         },
 
         "should yield stub, mock as arguments": function () {
@@ -326,6 +352,11 @@
         },
 
         "should yield server when faking xhr": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var sandbox = sinon.sandbox.create(sinon.getConfig({
                 injectIntoThis: false,
                 properties: ["server", "stub", "mock"]
@@ -338,6 +369,11 @@
         },
 
         "should use serverWithClock when faking xhr": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var sandbox = sinon.sandbox.create(sinon.getConfig({
                 injectIntoThis: false,
                 properties: ["server"],
@@ -348,6 +384,11 @@
         },
 
         "should yield clock when faking timers": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var sandbox = sinon.sandbox.create(sinon.getConfig({
                 injectIntoThis: false,
                 properties: ["server", "clock"]
@@ -368,6 +409,11 @@
         },
 
         "should inject properties into object": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var object = {};
 
             var sandbox = sinon.sandbox.create(sinon.getConfig({
@@ -385,6 +431,11 @@
         },
 
         "should inject server and clock when only enabling them": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var object = {};
 
             var sandbox = sinon.sandbox.create(sinon.getConfig({
@@ -416,4 +467,4 @@
             assertObject(object.sandbox);
         }
     });
-}(this));
+}(typeof global == "object" ? global : this));

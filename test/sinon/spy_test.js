@@ -22,6 +22,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("SpyCreateTest", {
         "should be function": function () {
@@ -1160,7 +1165,7 @@
         this.thisValue = {};
         this.args = [{}, [], function () {}, 3];
         this.returnValue = function () {};
-        this.call = sinon.spyCall.create(function () {}, this.thisValue, this.args, this.returnValue);
+        this.call = sinon.spy.spyCall.create(function () {}, this.thisValue, this.args, this.returnValue);
     }
 
     testCase("SpyCallObjectTest", {
@@ -1274,13 +1279,13 @@
         },
 
         "should return true for no arguments": function () {
-            var call = sinon.spyCall.create(function () {}, {}, []);
+            var call = sinon.spy.spyCall.create(function () {}, {}, []);
 
             assert(call.calledWithExactly());
         },
 
         "should return false when called with no args but matching one": function () {
-            var call = sinon.spyCall.create(function () {}, {}, []);
+            var call = sinon.spy.spyCall.create(function () {}, {}, []);
 
             assertFalse(call.calledWithExactly({}));
         }

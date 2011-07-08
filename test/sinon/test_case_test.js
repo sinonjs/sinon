@@ -17,6 +17,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("SinonTestCaseTest", {
         "should be function": function () {

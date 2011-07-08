@@ -1,9 +1,8 @@
 var jstestdriver = {};
 
 load("test/rhino/env.rhino.1.2.js");
-load("test/rhino/Asserts.js");
-var assert = assertTrue;
-load("test/rhino/test_case_shim.js");
+load("test/Asserts.js");
+load("test/test_case_shim.js");
 
 load("lib/sinon.js");
 load("lib/sinon/assert.js");

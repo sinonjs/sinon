@@ -19,6 +19,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("CollectionCreateTest", {
         "should create fake collection": function () {
