@@ -26,6 +26,12 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../../test_case_shim");
+    var sinon = require("../../../lib/sinon");
+    sinon.extend(sinon, require("../../../lib/sinon/util/fake_timers"));
+}
+
 (function (global) {
     testCase("SetTimeOutTest", {
         setUp: function () {
@@ -484,10 +490,13 @@
         },
 
         "should create real Date objects when Date constructor is gone": function () {
+            var realDate = new Date();
+            Date = function () {};
             global.Date = function () {};
+
             var date = new this.clock.Date();
 
-            assert(this.Date.prototype.isPrototypeOf(date));
+            assertSame(realDate.constructor.prototype, date.constructor.prototype);
         },
 
         "should create Date objects representing clock time": function () {
@@ -650,6 +659,7 @@
     testCase("SinonStubTimersTest", {
         tearDown: function () {
             this.clock.restore();
+            clearTimeout(this.timer);
         },
 
         "should return clock object": function () {
@@ -709,7 +719,7 @@
             var stub = sinon.stub.create();
             this.clock.restore();
 
-            setTimeout(stub, 1000);
+            this.timer = setTimeout(stub, 1000);
             this.clock.tick(1000);
 
             assertFalse(stub.called);
@@ -749,7 +759,7 @@
             var stub = sinon.stub.create();
             this.clock.restore();
 
-            setInterval(stub, 1000);
+            this.timer = setInterval(stub, 1000);
             this.clock.tick(1000);
 
             assertFalse(stub.called);
@@ -809,4 +819,4 @@
             assertSame(sinon.timers.clearInterval, clearInterval);
         }
     });
-}(this));
+}(typeof global != "undefined" ? global : this));

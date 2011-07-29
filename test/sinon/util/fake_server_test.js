@@ -500,6 +500,20 @@ testCase("ServerRespondWithFunctionHandlerTest", {
 
         assert(handler.called);
         assert(xhr.respond.calledOnce);
+    },
+
+    "should yield URL capture groups to response handler": function () {
+        var handler = sinon.spy();
+        this.server.respondWith("GET", /\/people\/(\d+)/, handler);
+        var xhr = new sinon.FakeXMLHttpRequest();
+        xhr.respond = sinon.spy();
+        xhr.open("GET", "/people/3");
+        xhr.send();
+
+        this.server.respond();
+
+        assert(handler.called);
+        assertEquals([xhr, 3], handler.args[0]);
     }
 });
 

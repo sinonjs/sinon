@@ -1,3 +1,45 @@
+== 1.1.1 / 2011-05-17
+* Fix broken mock verification in CommonJS when not including the full Sinon
+  package.
+
+== 1.1.0 / 2011-05-04
+* The fake server now has a autoRespond method which allows it to respond to
+  requests on the fly (asynchronously), making it a good fit for mockup
+  development
+* Stubs and spies now has a withArgs method. Using it allows you to create
+  several spies/stubs for the same method, filtered by received arguments
+* Stubs now has yields and yieldsTo methods for fuzzily invoking callbacks.
+  They work like callsArgAt only by inferring what callback to invoke, and
+  yieldsTo can invoke callbacks in object "options" arguments.
+* Allow sandboxes/collections to stub any property so long as the object
+  has the property as an own property
+* Significantly improve error reporting from failed mock expecations. Now prints
+  all met and unmet expectations with expected and received arguments
+* Allow mock expectations to be consumed in any order
+* Add pretty printing of all calls when assertions fail
+* Fix bug: Stub exception message ended up as "undefined" (string) if not
+  specified
+* Pass capture groups in URLs to fakeServer function handlers
+* Pass through return value from test function in testCase
+* typeof require is not enough to assume node, also use typeof module
+* Don't use Object.create in sinon.create. In the off chance that someone stubs
+  it, sinon will fail mysteriously (Thanks to Espen Dalløkken)
+* Catch exceptions when parsing DOM elements "on a hunch"
+  When responding to XHRs, Sinon acts like most browsers and try to parse the
+  response into responseXML if Content-Type indicates XML or HTML. However, it
+  also does this if the type is not set. Obviously, this may misfire and
+  should be caught.
+* Fix fakeServer.respond() to not drop requests when they are queued during the
+  processing of an existing queue. (Sven Fuchs)
+* Clean up module loading in CommonJS environments (Node.js still the only
+  tested such environment). No longer (temporarily) modifies require.paths,
+  always loads all modules.
+
+== 1.0.2 / 2011-02-22
+* Fix JSON bug in package.json
+* Sandbox no longer tries to use a fake server if config says so, but
+  server is not loaded
+
 == 1.0.1 / 2010-12-20
 * Make sure sinon.sandbox is exposed in node.js (fix by Gord Tanner)
 

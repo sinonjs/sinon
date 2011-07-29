@@ -19,6 +19,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("StubCreateTest", {
         "should return function": function () {
@@ -103,6 +108,18 @@
                 fail("Expected stub to throw");
             } catch (e) {
                 assertEquals(message, e.message);
+            }
+        },
+
+        "should not specify exception message if not provided": function () {
+            var stub = sinon.stub.create();
+            stub.throws("Error");
+
+            try {
+                stub();
+                fail("Expected stub to throw");
+            } catch (e) {
+                assertEquals("", e.message);
             }
         },
 
@@ -570,6 +587,44 @@
 
             assertException(function () {
                 stub({ error: callback });
+            });
+        }
+    });
+
+    testCase("StubWithArgsTest", {
+        "should define withArgs method": function () {
+            var stub = sinon.stub();
+
+            assertFunction(stub.withArgs);
+        },
+
+        "should create filtered stub": function () {
+            var stub = sinon.stub();
+            var other = stub.withArgs(23);
+
+            assertNotSame(stub, other);
+            assertFunction(stub.returns);
+            assertFunction(other.returns);
+        },
+
+        "should filter return values based on arguments": function () {
+            var stub = sinon.stub().returns(23);
+            stub.withArgs(42).returns(99);
+
+            assertEquals(23, stub());
+            assertEquals(99, stub(42));
+        },
+
+        "should filter exceptions based on arguments": function () {
+            var stub = sinon.stub().returns(23);
+            stub.withArgs(42).throws();
+
+            assertNoException(function () {
+                stub();
+            });
+
+            assertException(function () {
+                stub(42);
             });
         }
     });

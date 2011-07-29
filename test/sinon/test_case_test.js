@@ -17,6 +17,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("SinonTestCaseTest", {
         "should be function": function () {
@@ -193,6 +198,33 @@
 
             assert(helper.calledOnce);
             assert(helper.calledOn(testC));
+        },
+
+        "should return result of test function": function () {
+            var testC = sinon.testCase({
+                testIt: sinon.stub().returns(42)
+            });
+
+            assertEquals(42, testC.testIt());
+        },
+
+        "should return result of test function with setUp": function () {
+            var testC = sinon.testCase({
+                setUp: sinon.spy(),
+                testIt: sinon.stub().returns(42)
+            });
+
+            assertEquals(42, testC.testIt());
+        },
+
+        "should return result of test function with setUp and teardown": function () {
+            var testC = sinon.testCase({
+                setUp: sinon.spy(),
+                tearDown: sinon.spy(),
+                testIt: sinon.stub().returns(42)
+            });
+
+            assertEquals(42, testC.testIt());
         }
     });
 }());

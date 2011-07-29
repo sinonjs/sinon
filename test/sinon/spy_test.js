@@ -22,6 +22,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("SpyCreateTest", {
         "should be function": function () {
@@ -375,6 +380,84 @@
             this.spy();
 
             assertFalse(this.spy.alwaysCalledOn(object));
+        }
+    });
+
+    testCase("SpyCalledWithNewTest", {
+        setUp: function () {
+            this.spy = sinon.spy.create();
+        },
+
+        "should be false if spy wasn't called": function () {
+            assertFalse(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new": function () {
+            var result = new this.spy();
+
+            assert(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new on custom constructor": function () {
+            function MyThing() {}
+            MyThing.prototype = {};
+            var ns = { MyThing: MyThing };
+            sinon.spy(ns, "MyThing");
+
+            var result = new ns.MyThing();
+            assert(ns.MyThing.calledWithNew());
+        },
+
+        "should be false if called as function": function () {
+            this.spy();
+
+            assertFalse(this.spy.calledWithNew());
+        },
+
+        "should be true if called with new at least once": function () {
+            var object = {};
+            this.spy();
+            var a = new this.spy();
+            this.spy(object);
+            this.spy(window);
+
+            assert(this.spy.calledWithNew());
+        },
+
+        "should be true newed constructor returns object": function () {
+            function MyThing() { return {}; }
+            var object = { MyThing: MyThing };
+            sinon.spy(object, "MyThing");
+
+            var result = new object.MyThing;
+
+            assert(object.MyThing.calledWithNew());
+        }
+    });
+
+    testCase("SpyAlwaysCalledWithNewTest", {
+        setUp: function () {
+            this.spy = sinon.spy.create();
+        },
+
+        "should be false if spy wasn't called": function () {
+            assertFalse(this.spy.alwaysCalledWithNew());
+        },
+
+        "should be true if always called with new": function () {
+            var result = new this.spy();
+            var result2 = new this.spy();
+            var result3 = new this.spy();
+
+            assert(this.spy.alwaysCalledWithNew());
+        },
+
+        "should be false if called as function once": function () {
+            var result = new this.spy();
+            var result2 = new this.spy();
+            this.spy();
+
+            assertFalse(this.spy.alwaysCalledWithNew());
         }
     });
 
@@ -1082,7 +1165,7 @@
         this.thisValue = {};
         this.args = [{}, [], function () {}, 3];
         this.returnValue = function () {};
-        this.call = sinon.spyCall.create(this.thisValue, this.args, this.returnValue);
+        this.call = sinon.spy.spyCall.create(function () {}, this.thisValue, this.args, this.returnValue);
     }
 
     testCase("SpyCallObjectTest", {
@@ -1196,15 +1279,101 @@
         },
 
         "should return true for no arguments": function () {
-            var call = sinon.spyCall.create({}, []);
+            var call = sinon.spy.spyCall.create(function () {}, {}, []);
 
             assert(call.calledWithExactly());
         },
 
         "should return false when called with no args but matching one": function () {
-            var call = sinon.spyCall.create({}, []);
+            var call = sinon.spy.spyCall.create(function () {}, {}, []);
 
             assertFalse(call.calledWithExactly({}));
+        }
+    });
+
+    testCase("SpyCallToStringTest", {
+        setUp: function () {
+            this.format = sinon.format;
+        },
+
+        tearDown: function () {
+            sinon.format = this.format;
+        },
+
+        "should include spy name": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt();
+
+            assertEquals("doIt()", object.doIt.getCall(0).toString());
+        },
+
+        "should include single argument": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt(42);
+
+            assertEquals("doIt(42)", object.doIt.getCall(0).toString());
+        },
+
+        "should include all arguments": function () {
+            var object = { doIt: sinon.spy() };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey)", object.doIt.getCall(0).toString());
+        },
+
+        "should include explicit return value": function () {
+            var object = { doIt: sinon.stub().returns(42) };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey) => 42", object.doIt.getCall(0).toString());
+        },
+
+        "should include empty string return value": function () {
+            var object = { doIt: sinon.stub().returns("") };
+            object.doIt(42, "Hey");
+
+            assertEquals("doIt(42, Hey) => ", object.doIt.getCall(0).toString());
+        },
+
+        "should include exception": function () {
+            var object = { doIt: sinon.stub().throws("TypeError") };
+
+            try {
+                object.doIt();
+            } catch (e) {}
+
+            assertEquals("doIt() !TypeError", object.doIt.getCall(0).toString());
+        },
+
+        "should include exception message if any": function () {
+            var object = { doIt: sinon.stub().throws("TypeError", "Oh noes!") };
+
+            try {
+                object.doIt();
+            } catch (e) {}
+
+            assertEquals("doIt() !TypeError(Oh noes!)",
+                         object.doIt.getCall(0).toString());
+        },
+
+        "should format arguments with sinon.format": function () {
+            sinon.format = sinon.stub().returns("Forty-two");
+            var object = { doIt: sinon.spy() };
+
+            object.doIt(42);
+
+            assertEquals("doIt(Forty-two)", object.doIt.getCall(0).toString());
+            assert(sinon.format.calledWith(42));
+        },
+
+        "should format return value with sinon.format": function () {
+            sinon.format = sinon.stub().returns("Forty-two");
+            var object = { doIt: sinon.stub().returns(42) };
+
+            object.doIt();
+
+            assertEquals("doIt() => Forty-two", object.doIt.getCall(0).toString());
+            assert(sinon.format.calledWith(42));
         }
     });
 
@@ -1279,6 +1448,123 @@
             obj.meth();
 
             assertEquals("meth", obj.meth.toString());
+        }
+    });
+
+    testCase("SpyResetTest", {
+        "should reset spy state": function () {
+            var spy = sinon.spy();
+            spy();
+
+            spy.reset();
+
+            assert(!spy.called);
+            assert(!spy.calledOnce);
+            assertEquals(0, spy.args.length);
+            assertEquals(0, spy.returnValues.length);
+            assertEquals(0, spy.exceptions.length);
+            assertEquals(0, spy.thisValues.length);
+        },
+
+        "should reset call order state": function () {
+            var spies = [sinon.spy(), sinon.spy()];
+            spies[0]();
+            spies[1]();
+
+            spies[0].reset();
+
+            assert(!spies[0].calledBefore(spies[1]));
+        }
+    });
+
+    testCase("WithArgsTest", {
+        "should define withArgs method": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.withArgs);
+        },
+
+        "should record single call": function () {
+            var spy = sinon.spy().withArgs(1);
+            spy(1);
+
+            assertEquals(1, spy.callCount);
+        },
+
+        "should record non-matching call on original spy": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1);
+            spy(1);
+            spy(2);
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should record non-matching call with several arguments separately": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1, "str", {});
+            spy(1);
+            spy(1, "str", {});
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should record for partial argument match": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs(1, "str", {});
+            spy(1);
+            spy(1, "str", {});
+            spy(1, "str", {}, []);
+
+            assertEquals(3, spy.callCount);
+            assertEquals(2, argSpy.callCount);
+        },
+
+        "should record filtered spy when original throws": function () {
+            var spy = sinon.spy(function () {
+                throw new Error("Oops");
+            });
+
+            var argSpy = spy.withArgs({}, []);
+
+            assertException(function () {
+                spy(1);
+            });
+
+            assertException(function () {
+                spy({}, []);
+            });
+
+            assertEquals(2, spy.callCount);
+            assertEquals(1, argSpy.callCount);
+        },
+
+        "should return existing override for arguments": function () {
+            var spy = sinon.spy();
+            var argSpy = spy.withArgs({}, []);
+            var another = spy.withArgs({}, []);
+            spy();
+            spy({}, []);
+            spy({}, [], 2);
+
+            assertSame(argSpy, another);
+            assertNotSame(spy, another);
+            assertEquals(3, spy.callCount);
+            assertEquals(2, spy.withArgs({}, []).callCount);
+        },
+
+        "should chain withArgs calls on original spy": function () {
+            var spy = sinon.spy();
+            var numArgSpy = spy.withArgs({}, []).withArgs(3);
+            spy();
+            spy({}, []);
+            spy(3);
+
+            assertEquals(3, spy.callCount);
+            assertEquals(1, numArgSpy.callCount);
+            assertEquals(1, spy.withArgs({}, []).callCount);
         }
     });
 }());

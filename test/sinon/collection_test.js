@@ -19,6 +19,11 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
     testCase("CollectionCreateTest", {
         "should create fake collection": function () {
@@ -43,7 +48,7 @@
         },
 
         "should call stub": function () {
-            var object = { id: 42 };
+            var object = { method: function () {} };
             var args;
 
             sinon.stub = function () {
@@ -56,7 +61,7 @@
         },
 
         "should add stub to fake array": function () {
-            var object = { id: 42 };
+            var object = { method: function () {} };
 
             sinon.stub = function () {
                 return object;
@@ -75,10 +80,39 @@
                 return objects[i++];
             };
 
-            this.collection.stub({}, "method");
-            this.collection.stub({}, "method");
+            this.collection.stub({ method: function () {} }, "method");
+            this.collection.stub({ method: function () {} }, "method");
 
             assertEquals(objects, this.collection.fakes);
+        }
+    });
+
+    testCase("CollectionStubAnythingTest", {
+        setUp: function () {
+            this.object = { property: 42 };
+            this.collection = sinon.create(sinon.collection);
+        },
+
+        "should stub number property": function () {
+            this.collection.stub(this.object, "property", 1);
+
+            assertEquals(1, this.object.property);
+        },
+
+        "should restore number property": function () {
+            this.collection.stub(this.object, "property", 1);
+            this.collection.restore();
+
+            assertEquals(42, this.object.property);
+        },
+
+        "should fail if property does not exist": function () {
+            var collection = this.collection;
+            var object = {};
+
+            assertException(function () {
+                collection.stub(object, "prop", 1);
+            });
         }
     });
 
@@ -152,8 +186,8 @@
                 return objects[i++];
             };
 
-            this.collection.mock({}, "method");
-            this.collection.stub({}, "method");
+            this.collection.mock({ method: function () {} }, "method");
+            this.collection.stub({ method: function () {} }, "method");
 
             assertEquals(objects, this.collection.fakes);
         }

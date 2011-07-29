@@ -21,7 +21,14 @@
  */
 "use strict";
 
+if (typeof require == "function" && typeof testCase == "undefined") {
+    var testCase = require("../test_case_shim");
+    var sinon = require("../../lib/sinon");
+}
+
 (function () {
+    var supportsAjax = typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined";
+
     testCase("SinonTestTest", {
         tearDown: function () {
             sinon.config = {};
@@ -287,6 +294,11 @@
         },
 
         "should yield server when faking xhr": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var stubbed, mocked, server;
             var obj = { meth: function () {} };
 
@@ -309,6 +321,11 @@
         },
 
         "should use serverWithClock when faking xhr": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var server;
 
             sinon.config = {
@@ -326,21 +343,18 @@
         },
 
         "should yield clock when faking timers": function () {
-            var server, clock;
+            var clock;
 
             sinon.config = {
                 injectIntoThis: false,
-                properties: ["server", "clock"]
+                properties: ["clock"]
             };
 
-            sinon.test(function (s, c) {
-                server = s;
+            sinon.test(function (c) {
                 clock = c;
-
-                assertEquals(2, arguments.length);
+                assertEquals(1, arguments.length);
             })();
 
-            assertFakeServer(server);
             assertClock(clock);
         },
 
@@ -375,22 +389,25 @@
             var testCase = boundTestCase();
 
             sinon.config = {
-                properties: ["server", "clock"]
+                properties: ["clock"]
             };
 
             sinon.test(testCase.fn).call(testCase);
 
             assertSame(testCase, testCase.self);
             assertEquals(0, testCase.args.length);
-            assertFakeServer(testCase.server);
             assertClock(testCase.clock);
             assertUndefined(testCase.spy);
             assertUndefined(testCase.stub);
             assertUndefined(testCase.mock);
-            assertUndefined(testCase.requests);
         },
 
         "should inject properties into object": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var testCase = boundTestCase();
             var obj = {};
 
@@ -427,12 +444,15 @@
             assertFunction(testCase.spy);
             assertFunction(testCase.stub);
             assertFunction(testCase.mock);
-            assertObject(testCase.requests);
-            assertObject(testCase.server);
             assertObject(testCase.clock);
         },
 
         "should inject server and clock when only enabling them": function () {
+            if (!supportsAjax) {
+                jstestdriver.console.log("Ajax available, aborting");
+                return;
+            }
+
             var testCase = boundTestCase();
             var obj = {};
 
