@@ -234,9 +234,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should remove from collection when restored": function () {
           this.collection.restore();
-
-          assertUndefined(this.collection.fakes[0]);
-          assertUndefined(this.collection.fakes[1]);
+          assert(this.collection.fakes.length == 0);
         }
     });
 
