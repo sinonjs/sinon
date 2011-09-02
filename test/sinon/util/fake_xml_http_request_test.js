@@ -754,11 +754,10 @@
             assertEquals({}, this.xhr.requestHeaders);
         },
 
-        "should set state to DONE if headers received": function () {
+        "should set state to DONE if sent before": function () {
             var readyState;
             this.xhr.open("GET", "/");
             this.xhr.send();
-            this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
 
             this.xhr.onreadystatechange = function () {
                 readyState = this.readyState;
@@ -769,20 +768,18 @@
             assertEquals(sinon.FakeXMLHttpRequest.DONE, readyState);
         },
 
-        "should set send flag to false if headers received": function () {
+        "should set send flag to false if sent before": function () {
             this.xhr.open("GET", "/");
             this.xhr.send();
-            this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
 
             this.xhr.abort();
 
             assertFalse(this.xhr.sendFlag);
         },
 
-        "should dispatch readystatechange event if headers received": function () {
+        "should dispatch readystatechange event if sent before": function () {
             this.xhr.open("GET", "/");
             this.xhr.send();
-            this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
             this.xhr.onreadystatechange = sinon.stub();
 
             this.xhr.abort();
@@ -790,10 +787,9 @@
             assert(this.xhr.onreadystatechange.called);
         },
 
-        "should set readyState to unsent if headers received": function () {
+        "should set readyState to unsent if sent before": function () {
             this.xhr.open("GET", "/");
             this.xhr.send();
-            this.xhr.setResponseHeaders({ "X-Test": "Sumptn" });
 
             this.xhr.abort();
 
@@ -808,7 +804,8 @@
             assertFalse(this.xhr.onreadystatechange.called);
         },
 
-        "should not dispatch readystatechange event if readyState is opened": function () {
+        "should not dispatch readystatechange event if readyState is opened but not sent": function () {
+            this.xhr.open("GET", "/");
             this.xhr.onreadystatechange = sinon.stub();
 
             this.xhr.abort();
