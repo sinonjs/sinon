@@ -215,19 +215,26 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     testCase("CollectionRestoreTest", {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
-        },
-
-        "should call restore on all fakes": function () {
             this.collection.fakes = [{
                 restore: sinon.spy.create()
             }, {
                 restore: sinon.spy.create()
             }];
+        },
+
+        "should call restore on all fakes": function () {
+            var fake0 = this.collection.fakes[0];
+            var fake1 = this.collection.fakes[1];
 
             this.collection.restore();
 
-            assert(this.collection.fakes[0].restore.called);
-            assert(this.collection.fakes[1].restore.called);
+            assert(fake0.restore.called);
+            assert(fake1.restore.called);
+        },
+
+        "should remove from collection when restored": function () {
+          this.collection.restore();
+          assert(this.collection.fakes.length == 0);
         }
     });
 
