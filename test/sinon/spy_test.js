@@ -585,6 +585,52 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("SpyNeverCalledWithTest", {
+        setUp: function () {
+            this.spy = sinon.spy.create();
+        },
+
+        "should return true if spy was not called": function () {
+            assert(this.spy.neverCalledWith(1, 2, 3));
+        },
+
+        "should return false if spy was called with args": function () {
+            this.spy(1, 2, 3);
+
+            assertFalse(this.spy.neverCalledWith(1, 2, 3));
+        },
+
+        "should return false if called with args at least once": function () {
+            this.spy(1, 3, 3);
+            this.spy(1, 2, 3);
+            this.spy(3, 2, 3);
+
+            assertFalse(this.spy.neverCalledWith(1, 2, 3));
+        },
+
+        "should return true if not called with args": function () {
+            this.spy(1, 3, 3);
+            this.spy(2);
+            this.spy();
+
+            assert(this.spy.neverCalledWith(1, 2, 3));
+        },
+
+        "should return false for partial match": function () {
+            this.spy(1, 3, 3);
+            this.spy(2);
+            this.spy();
+
+            assertFalse(this.spy.neverCalledWith(1, 3));
+        },
+
+        "should match all arguments individually, not as array": function () {
+            this.spy([1, 2, 3]);
+
+            assert(this.spy.neverCalledWith(1, 2, 3));
+        }
+    });
+
     testCase("SpyArgsTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
@@ -1248,6 +1294,44 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var args = this.args;
 
             assertFalse(this.call.calledWith(args[0], args[2]));
+        }
+    });
+
+    testCase("SpyCallNotCalledWithTest", {
+        setUp: spyCallSetUp,
+
+        "should return false if all args match": function () {
+            var args = this.args;
+
+            assertFalse(this.call.notCalledWith(args[0], args[1], args[2]));
+        },
+
+        "should return false if first args match": function () {
+            var args = this.args;
+
+            assertFalse(this.call.notCalledWith(args[0], args[1]));
+        },
+
+        "should return false if first arg match": function () {
+            var args = this.args;
+
+            assertFalse(this.call.notCalledWith(args[0]));
+        },
+
+        "should return false for no args": function () {
+            assertFalse(this.call.notCalledWith());
+        },
+
+        "should return true for too many args": function () {
+            var args = this.args;
+
+            assert(this.call.notCalledWith(args[0], args[1], args[2], {}));
+        },
+
+        "should return true for wrong arg": function () {
+            var args = this.args;
+
+            assert(this.call.notCalledWith(args[0], args[2]));
         }
     });
 
