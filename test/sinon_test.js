@@ -132,6 +132,29 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("WrappedPrototypeMethodTest", {
+        setUp: function () {
+            this.type = function () {};
+            this.type.prototype.method = function () {};
+            this.object = new this.type();
+        },
+
+        "wrap should add owned property": function () {
+            var wrapper = sinon.wrapMethod(this.object, "method", function () {});
+
+            assertSame(wrapper, this.object.method);
+            assertTrue(this.object.hasOwnProperty("method"));
+        },
+
+        "restore should remove owned property": function () {
+            sinon.wrapMethod(this.object, "method", function () {});
+            this.object.method.restore();
+
+            assertSame(this.type.prototype.method, this.object.method);
+            assertFalse(this.object.hasOwnProperty("method"));
+        }
+    });
+
     testCase("SinonDeepEqualTest", {
         "should pass primitives": function () {
             assert(sinon.deepEqual(1, 1));
