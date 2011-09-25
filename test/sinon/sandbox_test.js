@@ -208,7 +208,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should define server and requests when using fake time": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -225,7 +225,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should define all possible fakes": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -353,7 +353,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should yield server when faking xhr": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -370,7 +370,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should use serverWithClock when faking xhr": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -385,7 +385,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should yield clock when faking timers": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -410,7 +410,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should inject properties into object": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
@@ -432,7 +432,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should inject server and clock when only enabling them": function () {
             if (!supportsAjax) {
-                jstestdriver.console.log("Ajax available, aborting");
+                jstestdriver.console.log("Ajax unavailable, aborting");
                 return;
             }
 
