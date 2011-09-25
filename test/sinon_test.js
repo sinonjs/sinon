@@ -171,12 +171,14 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should pass same DOM elements": function () {
             /*:DOC element = <div class="hey"></div> */
+            if (typeof document == "undefined") return console.log("Test requires DOM");
 
             assert(sinon.deepEqual(this.element, this.element));
         },
 
         "should not pass different DOM elements": function () {
             /*:DOC element = <div class="hey"></div> */
+            if (typeof document == "undefined") return console.log("Test requires DOM");
             var el = document.createElement("div");
 
             assertFalse(sinon.deepEqual(this.element, el));
@@ -184,6 +186,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should not modify DOM elements when comparing them": function () {
             /*:DOC += <div id="hey"></div> */
+            if (typeof document == "undefined") return console.log("Test requires DOM");
             var el = document.getElementById("hey");
             sinon.deepEqual(el, {})
 
