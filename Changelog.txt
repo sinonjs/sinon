@@ -1,3 +1,26 @@
+== 1.2.0 / 2011-09-27
+* Bug fix: abort() switches state to DONE when OPENED and sent. Fix by
+  Tristan Koch.
+* Bug fix: Mootools uses MSXML2.XMLHTTP as objectId, which Sinon matched with
+  different casing. Fix by Olmo Maldonado.
+* Bug fix: When wrapping a non-owned property, restore now removes the wrapper
+  instead of replacing it. Fix by Will Butler.
+* Bug fix: Make it possibly to stub Array.prototype.push by not using that
+  method directly inside Sinon.
+* Bug fix: Don't assume that req.requestBody is a string in the fake server.
+* Added spy.printf(format) to print a nicely formatted message with details
+  about a spy.
+* Garbage collection: removing fakes from collections when restoring the
+  original methods. Fix by Tristan Koch.
+* Add spy.calledWithNew to check if a function was used as a constructor
+* Add spy.notCalledWith(), spy.neverCalledWith() and
+  sinon.assert.neverCalledWith. By Max Antoni
+* Publicly expose sinon.expectation.fail to allow tools to integrate with mock
+  expectations.
+* Fake XMLHttpRequests now support a minimal portion of the events API, making
+  them work seamlessly with e.g. SproutCode (which uses
+  xhr.addEventListener("readystatechange"). Partially by Sven Fuchs.
+
 == 1.1.1 / 2011-05-17
 * Fix broken mock verification in CommonJS when not including the full Sinon
   package.
@@ -58,10 +81,10 @@
   objects from sinon.config. Now sinon.sandbox.create accepts an optional
   configuration that can be retrieved through sinon.getConfig({ ... }) - or, to
   match previous behavior, through sinon.getConfig(sinon.config);
-    
+
   The default configuration now lives in sinon.defaultConfig rather than the
   previous sinon.test.
-    
+
   This change enables external tools, such as test framework adapters, to easily
   create configurable sandboxes without going through sinon.test
 * Rewrite sinon.clock.tick to fix bug and make implementation clearer
