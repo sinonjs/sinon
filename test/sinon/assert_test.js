@@ -547,6 +547,45 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("SinonAssertNeverCalledWithTest", {
+        setUp: stubSetUp,
+        tearDown: stubTearDown,
+
+        "should fail when method fails": function () {
+            var object = {};
+            sinon.stub(this.stub, "neverCalledWith").returns(false);
+            var stub = this.stub;
+            
+            assertException(function () {
+                sinon.assert.neverCalledWith(stub, object, 1);
+            });
+
+            assert(this.stub.neverCalledWith.calledWith(object, 1));
+            assert(sinon.assert.fail.called);
+        },
+
+        "should not fail when method doesn't fail": function () {
+            var object = {};
+            sinon.stub(this.stub, "neverCalledWith").returns(true);
+            var stub = this.stub;
+            
+            assertNoException(function () {
+                sinon.assert.neverCalledWith(stub, object, 1);
+            });
+
+            assert(this.stub.neverCalledWith.calledWith(object, 1));
+            assertFalse(sinon.assert.fail.called);
+        },
+
+        "should call pass callback": function () {
+            this.stub("yeah");
+            sinon.assert.neverCalledWith(this.stub, "nah!");
+
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("neverCalledWith"));
+        }
+    });
+
     testCase("SinonAssertThrewTest", {
         setUp: stubSetUp,
         tearDown: stubTearDown,
@@ -992,6 +1031,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          "doSomething(1, 3)",
                          this.message("alwaysCalledWithExactly",
                                       this.obj.doSomething, 1, 3));
+        },
+
+        "assert.neverCalledWith exception message": function () {
+            this.obj.doSomething(1, 2, 3);
+
+            assertEquals("expected doSomething to never be called with " +
+                         "arguments 1, 2\n    doSomething(1, 2, 3)",
+                         this.message("neverCalledWith",
+                                      this.obj.doSomething, 1, 2));
         },
 
         "assert.threw exception message": function () {
