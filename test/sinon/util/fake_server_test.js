@@ -580,6 +580,14 @@ testCase("ServerRespondFakeHTTPVerbTest", {
         this.server.respond();
 
         assertEquals([200, {}, "OK"], this.request.respond.args[0]);
+    },
+
+    "should not fail when getting the HTTP method from a request with no body":
+    function () {
+        var server = this.server;
+        server.fakeHTTPMethods = true;
+
+        assertEquals("POST", server.getHTTPMethod({ method: "POST" }));
     }
 });
 
