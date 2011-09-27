@@ -252,24 +252,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
-    testCase("SinonKeysTest", {
-        "should be method": function () {
-            assertFunction(sinon.keys);
-        },
-
-        "should return enumerable keys": function () {
-            var obj = { a: 0, b: "", c: null, d: function () {}, e: {}, f: false };
-
-            assertEquals(["a", "b", "c", "d", "e", "f"], sinon.keys(obj));
-        },
-
-        "should return sorted keys": function () {
-            var obj = { d: function () {}, e: {}, f: false, a: 0, b: "", c: null };
-
-            assertEquals(["a", "b", "c", "d", "e", "f"], sinon.keys(obj));
-        }
-    });
-
     testCase("ExtendTest", {
         "should copy all properties": function () {
             var object1 = {
