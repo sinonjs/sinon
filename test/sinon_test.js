@@ -103,6 +103,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertException(function () {
                 sinon.wrapMethod(object, "method", function () {});
             }, "TypeError");
+        },
+
+        "should not throw if object is window object": function () {
+            window.sinonTestMethod = function () {};
+            try {
+                assertNoException(function () {
+                    sinon.wrapMethod(window, "sinonTestMethod", function () {});
+                });
+            } finally {
+                // IE 8 does not support delete on global properties.
+                window.sinonTestMethod = undefined;
+            }
         }
     });
 
