@@ -1375,6 +1375,270 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    function spyCallCallSetup() {
+        this.args = [];
+        this.proxy = sinon.spy();
+        this.call = sinon.spy.spyCall.create(this.proxy, {}, this.args);
+    }
+
+    testCase("SpyCallCallArgTest", {
+        setUp: spyCallCallSetup,
+
+        "should call argument at specified index": function () {
+            var callback = sinon.spy();
+            this.args.push(1, 2, callback);
+
+            this.call.callArg(2);
+
+            assert(callback.called);
+        },
+
+        "should throw if argument at specified index is not callable": function () {
+            this.args.push(1);
+            var call = this.call;
+
+            assertException(function () {
+                call.callArg(0);
+            }, "TypeError");
+        },
+
+        "should throw if no index is specified": function () {
+            var call = this.call;
+
+            assertException(function () {
+                call.callArg();
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var call = this.call;
+
+            assertException(function () {
+                call.callArg({});
+            }, "TypeError");
+        }
+
+    });
+
+    testCase("SpyCallCallArgWithTest", {
+        setUp: spyCallCallSetup,
+
+        "should call argument at specified index with provided args": function () {
+            var object = {};
+            var callback = sinon.spy();
+            this.args.push(1, callback);
+
+            this.call.callArgWith(1, object);
+
+            assert(callback.calledWith(object));
+        },
+
+        "should call callback without args": function () {
+            var callback = sinon.spy();
+            this.args.push(1, callback);
+
+            this.call.callArgWith(1);
+
+            assert(callback.calledWith());
+        },
+
+        "should call callback wit multiple args": function () {
+            var object = {};
+            var array = [];
+            var callback = sinon.spy();
+            this.args.push(1, 2, callback);
+
+            this.call.callArgWith(2, object, array);
+
+            assert(callback.calledWith(object, array));
+        },
+
+        "should throw if no index is specified": function () {
+            var call = this.call;
+
+            assertException(function () {
+                call.callArgWith();
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var call = this.call;
+
+            assertException(function () {
+                call.callArgWith({});
+            }, "TypeError");
+        }
+
+    });
+
+    testCase("SpyCallYieldTest", {
+        setUp: spyCallCallSetup,
+
+        "should invoke only argument as callback": function () {
+            var callback = sinon.spy();
+            this.args.push(callback);
+
+            this.call.yield();
+
+            assert(callback.calledOnce);
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should throw understandable error if no callback is passed": function () {
+            var call = this.call;
+
+            try {
+                call.yield();
+                throw new Error();
+            } catch (e) {
+                assertEquals("spy cannot yield since no callback was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+            this.proxy.displayName = "somethingAwesome";
+            this.args.push(23, 42);
+            var call = this.call;
+
+            try {
+                call.yield();
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome cannot yield since no callback was passed. " +
+                             "Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke last argument as callback": function () {
+            var spy = sinon.spy();
+            this.args.push(24, {}, spy);
+
+            this.call.yield();
+
+            assert(spy.calledOnce);
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should invoke first of two callbacks": function () {
+            var spy = sinon.spy();
+            var spy2 = sinon.spy();
+            this.args.push(24, {}, spy, spy2);
+
+            this.call.yield();
+
+            assert(spy.calledOnce);
+            assertFalse(spy2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+            var obj = { id: 42 };
+            var spy = sinon.spy();
+            this.args.push(spy);
+
+            this.call.yield(obj, "Crazy");
+
+            assert(spy.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+            this.args.push(function () {
+                throw new Error("d'oh!")
+            });
+            var call = this.call;
+
+            assertException(function () {
+                call.yield();
+            });
+        }
+    });
+
+    testCase("SpyCallYieldToTest", {
+        setUp: spyCallCallSetup,
+
+        "should invoke only argument as callback": function () {
+            var callback = sinon.spy();
+            this.args.push({
+                success: callback
+            });
+
+            this.call.yieldTo("success");
+
+            assert(callback.calledOnce);
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should throw understandable error if no callback is passed": function () {
+            var call = this.call;
+
+            try {
+                call.yieldTo("success");
+                throw new Error();
+            } catch (e) {
+                assertEquals("spy cannot yield to 'success' since no callback was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+            this.proxy.displayName = "somethingAwesome";
+            this.args.push(23, 42);
+            var call = this.call;
+
+            try {
+                call.yieldTo("success");
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome cannot yield to 'success' since no callback was passed. " +
+                             "Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke property on last argument as callback": function () {
+            var spy = sinon.spy();
+            this.args.push(24, {}, { success: spy });
+
+            this.call.yieldTo("success");
+
+            assert(spy.calledOnce);
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should invoke first of two possible callbacks": function () {
+            var spy = sinon.spy();
+            var spy2 = sinon.spy();
+            this.args.push(24, {}, { error: spy }, { error: spy2 });
+
+            this.call.yieldTo("error");
+
+            assert(spy.calledOnce);
+            assertFalse(spy2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+            var obj = { id: 42 };
+            var spy = sinon.spy();
+            this.args.push({ success: spy });
+
+            this.call.yieldTo("success", obj, "Crazy");
+
+            assert(spy.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+            this.args.push({
+                success: function () {
+                    throw new Error("d'oh!")
+                }
+            });
+            var call = this.call;
+
+            assertException(function () {
+                call.yieldTo("success");
+            });
+        }
+    });
+
     testCase("SpyCallToStringTest", {
         setUp: function () {
             this.format = sinon.format;
