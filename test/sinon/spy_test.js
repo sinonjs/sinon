@@ -1207,6 +1207,89 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("SpyCallArgTest", {
+
+        "should be function": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.callArg);
+        },
+
+        "should invoke argument at index for all calls": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            spy.callArg(2);
+
+            assert(callback.calledTwice);
+            assert(callback.alwaysCalledWith());
+        },
+
+        "should throw if argument at index is not a function": function () {
+            var spy = sinon.spy();
+            spy();
+
+            assertException(function () {
+                spy.callArg(1);
+            }, "TypeError");
+        },
+
+        "should throw if spy was not yet invoked": function () {
+            var spy = sinon.spy();
+
+            try {
+                spy.callArg(0);
+            } catch (e) {
+                assertEquals("spy cannot yield since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should include spy name in error message": function () {
+            var api = { someMethod: function () {} };
+            var spy = sinon.spy(api, "someMethod");
+
+            try {
+                spy.callArg(0);
+            } catch (e) {
+                assertEquals("someMethod cannot yield since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should throw if index is not a number": function () {
+            var spy = sinon.spy();
+            spy();
+
+            assertException(function () {
+                spy.callArg("");
+            }, "TypeError");
+        },
+
+        "should pass additional arguments": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            var array = [];
+            var object = {};
+            spy(callback);
+
+            spy.callArg(0, "abc", 123, array, object);
+
+            assert(callback.calledWith("abc", 123, array, object));
+        }
+
+    });
+
+    testCase("SpyCallArgWithTest", {
+
+        "should be alias for callArg": function () {
+            var spy = sinon.spy();
+
+            assertSame(spy.callArg, spy.callArgWith);
+        }
+
+    });
+
     function spyCallSetUp() {
         this.thisValue = {};
         this.args = [{}, [], function () {}, 3];
