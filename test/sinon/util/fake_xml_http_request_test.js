@@ -930,6 +930,80 @@
             assertSame(onCreate, sinon.FakeXMLHttpRequest.onCreate);
         }
     });
+    
+    var runWithWorkingXHROveride = function(workingXhr,test) {
+        try {
+            var original = sinon.xhr.workingXhr;
+            sinon.xhr.workingXhr = workingXhr;
+            test();
+        } finally {
+            sinon.xhr.workingXhr = original;
+        }
+    };
+    testCase("XHRFiltering",{
+      setUp: function() {
+          sinon.FakeXMLHttpRequest.useFilters = true;
+          sinon.useFakeXMLHttpRequest();
+      },
+      tearDown: function() {
+          sinon.FakeXMLHttpRequest.useFilters = false;
+          sinon.FakeXMLHttpRequest.restore()
+      },
+      "test_it": function() { //"should not fake XHR requests don't match a filter": function() {
+          var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+          try {
+              mock.expects("defake").never()
+              sinon.FakeXMLHttpRequest.addFilter(function() { return false });
+              new XMLHttpRequest().open("GET","http://example.com");
+          } finally { mock.verify(); }
+      },
+      "should defake XHR requests that match a filter": function() {
+          var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+          try {
+              mock.expects("defake").once()
+              sinon.FakeXMLHttpRequest.addFilter(function() { return true });
+              new XMLHttpRequest().open("GET","http://example.com");
+          } finally { mock.verify(); }
+      }
+    });
+    
+    testCase("DefakedXHR",{
+      "should update attributes from working XHR object when ready state changes": function() {
+          var workingXhrInstance;
+          var readyStateCb;
+          var workingXhrOverride = function() {
+              workingXhrInstance = this;
+              this.addEventListener = function(fn) {
+                  readyStateCb = fn;
+              };
+              this.open = function() {};
+          };
+          runWithWorkingXHROveride(workingXhrOverride,function() {
+              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+              workingXhrInstance.statusText = "This is the status text of the real XHR";
+              readyStateCb();
+              assertEquals(
+                  "Updates attributes on readyState callback",
+                  "This is the status text of the real XHR",
+                  fakeXhr.statusText
+              );
+          });
+      },
+      "should pass on methods to working XHR object": function() {
+          var workingXhrInstance;
+          var workingXhrOverride = function() {
+              workingXhrInstance = this;
+              this.addEventListener = this.open = function() {};
+          };
+          runWithWorkingXHROveride(workingXhrOverride,function() {
+              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+              var mock = sinon.mock(workingXhrInstance);
+              mock.expects("getResponseHeader").once();
+              fakeXhr.getResponseHeader();
+              mock.verify();
+          });
+      }
+    });
 
     if (typeof ActiveXObject == "undefined") {
         testCase("StubXHRActiveXTest", {
