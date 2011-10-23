@@ -962,7 +962,6 @@
         try {
             var original = sinon.xhr.workingXhr;
             sinon.xhr.workingXhr = workingXhr;
-            console.log(typeof sinon.xhr.workingXhr)
             test();
         } finally {
             sinon.xhr.workingXhr = original;
@@ -995,17 +994,16 @@
       },
       "should pass on methods to working XHR object": function() {
           var workingXhrInstance;
+          var spy;
           var workingXhrOverride = function() {
               workingXhrInstance = this;
               this.addEventListener = this.open = function() {};
           };
           runWithWorkingXHROveride(workingXhrOverride,function() {
               sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-              var mock = sinon.mock(workingXhrInstance);
-              try {
-                  mock.expects("getResponseHeader").once();
-                  fakeXhr.getResponseHeader();
-              } finally {  mock.verify(); }
+              workingXhrInstance.getResponseHeader = spy = sinon.spy();
+              fakeXhr.getResponseHeader();
+              sinon.assert.calledOnce(spy);
           });
       }
     });
