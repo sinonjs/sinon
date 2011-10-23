@@ -931,15 +931,6 @@
         }
     });
     
-    var runWithWorkingXHROveride = function(workingXhr,test) {
-        try {
-            var original = sinon.xhr.workingXhr;
-            sinon.xhr.workingXhr = workingXhr;
-            test();
-        } finally {
-            sinon.xhr.workingXhr = original;
-        }
-    };
     testCase("XHRFiltering",{
       setUp: function() {
           sinon.FakeXMLHttpRequest.useFilters = true;
@@ -967,13 +958,27 @@
       }
     });
     
+    var runWithWorkingXHROveride = function(workingXhr,test) {
+        try {
+            var original = sinon.xhr.workingXhr;
+            sinon.xhr.workingXhr = workingXhr;
+            console.log(typeof sinon.xhr.workingXhr)
+            test();
+        } finally {
+            sinon.xhr.workingXhr = original;
+        }
+    };
+    var fakeXhr;
     testCase("DefakedXHR",{
+      setUp: function() {
+          fakeXhr = new sinon.FakeXMLHttpRequest();
+      },
       "should update attributes from working XHR object when ready state changes": function() {
           var workingXhrInstance;
           var readyStateCb;
           var workingXhrOverride = function() {
               workingXhrInstance = this;
-              this.addEventListener = function(fn) {
+              this.addEventListener = function(str,fn) {
                   readyStateCb = fn;
               };
               this.open = function() {};
@@ -983,7 +988,6 @@
               workingXhrInstance.statusText = "This is the status text of the real XHR";
               readyStateCb();
               assertEquals(
-                  "Updates attributes on readyState callback",
                   "This is the status text of the real XHR",
                   fakeXhr.statusText
               );
@@ -998,9 +1002,10 @@
           runWithWorkingXHROveride(workingXhrOverride,function() {
               sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
               var mock = sinon.mock(workingXhrInstance);
-              mock.expects("getResponseHeader").once();
-              fakeXhr.getResponseHeader();
-              mock.verify();
+              try {
+                  mock.expects("getResponseHeader").once();
+                  fakeXhr.getResponseHeader();
+              } finally {  mock.verify(); }
           });
       }
     });
