@@ -932,30 +932,30 @@
     });
     
     testCase("XHRFiltering",{
-      setUp: function() {
-          sinon.FakeXMLHttpRequest.useFilters = true;
-          sinon.useFakeXMLHttpRequest();
-      },
-      tearDown: function() {
-          sinon.FakeXMLHttpRequest.useFilters = false;
-          sinon.FakeXMLHttpRequest.restore()
-      },
-      "should not fake XHR requests don't match a filter": function() {
-          var mock = sinon.mock(sinon.FakeXMLHttpRequest)
-          try {
-              mock.expects("defake").never()
-              sinon.FakeXMLHttpRequest.addFilter(function() { return false });
-              new XMLHttpRequest().open("GET","http://example.com");
-          } finally { mock.verify(); }
-      },
-      "should defake XHR requests that match a filter": function() {
-          var mock = sinon.mock(sinon.FakeXMLHttpRequest)
-          try {
-              mock.expects("defake").once()
-              sinon.FakeXMLHttpRequest.addFilter(function() { return true });
-              new XMLHttpRequest().open("GET","http://example.com");
-          } finally { mock.verify(); }
-      }
+        setUp: function() {
+            sinon.FakeXMLHttpRequest.useFilters = true;
+            sinon.useFakeXMLHttpRequest();
+        },
+        tearDown: function() {
+            sinon.FakeXMLHttpRequest.useFilters = false;
+            sinon.FakeXMLHttpRequest.restore()
+        },
+        "test_it": function() { //"should not fake XHR requests don't match a filter": function() {
+            var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+            try {
+                mock.expects("defake").never()
+                sinon.FakeXMLHttpRequest.addFilter(function() { return false });
+                new XMLHttpRequest().open("GET","http://example.com");
+            } finally { mock.verify(); }
+        },
+        "should defake XHR requests that match a filter": function() {
+            var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+            try {
+                mock.expects("defake").once()
+                sinon.FakeXMLHttpRequest.addFilter(function() { return true });
+                new XMLHttpRequest().open("GET","http://example.com");
+            } finally { mock.verify(); }
+        }
     });
     
     var runWithWorkingXHROveride = function(workingXhr,test) {
@@ -969,61 +969,61 @@
     };
     var fakeXhr;
     testCase("DefakedXHR",{
-      setUp: function() {
-          fakeXhr = new sinon.FakeXMLHttpRequest();
-      },
-      "should update attributes from working XHR object when ready state changes": function() {
-          var workingXhrInstance;
-          var readyStateCb;
-          var workingXhrOverride = function() {
-              workingXhrInstance = this;
-              this.addEventListener = function(str,fn) {
-                  readyStateCb = fn;
-              };
-              this.open = function() {};
-          };
-          runWithWorkingXHROveride(workingXhrOverride,function() {
-              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-              workingXhrInstance.statusText = "This is the status text of the real XHR";
-              readyStateCb();
-              assertEquals(
-                  "This is the status text of the real XHR",
-                  fakeXhr.statusText
-              );
-          });
-      },
-      "should pass on methods to working XHR object": function() {
-          var workingXhrInstance;
-          var spy;
-          var workingXhrOverride = function() {
-              workingXhrInstance = this;
-              this.addEventListener = this.open = function() {};
-          };
-          runWithWorkingXHROveride(workingXhrOverride,function() {
-              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-              workingXhrInstance.getResponseHeader = spy = sinon.spy();
-              fakeXhr.getResponseHeader();
-              sinon.assert.calledOnce(spy);
-          });
-      },
-      "should call leagacy onreadystatechange handlers": function() {
-          var workingXhrInstance;
-          var spy;
-          var readyStateCb;
-          var workingXhrOverride = function() {
-              workingXhrInstance = this;
-              this.addEventListener = function(str,fn) {
-                  readyStateCb = fn;
-              };
-              this.open = function() {};
-          };
-          runWithWorkingXHROveride(workingXhrOverride,function() {
-              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-              fakeXhr.onreadystatechange = spy = sinon.spy()
-              readyStateCb();
-              sinon.assert.calledOnce(spy);
-          });
-      }
+        setUp: function() {
+            fakeXhr = new sinon.FakeXMLHttpRequest();
+        },
+        "should update attributes from working XHR object when ready state changes": function() {
+            var workingXhrInstance;
+            var readyStateCb;
+            var workingXhrOverride = function() {
+                workingXhrInstance = this;
+                this.addEventListener = function(str,fn) {
+                    readyStateCb = fn;
+                };
+                this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXhrOverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                workingXhrInstance.statusText = "This is the status text of the real XHR";
+                readyStateCb();
+                assertEquals(
+                    "This is the status text of the real XHR",
+                    fakeXhr.statusText
+                );
+            });
+        },
+        "should pass on methods to working XHR object": function() {
+            var workingXhrInstance;
+            var spy;
+            var workingXhrOverride = function() {
+                workingXhrInstance = this;
+                this.addEventListener = this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXhrOverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                workingXhrInstance.getResponseHeader = spy = sinon.spy();
+                fakeXhr.getResponseHeader();
+                sinon.assert.calledOnce(spy);
+            });
+        },
+        "should call leagacy onreadystatechange handlers": function() {
+            var workingXhrInstance;
+            var spy;
+            var readyStateCb;
+            var workingXhrOverride = function() {
+                workingXhrInstance = this;
+                this.addEventListener = function(str,fn) {
+                    readyStateCb = fn;
+                };
+                this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXhrOverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                fakeXhr.onreadystatechange = spy = sinon.spy()
+                readyStateCb();
+                sinon.assert.calledOnce(spy);
+            });
+        }
     });
 
     if (typeof ActiveXObject == "undefined") {
