@@ -1005,6 +1005,24 @@
               fakeXhr.getResponseHeader();
               sinon.assert.calledOnce(spy);
           });
+      },
+      "should call leagacy onreadystatechange handlers": function() {
+          var workingXhrInstance;
+          var spy;
+          var readyStateCb;
+          var workingXhrOverride = function() {
+              workingXhrInstance = this;
+              this.addEventListener = function(str,fn) {
+                  readyStateCb = fn;
+              };
+              this.open = function() {};
+          };
+          runWithWorkingXHROveride(workingXhrOverride,function() {
+              sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+              fakeXhr.onreadystatechange = spy = sinon.spy()
+              readyStateCb();
+              sinon.assert.calledOnce(spy);
+          });
       }
     });
 
