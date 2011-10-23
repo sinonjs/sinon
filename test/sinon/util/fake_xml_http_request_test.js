@@ -940,7 +940,7 @@
           sinon.FakeXMLHttpRequest.useFilters = false;
           sinon.FakeXMLHttpRequest.restore()
       },
-      "test_it": function() { //"should not fake XHR requests don't match a filter": function() {
+      "should not fake XHR requests don't match a filter": function() {
           var mock = sinon.mock(sinon.FakeXMLHttpRequest)
           try {
               mock.expects("defake").never()
