@@ -1212,7 +1212,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should be undefined by default": function () {
             var spy = sinon.spy();
 
-            assertUndefined(spy.firstCall);
+            assertNull(spy.firstCall);
         },
 
         "should be equal to getCall(0) result after first call": function () {
@@ -1220,36 +1220,26 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             spy();
 
-			var call0 = spy.getCall(0);
+            var call0 = spy.getCall(0);
             assertEquals(call0.callId, spy.firstCall.callId);
             assertSame(call0.spy, spy.firstCall.spy);
-        },
-
-	    "should not change on second call": function () {
-            var spy = sinon.spy();
-            spy();
-			var firstCall = spy.firstCall;
-
-			spy();
-
-            assertSame(firstCall, spy.firstCall);
         }
 
     });
 
     testCase("SpySecondCallTest", {
 
-        "should be undefined by default": function () {
+        "should be null by default": function () {
             var spy = sinon.spy();
 
-            assertUndefined(spy.secondCall);
+            assertNull(spy.secondCall);
         },
 
-        "should still be undefined after first call": function () {
+        "should still be null after first call": function () {
             var spy = sinon.spy();
             spy();
 
-            assertUndefined(spy.secondCall);
+            assertNull(spy.secondCall);
         },
 
         "should be equal to getCall(1) result after second call": function () {
@@ -1258,20 +1248,9 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-			var call1 = spy.getCall(1);
+            var call1 = spy.getCall(1);
             assertEquals(call1.callId, spy.secondCall.callId);
             assertSame(call1.spy, spy.secondCall.spy);
-        },
-
-	    "should not change on third call": function () {
-            var spy = sinon.spy();
-            spy();
-            spy();
-			var secondCall = spy.secondCall;
-
-			spy();
-
-            assertSame(secondCall, spy.secondCall);
         }
 
     });
@@ -1281,7 +1260,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should be undefined by default": function () {
             var spy = sinon.spy();
 
-            assertUndefined(spy.thirdCall);
+            assertNull(spy.thirdCall);
         },
 
         "should still be undefined after second call": function () {
@@ -1289,7 +1268,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-            assertUndefined(spy.thirdCall);
+            assertNull(spy.thirdCall);
         },
 
         "should be equal to getCall(1) result after second call": function () {
@@ -1299,21 +1278,9 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-			var call2 = spy.getCall(2);
+            var call2 = spy.getCall(2);
             assertEquals(call2.callId, spy.thirdCall.callId);
             assertSame(call2.spy, spy.thirdCall.spy);
-        },
-
-	    "should not change on fourth call": function () {
-            var spy = sinon.spy();
-            spy();
-            spy();
-            spy();
-			var thirdCall = spy.thirdCall;
-
-			spy();
-
-            assertSame(thirdCall, spy.thirdCall);
         }
 
     });
@@ -1323,7 +1290,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should be undefined by default": function () {
             var spy = sinon.spy();
 
-            assertUndefined(spy.lastCall);
+            assertNull(spy.lastCall);
         },
 
         "should be same as firstCall after first call": function () {
@@ -1331,7 +1298,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             spy();
 
-            assertSame(spy.firstCall, spy.lastCall);
+            assertSame(spy.firstCall.callId, spy.lastCall.callId);
+            assertSame(spy.firstCall.spy, spy.lastCall.spy);
         },
 
         "should be same as secondCall after second call": function () {
@@ -1340,7 +1308,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-            assertSame(spy.secondCall, spy.lastCall);
+            assertSame(spy.secondCall.callId, spy.lastCall.callId);
+            assertSame(spy.secondCall.spy, spy.lastCall.spy);
         },
 
         "should be same as thirdCall after third call": function () {
@@ -1350,7 +1319,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-            assertSame(spy.thirdCall, spy.lastCall);
+            assertSame(spy.thirdCall.callId, spy.lastCall.callId);
+            assertSame(spy.thirdCall.spy, spy.lastCall.spy);
         },
 
         "should be equal to getCall(3) result after fourth call": function () {
@@ -1361,7 +1331,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-			var call3 = spy.getCall(3);
+            var call3 = spy.getCall(3);
             assertEquals(call3.callId, spy.lastCall.callId);
             assertSame(call3.spy, spy.lastCall.spy);
         },
@@ -1375,7 +1345,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy();
             spy();
 
-			var call4 = spy.getCall(4);
+            var call4 = spy.getCall(4);
             assertEquals(call4.callId, spy.lastCall.callId);
             assertSame(call4.spy, spy.lastCall.spy);
         }
@@ -2186,6 +2156,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals(0, spy.returnValues.length);
             assertEquals(0, spy.exceptions.length);
             assertEquals(0, spy.thisValues.length);
+            assertNull(spy.firstCall);
+            assertNull(spy.secondCall);
+            assertNull(spy.thirdCall);
+            assertNull(spy.lastCall);
         },
 
         "should reset call order state": function () {
