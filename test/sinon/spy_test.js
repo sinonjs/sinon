@@ -1207,6 +1207,350 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("SpyFirstCallTest", {
+
+        "should be undefined by default": function () {
+            var spy = sinon.spy();
+
+            assertNull(spy.firstCall);
+        },
+
+        "should be equal to getCall(0) result after first call": function () {
+            var spy = sinon.spy();
+
+            spy();
+
+            var call0 = spy.getCall(0);
+            assertEquals(call0.callId, spy.firstCall.callId);
+            assertSame(call0.spy, spy.firstCall.spy);
+        }
+
+    });
+
+    testCase("SpySecondCallTest", {
+
+        "should be null by default": function () {
+            var spy = sinon.spy();
+
+            assertNull(spy.secondCall);
+        },
+
+        "should still be null after first call": function () {
+            var spy = sinon.spy();
+            spy();
+
+            assertNull(spy.secondCall);
+        },
+
+        "should be equal to getCall(1) result after second call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+
+            var call1 = spy.getCall(1);
+            assertEquals(call1.callId, spy.secondCall.callId);
+            assertSame(call1.spy, spy.secondCall.spy);
+        }
+
+    });
+
+    testCase("SpyThirdCallTest", {
+
+        "should be undefined by default": function () {
+            var spy = sinon.spy();
+
+            assertNull(spy.thirdCall);
+        },
+
+        "should still be undefined after second call": function () {
+            var spy = sinon.spy();
+            spy();
+            spy();
+
+            assertNull(spy.thirdCall);
+        },
+
+        "should be equal to getCall(1) result after second call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+            spy();
+
+            var call2 = spy.getCall(2);
+            assertEquals(call2.callId, spy.thirdCall.callId);
+            assertSame(call2.spy, spy.thirdCall.spy);
+        }
+
+    });
+
+    testCase("SpyLastCallTest", {
+
+        "should be undefined by default": function () {
+            var spy = sinon.spy();
+
+            assertNull(spy.lastCall);
+        },
+
+        "should be same as firstCall after first call": function () {
+            var spy = sinon.spy();
+
+            spy();
+
+            assertSame(spy.firstCall.callId, spy.lastCall.callId);
+            assertSame(spy.firstCall.spy, spy.lastCall.spy);
+        },
+
+        "should be same as secondCall after second call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+
+            assertSame(spy.secondCall.callId, spy.lastCall.callId);
+            assertSame(spy.secondCall.spy, spy.lastCall.spy);
+        },
+
+        "should be same as thirdCall after third call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+            spy();
+
+            assertSame(spy.thirdCall.callId, spy.lastCall.callId);
+            assertSame(spy.thirdCall.spy, spy.lastCall.spy);
+        },
+
+        "should be equal to getCall(3) result after fourth call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+            spy();
+            spy();
+
+            var call3 = spy.getCall(3);
+            assertEquals(call3.callId, spy.lastCall.callId);
+            assertSame(call3.spy, spy.lastCall.spy);
+        },
+
+        "should be equal to getCall(4) result after fifth call": function () {
+            var spy = sinon.spy();
+
+            spy();
+            spy();
+            spy();
+            spy();
+            spy();
+
+            var call4 = spy.getCall(4);
+            assertEquals(call4.callId, spy.lastCall.callId);
+            assertSame(call4.spy, spy.lastCall.spy);
+        }
+
+    });
+
+    testCase("SpyCallArgTest", {
+
+        "should be function": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.callArg);
+        },
+
+        "should invoke argument at index for all calls": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            spy.callArg(2);
+
+            assert(callback.calledTwice);
+            assert(callback.alwaysCalledWith());
+        },
+
+        "should throw if argument at index is not a function": function () {
+            var spy = sinon.spy();
+            spy();
+
+            assertException(function () {
+                spy.callArg(1);
+            }, "TypeError");
+        },
+
+        "should throw if spy was not yet invoked": function () {
+            var spy = sinon.spy();
+
+            try {
+                spy.callArg(0);
+                throw new Error();
+            } catch (e) {
+                assertEquals("spy cannot call arg since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should include spy name in error message": function () {
+            var api = { someMethod: function () {} };
+            var spy = sinon.spy(api, "someMethod");
+
+            try {
+                spy.callArg(0);
+                throw new Error();
+            } catch (e) {
+                assertEquals("someMethod cannot call arg since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should throw if index is not a number": function () {
+            var spy = sinon.spy();
+            spy();
+
+            assertException(function () {
+                spy.callArg("");
+            }, "TypeError");
+        },
+
+        "should pass additional arguments": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            var array = [];
+            var object = {};
+            spy(callback);
+
+            spy.callArg(0, "abc", 123, array, object);
+
+            assert(callback.calledWith("abc", 123, array, object));
+        }
+
+    });
+
+    testCase("SpyCallArgWithTest", {
+
+        "should be alias for callArg": function () {
+            var spy = sinon.spy();
+
+            assertSame(spy.callArg, spy.callArgWith);
+        }
+
+    });
+
+    testCase("SpyYieldTest", {
+
+        "should be function": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.yield);
+        },
+
+        "should invoke first function arg for all calls": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            spy.yield();
+
+            assert(callback.calledTwice);
+            assert(callback.alwaysCalledWith());
+        },
+
+        "should throw if spy was not yet invoked": function () {
+            var spy = sinon.spy();
+
+            try {
+                spy.yield();
+                throw new Error();
+            } catch (e) {
+                assertEquals("spy cannot yield since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should include spy name in error message": function () {
+            var api = { someMethod: function () {} };
+            var spy = sinon.spy(api, "someMethod");
+
+            try {
+                spy.yield();
+                throw new Error();
+            } catch (e) {
+                assertEquals("someMethod cannot yield since it was not yet invoked.", e.message);
+            }
+        },
+
+		"should pass additional arguments": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            var array = [];
+            var object = {};
+            spy(callback);
+
+            spy.yield("abc", 123, array, object);
+
+            assert(callback.calledWith("abc", 123, array, object));
+        }
+
+    });
+
+    testCase("SpyYieldToTest", {
+
+        "should be function": function () {
+            var spy = sinon.spy();
+
+            assertFunction(spy.yieldTo);
+        },
+
+        "should invoke first function arg for all calls": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            spy(1, 2, { success: callback });
+            spy(3, 4, { success: callback });
+
+            spy.yieldTo("success");
+
+            assert(callback.calledTwice);
+            assert(callback.alwaysCalledWith());
+        },
+
+        "should throw if spy was not yet invoked": function () {
+            var spy = sinon.spy();
+
+            try {
+                spy.yieldTo("success");
+                throw new Error();
+            } catch (e) {
+                assertEquals("spy cannot yield to 'success' since it was not yet invoked.", e.message);
+            }
+        },
+
+        "should include spy name in error message": function () {
+            var api = { someMethod: function () {} };
+            var spy = sinon.spy(api, "someMethod");
+
+            try {
+                spy.yieldTo("success");
+                throw new Error();
+            } catch (e) {
+                assertEquals("someMethod cannot yield to 'success' since it was not yet invoked.", e.message);
+            }
+        },
+
+		"should pass additional arguments": function () {
+            var spy = sinon.spy();
+            var callback = sinon.spy();
+            var array = [];
+            var object = {};
+            spy({ test: callback });
+
+            spy.yieldTo("test", "abc", 123, array, object);
+
+            assert(callback.calledWith("abc", 123, array, object));
+        }
+
+    });
+
     function spyCallSetUp() {
         this.thisValue = {};
         this.args = [{}, [], function () {}, 3];
@@ -1812,6 +2156,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals(0, spy.returnValues.length);
             assertEquals(0, spy.exceptions.length);
             assertEquals(0, spy.thisValues.length);
+            assertNull(spy.firstCall);
+            assertNull(spy.secondCall);
+            assertNull(spy.thirdCall);
+            assertNull(spy.lastCall);
         },
 
         "should reset call order state": function () {
