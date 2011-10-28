@@ -522,6 +522,17 @@
             assertException(function () {
                 xhr.setResponseBody("");
             });
+        },
+
+        "should throw if body is not a string": function () {
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/");
+            xhr.send();
+            xhr.setResponseHeaders({});
+
+            assertException(function () {
+                xhr.setResponseBody({});
+            }, "InvalidBodyException");
         }
     });
 
