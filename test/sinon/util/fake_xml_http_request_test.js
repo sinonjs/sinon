@@ -940,7 +940,7 @@
             sinon.FakeXMLHttpRequest.useFilters = false;
             sinon.FakeXMLHttpRequest.restore()
         },
-        "should not fake XHR requests don't match a filter": function() {
+        "should not defake XHR requests that don't match a filter": function() {
             var mock = sinon.mock(sinon.FakeXMLHttpRequest)
             try {
                 mock.expects("defake").never()
@@ -958,13 +958,13 @@
         }
     });
     
-    var runWithWorkingXHROveride = function(workingXhr,test) {
+    var runWithWorkingXHROveride = function(workingXHR,test) {
         try {
-            var original = sinon.xhr.workingXhr;
-            sinon.xhr.workingXhr = workingXhr;
+            var original = sinon.xhr.workingXHR;
+            sinon.xhr.workingXHR = workingXhr;
             test();
         } finally {
-            sinon.xhr.workingXhr = original;
+            sinon.xhr.workingXHR = original;
         }
     };
     var fakeXhr;
@@ -973,18 +973,18 @@
             fakeXhr = new sinon.FakeXMLHttpRequest();
         },
         "should update attributes from working XHR object when ready state changes": function() {
-            var workingXhrInstance;
+            var workingXHRInstance;
             var readyStateCb;
-            var workingXhrOverride = function() {
-                workingXhrInstance = this;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
                 this.addEventListener = function(str,fn) {
                     readyStateCb = fn;
                 };
                 this.open = function() {};
             };
-            runWithWorkingXHROveride(workingXhrOverride,function() {
+            runWithWorkingXHROveride(workingXHROverride,function() {
                 sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-                workingXhrInstance.statusText = "This is the status text of the real XHR";
+                workingXHRInstance.statusText = "This is the status text of the real XHR";
                 readyStateCb();
                 assertEquals(
                     "This is the status text of the real XHR",
@@ -993,31 +993,31 @@
             });
         },
         "should pass on methods to working XHR object": function() {
-            var workingXhrInstance;
+            var workingXHRInstance;
             var spy;
-            var workingXhrOverride = function() {
-                workingXhrInstance = this;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
                 this.addEventListener = this.open = function() {};
             };
-            runWithWorkingXHROveride(workingXhrOverride,function() {
+            runWithWorkingXHROveride(workingXHROverride,function() {
                 sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
-                workingXhrInstance.getResponseHeader = spy = sinon.spy();
+                workingXHRInstance.getResponseHeader = spy = sinon.spy();
                 fakeXhr.getResponseHeader();
                 sinon.assert.calledOnce(spy);
             });
         },
         "should call leagacy onreadystatechange handlers": function() {
-            var workingXhrInstance;
+            var workingXHRInstance;
             var spy;
             var readyStateCb;
-            var workingXhrOverride = function() {
-                workingXhrInstance = this;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
                 this.addEventListener = function(str,fn) {
                     readyStateCb = fn;
                 };
                 this.open = function() {};
             };
-            runWithWorkingXHROveride(workingXhrOverride,function() {
+            runWithWorkingXHROveride(workingXHROverride,function() {
                 sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
                 fakeXhr.onreadystatechange = spy = sinon.spy()
                 readyStateCb();
