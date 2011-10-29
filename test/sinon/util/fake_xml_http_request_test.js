@@ -934,11 +934,12 @@
     testCase("XHRFiltering",{
         setUp: function() {
             sinon.FakeXMLHttpRequest.useFilters = true;
+            sinon.FakeXMLHttpRequest.filters = [];
             sinon.useFakeXMLHttpRequest();
         },
         tearDown: function() {
             sinon.FakeXMLHttpRequest.useFilters = false;
-            sinon.FakeXMLHttpRequest.restore()
+            sinon.FakeXMLHttpRequest.restore();
         },
         "should not defake XHR requests that don't match a filter": function() {
             var mock = sinon.mock(sinon.FakeXMLHttpRequest)
@@ -961,7 +962,7 @@
     var runWithWorkingXHROveride = function(workingXHR,test) {
         try {
             var original = sinon.xhr.workingXHR;
-            sinon.xhr.workingXHR = workingXhr;
+            sinon.xhr.workingXHR = workingXHR;
             test();
         } finally {
             sinon.xhr.workingXHR = original;
