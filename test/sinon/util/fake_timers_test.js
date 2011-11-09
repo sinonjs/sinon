@@ -181,20 +181,28 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "should trigger even when some throw": function () {
+            var clock = this.clock;
             var stubs = [sinon.stub.create().throws(), sinon.stub.create()];
-            this.clock.setTimeout(stubs[0], 100);
-            this.clock.setTimeout(stubs[1], 120);
 
-            this.clock.tick(120);
+            clock.setTimeout(stubs[0], 100);
+            clock.setTimeout(stubs[1], 120);
+
+            assertException(function() {
+              clock.tick(120);
+            });
 
             assert(stubs[0].called);
             assert(stubs[1].called);
         },
 
         "should call function with global object or null (strict mode) as this": function () {
+            var clock = this.clock;
             var stub = sinon.stub.create().throws();
-            this.clock.setTimeout(stub, 100);
-            this.clock.tick(100);
+            clock.setTimeout(stub, 100);
+
+            assertException(function() {
+              clock.tick(100);
+            });
 
             assert(stub.calledOn(global) || stub.calledOn(null));
         },
@@ -375,6 +383,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             clock.tick(1000);
 
             assertEquals(11, i);
+        },
+
+        "should not silently catch exceptions": function () {
+          var clock = this.clock;
+
+          clock.setTimeout(function() {
+            throw new Exception('oh no!');
+          }, 1000);
+
+          assertException(function() {
+            clock.tick(1000);
+          });
         }
     });
 
