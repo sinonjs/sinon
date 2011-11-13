@@ -1494,6 +1494,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
     });
 
+    testCase("SpyInvokeCallbackTest", {
+
+        "should be alias for yield": function () {
+            var spy = sinon.spy();
+
+            assertSame(spy.yield, spy.invokeCallback);
+        }
+
+    });
+
     testCase("SpyYieldToTest", {
 
         "should be function": function () {
