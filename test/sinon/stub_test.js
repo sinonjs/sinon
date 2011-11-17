@@ -385,6 +385,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFunction(obj.func3.restore);
         },
 
+        "should stub prototype methods": function () {
+            function Obj() {};
+            Obj.prototype.func1 = function() {};
+            var obj = new Obj();
+
+            var stub = sinon.stub(obj);
+
+            assertFunction(obj.func1.restore);
+        },
+
         "should return object": function () {
             var object = {};
 
