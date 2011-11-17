@@ -10,7 +10,7 @@
   },
   "bugs": {
     "mail": "christian@cjohansen.no",
-    "web": "http://github.com/cjohansen/Sinon.JS/issues"
+    "url": "http://github.com/cjohansen/Sinon.JS/issues"
   },
   "licenses": [
      { "type": "BSD",
