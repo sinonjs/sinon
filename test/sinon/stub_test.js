@@ -399,18 +399,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
 
             assertSame(object, sinon.stub(object));
-        },
-
-        "should not stub inherited methods": function () {
-            var getName = function () {};
-            var person = { getName: getName };
-            var dude = sinon.create(person);
-
-            sinon.stub(dude);
-
-            assertUndefined(dude.toString.restore);
-            assertUndefined(dude.valueOf.restore);
-            assertSame(getName, dude.getName);
         }
     });
 
