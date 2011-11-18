@@ -399,6 +399,13 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
 
             assertSame(object, sinon.stub(object));
+        },
+
+        "should only stub functions": function () {
+            var object = {foo: 'bar'};
+            sinon.stub(object);
+
+            assertEquals('bar', object.foo);
         }
     });
 
