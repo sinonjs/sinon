@@ -385,22 +385,27 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFunction(obj.func3.restore);
         },
 
+        "should stub prototype methods": function () {
+            function Obj() {};
+            Obj.prototype.func1 = function() {};
+            var obj = new Obj();
+
+            var stub = sinon.stub(obj);
+
+            assertFunction(obj.func1.restore);
+        },
+
         "should return object": function () {
             var object = {};
 
             assertSame(object, sinon.stub(object));
         },
 
-        "should not stub inherited methods": function () {
-            var getName = function () {};
-            var person = { getName: getName };
-            var dude = sinon.create(person);
+        "should only stub functions": function () {
+            var object = {foo: 'bar'};
+            sinon.stub(object);
 
-            sinon.stub(dude);
-
-            assertUndefined(dude.toString.restore);
-            assertUndefined(dude.valueOf.restore);
-            assertSame(getName, dude.getName);
+            assertEquals('bar', object.foo);
         }
     });
 
