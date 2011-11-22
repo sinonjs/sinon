@@ -398,6 +398,15 @@ testCase("ServerRespondWithTest", {
         assertObject(error);
         assertEquals("Fake server response body should be string, but was undefined",
                      error.message);
+    },
+
+    "should be able to pass the same args to respond directly": function() {
+        this.server.respond("Oh yeah! Duffman!");
+
+        assertEquals([200, {}, "Oh yeah! Duffman!"], this.getRootAsync.respond.args[0]);
+        assertEquals([200, {}, "Oh yeah! Duffman!"], this.getPathAsync.respond.args[0]);
+        assertEquals([200, {}, "Oh yeah! Duffman!"], this.postRootAsync.respond.args[0]);
+        assertEquals([200, {}, "Oh yeah! Duffman!"], this.postPathAsync.respond.args[0]);
     }
 });
 
