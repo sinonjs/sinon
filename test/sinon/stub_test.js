@@ -67,6 +67,44 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertUndefined(stub());
         }
     });
+    
+    testCase("StubReturnsArgTest", {
+        "should have returnsArg method": function() {
+            var stub = sinon.stub.create();
+
+            assertFunction(stub.returnsArg);
+        },
+        
+        "should return argument at specified index": function() {
+            var stub = sinon.stub.create();
+            stub.returnsArg(0);
+            var object = {};
+
+            assertSame(object, stub(object));
+        },
+        
+        "should return stub": function () {
+            var stub = sinon.stub.create();
+
+            assertSame(stub, stub.returnsArg(0));
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = sinon.stub.create();
+
+            assertException(function () {
+                stub.returnsArg();
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = sinon.stub.create();
+
+            assertException(function () {
+                stub.returnsArg({});
+            }, "TypeError");
+        }
+    });
 
     testCase("StubThrowsTest", {
         "should throw specified exception": function () {
