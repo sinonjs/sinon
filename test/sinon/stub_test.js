@@ -67,6 +67,44 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertUndefined(stub());
         }
     });
+    
+    testCase("StubReturnsArgTest", {
+        "should have returnsArg method": function() {
+            var stub = sinon.stub.create();
+
+            assertFunction(stub.returnsArg);
+        },
+        
+        "should return argument at specified index": function() {
+            var stub = sinon.stub.create();
+            stub.returnsArg(0);
+            var object = {};
+
+            assertSame(object, stub(object));
+        },
+        
+        "should return stub": function () {
+            var stub = sinon.stub.create();
+
+            assertSame(stub, stub.returnsArg(0));
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = sinon.stub.create();
+
+            assertException(function () {
+                stub.returnsArg();
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = sinon.stub.create();
+
+            assertException(function () {
+                stub.returnsArg({});
+            }, "TypeError");
+        }
+    });
 
     testCase("StubThrowsTest", {
         "should throw specified exception": function () {
@@ -385,22 +423,27 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFunction(obj.func3.restore);
         },
 
+        "should stub prototype methods": function () {
+            function Obj() {};
+            Obj.prototype.func1 = function() {};
+            var obj = new Obj();
+
+            var stub = sinon.stub(obj);
+
+            assertFunction(obj.func1.restore);
+        },
+
         "should return object": function () {
             var object = {};
 
             assertSame(object, sinon.stub(object));
         },
 
-        "should not stub inherited methods": function () {
-            var getName = function () {};
-            var person = { getName: getName };
-            var dude = sinon.create(person);
+        "should only stub functions": function () {
+            var object = {foo: 'bar'};
+            sinon.stub(object);
 
-            sinon.stub(dude);
-
-            assertUndefined(dude.toString.restore);
-            assertUndefined(dude.valueOf.restore);
-            assertSame(getName, dude.getName);
+            assertEquals('bar', object.foo);
         }
     });
 
