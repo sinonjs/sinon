@@ -986,6 +986,7 @@
             runWithWorkingXHROveride(workingXHROverride,function() {
                 sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
                 workingXHRInstance.statusText = "This is the status text of the real XHR";
+                workingXHRInstance.readyState = 4;
                 readyStateCb();
                 assertEquals(
                     "This is the status text of the real XHR",
