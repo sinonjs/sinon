@@ -1028,6 +1028,43 @@
         }
     });
 
+    AsyncTestCase("DefakedXHRTest",{
+        setUp: function() {
+            sinon.FakeXMLHttpRequest.useFilters = true;
+            sinon.FakeXMLHttpRequest.filters = [];
+            sinon.useFakeXMLHttpRequest();
+            sinon.FakeXMLHttpRequest.addFilter(function() {return true;});
+        },
+        tearDown: function() {
+            sinon.FakeXMLHttpRequest.useFilters = false;
+            sinon.FakeXMLHttpRequest.restore();
+        },
+        "test loads resource asynchronously": function(q) {
+            q.call(function(callbacks) {
+                var req = new XMLHttpRequest;
+                var responseReceived = callbacks.add(function(responseText) {
+                    assertMatch(/loaded successfully/, responseText);
+                });
+                req.onreadystatechange = function() {
+                    if(this.readyState == 4) {
+                        responseReceived(this.responseText);
+                    }
+                };
+
+                setTimeout(callbacks.addErrback("timeout on ajax"),1000);
+
+                req.open("GET","/test/test/resources/xhr_target.txt",true);
+                req.send();
+            });
+        },
+        "test loads resource synchronously": function() {
+            var req = new XMLHttpRequest;
+            req.open("GET","/test/test/resources/xhr_target.txt",false);
+            req.send();
+            assertMatch(/loaded successfully/, req.responseText);
+        }
+    });
+
     if (typeof ActiveXObject == "undefined") {
         testCase("StubXHRActiveXTest", {
             setUp: fakeXhrSetUp,
