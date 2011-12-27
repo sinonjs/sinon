@@ -662,6 +662,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertSame(Date.UTC, this.clock.Date.UTC);
         },
 
+        "should mirror toUTCString method": function () {
+            assertSame(Date.prototype.toUTCString, this.clock.Date.prototype.toUTCString);
+        },
+
         "should mirror toSource if supported": function () {
             if (Date.toSource) {
                 assertSame(Date.toSource(), this.clock.Date.toSource());
