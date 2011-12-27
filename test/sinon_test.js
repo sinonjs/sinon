@@ -361,4 +361,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals(false, config.useFakeServer);
         }
     });
+
+    testCase("LogTest", {
+        "should do nothing gracefully": function () {
+            sinon.log("Oh, hiya");
+        }
+    });
 }());
