@@ -1,3 +1,37 @@
+== 1.3.0 / 2011-12-28
+* Format objects with buster-format
+* Support using bare functions as fake server response handlers (< 1.3.0
+  required URL and/or method matcher too)
+* Log some internal errors to sinon.log (defaults to noop). Set sinon.log
+  to your logging utility of choice for better feedback when.
+* White-list fake XHRs: Allows some fake requests and some that fall through to
+  the backend server
+* Decide Date.now support at fake-time. Makes it possible to load something that
+  polyfills Date.now after Sinon loaded and still have Date.now on fake Dates.
+* Mirror properties on replaced function properties
+* New methods: spy.yield(), spy.yieldTo(), spy.callArg() and spy.callArgWith()
+  can be used to invoke callbacks passed to spies (while avoiding the mock-like
+  upfront yields() and friends). invokeCallback is available as an alias for
+  yield for people working with strict mode.
+* New properties: spy.firstCall, spy.secondCall, spy.thirdCall and spy.lastCall.
+* New method: stub.returnsArg(), causes stub to return one of its arguments.
+* Stubs now work for inherited methods. This was previously prohibited to avoid
+  stubbing not-yet-implemented methods.
+* server.respond() can now accept the same arguments as server.respondWith() for
+  quick-and-dirty respondWith+respond.
+
+* Bug fix: Make sure XHRs can complete even if onreadystatechange handler fails
+* Bug fix: Mirror entire Date.prototype, including toUTCString when faking
+* Bug fix: Default this object to global in exposed asserts
+* Bug fix: sinon.test: use try/finally instead of catch and throw - preserves
+  stack traces
+* Bug fix: Fake `setTimeout` now returns ids greater than 0.
+* Bug fix: NPM install warning
+* Bug fix: Fake timers no longer swallows exceptions
+* Bug fix: Properly expose all needed asserts for node
+* Bug fix: wrapMethod on window property (i.e. when stubbing/spying on global
+  functions)
+
 == 1.2.0 / 2011-09-27
 * Bug fix: abort() switches state to DONE when OPENED and sent. Fix by
   Tristan Koch.
