@@ -948,6 +948,140 @@
             assertSame(onCreate, sinon.FakeXMLHttpRequest.onCreate);
         }
     });
+    
+    testCase("XHRFiltering",{
+        setUp: function() {
+            sinon.FakeXMLHttpRequest.useFilters = true;
+            sinon.FakeXMLHttpRequest.filters = [];
+            sinon.useFakeXMLHttpRequest();
+        },
+        tearDown: function() {
+            sinon.FakeXMLHttpRequest.useFilters = false;
+            sinon.FakeXMLHttpRequest.restore();
+        },
+        "should not defake XHR requests that don't match a filter": function() {
+            var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+            try {
+                mock.expects("defake").never()
+                sinon.FakeXMLHttpRequest.addFilter(function() { return false });
+                new XMLHttpRequest().open("GET","http://example.com");
+            } finally { mock.verify(); }
+        },
+        "should defake XHR requests that match a filter": function() {
+            var mock = sinon.mock(sinon.FakeXMLHttpRequest)
+            try {
+                mock.expects("defake").once()
+                sinon.FakeXMLHttpRequest.addFilter(function() { return true });
+                new XMLHttpRequest().open("GET","http://example.com");
+            } finally { mock.verify(); }
+        }
+    });
+    
+    var runWithWorkingXHROveride = function(workingXHR,test) {
+        try {
+            var original = sinon.xhr.workingXHR;
+            sinon.xhr.workingXHR = workingXHR;
+            test();
+        } finally {
+            sinon.xhr.workingXHR = original;
+        }
+    };
+    var fakeXhr;
+    testCase("DefakedXHR",{
+        setUp: function() {
+            fakeXhr = new sinon.FakeXMLHttpRequest();
+        },
+        "should update attributes from working XHR object when ready state changes": function() {
+            var workingXHRInstance;
+            var readyStateCb;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
+                this.addEventListener = function(str,fn) {
+                    readyStateCb = fn;
+                };
+                this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXHROverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                workingXHRInstance.statusText = "This is the status text of the real XHR";
+                workingXHRInstance.readyState = 4;
+                readyStateCb();
+                assertEquals(
+                    "This is the status text of the real XHR",
+                    fakeXhr.statusText
+                );
+            });
+        },
+        "should pass on methods to working XHR object": function() {
+            var workingXHRInstance;
+            var spy;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
+                this.addEventListener = this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXHROverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                workingXHRInstance.getResponseHeader = spy = sinon.spy();
+                fakeXhr.getResponseHeader();
+                sinon.assert.calledOnce(spy);
+            });
+        },
+        "should call leagacy onreadystatechange handlers": function() {
+            var workingXHRInstance;
+            var spy;
+            var readyStateCb;
+            var workingXHROverride = function() {
+                workingXHRInstance = this;
+                this.addEventListener = function(str,fn) {
+                    readyStateCb = fn;
+                };
+                this.open = function() {};
+            };
+            runWithWorkingXHROveride(workingXHROverride,function() {
+                sinon.FakeXMLHttpRequest.defake(fakeXhr,[]);
+                fakeXhr.onreadystatechange = spy = sinon.spy()
+                readyStateCb();
+                sinon.assert.calledOnce(spy);
+            });
+        }
+    });
+
+    AsyncTestCase("DefakedXHRTest",{
+        setUp: function() {
+            sinon.FakeXMLHttpRequest.useFilters = true;
+            sinon.FakeXMLHttpRequest.filters = [];
+            sinon.useFakeXMLHttpRequest();
+            sinon.FakeXMLHttpRequest.addFilter(function() {return true;});
+        },
+        tearDown: function() {
+            sinon.FakeXMLHttpRequest.useFilters = false;
+            sinon.FakeXMLHttpRequest.restore();
+        },
+        "test loads resource asynchronously": function(q) {
+            q.call(function(callbacks) {
+                var req = new XMLHttpRequest;
+                var responseReceived = callbacks.add(function(responseText) {
+                    assertMatch(/loaded successfully/, responseText);
+                });
+                req.onreadystatechange = function() {
+                    if(this.readyState == 4) {
+                        responseReceived(this.responseText);
+                    }
+                };
+
+                setTimeout(callbacks.addErrback("timeout on ajax"),1000);
+
+                req.open("GET","/test/test/resources/xhr_target.txt",true);
+                req.send();
+            });
+        },
+        "test loads resource synchronously": function() {
+            var req = new XMLHttpRequest;
+            req.open("GET","/test/test/resources/xhr_target.txt",false);
+            req.send();
+            assertMatch(/loaded successfully/, req.responseText);
+        }
+    });
 
     if (typeof ActiveXObject == "undefined") {
         testCase("StubXHRActiveXTest", {
