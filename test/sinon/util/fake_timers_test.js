@@ -682,7 +682,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         tearDown: function () {
-            this.clock.restore();
+            if (this.clock) {
+                this.clock.restore();
+            }
+
             clearTimeout(this.timer);
             if (typeof this.dateNow == "undefined") {
                 delete global.Date.now;
@@ -860,6 +863,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertSame(sinon.timers.clearTimeout, clearTimeout);
             assertSame(sinon.timers.setInterval, setInterval);
             assertSame(sinon.timers.clearInterval, clearInterval);
+        },
+
+        "should not be able to use date object for now": function () {
+            assertException(function () {
+                sinon.useFakeTimers(new Date(2011, 9, 1));
+            });
         }
     });
 }(typeof global != "undefined" ? global : this));
