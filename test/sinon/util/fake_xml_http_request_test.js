@@ -649,6 +649,13 @@
             this.xhr.respond(200, {}, "'tis some body text");
 
             assertEquals("'tis some body text", this.xhr.responseText);
+        },
+
+        "should complete request when onreadystatechange fails": function () {
+            this.xhr.onreadystatechange = sinon.stub().throws();
+            this.xhr.respond(200, {}, "'tis some body text");
+
+            assertEquals(4, this.xhr.onreadystatechange.callCount);
         }
     });
 
