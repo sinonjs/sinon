@@ -115,6 +115,24 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 // IE 8 does not support delete on global properties.
                 window.sinonTestMethod = undefined;
             }
+        },
+
+        "should mirror function properties": function () {
+            var object = { method: function () {} };
+            object.method.prop = 42;
+
+            sinon.wrapMethod(object, "method", function () {});
+
+            assertEquals(42, object.method.prop);
+        },
+
+        "should not mirror and overwrite existing properties": function () {
+            var object = { method: function () {} };
+            object.method.called = 42;
+
+            sinon.stub(object, "method");
+
+            assertSame(false, object.method.called);
         }
     });
 
