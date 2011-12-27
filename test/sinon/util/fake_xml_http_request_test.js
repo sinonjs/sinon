@@ -948,7 +948,7 @@
             tearDown: fakeXhrTearDown,
 
             "should notify user of missing ActiveXObject": function () {
-                jstestdriver.console.log("Browser does not support ActiveXObject");
+                jstestdriver.console.log("Environment does not support ActiveXObject");
             },
 
             "should not expose ActiveXObject": function () {
@@ -1012,7 +1012,7 @@
             tearDown: fakeXhrTearDown,
 
             "should notify user of missing XMLHttpRequest": function () {
-                jstestdriver.console.log("Browser does not support XMLHttpRequest");
+                jstestdriver.console.log("Environment does not support XMLHttpRequest");
             },
 
             "should not expose XMLHttpRequest": function () {

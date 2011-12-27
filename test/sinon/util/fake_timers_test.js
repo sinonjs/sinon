@@ -649,7 +649,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             if (Date.now) {
                 assertEquals(this.now, this.clock.Date.now());
             } else {
-                jstestdriver.console.log("Browser does not support Date.now");
+                jstestdriver.console.log("Environment does not support Date.now");
                 assertUndefined(this.clock.Date.now);
             }
         },
@@ -666,7 +666,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             if (Date.toSource) {
                 assertSame(Date.toSource(), this.clock.Date.toSource());
             } else {
-                jstestdriver.console.log("Browser does not support Date.toSource");
+                jstestdriver.console.log("Environment does not support Date.toSource");
                 assertUndefined(this.clock.Date.toSource);
             }
         },
