@@ -677,9 +677,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     });
 
     testCase("SinonStubTimersTest", {
+        setUp: function () {
+            this.dateNow = global.Date.now;
+        },
+
         tearDown: function () {
             this.clock.restore();
             clearTimeout(this.timer);
+            if (typeof this.dateNow == "undefined") {
+                delete global.Date.now;
+            } else {
+                global.Date.now = this.dateNow;
+            }
         },
 
         "should return clock object": function () {
@@ -807,6 +816,20 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(!!Date.parse);
             assert(!!Date.UTC);
+        },
+
+        "decide on Date.now support at call-time when supported": function () {
+            global.Date.now = function () {};
+            this.clock = sinon.useFakeTimers(0);
+
+            assertTypeOf("function", Date.now);
+        },
+
+        "decide on Date.now support at call-time when unsupported": function () {
+            global.Date.now = null;
+            this.clock = sinon.useFakeTimers(0);
+
+            assertUndefined(Date.now);
         },
 
         "should restore Date constructor": function () {
