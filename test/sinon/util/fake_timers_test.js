@@ -822,7 +822,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             global.Date.now = function () {};
             this.clock = sinon.useFakeTimers(0);
 
-            assertTypeOf("function", Date.now);
+            assertEquals("function", typeof Date.now);
         },
 
         "decide on Date.now support at call-time when unsupported": function () {
