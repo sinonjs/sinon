@@ -441,7 +441,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledOn").returns(false);
             var stub = this.stub;
-            
+
             assertException(function () {
                 sinon.assert.calledOn(stub, object);
             });
@@ -453,7 +453,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledOn").returns(true);
             var stub = this.stub;
-            
+
             sinon.assert.calledOn(stub, object);
 
             assertFalse(sinon.assert.fail.called);
@@ -477,7 +477,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledWith").returns(false);
             var stub = this.stub;
-            
+
             assertException(function () {
                 sinon.assert.calledWith(stub, object, 1);
             });
@@ -490,7 +490,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledWith").returns(true);
             var stub = this.stub;
-            
+
             assertNoException(function () {
                 sinon.assert.calledWith(stub, object, 1);
             });
@@ -516,7 +516,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledWithExactly").returns(false);
             var stub = this.stub;
-            
+
             assertException(function () {
                 sinon.assert.calledWithExactly(stub, object, 1);
             });
@@ -529,7 +529,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "calledWithExactly").returns(true);
             var stub = this.stub;
-            
+
             assertNoException(function () {
                 sinon.assert.calledWithExactly(stub, object, 1);
             });
@@ -555,7 +555,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "neverCalledWith").returns(false);
             var stub = this.stub;
-            
+
             assertException(function () {
                 sinon.assert.neverCalledWith(stub, object, 1);
             });
@@ -568,7 +568,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var object = {};
             sinon.stub(this.stub, "neverCalledWith").returns(true);
             var stub = this.stub;
-            
+
             assertNoException(function () {
                 sinon.assert.neverCalledWith(stub, object, 1);
             });
@@ -593,7 +593,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should fail when method fails": function () {
             sinon.stub(this.stub, "threw").returns(false);
             var stub = this.stub;
-            
+
             assertException(function () {
                 sinon.assert.threw(stub, 1, 2);
             });
@@ -605,7 +605,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should not fail when method doesn't fail": function () {
             sinon.stub(this.stub, "threw").returns(true);
             var stub = this.stub;
-            
+
             assertNoException(function () {
                 sinon.assert.threw(stub, 1, 2);
             });
@@ -643,7 +643,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should not fail when method doesn't fail": function () {
             var stub = this.stub;
             this.stub.callCount = 3;
-            
+
             assertNoException(function () {
                 sinon.assert.callCount(stub, 3);
             });
@@ -826,6 +826,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFunction(assertCallCount);
         },
 
+        "should fail exposed asserts without errors": function () {
+            sinon.assert.expose(global, {
+                includeFail: false
+            });
+
+            try {
+                assertCalled(sinon.spy());
+            } catch (e) {
+                assertEquals("expected spy to have been called at least once but was never called", e.message);
+            }
+        },
+
         "should expose asserts into object without prefixes": function () {
             var test = {};
 
@@ -874,7 +886,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "assert.called exception message": function () {
-            assertEquals("expected doSomething to have been called at " + 
+            assertEquals("expected doSomething to have been called at " +
                          "least once but was never called",
                          this.message("called", this.obj.doSomething));
         },
@@ -882,7 +894,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "assert.notCalled exception message one call": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " + 
+            assertEquals("expected doSomething to not have been called " +
                          "but was called once\n    doSomething()",
                          this.message("notCalled", this.obj.doSomething));
         },
@@ -893,7 +905,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " + 
+            assertEquals("expected doSomething to not have been called " +
                          "but was called 4 times\n    doSomething()\n    " +
                          "doSomething()\n    doSomething()\n    doSomething()",
                          this.message("notCalled", this.obj.doSomething));
@@ -905,7 +917,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething(42, 1);
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " + 
+            assertEquals("expected doSomething to not have been called " +
                          "but was called 4 times\n    doSomething()\n    " +
                          "doSomething(3)\n    doSomething(42, 1)\n    doSomething()",
                          this.message("notCalled", this.obj.doSomething));
@@ -920,7 +932,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
             obj.foo();
 
-            assertEquals("expected doSomething, doop, foo to be called in " + 
+            assertEquals("expected doSomething, doop, foo to be called in " +
                          "order but were called as doop, doSomething, foo",
                          this.message("callOrder", this.obj.doSomething, obj.doop, obj.foo));
         },
