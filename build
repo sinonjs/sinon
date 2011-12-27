@@ -32,6 +32,24 @@ PREAMBLE
   end
 end
 
+def add_buster_format(file)
+  if !File.exists?("./node_modules/buster-format")
+    puts "Initialize NPM modules with `npm link`"
+    exit
+  end
+  contents = File.read(file)
+
+  File.open(file, "w") do |f|
+    f.puts("var sinon = (function () {")
+    f.puts(File.read("./node_modules/buster-format/node_modules/buster-core/lib/buster-core.js"))
+    f.puts(File.read("./node_modules/buster-format/lib/buster-format.js").gsub("var buster = this.buster || {};", ""))
+    f.puts(contents)
+    f.puts("return sinon;}.call(typeof window != 'undefined' && window || {}));")
+  end
+
+  file
+end
+
 Dir.chdir(File.dirname(__FILE__)) do
   version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
   version_string = ARGV[0] == "plain" ? "" : "-#{version}"
@@ -42,7 +60,7 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger << "lib/sinon/test_case.js"
   merger << "lib/sinon/assert.js"
   merger.save(output)
-  add_license(output, version)
+  add_license(add_buster_format(output), version)
 
   File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
     f.puts(File.read("lib/sinon/util/timers_ie.js"))
@@ -61,6 +79,8 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger << "lib/sinon/util/fake_server_with_clock.js"
   merger.save("pkg/sinon-server#{version_string}.js")
   add_license("pkg/sinon-server#{version_string}.js", version)
+  `cp #{output} pkg/sinon.js`
+  `cp pkg/sinon-ie#{version_string}.js pkg/sinon-ie.js`
 
   puts "Built Sinon.JS #{version}"
 end
