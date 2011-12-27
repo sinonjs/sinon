@@ -496,6 +496,22 @@ testCase("ServerRespondWithFunctionHandlerTest", {
         assert(!handler.called);
     },
 
+    "should add function handler without method or url filter": function () {
+        this.server.respondWith(function (xhr) {
+            xhr.respond(200, { "Content-Type": "application/json" }, '{"id":42}');
+        });
+
+        var request = new sinon.FakeXMLHttpRequest();
+        request.open("GET", "/whatever");
+        request.send();
+
+        this.server.respond();
+
+        assertEquals(200, request.status);
+        assertEquals({ "Content-Type": "application/json" }, request.responseHeaders);
+        assertEquals('{"id":42}', request.responseText);
+    },
+
     "should not process request further if processed by function": function () {
         var handler = sinon.spy();
         this.server.respondWith("GET", /\/a.*/, handler);
