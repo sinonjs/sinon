@@ -186,6 +186,34 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     });
 
     testCase("SinonDeepEqualTest", {
+        "should pass null": function () {
+            assert(sinon.deepEqual(null, null));
+        },
+
+        "should not pass null and object": function () {
+            assertFalse(sinon.deepEqual(null, {}));
+        },
+
+        "should not pass object and null": function () {
+            assertFalse(sinon.deepEqual({}, null));
+        },
+
+        "should not pass error and object": function () {
+            assertFalse(sinon.deepEqual(new Error(), {}));
+        },
+
+        "should not pass object and error": function () {
+            assertFalse(sinon.deepEqual({}, new Error()));
+        },
+
+        "should not pass regexp and object": function () {
+            assertFalse(sinon.deepEqual(/.*/, {}));
+        },
+
+        "should not pass object and regexp": function () {
+            assertFalse(sinon.deepEqual({}, /.*/));
+        },
+
         "should pass primitives": function () {
             assert(sinon.deepEqual(1, 1));
         },
