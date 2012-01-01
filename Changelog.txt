@@ -1,5 +1,4 @@
-== 1.3.0 / 2011-12-28
-* Format objects with buster-format
+== 1.3.0 / 2012-01-01
 * Support using bare functions as fake server response handlers (< 1.3.0
   required URL and/or method matcher too)
 * Log some internal errors to sinon.log (defaults to noop). Set sinon.log
@@ -21,6 +20,9 @@
   stubbing not-yet-implemented methods. (Felix Geisendörfer)
 * server.respond() can now accept the same arguments as server.respondWith() for
   quick-and-dirty respondWith+respond. (Gavin Huang)
+* Format objects with buster-format in the default bundle. Default to
+  util.inspect on node unless buster-format is available (not a hard dependency,
+  more like a 'preference').
 
 * Bug fix: Make sure XHRs can complete even if onreadystatechange handler fails
 * Bug fix: Mirror entire Date.prototype, including toUTCString when faking
@@ -34,6 +36,7 @@
 * Bug fix: wrapMethod on window property (i.e. when stubbing/spying on global
   functions)
 * Bug fix: Quote "yield" (Ben Hockey)
+* Bug fix: callOrder works correctly when spies have been called multiple times
 
 == 1.2.0 / 2011-09-27
 * Bug fix: abort() switches state to DONE when OPENED and sent. Fix by
