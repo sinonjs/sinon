@@ -14,6 +14,8 @@ if (typeof require == "function") {
 }
 
 var testCase = (function () {
+    var silent = typeof process == "object" && process.env.SILENT || false;
+
     function green(str) {
         return "\033[1m\033[32m" + str + "\033[0m";
     }
@@ -66,7 +68,7 @@ var testCase = (function () {
             }
         }
 
-        if (errorCount == 0) {
+        if (errorCount == 0 && !silent) {
             print(green("OK: " + name));
         }
     }
