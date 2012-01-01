@@ -1158,7 +1158,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.spy1();
             this.spy2();
 
-            assertFalse(this.spy1.calledBefore(this.spy2));
+            assert(this.spy1.calledBefore(this.spy2));
         }
     });
 

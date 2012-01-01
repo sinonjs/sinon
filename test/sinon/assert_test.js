@@ -402,6 +402,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("callOrder"));
+        },
+
+        "should pass for multiple calls to same spy": function () {
+            var first = sinon.spy();
+            var second = sinon.spy();
+
+            first();
+            second();
+            first();
+
+            sinon.assert.callOrder(first, second, first);
         }
     });
 
