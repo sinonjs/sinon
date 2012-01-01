@@ -34,8 +34,14 @@ end
 
 def add_buster_format(file)
   if !File.exists?("./node_modules/buster-format")
-    puts "Initialize NPM modules with `npm link`"
-    exit
+    puts <<-MSG
+buster-format not found, skipping. To build with buster-format support:
+    mkdir node_modules
+    git submodule add git://gitorious.org/buster/buster-format.git node_modules/buster-format
+    cd node_modules/buster-format
+    npm link
+    MSG
+    return file
   end
   contents = File.read(file)
 

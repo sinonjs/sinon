@@ -18,8 +18,5 @@
         }
     ],
     "main": "./lib/sinon.js",
-    "engines": { "node": ">=0.1.103" },
-    "dependencies": {
-        "buster-format": "~0.5"
-    }
+    "engines": { "node": ">=0.1.103" }
 }
