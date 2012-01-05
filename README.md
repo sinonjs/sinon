@@ -11,9 +11,12 @@ via [npm (node package manager)](http://github.com/isaacs/npm)
 or install via git by cloning the repository and including sinon.js 
 in your project, as you would any other third party library.
 
+Don't forget to include the parts of Sinon.JS that you want to use as well
+(i.e. spy.js).
+
 ## Usage
 
-See the [sinon project homepage](http://cjohansen.no/sinon/)
+See the [sinon project homepage](http://sinonjs.org/)
 
 ## Goals
 
