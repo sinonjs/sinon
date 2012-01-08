@@ -2271,6 +2271,131 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals(3, spy.callCount);
             assertEquals(1, numArgSpy.callCount);
             assertEquals(1, spy.withArgs({}, []).callCount);
+        },
+
+        "should initialize filtered spy with callCount": function () {
+            var spy = sinon.spy();
+            spy("a");
+            spy("b");
+            spy("b");
+            spy("c");
+            spy("c");
+            spy("c");
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+            var argSpy3 = spy.withArgs("c");
+
+            assertEquals(1, argSpy1.callCount);
+            assertEquals(2, argSpy2.callCount);
+            assertEquals(3, argSpy3.callCount);
+            assert(argSpy1.called);
+            assert(argSpy2.called);
+            assert(argSpy3.called);
+            assert(argSpy1.calledOnce);
+            assert(argSpy2.calledTwice);
+            assert(argSpy3.calledThrice);
+        },
+
+        "should initialize filtered spy with first, second, third and last call": function () {
+            var spy = sinon.spy();
+            spy("a", 1);
+            spy("b", 2);
+            spy("b", 3);
+            spy("b", 4);
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy1.firstCall.calledWithExactly("a", 1));
+            assert(argSpy1.lastCall.calledWithExactly("a", 1));
+            assert(argSpy2.firstCall.calledWithExactly("b", 2));
+            assert(argSpy2.secondCall.calledWithExactly("b", 3));
+            assert(argSpy2.thirdCall.calledWithExactly("b", 4));
+            assert(argSpy2.lastCall.calledWithExactly("b", 4));
+        },
+
+        "should initialize filtered spy with arguments": function () {
+            var spy = sinon.spy();
+            spy("a");
+            spy("b");
+            spy("b", "c", "d");
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy1.getCall(0).calledWithExactly("a"));
+            assert(argSpy2.getCall(0).calledWithExactly("b"));
+            assert(argSpy2.getCall(1).calledWithExactly("b", "c", "d"));
+        },
+
+        "should initialize filtered spy with thisValues": function () {
+            var spy = sinon.spy();
+            var thisValue1 = {};
+            var thisValue2 = {};
+            var thisValue3 = {};
+            spy.call(thisValue1, "a");
+            spy.call(thisValue2, "b");
+            spy.call(thisValue3, "b");
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy1.getCall(0).calledOn(thisValue1));
+            assert(argSpy2.getCall(0).calledOn(thisValue2));
+            assert(argSpy2.getCall(1).calledOn(thisValue3));
+        },
+
+        "should initialize filtered spy with return values": function () {
+            var spy = sinon.spy(function (value) { return value; });
+            spy("a");
+            spy("b");
+            spy("b");
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy1.getCall(0).returned("a"));
+            assert(argSpy2.getCall(0).returned("b"));
+            assert(argSpy2.getCall(1).returned("b"));
+        },
+
+        "should initialize filtered spy with call order": function () {
+            var spy = sinon.spy();
+            spy("a");
+            spy("b");
+            spy("b");
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy2.getCall(0).calledAfter(argSpy1.getCall(0)));
+            assert(argSpy2.getCall(1).calledAfter(argSpy1.getCall(0)));
+        },
+
+        "should initialize filtered spy with exceptions": function () {
+            var spy = sinon.spy(function (x, y) {
+                var error = new Error();
+                error.name = y;
+                throw error;
+            });
+            try {
+                spy("a", "1");
+            } catch (ignored) {}
+            try {
+                spy("b", "2");
+            } catch (ignored) {}
+            try {
+                spy("b", "3");
+            } catch (ignored) {}
+
+            var argSpy1 = spy.withArgs("a");
+            var argSpy2 = spy.withArgs("b");
+
+            assert(argSpy1.getCall(0).threw("1"));
+            assert(argSpy2.getCall(0).threw("2"));
+            assert(argSpy2.getCall(1).threw("3"));
         }
+
     });
 }());
