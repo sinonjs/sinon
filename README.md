@@ -6,7 +6,7 @@ Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
 
 via [npm (node package manager)](http://github.com/isaacs/npm)
 
-    $ sudo npm install sinon
+    $ npm install sinon
 
 or install via git by cloning the repository and including sinon.js 
 in your project, as you would any other third party library.
