@@ -338,6 +338,86 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("StubCallsArgOnWithTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should call argument at specified index with provided args": function () {
+            var object = {};
+            this.stub.callsArgOnWith(1, this.fakeContext, object);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith(object));
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should return function": function () {
+            var stub = this.stub.callsArgOnWith(2, this.fakeContext, 3);
+
+            assertFunction(stub);
+        },
+
+        "should call callback without args": function () {
+            this.stub.callsArgOnWith(1, this.fakeContext);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith());
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should call callback wit multiple args": function () {
+            var object = {};
+            var array = [];
+            this.stub.callsArgOnWith(1, this.fakeContext, object, array);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith(object, array));
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith();
+            }, "TypeError");
+        },
+
+        "should throw if no context is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith(3);
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith({});
+            }, "TypeError");
+        },
+
+        "should throw if context is not an object": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith(2, 2);
+            }, "TypeError");
+        }
+    });
+
     testCase("StubObjectMethodTest", {
         setUp: function () {
             this.method = function () {};
