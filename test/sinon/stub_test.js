@@ -274,6 +274,70 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("StubCallsArgOnTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should call argument at specified index": function () {
+            this.stub.callsArgOn(2, this.fakeContext);
+            var callback = sinon.stub.create();
+
+            this.stub(1, 2, callback);
+
+            assert(callback.called);
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should return stub": function () {
+            var stub = this.stub.callsArgOn(2, this.fakeContext);
+
+            assertFunction(stub);
+        },
+
+        "should throw if argument at specified index is not callable": function () {
+            this.stub.callsArgOn(0, this.fakeContext);
+
+            assertException(function () {
+                this.stub(1);
+            }, "TypeError");
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn();
+            }, "TypeError");
+        },
+
+        "should throw if no context is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(3);
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(this.fakeContext, 2);
+            }, "TypeError");
+        },
+        "should throw if context is not an object": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(2, 2);
+            }, "TypeError");
+        }
+    });
+
     testCase("StubObjectMethodTest", {
         setUp: function () {
             this.method = function () {};
