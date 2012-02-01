@@ -1043,6 +1043,17 @@
                 readyStateCb();
                 sinon.assert.calledOnce(spy);
             });
+        },
+        "should perform initial readystatechange on opening when filters are being used, but don't match": function() {
+            try {
+              sinon.FakeXMLHttpRequest.useFilters = true;
+              var spy = sinon.spy();
+              fakeXhr.addEventListener("readystatechange",spy);
+              fakeXhr.open("GET","http://example.com",true);
+              sinon.assert.calledOnce(spy);
+            } finally {
+              sinon.FakeXMLHttpRequest.useFilters = false;
+            }
         }
     });
 
@@ -1055,6 +1066,7 @@
         },
         tearDown: function() {
             sinon.FakeXMLHttpRequest.useFilters = false;
+            sinon.FakeXMLHttpRequest.filters = [];
             sinon.FakeXMLHttpRequest.restore();
         },
         "test loads resource asynchronously": function(q) {
