@@ -1043,6 +1043,17 @@
                 readyStateCb();
                 sinon.assert.calledOnce(spy);
             });
+        },
+        "should perform initial onReadyStateChange on opening when filters are being used, but don't match": function() {
+            try {
+              sinon.FakeXMLHttpRequest.useFilters = true;
+              var spy = sinon.spy();
+              fakeXhr.addEventListener("readyStateChange",spy);
+              fakeXhr.open();
+              sinon.assert.calledOnce(spy);
+            } finally {
+              sinon.FakeXMLHttpRequest.useFilters = false;
+            }
         }
     });
 
