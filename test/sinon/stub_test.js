@@ -562,6 +562,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var stub = sinon.stub().yieldsOn(context);
             var spy = sinon.spy();
             stub(spy);
+
+	        assert(spy.calledOn(context));
             assert(spy.calledOnce);
             assertEquals(0, spy.args[0].length);
         },
@@ -601,7 +603,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var spy = sinon.spy();
             stub(context, 24, {}, spy);
 
-            assert(spy.calledOnce);
+            assert(spy.calledOn(context));
+	        assert(spy.calledOnce);
             assertEquals(0, spy.args[0].length);
         },
 
@@ -612,7 +615,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var spy2 = sinon.spy();
             stub(context, 24, {}, spy, spy2);
 
-            assert(spy.calledOnce);
+            assert(spy.calledOn(context));
+	        assert(spy.calledOnce);
             assert(!spy2.called);
         },
 
@@ -766,7 +770,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var callback = sinon.spy();
             stub(24, {}, { success: callback });
 
-            assert(callback.calledOnce);
+            assert(callback.calledOn(context));
+	        assert(callback.calledOnce);
             assertEquals(0, callback.args[0].length);
         },
 
@@ -777,7 +782,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var callback2 = sinon.spy();
             stub(24, {}, { error: callback }, { error: callback2 });
 
-            assert(callback.calledOnce);
+            assert(callback.calledOn(context));
+	        assert(callback.calledOnce);
             assert(!callback2.called);
         },
 
@@ -788,7 +794,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var callback = sinon.spy();
             stub({ success: callback });
 
-            assert(callback.calledWith(obj, "Crazy"));
+            assert(callback.calledOn(context));
+	        assert(callback.calledWith(obj, "Crazy"));
         },
 
         "should throw if callback throws": function () {
