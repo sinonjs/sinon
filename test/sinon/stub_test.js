@@ -67,14 +67,14 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertUndefined(stub());
         }
     });
-    
+
     testCase("StubReturnsArgTest", {
         "should have returnsArg method": function() {
             var stub = sinon.stub.create();
 
             assertFunction(stub.returnsArg);
         },
-        
+
         "should return argument at specified index": function() {
             var stub = sinon.stub.create();
             stub.returnsArg(0);
@@ -82,7 +82,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assertSame(object, stub(object));
         },
-        
+
         "should return stub": function () {
             var stub = sinon.stub.create();
 
@@ -556,6 +556,89 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+	testCase("StubYieldsOnTest", {
+        "should invoke only argument as callback": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsOn(context);
+            var spy = sinon.spy();
+            stub(spy);
+            assert(spy.calledOnce);
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should throw understandable error if no callback is passed": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsOn(context);
+            var spy = sinon.spy();
+
+            try {
+                stub();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield, but no callback was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+	        var context = {};
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsOn();
+            var spy = sinon.spy();
+
+            try {
+                stub(context, 23, 42);
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome expected to yield, but no callback " +
+                             "was passed. Received [[object Object], 23, 42]", e.message);
+            }
+        },
+
+        "should invoke last argument as callback": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsOn();
+            var spy = sinon.spy();
+            stub(context, 24, {}, spy);
+
+            assert(spy.calledOnce);
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should invoke first of two callbacks": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsOn();
+            var spy = sinon.spy();
+            var spy2 = sinon.spy();
+            stub(context, 24, {}, spy, spy2);
+
+            assert(spy.calledOnce);
+            assert(!spy2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+	        var context = {};
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsOn(context, obj, "Crazy");
+            var spy = sinon.spy();
+            stub(spy);
+
+            assert(spy.calledOn(context));
+	        assert(spy.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+	        var context = {};
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsOn(context, obj, "Crazy");
+            var callback = sinon.stub().throws();
+
+            assertException(function () {
+                stub(spy);
+            });
+        }
+    });
+
     // yieldsTo burde kunne kalles flere ganger?
     testCase("StubYieldsToTest", {
         "should yield to property of object argument": function () {
@@ -631,6 +714,93 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertException(function () {
                 stub({ error: callback });
             });
+        }
+    });
+
+	// yieldsTo burde kunne kalles flere ganger?
+    testCase("StubYieldsToOnTest", {
+        "should yield to property of object argument": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsToOn(context, "success");
+            var callback = sinon.spy();
+
+            stub({ success: callback });
+
+            assert(callback.calledOn(context));
+	        assert(callback.calledOnce);
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should throw understandable error if no object with callback is passed": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsToOn(context, "success");
+
+            try {
+                stub();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield to 'success', but no object "+
+                             "with such a property was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+	        var context = {};
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToOn(context, "success");
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome expected to yield to 'success', but " +
+                             "no object with such a property was passed. " +
+                             "Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke property on last argument as callback": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsToOn(context, "success");
+            var callback = sinon.spy();
+            stub(24, {}, { success: callback });
+
+            assert(callback.calledOnce);
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should invoke first of two possible callbacks": function () {
+	        var context = {};
+            var stub = sinon.stub().yieldsToOn(context, "error");
+            var callback = sinon.spy();
+            var callback2 = sinon.spy();
+            stub(24, {}, { error: callback }, { error: callback2 });
+
+            assert(callback.calledOnce);
+            assert(!callback2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+	        var context = {};
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsToOn(context, "success", obj, "Crazy");
+            var callback = sinon.spy();
+            stub({ success: callback });
+
+            assert(callback.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+	        var context = {};
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsToOn(context, "error", obj, "Crazy");
+            var callback = sinon.stub().throws();
+
+            assertException(function () {
+                stub({ error: callback });
+            });
+
         }
     });
 
