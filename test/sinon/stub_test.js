@@ -874,6 +874,104 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("StubYieldsToOnTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should yield to property of object argument": function () {
+            this.stub.yieldsToOn("success", this.fakeContext);
+            var callback = sinon.spy();
+
+            this.stub({ success: callback });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should throw if no context is specified": function () {
+            assertException(function () {
+                this.stub.yieldsToOn("success");
+            }, "TypeError");
+        },
+
+        "should throw understandable error if no object with callback is passed": function () {
+            this.stub.yieldsToOn("success", this.fakeContext);
+
+            try {
+                this.stub();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield to 'success', but no object "+
+                             "with such a property was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome expected to yield to 'success', but " +
+                             "no object with such a property was passed. " +
+                             "Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke property on last argument as callback": function () {
+            var callback = sinon.spy();
+
+            this.stub.yieldsToOn("success", this.fakeContext);
+            this.stub(24, {}, { success: callback });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should invoke first of two possible callbacks": function () {
+            var callback = sinon.spy();
+            var callback2 = sinon.spy();
+
+            this.stub.yieldsToOn("error", this.fakeContext);
+            this.stub(24, {}, { error: callback }, { error: callback2 });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assert(!callback2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+            var obj = { id: 42 };
+            var callback = sinon.spy();
+
+            this.stub.yieldsToOn("success", this.fakeContext, obj, "Crazy");
+            this.stub({ success: callback });
+
+            assert(callback.calledOn(this.fakeContext));
+            assert(callback.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+            var obj = { id: 42 };
+            var callback = sinon.stub().throws();
+
+            this.stub.yieldsToOn("error", this.fakeContext, obj, "Crazy");
+
+            assertException(function () {
+                this.stub({ error: callback });
+            });
+        }
+    });
+
     testCase("StubWithArgsTest", {
         "should define withArgs method": function () {
             var stub = sinon.stub();
