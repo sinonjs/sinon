@@ -10,6 +10,7 @@
           assertSame
           assertNotSame
           assertEquals
+          assertNoException
           assertException*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
@@ -274,6 +275,150 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("StubCallsArgOnTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should call argument at specified index": function () {
+            this.stub.callsArgOn(2, this.fakeContext);
+            var callback = sinon.stub.create();
+
+            this.stub(1, 2, callback);
+
+            assert(callback.called);
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should return stub": function () {
+            var stub = this.stub.callsArgOn(2, this.fakeContext);
+
+            assertFunction(stub);
+        },
+
+        "should throw if argument at specified index is not callable": function () {
+            this.stub.callsArgOn(0, this.fakeContext);
+
+            assertException(function () {
+                this.stub(1);
+            }, "TypeError");
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn();
+            }, "TypeError");
+        },
+
+        "should throw if no context is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(3);
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(this.fakeContext, 2);
+            }, "TypeError");
+        },
+        "should throw if context is not an object": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOn(2, 2);
+            }, "TypeError");
+        }
+    });
+
+    testCase("StubCallsArgOnWithTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should call argument at specified index with provided args": function () {
+            var object = {};
+            this.stub.callsArgOnWith(1, this.fakeContext, object);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith(object));
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should return function": function () {
+            var stub = this.stub.callsArgOnWith(2, this.fakeContext, 3);
+
+            assertFunction(stub);
+        },
+
+        "should call callback without args": function () {
+            this.stub.callsArgOnWith(1, this.fakeContext);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith());
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should call callback wit multiple args": function () {
+            var object = {};
+            var array = [];
+            this.stub.callsArgOnWith(1, this.fakeContext, object, array);
+            var callback = sinon.stub.create();
+
+            this.stub(1, callback);
+
+            assert(callback.calledWith(object, array));
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "should throw if no index is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith();
+            }, "TypeError");
+        },
+
+        "should throw if no context is specified": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith(3);
+            }, "TypeError");
+        },
+
+        "should throw if index is not number": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith({});
+            }, "TypeError");
+        },
+
+        "should throw if context is not an object": function () {
+            var stub = this.stub;
+
+            assertException(function () {
+                stub.callsArgOnWith(2, 2);
+            }, "TypeError");
+        }
+    });
+
     testCase("StubObjectMethodTest", {
         setUp: function () {
             this.method = function () {};
@@ -424,7 +569,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "should stub prototype methods": function () {
-            function Obj() {};
+            function Obj() {}
             Obj.prototype.func1 = function() {};
             var obj = new Obj();
 
@@ -492,7 +637,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should throw understandable error if no callback is passed": function () {
             var stub = sinon.stub().yields();
-            var spy = sinon.spy();
 
             try {
                 stub();
@@ -506,7 +650,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should include stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = sinon.stub(myObj, "somethingAwesome").yields();
-            var spy = sinon.spy();
 
             try {
                 stub(23, 42);
@@ -551,7 +694,103 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var callback = sinon.stub().throws();
 
             assertException(function () {
-                stub(spy);
+                stub(callback);
+            });
+        }
+    });
+
+    testCase("StubYieldsOnTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should invoke only argument as callback": function () {
+            var spy = sinon.spy();
+
+            this.stub.yieldsOn(this.fakeContext);
+            this.stub(spy);
+
+            assert(spy.calledOnce);
+            assert(spy.calledOn(this.fakeContext));
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should throw if no context is specified": function () {
+            assertException(function () {
+                this.stub.yieldsOn();
+            }, "TypeError");
+        },
+
+        "should throw understandable error if no callback is passed": function () {
+            this.stub.yieldsOn(this.fakeContext);
+
+            try {
+                this.stub();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield, but no callback was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsOn(this.fakeContext);
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome expected to yield, but no callback " +
+                             "was passed. Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke last argument as callback": function () {
+            var spy = sinon.spy();
+            this.stub.yieldsOn(this.fakeContext);
+
+            this.stub(24, {}, spy);
+
+            assert(spy.calledOnce);
+            assert(spy.calledOn(this.fakeContext));
+            assertEquals(0, spy.args[0].length);
+        },
+
+        "should invoke first of two callbacks": function () {
+            var spy = sinon.spy();
+            var spy2 = sinon.spy();
+
+            this.stub.yieldsOn(this.fakeContext);
+            this.stub(24, {}, spy, spy2);
+
+            assert(spy.calledOnce);
+            assert(spy.calledOn(this.fakeContext));
+            assert(!spy2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+            var obj = { id: 42 };
+            var spy = sinon.spy();
+
+            this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
+            this.stub(spy);
+
+            assert(spy.calledWith(obj, "Crazy"));
+            assert(spy.calledOn(this.fakeContext));
+        },
+
+        "should throw if callback throws": function () {
+            var obj = { id: 42 };
+            var callback = sinon.stub().throws();
+
+            this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
+
+            assertException(function () {
+                this.stub(callback);
             });
         }
     });
@@ -630,6 +869,104 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assertException(function () {
                 stub({ error: callback });
+            });
+        }
+    });
+
+    testCase("StubYieldsToOnTest", {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: 'bar'
+            };
+        },
+
+        "should yield to property of object argument": function () {
+            this.stub.yieldsToOn("success", this.fakeContext);
+            var callback = sinon.spy();
+
+            this.stub({ success: callback });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should throw if no context is specified": function () {
+            assertException(function () {
+                this.stub.yieldsToOn("success");
+            }, "TypeError");
+        },
+
+        "should throw understandable error if no object with callback is passed": function () {
+            this.stub.yieldsToOn("success", this.fakeContext);
+
+            try {
+                this.stub();
+                throw new Error();
+            } catch (e) {
+                assertEquals("stub expected to yield to 'success', but no object "+
+                             "with such a property was passed.",
+                             e.message);
+            }
+        },
+
+        "should include stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assertEquals("somethingAwesome expected to yield to 'success', but " +
+                             "no object with such a property was passed. " +
+                             "Received [23, 42]", e.message);
+            }
+        },
+
+        "should invoke property on last argument as callback": function () {
+            var callback = sinon.spy();
+
+            this.stub.yieldsToOn("success", this.fakeContext);
+            this.stub(24, {}, { success: callback });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assertEquals(0, callback.args[0].length);
+        },
+
+        "should invoke first of two possible callbacks": function () {
+            var callback = sinon.spy();
+            var callback2 = sinon.spy();
+
+            this.stub.yieldsToOn("error", this.fakeContext);
+            this.stub(24, {}, { error: callback }, { error: callback2 });
+
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+            assert(!callback2.called);
+        },
+
+        "should invoke callback with arguments": function () {
+            var obj = { id: 42 };
+            var callback = sinon.spy();
+
+            this.stub.yieldsToOn("success", this.fakeContext, obj, "Crazy");
+            this.stub({ success: callback });
+
+            assert(callback.calledOn(this.fakeContext));
+            assert(callback.calledWith(obj, "Crazy"));
+        },
+
+        "should throw if callback throws": function () {
+            var obj = { id: 42 };
+            var callback = sinon.stub().throws();
+
+            this.stub.yieldsToOn("error", this.fakeContext, obj, "Crazy");
+
+            assertException(function () {
+                this.stub({ error: callback });
             });
         }
     });
