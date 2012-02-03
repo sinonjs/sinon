@@ -10,6 +10,7 @@
           assertSame
           assertNotSame
           assertEquals
+          assertNoException
           assertException*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
@@ -568,7 +569,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "should stub prototype methods": function () {
-            function Obj() {};
+            function Obj() {}
             Obj.prototype.func1 = function() {};
             var obj = new Obj();
 
@@ -636,7 +637,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should throw understandable error if no callback is passed": function () {
             var stub = sinon.stub().yields();
-            var spy = sinon.spy();
 
             try {
                 stub();
@@ -650,7 +650,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should include stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = sinon.stub(myObj, "somethingAwesome").yields();
-            var spy = sinon.spy();
 
             try {
                 stub(23, 42);
@@ -695,7 +694,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var callback = sinon.stub().throws();
 
             assertException(function () {
-                stub(spy);
+                stub(callback);
             });
         }
     });
