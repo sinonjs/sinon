@@ -1,3 +1,17 @@
+== 1.3.2 / 2012-03-11
+* Stronger Node inference in sandbox
+* Fixed issue with sinon.useFakeTimers() and Rhino.js 1.7R3
+* Formatting brush-up
+* FIX Internet Explorer misreporting the type of Function objects
+  originating in an external window as "object" instead of "function".
+* New methods stub.callsArgOn, stub.callsArgOnWith,
+  stub.yieldsOn, stub.yieldsToOn
+* Implemented
+* Fixing `clearTimeout` to not throw when called for nonexistant IDs.
+* Spys that are created using 'withArgs' now get initialized with previous
+  calls to the original spy.
+* Minor bug fixes and docs cleanup.
+
 == 1.3.1 / 2012-01-04
 * Fix bug in core sinon: isNode was used for both a variable and a function,
   causing load errors and lots of bugs. Should have never left the door.
