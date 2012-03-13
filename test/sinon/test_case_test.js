@@ -161,6 +161,28 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertSame(myMeth, myObj.meth);
         },
 
+        "should unstub all methods of an objects after test is run": function () {
+            var myMeth = function () {};
+            var myMeth2 = function () {};
+            var myObj = { meth: myMeth, meth2: myMeth2 };
+
+            var testCase = sinon.testCase({
+                testA: function () {
+                    this.stub(myObj);
+
+                    assertFunction(this.stub);
+
+                    assertNotSame(myMeth, myObj.meth);
+                    assertNotSame(myMeth2, myObj.meth2);
+                }
+            });
+
+            testCase.testA();
+
+            assertSame(myMeth, myObj.meth);
+            assertSame(myMeth2, myObj.meth2);
+        },
+
         "should unstub objects stubbed in setUp": function () {
             var myMeth = function () {};
             var myObj = { meth: myMeth };
@@ -179,6 +201,29 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             testCase.testA();
 
             assertSame(myMeth, myObj.meth);
+        },
+
+        "should unstub all methods of an objects stubbed in setUp": function () {
+            var myMeth = function () {};
+            var myMeth2 = function () {};
+            var myObj = { meth: myMeth, meth2: myMeth2 };
+
+            var testCase = sinon.testCase({
+                setUp: function () {
+                    this.stub(myObj);
+                },
+                testA: function () {
+                    assertFunction(this.stub);
+
+                    assertNotSame(myMeth, myObj.meth);
+                    assertNotSame(myMeth2, myObj.meth2);
+                }
+            });
+
+            testCase.testA();
+
+            assertSame(myMeth, myObj.meth);
+            assertSame(myMeth2, myObj.meth2);
         },
 
         "should allow the use of helper methods": function () {
