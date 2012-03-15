@@ -84,7 +84,37 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.collection.stub({ method: function () {} }, "method");
 
             assertEquals(objects, this.collection.fakes);
+        },
+
+        "should add object restore wrapper to fake array": function() {
+            var object = { method: function () {} };
+
+            this.collection.stub(object);
+
+            assertFunction(this.collection.fakes[0].restore);
+        },
+
+        "should return a stubbed object": function() {
+            var object = { method: function () {} };
+
+            sinon.stub = function () {
+                return object;
+            };
+
+            assertEquals(object, this.collection.stub(object));
+        },
+
+        "should return a stubbed method": function() {
+            var object = { method: function () {} };
+
+            sinon.stub = function () {
+                return object.method;
+            };
+
+            assertEquals(object.method, this.collection.stub(object, "method"));
         }
+
+
     });
 
     testCase("CollectionStubAnythingTest", {
