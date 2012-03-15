@@ -72,6 +72,19 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertSame(method, object.method);
         },
 
+        "should restore stubs on all object methods": function() {
+            var method = function () {};
+            var method2 = function () {};
+            var object = { method: method, method2: method2 };
+
+            sinon.test(function () {
+                this.stub(object);
+            }).call({});
+
+            assertSame(method, object.method);
+            assertSame(method2, object.method2);
+        },
+
         "should throw when method throws": function () {
             var method = function () {};
             var object = { method: method };
