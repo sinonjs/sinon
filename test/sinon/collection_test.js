@@ -84,7 +84,42 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.collection.stub({ method: function () {} }, "method");
 
             assertEquals(objects, this.collection.fakes);
+        },
+
+        "should add all object methods to fake array": function() {
+            var object = { method: function () {}, method2: function() {} };
+
+            sinon.stub = function() {
+                return object;
+            };
+
+            this.collection.stub(object);
+
+            assertEquals([object.method, object.method2], this.collection.fakes);
+            assertEquals(2, this.collection.fakes.length);
+        },
+
+        "should return a stubbed object": function() {
+            var object = { method: function () {} };
+
+            sinon.stub = function () {
+                return object;
+            };
+
+            assertEquals(object, this.collection.stub(object));
+        },
+
+        "should return a stubbed method": function() {
+            var object = { method: function () {} };
+
+            sinon.stub = function () {
+                return object.method;
+            };
+
+            assertEquals(object.method, this.collection.stub(object, "method"));
         }
+
+
     });
 
     testCase("CollectionStubAnythingTest", {
