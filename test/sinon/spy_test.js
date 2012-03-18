@@ -529,6 +529,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.spy([1, 2, 3]);
 
             assertFalse(this.spy.calledWith(1, 2, 3));
+        },
+
+        "should use matcher": function () {
+            this.spy("abc");
+
+            assert(this.spy.calledWith(sinon.match.typeOf("string")));
+        },
+
+        "should use matcher in object": function () {
+            this.spy({ some: "abc" });
+
+            assert(this.spy.calledWith({ some: sinon.match.typeOf("string") }));
         }
     });
 
