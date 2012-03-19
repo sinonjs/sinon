@@ -441,6 +441,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should return regexp": function () {
             assertEquals("regexp", sinon.typeOf(/.*/));
+        },
+
+        "should return date": function () {
+            assertEquals("date", sinon.typeOf(new Date()));
         }
     });
 }());

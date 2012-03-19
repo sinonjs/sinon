@@ -1032,9 +1032,9 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething(true, true);
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "any(), false\n    doSomething(true, true)",
+                         "any, false\n    doSomething(true, true)",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.any(), false));
+                         sinon.match.any, false));
         },
 
         "assert.calledWith match.same exception message": function () {
@@ -1059,7 +1059,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "instanceOf(\"CustomType\")\n    doSomething()",
+                         "instanceOf(CustomType)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
                          sinon.match.instanceOf(function CustomType() {})));
         },

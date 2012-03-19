@@ -65,16 +65,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     });
 
     testCase("MatchAnyTest", {
-        "should return matcher": function () {
-            var any = sinon.match.any();
-
-            assert(sinon.match.isMatcher(any));
+        "should be matcher": function () {
+            assert(sinon.match.isMatcher(sinon.match.any));
         },
 
         "should return true when tested": function () {
-            var any = sinon.match.any();
-
-            assert(any.test());
+            assert(sinon.match.any.test());
         }
     });
 
@@ -275,6 +271,78 @@ if (typeof require == "function" && typeof testCase == "undefined") {
           assertFalse(like.test(undefined));
           assertFalse(like.test("no"));
           assertFalse(like.test([]));
+        }
+    });
+
+    testCase("MatchBoolTest", {
+        "should be typeOf boolean matcher": function () {
+            var bool = sinon.match.bool;
+
+            assert(sinon.match.isMatcher(bool));
+            assertEquals("typeOf(\"boolean\")", bool.toString());
+        }
+    });
+
+    testCase("MatchNumberTest", {
+        "should be typeOf number matcher": function () {
+            var number = sinon.match.number;
+
+            assert(sinon.match.isMatcher(number));
+            assertEquals("typeOf(\"number\")", number.toString());
+        }
+    });
+
+    testCase("MatchStringTest", {
+        "should be typeOf string matcher": function () {
+            var string = sinon.match.string;
+
+            assert(sinon.match.isMatcher(string));
+            assertEquals("typeOf(\"string\")", string.toString());
+        }
+    });
+
+    testCase("MatchObjectTest", {
+        "should be typeOf object matcher": function () {
+            var object = sinon.match.object;
+
+            assert(sinon.match.isMatcher(object));
+            assertEquals("typeOf(\"object\")", object.toString());
+        }
+    });
+
+    testCase("MatchFuncTest", {
+        "should be typeOf function matcher": function () {
+            var func = sinon.match.func;
+
+            assert(sinon.match.isMatcher(func));
+            assertEquals("typeOf(\"function\")", func.toString());
+        }
+    });
+
+    testCase("MatchArrayTest", {
+        "should be typeOf array matcher": function () {
+            var array = sinon.match.array;
+
+            assert(sinon.match.isMatcher(array));
+            assertEquals("typeOf(\"array\")", array.toString());
+        }
+    });
+
+    testCase("MatchRegexpTest", {
+        "should be typeOf regexp matcher": function () {
+            var regexp = sinon.match.regexp;
+
+            assert(sinon.match.isMatcher(regexp));
+            assertEquals("typeOf(\"regexp\")", regexp.toString());
+        }
+    });
+
+    testCase("MatchDateTest", {
+        "should be typeOf regexp matcher": function () {
+            var date = sinon.match.date;
+
+            assert(sinon.match.isMatcher(date));
+            assertEquals("typeOf(\"date\")", date.toString());
         }
     });
 }());
