@@ -15,10 +15,10 @@
           assertException
           assertEquals*/
 /**
- * @author Christian Johansen (christian@cjohansen.no)
- * @license BSD
- *
- * Copyright (c) 2010-2011 Christian Johansen
+* @author Maximilian Antoni (mail@maxantoni.de)
+* @license BSD
+*
+* Copyright (c) 2012 Maximilian Antoni
  */
 "use strict";
 
@@ -33,36 +33,42 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFunction(sinon.match);
         },
 
-        "should return instance of Matcher": function () {
-            assert(sinon.match(function () {}) instanceof sinon.match.Matcher);
-        }
-    });
+        "should return matcher": function () {
+            var match = sinon.match(function () {}, "");
 
-    testCase("MatcherTest", {
-        "should be function": function () {
-            assertFunction(sinon.match.Matcher);
+            assert(sinon.match.isMatcher(match));
         },
 
         "should require function argument": function () {
             assertException(function () {
-                sinon.match.Matcher();
+                sinon.match();
             }, "TypeError");
         },
 
         "should expose test function": function () {
             var test = function () {};
 
-            var matcher = new sinon.match.Matcher(test);
+            var match = sinon.match(test, "");
 
-            assertSame(test, matcher.test);
+            assertSame(test, match.test);
+        }
+    });
+
+    testCase("MatchToStringTest", {
+        "should return message": function () {
+            var message = "hello sinon.match";
+
+            var match = sinon.match(function () {}, message);
+
+            assertSame(message, match.toString());
         }
     });
 
     testCase("MatchAnyTest", {
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var any = sinon.match.any();
 
-            assert(any instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(any));
         },
 
         "should return true when tested": function () {
@@ -73,10 +79,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     });
 
     testCase("MatchSameTest", {
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var same = sinon.match.same();
 
-            assert(same instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(same));
         },
 
         "should return true if test is called with same argument": function () {
@@ -103,10 +109,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             }, "TypeError");
         },
 
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var typeOf = sinon.match.typeOf("string");
 
-            assert(typeOf instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(typeOf));
         },
 
         "should return true if test is called with string": function () {
@@ -144,10 +150,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             }, "TypeError");
         },
 
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var instanceOf = sinon.match.instanceOf(function () {});
 
-            assert(instanceOf instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(instanceOf));
         },
 
         "should return true if test is called with instance of argument": function () {
@@ -173,10 +179,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             }, "TypeError");
         },
 
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var re = sinon.match.re(/.+/);
 
-            assert(re instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(re));
         },
 
         "should return true if test is called with instance of argument": function () {
@@ -202,10 +208,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     });
 
     testCase("MatchLikeTest", {
-        "should return instance of Matcher": function () {
+        "should return matcher": function () {
             var like = sinon.match.like({});
 
-            assert(like instanceof sinon.match.Matcher);
+            assert(sinon.match.isMatcher(like));
         },
 
         "should throw if argument is not object": function () {
