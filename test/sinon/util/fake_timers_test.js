@@ -86,6 +86,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.clock.tick(10);
 
             assert(sinon.clock.evalCalled);
+        },
+
+        "should pass setTimeout parameters": function() {
+            var clock = sinon.clock.create();
+            var stub = sinon.stub.create();
+
+            clock.setTimeout(stub, 2, 'the first', 'the second');
+
+            clock.tick(3);
+
+            assertEquals(true, stub.calledWithExactly('the first', 'the second'));
         }
     });
 
@@ -479,6 +490,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.clock.tick(100);
 
             assertEquals(3, stub.callCount);
+        },
+
+        "should pass setTimeout parameters": function() {
+            var clock = sinon.clock.create();
+            var stub = sinon.stub.create();
+
+            clock.setInterval(stub, 2, 'the first', 'the second');
+
+            clock.tick(3);
+
+            assertEquals(true, stub.calledWithExactly('the first', 'the second'));
         }
     });
 
