@@ -405,4 +405,46 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("Hey", sinon.format("Hey"));
         }
     });
+
+    testCase("TypeOfTest", {
+        "should return boolean": function () {
+            assertEquals("boolean", sinon.typeOf(false));
+        },
+
+        "should return string": function () {
+            assertEquals("string", sinon.typeOf("Sinon.JS"));
+        },
+
+        "should return number": function () {
+            assertEquals("number", sinon.typeOf(123));
+        },
+
+        "should return object": function () {
+            assertEquals("object", sinon.typeOf({}));
+        },
+
+        "should return function": function () {
+            assertEquals("function", sinon.typeOf(function () {}));
+        },
+
+        "should return undefined": function () {
+            assertEquals("undefined", sinon.typeOf(undefined));
+        },
+
+        "should return null": function () {
+            assertEquals("null", sinon.typeOf(null));
+        },
+
+        "should return array": function () {
+            assertEquals("array", sinon.typeOf([]));
+        },
+
+        "should return regexp": function () {
+            assertEquals("regexp", sinon.typeOf(/.*/));
+        },
+
+        "should return date": function () {
+            assertEquals("date", sinon.typeOf(new Date()));
+        }
+    });
 }());
