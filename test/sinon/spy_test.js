@@ -1056,7 +1056,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(spy.returned(object));
         },
 
-        "should compare values strictly": function () {
+        "should compare values deeply": function () {
+            var object = { deep: { id: 42 } };
+            var spy = sinon.spy.create(function () {
+                return object;
+            });
+
+            spy();
+
+            assert(spy.returned({ deep: { id: 42 } }));
+        },
+
+        "should compare values strictly using match.same": function () {
             var object = { id: 42 };
             var spy = sinon.spy.create(function () {
                 return object;
@@ -1064,7 +1075,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             spy();
 
-            assertFalse(spy.returned({ id: 42 }));
+            assertFalse(spy.returned(sinon.match.same({ id: 42 })));
+            assert(spy.returned(sinon.match.same(object)));
         }
     });
 
