@@ -31,6 +31,17 @@ See the [sinon project homepage](http://sinonjs.org/)
 
 Check out [todo.org](http://github.com/cjohansen/Sinon.JS/raw/1.0.0/todo.org) in the project repository
 
+### Run the tests
+
+* Install node & npm
+* npm install buster-format
+* Install java
+* download jsTestDriver
+* run `java -jar JsTestDriver.jar --port 4224` to start the JsTestDriver server
+* go to http://localhost:4224/ and click 'Capture this Browser'
+* run `java -jar JsTestDriver.jar --tests all --reset`
+
+
 ## Running tests on Rhino
 
 I've added a rudimentary setup for running the tests on Rhino with env.js (as
