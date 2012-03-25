@@ -274,6 +274,114 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    function propertyMatcherTests(matcher) {
+        return {
+            "should return matcher": function () {
+                var has = matcher("foo");
+
+                assert(sinon.match.isMatcher(has));
+            },
+
+            "should throw if first argument is not string": function () {
+                assertException(function () {
+                    matcher();
+                }, "TypeError");
+                assertException(function () {
+                    matcher(123);
+                }, "TypeError");
+            },
+
+            "should return false if value is not object": function () {
+                var has = matcher("foo");
+
+                assertFalse(has.test());
+                assertFalse(has.test(null));
+                assertFalse(has.test(123));
+                assertFalse(has.test("test"));
+            },
+
+            "should return true if object has property": function () {
+                var has = matcher("foo");
+
+                assert(has.test({ foo: null }));
+            },
+
+            "should return false if object value is not equal to given value": function () {
+                var has = matcher("foo", 1);
+
+                assertFalse(has.test({ foo: null }));
+            },
+
+            "should return true if object value is equal to given value": function () {
+                var has = matcher("foo", 1);
+
+                assert(has.test({ foo: 1 }));
+            },
+
+            "should allow to expect undefined": function () {
+                var has = matcher("foo", undefined);
+
+                assertFalse(has.test({ foo: 1 }));
+            },
+
+            "should compare value deeply": function () {
+                var has = matcher("foo", { bar: "doo", test: 42 });
+
+                assert(has.test({ foo: { bar: "doo", test: 42 } }));
+            },
+
+            "should compare with matcher": function () {
+                var has = matcher("callback", sinon.match.typeOf("function"));
+
+                assert(has.test({ callback: function () {} }));
+            }
+        };
+    }
+
+    testCase("MatchHasTest", propertyMatcherTests(sinon.match.has));
+
+    testCase("MatchHasOwnTest", propertyMatcherTests(sinon.match.hasOwn));
+
+    testCase("MatchHasSpecialTest", {
+        "should return true if object has inherited property": function () {
+            var has = sinon.match.has("toString");
+
+            assert(has.test({}));
+        },
+
+        "should only include property in message": function () {
+            var has = sinon.match.has("test");
+
+            assertEquals("has(\"test\")", has.toString());
+        },
+
+        "should include property and value in message": function () {
+            var has = sinon.match.has("test", undefined);
+
+            assertEquals("has(\"test\", undefined)", has.toString());
+        }
+    });
+
+    testCase("MatchHasOwnSpecialTest", {
+        "should return false if object has inherited property": function () {
+          var hasOwn = sinon.match.hasOwn("toString");
+
+          assertFalse(hasOwn.test({}));
+        },
+
+        "should only include property in message": function () {
+            var hasOwn = sinon.match.hasOwn("test");
+
+            assertEquals("hasOwn(\"test\")", hasOwn.toString());
+        },
+
+        "should include property and value in message": function () {
+            var hasOwn = sinon.match.hasOwn("test", undefined);
+
+            assertEquals("hasOwn(\"test\", undefined)", hasOwn.toString());
+        }
+    });
+
     testCase("MatchBoolTest", {
         "should be typeOf boolean matcher": function () {
             var bool = sinon.match.bool;
