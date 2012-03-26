@@ -21,6 +21,7 @@ def add_license(file, version)
  * Sinon.JS #{version}, #{Time.now.strftime("%Y/%m/%d")}
  *
  * @author Christian Johansen (christian@cjohansen.no)
+ * @author Contributors: https://github.com/cjohansen/Sinon.JS/blob/master/AUTHORS
  *
  * #{File.read("LICENSE").split("\n").join("\n * ")}
  */
