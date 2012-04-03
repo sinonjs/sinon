@@ -97,7 +97,21 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             clock.tick(3);
 
             assertEquals(true, stub.calledWithExactly('the first', 'the second'));
-        }
+        },
+
+		"should call correct timeout on recursive tick": function() {
+			var clock = sinon.clock.create(),
+				stub = sinon.stub.create(),
+				recurseCallback = function(){
+					clock.tick(100);
+				};
+
+			clock.setTimeout(recurseCallback, 50);
+			clock.setTimeout(stub, 100);
+
+			clock.tick(50);
+			assert(stub.called);
+		}
     });
 
     testCase("ClockTickTest", {
