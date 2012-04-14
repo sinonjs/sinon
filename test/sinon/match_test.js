@@ -496,4 +496,69 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("typeOf(\"date\")", date.toString());
         }
     });
+
+    testCase("MatchOrTest", {
+        "should be matcher": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assert(sinon.match.isMatcher(numberOrString));
+            assertEquals("typeOf(\"number\").or(typeOf(\"string\"))",
+                numberOrString.toString());
+        },
+
+        "should require matcher argument": function () {
+            assertException(function () {
+                sinon.match.instanceOf(Error).or();
+            }, "TypeError");
+            assertException(function () {
+                sinon.match.same({}).or({});
+            }, "TypeError");
+        },
+
+        "should return true if either matcher matches": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assert(numberOrString.test(123));
+            assert(numberOrString.test("abc"));
+        },
+
+        "should return false if neither matcher matches": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assertFalse(numberOrString.test(/.+/));
+            assertFalse(numberOrString.test(new Date()));
+            assertFalse(numberOrString.test({}));
+        }
+    });
+
+    testCase("MatchAndTest", {
+        "should be matcher": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assert(sinon.match.isMatcher(fooAndBar));
+            assertEquals("has(\"foo\").and(has(\"bar\"))", fooAndBar.toString());
+        },
+
+        "should require matcher argument": function () {
+            assertException(function () {
+                sinon.match.instanceOf(Error).and();
+            }, "TypeError");
+            assertException(function () {
+                sinon.match.same({}).and({});
+            }, "TypeError");
+        },
+
+        "should return true if both matchers match": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assert(fooAndBar.test({ foo: "foo", bar: "bar" }));
+        },
+
+        "should return false if either matcher does not match": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assertFalse(fooAndBar.test({ foo: "foo" }));
+            assertFalse(fooAndBar.test({ bar: "bar" }));
+        }
+    });
 }());
