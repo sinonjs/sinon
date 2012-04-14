@@ -165,44 +165,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
-    testCase("MatchReTest", {
-        "should throw if given argument is not a regular expression": function () {
-            assertException(function () {
-                sinon.match.re();
-            }, "TypeError");
-            assertException(function () {
-                sinon.match.re("foo");
-            }, "TypeError");
-        },
-
-        "should return matcher": function () {
-            var re = sinon.match.re(/.+/);
-
-            assert(sinon.match.isMatcher(re));
-        },
-
-        "should return true if test is called with instance of argument": function () {
-            var re = sinon.match.re(/[a-c]/);
-
-            assert(re.test("b"));
-        },
-
-        "should return false if test is not called with instance of argument": function () {
-            var re = sinon.match.re(/[a-c]/);
-
-            assertFalse(re.test("d"));
-        },
-
-        "should return false if argument is not string": function () {
-            var re = sinon.match.re(/.*/);
-
-            assertFalse(re.test());
-            assertFalse(re.test(null));
-            assertFalse(re.test(123));
-            assertFalse(re.test({}));
-        }
-    });
-
     testCase("MatchLikeTest", {
         "should return matcher": function () {
             var like = sinon.match.like({});
@@ -210,7 +172,13 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.match.isMatcher(like));
         },
 
-        "should throw if argument is not object": function () {
+        "should throw if argument is not an object": function () {
+            assertException(function () {
+                sinon.match.like(null);
+            }, "TypeError");
+            assertException(function () {
+                sinon.match.like(undefined);
+            }, "TypeError");
             assertException(function () {
                 sinon.match.like([]);
             }, "TypeError");
@@ -229,48 +197,106 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "should return false if a property is not equal": function () {
-          var like = sinon.match.like({ str: "sinon", nr: 1 });
+            var like = sinon.match.like({ str: "sinon", nr: 1 });
 
-          assertFalse(like.test({ str: "sinon", nr: 2 }));
+            assertFalse(like.test({ str: "sinon", nr: 2 }));
         },
 
         "should return false if a property is missing": function () {
-          var like = sinon.match.like({ str: "sinon", nr: 1 });
+            var like = sinon.match.like({ str: "sinon", nr: 1 });
 
-          assertFalse(like.test({ nr: 1 }));
+            assertFalse(like.test({ nr: 1 }));
         },
 
         "should return true if test matches": function () {
-          var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
+            var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
 
-          assert(like.test({ prop: true }));
+            assert(like.test({ prop: true }));
         },
 
         "should return false if test does not match": function () {
-          var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
+            var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
 
-          assertFalse(like.test({ prop: "no" }));
+            assertFalse(like.test({ prop: "no" }));
         },
 
         "should return true if deep test matches": function () {
-          var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
+            var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
 
-          assert(like.test({ deep: { prop: true } }));
+            assert(like.test({ deep: { prop: true } }));
         },
 
         "should return false if deep test does not match": function () {
-          var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
+            var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
 
-          assertFalse(like.test({ deep: { prop: "no" } }));
+            assertFalse(like.test({ deep: { prop: "no" } }));
         },
 
-        "should return false if tested value is not object": function () {
-          var like = sinon.match.like({});
+        "should return false if tested value is null or undefined": function () {
+            var like = sinon.match.like({});
 
-          assertFalse(like.test(null));
-          assertFalse(like.test(undefined));
-          assertFalse(like.test("no"));
-          assertFalse(like.test([]));
+            assertFalse(like.test(null));
+            assertFalse(like.test(undefined));
+        },
+
+        "should return true if error message matches": function () {
+            var like = sinon.match.like({ message: "evil error" });
+
+            assert(like.test(new Error("evil error")));
+        },
+
+        "should return true if string property matches": function () {
+            var like = sinon.match.like({ length: 5 });
+
+            assert(like.test("sinon"));
+        },
+
+        "should return true if number property matches": function () {
+            var like = sinon.match.like({ toFixed: sinon.match.func });
+
+            assert(like.test(0));
+        },
+
+        "should return true for string match": function () {
+            var like = sinon.match.like("sinon");
+
+            assert(like.test("sinon"));
+        },
+
+        "should return true for substring match": function () {
+            var like = sinon.match.like("no");
+
+            assert(like.test("sinon"));
+        },
+
+        "should return false for string mismatch": function () {
+            var like = sinon.match.like("Sinon.JS");
+
+            assertFalse(like.test(null));
+            assertFalse(like.test({}));
+            assertFalse(like.test("sinon"));
+            assertFalse(like.test("sinon.js"));
+        },
+
+        "should return true for regexp match": function () {
+            var like = sinon.match.like(/^[sino]+$/);
+
+            assert(like.test("sinon"));
+        },
+
+        "should return false for regexp string mismatch": function () {
+            var like = sinon.match.like(/^[sin]+$/);
+
+            assertFalse(like.test("sinon"));
+        },
+
+        "should return false for regexp type mismatch": function () {
+            var like = sinon.match.like(/.*/);
+
+            assertFalse(like.test());
+            assertFalse(like.test(null));
+            assertFalse(like.test(123));
+            assertFalse(like.test({}));
         }
     });
 
@@ -291,13 +317,11 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 }, "TypeError");
             },
 
-            "should return false if value is not object": function () {
+            "should return false if value is undefined or null": function () {
                 var has = matcher("foo");
 
-                assertFalse(has.test());
+                assertFalse(has.test(undefined));
                 assertFalse(has.test(null));
-                assertFalse(has.test(123));
-                assertFalse(has.test("test"));
             },
 
             "should return true if object has property": function () {
@@ -313,9 +337,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             },
 
             "should return true if object value is equal to given value": function () {
-                var has = matcher("foo", 1);
+                var has = matcher("message", "sinon rocks");
 
-                assert(has.test({ foo: 1 }));
+                assert(has.test({ message: "sinon rocks" }));
+                assert(has.test(new Error("sinon rocks")));
+            },
+
+            "should return true if string property matches": function () {
+                var has = matcher("length", 5);
+
+                assert(has.test("sinon"));
             },
 
             "should allow to expect undefined": function () {
@@ -359,6 +390,18 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var has = sinon.match.has("test", undefined);
 
             assertEquals("has(\"test\", undefined)", has.toString());
+        },
+
+        "should return true if string function matches": function () {
+            var has = sinon.match.has("toUpperCase", sinon.match.func);
+
+            assert(has.test("sinon"));
+        },
+
+        "should return true if number function matches": function () {
+            var has = sinon.match.has("toFixed", sinon.match.func);
+
+            assert(has.test(0));
         }
     });
 
@@ -451,6 +494,71 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(sinon.match.isMatcher(date));
             assertEquals("typeOf(\"date\")", date.toString());
+        }
+    });
+
+    testCase("MatchOrTest", {
+        "should be matcher": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assert(sinon.match.isMatcher(numberOrString));
+            assertEquals("typeOf(\"number\").or(typeOf(\"string\"))",
+                numberOrString.toString());
+        },
+
+        "should require matcher argument": function () {
+            assertException(function () {
+                sinon.match.instanceOf(Error).or();
+            }, "TypeError");
+            assertException(function () {
+                sinon.match.same({}).or({});
+            }, "TypeError");
+        },
+
+        "should return true if either matcher matches": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assert(numberOrString.test(123));
+            assert(numberOrString.test("abc"));
+        },
+
+        "should return false if neither matcher matches": function () {
+            var numberOrString = sinon.match.number.or(sinon.match.string);
+
+            assertFalse(numberOrString.test(/.+/));
+            assertFalse(numberOrString.test(new Date()));
+            assertFalse(numberOrString.test({}));
+        }
+    });
+
+    testCase("MatchAndTest", {
+        "should be matcher": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assert(sinon.match.isMatcher(fooAndBar));
+            assertEquals("has(\"foo\").and(has(\"bar\"))", fooAndBar.toString());
+        },
+
+        "should require matcher argument": function () {
+            assertException(function () {
+                sinon.match.instanceOf(Error).and();
+            }, "TypeError");
+            assertException(function () {
+                sinon.match.same({}).and({});
+            }, "TypeError");
+        },
+
+        "should return true if both matchers match": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assert(fooAndBar.test({ foo: "foo", bar: "bar" }));
+        },
+
+        "should return false if either matcher does not match": function () {
+            var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
+
+            assertFalse(fooAndBar.test({ foo: "foo" }));
+            assertFalse(fooAndBar.test({ bar: "bar" }));
         }
     });
 }());
