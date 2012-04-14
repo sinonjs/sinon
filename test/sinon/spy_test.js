@@ -2140,6 +2140,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertUndefined(myObj.ouch);
         },
 
+        "should throw if spying on non-existent object": function () {
+            assertException(function () {
+                sinon.spy(undefined, "ouch");
+            });
+        },
+
         "should have toString method": function () {
             var obj = { meth: function () {} };
             sinon.spy(obj, "meth");
