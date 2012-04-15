@@ -297,6 +297,38 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFalse(like.test(null));
             assertFalse(like.test(123));
             assertFalse(like.test({}));
+        },
+
+        "should return true for boolean true(ish) match": function () {
+            var like = sinon.match.like(true);
+
+            assert(like.test(true));
+            assert(like.test(1));
+            assert(like.test("indeed"));
+        },
+
+        "should return true for boolean false(ish) match": function () {
+            var like = sinon.match.like(false);
+
+            assert(like.test(false));
+            assert(like.test(0));
+            assert(like.test(""));
+        },
+
+        "should return false for boolean true(ish) mismatch": function () {
+            var like = sinon.match.like(true);
+
+            assertFalse(like.test(false));
+            assertFalse(like.test(0));
+            assertFalse(like.test(""));
+        },
+
+        "should return false for boolean false(ish) mismatch": function () {
+            var like = sinon.match.like(false);
+
+            assertFalse(like.test(true));
+            assertFalse(like.test(1));
+            assertFalse(like.test("nope"));
         }
     });
 
