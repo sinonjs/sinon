@@ -1073,6 +1073,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.like({ some: "value", and: 123 })));
         },
 
+        "assert.calledWith match.like boolean exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "like(true)\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.like(true)));
+        },
+
         "assert.calledWith match.like string exception message": function () {
             this.obj.doSomething();
 
