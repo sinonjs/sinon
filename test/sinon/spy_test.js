@@ -486,160 +486,322 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
-    testCase("SpyCalledWithTest", {
+    function spyCalledTests(method) {
+        return {
+            setUp: function () {
+                this.spy = sinon.spy.create();
+            },
+
+            "should return false if spy was not called": function () {
+                assertFalse(this.spy[method](1, 2, 3));
+            },
+
+            "should return true if spy was called with args": function () {
+                this.spy(1, 2, 3);
+
+                assert(this.spy[method](1, 2, 3));
+            },
+
+            "should return true if called with args at least once": function () {
+                this.spy(1, 3, 3);
+                this.spy(1, 2, 3);
+                this.spy(3, 2, 3);
+
+                assert(this.spy[method](1, 2, 3));
+            },
+
+            "should return false if not called with args": function () {
+                this.spy(1, 3, 3);
+                this.spy(2);
+                this.spy();
+
+                assertFalse(this.spy[method](1, 2, 3));
+            },
+
+            "should return true for partial match": function () {
+                this.spy(1, 3, 3);
+                this.spy(2);
+                this.spy();
+
+                assert(this.spy[method](1, 3));
+            },
+
+            "should match all arguments individually, not as array": function () {
+                this.spy([1, 2, 3]);
+
+                assertFalse(this.spy[method](1, 2, 3));
+            },
+
+            "should use matcher": function () {
+                this.spy("abc");
+
+                assert(this.spy[method](sinon.match.typeOf("string")));
+            },
+
+            "should use matcher in object": function () {
+                this.spy({ some: "abc" });
+
+                assert(this.spy[method]({ some: sinon.match.typeOf("string") }));
+            }
+        };
+    }
+
+    testCase("SpyCalledWithTest", spyCalledTests("calledWith"));
+    testCase("SpyCalledLikeTest", spyCalledTests("calledLike"));
+
+    testCase("SpyCalledLikeSpecialTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
         },
 
-        "should return false if spy was not called": function () {
-            assertFalse(this.spy.calledWith(1, 2, 3));
+        "should check true(ish) value": function () {
+            this.spy("yes");
+
+            assert(this.spy.calledLike(true));
+            assertFalse(this.spy.calledLike(false));
         },
 
-        "should return true if spy was called with args": function () {
-            this.spy(1, 2, 3);
+        "should check false(ish) value": function () {
+            this.spy("");
 
-            assert(this.spy.calledWith(1, 2, 3));
+            assert(this.spy.calledLike(false));
+            assertFalse(this.spy.calledLike(true));
         },
 
-        "should return true if called with args at least once": function () {
-            this.spy(1, 3, 3);
-            this.spy(1, 2, 3);
-            this.spy(3, 2, 3);
+        "should check substring match": function () {
+            this.spy("I like it");
 
-            assert(this.spy.calledWith(1, 2, 3));
+            assert(this.spy.calledLike("like"));
+            assertFalse(this.spy.calledLike("nope"));
         },
 
-        "should return false if not called with args": function () {
-            this.spy(1, 3, 3);
-            this.spy(2);
-            this.spy();
+        "should check for regexp match": function () {
+            this.spy("I like it");
 
-            assertFalse(this.spy.calledWith(1, 2, 3));
+            assert(this.spy.calledLike(/[a-z ]+/i));
+            assertFalse(this.spy.calledLike(/[0-9]+/));
         },
 
-        "should return true for partial match": function () {
-            this.spy(1, 3, 3);
-            this.spy(2);
-            this.spy();
+        "should check for partial object match": function () {
+            this.spy({ foo: "foo", bar: "bar" });
 
-            assert(this.spy.calledWith(1, 3));
-        },
-
-        "should match all arguments individually, not as array": function () {
-            this.spy([1, 2, 3]);
-
-            assertFalse(this.spy.calledWith(1, 2, 3));
-        },
-
-        "should use matcher": function () {
-            this.spy("abc");
-
-            assert(this.spy.calledWith(sinon.match.typeOf("string")));
-        },
-
-        "should use matcher in object": function () {
-            this.spy({ some: "abc" });
-
-            assert(this.spy.calledWith({ some: sinon.match.typeOf("string") }));
+            assert(this.spy.calledLike({ bar: "bar" }));
+            assertFalse(this.spy.calledLike({ same: "same" }));
         }
     });
 
-    testCase("SpyAlwaysCalledWithTest", {
-        setUp: function () {
-            this.spy = sinon.spy.create();
-        },
+    function spyAlwaysCalledTests(method) {
+        return {
+            setUp: function () {
+                this.spy = sinon.spy.create();
+            },
 
-        "should return false if spy was not called": function () {
-            assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
-        },
+            "should return false if spy was not called": function () {
+                assertFalse(this.spy[method](1, 2, 3));
+            },
 
-        "should return true if spy was called with args": function () {
-            this.spy(1, 2, 3);
+            "should return true if spy was called with args": function () {
+                this.spy(1, 2, 3);
 
-            assert(this.spy.alwaysCalledWith(1, 2, 3));
-        },
+                assert(this.spy[method](1, 2, 3));
+            },
 
-        "should return false if called with args only once": function () {
-            this.spy(1, 3, 3);
-            this.spy(1, 2, 3);
-            this.spy(3, 2, 3);
+            "should return false if called with args only once": function () {
+                this.spy(1, 3, 3);
+                this.spy(1, 2, 3);
+                this.spy(3, 2, 3);
 
-            assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
-        },
+                assertFalse(this.spy[method](1, 2, 3));
+            },
 
-        "should return false if not called with args": function () {
-            this.spy(1, 3, 3);
-            this.spy(2);
-            this.spy();
+            "should return false if not called with args": function () {
+                this.spy(1, 3, 3);
+                this.spy(2);
+                this.spy();
 
-            assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
-        },
+                assertFalse(this.spy[method](1, 2, 3));
+            },
 
-        "should return true for partial match": function () {
-            this.spy(1, 3, 3);
+            "should return true for partial match": function () {
+                this.spy(1, 3, 3);
 
-            assert(this.spy.alwaysCalledWith(1, 3));
-        },
+                assert(this.spy[method](1, 3));
+            },
 
-        "should return true for partial match on many calls": function () {
-            this.spy(1, 3, 3);
-            this.spy(1, 3);
-            this.spy(1, 3, 4, 5);
-            this.spy(1, 3, 1);
+            "should return true for partial match on many calls": function () {
+                this.spy(1, 3, 3);
+                this.spy(1, 3);
+                this.spy(1, 3, 4, 5);
+                this.spy(1, 3, 1);
 
-            assert(this.spy.alwaysCalledWith(1, 3));
-        },
+                assert(this.spy[method](1, 3));
+            },
 
-        "should match all arguments individually, not as array": function () {
-            this.spy([1, 2, 3]);
+            "should match all arguments individually, not as array": function () {
+                this.spy([1, 2, 3]);
 
-            assertFalse(this.spy.alwaysCalledWith(1, 2, 3));
-        }
+                assertFalse(this.spy[method](1, 2, 3));
+            }
+        };
+    }
+
+    testCase("SpyAlwaysCalledWithTest", spyAlwaysCalledTests("alwaysCalledWith"));
+    testCase("SpyAlwaysCalledLikeTest", spyAlwaysCalledTests("alwaysCalledLike"));
+
+    testCase("SpyAlwaysCalledLikeSpecialTest", {
+      setUp: function () {
+          this.spy = sinon.spy.create();
+      },
+
+      "should check true(ish) value": function () {
+          this.spy(true);
+          this.spy(1);
+          this.spy("indeed");
+          this.spy({});
+
+          assert(this.spy.alwaysCalledLike(true));
+          assertFalse(this.spy.alwaysCalledLike(false));
+      },
+
+      "should check false(ish) value": function () {
+          this.spy(false);
+          this.spy(0);
+          this.spy("");
+
+          assert(this.spy.alwaysCalledLike(false));
+          assertFalse(this.spy.alwaysCalledLike(true));
+      },
+
+      "should check substring match": function () {
+          this.spy("test case");
+          this.spy("some test");
+          this.spy("all tests");
+
+          assert(this.spy.alwaysCalledLike("test"));
+          assertFalse(this.spy.alwaysCalledLike("case"));
+      },
+
+      "should check regexp match": function () {
+          this.spy("1");
+          this.spy("2");
+          this.spy("3");
+
+          assert(this.spy.alwaysCalledLike(/[123]/));
+          assertFalse(this.spy.alwaysCalledLike(/[12]/));
+      },
+
+      "should check partial object match": function () {
+          this.spy({ a: "a", b: "b" });
+          this.spy({ c: "c", b: "b" });
+          this.spy({ b: "b", d: "d" });
+
+          assert(this.spy.alwaysCalledLike({ b: "b" }));
+          assertFalse(this.spy.alwaysCalledLike({ a: "a" }));
+      }
     });
 
-    testCase("SpyNeverCalledWithTest", {
+    function spyNeverCalledTests(method) {
+        return {
+            setUp: function () {
+                this.spy = sinon.spy.create();
+            },
+
+            "should return true if spy was not called": function () {
+                assert(this.spy[method](1, 2, 3));
+            },
+
+            "should return false if spy was called with args": function () {
+                this.spy(1, 2, 3);
+
+                assertFalse(this.spy[method](1, 2, 3));
+            },
+
+            "should return false if called with args at least once": function () {
+                this.spy(1, 3, 3);
+                this.spy(1, 2, 3);
+                this.spy(3, 2, 3);
+
+                assertFalse(this.spy[method](1, 2, 3));
+            },
+
+            "should return true if not called with args": function () {
+                this.spy(1, 3, 3);
+                this.spy(2);
+                this.spy();
+
+                assert(this.spy[method](1, 2, 3));
+            },
+
+            "should return false for partial match": function () {
+                this.spy(1, 3, 3);
+                this.spy(2);
+                this.spy();
+
+                assertFalse(this.spy[method](1, 3));
+            },
+
+            "should match all arguments individually, not as array": function () {
+                this.spy([1, 2, 3]);
+
+                assert(this.spy[method](1, 2, 3));
+            }
+        };
+    }
+
+    testCase("SpyNeverCalledWithTest", spyNeverCalledTests("neverCalledWith"));
+    testCase("SpyNeverCalledLikeTest", spyNeverCalledTests("neverCalledLike"));
+
+    testCase("SpyNeverCalledLikeSpecialTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
         },
 
-        "should return true if spy was not called": function () {
-            assert(this.spy.neverCalledWith(1, 2, 3));
+        "should check true(ish) values": function () {
+            this.spy(false, "", 0);
+
+            assert(this.spy.neverCalledLike(true, true, true));
+            assert(this.spy.neverCalledLike(true, true, false));
+            assert(this.spy.neverCalledLike(true, false, false));
+            assert(this.spy.neverCalledLike(false, true, true));
+            assert(this.spy.neverCalledLike(false, false, true));
+            assertFalse(this.spy.neverCalledLike(false, false, false));
         },
 
-        "should return false if spy was called with args": function () {
-            this.spy(1, 2, 3);
+        "should check false(ish) values": function () {
+            this.spy(true, "test", 1);
 
-            assertFalse(this.spy.neverCalledWith(1, 2, 3));
+            assert(this.spy.neverCalledLike(false, false, false));
+            assert(this.spy.neverCalledLike(false, false, true));
+            assert(this.spy.neverCalledLike(false, true, true));
+            assert(this.spy.neverCalledLike(true, false, false));
+            assert(this.spy.neverCalledLike(true, true, false));
+            assertFalse(this.spy.neverCalledLike(true, true, true));
         },
 
-        "should return false if called with args at least once": function () {
-            this.spy(1, 3, 3);
-            this.spy(1, 2, 3);
-            this.spy(3, 2, 3);
+        "should check substring match": function () {
+            this.spy("a test", "b test");
 
-            assertFalse(this.spy.neverCalledWith(1, 2, 3));
+            assert(this.spy.neverCalledLike("a", "a"));
+            assert(this.spy.neverCalledLike("b", "b"));
+            assert(this.spy.neverCalledLike("b", "a"));
+            assertFalse(this.spy.neverCalledLike("a", "b"));
         },
 
-        "should return true if not called with args": function () {
-            this.spy(1, 3, 3);
-            this.spy(2);
-            this.spy();
+        "should check regexp match": function () {
+            this.spy("a test", "b test");
 
-            assert(this.spy.neverCalledWith(1, 2, 3));
+            assert(this.spy.neverCalledLike(/a/, /a/));
+            assert(this.spy.neverCalledLike(/b/, /b/));
+            assert(this.spy.neverCalledLike(/b/, /a/));
+            assertFalse(this.spy.neverCalledLike(/a/, /b/));
         },
 
-        "should return false for partial match": function () {
-            this.spy(1, 3, 3);
-            this.spy(2);
-            this.spy();
+        "should check partial object match": function () {
+            this.spy({ a: "test", b: "test" });
 
-            assertFalse(this.spy.neverCalledWith(1, 3));
-        },
-
-        "should match all arguments individually, not as array": function () {
-            this.spy([1, 2, 3]);
-
-            assert(this.spy.neverCalledWith(1, 2, 3));
+            assert(this.spy.neverCalledLike({ a: "nope" }));
+            assert(this.spy.neverCalledLike({ c: "test" }));
+            assertFalse(this.spy.neverCalledLike({ b: "test" }));
         }
     });
 
@@ -1504,7 +1666,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             }
         },
 
-		"should pass additional arguments": function () {
+        "should pass additional arguments": function () {
             var spy = sinon.spy();
             var callback = sinon.spy();
             var array = [];
@@ -1637,81 +1799,91 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
-    testCase("SpyCallCalledWithTest", {
-        setUp: spyCallSetUp,
+    function spyCallCalledTests(method) {
+        return {
+            setUp: spyCallSetUp,
 
-        "should return true if all args match": function () {
-            var args = this.args;
+            "should return true if all args match": function () {
+                var args = this.args;
 
-            assert(this.call.calledWith(args[0], args[1], args[2]));
-        },
+                assert(this.call[method](args[0], args[1], args[2]));
+            },
 
-        "should return true if first args match": function () {
-            var args = this.args;
+            "should return true if first args match": function () {
+                var args = this.args;
 
-            assert(this.call.calledWith(args[0], args[1]));
-        },
+                assert(this.call[method](args[0], args[1]));
+            },
 
-        "should return true if first arg match": function () {
-            var args = this.args;
+            "should return true if first arg match": function () {
+                var args = this.args;
 
-            assert(this.call.calledWith(args[0]));
-        },
+                assert(this.call[method](args[0]));
+            },
 
-        "should return true for no args": function () {
-            assert(this.call.calledWith());
-        },
+            "should return true for no args": function () {
+                assert(this.call[method]());
+            },
 
-        "should return false for too many args": function () {
-            var args = this.args;
+            "should return false for too many args": function () {
+                var args = this.args;
 
-            assertFalse(this.call.calledWith(args[0], args[1], args[2], {}));
-        },
+                assertFalse(this.call[method](args[0], args[1], args[2], args[3], {}));
+            },
 
-        "should return false for wrong arg": function () {
-            var args = this.args;
+            "should return false for wrong arg": function () {
+                var args = this.args;
 
-            assertFalse(this.call.calledWith(args[0], args[2]));
-        }
-    });
+                assertFalse(this.call[method](args[0], args[2]));
+            }
+        };
+    }
 
-    testCase("SpyCallNotCalledWithTest", {
-        setUp: spyCallSetUp,
+    testCase("SpyCallCalledWithTest", spyCallCalledTests("calledWith"));
+    testCase("SpyCallCalledLikeTest", spyCallCalledTests("calledLike"));
 
-        "should return false if all args match": function () {
-            var args = this.args;
+    function spyCallNotCalledTests(method) {
+        return {
+            setUp: spyCallSetUp,
 
-            assertFalse(this.call.notCalledWith(args[0], args[1], args[2]));
-        },
+            "should return false if all args match": function () {
+                var args = this.args;
 
-        "should return false if first args match": function () {
-            var args = this.args;
+                assertFalse(this.call[method](args[0], args[1], args[2]));
+            },
 
-            assertFalse(this.call.notCalledWith(args[0], args[1]));
-        },
+            "should return false if first args match": function () {
+                var args = this.args;
 
-        "should return false if first arg match": function () {
-            var args = this.args;
+                assertFalse(this.call[method](args[0], args[1]));
+            },
 
-            assertFalse(this.call.notCalledWith(args[0]));
-        },
+            "should return false if first arg match": function () {
+                var args = this.args;
 
-        "should return false for no args": function () {
-            assertFalse(this.call.notCalledWith());
-        },
+                assertFalse(this.call[method](args[0]));
+            },
 
-        "should return true for too many args": function () {
-            var args = this.args;
+            "should return false for no args": function () {
+                assertFalse(this.call[method]());
+            },
 
-            assert(this.call.notCalledWith(args[0], args[1], args[2], {}));
-        },
+            "should return true for too many args": function () {
+                var args = this.args;
 
-        "should return true for wrong arg": function () {
-            var args = this.args;
+                assert(this.call[method](args[0], args[1], args[2], args[3], {}));
+            },
 
-            assert(this.call.notCalledWith(args[0], args[2]));
-        }
-    });
+            "should return true for wrong arg": function () {
+                var args = this.args;
+
+                assert(this.call[method](args[0], args[2]));
+            }
+        };
+    }
+
+    testCase("SpyCallNotCalledWithTest", spyCallNotCalledTests("notCalledWith"));
+    testCase("SpyCallNotCalledLikeTest", spyCallNotCalledTests("notCalledLike"));
 
     testCase("SpyCallCalledWithExactlyTest", {
         setUp: spyCallSetUp,
@@ -1725,7 +1897,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should return false for too many args": function () {
             var args = this.args;
 
-            assertFalse(this.call.calledWithExactly(args[0], args[1], args[2], {}));
+            assertFalse(this.call.calledWithExactly(args[0], args[1], args[2], args[3], {}));
         },
 
         "should return false for too few args": function () {

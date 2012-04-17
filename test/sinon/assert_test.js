@@ -1109,6 +1109,14 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.like(/[a-z]+/)));
         },
 
+        "assert.calledLike exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+
+            assertEquals("expected doSomething to be called like 4, 3, " +
+                         "hey\n    doSomething(1, 3, hey)",
+                         this.message("calledLike", this.obj.doSomething, 4, 3, "hey"));
+        },
+
         "assert.alwaysCalledWith exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, "hey");
@@ -1116,6 +1124,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("expected doSomething to always be called with arguments 1" +
                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
                          this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey"));
+        },
+
+        "assert.alwaysCalledLike exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+            this.obj.doSomething(1, "hey");
+
+            assertEquals("expected doSomething to always be called like 1" +
+                         ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
+                         this.message("alwaysCalledLike", this.obj.doSomething, 1, "hey"));
         },
 
         "assert.calledWithExactly exception message": function () {
@@ -1143,6 +1160,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("expected doSomething to never be called with " +
                          "arguments 1, 2\n    doSomething(1, 2, 3)",
                          this.message("neverCalledWith",
+                                      this.obj.doSomething, 1, 2));
+        },
+
+        "assert.neverCalledLike exception message": function () {
+            this.obj.doSomething(1, 2, 3);
+
+            assertEquals("expected doSomething to never be called like " +
+                         "1, 2\n    doSomething(1, 2, 3)",
+                         this.message("neverCalledLike",
                                       this.obj.doSomething, 1, 2));
         },
 
