@@ -74,6 +74,33 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         }
     });
 
+    testCase("MatchDefinedTest", {
+        "should be matcher": function () {
+            assert(sinon.match.isMatcher(sinon.match.defined));
+        },
+
+        "should return false if test is called with null": function () {
+            assertFalse(sinon.match.defined.test(null));
+        },
+
+        "should return false if test is called with undefined": function () {
+            assertFalse(sinon.match.defined.test(undefined));
+        },
+
+        "should return true if test is called with any value": function () {
+            assert(sinon.match.defined.test(false));
+            assert(sinon.match.defined.test(true));
+            assert(sinon.match.defined.test(0));
+            assert(sinon.match.defined.test(1));
+            assert(sinon.match.defined.test(""));
+        },
+
+        "should return true if test is called with any object": function () {
+            assert(sinon.match.defined.test({}));
+            assert(sinon.match.defined.test(function () {}));
+        },
+    });
+
     testCase("MatchSameTest", {
         "should return matcher": function () {
             var same = sinon.match.same();

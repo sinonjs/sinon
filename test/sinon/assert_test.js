@@ -1037,6 +1037,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.any, false));
         },
 
+        "assert.calledWith match.defined exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "defined\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.defined));
+        },
+
         "assert.calledWith match.same exception message": function () {
             this.obj.doSomething();
 
