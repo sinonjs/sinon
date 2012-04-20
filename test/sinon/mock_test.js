@@ -593,6 +593,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     testCase("MockExpectationVerifyTest", {
         setUp: expectationSetUp,
 
+        "should pass if met": function () {
+            sinon.stub(sinon.expectation, "pass");
+            var expectation = this.expectation;
+
+            expectation();
+            expectation.verify();
+
+            assertEquals(1, sinon.expectation.pass.callCount);
+            sinon.expectation.pass.restore();
+        },
+
         "should throw if not called enough times": function () {
             var expectation = this.expectation;
 
@@ -622,6 +633,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.mock.verify();
 
             assertSame(this.method, this.object.method);
+        },
+
+        "should pass verified mocks": function () {
+            sinon.stub(sinon.expectation, "pass");
+
+            this.mock.expects("method").once();
+            this.object.method();
+            this.mock.verify();
+
+            assertEquals(1, sinon.expectation.pass.callCount);
+            sinon.expectation.pass.restore();
         },
 
         "should restore if not met": function () {
