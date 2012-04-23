@@ -1046,6 +1046,24 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.defined));
         },
 
+        "assert.calledWith match.truthy exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "truthy\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.truthy));
+        },
+
+        "assert.calledWith match.falsy exception message": function () {
+            this.obj.doSomething(true);
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "falsy\n    doSomething(true)",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.falsy));
+        },
+
         "assert.calledWith match.same exception message": function () {
             this.obj.doSomething();
 

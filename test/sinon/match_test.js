@@ -207,7 +207,45 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should return true if test is called with any object": function () {
             assert(sinon.match.defined.test({}));
             assert(sinon.match.defined.test(function () {}));
+        }
+    });
+
+    testCase("MatchTruthyTest", {
+        "should be matcher": function () {
+            assert(sinon.match.isMatcher(sinon.match.truthy));
         },
+
+        "should return true if test is called with trueish value": function () {
+            assert(sinon.match.truthy.test(true));
+            assert(sinon.match.truthy.test(1));
+            assert(sinon.match.truthy.test("yes"));
+        },
+
+        "should return false if test is called falsy value": function () {
+            assertFalse(sinon.match.truthy.test(false));
+            assertFalse(sinon.match.truthy.test(null));
+            assertFalse(sinon.match.truthy.test(undefined));
+            assertFalse(sinon.match.truthy.test(""));
+        }
+    });
+
+    testCase("MatchFalsyTest", {
+        "should be matcher": function () {
+            assert(sinon.match.isMatcher(sinon.match.falsy));
+        },
+
+        "should return true if test is called falsy value": function () {
+            assert(sinon.match.falsy.test(false));
+            assert(sinon.match.falsy.test(null));
+            assert(sinon.match.falsy.test(undefined));
+            assert(sinon.match.falsy.test(""));
+        },
+
+        "should return false if test is called with trueish value": function () {
+            assertFalse(sinon.match.falsy.test(true));
+            assertFalse(sinon.match.falsy.test(1));
+            assertFalse(sinon.match.falsy.test("yes"));
+        }
     });
 
     testCase("MatchSameTest", {
