@@ -39,18 +39,127 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.match.isMatcher(match));
         },
 
-        "should require function argument": function () {
-            assertException(function () {
-                sinon.match();
-            }, "TypeError");
-        },
-
         "should expose test function": function () {
             var test = function () {};
 
             var match = sinon.match(test, "");
 
             assertSame(test, match.test);
+        },
+
+        "should return true if properties are equal": function () {
+            var match = sinon.match({ str: "sinon", nr: 1 });
+
+            assert(match.test({ str: "sinon", nr: 1, other: "ignored" }));
+        },
+
+        "should return true if properties are deep equal": function () {
+            var match = sinon.match({ deep: { str: "sinon" } });
+
+            assert(match.test({ deep: { str: "sinon", ignored: "value" } }));
+        },
+
+        "should return false if a property is not equal": function () {
+            var match = sinon.match({ str: "sinon", nr: 1 });
+
+            assertFalse(match.test({ str: "sinon", nr: 2 }));
+        },
+
+        "should return false if a property is missing": function () {
+            var match = sinon.match({ str: "sinon", nr: 1 });
+
+            assertFalse(match.test({ nr: 1 }));
+        },
+
+        "should return true if test matches": function () {
+            var match = sinon.match({ prop: sinon.match.typeOf("boolean") });
+
+            assert(match.test({ prop: true }));
+        },
+
+        "should return false if test does not match": function () {
+            var match = sinon.match({ prop: sinon.match.typeOf("boolean") });
+
+            assertFalse(match.test({ prop: "no" }));
+        },
+
+        "should return true if deep test matches": function () {
+            var match = sinon.match({ deep: { prop: sinon.match.typeOf("boolean") } });
+
+            assert(match.test({ deep: { prop: true } }));
+        },
+
+        "should return false if deep test does not match": function () {
+            var match = sinon.match({ deep: { prop: sinon.match.typeOf("boolean") } });
+
+            assertFalse(match.test({ deep: { prop: "no" } }));
+        },
+
+        "should return false if tested value is null or undefined": function () {
+            var match = sinon.match({});
+
+            assertFalse(match.test(null));
+            assertFalse(match.test(undefined));
+        },
+
+        "should return true if error message matches": function () {
+            var match = sinon.match({ message: "evil error" });
+
+            assert(match.test(new Error("evil error")));
+        },
+
+        "should return true if string property matches": function () {
+            var match = sinon.match({ length: 5 });
+
+            assert(match.test("sinon"));
+        },
+
+        "should return true if number property matches": function () {
+            var match = sinon.match({ toFixed: sinon.match.func });
+
+            assert(match.test(0));
+        },
+
+        "should return true for string match": function () {
+            var match = sinon.match("sinon");
+
+            assert(match.test("sinon"));
+        },
+
+        "should return true for substring match": function () {
+            var match = sinon.match("no");
+
+            assert(match.test("sinon"));
+        },
+
+        "should return false for string mismatch": function () {
+            var match = sinon.match("Sinon.JS");
+
+            assertFalse(match.test(null));
+            assertFalse(match.test({}));
+            assertFalse(match.test("sinon"));
+            assertFalse(match.test("sinon.js"));
+        },
+
+        "should return true for regexp match": function () {
+            var match = sinon.match(/^[sino]+$/);
+
+            assert(match.test("sinon"));
+        },
+
+        "should return false for regexp string mismatch": function () {
+            var match = sinon.match(/^[sin]+$/);
+
+            assertFalse(match.test("sinon"));
+        },
+
+        "should return false for regexp type mismatch": function () {
+            var match = sinon.match(/.*/);
+
+            assertFalse(match.test());
+            assertFalse(match.test(null));
+            assertFalse(match.test(123));
+            assertFalse(match.test({}));
         }
     });
 
@@ -189,173 +298,6 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var instanceOf = sinon.match.instanceOf(Array);
 
             assertFalse(instanceOf.test({}));
-        }
-    });
-
-    testCase("MatchLikeTest", {
-        "should return matcher": function () {
-            var like = sinon.match.like({});
-
-            assert(sinon.match.isMatcher(like));
-        },
-
-        "should throw if argument is not an object": function () {
-            assertException(function () {
-                sinon.match.like(null);
-            }, "TypeError");
-            assertException(function () {
-                sinon.match.like(undefined);
-            }, "TypeError");
-            assertException(function () {
-                sinon.match.like([]);
-            }, "TypeError");
-        },
-
-        "should return true if properties are equal": function () {
-            var like = sinon.match.like({ str: "sinon", nr: 1 });
-
-            assert(like.test({ str: "sinon", nr: 1, other: "ignored" }));
-        },
-
-        "should return true if properties are deep equal": function () {
-            var like = sinon.match.like({ deep: { str: "sinon" } });
-
-            assert(like.test({ deep: { str: "sinon", ignored: "value" } }));
-        },
-
-        "should return false if a property is not equal": function () {
-            var like = sinon.match.like({ str: "sinon", nr: 1 });
-
-            assertFalse(like.test({ str: "sinon", nr: 2 }));
-        },
-
-        "should return false if a property is missing": function () {
-            var like = sinon.match.like({ str: "sinon", nr: 1 });
-
-            assertFalse(like.test({ nr: 1 }));
-        },
-
-        "should return true if test matches": function () {
-            var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
-
-            assert(like.test({ prop: true }));
-        },
-
-        "should return false if test does not match": function () {
-            var like = sinon.match.like({ prop: sinon.match.typeOf("boolean") });
-
-            assertFalse(like.test({ prop: "no" }));
-        },
-
-        "should return true if deep test matches": function () {
-            var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
-
-            assert(like.test({ deep: { prop: true } }));
-        },
-
-        "should return false if deep test does not match": function () {
-            var like = sinon.match.like({ deep: { prop: sinon.match.typeOf("boolean") } });
-
-            assertFalse(like.test({ deep: { prop: "no" } }));
-        },
-
-        "should return false if tested value is null or undefined": function () {
-            var like = sinon.match.like({});
-
-            assertFalse(like.test(null));
-            assertFalse(like.test(undefined));
-        },
-
-        "should return true if error message matches": function () {
-            var like = sinon.match.like({ message: "evil error" });
-
-            assert(like.test(new Error("evil error")));
-        },
-
-        "should return true if string property matches": function () {
-            var like = sinon.match.like({ length: 5 });
-
-            assert(like.test("sinon"));
-        },
-
-        "should return true if number property matches": function () {
-            var like = sinon.match.like({ toFixed: sinon.match.func });
-
-            assert(like.test(0));
-        },
-
-        "should return true for string match": function () {
-            var like = sinon.match.like("sinon");
-
-            assert(like.test("sinon"));
-        },
-
-        "should return true for substring match": function () {
-            var like = sinon.match.like("no");
-
-            assert(like.test("sinon"));
-        },
-
-        "should return false for string mismatch": function () {
-            var like = sinon.match.like("Sinon.JS");
-
-            assertFalse(like.test(null));
-            assertFalse(like.test({}));
-            assertFalse(like.test("sinon"));
-            assertFalse(like.test("sinon.js"));
-        },
-
-        "should return true for regexp match": function () {
-            var like = sinon.match.like(/^[sino]+$/);
-
-            assert(like.test("sinon"));
-        },
-
-        "should return false for regexp string mismatch": function () {
-            var like = sinon.match.like(/^[sin]+$/);
-
-            assertFalse(like.test("sinon"));
-        },
-
-        "should return false for regexp type mismatch": function () {
-            var like = sinon.match.like(/.*/);
-
-            assertFalse(like.test());
-            assertFalse(like.test(null));
-            assertFalse(like.test(123));
-            assertFalse(like.test({}));
-        },
-
-        "should return true for boolean true(ish) match": function () {
-            var like = sinon.match.like(true);
-
-            assert(like.test(true));
-            assert(like.test(1));
-            assert(like.test("indeed"));
-        },
-
-        "should return true for boolean false(ish) match": function () {
-            var like = sinon.match.like(false);
-
-            assert(like.test(false));
-            assert(like.test(0));
-            assert(like.test(""));
-        },
-
-        "should return false for boolean true(ish) mismatch": function () {
-            var like = sinon.match.like(true);
-
-            assertFalse(like.test(false));
-            assertFalse(like.test(0));
-            assertFalse(like.test(""));
-        },
-
-        "should return false for boolean false(ish) mismatch": function () {
-            var like = sinon.match.like(false);
-
-            assertFalse(like.test(true));
-            assertFalse(like.test(1));
-            assertFalse(like.test("nope"));
         }
     });
 

@@ -1073,48 +1073,48 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.instanceOf(function CustomType() {})));
         },
 
-        "assert.calledWith match.like object exception message": function () {
+        "assert.calledWith match object exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(some: value, and: 123)\n    doSomething()",
+                         "match(some: value, and: 123)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like({ some: "value", and: 123 })));
+                         sinon.match({ some: "value", and: 123 })));
         },
 
-        "assert.calledWith match.like boolean exception message": function () {
+        "assert.calledWith match boolean exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(true)\n    doSomething()",
+                         "match(true)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like(true)));
+                         sinon.match(true)));
         },
 
-        "assert.calledWith match.like string exception message": function () {
+        "assert.calledWith match string exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(\"Sinon\")\n    doSomething()",
+                         "match(\"Sinon\")\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like("Sinon")));
+                         sinon.match("Sinon")));
         },
 
-        "assert.calledWith match.like regexp exception message": function () {
+        "assert.calledWith match regexp exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(/[a-z]+/)\n    doSomething()",
+                         "match(/[a-z]+/)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like(/[a-z]+/)));
+                         sinon.match(/[a-z]+/)));
         },
 
         "assert.calledLike exception message": function () {
             this.obj.doSomething(1, 3, "hey");
 
-            assertEquals("expected doSomething to be called like 4, 3, " +
+            assertEquals("expected doSomething to be called with match 4, 3, " +
                          "hey\n    doSomething(1, 3, hey)",
-                         this.message("calledLike", this.obj.doSomething, 4, 3, "hey"));
+                         this.message("calledWithMatch", this.obj.doSomething, 4, 3, "hey"));
         },
 
         "assert.alwaysCalledWith exception message": function () {

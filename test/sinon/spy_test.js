@@ -547,46 +547,32 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     }
 
     testCase("SpyCalledWithTest", spyCalledTests("calledWith"));
-    testCase("SpyCalledLikeTest", spyCalledTests("calledLike"));
+    testCase("SpyCalledWithMatchTest", spyCalledTests("calledWithMatch"));
 
-    testCase("SpyCalledLikeSpecialTest", {
+    testCase("SpyCalledWithMatchSpecialTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
-        },
-
-        "should check true(ish) value": function () {
-            this.spy("yes");
-
-            assert(this.spy.calledLike(true));
-            assertFalse(this.spy.calledLike(false));
-        },
-
-        "should check false(ish) value": function () {
-            this.spy("");
-
-            assert(this.spy.calledLike(false));
-            assertFalse(this.spy.calledLike(true));
         },
 
         "should check substring match": function () {
             this.spy("I like it");
 
-            assert(this.spy.calledLike("like"));
-            assertFalse(this.spy.calledLike("nope"));
+            assert(this.spy.calledWithMatch("like"));
+            assertFalse(this.spy.calledWithMatch("nope"));
         },
 
         "should check for regexp match": function () {
             this.spy("I like it");
 
-            assert(this.spy.calledLike(/[a-z ]+/i));
-            assertFalse(this.spy.calledLike(/[0-9]+/));
+            assert(this.spy.calledWithMatch(/[a-z ]+/i));
+            assertFalse(this.spy.calledWithMatch(/[0-9]+/));
         },
 
         "should check for partial object match": function () {
             this.spy({ foo: "foo", bar: "bar" });
 
-            assert(this.spy.calledLike({ bar: "bar" }));
-            assertFalse(this.spy.calledLike({ same: "same" }));
+            assert(this.spy.calledWithMatch({ bar: "bar" }));
+            assertFalse(this.spy.calledWithMatch({ same: "same" }));
         }
     });
 
@@ -646,30 +632,25 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     }
 
     testCase("SpyAlwaysCalledWithTest", spyAlwaysCalledTests("alwaysCalledWith"));
-    testCase("SpyAlwaysCalledLikeTest", spyAlwaysCalledTests("alwaysCalledLike"));
+    testCase("SpyAlwaysCalledWithMatchTest", spyAlwaysCalledTests("alwaysCalledWithMatch"));
 
-    testCase("SpyAlwaysCalledLikeSpecialTest", {
+    testCase("SpyAlwaysCalledWithMatchSpecialTest", {
       setUp: function () {
           this.spy = sinon.spy.create();
       },
 
-      "should check true(ish) value": function () {
+      "should check true": function () {
           this.spy(true);
-          this.spy(1);
-          this.spy("indeed");
-          this.spy({});
 
-          assert(this.spy.alwaysCalledLike(true));
-          assertFalse(this.spy.alwaysCalledLike(false));
+          assert(this.spy.alwaysCalledWithMatch(true));
+          assertFalse(this.spy.alwaysCalledWithMatch(false));
       },
 
-      "should check false(ish) value": function () {
+      "should check false": function () {
           this.spy(false);
-          this.spy(0);
-          this.spy("");
 
-          assert(this.spy.alwaysCalledLike(false));
-          assertFalse(this.spy.alwaysCalledLike(true));
+          assert(this.spy.alwaysCalledWithMatch(false));
+          assertFalse(this.spy.alwaysCalledWithMatch(true));
       },
 
       "should check substring match": function () {
@@ -677,8 +658,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
           this.spy("some test");
           this.spy("all tests");
 
-          assert(this.spy.alwaysCalledLike("test"));
-          assertFalse(this.spy.alwaysCalledLike("case"));
+          assert(this.spy.alwaysCalledWithMatch("test"));
+          assertFalse(this.spy.alwaysCalledWithMatch("case"));
       },
 
       "should check regexp match": function () {
@@ -686,8 +667,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
           this.spy("2");
           this.spy("3");
 
-          assert(this.spy.alwaysCalledLike(/[123]/));
-          assertFalse(this.spy.alwaysCalledLike(/[12]/));
+          assert(this.spy.alwaysCalledWithMatch(/[123]/));
+          assertFalse(this.spy.alwaysCalledWithMatch(/[12]/));
       },
 
       "should check partial object match": function () {
@@ -695,8 +676,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
           this.spy({ c: "c", b: "b" });
           this.spy({ b: "b", d: "d" });
 
-          assert(this.spy.alwaysCalledLike({ b: "b" }));
-          assertFalse(this.spy.alwaysCalledLike({ a: "a" }));
+          assert(this.spy.alwaysCalledWithMatch({ b: "b" }));
+          assertFalse(this.spy.alwaysCalledWithMatch({ a: "a" }));
       }
     });
 
@@ -749,59 +730,37 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     }
 
     testCase("SpyNeverCalledWithTest", spyNeverCalledTests("neverCalledWith"));
-    testCase("SpyNeverCalledLikeTest", spyNeverCalledTests("neverCalledLike"));
+    testCase("SpyNeverCalledWithMatchTest", spyNeverCalledTests("neverCalledWithMatch"));
 
-    testCase("SpyNeverCalledLikeSpecialTest", {
+    testCase("SpyNeverCalledWithMatchSpecialTest", {
         setUp: function () {
             this.spy = sinon.spy.create();
-        },
-
-        "should check true(ish) values": function () {
-            this.spy(false, "", 0);
-
-            assert(this.spy.neverCalledLike(true, true, true));
-            assert(this.spy.neverCalledLike(true, true, false));
-            assert(this.spy.neverCalledLike(true, false, false));
-            assert(this.spy.neverCalledLike(false, true, true));
-            assert(this.spy.neverCalledLike(false, false, true));
-            assertFalse(this.spy.neverCalledLike(false, false, false));
-        },
-
-        "should check false(ish) values": function () {
-            this.spy(true, "test", 1);
-
-            assert(this.spy.neverCalledLike(false, false, false));
-            assert(this.spy.neverCalledLike(false, false, true));
-            assert(this.spy.neverCalledLike(false, true, true));
-            assert(this.spy.neverCalledLike(true, false, false));
-            assert(this.spy.neverCalledLike(true, true, false));
-            assertFalse(this.spy.neverCalledLike(true, true, true));
         },
 
         "should check substring match": function () {
             this.spy("a test", "b test");
 
-            assert(this.spy.neverCalledLike("a", "a"));
-            assert(this.spy.neverCalledLike("b", "b"));
-            assert(this.spy.neverCalledLike("b", "a"));
-            assertFalse(this.spy.neverCalledLike("a", "b"));
+            assert(this.spy.neverCalledWithMatch("a", "a"));
+            assert(this.spy.neverCalledWithMatch("b", "b"));
+            assert(this.spy.neverCalledWithMatch("b", "a"));
+            assertFalse(this.spy.neverCalledWithMatch("a", "b"));
         },
 
         "should check regexp match": function () {
             this.spy("a test", "b test");
 
-            assert(this.spy.neverCalledLike(/a/, /a/));
-            assert(this.spy.neverCalledLike(/b/, /b/));
-            assert(this.spy.neverCalledLike(/b/, /a/));
-            assertFalse(this.spy.neverCalledLike(/a/, /b/));
+            assert(this.spy.neverCalledWithMatch(/a/, /a/));
+            assert(this.spy.neverCalledWithMatch(/b/, /b/));
+            assert(this.spy.neverCalledWithMatch(/b/, /a/));
+            assertFalse(this.spy.neverCalledWithMatch(/a/, /b/));
         },
 
         "should check partial object match": function () {
             this.spy({ a: "test", b: "test" });
 
-            assert(this.spy.neverCalledLike({ a: "nope" }));
-            assert(this.spy.neverCalledLike({ c: "test" }));
-            assertFalse(this.spy.neverCalledLike({ b: "test" }));
+            assert(this.spy.neverCalledWithMatch({ a: "nope" }));
+            assert(this.spy.neverCalledWithMatch({ c: "test" }));
+            assertFalse(this.spy.neverCalledWithMatch({ b: "test" }));
         }
     });
 
@@ -1749,9 +1708,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
     function spyCallSetUp() {
         this.thisValue = {};
-        this.args = [{}, [], function () {}, 3];
+        this.args = [{}, [], new Error(), 3];
         this.returnValue = function () {};
-        this.call = sinon.spy.spyCall.create(function () {}, this.thisValue, this.args, this.returnValue);
+        this.call = sinon.spy.spyCall.create(function () {}, this.thisValue,
+            this.args, this.returnValue);
     }
 
     testCase("SpyCallObjectTest", {
@@ -1840,7 +1800,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     }
 
     testCase("SpyCallCalledWithTest", spyCallCalledTests("calledWith"));
-    testCase("SpyCallCalledLikeTest", spyCallCalledTests("calledLike"));
+    testCase("SpyCallCalledWithMatchTest", spyCallCalledTests("calledWithMatch"));
 
     function spyCallNotCalledTests(method) {
         return {
@@ -1883,7 +1843,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
     }
 
     testCase("SpyCallNotCalledWithTest", spyCallNotCalledTests("notCalledWith"));
-    testCase("SpyCallNotCalledLikeTest", spyCallNotCalledTests("notCalledLike"));
+    testCase("SpyCallNotCalledWithMatchTest", spyCallNotCalledTests("notCalledWithMatch"));
 
     testCase("SpyCallCalledWithExactlyTest", {
         setUp: spyCallSetUp,
