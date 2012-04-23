@@ -1109,7 +1109,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match(/[a-z]+/)));
         },
 
-        "assert.calledLike exception message": function () {
+        "assert.calledWithMatch exception message": function () {
             this.obj.doSomething(1, 3, "hey");
 
             assertEquals("expected doSomething to be called with match 4, 3, " +
@@ -1126,13 +1126,13 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey"));
         },
 
-        "assert.alwaysCalledLike exception message": function () {
+        "assert.alwaysCalledWithMatch exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, "hey");
 
-            assertEquals("expected doSomething to always be called like 1" +
+            assertEquals("expected doSomething to always be called with match 1" +
                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
-                         this.message("alwaysCalledLike", this.obj.doSomething, 1, "hey"));
+                         this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey"));
         },
 
         "assert.calledWithExactly exception message": function () {
@@ -1163,12 +1163,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                                       this.obj.doSomething, 1, 2));
         },
 
-        "assert.neverCalledLike exception message": function () {
+        "assert.neverCalledWithMatch exception message": function () {
             this.obj.doSomething(1, 2, 3);
 
-            assertEquals("expected doSomething to never be called like " +
+            assertEquals("expected doSomething to never be called with match " +
                          "1, 2\n    doSomething(1, 2, 3)",
-                         this.message("neverCalledLike",
+                         this.message("neverCalledWithMatch",
                                       this.obj.doSomething, 1, 2));
         },
 
