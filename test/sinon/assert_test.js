@@ -1037,6 +1037,33 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.any, false));
         },
 
+        "assert.calledWith match.defined exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "defined\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.defined));
+        },
+
+        "assert.calledWith match.truthy exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "truthy\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.truthy));
+        },
+
+        "assert.calledWith match.falsy exception message": function () {
+            this.obj.doSomething(true);
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "falsy\n    doSomething(true)",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match.falsy));
+        },
+
         "assert.calledWith match.same exception message": function () {
             this.obj.doSomething();
 
@@ -1064,40 +1091,66 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match.instanceOf(function CustomType() {})));
         },
 
-        "assert.calledWith match.like object exception message": function () {
+        "assert.calledWith match object exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(some: value, and: 123)\n    doSomething()",
+                         "match(some: value, and: 123)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like({ some: "value", and: 123 })));
+                         sinon.match({ some: "value", and: 123 })));
         },
 
-        "assert.calledWith match.like boolean exception message": function () {
+        "assert.calledWith match boolean exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(true)\n    doSomething()",
+                         "match(true)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like(true)));
+                         sinon.match(true)));
         },
 
-        "assert.calledWith match.like string exception message": function () {
+        "assert.calledWith match number exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(\"Sinon\")\n    doSomething()",
+                         "match(123)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like("Sinon")));
+                         sinon.match(123)));
         },
 
-        "assert.calledWith match.like regexp exception message": function () {
+        "assert.calledWith match string exception message": function () {
             this.obj.doSomething();
 
             assertEquals("expected doSomething to be called with arguments " +
-                         "like(/[a-z]+/)\n    doSomething()",
+                         "match(\"Sinon\")\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like(/[a-z]+/)));
+                         sinon.match("Sinon")));
+        },
+
+        "assert.calledWith match regexp exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "match(/[a-z]+/)\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match(/[a-z]+/)));
+        },
+
+        "assert.calledWith match test function exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "match(custom)\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match({ test: function custom() {} })));
+        },
+
+        "assert.calledWithMatch exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+
+            assertEquals("expected doSomething to be called with match 4, 3, " +
+                         "hey\n    doSomething(1, 3, hey)",
+                         this.message("calledWithMatch", this.obj.doSomething, 4, 3, "hey"));
         },
 
         "assert.alwaysCalledWith exception message": function () {
@@ -1107,6 +1160,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("expected doSomething to always be called with arguments 1" +
                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
                          this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey"));
+        },
+
+        "assert.alwaysCalledWithMatch exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+            this.obj.doSomething(1, "hey");
+
+            assertEquals("expected doSomething to always be called with match 1" +
+                         ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
+                         this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey"));
         },
 
         "assert.calledWithExactly exception message": function () {
@@ -1134,6 +1196,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("expected doSomething to never be called with " +
                          "arguments 1, 2\n    doSomething(1, 2, 3)",
                          this.message("neverCalledWith",
+                                      this.obj.doSomething, 1, 2));
+        },
+
+        "assert.neverCalledWithMatch exception message": function () {
+            this.obj.doSomething(1, 2, 3);
+
+            assertEquals("expected doSomething to never be called with match " +
+                         "1, 2\n    doSomething(1, 2, 3)",
+                         this.message("neverCalledWithMatch",
                                       this.obj.doSomething, 1, 2));
         },
 
