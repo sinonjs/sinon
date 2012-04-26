@@ -34,7 +34,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "should return matcher": function () {
-            var match = sinon.match(function () {}, "");
+            var match = sinon.match(function () {});
 
             assert(sinon.match.isMatcher(match));
         },
@@ -42,7 +42,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         "should expose test function": function () {
             var test = function () {};
 
-            var match = sinon.match(test, "");
+            var match = sinon.match(test);
 
             assertSame(test, match.test);
         },
@@ -160,7 +160,56 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertFalse(match.test(null));
             assertFalse(match.test(123));
             assertFalse(match.test({}));
+        },
+
+        "should return true for number match": function () {
+            var match = sinon.match(1);
+
+            assert(match.test(1));
+            assert(match.test("1"));
+            assert(match.test(true));
+        },
+
+        "should return false for number mismatch": function () {
+            var match = sinon.match(1);
+
+            assertFalse(match.test());
+            assertFalse(match.test(null));
+            assertFalse(match.test(2));
+            assertFalse(match.test(false));
+            assertFalse(match.test({}));
+        },
+
+        "should return true if test function in object returns true": function () {
+            var match = sinon.match({ test: function () { return true; }});
+
+            assert(match.test());
+        },
+
+        "should return false if test function in object returns false": function () {
+            var match = sinon.match({ test: function () { return false; }});
+
+            assertFalse(match.test());
+        },
+
+        "should return false if test function in object returns nothing": function () {
+            var match = sinon.match({ test: function () {}});
+
+            assertFalse(match.test());
+        },
+
+        "should pass actual value to test function in object": function () {
+            var match = sinon.match({ test: function (arg) { return arg; }});
+
+            assert(match.test(true));
+        },
+
+        "should use matcher": function () {
+            var match = sinon.match(sinon.match("test"));
+
+            assert(match.test("testing"));
         }
+
     });
 
     testCase("MatchToStringTest", {
@@ -170,6 +219,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             var match = sinon.match(function () {}, message);
 
             assertSame(message, match.toString());
+        },
+
+        "should default to match(functionName)": function () {
+            var match = sinon.match(function custom() {});
+
+            assertSame("match(custom)", match.toString());
         }
     });
 

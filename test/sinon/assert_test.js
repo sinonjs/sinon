@@ -1109,6 +1109,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          sinon.match(true)));
         },
 
+        "assert.calledWith match number exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "match(123)\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match(123)));
+        },
+
         "assert.calledWith match string exception message": function () {
             this.obj.doSomething();
 
@@ -1125,6 +1134,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                          "match(/[a-z]+/)\n    doSomething()",
                          this.message("calledWith", this.obj.doSomething,
                          sinon.match(/[a-z]+/)));
+        },
+
+        "assert.calledWith match test function exception message": function () {
+            this.obj.doSomething();
+
+            assertEquals("expected doSomething to be called with arguments " +
+                         "match(custom)\n    doSomething()",
+                         this.message("calledWith", this.obj.doSomething,
+                         sinon.match({ test: function custom() {} })));
         },
 
         "assert.calledWithMatch exception message": function () {
