@@ -324,6 +324,19 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.expectation();
 
             assert(this.expectation.met());
+        },
+
+        "should not throw when exceeding at least expectation": function () {
+            var obj = { foobar: function () {} };
+            var mock = sinon.mock(obj);
+            mock.expects("foobar").atLeast(1);
+
+            obj.foobar();
+
+            assertNoException(function () {
+                obj.foobar();
+                mock.verify();
+            });
         }
     });
 
