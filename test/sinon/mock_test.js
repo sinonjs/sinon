@@ -517,6 +517,22 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertNoException(function () {
                 expectation(1, 2, 3, 4);
             });
+        },
+
+        "should call accept with no args": function () {
+            this.expectation.withArgs();
+            this.expectation();
+
+            assert(this.expectation.met());
+        },
+
+        "should allow no args called with excessive args": function () {
+            var expectation = this.expectation;
+            expectation.withArgs();
+
+            assertNoException(function () {
+                expectation(1, 2, 3);
+            });
         }
     });
 
@@ -571,6 +587,22 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assertException(function () {
                 expectation(1, 2, 3, 4);
+            }, "ExpectationError");
+        },
+
+        "should accept call with no expected args": function () {
+            this.expectation.withExactArgs();
+            this.expectation();
+
+            assert(this.expectation.met());
+        },
+
+        "should not allow excessive args with no expected args": function () {
+            var expectation = this.expectation;
+            expectation.withExactArgs();
+
+            assertException(function () {
+                expectation(1, 2, 3);
             }, "ExpectationError");
         }
     });
