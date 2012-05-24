@@ -403,6 +403,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
         "should format strings without quotes": function () {
             assertEquals("Hey", sinon.format("Hey"));
+        },
+
+        "should not format null": function() {
+            assertEquals(null, sinon.format(null));
         }
     });
 
