@@ -17,6 +17,9 @@
           "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
         }
     ],
+    "scripts": {
+        "test": "node test/node/run.js"
+    },
     "main": "./lib/sinon.js",
     "engines": { "node": ">=0.1.103" }
 }
