@@ -36,6 +36,10 @@ Check out [todo.org](http://github.com/cjohansen/Sinon.JS/raw/1.0.0/todo.org) in
 
 ### On Node
 
+    $ npm test
+
+OR
+
     $ node test/node/run.js
 
 ### In the browser, via JsTestDriver
