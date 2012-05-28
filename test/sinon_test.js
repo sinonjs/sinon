@@ -405,8 +405,22 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assertEquals("Hey", sinon.format("Hey"));
         },
 
-        "should not format null": function() {
-            assertEquals(null, sinon.format(null));
+        "should stringify null": function() {
+            assertEquals("null", sinon.format(null));
+        },
+
+        "should stringify undefined": function() {
+            assertEquals("undefined", sinon.format(undefined));
+        },
+
+        "should stringify numbers": function() {
+            assertEquals("0", sinon.format(0));
+            assertEquals("1", sinon.format(1));
+        },
+
+        "should stringify booleans": function() {
+            assertEquals("true", sinon.format(true));
+            assertEquals("false", sinon.format(false));
         }
     });
 
