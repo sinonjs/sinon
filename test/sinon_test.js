@@ -1,281 +1,275 @@
 /*jslint onevar: false, eqeqeq: false*/
-/*globals testCase
-          document
-          sinon
-          fail
-          assert
-          assertFalse
-          assertEquals
-          assertSame
-          assertNotSame
-          assertFunction
-          assertObject
-          assertException
-          assertNoException*/
+/*globals document sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("./test_case_shim");
+if (typeof require == "function" && typeof module == "object") {
+    var buster = require("./runner");
     var sinon = require("../lib/sinon");
 }
 
-(function () {
-    testCase("SinonTest", {
-        "sinon should be object": function () {
-            assertObject(sinon);
-        }
-    });
+buster.testCase("sinon", {
+    "should be object": function () {
+        assert.isObject(sinon);
+    },
 
-    testCase("SinonWrapMethodTest", {
+    ".wrapMethod": {
         setUp: function () {
             this.method = function () {};
             this.object = { method: this.method };
         },
 
-        "should be function": function () {
-            assertFunction(sinon.wrapMethod);
+        "is function": function () {
+            assert.isFunction(sinon.wrapMethod);
         },
 
-        "should throw if first argument is not object": function () {
-            assertException(function () {
+        "throws if first argument is not object": function () {
+            assert.exception(function () {
                 sinon.wrapMethod();
             }, "TypeError");
         },
 
-        "should throw if object defines property but is not function": function () {
+        "throws if object defines property but is not function": function () {
             this.object.prop = 42;
             var object = this.object;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "prop", function () {});
             }, "TypeError");
         },
 
-        "should throw if object does not define property": function () {
+        "throws if object does not define property": function () {
             var object = this.object;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "prop", function () {});
             });
         },
 
-        "should throw if third argument is missing": function () {
+        "throws if third argument is missing": function () {
             var object = this.object;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "method");
             }, "TypeError");
         },
 
-        "should throw if third argument is not function": function () {
+        "throws if third argument is not function": function () {
             var object = this.object;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "method", {});
             }, "TypeError");
         },
 
-        "should replace object method": function () {
+        "replaces object method": function () {
             sinon.wrapMethod(this.object, "method", function () {});
 
-            assertNotSame(this.method, this.object.method);
-            assertFunction(this.object.method);
+            refute.same(this.method, this.object.method);
+            assert.isFunction(this.object.method);
         },
 
-        "should throw if method is already wrapped": function () {
+        "throws if method is already wrapped": function () {
             var object = { method: function () {} };
             sinon.wrapMethod(object, "method", function () {});
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "method", function () {});
             }, "TypeError");
         },
 
-        "should throw if method is already a spy": function () {
+        "throws if method is already a spy": function () {
             var object = { method: sinon.spy() };
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.wrapMethod(object, "method", function () {});
             }, "TypeError");
         },
 
-        "should not throw if object is window object": function () {
-            window.sinonTestMethod = function () {};
-            try {
-                assertNoException(function () {
-                    sinon.wrapMethod(window, "sinonTestMethod", function () {});
-                });
-            } finally {
-                // IE 8 does not support delete on global properties.
-                window.sinonTestMethod = undefined;
+        "in browser": {
+            requiresSupportFor: {
+                "window object": typeof window !== "undefined"
+            },
+
+            "does not throw if object is window object": function () {
+                window.sinonTestMethod = function () {};
+                try {
+                    refute.exception(function () {
+                        sinon.wrapMethod(window, "sinonTestMethod", function () {});
+                    });
+                } finally {
+                    // IE 8 does not support delete on global properties.
+                    window.sinonTestMethod = undefined;
+                }
             }
         },
 
-        "should mirror function properties": function () {
+        "mirrors function properties": function () {
             var object = { method: function () {} };
             object.method.prop = 42;
 
             sinon.wrapMethod(object, "method", function () {});
 
-            assertEquals(42, object.method.prop);
+            assert.equals(object.method.prop, 42);
         },
 
-        "should not mirror and overwrite existing properties": function () {
+        "does not mirror and overwrite existing properties": function () {
             var object = { method: function () {} };
             object.method.called = 42;
 
             sinon.stub(object, "method");
 
-            assertSame(false, object.method.called);
+            assert.isFalse(object.method.called);
         }
-    });
+    },
 
-    testCase("WrappedMethodTest", {
+    "wrapped method": {
         setUp: function () {
             this.method = function () {};
             this.object = { method: this.method };
         },
 
-        "should define restore method": function () {
+        "defines restore method": function () {
             sinon.wrapMethod(this.object, "method", function () {});
 
-            assertFunction(this.object.method.restore);
+            assert.isFunction(this.object.method.restore);
         },
 
-        "should return wrapper": function () {
+        "returns wrapper": function () {
             var wrapper = sinon.wrapMethod(this.object, "method", function () {});
 
-            assertSame(wrapper, this.object.method);
+            assert.same(this.object.method, wrapper);
         },
 
-        "restore should bring back original method": function () {
+        "restore brings back original method": function () {
             sinon.wrapMethod(this.object, "method", function () {});
             this.object.method.restore();
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         }
-    });
+    },
 
-    testCase("WrappedPrototypeMethodTest", {
+    "wrapped prototype method": {
         setUp: function () {
             this.type = function () {};
             this.type.prototype.method = function () {};
             this.object = new this.type();
         },
 
-        "wrap should add owned property": function () {
+        "wrap adds owned property": function () {
             var wrapper = sinon.wrapMethod(this.object, "method", function () {});
 
-            assertSame(wrapper, this.object.method);
+            assert.same(this.object.method, wrapper);
             assert(this.object.hasOwnProperty("method"));
         },
 
-        "restore should remove owned property": function () {
+        "restore removes owned property": function () {
             sinon.wrapMethod(this.object, "method", function () {});
             this.object.method.restore();
 
-            assertSame(this.type.prototype.method, this.object.method);
-            assertFalse(this.object.hasOwnProperty("method"));
+            assert.same(this.object.method, this.type.prototype.method);
+            assert.isFalse(this.object.hasOwnProperty("method"));
         }
-    });
+    },
 
-    testCase("SinonDeepEqualTest", {
-        "should pass null": function () {
+    "deepEqual": {
+        "passes null": function () {
             assert(sinon.deepEqual(null, null));
         },
 
-        "should not pass null and object": function () {
-            assertFalse(sinon.deepEqual(null, {}));
+        "fails null and object": function () {
+            assert.isFalse(sinon.deepEqual(null, {}));
         },
 
-        "should not pass object and null": function () {
-            assertFalse(sinon.deepEqual({}, null));
+        "fails object and null": function () {
+            assert.isFalse(sinon.deepEqual({}, null));
         },
 
-        "should not pass error and object": function () {
-            assertFalse(sinon.deepEqual(new Error(), {}));
+        "fails error and object": function () {
+            assert.isFalse(sinon.deepEqual(new Error(), {}));
         },
 
-        "should not pass object and error": function () {
-            assertFalse(sinon.deepEqual({}, new Error()));
+        "fails object and error": function () {
+            assert.isFalse(sinon.deepEqual({}, new Error()));
         },
 
-        "should not pass regexp and object": function () {
-            assertFalse(sinon.deepEqual(/.*/, {}));
+        "fails regexp and object": function () {
+            assert.isFalse(sinon.deepEqual(/.*/, {}));
         },
 
-        "should not pass object and regexp": function () {
-            assertFalse(sinon.deepEqual({}, /.*/));
+        "fails object and regexp": function () {
+            assert.isFalse(sinon.deepEqual({}, /.*/));
         },
 
-        "should pass primitives": function () {
+        "passes primitives": function () {
             assert(sinon.deepEqual(1, 1));
         },
 
-        "should pass same object": function () {
+        "passes same object": function () {
             var object = {};
 
             assert(sinon.deepEqual(object, object));
         },
 
-        "should pass same function": function () {
+        "passes same function": function () {
             var func = function () {};
 
             assert(sinon.deepEqual(func, func));
         },
 
-        "should pass same array": function () {
+        "passes same array": function () {
             var arr = [];
 
             assert(sinon.deepEqual(arr, arr));
         },
 
-        "should pass equal arrays": function () {
+        "passes equal arrays": function () {
             var arr1 = [1, 2, 3, "hey", "there"];
             var arr2 = [1, 2, 3, "hey", "there"];
 
             assert(sinon.deepEqual(arr1, arr2));
         },
 
-        "should pass equal objects": function () {
+        "passes equal objects": function () {
             var obj1 = { a: 1, b: 2, c: 3, d: "hey", e: "there" };
             var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };
 
             assert(sinon.deepEqual(obj1, obj2));
         },
 
-        "should pass same DOM elements": function () {
-            /*:DOC element = <div class="hey"></div> */
-            if (typeof document == "undefined") return console.log("Test requires DOM");
+        "in browsers": {
+            requiresSupportFor: {
+                "document object": typeof document !== "undefined"
+            },
 
-            assert(sinon.deepEqual(this.element, this.element));
+            "passes same DOM elements": function () {
+                var element = document.createElement("div");
+
+                assert(sinon.deepEqual(element, element));
+            },
+
+            "fails different DOM elements": function () {
+                var element = document.createElement("div");
+                var el = document.createElement("div");
+
+                assert.isFalse(sinon.deepEqual(element, el));
+            },
+
+            "does not modify DOM elements when comparing them": function () {
+                var el = document.getElementById("hey");
+                sinon.deepEqual(el, {});
+
+                assert.same(el.parentNode, document.body);
+                assert.equals(el.childNodes.length, 0);
+            }
         },
 
-        "should not pass different DOM elements": function () {
-            /*:DOC element = <div class="hey"></div> */
-            if (typeof document == "undefined") return console.log("Test requires DOM");
-            var el = document.createElement("div");
-
-            assertFalse(sinon.deepEqual(this.element, el));
-        },
-
-        "should not modify DOM elements when comparing them": function () {
-            /*:DOC += <div id="hey"></div> */
-            if (typeof document == "undefined") return console.log("Test requires DOM");
-            var el = document.getElementById("hey");
-            sinon.deepEqual(el, {})
-
-            assertSame(document.body, el.parentNode);
-            assertEquals(0, el.childNodes.length);
-        },
-
-        "should pass deep objects": function () {
+        "passes deep objects": function () {
             var func = function () {};
 
             var obj1 = {
@@ -308,10 +302,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(sinon.deepEqual(obj1, obj2));
         }
-    });
+    },
 
-    testCase("ExtendTest", {
-        "should copy all properties": function () {
+    "extend": {
+        "copies all properties": function () {
             var object1 = {
                 prop1: null,
                 prop2: false
@@ -331,48 +325,48 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 prop4: 4
             };
 
-            assertEquals(expected, result);
+            assert.equals(result, expected);
         }
-    });
+    },
 
-    testCase("FunctionToStringTest", {
-        "should return function's displayName property": function () {
+    "Function.prototype.toString": {
+        "returns function's displayName property": function () {
             var fn = function () {};
             fn.displayName = "Larry";
 
-            assertEquals("Larry", sinon.functionToString.call(fn));
+            assert.equals(sinon.functionToString.call(fn), "Larry");
         },
 
-        "should guess name from last call's this object": function () {
+        "guesses name from last call's this object": function () {
             var obj = {};
             obj.doStuff = sinon.spy();
             obj.doStuff.call({});
             obj.doStuff();
 
-            assertEquals("doStuff", sinon.functionToString.call(obj.doStuff));
+            assert.equals(sinon.functionToString.call(obj.doStuff), "doStuff");
         },
 
-        "should guess name from any call where property can be located": function () {
+        "guesses name from any call where property can be located": function () {
             var obj = {}, otherObj = { id: 42 };
             obj.doStuff = sinon.spy();
             obj.doStuff.call({});
             obj.doStuff();
             obj.doStuff.call(otherObj);
 
-            assertEquals("doStuff", sinon.functionToString.call(obj.doStuff));
+            assert.equals(sinon.functionToString.call(obj.doStuff), "doStuff");
         }
-    });
+    },
 
-    testCase("ConfigTest", {
-        "should get copy of default config": function () {
+    "config": {
+        "gets copy of default config": function () {
             var config = sinon.getConfig();
 
-            assertNotSame(sinon.defaultConfig, config);
-            assertEquals(sinon.defaultConfig.injectIntoThis, config.injectIntoThis);
-            assertEquals(sinon.defaultConfig.injectInto, config.injectInto);
-            assertEquals(sinon.defaultConfig.properties, config.properties);
-            assertEquals(sinon.defaultConfig.useFakeTimers, config.useFakeTimers);
-            assertEquals(sinon.defaultConfig.useFakeServer, config.useFakeServer);
+            refute.same(config, sinon.defaultConfig);
+            assert.equals(config.injectIntoThis, sinon.defaultConfig.injectIntoThis);
+            assert.equals(config.injectInto, sinon.defaultConfig.injectInto);
+            assert.equals(config.properties, sinon.defaultConfig.properties);
+            assert.equals(config.useFakeTimers, sinon.defaultConfig.useFakeTimers);
+            assert.equals(config.useFakeServer, sinon.defaultConfig.useFakeServer);
         },
 
         "should override specified properties": function () {
@@ -381,70 +375,72 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 useFakeServer: false
             });
 
-            assertNotSame(sinon.defaultConfig, config);
-            assertEquals(sinon.defaultConfig.injectIntoThis, config.injectIntoThis);
-            assertEquals(sinon.defaultConfig.injectInto, config.injectInto);
-            assertEquals(["stub", "mock"], config.properties);
-            assertEquals(sinon.defaultConfig.useFakeTimers, config.useFakeTimers);
-            assertEquals(false, config.useFakeServer);
+            refute.same(config, sinon.defaultConfig);
+            assert.equals(config.injectIntoThis, sinon.defaultConfig.injectIntoThis);
+            assert.equals(config.injectInto, sinon.defaultConfig.injectInto);
+            assert.equals(config.properties, ["stub", "mock"]);
+            assert.equals(config.useFakeTimers, sinon.defaultConfig.useFakeTimers);
+            assert.isFalse(config.useFakeServer);
         }
-    });
+    },
 
-    testCase("LogTest", {
-        "should do nothing gracefully": function () {
-            sinon.log("Oh, hiya");
+    "log": {
+        "does nothing gracefully": function () {
+            refute.exception(function () {
+                sinon.log("Oh, hiya");
+            });
         }
-    });
+    },
 
-    testCase("FormatTest", {
-        "should format with buster by default": function () {
-            assertEquals("{ id: 42 }", sinon.format({ id: 42 }));
+    "format": {
+        "formats with buster by default": function () {
+            assert.equals(sinon.format({ id: 42 }), "{ id: 42 }");
         },
 
-        "should format strings without quotes": function () {
-            assertEquals("Hey", sinon.format("Hey"));
+        "formats strings without quotes": function () {
+            assert.equals(sinon.format("Hey"), "Hey");
         }
-    });
+    },
 
-    testCase("TypeOfTest", {
-        "should return boolean": function () {
-            assertEquals("boolean", sinon.typeOf(false));
+    "typeOf": {
+        "returns boolean": function () {
+            assert.equals(sinon.typeOf(false), "boolean");
         },
 
-        "should return string": function () {
-            assertEquals("string", sinon.typeOf("Sinon.JS"));
+        "returns string": function () {
+            assert.equals(sinon.typeOf("Sinon.JS"), "string");
         },
 
-        "should return number": function () {
-            assertEquals("number", sinon.typeOf(123));
+        "returns number": function () {
+            assert.equals(sinon.typeOf(123), "number");
         },
 
-        "should return object": function () {
-            assertEquals("object", sinon.typeOf({}));
+        "returns object": function () {
+            assert.equals(sinon.typeOf({}), "object");
         },
 
-        "should return function": function () {
-            assertEquals("function", sinon.typeOf(function () {}));
+        "returns function": function () {
+            assert.equals(sinon.typeOf(function () {}), "function");
         },
 
-        "should return undefined": function () {
-            assertEquals("undefined", sinon.typeOf(undefined));
+        "returns undefined": function () {
+            assert.equals(sinon.typeOf(undefined), "undefined");
         },
 
-        "should return null": function () {
-            assertEquals("null", sinon.typeOf(null));
+        "returns null": function () {
+            assert.equals(sinon.typeOf(null), "null");
         },
 
-        "should return array": function () {
-            assertEquals("array", sinon.typeOf([]));
+        "returns array": function () {
+            assert.equals(sinon.typeOf([]), "array");
         },
 
-        "should return regexp": function () {
-            assertEquals("regexp", sinon.typeOf(/.*/));
+        "returns regexp": function () {
+            assert.equals(sinon.typeOf(/.*/), "regexp");
         },
 
-        "should return date": function () {
-            assertEquals("date", sinon.typeOf(new Date()));
+        "returns date": function () {
+            assert.equals(sinon.typeOf(new Date()), "date");
         }
-    });
-}());
+    }
+});

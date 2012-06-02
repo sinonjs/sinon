@@ -17,6 +17,13 @@
           "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
         }
     ],
+    "devDependencies": {
+        "buster-core": "~0.6",
+        "buster-format": "~0.5",
+        "buster-assertions": "~0.10",
+        "buster-evented-logger": "~0.4",
+        "buster-test": "~0.5"
+    },
     "main": "./lib/sinon.js",
     "engines": { "node": ">=0.1.103" }
 }
