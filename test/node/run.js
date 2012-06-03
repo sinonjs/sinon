@@ -9,3 +9,14 @@ require("../sinon/assert_test.js");
 require("../sinon/test_test.js");
 require("../sinon/test_case_test.js");
 require("../sinon/match_test.js");
+var buster = require("../runner");
+
+buster.testRunner.onCreate(function (runner) {
+    runner.on("suite:end", function (results) {
+        // Reporter will be set up after delay, allow
+        // it to finish before we exit the process
+        process.nextTick(function () {
+            process.exit(results.ok ? 0 : 1);
+        });
+    });
+});
