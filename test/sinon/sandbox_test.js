@@ -64,7 +64,7 @@ if (typeof require == "function" && typeof module == "object") {
             "uses restorable clock": function () {
                 this.sandbox.useFakeTimers();
 
-                assert.isFunction(this.sandbox.clock.restore);
+                refute.isFunction(this.sandbox.clock.restore);
             },
 
             "passes arguments to sinon.useFakeTimers": sinon.test(function () {
@@ -85,8 +85,13 @@ if (typeof require == "function" && typeof module == "object") {
         },
 
         "fake XHR/server": {
+            // Causes problems in Chrome/Firefox
+            // TODO: Figure out why
+            // requiresSupportFor: {
+            //     "XHR/ActiveXObject": globalXHR || globalAXO
+            // },
             requiresSupportFor: {
-                "XHR/ActiveXObject": globalXHR || globalAXO
+                "browser": typeof window !== "undefined"
             },
 
             "useFakeXMLHttpRequest": {
@@ -388,4 +393,4 @@ if (typeof require == "function" && typeof module == "object") {
             }
         }
     });
-}(typeof global == "object" ? global : this));
+}(typeof global == "object" ? global : window));

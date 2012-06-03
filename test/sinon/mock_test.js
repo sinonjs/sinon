@@ -13,7 +13,7 @@ if (typeof require == "function" && typeof module == "object") {
     var sinon = require("../../lib/sinon");
 }
 
-buster.testCase("mock", {
+buster.testCase("sinon.mock", {
     "create": {
         "returns function with expects method": function () {
             var mock = sinon.mock.create({});

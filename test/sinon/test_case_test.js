@@ -13,7 +13,7 @@ if (typeof require === "function" && typeof module === "object") {
     var sinon = require("../../lib/sinon");
 }
 
-buster.testCase("SinonTestCaseTest", {
+buster.testCase("sinon.testCase", {
     "throws without argument": function () {
         assert.exception(function () {
             sinon.testCase();

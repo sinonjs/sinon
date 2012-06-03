@@ -1,40 +1,24 @@
 /*jslint onevar: false, browser: false, regexp: false, browser: true*/
-/*globals testCase
-          sinon
-          assert
-          assertSame
-          assertNotSame
-          assertEquals
-          assertTrue
-          assertFalse
-          assertNull
-          assertException
-          assertNoException
-          assertUndefined
-          assertObject
-          assertFunction*/
+/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-testCase("ServerWithClockTest", {
+buster.testCase("sinon.fakeServerWithClock", {
     setUp: function () {
         this.server = sinon.fakeServerWithClock.create();
     },
 
     tearDown: function () {
         this.server.restore();
-
-        if (this.clock) {
-            this.clock.restore();
-        }
+        if (this.clock) { this.clock.restore(); }
     },
 
-    "should call 'super' when adding requests": sinon.test(function () {
+    "calls 'super' when adding requests": sinon.test(function () {
         var addRequest = this.stub(sinon.fakeServer, "addRequest");
         var xhr = {};
         this.server.addRequest(xhr);
@@ -43,14 +27,14 @@ testCase("ServerWithClockTest", {
         assert(addRequest.calledOn(this.server));
     }),
 
-    "should set reference to clock when adding async request": function () {
+    "sets reference to clock when adding async request": function () {
         this.server.addRequest({ async: true });
 
-        assertObject(this.server.clock);
-        assertFunction(this.server.clock.tick);
+        assert.isObject(this.server.clock);
+        assert.isFunction(this.server.clock.tick);
     },
 
-    "should set longest timeout from setTimeout": function () {
+    "sets longest timeout from setTimeout": function () {
         this.server.addRequest({ async: true });
 
         setTimeout(function () {}, 12);
@@ -58,10 +42,10 @@ testCase("ServerWithClockTest", {
         setInterval(function () {}, 12);
         setTimeout(function () {}, 27);
 
-        assertEquals(29, this.server.longestTimeout);
+        assert.equals(this.server.longestTimeout, 29);
     },
 
-    "should set longest timeout from setInterval": function () {
+    "sets longest timeout from setInterval": function () {
         this.server.addRequest({ async: true });
 
         setTimeout(function () {}, 12);
@@ -69,164 +53,164 @@ testCase("ServerWithClockTest", {
         setInterval(function () {}, 132);
         setTimeout(function () {}, 27);
 
-        assertEquals(132, this.server.longestTimeout);
+        assert.equals(this.server.longestTimeout, 132);
     },
 
-    "should reset clock": function () {
+    "resets clock": function () {
         this.server.addRequest({ async: true });
 
         this.server.respond("");
 
-        assertSame(sinon.timers.setTimeout, setTimeout);
+        assert.same(setTimeout, sinon.timers.setTimeout);
     },
 
-    "should not reset clock second time": function () {
+    "does not reset clock second time": function () {
         this.server.addRequest({ async: true });
         this.server.respond("");
         this.clock = sinon.useFakeTimers();
         this.server.addRequest({ async: true });
         this.server.respond("");
 
-        assertNotSame(sinon.timers.setTimeout, setTimeout);
-    }
-});
-
-testCase("ServerWithClockExistingClockTest", {
-    setUp: function () {
-        this.clock = sinon.useFakeTimers();
-        this.server = sinon.fakeServerWithClock.create();
+        refute.same(setTimeout, sinon.timers.setTimeout);
     },
 
-    tearDown: function () {
-        this.clock.restore();
-        this.server.restore();
+    "existing clock": {
+        setUp: function () {
+            this.clock = sinon.useFakeTimers();
+            this.server = sinon.fakeServerWithClock.create();
+        },
+
+        tearDown: function () {
+            this.clock.restore();
+            this.server.restore();
+        },
+
+        "uses existing clock": function () {
+            this.server.addRequest({ async: true });
+
+            assert.same(this.server.clock, this.clock);
+        },
+
+        "records longest timeout using setTimeout and existing clock": function () {
+            this.server.addRequest({ async: true });
+
+            setInterval(function () {}, 42);
+            setTimeout(function () {}, 23);
+            setTimeout(function () {}, 53);
+            setInterval(function () {}, 12);
+
+            assert.same(this.server.longestTimeout, 53);
+        },
+
+        "records longest timeout using setInterval and existing clock": function () {
+            this.server.addRequest({ async: true });
+
+            setInterval(function () {}, 92);
+            setTimeout(function () {}, 73);
+            setTimeout(function () {}, 53);
+            setInterval(function () {}, 12);
+
+            assert.same(this.server.longestTimeout, 92);
+        },
+
+        "does not reset clock": function () {
+            this.server.respond("");
+
+            assert.same(setTimeout.clock, this.clock);
+        }
     },
 
-    "should use existing clock": function () {
-        this.server.addRequest({ async: true });
+    "respond": {
+        setUp: function () {
+            this.server = sinon.fakeServerWithClock.create();
+            this.server.addRequest({ async: true });
+        },
 
-        assertSame(this.clock, this.server.clock);
+        tearDown: function () {
+            this.server.restore();
+        },
+
+        "ticks the clock to fire the longest timeout": function () {
+            this.server.longestTimeout = 96;
+
+            this.server.respond();
+
+            assert.equals(this.server.clock.now, 96);
+        },
+
+        "ticks the clock to fire the longest timeout when multiple responds": function () {
+            setInterval(function () {}, 13);
+            this.server.respond();
+            var xhr = new sinon.FakeXMLHttpRequest();
+            setInterval(function () {}, 17);
+            this.server.respond();
+
+            assert.equals(this.server.clock.now, 17);
+        },
+
+        "resets longest timeout": function () {
+            this.server.longestTimeout = 96;
+
+            this.server.respond();
+
+            assert.equals(this.server.longestTimeout, 0);
+        },
+
+        "calls original respond": sinon.test(function () {
+            var obj = {};
+            var respond = this.stub(sinon.fakeServer, "respond").returns(obj);
+
+            var result = this.server.respond("GET", "/", "");
+
+            assert.equals(result, obj);
+            assert(respond.calledWith("GET", "/", ""));
+            assert(respond.calledOn(this.server));
+        })
     },
 
-    "should record longest timeout using setTimeout and existing clock": function () {
-        this.server.addRequest({ async: true });
+    "jQuery compat mode": {
+        setUp: function () {
+            this.server = sinon.fakeServerWithClock.create();
 
-        setInterval(function () {}, 42);
-        setTimeout(function () {}, 23);
-        setTimeout(function () {}, 53);
-        setInterval(function () {}, 12);
+            this.request = new sinon.FakeXMLHttpRequest();
+            this.request.open("get", "/", true);
+            this.request.send();
+            sinon.spy(this.request, "respond");
+        },
 
-        assertSame(53, this.server.longestTimeout);
-    },
+        tearDown: function () {
+            this.server.restore();
+        },
 
-    "should record longest timeout using setInterval and existing clock": function () {
-        this.server.addRequest({ async: true });
+        "handles clock automatically": function () {
+            this.server.respondWith("OK");
+            var spy = sinon.spy();
 
-        setInterval(function () {}, 92);
-        setTimeout(function () {}, 73);
-        setTimeout(function () {}, 53);
-        setInterval(function () {}, 12);
+            setTimeout(spy, 13);
+            this.server.respond();
+            this.server.restore();
 
-        assertSame(92, this.server.longestTimeout);
-    },
+            assert(spy.called);
+            assert.same(setTimeout, sinon.timers.setTimeout);
+        },
 
-    "should not reset clock": function () {
-        this.server.respond("");
+        "finishes xhr from setInterval like jQuery 1.3.x does": function () {
+            this.server.respondWith("Hello World");
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/");
+            xhr.send();
 
-        assertSame(this.clock, setTimeout.clock);
-    }
-});
+            var spy = sinon.spy();
 
-testCase("ServerWithClockRespondTest", {
-    setUp: function () {
-        this.server = sinon.fakeServerWithClock.create();
-        this.server.addRequest({ async: true });
-    },
+            setInterval(function () {
+                spy(xhr.responseText, xhr.statusText, xhr);
+            }, 13);
 
-    tearDown: function () {
-        this.server.restore();
-    },
+            this.server.respond();
 
-    "should tick the clock to fire the longest timeout": function () {
-        this.server.longestTimeout = 96;
-
-        this.server.respond();
-
-        assertEquals(96, this.server.clock.now);
-    },
-
-    "should tick the clock to fire the longest timeout when multiple responds": function () {
-        setInterval(function () {}, 13);
-        this.server.respond();
-        var xhr = new sinon.FakeXMLHttpRequest();
-        setInterval(function () {}, 17);
-        this.server.respond();
-
-        assertEquals(17, this.server.clock.now);
-    },
-
-    "should reset longest timeout": function () {
-        this.server.longestTimeout = 96;
-
-        this.server.respond();
-
-        assertEquals(0, this.server.longestTimeout);
-    },
-
-    "should call original respond": sinon.test(function () {
-        var obj = {};
-        var respond = this.stub(sinon.fakeServer, "respond").returns(obj);
-
-        var result = this.server.respond("GET", "/", "");
-
-        assertEquals(obj, result);
-        assert(respond.calledWith("GET", "/", ""));
-        assert(respond.calledOn(this.server));
-    })
-});
-
-testCase("ServerJQueryCompatMode", {
-    setUp: function () {
-        this.server = sinon.fakeServerWithClock.create();
-
-        this.request = new sinon.FakeXMLHttpRequest();
-        this.request.open("get", "/", true);
-        this.request.send();
-        sinon.spy(this.request, "respond");
-    },
-
-    tearDown: function () {
-        this.server.restore();
-    },
-
-    "should handle clock automatically": function () {
-        this.server.respondWith("OK");
-        var spy = sinon.spy();
-
-        setTimeout(spy, 13);
-        this.server.respond();
-        this.server.restore();
-
-        assert(spy.called);
-        assertSame(sinon.timers.setTimeout, setTimeout);
-    },
-
-    "should finish xhr from setInterval like jQuery 1.3.x does": function () {
-        this.server.respondWith("Hello World");
-        var xhr = new sinon.FakeXMLHttpRequest();
-        xhr.open("GET", "/");
-        xhr.send();
-
-        var spy = sinon.spy();
-
-        setInterval(function () {
-            spy(xhr.responseText, xhr.statusText, xhr);
-        }, 13);
-
-        this.server.respond();
-
-        assertEquals("Hello World", spy.args[0][0]);
-        assertEquals("OK", spy.args[0][1]);
-        assertEquals(200, spy.args[0][2].status);
+            assert.equals(spy.args[0][0], "Hello World");
+            assert.equals(spy.args[0][1], "OK");
+            assert.equals(spy.args[0][2].status, 200);
+        }
     }
 });

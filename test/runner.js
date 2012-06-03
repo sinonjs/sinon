@@ -73,7 +73,6 @@
 
     buster.testContext.on("create", runner);
 
-
     buster.assertions.add("spy", {
         assert: function (obj) {
             return obj !== null && typeof obj.calledWith === "function" && !obj.returns;

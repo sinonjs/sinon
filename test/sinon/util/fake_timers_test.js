@@ -16,7 +16,7 @@ if (typeof require == "function" && typeof module == "object") {
 
 buster.testCase("sinon.clock", {
     setUp: function () {
-        this.global = typeof global != "undefined" ? global : this;
+        this.global = typeof global != "undefined" ? global : window;
     },
 
     "setTimeout": {
@@ -79,17 +79,17 @@ buster.testCase("sinon.clock", {
             assert.isTrue(stub.calledWithExactly("the first", "the second"));
         },
 
-	"calls correct timeout on recursive tick": function() {
-	    var clock = sinon.clock.create();
-	    var stub = sinon.stub.create();
-	    var recurseCallback = function () { clock.tick(100); };
+        "calls correct timeout on recursive tick": function() {
+            var clock = sinon.clock.create();
+            var stub = sinon.stub.create();
+            var recurseCallback = function () { clock.tick(100); };
 
-	    clock.setTimeout(recurseCallback, 50);
-	    clock.setTimeout(stub, 100);
+            clock.setTimeout(recurseCallback, 50);
+            clock.setTimeout(stub, 100);
 
-	    clock.tick(50);
-	    assert(stub.called);
-	}
+            clock.tick(50);
+            assert(stub.called);
+        }
     },
 
     "tick": {

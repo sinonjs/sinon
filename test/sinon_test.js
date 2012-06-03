@@ -257,7 +257,8 @@ buster.testCase("sinon", {
             },
 
             "does not modify DOM elements when comparing them": function () {
-                var el = document.getElementById("hey");
+                var el = document.createElement("div");
+                document.body.appendChild(el);
                 sinon.deepEqual(el, {});
 
                 assert.same(el.parentNode, document.body);
