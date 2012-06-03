@@ -64,7 +64,7 @@ if (typeof require == "function" && typeof module == "object") {
             "uses restorable clock": function () {
                 this.sandbox.useFakeTimers();
 
-                refute.isFunction(this.sandbox.clock.restore);
+                assert.isFunction(this.sandbox.clock.restore);
             },
 
             "passes arguments to sinon.useFakeTimers": sinon.test(function () {
