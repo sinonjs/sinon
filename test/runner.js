@@ -71,7 +71,11 @@
         cwd: typeof process != "undefined" ? process.cwd() : null
     });
 
-    buster.testContext.on("create", runner);
+    if (buster.testContext.on) {
+        buster.testContext.on("create", runner);
+    } else {
+        buster.testCase.onCreate = runner;
+    }
 
     buster.assertions.add("spy", {
         assert: function (obj) {
