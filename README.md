@@ -65,4 +65,5 @@ in a browser.
 
 ### On Rhino
 
-The Rhino tests are currently out of commission.
+The Rhino tests are currently out of commission (pending update after switch to
+Buster.JS for tests).
