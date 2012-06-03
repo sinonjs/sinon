@@ -14,10 +14,6 @@ if (typeof require == "function" && typeof module == "object") {
 }
 
 buster.testCase("sinon", {
-    "should be object": function () {
-        assert.isObject(sinon);
-    },
-
     ".wrapMethod": {
         setUp: function () {
             this.method = function () {};
