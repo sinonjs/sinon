@@ -255,6 +255,18 @@ buster.testCase("sinon.collection", {
         "removes from collection when restored": function () {
             this.collection.restore();
             assert(this.collection.fakes.length == 0);
+        },
+
+        "restores functions when stubbing entire object": function () {
+            var a = function () {};
+            var b = function () {};
+            var obj = { a: a, b: b };
+            this.collection.stub(obj);
+
+            this.collection.restore();
+
+            assert.same(obj.a, a);
+            assert.same(obj.b, b);
         }
     },
 
