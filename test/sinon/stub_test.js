@@ -214,7 +214,7 @@ buster.testCase("sinon.create", {
             assert(callback.calledWith());
         },
 
-        "calls callback wit multiple args": function () {
+        "calls callback with multiple args": function () {
             var object = {};
             var array = [];
             this.stub.callsArgWith(1, object, array);
@@ -340,7 +340,7 @@ buster.testCase("sinon.create", {
             assert(callback.calledOn(this.fakeContext));
         },
 
-        "calls callback wit multiple args": function () {
+        "calls callback with multiple args": function () {
             var object = {};
             var array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
@@ -954,6 +954,696 @@ buster.testCase("sinon.create", {
 
             refute.exception(stub);
             assert.exception(function () { stub(42); });
+        }
+    },
+
+    "callsArgAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+
+        "asynchronously calls argument at specified index": function (done) {
+            this.stub.callsArgAsync(2);
+            var callback = sinon.spy(done);
+
+            this.stub(1, 2, callback);
+
+            assert(!callback.called);
+        },
+
+        "returns stub": function () {
+            assert.isFunction(this.stub.callsArgAsync(2));
+        },
+
+        "throws if argument at specified index is not callable": function () {
+            this.stub.callsArgAsync(0);
+
+            assert.exception(function () {
+                this.stub(1);
+            }, "TypeError");
+        },
+
+        "throws if no index is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgAsync();
+            }, "TypeError");
+        },
+
+        "throws if index is not number": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgAsync({});
+            }, "TypeError");
+        }
+    },
+
+    "callsArgWithAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+
+        "asynchronously calls argument at specified index with provided args": function (done) {
+            var object = {};
+            this.stub.callsArgWithAsync(1, object);
+            
+            var callback = sinon.spy(function (arg) {
+                assert(callback.calledWith(object));
+                done();
+            });
+
+            this.stub(1, callback);
+            
+            assert(!callback.called);
+        },
+
+        "returns function": function () {
+            var stub = this.stub.callsArgWithAsync(2, 3);
+
+            assert.isFunction(stub);
+        },
+
+        "asynchronously calls callback without args": function (done) {
+            this.stub.callsArgWithAsync(1);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledWith());
+                done();
+            });
+
+            this.stub(1, callback);
+
+            assert(!callback.called);
+        },
+
+        "asynchronously calls callback with multiple args": function (done) {
+            var object = {};
+            var array = [];
+            this.stub.callsArgWithAsync(1, object, array);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledWith(object, array));
+                done();
+            });
+
+            this.stub(1, callback);
+
+            assert(!callback.called);
+        },
+
+        "throws if no index is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgWithAsync();
+            }, "TypeError");
+        },
+
+        "throws if index is not number": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgWithAsync({});
+            }, "TypeError");
+        }
+    },
+
+    "callsArgOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: "bar"
+            };
+        },
+
+        "asynchronously calls argument at specified index": function (done) {
+            var context = this.fakeContext;
+            this.stub.callsArgOnAsync(2, context);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledOn(context));
+                done();
+            });
+
+            this.stub(1, 2, callback);
+            
+            assert(!callback.called);
+        },
+
+        "returns stub": function () {
+            var stub = this.stub.callsArgOnAsync(2, this.fakeContext);
+
+            assert.isFunction(stub);
+        },
+
+        "throws if argument at specified index is not callable": function () {
+            this.stub.callsArgOnAsync(0, this.fakeContext);
+
+            assert.exception(function () {
+                this.stub(1);
+            }, "TypeError");
+        },
+
+        "throws if no index is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnAsync();
+            }, "TypeError");
+        },
+
+        "throws if no context is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnAsync(3);
+            }, "TypeError");
+        },
+
+        "throws if index is not number": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnAsync(this.fakeContext, 2);
+            }, "TypeError");
+        },
+
+        "throws if context is not an object": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnAsync(2, 2);
+            }, "TypeError");
+        }
+    },
+
+    "callsArgOnWithAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+
+        "asynchronously calls argument at specified index with provided args": function (done) {
+            var object = {};
+            var context = this.fakeContext;
+            this.stub.callsArgOnWithAsync(1, context, object);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledOn(context))
+                assert(callback.calledWith(object));
+                done();
+            });
+
+            this.stub(1, callback);
+            
+            assert(!callback.called);
+        },
+
+        "returns function": function () {
+            var stub = this.stub.callsArgOnWithAsync(2, this.fakeContext, 3);
+
+            assert.isFunction(stub);
+        },
+
+        "asynchronously calls callback without args": function (done) {
+            var context = this.fakeContext;
+            this.stub.callsArgOnWithAsync(1, context);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledWith());
+                assert(callback.calledOn(context));
+                done();
+            });
+
+            this.stub(1, callback);
+
+            assert(!callback.called);
+        },
+
+        "asynchronously calls callback with multiple args": function (done) {
+            var object = {};
+            var array = [];
+            var context = this.fakeContext;
+            this.stub.callsArgOnWithAsync(1, context, object, array);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledWith(object, array));
+                assert(callback.calledOn(context));
+                done();
+            });
+
+            this.stub(1, callback);
+
+            assert(!callback.called);
+        },
+
+        "throws if no index is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnWithAsync();
+            }, "TypeError");
+        },
+
+        "throws if no context is specified": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnWithAsync(3);
+            }, "TypeError");
+        },
+
+        "throws if index is not number": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnWithAsync({});
+            }, "TypeError");
+        },
+
+        "throws if context is not an object": function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                stub.callsArgOnWithAsync(2, 2);
+            }, "TypeError");
+        }
+    },
+
+    "yieldsAsync": {
+        "asynchronously invokes only argument as callback": function (done) {
+            var stub = sinon.stub().yieldsAsync();
+
+            var spy = sinon.spy(done);
+            
+            stub(spy);
+
+            assert(!spy.called);
+        },
+
+        "throws understandable error if no callback is passed": function () {
+            var stub = sinon.stub().yieldsAsync();
+
+            try {
+                stub();
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "stub expected to yield, but no callback was passed.");
+            }
+        },
+
+        "includes stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsAsync();
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "somethingAwesome expected to yield, but no callback " +
+                              "was passed. Received [23, 42]");
+            }
+        },
+
+        "asynchronously invokes last argument as callback": function (done) {
+            var stub = sinon.stub().yieldsAsync();
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledOnce);
+                assert.equals(spy.args[0].length, 0);
+                done();
+            });
+            
+            stub(24, {}, spy);
+            
+            assert(!spy.called);
+        },
+
+        "asynchronously invokes first of two callbacks": function (done) {
+            var stub = sinon.stub().yieldsAsync();
+            var spy2 = sinon.spy();
+            
+            var spy = sinon.spy(function () {
+                assert(spy.calledOnce);
+                assert(!spy2.called);
+                done(); 
+            });
+
+            stub(24, {}, spy, spy2);
+            
+            assert(!spy.called);
+        },
+
+        "asynchronously invokes callback with arguments": function (done) {
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsAsync(obj, "Crazy");
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledWith(obj, "Crazy"));
+                done();
+            });
+            
+            stub(spy);
+            
+            assert(!spy.called);
+        },
+
+        "//throws if callback throws": function () {
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsAsync(obj, "Crazy");
+            var callback = sinon.stub().throws();
+
+            assert.exception(function () {
+                stub(callback);
+            });
+        }
+    },
+
+    "yieldsOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+
+        "asynchronously invokes only argument as callback": function () {
+            var context = this.fakeContext;
+            this.stub.yieldsOnAsync(context);
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledOnce);
+                assert(spy.calledOn(context));
+                assert.equals(spy.args[0].length, 0);
+            });
+            
+            this.stub(spy);
+            
+            assert(!spy.called);
+        },
+
+        "throws if no context is specified": function () {
+            assert.exception(function () {
+                this.stub.yieldsOnAsync();
+            }, "TypeError");
+        },
+
+        "throws understandable error if no callback is passed": function () {
+            this.stub.yieldsOnAsync(this.fakeContext);
+
+            try {
+                this.stub();
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "stub expected to yield, but no callback was passed.");
+            }
+        },
+
+        "includes stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsOnAsync(this.fakeContext);
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "somethingAwesome expected to yield, but no callback " +
+                              "was passed. Received [23, 42]");
+            }
+        },
+
+        "asynchronously invokes last argument as callback": function (done) {
+            var context = this.fakeContext;
+            this.stub.yieldsOnAsync(context);
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledOnce);
+                assert(spy.calledOn(context));
+                assert.equals(spy.args[0].length, 0);
+                done();
+            });
+
+            this.stub(24, {}, spy);
+            
+            assert(!spy.called);
+        },
+
+        "asynchronously invokes first of two callbacks": function (done) {
+            var context = this.fakeContext;
+            var spy2 = sinon.spy();
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledOnce);
+                assert(spy.calledOn(context));
+                assert(!spy2.called);
+                done();
+            });
+
+            this.stub.yieldsOnAsync(context);
+            this.stub(24, {}, spy, spy2);
+
+            assert(!spy.called);
+            assert(!spy2.called);
+        },
+
+        "asynchronously invokes callback with arguments": function (done) {
+            var context = this.fakeContext;
+            var obj = { id: 42 };
+
+            var spy = sinon.spy(function () {
+                assert(spy.calledWith(obj, "Crazy"));
+                assert(spy.calledOn(context));
+                done();
+            });
+
+            this.stub.yieldsOnAsync(context, obj, "Crazy");
+            this.stub(spy);
+
+            assert(!spy.called);
+        },
+
+        "//throws if callback throws": function () {
+            var obj = { id: 42 };
+            var callback = sinon.stub().throws();
+            var stub = this.stub;
+
+            stub.yieldsOnAsync(this.fakeContext, obj, "Crazy");
+
+            assert.exception(function () {
+                stub(callback);
+            });
+        }
+    },
+
+    "yieldsToAsync": {
+        "asynchronously yields to property of object argument": function (done) {
+            var stub = sinon.stub().yieldsToAsync("success");
+
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert.equals(callback.args[0].length, 0);
+                done();
+            });
+
+            stub({ success: callback });
+
+            assert(!callback.called);
+        },
+
+        "throws understandable error if no object with callback is passed": function () {
+            var stub = sinon.stub().yieldsToAsync("success");
+
+            try {
+                stub();
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "stub expected to yield to 'success', but no object "+
+                              "with such a property was passed.");
+            }
+        },
+
+        "includes stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToAsync("success");
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "somethingAwesome expected to yield to 'success', but " +
+                              "no object with such a property was passed. " +
+                              "Received [23, 42]");
+            }
+        },
+
+        "asynchronously invokes property on last argument as callback": function (done) {
+            var stub = sinon.stub().yieldsToAsync("success");
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert.equals(callback.args[0].length, 0);
+                done();
+            });
+            
+            stub(24, {}, { success: callback });
+
+            assert(!callback.called);
+        },
+
+        "asynchronously invokes first of two possible callbacks": function (done) {
+            var stub = sinon.stub().yieldsToAsync("error");
+            var callback2 = sinon.spy();
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert(!callback2.called);
+                done();
+            });
+
+            stub(24, {}, { error: callback }, { error: callback2 });
+
+            assert(!callback.called);
+            assert(!callback2.called);
+        },
+
+        "asynchronously invokes callback with arguments": function (done) {
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsToAsync("success", obj, "Crazy");
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledWith(obj, "Crazy"));
+                done();
+            });
+            
+            stub({ success: callback });
+
+            assert(!callback.called);
+        },
+
+        "//throws if callback throws": function () {
+            var obj = { id: 42 };
+            var stub = sinon.stub().yieldsToAsync("error", obj, "Crazy");
+            var callback = sinon.stub().throws();
+
+            assert.exception(function () {
+                stub({ error: callback });
+            });
+        }
+    },
+
+    "yieldsToOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+
+        "asynchronously yields to property of object argument": function (done) {
+            var context = this.fakeContext;
+            this.stub.yieldsToOnAsync("success", context);
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert(callback.calledOn(context));
+                assert.equals(callback.args[0].length, 0);
+                done();
+            });
+
+            this.stub({ success: callback });
+
+            assert(!callback.called);
+        },
+
+        "throws if no context is specified": function () {
+            assert.exception(function () {
+                this.stub.yieldsToOnAsync("success");
+            }, "TypeError");
+        },
+
+        "throws understandable error if no object with callback is passed": function () {
+            this.stub.yieldsToOnAsync("success", this.fakeContext);
+
+            try {
+                this.stub();
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "stub expected to yield to 'success', but no object "+
+                              "with such a property was passed.");
+            }
+        },
+
+        "includes stub name and actual arguments in error": function () {
+            var myObj = { somethingAwesome: function () {} };
+            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToOnAsync("success", this.fakeContext);
+
+            try {
+                stub(23, 42);
+                throw new Error();
+            } catch (e) {
+                assert.equals(e.message, "somethingAwesome expected to yield to 'success', but " +
+                              "no object with such a property was passed. " +
+                              "Received [23, 42]");
+            }
+        },
+
+        "asynchronously invokes property on last argument as callback": function (done) {
+            var context = this.fakeContext;
+
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert(callback.calledOn(context));
+                assert.equals(callback.args[0].length, 0);
+                done();
+            });
+
+            this.stub.yieldsToOnAsync("success", context);
+            this.stub(24, {}, { success: callback });
+
+            assert(!callback.called);
+        },
+
+        "asynchronously invokes first of two possible callbacks": function (done) {
+            var context = this.fakeContext;
+            var callback2 = sinon.spy();
+            
+            var callback = sinon.spy(function () {
+                assert(callback.calledOnce);
+                assert(callback.calledOn(context));
+                assert(!callback2.called);
+                done();
+            });
+            
+            this.stub.yieldsToOnAsync("error", context);
+            this.stub(24, {}, { error: callback }, { error: callback2 });
+
+            assert(!callback.called);
+            assert(!callback2.called);
+        },
+
+        "asynchronously invokes callback with arguments": function (done) {
+            var context = this.fakeContext;
+            var obj = { id: 42 };
+
+            var callback = sinon.spy(function () {
+                assert(callback.calledOn(context));
+                assert(callback.calledWith(obj, "Crazy"));
+                done();
+            });
+
+            this.stub.yieldsToOnAsync("success", context, obj, "Crazy");
+            this.stub({ success: callback });
+
+            assert(!callback.called);
+        },
+
+        "//throws if callback throws": function () {
+            var obj = { id: 42 };
+            var callback = sinon.stub().throws();
+            var stub = this.stub;
+
+            stub.yieldsToOnAsync("error", this.fakeContext, obj, "Crazy");
+
+            assert.exception(function () {
+                stub({ error: callback });
+            });
         }
     }
 });
