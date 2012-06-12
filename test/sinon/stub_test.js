@@ -998,10 +998,9 @@ buster.testCase("sinon.create", {
             var object = {};
             this.stub.callsArgWithAsync(1, object);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith(object));
-                done();
-            });
+            }));
 
             this.stub(1, callback);
             
@@ -1011,10 +1010,9 @@ buster.testCase("sinon.create", {
         "asynchronously calls callback without args": function (done) {
             this.stub.callsArgWithAsync(1);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith());
-                done();
-            });
+            }));
 
             this.stub(1, callback);
 
@@ -1026,10 +1024,9 @@ buster.testCase("sinon.create", {
             var array = [];
             this.stub.callsArgWithAsync(1, object, array);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith(object, array));
-                done();
-            });
+            }));
 
             this.stub(1, callback);
 
@@ -1057,10 +1054,9 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOn(context));
-                done();
-            });
+            }));
 
             this.stub(1, 2, callback);
             
@@ -1088,11 +1084,10 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOn(context))
                 assert(callback.calledWith(object));
-                done();
-            });
+            }));
 
             this.stub(1, callback);
             
@@ -1103,11 +1098,10 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith());
                 assert(callback.calledOn(context));
-                done();
-            });
+            }));
 
             this.stub(1, callback);
 
@@ -1120,11 +1114,10 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object, array);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith(object, array));
                 assert(callback.calledOn(context));
-                done();
-            });
+            }));
 
             this.stub(1, callback);
 
@@ -1155,11 +1148,10 @@ buster.testCase("sinon.create", {
         "asynchronously invokes last argument as callback": function (done) {
             var stub = sinon.stub().yieldsAsync();
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledOnce);
                 assert.equals(spy.args[0].length, 0);
-                done();
-            });
+            }));
             
             stub(24, {}, spy);
             
@@ -1170,11 +1162,10 @@ buster.testCase("sinon.create", {
             var stub = sinon.stub().yieldsAsync();
             var spy2 = sinon.spy();
             
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledOnce);
                 assert(!spy2.called);
-                done(); 
-            });
+            }));
 
             stub(24, {}, spy, spy2);
             
@@ -1185,10 +1176,9 @@ buster.testCase("sinon.create", {
             var obj = { id: 42 };
             var stub = sinon.stub().yieldsAsync(obj, "Crazy");
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledWith(obj, "Crazy"));
-                done();
-            });
+            }));
             
             stub(spy);
             
@@ -1211,15 +1201,15 @@ buster.testCase("sinon.create", {
             assert(stub.yieldsOn.calledWith(this.fakeContext));
         },
 
-        "asynchronously invokes only argument as callback": function () {
+        "asynchronously invokes only argument as callback": function (done) {
             var context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
-            });
+            }));
             
             this.stub(spy);
             
@@ -1230,12 +1220,11 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
-                done();
-            });
+            }));
 
             this.stub(24, {}, spy);
             
@@ -1246,12 +1235,11 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             var spy2 = sinon.spy();
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert(!spy2.called);
-                done();
-            });
+            }));
 
             this.stub.yieldsOnAsync(context);
             this.stub(24, {}, spy, spy2);
@@ -1264,11 +1252,10 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             var obj = { id: 42 };
 
-            var spy = sinon.spy(function () {
+            var spy = sinon.spy(done(function () {
                 assert(spy.calledWith(obj, "Crazy"));
                 assert(spy.calledOn(context));
-                done();
-            });
+            }));
 
             this.stub.yieldsOnAsync(context, obj, "Crazy");
             this.stub(spy);
@@ -1290,11 +1277,10 @@ buster.testCase("sinon.create", {
         "asynchronously yields to property of object argument": function (done) {
             var stub = sinon.stub().yieldsToAsync("success");
 
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
-                done();
-            });
+            }));
 
             stub({ success: callback });
 
@@ -1303,11 +1289,10 @@ buster.testCase("sinon.create", {
 
         "asynchronously invokes property on last argument as callback": function (done) {
             var stub = sinon.stub().yieldsToAsync("success");
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
-                done();
-            });
+            }));
             
             stub(24, {}, { success: callback });
 
@@ -1318,11 +1303,10 @@ buster.testCase("sinon.create", {
             var stub = sinon.stub().yieldsToAsync("error");
             var callback2 = sinon.spy();
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert(!callback2.called);
-                done();
-            });
+            }));
 
             stub(24, {}, { error: callback }, { error: callback2 });
 
@@ -1334,10 +1318,9 @@ buster.testCase("sinon.create", {
             var obj = { id: 42 };
             var stub = sinon.stub().yieldsToAsync("success", obj, "Crazy");
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledWith(obj, "Crazy"));
-                done();
-            });
+            }));
             
             stub({ success: callback });
 
@@ -1364,12 +1347,11 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
-                done();
-            });
+            }));
 
             this.stub({ success: callback });
 
@@ -1379,12 +1361,11 @@ buster.testCase("sinon.create", {
         "asynchronously invokes property on last argument as callback": function (done) {
             var context = this.fakeContext;
 
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
-                done();
-            });
+            }));
 
             this.stub.yieldsToOnAsync("success", context);
             this.stub(24, {}, { success: callback });
@@ -1396,12 +1377,11 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             var callback2 = sinon.spy();
             
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert(!callback2.called);
-                done();
-            });
+            }));
             
             this.stub.yieldsToOnAsync("error", context);
             this.stub(24, {}, { error: callback }, { error: callback2 });
@@ -1414,11 +1394,10 @@ buster.testCase("sinon.create", {
             var context = this.fakeContext;
             var obj = { id: 42 };
 
-            var callback = sinon.spy(function () {
+            var callback = sinon.spy(done(function () {
                 assert(callback.calledOn(context));
                 assert(callback.calledWith(obj, "Crazy"));
-                done();
-            });
+            }));
 
             this.stub.yieldsToOnAsync("success", context, obj, "Crazy");
             this.stub({ success: callback });
