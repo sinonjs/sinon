@@ -447,6 +447,116 @@ buster.testCase("sinon.assert", {
         }
     },
 
+    "calledWithNew": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
+
+        "fails when method does not exist": function () {
+            sinon.stub(this.stub, "calledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(null);
+            });
+
+            assert.isFalse(this.stub.calledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method is not stub": function () {
+            sinon.stub(this.stub, "calledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(function () {});
+            });
+
+            assert.isFalse(this.stub.calledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method fails": function () {
+            sinon.stub(this.stub, "calledWithNew").returns(false);
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(stub);
+            });
+
+            assert(sinon.assert.fail.called);
+        },
+
+        "passes when method doesn't fail": function () {
+            sinon.stub(this.stub, "calledWithNew").returns(true);
+            var stub = this.stub;
+
+            sinon.assert.calledWithNew(stub);
+
+            assert.isFalse(sinon.assert.fail.called);
+        },
+
+        "calls pass callback": function () {
+            var a = new this.stub();
+            sinon.assert.calledWithNew(this.stub);
+
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("calledWithNew"));
+        }
+    },
+
+    "alwaysCalledWithNew": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
+
+        "fails when method does not exist": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(null);
+            });
+
+            assert.isFalse(this.stub.alwaysCalledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method is not stub": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(function () {});
+            });
+
+            assert.isFalse(this.stub.alwaysCalledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method fails": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew").returns(false);
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(stub);
+            });
+
+            assert(sinon.assert.fail.called);
+        },
+
+        "passes when method doesn't fail": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew").returns(true);
+            var stub = this.stub;
+
+            sinon.assert.alwaysCalledWithNew(stub);
+
+            assert.isFalse(sinon.assert.fail.called);
+        },
+
+        "calls pass callback": function () {
+            var a = new this.stub();
+            sinon.assert.alwaysCalledWithNew(this.stub);
+
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("alwaysCalledWithNew"));
+        }
+    },
+
     "calledWith": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
@@ -985,6 +1095,21 @@ buster.testCase("sinon.assert", {
 
             assert.equals(this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
                           "expected doSomething to always be called with [Oh yeah] as this but was called with [Oh no], [Oh well], [Oh yeah]");
+        },
+
+        "assert.calledWithNew exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWithNew", this.obj.doSomething),
+                          "expected doSomething to be called with new");
+        },
+
+        "assert.alwaysCalledWithNew exception message": function () {
+            var a = new this.obj.doSomething();
+            this.obj.doSomething();
+
+            assert.equals(this.message("alwaysCalledWithNew", this.obj.doSomething),
+                          "expected doSomething to always be called with new");
         },
 
         "assert.calledWith exception message": function () {
