@@ -1,275 +1,260 @@
 /*jslint onevar: false*/
-/*globals testCase
-          sinon
-          assert
-          assertFalse
-          assertUndefined
-          assertFunction
-          assertSame
-          assertNotSame
-          assertEquals
-          assertException*/
+/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("../test_case_shim");
+if (typeof require === "function" && typeof module === "object") {
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 
-(function () {
-    testCase("SinonTestCaseTest", {
-        "should be function": function () {
-            assertFunction(sinon.testCase);
-        },
+buster.testCase("sinon.testCase", {
+    "throws without argument": function () {
+        assert.exception(function () {
+            sinon.testCase();
+        }, "TypeError");
+    },
 
-        "should return object": function () {
-            var tests = sinon.testCase({});
+    "throws without object": function () {
+        assert.exception(function () {
+            sinon.testCase(function () {});
+        }, "TypeError");
+    },
 
-            assertEquals({}, tests);
-        },
+    "only wraps functions with test prefix": sinon.test(function () {
+        this.spy(sinon, "test");
 
-        "should throw without argument": function () {
-            assertException(function () {
-                sinon.testCase();
-            }, "TypeError");
-        },
+        var testc = {
+            testA: function () {},
+            doB: function () {}
+        };
 
-        "should throw without object": function () {
-            assertException(function () {
-                sinon.testCase(function () {});
-            }, "TypeError");
-        },
+        sinon.testCase(testc);
 
-        "should only wrap functions with test prefix": sinon.test(function () {
-            this.spy(sinon, "test");
+        assert.isFunction(testc.doB);
+        assert(sinon.test.calledWith(testc.testA));
+        assert.isFalse(sinon.test.calledWith(testc.doB));
+    }),
 
-            var testc = {
-                testA: function () {},
-                doB: function () {}
-            };
+    "removes setUp method": function () {
+        var test = { setUp: function () {} };
+        var result = sinon.testCase(test);
 
-            sinon.testCase(testc);
+        refute.defined(result.setUp);
+        refute.defined(result["test setUp"]);
+    },
 
-            assertFunction(testc.doB);
-            assert(sinon.test.calledWith(testc.testA));
-            assertFalse(sinon.test.calledWith(testc.doB));
-        }),
+    "removes tearDown method": function () {
+        var test = { tearDown: function () {} };
+        var result = sinon.testCase(test);
 
-        "should remove setUp method": function () {
-            var test = { setUp: function () {} };
-            var result = sinon.testCase(test);
+        refute.defined(result.tearDown);
+        refute.defined(result["test tearDown"]);
+    },
 
-            assertUndefined(result.setUp);
-            assertUndefined(result["test setUp"]);
-        },
+    "calls setUp before any test": function () {
+        var test = { setUp: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
+        var result = sinon.testCase(test);
+        result.test();
+        result.test2();
 
-        "should remove tearDown method": function () {
-            var test = { tearDown: function () {} };
-            var result = sinon.testCase(test);
+        assert.equals(test.setUp.callCount, 2);
+        sinon.assert.called(test.test);
+        sinon.assert.called(test.test2);
+    },
 
-            assertUndefined(result.tearDown);
-            assertUndefined(result["test tearDown"]);
-        },
+    "calls tearDown after any test": function () {
+        var test = { tearDown: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
+        var result = sinon.testCase(test);
+        result.test();
+        result.test2();
 
-        "should call setUp before any test": function () {
-            var test = { setUp: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
-            var result = sinon.testCase(test);
-            result.test();
-            result.test2();
-
-            assertEquals(2, test.setUp.callCount);
-            sinon.assert.called(test.test);
-            sinon.assert.called(test.test2);
-        },
-
-        "should call tearDown after any test": function () {
-            var test = { tearDown: sinon.stub(), test: sinon.stub(), test2: sinon.stub() };
-            var result = sinon.testCase(test);
-            result.test();
-            result.test2();
-
+        refute.exception(function () {
             sinon.assert.called(test.tearDown);
             sinon.assert.called(test.test);
             sinon.assert.called(test.test2);
-        },
+        });
+    },
 
-        "should call tearDown even if test throws": function () {
-            var test = { tearDown: sinon.stub(), test: sinon.stub().throws() };
-            var result = sinon.testCase(test);
+    "calls tearDown even if test throws": function () {
+        var test = { tearDown: sinon.stub(), test: sinon.stub().throws() };
+        var result = sinon.testCase(test);
 
-            assertException(function () {
-                result.test();
-            }, "Error");
+        assert.exception(function () {
+            result.test();
+        }, "Error");
 
-            sinon.assert.called(test.tearDown);
-            sinon.assert.called(test.test);
-        },
+        sinon.assert.called(test.tearDown);
+        sinon.assert.called(test.test);
+    },
 
-        "should call setUp test tearDown in order": function () {
-            var testCase = {
-                setUp: sinon.stub(),
-                test: sinon.stub(),
-                tearDown: sinon.stub()
-            };
+    "calls setUp test tearDown in order": function () {
+        var testCase = {
+            setUp: sinon.stub(),
+            test: sinon.stub(),
+            tearDown: sinon.stub()
+        };
 
-            var result = sinon.testCase(testCase);
+        var result = sinon.testCase(testCase);
 
-            try {
-                result.test();
-            } catch (e) {}
+        try {
+            result.test();
+        } catch (e) {}
 
+        refute.exception(function () {
             sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
-        },
+        });
+    },
 
-        "should call in order when test throws": function () {
-            var testCase = {
-                setUp: sinon.stub(),
-                tearDown: sinon.stub(),
-                test: sinon.stub().throws()
-            };
+    "calls in order when test throws": function () {
+        var testCase = {
+            setUp: sinon.stub(),
+            tearDown: sinon.stub(),
+            test: sinon.stub().throws()
+        };
 
-            var result = sinon.testCase(testCase);
+        var result = sinon.testCase(testCase);
 
-            try {
-                result.test();
-            } catch (e) {}
+        try {
+            result.test();
+        } catch (e) {}
 
+        refute.exception(function () {
             sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
-        },
+        });
+    },
 
-        "should unstub objects after test is run": function () {
-            var myMeth = function () {};
-            var myObj = { meth: myMeth };
+    "unstubs objects after test is run": function () {
+        var myMeth = function () {};
+        var myObj = { meth: myMeth };
 
-            var testCase = sinon.testCase({
-                testA: function () {
-                    this.stub(myObj, "meth");
+        var testCase = sinon.testCase({
+            testA: function () {
+                this.stub(myObj, "meth");
 
-                    assertFunction(this.stub);
-                    assertNotSame(myMeth, myObj.meth);
-                }
-            });
+                assert.isFunction(this.stub);
+                refute.same(myObj.meth, myMeth);
+            }
+        });
 
-            testCase.testA();
+        testCase.testA();
 
-            assertSame(myMeth, myObj.meth);
-        },
+        assert.same(myObj.meth, myMeth);
+    },
 
-        "should unstub all methods of an objects after test is run": function () {
-            var myMeth = function () {};
-            var myMeth2 = function () {};
-            var myObj = { meth: myMeth, meth2: myMeth2 };
+    "unstubs all methods of an objects after test is run": function () {
+        var myMeth = function () {};
+        var myMeth2 = function () {};
+        var myObj = { meth: myMeth, meth2: myMeth2 };
 
-            var testCase = sinon.testCase({
-                testA: function () {
-                    this.stub(myObj);
+        var testCase = sinon.testCase({
+            testA: function () {
+                this.stub(myObj);
 
-                    assertFunction(this.stub);
+                assert.isFunction(this.stub);
 
-                    assertNotSame(myMeth, myObj.meth);
-                    assertNotSame(myMeth2, myObj.meth2);
-                }
-            });
+                refute.same(myObj.meth, myMeth);
+                refute.same(myObj.meth2, myMeth2);
+            }
+        });
 
-            testCase.testA();
+        testCase.testA();
 
-            assertSame(myMeth, myObj.meth);
-            assertSame(myMeth2, myObj.meth2);
-        },
+        assert.same(myObj.meth, myMeth);
+        assert.same(myObj.meth2, myMeth2);
+    },
 
-        "should unstub objects stubbed in setUp": function () {
-            var myMeth = function () {};
-            var myObj = { meth: myMeth };
+    "unstubs objects stubbed in setUp": function () {
+        var myMeth = function () {};
+        var myObj = { meth: myMeth };
 
-            var testCase = sinon.testCase({
-                setUp: function () {
-                    this.stub(myObj, "meth");
-                },
+        var testCase = sinon.testCase({
+            setUp: function () {
+                this.stub(myObj, "meth");
+            },
 
-                testA: function () {
-                    assertFunction(this.stub);
-                    assertNotSame(myMeth, myObj.meth);
-                }
-            });
+            testA: function () {
+                assert.isFunction(this.stub);
+                refute.same(myObj.meth, myMeth);
+            }
+        });
 
-            testCase.testA();
+        testCase.testA();
 
-            assertSame(myMeth, myObj.meth);
-        },
+        assert.same(myObj.meth, myMeth);
+    },
 
-        "should unstub all methods of an objects stubbed in setUp": function () {
-            var myMeth = function () {};
-            var myMeth2 = function () {};
-            var myObj = { meth: myMeth, meth2: myMeth2 };
+    "unstubs all methods of an objects stubbed in setUp": function () {
+        var myMeth = function () {};
+        var myMeth2 = function () {};
+        var myObj = { meth: myMeth, meth2: myMeth2 };
 
-            var testCase = sinon.testCase({
-                setUp: function () {
-                    this.stub(myObj);
-                },
-                testA: function () {
-                    assertFunction(this.stub);
+        var testCase = sinon.testCase({
+            setUp: function () {
+                this.stub(myObj);
+            },
+            testA: function () {
+                assert.isFunction(this.stub);
 
-                    assertNotSame(myMeth, myObj.meth);
-                    assertNotSame(myMeth2, myObj.meth2);
-                }
-            });
+                refute.same(myObj.meth, myMeth);
+                refute.same(myObj.meth2, myMeth2);
+            }
+        });
 
-            testCase.testA();
+        testCase.testA();
 
-            assertSame(myMeth, myObj.meth);
-            assertSame(myMeth2, myObj.meth2);
-        },
+        assert.same(myObj.meth, myMeth);
+        assert.same(myObj.meth2, myMeth2);
+    },
 
-        "should allow the use of helper methods": function () {
-            var helper = sinon.spy();
+    "allows the use of helper methods": function () {
+        var helper = sinon.spy();
 
-            var testC = sinon.testCase({
-                doIt: helper,
+        var testC = sinon.testCase({
+            doIt: helper,
 
-                testIt: function () {
-                    this.doIt();
-                }
-            });
+            testIt: function () {
+                this.doIt();
+            }
+        });
 
-            assertNoException(function () {
-                testC.testIt();
-            });
+        refute.exception(function () {
+            testC.testIt();
+        });
 
-            assert(helper.calledOnce);
-            assert(helper.calledOn(testC));
-        },
+        assert(helper.calledOnce);
+        assert(helper.calledOn(testC));
+    },
 
-        "should return result of test function": function () {
-            var testC = sinon.testCase({
-                testIt: sinon.stub().returns(42)
-            });
+    "returns result of test function": function () {
+        var testC = sinon.testCase({
+            testIt: sinon.stub().returns(42)
+        });
 
-            assertEquals(42, testC.testIt());
-        },
+        assert.equals(testC.testIt(), 42);
+    },
 
-        "should return result of test function with setUp": function () {
-            var testC = sinon.testCase({
-                setUp: sinon.spy(),
-                testIt: sinon.stub().returns(42)
-            });
+    "returns result of test function with setUp": function () {
+        var testC = sinon.testCase({
+            setUp: sinon.spy(),
+            testIt: sinon.stub().returns(42)
+        });
 
-            assertEquals(42, testC.testIt());
-        },
+        assert.equals(testC.testIt(), 42);
+    },
 
-        "should return result of test function with setUp and teardown": function () {
-            var testC = sinon.testCase({
-                setUp: sinon.spy(),
-                tearDown: sinon.spy(),
-                testIt: sinon.stub().returns(42)
-            });
+    "returns result of test function with setUp and teardown": function () {
+        var testC = sinon.testCase({
+            setUp: sinon.spy(),
+            tearDown: sinon.spy(),
+            testIt: sinon.stub().returns(42)
+        });
 
-            assertEquals(42, testC.testIt());
-        }
-    });
-}());
+        assert.equals(testC.testIt(), 42);
+    }
+});

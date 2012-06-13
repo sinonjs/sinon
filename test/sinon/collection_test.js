@@ -1,43 +1,30 @@
 /*jslint onevar: false, eqeqeq: false, plusplus: false*/
-/*globals testCase
-          sinon
-          fail
-          assert
-          assertArray
-          assertEquals
-          assertSame
-          assertNotSame
-          assertFunction
-          assertObject
-          assertException
-          assertNoException*/
+/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("../test_case_shim");
+if (typeof require == "function" && typeof module == "object") {
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 
-(function () {
-    testCase("CollectionCreateTest", {
-        "should create fake collection": function () {
-            var collection = sinon.create(sinon.collection);
+buster.testCase("sinon.collection", {
+    "creates fake collection": function () {
+        var collection = sinon.create(sinon.collection);
 
-            assertFunction(collection.verify);
-            assertFunction(collection.restore);
-            assertFunction(collection.verifyAndRestore);
-            assertFunction(collection.stub);
-            assertFunction(collection.mock);
-        }
-    });
+        assert.isFunction(collection.verify);
+        assert.isFunction(collection.restore);
+        assert.isFunction(collection.verifyAndRestore);
+        assert.isFunction(collection.stub);
+        assert.isFunction(collection.mock);
+    },
 
-    testCase("CollectionStubTest", {
+    "stub": {
         setUp: function () {
             this.stub = sinon.stub;
             this.collection = sinon.create(sinon.collection);
@@ -47,7 +34,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.stub = this.stub;
         },
 
-        "should call stub": function () {
+        "calls stub": function () {
             var object = { method: function () {} };
             var args;
 
@@ -57,10 +44,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             this.collection.stub(object, "method");
 
-            assertEquals([object, "method"], args);
+            assert.equals(args, [object, "method"]);
         },
 
-        "should add stub to fake array": function () {
+        "adds stub to fake array": function () {
             var object = { method: function () {} };
 
             sinon.stub = function () {
@@ -69,10 +56,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             this.collection.stub(object, "method");
 
-            assertEquals([object], this.collection.fakes);
+            assert.equals(this.collection.fakes, [object]);
         },
 
-        "should append stubs to fake array": function () {
+        "appends stubs to fake array": function () {
             var objects = [{ id: 42 }, { id: 17 }];
             var i = 0;
 
@@ -83,10 +70,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.collection.stub({ method: function () {} }, "method");
             this.collection.stub({ method: function () {} }, "method");
 
-            assertEquals(objects, this.collection.fakes);
+            assert.equals(this.collection.fakes, objects);
         },
 
-        "should add all object methods to fake array": function() {
+        "adds all object methods to fake array": function() {
             var object = { method: function () {}, method2: function() {} };
 
             sinon.stub = function() {
@@ -95,63 +82,61 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             this.collection.stub(object);
 
-            assertEquals([object.method, object.method2], this.collection.fakes);
-            assertEquals(2, this.collection.fakes.length);
+            assert.equals(this.collection.fakes, [object.method, object.method2]);
+            assert.equals(this.collection.fakes.length, 2);
         },
 
-        "should return a stubbed object": function() {
+        "returns a stubbed object": function() {
             var object = { method: function () {} };
 
             sinon.stub = function () {
                 return object;
             };
 
-            assertEquals(object, this.collection.stub(object));
+            assert.equals(this.collection.stub(object), object);
         },
 
-        "should return a stubbed method": function() {
+        "returns a stubbed method": function() {
             var object = { method: function () {} };
 
             sinon.stub = function () {
                 return object.method;
             };
 
-            assertEquals(object.method, this.collection.stub(object, "method"));
+            assert.equals(this.collection.stub(object, "method"), object.method);
         }
+    },
 
-
-    });
-
-    testCase("CollectionStubAnythingTest", {
+    "stubAnything": {
         setUp: function () {
             this.object = { property: 42 };
             this.collection = sinon.create(sinon.collection);
         },
 
-        "should stub number property": function () {
+        "stubs number property": function () {
             this.collection.stub(this.object, "property", 1);
 
-            assertEquals(1, this.object.property);
+            assert.equals(this.object.property, 1);
         },
 
-        "should restore number property": function () {
+        "restores number property": function () {
             this.collection.stub(this.object, "property", 1);
             this.collection.restore();
 
-            assertEquals(42, this.object.property);
+            assert.equals(this.object.property, 42);
         },
 
-        "should fail if property does not exist": function () {
+        "fails if property does not exist": function () {
             var collection = this.collection;
             var object = {};
 
-            assertException(function () {
+            assert.exception(function () {
                 collection.stub(object, "prop", 1);
             });
         }
-    });
+    },
 
-    testCase("CollectionMockTest", {
+    "mock": {
         setUp: function () {
             this.mock = sinon.mock;
             this.collection = sinon.create(sinon.collection);
@@ -161,7 +146,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.mock = this.mock;
         },
 
-        "should call mock": function () {
+        "calls mock": function () {
             var object = { id: 42 };
             var args;
 
@@ -171,10 +156,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             this.collection.mock(object, "method");
 
-            assertEquals([object, "method"], args);
+            assert.equals(args, [object, "method"]);
         },
 
-        "should add mock to fake array": function () {
+        "adds mock to fake array": function () {
             var object = { id: 42 };
 
             sinon.mock = function () {
@@ -183,10 +168,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             this.collection.mock(object, "method");
 
-            assertEquals([object], this.collection.fakes);
+            assert.equals(this.collection.fakes, [object]);
         },
 
-        "should append mocks to fake array": function () {
+        "appends mocks to fake array": function () {
             var objects = [{ id: 42 }, { id: 17 }];
             var i = 0;
 
@@ -197,11 +182,11 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.collection.mock({}, "method");
             this.collection.mock({}, "method");
 
-            assertEquals(objects, this.collection.fakes);
+            assert.equals(this.collection.fakes, objects);
         }
-    });
+    },
 
-    testCase("CollectionStubAndMockTest", {
+    "stubAndMockTest": {
         setUp: function () {
             this.mock = sinon.mock;
             this.stub = sinon.stub;
@@ -213,7 +198,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.stub = this.stub;
         },
 
-        "should append mocks and stubs to fake array": function () {
+        "appends mocks and stubs to fake array": function () {
             var objects = [{ id: 42 }, { id: 17 }];
             var i = 0;
 
@@ -224,16 +209,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.collection.mock({ method: function () {} }, "method");
             this.collection.stub({ method: function () {} }, "method");
 
-            assertEquals(objects, this.collection.fakes);
+            assert.equals(this.collection.fakes, objects);
         }
-    });
+    },
 
-    testCase("CollectionVerifyTest", {
+    "verify": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },
 
-        "should call verify on all fakes": function () {
+        "calls verify on all fakes": function () {
             this.collection.fakes = [{
                 verify: sinon.spy.create()
             }, {
@@ -245,9 +230,9 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(this.collection.fakes[0].verify.called);
             assert(this.collection.fakes[1].verify.called);
         }
-    });
+    },
 
-    testCase("CollectionRestoreTest", {
+    "restore": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
             this.collection.fakes = [{
@@ -257,7 +242,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             }];
         },
 
-        "should call restore on all fakes": function () {
+        "calls restore on all fakes": function () {
             var fake0 = this.collection.fakes[0];
             var fake1 = this.collection.fakes[1];
 
@@ -267,18 +252,30 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(fake1.restore.called);
         },
 
-        "should remove from collection when restored": function () {
-          this.collection.restore();
-          assert(this.collection.fakes.length == 0);
-        }
-    });
+        "removes from collection when restored": function () {
+            this.collection.restore();
+            assert(this.collection.fakes.length == 0);
+        },
 
-    testCase("CollectionVerifyAndRestoreTest", {
+        "restores functions when stubbing entire object": function () {
+            var a = function () {};
+            var b = function () {};
+            var obj = { a: a, b: b };
+            this.collection.stub(obj);
+
+            this.collection.restore();
+
+            assert.same(obj.a, a);
+            assert.same(obj.b, b);
+        }
+    },
+
+    "verifyAndRestore": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },
 
-        "should call verify and restore": function () {
+        "calls verify and restore": function () {
             this.collection.verify = sinon.spy.create();
             this.collection.restore = sinon.spy.create();
 
@@ -288,16 +285,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(this.collection.restore.called);
         },
 
-        "should throw when restore throws": function () {
+        "throws when restore throws": function () {
             this.collection.verify = sinon.spy.create();
             this.collection.restore = sinon.stub.create().throws();
 
-            assertException(function () {
+            assert.exception(function () {
                 this.collection.verifyAndRestore();
             });
         },
 
-        "should call restore when restore throws": function () {
+        "calls restore when restore throws": function () {
             this.collection.verify = sinon.spy.create();
             this.collection.restore = sinon.stub.create().throws();
 
@@ -307,29 +304,29 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(this.collection.restore.called);
         }
-    });
+    },
 
-    testCase("CollectionInjectTest", {
+    "injectTest": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },
 
-        "should inject fakes into object": function () {
+        "injects fakes into object": function () {
             var obj = {};
             this.collection.inject(obj);
 
-            assertFunction(obj.spy);
-            assertFunction(obj.stub);
-            assertFunction(obj.mock);
+            assert.isFunction(obj.spy);
+            assert.isFunction(obj.stub);
+            assert.isFunction(obj.mock);
         },
 
-        "should return argument": function () {
+        "returns argument": function () {
             var obj = {};
 
-            assertSame(obj, this.collection.inject(obj));
+            assert.same(this.collection.inject(obj), obj);
         },
 
-        "should inject spy, stub, mock bound to collection": sinon.test(function () {
+        "injects spy, stub, mock bound to collection": sinon.test(function () {
             var obj = {};
             this.collection.inject(obj);
             this.stub(this.collection, "spy");
@@ -352,5 +349,5 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(this.collection.stub.calledTwice);
             assert(this.collection.mock.calledTwice);
         })
-    });
-}());
+    }
+});

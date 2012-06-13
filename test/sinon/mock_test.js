@@ -1,663 +1,638 @@
 /*jslint onevar: false*/
-/*globals testCase
-          sinon
-          fail
-          assert
-          assertFalse
-          assertFunction
-          assertObject
-          assertSame
-          assertNotSame
-          assertEquals
-          assertNoException
-          assertException*/
+/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("../test_case_shim");
+if (typeof require == "function" && typeof module == "object") {
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 
-(function () {
-    testCase("MockCreateTest", {
-        "should be function": function () {
-            assertFunction(sinon.mock.create);
-        },
-
-        "should return object": function () {
+buster.testCase("sinon.mock", {
+    "create": {
+        "returns function with expects method": function () {
             var mock = sinon.mock.create({});
 
-            assertObject(mock);
+            assert.isFunction(mock.expects);
         },
 
-        "should return function with expects method": function () {
-            var mock = sinon.mock.create({});
-
-            assertFunction(mock.expects);
-        },
-
-        "should throw without object": function () {
-            assertException(function () {
+        "throws without object": function () {
+            assert.exception(function () {
                 sinon.mock.create();
             }, "TypeError");
         }
-    });
+    },
 
-    testCase("MockExpectsTest", {
+    "expects": {
         setUp: function () {
             this.mock = sinon.mock.create({ someMethod: function () {} });
         },
 
-        "should throw without method": function () {
+        "throws without method": function () {
             var mock = this.mock;
 
-            assertException(function () {
+            assert.exception(function () {
                 mock.expects();
             }, "TypeError");
         },
 
-        "should return expectation": function () {
+        "returns expectation": function () {
             var result = this.mock.expects("someMethod");
 
-            assertFunction(result);
-            assertEquals("someMethod", result.method);
+            assert.isFunction(result);
+            assert.equals(result.method, "someMethod");
         },
 
-        "should throw if expecting a non-existent method": function () {
+        "throws if expecting a non-existent method": function () {
             var mock = this.mock;
 
-            assertException(function () {
+            assert.exception(function () {
                 mock.expects("someMethod2");
             });
         }
-    });
+    },
 
-    testCase("ExpectationTest", {
+    "expectation": {
         setUp: function () {
             this.method = "myMeth";
-            this.expectation = sinon.expectation.create(this.methodName);
+            this.expectation = sinon.expectation.create(this.method);
         },
 
-        call: function () {
+        "call expectation": function () {
             this.expectation();
 
-            assertFunction(this.expectation.invoke);
+            assert.isFunction(this.expectation.invoke);
             assert(this.expectation.called);
         },
 
-        "should be invokable": function () {
+        "is invokable": function () {
             var expectation = this.expectation;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 expectation();
             });
-        }
-    });
-
-    function expectationSetUp() {
-        this.method = "myMeth";
-        this.expectation = sinon.expectation.create(this.method);
-    }
-
-    function mockSetUp() {
-        this.method = function () {};
-        this.object = { method: this.method };
-        this.mock = sinon.mock.create(this.object);
-    }
-
-    testCase("ExpectationReturnsTest", {
-        setUp: expectationSetUp,
-
-        "should return configured return value": function () {
-            var object = {};
-            this.expectation.returns(object);
-
-            assertSame(object, this.expectation());
-        }
-    });
-
-    testCase("ExpectationCallTest", {
-        setUp: expectationSetUp,
-
-        "should be called with correct this value": function () {
-            var object = { method: this.expectation };
-            object.method();
-
-            assert(this.expectation.calledOn(object));
-        }
-    });
-
-    testCase("ExpectationCallCountTest", {
-        setUp: expectationSetUp,
-
-        "should only be invokable once by default": function () {
-            var expectation = this.expectation;
-            expectation();
-
-            assertException(function () {
-                expectation();
-            }, "ExpectationError");
         },
 
-        "throw readable error": function () {
-            var expectation = this.expectation;
-            expectation();
+        "returns": {
+            "returns configured return value": function () {
+                var object = {};
+                this.expectation.returns(object);
 
-            try {
-                expectation();
-                fail("Expected to throw");
-            } catch (e) {
-                assertEquals("myMeth already called once", e.message);
+                assert.same(this.expectation(), object);
             }
-        }
-    });
+        },
 
-    testCase("ExpectationCallCountNeverTest", {
-        setUp: expectationSetUp,
+        "call": {
+            "is called with correct this value": function () {
+                var object = { method: this.expectation };
+                object.method();
 
-        "should not be callable": function () {
-            var expectation = this.expectation;
-            expectation.never();
+                assert(this.expectation.calledOn(object));
+            }
+        },
 
-            assertException(function () {
+        "callCount": {
+            "onlys be invokable once by default": function () {
+                var expectation = this.expectation;
                 expectation();
-            }, "ExpectationError");
-        },
 
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.never());
-        }
-    });
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
 
-    testCase("ExpectationCallCountOnceTest", {
-        setUp: expectationSetUp,
-
-        "should allow one call": function () {
-            var expectation = this.expectation;
-            expectation.once();
-            expectation();
-
-            assertException(function () {
+            "throw readable error": function () {
+                var expectation = this.expectation;
                 expectation();
-            }, "ExpectationError");
+
+                try {
+                    expectation();
+                    buster.assertions.fail("Expected to throw");
+                } catch (e) {
+                    assert.equals(e.message, "myMeth already called once");
+                }
+            }
         },
 
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.once());
-        }
-    });
+        "callCountNever": {
+            "is not callable": function () {
+                var expectation = this.expectation;
+                expectation.never();
 
-    testCase("ExpectationCallCountTwiceTest", {
-        setUp: expectationSetUp,
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
 
-        "should allow two calls": function () {
-            var expectation = this.expectation;
-            expectation.twice();
-            expectation();
-            expectation();
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.never(), this.expectation);
+            }
+        },
 
-            assertException(function () {
+        "callCountOnce": {
+            "allows one call": function () {
+                var expectation = this.expectation;
+                expectation.once();
                 expectation();
-            }, "ExpectationError");
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
+
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.once(), this.expectation);
+            }
         },
 
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.twice());
-        }
-    });
-
-    testCase("ExpectationCallCountThriceTest", {
-        setUp: expectationSetUp,
-
-        "should allow three calls": function () {
-            var expectation = this.expectation;
-            expectation.thrice();
-            expectation();
-            expectation();
-            expectation();
-
-            assertException(function () {
-                expectation();
-            }, "ExpectationError");
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.thrice());
-        }
-    });
-
-    testCase("ExpectationCallCountExactlyTest", {
-        setUp: expectationSetUp,
-
-        "should allow specified number of calls": function () {
-            var expectation = this.expectation;
-            expectation.exactly(2);
-            expectation();
-            expectation();
-
-            assertException(function () {
-                expectation();
-            }, "ExpectationError");
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.exactly(2));
-        },
-
-        "should throw without argument": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.exactly();
-            }, "TypeError");
-        },
-
-        "should throw without number": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.exactly("12");
-            }, "TypeError");
-        }
-    });
-
-    testCase("MockExpectationAtLeastTest", {
-        setUp: expectationSetUp,
-
-        "should throw without argument": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.atLeast();
-            }, "TypeError");
-        },
-
-        "should throw without number": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.atLeast({});
-            }, "TypeError");
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.atLeast(2));
-        },
-
-        "should allow any number of calls": function () {
-            var expectation = this.expectation;
-            expectation.atLeast(2);
-            expectation();
-            expectation();
-
-            assertNoException(function () {
+        "callCountTwice": {
+            "allows two calls": function () {
+                var expectation = this.expectation;
+                expectation.twice();
                 expectation();
                 expectation();
-            });
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
+
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.twice(), this.expectation);
+            }
         },
 
-        "should not be met with too few calls": function () {
-            this.expectation.atLeast(2);
-            this.expectation();
-
-            assertFalse(this.expectation.met());
-        },
-
-        "should be met with exact calls": function () {
-            this.expectation.atLeast(2);
-            this.expectation();
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should be met with excessive calls": function () {
-            this.expectation.atLeast(2);
-            this.expectation();
-            this.expectation();
-            this.expectation();
-
-            assert(this.expectation.met());
-        }
-    });
-
-    testCase("MockExpectationAtMostTest", {
-        setUp: expectationSetUp,
-
-        "should throw without argument": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.atMost();
-            }, "TypeError");
-        },
-
-        "should throw without number": function () {
-            var expectation = this.expectation;
-
-            assertException(function () {
-                expectation.atMost({});
-            }, "TypeError");
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.atMost(2));
-        },
-
-        "should allow fewer calls": function () {
-            var expectation = this.expectation;
-            expectation.atMost(2);
-
-            assertNoException(function () {
+        "callCountThrice": {
+            "allows three calls": function () {
+                var expectation = this.expectation;
+                expectation.thrice();
                 expectation();
-            });
-        },
-
-        "should be met with fewer calls": function () {
-            this.expectation.atMost(2);
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should be met with exact calls": function () {
-            this.expectation.atMost(2);
-            this.expectation();
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should not be met with excessive calls": function () {
-            var expectation = this.expectation;
-            this.expectation.atMost(2);
-            this.expectation();
-            this.expectation();
-
-            assertException(function () {
                 expectation();
-            }, "ExpectationError");
-
-            assertFalse(this.expectation.met());
-        }
-    });
-
-    testCase("MockExpectationAtMostAndAtLeastTest", {
-        setUp: function () {
-            expectationSetUp.call(this);
-            this.expectation.atLeast(2);
-            this.expectation.atMost(3);
-        },
-
-        "should not be met with too few calls": function () {
-            this.expectation();
-
-            assertFalse(this.expectation.met());
-        },
-
-        "should be met with minimum calls": function () {
-            this.expectation();
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should be met with maximum calls": function () {
-            this.expectation();
-            this.expectation();
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should throw with excessive calls": function () {
-            var expectation = this.expectation;
-            expectation();
-            expectation();
-            expectation();
-
-            assertException(function () {
                 expectation();
-            }, "ExpectationError");
-        }
-    });
 
-    testCase("MockExpectationMetTest", {
-        setUp: expectationSetUp,
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
 
-        "should not be met when not called enough times": function () {
-            assertFalse(this.expectation.met());
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.thrice(), this.expectation);
+            }
         },
 
-        "should be met when called enough times": function () {
-            this.expectation();
+        "callCountExactly": {
+            "allows specified number of calls": function () {
+                var expectation = this.expectation;
+                expectation.exactly(2);
+                expectation();
+                expectation();
 
-            assert(this.expectation.met());
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
+
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.exactly(2), this.expectation);
+            },
+
+            "throws without argument": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.exactly();
+                }, "TypeError");
+            },
+
+            "throws without number": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.exactly("12");
+                }, "TypeError");
+            }
         },
 
-        "should not be met when called too many times": function () {
-            this.expectation();
+        "atLeast": {
+            "throws without argument": function () {
+                var expectation = this.expectation;
 
-            try {
+                assert.exception(function () {
+                    expectation.atLeast();
+                }, "TypeError");
+            },
+
+            "throws without number": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.atLeast({});
+                }, "TypeError");
+            },
+
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.atLeast(2), this.expectation);
+            },
+
+            "allows any number of calls": function () {
+                var expectation = this.expectation;
+                expectation.atLeast(2);
+                expectation();
+                expectation();
+
+                refute.exception(function () {
+                    expectation();
+                    expectation();
+                });
+            },
+
+            "nots be met with too few calls": function () {
+                this.expectation.atLeast(2);
                 this.expectation();
-            } catch (e) {}
 
-            assertFalse(this.expectation.met());
-        }
-    });
+                assert.isFalse(this.expectation.met());
+            },
 
-    testCase("MockExpectationWithArgsTest", {
-        setUp: expectationSetUp,
+            "is met with exact calls": function () {
+                this.expectation.atLeast(2);
+                this.expectation();
+                this.expectation();
 
-        "should be method": function () {
-            assertFunction(this.expectation.withArgs);
+                assert(this.expectation.met());
+            },
+
+            "is met with excessive calls": function () {
+                this.expectation.atLeast(2);
+                this.expectation();
+                this.expectation();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "nots throw when exceeding at least expectation": function () {
+                var obj = { foobar: function () {} };
+                var mock = sinon.mock(obj);
+                mock.expects("foobar").atLeast(1);
+
+                obj.foobar();
+
+                refute.exception(function () {
+                    obj.foobar();
+                    mock.verify();
+                });
+            }
         },
 
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.withArgs(1));
+        "atMost": {
+            "throws without argument": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.atMost();
+                }, "TypeError");
+            },
+
+            "throws without number": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.atMost({});
+                }, "TypeError");
+            },
+
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.atMost(2), this.expectation);
+            },
+
+            "allows fewer calls": function () {
+                var expectation = this.expectation;
+                expectation.atMost(2);
+
+                refute.exception(function () {
+                    expectation();
+                });
+            },
+
+            "is met with fewer calls": function () {
+                this.expectation.atMost(2);
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "is met with exact calls": function () {
+                this.expectation.atMost(2);
+                this.expectation();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "nots be met with excessive calls": function () {
+                var expectation = this.expectation;
+                this.expectation.atMost(2);
+                this.expectation();
+                this.expectation();
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+
+                assert.isFalse(this.expectation.met());
+            }
         },
 
-        "should accept call with expected args": function () {
-            this.expectation.withArgs(1, 2, 3);
-            this.expectation(1, 2, 3);
+        "atMostAndAtLeast": {
+            setUp: function () {
+                this.expectation.atLeast(2);
+                this.expectation.atMost(3);
+            },
 
-            assert(this.expectation.met());
-        },
+            "nots be met with too few calls": function () {
+                this.expectation();
 
-        "should throw when called without args": function () {
-            var expectation = this.expectation;
-            expectation.withArgs(1, 2, 3);
+                assert.isFalse(this.expectation.met());
+            },
 
-            assertException(function () {
+            "is met with minimum calls": function () {
+                this.expectation();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "is met with maximum calls": function () {
+                this.expectation();
+                this.expectation();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "throws with excessive calls": function () {
+                var expectation = this.expectation;
                 expectation();
-            }, "ExpectationError");
-        },
-
-        "should throw when called with too few args": function () {
-            var expectation = this.expectation;
-            expectation.withArgs(1, 2, 3);
-
-            assertException(function () {
-                expectation(1, 2);
-            }, "ExpectationError");
-        },
-
-        "should throw when called with wrong args": function () {
-            var expectation = this.expectation;
-            expectation.withArgs(1, 2, 3);
-
-            assertException(function () {
-                expectation(2, 2, 3);
-            }, "ExpectationError");
-        },
-
-        "should allow excessive args": function () {
-            var expectation = this.expectation;
-            expectation.withArgs(1, 2, 3);
-
-            assertNoException(function () {
-                expectation(1, 2, 3, 4);
-            });
-        }
-    });
-
-    testCase("MockExpectationWithExactArgsTest", {
-        setUp: expectationSetUp,
-
-        "should be method": function () {
-            assertFunction(this.expectation.withExactArgs);
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.withExactArgs(1));
-        },
-
-        "should accept call with expected args": function () {
-            this.expectation.withExactArgs(1, 2, 3);
-            this.expectation(1, 2, 3);
-
-            assert(this.expectation.met());
-        },
-
-        "should throw when called without args": function () {
-            var expectation = this.expectation;
-            expectation.withExactArgs(1, 2, 3);
-
-            assertException(function () {
                 expectation();
-            }, "ExpectationError");
-        },
-
-        "should throw when called with too few args": function () {
-            var expectation = this.expectation;
-            expectation.withExactArgs(1, 2, 3);
-
-            assertException(function () {
-                expectation(1, 2);
-            }, "ExpectationError");
-        },
-
-        "should throw when called with wrong args": function () {
-            var expectation = this.expectation;
-            expectation.withExactArgs(1, 2, 3);
-
-            assertException(function () {
-                expectation(2, 2, 3);
-            }, "ExpectationError");
-        },
-
-        "should not allow excessive args": function () {
-            var expectation = this.expectation;
-            expectation.withExactArgs(1, 2, 3);
-
-            assertException(function () {
-                expectation(1, 2, 3, 4);
-            }, "ExpectationError");
-        }
-    });
-
-    testCase("MockExpectationOnTest", {
-        setUp: expectationSetUp,
-
-        "should be method": function () {
-            assertFunction(this.expectation.on);
-        },
-
-        "should return expectation for chaining": function () {
-            assertSame(this.expectation, this.expectation.on({}));
-        },
-
-        "should allow calls on object": function () {
-            this.expectation.on(this);
-            this.expectation();
-
-            assert(this.expectation.met());
-        },
-
-        "should throw if called on wrong object": function () {
-            var expectation = this.expectation;
-            expectation.on({});
-
-            assertException(function () {
                 expectation();
-            }, "ExpectationError");
-        }
-    });
 
-    testCase("MockExpectationVerifyTest", {
-        setUp: expectationSetUp,
-
-        "should pass if met": function () {
-            sinon.stub(sinon.expectation, "pass");
-            var expectation = this.expectation;
-
-            expectation();
-            expectation.verify();
-
-            assertEquals(1, sinon.expectation.pass.callCount);
-            sinon.expectation.pass.restore();
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            }
         },
 
-        "should throw if not called enough times": function () {
-            var expectation = this.expectation;
+        "met": {
+            "nots be met when not called enough times": function () {
+                assert.isFalse(this.expectation.met());
+            },
 
-            assertException(function () {
+            "is met when called enough times": function () {
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "nots be met when called too many times": function () {
+                this.expectation();
+
+                try {
+                    this.expectation();
+                } catch (e) {}
+
+                assert.isFalse(this.expectation.met());
+            }
+        },
+
+        "withArgs": {
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.withArgs(1), this.expectation);
+            },
+
+            "accepts call with expected args": function () {
+                this.expectation.withArgs(1, 2, 3);
+                this.expectation(1, 2, 3);
+
+                assert(this.expectation.met());
+            },
+
+            "throws when called without args": function () {
+                var expectation = this.expectation;
+                expectation.withArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
+
+            "throws when called with too few args": function () {
+                var expectation = this.expectation;
+                expectation.withArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation(1, 2);
+                }, "ExpectationError");
+            },
+
+            "throws when called with wrong args": function () {
+                var expectation = this.expectation;
+                expectation.withArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation(2, 2, 3);
+                }, "ExpectationError");
+            },
+
+            "allows excessive args": function () {
+                var expectation = this.expectation;
+                expectation.withArgs(1, 2, 3);
+
+                refute.exception(function () {
+                    expectation(1, 2, 3, 4);
+                });
+            },
+
+            "calls accept with no args": function () {
+                this.expectation.withArgs();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "allows no args called with excessive args": function () {
+                var expectation = this.expectation;
+                expectation.withArgs();
+
+                refute.exception(function () {
+                    expectation(1, 2, 3);
+                });
+            }
+        },
+
+        "withExactArgs": {
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.withExactArgs(1), this.expectation);
+            },
+
+            "accepts call with expected args": function () {
+                this.expectation.withExactArgs(1, 2, 3);
+                this.expectation(1, 2, 3);
+
+                assert(this.expectation.met());
+            },
+
+            "throws when called without args": function () {
+                var expectation = this.expectation;
+                expectation.withExactArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            },
+
+            "throws when called with too few args": function () {
+                var expectation = this.expectation;
+                expectation.withExactArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation(1, 2);
+                }, "ExpectationError");
+            },
+
+            "throws when called with wrong args": function () {
+                var expectation = this.expectation;
+                expectation.withExactArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation(2, 2, 3);
+                }, "ExpectationError");
+            },
+
+            "nots allow excessive args": function () {
+                var expectation = this.expectation;
+                expectation.withExactArgs(1, 2, 3);
+
+                assert.exception(function () {
+                    expectation(1, 2, 3, 4);
+                }, "ExpectationError");
+            },
+
+            "accepts call with no expected args": function () {
+                this.expectation.withExactArgs();
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "nots allow excessive args with no expected args": function () {
+                var expectation = this.expectation;
+                expectation.withExactArgs();
+
+                assert.exception(function () {
+                    expectation(1, 2, 3);
+                }, "ExpectationError");
+            }
+        },
+
+        "on": {
+            "returns expectation for chaining": function () {
+                assert.same(this.expectation.on({}), this.expectation);
+            },
+
+            "allows calls on object": function () {
+                this.expectation.on(this);
+                this.expectation();
+
+                assert(this.expectation.met());
+            },
+
+            "throws if called on wrong object": function () {
+                var expectation = this.expectation;
+                expectation.on({});
+
+                assert.exception(function () {
+                    expectation();
+                }, "ExpectationError");
+            }
+        },
+
+        "verify": {
+            "passs if met": function () {
+                sinon.stub(sinon.expectation, "pass");
+                var expectation = this.expectation;
+
+                expectation();
                 expectation.verify();
-            }, "ExpectationError");
-        },
 
-        "should throw readable error": function () {
-            var expectation = this.expectation;
+                assert.equals(sinon.expectation.pass.callCount, 1);
+                sinon.expectation.pass.restore();
+            },
 
-            try {
-                expectation.verify();
-                fail("Expected to throw");
-            } catch (e) {
-                assertEquals("Expected myMeth([...]) once (never called)", e.message);
+            "throws if not called enough times": function () {
+                var expectation = this.expectation;
+
+                assert.exception(function () {
+                    expectation.verify();
+                }, "ExpectationError");
+            },
+
+            "throws readable error": function () {
+                var expectation = this.expectation;
+
+                try {
+                    expectation.verify();
+                    buster.assertions.fail("Expected to throw");
+                } catch (e) {
+                    assert.equals(e.message,
+                                  "Expected myMeth([...]) once (never called)");
+                }
             }
         }
-    });
+    },
 
-    testCase("MockVerifyTest", {
-        setUp: mockSetUp,
+    "verify": {
+        setUp: function () {
+            this.method = function () {};
+            this.object = { method: this.method };
+            this.mock = sinon.mock.create(this.object);
+        },
 
-        "should restore mocks": function () {
+        "restores mocks": function () {
             this.object.method();
             this.object.method.call(this.thisValue);
             this.mock.verify();
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         },
 
-        "should pass verified mocks": function () {
+        "passes verified mocks": function () {
             sinon.stub(sinon.expectation, "pass");
 
             this.mock.expects("method").once();
             this.object.method();
             this.mock.verify();
 
-            assertEquals(1, sinon.expectation.pass.callCount);
+            assert.equals(sinon.expectation.pass.callCount, 1);
             sinon.expectation.pass.restore();
         },
 
-        "should restore if not met": function () {
+        "restores if not met": function () {
             var mock = this.mock;
             mock.expects("method");
 
-            assertException(function () {
+            assert.exception(function () {
                 mock.verify();
             }, "ExpectationError");
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         },
 
-        "should include all calls in error message": function () {
+        "includes all calls in error message": function () {
             var mock = this.mock;
             mock.expects("method").thrice();
             mock.expects("method").once().withArgs(42);
@@ -669,10 +644,11 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)", message);
+            assert.equals(message,
+                          "Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)");
         },
 
-        "should include exact expected arguments in error message": function () {
+        "includes exact expected arguments in error message": function () {
             var mock = this.mock;
             mock.expects("method").once().withExactArgs(42);
             var message;
@@ -683,10 +659,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method(42) once (never called)", message);
+            assert.equals(message, "Expected method(42) once (never called)");
         },
 
-        "should include received call count in error message": function () {
+        "includes received call count in error message": function () {
             var mock = this.mock;
             mock.expects("method").thrice().withExactArgs(42);
             this.object.method(42);
@@ -698,10 +674,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method(42) thrice (called once)", message);
+            assert.equals(message, "Expected method(42) thrice (called once)");
         },
 
-        "should include unexpected calls in error message": function () {
+        "includes unexpected calls in error message": function () {
             var mock = this.mock;
             mock.expects("method").thrice().withExactArgs(42);
             var message;
@@ -712,11 +688,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Unexpected call: method()\n" +
-                         "    Expected method(42) thrice (never called)", message);
+            assert.equals(message,
+                          "Unexpected call: method()\n" +
+                          "    Expected method(42) thrice (never called)");
         },
 
-        "should include met expectations in error message": function () {
+        "includes met expectations in error message": function () {
             var mock = this.mock;
             mock.expects("method").once().withArgs(1);
             mock.expects("method").thrice().withExactArgs(42);
@@ -729,12 +706,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Unexpected call: method()\n" +
-                         "    Expectation met: method(1[, ...]) once\n" +
-                         "    Expected method(42) thrice (never called)", message);
+            assert.equals(message, "Unexpected call: method()\n" +
+                          "    Expectation met: method(1[, ...]) once\n" +
+                          "    Expected method(42) thrice (never called)");
         },
 
-        "should include met expectations in error message from verify": function () {
+        "includes met expectations in error message from verify": function () {
             var mock = this.mock;
             mock.expects("method").once().withArgs(1);
             mock.expects("method").thrice().withExactArgs(42);
@@ -747,11 +724,11 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method(42) thrice (never called)\n" +
-                         "Expectation met: method(1[, ...]) once", message);
+            assert.equals(message, "Expected method(42) thrice (never called)\n" +
+                          "Expectation met: method(1[, ...]) once");
         },
 
-        "should report min calls in error message": function () {
+        "reports min calls in error message": function () {
             var mock = this.mock;
             mock.expects("method").atLeast(1);
             var message;
@@ -762,10 +739,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method([...]) at least once (never called)", message);
+            assert.equals(message, "Expected method([...]) at least once (never called)");
         },
 
-        "should report max calls in error message": function () {
+        "reports max calls in error message": function () {
             var mock = this.mock;
             mock.expects("method").atMost(2);
             var message;
@@ -778,11 +755,11 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Unexpected call: method()\n" +
-                         "    Expectation met: method([...]) at most twice", message);
+            assert.equals(message, "Unexpected call: method()\n" +
+                          "    Expectation met: method([...]) at most twice");
         },
 
-        "should report min calls in met expectation": function () {
+        "reports min calls in met expectation": function () {
             var mock = this.mock;
             mock.expects("method").atLeast(1);
             mock.expects("method").withArgs(2).once();
@@ -796,12 +773,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Unexpected call: method(2)\n" +
-                         "    Expectation met: method([...]) at least once\n" +
-                         "    Expectation met: method(2[, ...]) once", message);
+            assert.equals(message, "Unexpected call: method(2)\n" +
+                          "    Expectation met: method([...]) at least once\n" +
+                          "    Expectation met: method(2[, ...]) once");
         },
 
-        "should report max and min calls in error messages": function () {
+        "reports max and min calls in error messages": function () {
             var mock = this.mock;
             mock.expects("method").atLeast(1).atMost(2);
             var message;
@@ -812,63 +789,67 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 message = e.message;
             }
 
-            assertEquals("Expected method([...]) at least once and at most twice " +
-                         "(never called)", message);
+            assert.equals(message, "Expected method([...]) at least once and at most twice " +
+                          "(never called)");
         }
-    });
+    },
 
-    testCase("MockObjectTest", {
-        setUp: mockSetUp,
-
-        "should mock object method": function () {
-            this.mock.expects("method");
-
-            assertFunction(this.object.method);
-            assertNotSame(this.method, this.object.method);
+    "mockObject": {
+        setUp: function () {
+            this.method = function () {};
+            this.object = { method: this.method };
+            this.mock = sinon.mock.create(this.object);
         },
 
-        "should revert mocked method": function () {
+        "mocks object method": function () {
+            this.mock.expects("method");
+
+            assert.isFunction(this.object.method);
+            refute.same(this.object.method, this.method);
+        },
+
+        "reverts mocked method": function () {
             this.mock.expects("method");
             this.object.method.restore();
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         },
 
-        "should revert expectation": function () {
+        "reverts expectation": function () {
             var method = this.mock.expects("method");
             this.object.method.restore();
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         },
 
-        "should revert mock": function () {
+        "reverts mock": function () {
             var method = this.mock.expects("method");
             this.mock.restore();
 
-            assertSame(this.method, this.object.method);
+            assert.same(this.object.method, this.method);
         },
 
-        "should verify mock": function () {
+        "verifies mock": function () {
             var method = this.mock.expects("method");
             this.object.method();
             var mock = this.mock;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 assert(mock.verify());
             });
         },
 
-        "should verify mock with unmet expectations": function () {
+        "verifies mock with unmet expectations": function () {
             var method = this.mock.expects("method");
             var mock = this.mock;
 
-            assertException(function () {
+            assert.exception(function () {
                 assert(mock.verify());
             }, "ExpectationError");
         }
-    });
+    },
 
-    testCase("MockMethodMultipleTimesTest", {
+    "mock method multiple times": {
         setUp: function () {
             this.thisValue = {};
             this.method = function () {};
@@ -878,90 +859,90 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.mock2 = this.mock.expects("method").on(this.thisValue);
         },
 
-        "should queue expectations": function () {
+        "queues expectations": function () {
             var object = this.object;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 object.method();
             });
         },
 
-        "should start on next expectation when first is met": function () {
+        "starts on next expectation when first is met": function () {
             var object = this.object;
             object.method();
 
-            assertException(function () {
+            assert.exception(function () {
                 object.method();
             }, "ExpectationError");
         },
 
-        "should fail on last expectation": function () {
+        "fails on last expectation": function () {
             var object = this.object;
             object.method();
             object.method.call(this.thisValue);
 
-            assertException(function () {
+            assert.exception(function () {
                 object.method();
             }, "ExpectationError");
         },
 
-        "should allow mock calls in any order": function () {
+        "allows mock calls in any order": function () {
             var object = { method: function () {} };
             var mock = sinon.mock(object);
             mock.expects("method").once().withArgs(42);
             mock.expects("method").twice().withArgs("Yeah");
 
-            assertNoException(function () {
+            refute.exception(function () {
                 object.method("Yeah");
             });
 
-            assertNoException(function () {
+            refute.exception(function () {
                 object.method(42);
             });
 
-            assertException(function () {
+            assert.exception(function () {
                 object.method(1);
             });
 
-            assertNoException(function () {
+            refute.exception(function () {
                 object.method("Yeah");
             });
 
-            assertException(function () {
+            assert.exception(function () {
                 object.method(42);
             });
         }
-    });
+    },
 
-    testCase("MockFunctionTest", {
-        "should return mock method": function () {
+    "mock function": {
+        "returns mock method": function () {
             var mock = sinon.mock();
 
-            assertFunction(mock);
-            assertFunction(mock.atLeast);
-            assertFunction(mock.verify);
+            assert.isFunction(mock);
+            assert.isFunction(mock.atLeast);
+            assert.isFunction(mock.verify);
         },
 
-        "should return mock object": function () {
+        "returns mock object": function () {
             var mock = sinon.mock({});
 
-            assertObject(mock);
-            assertFunction(mock.expects);
-            assertFunction(mock.verify);
+            assert.isObject(mock);
+            assert.isFunction(mock.expects);
+            assert.isFunction(mock.verify);
         }
-    });
+    },
 
-    testCase("MockExpectationYieldsTest", {
-        "should invoke only argument as callback": function () {
+    "yields": {
+        "invokes only argument as callback": function () {
             var mock = sinon.mock().yields();
             var spy = sinon.spy();
             mock(spy);
 
             assert(spy.calledOnce);
-            assertEquals(0, spy.args[0].length);
+            assert.equals(spy.args[0].length, 0);
         },
 
-        "should throw understandable error if no callback is passed": function () {
+        "throws understandable error if no callback is passed": function () {
             var mock = sinon.mock().yields();
             var spy = sinon.spy();
 
@@ -969,9 +950,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 mock();
                 throw new Error();
             } catch (e) {
-                assertEquals("stub expected to yield, but no callback was passed.",
-                             e.message);
+                assert.equals(e.message, "stub expected to yield, but no callback was passed.");
             }
         }
-    });
-}());
+    }
+});
