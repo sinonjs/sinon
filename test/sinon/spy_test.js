@@ -2282,13 +2282,8 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
-        "reset": {
-            "resets spy state": function () {
-                var spy = sinon.spy();
-                spy();
-
-                spy.reset();
-
+        "reset": (function () {
+            function assertReset(spy) {
                 assert(!spy.called);
                 assert(!spy.calledOnce);
                 assert.equals(spy.args.length, 0);
@@ -2299,18 +2294,45 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.isNull(spy.secondCall);
                 assert.isNull(spy.thirdCall);
                 assert.isNull(spy.lastCall);
-            },
-
-            "resets call order state": function () {
-                var spies = [sinon.spy(), sinon.spy()];
-                spies[0]();
-                spies[1]();
-
-                spies[0].reset();
-
-                assert(!spies[0].calledBefore(spies[1]));
             }
-        },
+
+            return {
+                "resets spy state": function () {
+                    var spy = sinon.spy();
+                    spy();
+
+                    spy.reset();
+
+                    assertReset(spy);
+                },
+
+                "resets call order state": function () {
+                    var spies = [sinon.spy(), sinon.spy()];
+                    spies[0]();
+                    spies[1]();
+
+                    spies[0].reset();
+
+                    assert(!spies[0].calledBefore(spies[1]));
+                },
+
+                "resets fakes returned by withArgs": function () {
+                    var spy = sinon.spy();
+                    var fakeA = spy.withArgs("a");
+                    var fakeB = spy.withArgs("b");
+                    spy("a");
+                    spy("b");
+                    spy("c");
+                    var fakeC = spy.withArgs("c");
+
+                    spy.reset();
+
+                    assertReset(fakeA);
+                    assertReset(fakeB);
+                    assertReset(fakeC);
+                }
+            }
+        }()),
 
         "withArgs": {
             "defines withArgs method": function () {
