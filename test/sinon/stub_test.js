@@ -690,6 +690,38 @@ buster.testCase("sinon.stub", {
             assert.exception(function () {
                 stub(callback);
             });
+        },
+
+        "plays nice with throws": function () {
+            var stub = sinon.stub().throws().yields();
+            var spy = sinon.spy();
+            assert.exception(function () {
+                stub(spy);
+            })
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returns": function () {
+            var obj = {};
+            var stub = sinon.stub().returns(obj).yields();
+            var spy = sinon.spy();
+            assert.same(stub(spy), obj);
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returnsArg": function () {
+            var stub = sinon.stub().returnsArg(0).yields();
+            var spy = sinon.spy();
+            assert.same(stub(spy), spy);
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returnsThis": function () {
+            var obj = {};
+            var stub = sinon.stub().returnsThis().yields();
+            var spy = sinon.spy();
+            assert.same(stub.call(obj, spy), obj);
+            assert(spy.calledOnce);
         }
     },
 
