@@ -13,7 +13,7 @@ if (typeof require === "function" && typeof module === "object") {
     var sinon = require("../../lib/sinon");
 }
 
-buster.testCase("sinon.create", {
+buster.testCase("sinon.stub", {
     "is spy": function () {
         var stub = sinon.stub.create();
 
@@ -73,6 +73,39 @@ buster.testCase("sinon.create", {
             assert.exception(function () {
                 stub.returnsArg({});
             }, "TypeError");
+        }
+    },
+
+    "returnsThis": {
+        "stub returns this": function () {
+            var instance = {};
+            instance.stub = sinon.stub.create();
+            instance.stub.returnsThis();
+
+            assert.same(instance.stub(), instance);
+        },
+
+        "stub returns undefined when detached": function () {
+            var stub = sinon.stub.create();
+            stub.returnsThis();
+
+            // Due to strict mode, would be `global` otherwise
+            assert.same(stub(), undefined);
+        },
+
+        "stub respects call/apply": function() {
+            var stub = sinon.stub.create();
+            stub.returnsThis();
+            var object = {};
+
+            assert.same(stub.call(object), object);
+            assert.same(stub.apply(object), object);
+        },
+
+        "returns stub": function () {
+            var stub = sinon.stub.create();
+
+            assert.same(stub.returnsThis(), stub);
         }
     },
 
@@ -657,6 +690,38 @@ buster.testCase("sinon.create", {
             assert.exception(function () {
                 stub(callback);
             });
+        },
+
+        "plays nice with throws": function () {
+            var stub = sinon.stub().throws().yields();
+            var spy = sinon.spy();
+            assert.exception(function () {
+                stub(spy);
+            })
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returns": function () {
+            var obj = {};
+            var stub = sinon.stub().returns(obj).yields();
+            var spy = sinon.spy();
+            assert.same(stub(spy), obj);
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returnsArg": function () {
+            var stub = sinon.stub().returnsArg(0).yields();
+            var spy = sinon.spy();
+            assert.same(stub(spy), spy);
+            assert(spy.calledOnce);
+        },
+
+        "plays nice with returnsThis": function () {
+            var obj = {};
+            var stub = sinon.stub().returnsThis().yields();
+            var spy = sinon.spy();
+            assert.same(stub.call(obj, spy), obj);
+            assert(spy.calledOnce);
         }
     },
 
