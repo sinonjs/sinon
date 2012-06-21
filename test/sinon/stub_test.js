@@ -214,7 +214,7 @@ buster.testCase("sinon.create", {
             assert(callback.calledWith());
         },
 
-        "calls callback wit multiple args": function () {
+        "calls callback with multiple args": function () {
             var object = {};
             var array = [];
             this.stub.callsArgWith(1, object, array);
@@ -340,7 +340,7 @@ buster.testCase("sinon.create", {
             assert(callback.calledOn(this.fakeContext));
         },
 
-        "calls callback wit multiple args": function () {
+        "calls callback with multiple args": function () {
             var object = {};
             var array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
@@ -954,6 +954,226 @@ buster.testCase("sinon.create", {
 
             refute.exception(stub);
             assert.exception(function () { stub(42); });
+        }
+    },
+
+    "callsArgAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+
+        "passes call to callsArg": function () {
+            var spy = sinon.spy(this.stub, "callsArg");
+
+            this.stub.callsArgAsync(2);
+
+            assert(spy.calledWith(2));
+        },
+
+        "asynchronously calls argument at specified index": function (done) {
+            this.stub.callsArgAsync(2);
+            var callback = sinon.spy(done);
+
+            this.stub(1, 2, callback);
+
+            assert(!callback.called);
+        }
+    },
+
+    "callsArgWithAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+        
+        "passes call to callsArgWith": function () {
+            var object = {};
+            sinon.spy(this.stub, "callsArgWith");
+            
+            this.stub.callsArgWithAsync(1, object);
+            
+            assert(this.stub.callsArgWith.calledWith(1, object));
+        },
+
+        "asynchronously calls callback at specified index with multiple args": function (done) {
+            var object = {};
+            var array = [];
+            this.stub.callsArgWithAsync(1, object, array);
+            
+            var callback = sinon.spy(done(function () {
+                assert(callback.calledWith(object, array));
+            }));
+
+            this.stub(1, callback);
+
+            assert(!callback.called);
+        }
+    },
+
+    "callsArgOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {
+                foo: "bar"
+            };
+        },
+        
+        "passes call to callsArgOn": function () {
+            sinon.spy(this.stub, "callsArgOn");
+
+            this.stub.callsArgOnAsync(2, this.fakeContext);
+
+            assert(this.stub.callsArgOn.calledWith(2, this.fakeContext));
+        },
+
+        "asynchronously calls argument at specified index with specified context": function (done) {
+            var context = this.fakeContext;
+            this.stub.callsArgOnAsync(2, context);
+            
+            var callback = sinon.spy(done(function () {
+                assert(callback.calledOn(context));
+            }));
+
+            this.stub(1, 2, callback);
+            
+            assert(!callback.called);
+        }
+    },
+
+    "callsArgOnWithAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+        
+        "passes call to callsArgOnWith": function () {
+            var object = {};
+            sinon.spy(this.stub, "callsArgOnWith");
+
+            this.stub.callsArgOnWithAsync(1, this.fakeContext, object);
+
+            assert(this.stub.callsArgOnWith.calledWith(1, this.fakeContext, object));
+        },
+
+        "asynchronously calls argument at specified index with provided context and args": function (done) {
+            var object = {};
+            var context = this.fakeContext;
+            this.stub.callsArgOnWithAsync(1, context, object);
+            
+            var callback = sinon.spy(done(function () {
+                assert(callback.calledOn(context))
+                assert(callback.calledWith(object));
+            }));
+
+            this.stub(1, callback);
+            
+            assert(!callback.called);
+        }
+    },
+
+    "yieldsAsync": {
+        "passes call to yields": function () {
+            var stub = sinon.stub();
+            sinon.spy(stub, "yields");
+
+            stub.yieldsAsync();
+
+            assert(stub.yields.calledWith());
+        },
+
+        "asynchronously invokes only argument as callback": function (done) {
+            var stub = sinon.stub().yieldsAsync();
+
+            var spy = sinon.spy(done);
+            
+            stub(spy);
+
+            assert(!spy.called);
+        }
+    },
+
+    "yieldsOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+
+        "passes call to yieldsOn": function () {
+            var stub = sinon.stub();
+            sinon.spy(stub, "yieldsOn");
+
+            stub.yieldsOnAsync(this.fakeContext);
+
+            assert(stub.yieldsOn.calledWith(this.fakeContext));
+        },
+
+        "asynchronously invokes only argument as callback with given context": function (done) {
+            var context = this.fakeContext;
+            this.stub.yieldsOnAsync(context);
+
+            var spy = sinon.spy(done(function () {
+                assert(spy.calledOnce);
+                assert(spy.calledOn(context));
+                assert.equals(spy.args[0].length, 0);
+            }));
+            
+            this.stub(spy);
+            
+            assert(!spy.called);
+        }
+    },
+
+    "yieldsToAsync": {
+        "passes call to yieldsTo": function () {
+            var stub = sinon.stub();
+            sinon.spy(stub, "yieldsTo");
+
+            stub.yieldsToAsync("success");
+
+            assert(stub.yieldsTo.calledWith("success"));
+        },
+        
+        "asynchronously yields to property of object argument": function (done) {
+            var stub = sinon.stub().yieldsToAsync("success");
+
+            var callback = sinon.spy(done(function () {
+                assert(callback.calledOnce);
+                assert.equals(callback.args[0].length, 0);
+            }));
+
+            stub({ success: callback });
+
+            assert(!callback.called);
+        }
+    },
+
+    "yieldsToOnAsync": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = { foo: "bar" };
+        },
+
+        "passes call to yieldsToOn": function () {
+            var stub = sinon.stub();
+            sinon.spy(stub, "yieldsToOn");
+
+            stub.yieldsToOnAsync("success", this.fakeContext);
+
+            assert(stub.yieldsToOn.calledWith("success", this.fakeContext));
+        },
+
+        "asynchronously yields to property of object argument with given context": function (done) {
+            var context = this.fakeContext;
+            this.stub.yieldsToOnAsync("success", context);
+            
+            var callback = sinon.spy(done(function () {
+                assert(callback.calledOnce);
+                assert(callback.calledOn(context));
+                assert.equals(callback.args[0].length, 0);
+            }));
+
+            this.stub({ success: callback });
+
+            assert(!callback.called);
         }
     }
 });
