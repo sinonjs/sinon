@@ -199,6 +199,268 @@ buster.testCase("sinon.stub", {
         }
     },
 
+    "callFake": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+
+        "calls the specified function": function() {
+            var callback = sinon.stub.create();
+
+            this.stub(1, 2);
+
+            this.stub.callFake(callback);
+
+            assert(callback.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            var callback = function() { return 3; }
+            this.stub();
+
+            var result = this.stub.callFake(callback);
+
+            assert.equals(result, 3);
+        },
+
+        "uses the current context": function() {
+            var o = { stub: this.stub };
+            var callback = sinon.stub.create();
+
+            o.stub();
+
+            o.stub.callFake(callback);
+
+            assert(callback.calledOn(o));
+        }
+    },
+
+    "callFakeOn": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {};
+        },
+
+        "calls the specified function": function() {
+            var callback = sinon.stub.create();
+            this.stub(1, 2);
+
+            this.stub.callFakeOn(callback, this.fakeContext);
+
+            assert(callback.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            var callback = function() { return 3; }
+            this.stub();
+
+            var result = this.stub.callFakeOn(callback, this.fakeContext);
+
+            assert.equals(result, 3);
+        },
+
+        "uses the specified current context": function() {
+            var o = { stub: this.stub };
+            var callback = sinon.stub.create();
+            o.stub();
+
+            o.stub.callFakeOn(callback, this.fakeContext);
+
+            assert(callback.calledOn(this.fakeContext));
+        }
+    },
+
+    "callOriginal": {
+        setUp: function () {
+            var orgFunc = this.originalFunction = sinon.stub.create();
+            this.object = {
+                func: function() {
+                    return orgFunc.apply(this, arguments);
+                }
+            };
+
+            this.stub = sinon.stub(this.object, 'func');
+        },
+
+        "calls the original function": function() {
+            this.object.func(1, 2);
+
+            this.stub.callOriginal();
+
+            assert(this.originalFunction.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            this.originalFunction.returns(1);
+            this.object.func();
+
+            var result = this.stub.callOriginal();
+
+            assert.equals(result, 1);
+        },
+
+        "uses the original context": function() {
+            this.object.func();
+
+            this.stub.callOriginal();
+
+            assert(this.originalFunction.calledOn(this.object));
+        }
+    },
+
+    "calls": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+        },
+
+        "calls the specified function": function() {
+            var callback = sinon.stub.create();
+            this.stub.callsFake(callback);
+
+            this.stub(1, 2);
+
+            assert(callback.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            var callback = function() { return 3; }
+            this.stub.callsFake(callback);
+
+            var result = this.stub();
+
+            assert.equals(result, 3);
+        },
+
+        "uses the current context": function() {
+            var o = { stub: this.stub };
+            var callback = sinon.stub.create();
+            o.stub.callsFake(callback);
+
+            o.stub();
+
+            assert(callback.calledOn(o));
+        },
+
+        "resets the context, in case callsOn was called first": function () {
+            var callback = sinon.stub.create();
+            var context = { stub: this.stub };
+            context.stub.callsFakeOn(callback, {});
+            context.stub.callsFake(callback);
+
+            context.stub();
+
+            assert.equals(callback.callCount, 1);
+            assert(callback.calledOn(context));
+        },
+
+        "returns the stub for chaining": function () {
+            var callback = sinon.stub.create();
+
+            var result = this.stub.callsFake(callback);
+
+            assert.same(result, this.stub)
+        }
+    },
+
+    "callsFakeOn": {
+        setUp: function () {
+            this.stub = sinon.stub.create();
+            this.fakeContext = {};
+        },
+
+        "calls the specified function": function() {
+            var callback = sinon.stub.create();
+            this.stub.callsFakeOn(callback, this.fakeContext);
+
+            this.stub(1, 2);
+
+            assert(callback.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            var callback = function() { return 3; }
+            this.stub.callsFakeOn(callback, this.fakeContext);
+
+            var result = this.stub();
+
+            assert.equals(result, 3);
+        },
+
+        "uses the specified current context": function() {
+            var o = { stub: this.stub };
+            var callback = sinon.stub.create();
+            o.stub.callsFakeOn(callback, this.fakeContext);
+
+            o.stub();
+
+            assert(callback.calledOn(this.fakeContext));
+        },
+
+        "returns the stub for chaining": function () {
+            var callback = sinon.stub.create();
+
+            var result = this.stub.callsFakeOn(callback, this.fakeContext);
+
+            assert.same(result, this.stub)
+        }
+    },
+
+    "callsOriginal": {
+        setUp: function () {
+            var orgFunc = this.originalFunction = sinon.stub.create();
+            this.object = {
+                func: function() {
+                    return orgFunc.apply(this, arguments);
+                }
+            };
+
+            this.stub = sinon.stub(this.object, 'func');
+        },
+
+        "calls the original function": function() {
+            this.stub.callsOriginal();
+
+            this.object.func(1, 2);
+
+            assert(this.originalFunction.calledWith(1, 2));
+        },
+
+        "returns the result of the function": function() {
+            this.originalFunction.returns(1);
+            this.stub.callsOriginal();
+
+            var result = this.object.func();
+
+            assert.equals(result, 1);
+        },
+
+        "uses the original context": function() {
+            this.stub.callsOriginal();
+
+            this.object.func();
+
+            assert(this.originalFunction.calledOn(this.object));
+        },
+
+        "resets the context if other stub methods are called first": function () {
+            var callback = sinon.stub.create();
+            this.stub.callsFakeOn(callback, {});
+            this.stub.callsOriginal();
+
+            this.object.func();
+
+            assert.equals(callback.callCount, 0);
+            assert.equals(this.originalFunction.callCount, 1);
+            assert(this.originalFunction.calledOn(this.object));
+        },
+
+        "returns the stub for chaining": function () {
+            var result = this.stub.callsOriginal();
+
+            assert.same(result, this.stub)
+        }
+    },
+
     "callsArg": {
         setUp: function () {
             this.stub = sinon.stub.create();
