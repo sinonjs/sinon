@@ -419,6 +419,22 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "notCalled": {
+            setUp: function () {
+                this.spy = sinon.spy.create();
+            },
+
+            "is true prior to calling the spy": function () {
+                assert.isTrue(this.spy.notCalled);
+            },
+
+            "is false after calling the spy once": function () {
+                this.spy();
+
+                assert.isFalse(this.spy.notCalled);
+            }
+        },
+
         "calledOnce": {
             setUp: function () {
                 this.spy = sinon.spy.create();
