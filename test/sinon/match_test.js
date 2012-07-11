@@ -122,6 +122,24 @@ buster.testCase("sinon.match", {
         assert.isFalse(match.test({ nr: 1 }));
     },
 
+    "returns true if array is equal": function () {
+        var match = sinon.match({ arr: ["a", "b"] });
+
+        assert(match.test({ arr: ["a", "b"] }));
+    },
+
+    "returns false if array is not equal": function () {
+        var match = sinon.match({ arr: ["b", "a"] });
+
+        assert.isFalse(match.test({ arr: ["a", "b"] }));
+    },
+
+    "returns true if number objects are equal": function () {
+        var match = sinon.match({ one : new Number(1) });
+
+        assert(match.test({ one : new Number(1) }));
+    },
+
     "returns true if test matches": function () {
         var match = sinon.match({ prop: sinon.match.typeOf("boolean") });
 
