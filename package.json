@@ -21,10 +21,10 @@
         "test": "node test/node/run.js"
     },
     "dependencies": {
-        "buster-format": "~0.5"  
+        "buster-format": "~0.5"
     },
     "devDependencies": {
-        "buster-core": "~0.6",
+        "buster-core": ">=0.6.4",
         "buster-assertions": "~0.10",
         "buster-evented-logger": "~0.4",
         "buster-test": "~0.5",
