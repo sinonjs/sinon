@@ -1,5 +1,5 @@
 /**
- * Sinon.JS 1.4.0, 2012/07/16
+ * Sinon.JS 1.4.2, 2012/07/16
  *
  * @author Christian Johansen (christian@cjohansen.no)
  * @author Contributors: https://github.com/cjohansen/Sinon.JS/blob/master/AUTHORS
@@ -536,10 +536,14 @@ var sinon = (function (buster) {
             method.displayName = property;
 
             method.restore = function () {
-                if(owned) {
-                    object[property] = wrappedMethod;
-                } else {
+                // For prototype properties try to reset by delete first.
+                // If this fails (ex: localStorage on mobile safari) then force a reset
+                // via direct assignment.
+                if (!owned) {
                     delete object[property];
+                }
+                if (object[property] === method) {
+                    object[property] = wrappedMethod;
                 }
             };
 
@@ -574,7 +578,7 @@ var sinon = (function (buster) {
         },
 
         deepEqual: function deepEqual(a, b) {
-            if (sinon.match.isMatcher(a)) {
+            if (sinon.match && sinon.match.isMatcher(a)) {
                 return a.test(b);
             }
             if (typeof a != "object" || typeof b != "object") {
@@ -768,7 +772,7 @@ var sinon = (function (buster) {
         try {
             var util = require("util");
             sinon.format = function (value) {
-                return typeof value == "object" ? util.inspect(value) : value;
+                return typeof value == "object" && value.toString === Object.prototype.toString ? util.inspect(value) : value;
             };
         } catch (e) {
             /* Node, but no util module - would be very old, but better safe than
@@ -816,22 +820,141 @@ var sinon = (function (buster) {
         }
     };
 
-    var match = function (test, message) {
-        assertType(test, "function", "test");
-        assertType(message, "string", "message");
+    function isMatcher(object) {
+        return matcher.isPrototypeOf(object);
+    }
+
+    function matchObject(expectation, actual) {
+        if (actual === null || actual === undefined) {
+            return false;
+        }
+        for (var key in expectation) {
+            if (expectation.hasOwnProperty(key)) {
+                var exp = expectation[key];
+                var act = actual[key];
+                if (match.isMatcher(exp)) {
+                    if (!exp.test(act)) {
+                        return false;
+                    }
+                } else if (sinon.typeOf(exp) === "object") {
+                    if (!matchObject(exp, act)) {
+                        return false;
+                    }
+                } else if (!sinon.deepEqual(exp, act)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    matcher.or = function (m2) {
+        if (!isMatcher(m2)) {
+            throw new TypeError("Matcher expected");
+        }
+        var m1 = this;
+        var or = sinon.create(matcher);
+        or.test = function (actual) {
+            return m1.test(actual) || m2.test(actual);
+        };
+        or.message = m1.message + ".or(" + m2.message + ")";
+        return or;
+    };
+
+    matcher.and = function (m2) {
+        if (!isMatcher(m2)) {
+            throw new TypeError("Matcher expected");
+        }
+        var m1 = this;
+        var and = sinon.create(matcher);
+        and.test = function (actual) {
+            return m1.test(actual) && m2.test(actual);
+        };
+        and.message = m1.message + ".and(" + m2.message + ")";
+        return and;
+    };
+
+    var match = function (expectation, message) {
         var m = sinon.create(matcher);
-        m.test = test;
-        m.message = message;
+        var type = sinon.typeOf(expectation);
+        switch (type) {
+        case "object":
+            if (typeof expectation.test === "function") {
+                m.test = function (actual) {
+                    return expectation.test(actual) === true;
+                };
+                m.message = "match(" + sinon.functionName(expectation.test) + ")";
+                return m;
+            }
+            var str = [];
+            for (var key in expectation) {
+                if (expectation.hasOwnProperty(key)) {
+                    str.push(key + ": " + expectation[key]);
+                }
+            }
+            m.test = function (actual) {
+                return matchObject(expectation, actual);
+            };
+            m.message = "match(" + str.join(", ") + ")";
+            break;
+        case "number":
+            m.test = function (actual) {
+                return expectation == actual;
+            };
+            break;
+        case "string":
+            m.test = function (actual) {
+                if (typeof actual !== "string") {
+                    return false;
+                }
+                return actual.indexOf(expectation) !== -1;
+            };
+            m.message = "match(\"" + expectation + "\")";
+            break;
+        case "regexp":
+            m.test = function (actual) {
+                if (typeof actual !== "string") {
+                    return false;
+                }
+                return expectation.test(actual);
+            };
+            break;
+        case "function":
+            m.test = expectation;
+            if (message) {
+                m.message = message;
+            } else {
+                m.message = "match(" + sinon.functionName(expectation) + ")";
+            }
+            break;
+        default:
+            m.test = function (actual) {
+              return sinon.deepEqual(expectation, actual);
+            };
+        }
+        if (!m.message) {
+            m.message = "match(" + expectation + ")";
+        }
         return m;
     };
 
-    match.isMatcher = function (object) {
-        return matcher.isPrototypeOf(object);
-    };
+    match.isMatcher = isMatcher;
 
     match.any = match(function () {
         return true;
     }, "any");
+
+    match.defined = match(function (actual) {
+        return actual !== null && actual !== undefined;
+    }, "defined");
+
+    match.truthy = match(function (actual) {
+        return !!actual;
+    }, "truthy");
+
+    match.falsy = match(function (actual) {
+        return !actual;
+    }, "falsy");
 
     match.same = function (expectation) {
         return match(function (actual) {
@@ -853,53 +976,6 @@ var sinon = (function (buster) {
         }, "instanceOf(" + sinon.functionName(type) + ")");
     };
 
-    match.re = function (exp) {
-        assertType(exp, "regexp", "expression");
-        return match(function (actual) {
-            if (typeof actual !== "string") {
-              return false;
-            }
-            return exp.test(actual);
-        }, "re(" + exp+ ")");
-    };
-
-    function like(expectation, actual) {
-        if (sinon.typeOf(actual) !== "object") {
-          return false;
-        }
-        for (var key in expectation) {
-            if (expectation.hasOwnProperty(key)) {
-                var exp = expectation[key];
-                var act = actual[key];
-                if (match.isMatcher(exp)) {
-                    if (!exp.test(act)) {
-                        return false;
-                    }
-                } else if (sinon.typeOf(exp) === "object") {
-                    if (!like(exp, act)) {
-                        return false;
-                    }
-                } else if (exp !== act) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    match.like = function (expectation) {
-        assertType(expectation, "object", "expectation");
-        var str = [];
-        for (var key in expectation) {
-            if (expectation.hasOwnProperty(key)) {
-                str.push(key + ": " + expectation[key]);
-            }
-        }
-        return match(function (actual) {
-            return like(expectation, actual);
-        }, "like(" + str.join(", ") + ")");
-    };
-
     function createPropertyMatcher(propertyTest, messagePrefix) {
         return function (property, value) {
             assertType(property, "string", "property");
@@ -910,7 +986,8 @@ var sinon = (function (buster) {
             }
             message += ")";
             return match(function (actual) {
-                if (sinon.typeOf(actual) !== "object" || !propertyTest(actual, property)) {
+                if (actual === undefined || actual === null ||
+                        !propertyTest(actual, property)) {
                     return false;
                 }
                 return onlyProperty || sinon.deepEqual(value, actual[property]);
@@ -919,7 +996,10 @@ var sinon = (function (buster) {
     }
 
     match.has = createPropertyMatcher(function (actual, property) {
-        return property in actual;
+        if (typeof actual === "object") {
+            return property in actual;
+        }
+        return actual[property] !== undefined;
     }, "has");
 
     match.hasOwn = createPropertyMatcher(function (actual, property) {
@@ -977,7 +1057,7 @@ var sinon = (function (buster) {
             return spy.create(object);
         }
 
-        if (!object || !property) {
+        if (!object && !property) {
             return spy.create(function () {});
         }
 
@@ -1032,6 +1112,7 @@ var sinon = (function (buster) {
         function incrementCallCount() {
             this.called = true;
             this.callCount += 1;
+            this.notCalled = false;
             this.calledOnce = this.callCount == 1;
             this.calledTwice = this.callCount == 2;
             this.calledThrice = this.callCount == 3;
@@ -1050,6 +1131,7 @@ var sinon = (function (buster) {
         var spyApi = {
             reset: function () {
                 this.called = false;
+                this.notCalled = true;
                 this.calledOnce = false;
                 this.calledTwice = false;
                 this.calledThrice = false;
@@ -1063,6 +1145,11 @@ var sinon = (function (buster) {
                 this.thisValues = [];
                 this.exceptions = [];
                 this.callIds = [];
+                if (this.fakes) {
+                    for (var i = 0; i < this.fakes.length; i++) {
+                        this.fakes[i].reset();
+                    }
+                }
             },
 
             create: function create(func) {
@@ -1220,10 +1307,14 @@ var sinon = (function (buster) {
         delegateToCalls(spyApi, "calledOn", true);
         delegateToCalls(spyApi, "alwaysCalledOn", false, "calledOn");
         delegateToCalls(spyApi, "calledWith", true);
+        delegateToCalls(spyApi, "calledWithMatch", true);
         delegateToCalls(spyApi, "alwaysCalledWith", false, "calledWith");
+        delegateToCalls(spyApi, "alwaysCalledWithMatch", false, "calledWithMatch");
         delegateToCalls(spyApi, "calledWithExactly", true);
         delegateToCalls(spyApi, "alwaysCalledWithExactly", false, "calledWithExactly");
         delegateToCalls(spyApi, "neverCalledWith", false, "notCalledWith",
+            function () { return true; });
+        delegateToCalls(spyApi, "neverCalledWithMatch", false, "notCalledWithMatch",
             function () { return true; });
         delegateToCalls(spyApi, "threw", true);
         delegateToCalls(spyApi, "alwaysThrew", false, "threw");
@@ -1275,7 +1366,13 @@ var sinon = (function (buster) {
             },
 
             "*": function (spy, args) {
-                return args.join(", ");
+                var formatted = [];
+
+                for (var i = 0, l = args.length; i < l; ++i) {
+                    push.call(formatted, sinon.format(args[i]));
+                }
+
+                return formatted.join(", ");
             }
         };
 
@@ -1320,18 +1417,28 @@ var sinon = (function (buster) {
                 return true;
             },
 
+            calledWithMatch: function calledWithMatch() {
+              for (var i = 0, l = arguments.length; i < l; i += 1) {
+                  var actual = this.args[i];
+                  var expectation = arguments[i];
+                  if (!sinon.match || !sinon.match(expectation).test(actual)) {
+                      return false;
+                  }
+              }
+              return true;
+            },
+
             calledWithExactly: function calledWithExactly() {
                 return arguments.length == this.args.length &&
                     this.calledWith.apply(this, arguments);
             },
 
             notCalledWith: function notCalledWith() {
-                for (var i = 0, l = arguments.length; i < l; i += 1) {
-                    if (!sinon.deepEqual(arguments[i], this.args[i])) {
-                        return true;
-                    }
-                }
-                return false;
+                return !this.calledWith.apply(this, arguments);
+            },
+
+            notCalledWithMatch: function notCalledWithMatch() {
+              return !this.calledWithMatch.apply(this, arguments);
             },
 
             returned: function returned(value) {
@@ -1533,6 +1640,20 @@ var sinon = (function (buster) {
         return "argument at index " + stub.callArgAt + " is not a function: " + func;
     }
 
+    var nextTick = (function () {
+        if (typeof process === "object" && typeof process.nextTick === "function") {
+            return process.nextTick;
+        } else if (typeof msSetImmediate === "function") {
+            return msSetImmediate.bind(window);
+        } else if (typeof setImmediate === "function") {
+            return setImmediate;
+        } else {
+            return function (callback) {
+                setTimeout(callback, 0);
+            };
+        }
+    })();
+
     function callCallback(stub, args) {
         if (typeof stub.callArgAt == "number") {
             var func = getCallback(stub, args);
@@ -1541,14 +1662,20 @@ var sinon = (function (buster) {
                 throw new TypeError(getCallbackError(stub, func, args));
             }
 
-            func.apply(stub.callbackContext, stub.callbackArguments);
+            if (stub.callbackAsync) {
+                nextTick(function() {
+                    func.apply(stub.callbackContext, stub.callbackArguments);
+                });
+            } else {
+                func.apply(stub.callbackContext, stub.callbackArguments);
+            }
         }
     }
 
     var uuid = 0;
 
     sinon.extend(stub, (function () {
-        var slice = Array.prototype.slice;
+        var slice = Array.prototype.slice, proto;
 
         function throwsException(error, message) {
             if (typeof error == "string") {
@@ -1559,21 +1686,23 @@ var sinon = (function (buster) {
             } else {
                 this.exception = error;
             }
-            
+
             return this;
         }
 
-        return {
+        proto = {
             create: function create() {
                 var functionStub = function () {
+
+                    callCallback(functionStub, arguments);
+
                     if (functionStub.exception) {
                         throw functionStub.exception;
                     } else if (typeof functionStub.returnArgAt == 'number') {
                         return arguments[functionStub.returnArgAt];
+                    } else if (functionStub.returnThis) {
+                        return this;
                     }
-
-                    callCallback(functionStub, arguments);
-
                     return functionStub.returnValue;
                 };
 
@@ -1600,8 +1729,14 @@ var sinon = (function (buster) {
                 if (typeof pos != "number") {
                     throw new TypeError("argument index is not number");
                 }
-                
+
                 this.returnArgAt = pos;
+
+                return this;
+            },
+
+            returnsThis: function returnsThis() {
+                this.returnThis = true;
 
                 return this;
             },
@@ -1701,6 +1836,21 @@ var sinon = (function (buster) {
                 return this;
             }
         };
+        
+        // create asynchronous versions of callsArg* and yields* methods
+        for (var method in proto) {
+            if (proto.hasOwnProperty(method) && method.match(/^(callsArg|yields)/)) {
+                proto[method + 'Async'] = (function (syncFnName) {
+                    return function () {
+                        this.callbackAsync = true;
+                        return this[syncFnName].apply(this, arguments);
+                    };
+                })(method);
+            }
+        }
+        
+        return proto;
+        
     }()));
 
     if (commonJSModule) {
@@ -1826,6 +1976,8 @@ var sinon = (function (buster) {
 
                 if (messages.length > 0) {
                     sinon.expectation.fail(messages.concat(met).join("\n"));
+                } else {
+                    sinon.expectation.pass(messages.concat(met).join("\n"));
                 }
 
                 return true;
@@ -1833,19 +1985,28 @@ var sinon = (function (buster) {
 
             invokeMethod: function invokeMethod(method, thisValue, args) {
                 var expectations = this.expectations && this.expectations[method];
-                var length = expectations && expectations.length || 0;
+                var length = expectations && expectations.length || 0, i;
 
-                for (var i = 0; i < length; i += 1) {
+                for (i = 0; i < length; i += 1) {
                     if (!expectations[i].met() &&
                         expectations[i].allowsCall(thisValue, args)) {
                         return expectations[i].apply(thisValue, args);
                     }
                 }
 
-                var messages = [];
+                var messages = [], available, exhausted = 0;
 
                 for (i = 0; i < length; i += 1) {
+                    if (expectations[i].allowsCall(thisValue, args)) {
+                        available = available || expectations[i];
+                    } else {
+                        exhausted += 1;
+                    }
                     push.call(messages, "    " + expectations[i].toString());
+                }
+
+                if (exhausted === 0) {
+                    return available.apply(thisValue, args);
                 }
 
                 messages.unshift("Unexpected call: " + sinon.spyCall.toString.call({
@@ -1998,7 +2159,7 @@ var sinon = (function (buster) {
                     return;
                 }
 
-                if (!args || args.length === 0) {
+                if (!args) {
                     sinon.expectation.fail(this.method + " received no arguments, expected " +
                         this.expectedArguments.join());
                 }
@@ -2023,7 +2184,7 @@ var sinon = (function (buster) {
             },
 
             allowsCall: function allowsCall(thisValue, args) {
-                if (this.met()) {
+                if (this.met() && receivedMaxCalls(this)) {
                     return false;
                 }
 
@@ -2096,11 +2257,16 @@ var sinon = (function (buster) {
             verify: function verify() {
                 if (!this.met()) {
                     sinon.expectation.fail(this.toString());
+                } else {
+                    sinon.expectation.pass(this.toString());
                 }
 
                 return true;
             },
 
+            pass: function(message) {
+              sinon.assert.pass(message);
+            },
             fail: function (message) {
                 var exception = new Error(message);
                 exception.name = "ExpectationError";
@@ -2555,11 +2721,19 @@ if (typeof sinon == "undefined") {
 
         for (var i = 0, l = this.methods.length; i < l; i++) {
             method = this.methods[i];
-            global[method] = this["_" + method];
+            if (global[method].hadOwnProperty) {
+                global[method] = this["_" + method];
+            } else {
+                delete global[method];
+            }
         }
+
+        // Prevent multiple executions which will completely remove these props
+        this.methods = [];
     }
 
     function stubGlobal(method, clock) {
+        clock[method].hadOwnProperty = Object.prototype.hasOwnProperty.call(global, method);
         clock["_" + method] = global[method];
 
         if (method == "Date") {
@@ -3200,7 +3374,7 @@ sinon.fakeServer = (function () {
         return response;
     }
 
-    var wloc = window.location;
+    var wloc = typeof window !== "undefined" ? window.location : {};
     var rCurrLoc = new RegExp("^" + wloc.protocol + "//" + wloc.host);
 
     function matchOne(response, reqMethod, reqUrl) {
@@ -3884,11 +4058,16 @@ if (typeof module == "object" && typeof require == "function") {
     mirrorPropAsAssertion("calledThrice", "expected %n to be called thrice but was called %c%C");
     mirrorPropAsAssertion("calledOn", "expected %n to be called with %1 as this but was called with %t");
     mirrorPropAsAssertion("alwaysCalledOn", "expected %n to always be called with %1 as this but was called with %t");
+    mirrorPropAsAssertion("calledWithNew", "expected %n to be called with new");
+    mirrorPropAsAssertion("alwaysCalledWithNew", "expected %n to always be called with new");
     mirrorPropAsAssertion("calledWith", "expected %n to be called with arguments %*%C");
+    mirrorPropAsAssertion("calledWithMatch", "expected %n to be called with match %*%C");
     mirrorPropAsAssertion("alwaysCalledWith", "expected %n to always be called with arguments %*%C");
+    mirrorPropAsAssertion("alwaysCalledWithMatch", "expected %n to always be called with match %*%C");
     mirrorPropAsAssertion("calledWithExactly", "expected %n to be called with exact arguments %*%C");
     mirrorPropAsAssertion("alwaysCalledWithExactly", "expected %n to always be called with exact arguments %*%C");
     mirrorPropAsAssertion("neverCalledWith", "expected %n to never be called with arguments %*%C");
+    mirrorPropAsAssertion("neverCalledWithMatch", "expected %n to never be called with match %*%C");
     mirrorPropAsAssertion("threw", "%n did not throw exception%C");
     mirrorPropAsAssertion("alwaysThrew", "%n did not always throw exception%C");
 
