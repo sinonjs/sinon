@@ -1,54 +1,39 @@
 /*jslint onevar: false*/
-/*globals testCase
-          sinon
-          fail
-          failException
-          assert
-          assertString
-          assertFunction
-          assertObject
-          assertFalse
-          assertEquals
-          assertNoException
-          assertException
-          assertCalled
-          assertCalledOn
-          assertCalledWith
-          assertCalledWithExactly
-          assertThrew
-          assertCallCount*/
+/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("../test_case_shim");
+if (typeof require == "function" && typeof module == "object") {
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 
-(function (global) {
-    testCase("SinonAssertTest", {
-        "should be object": function () {
-            assertObject(sinon.assert);
-        }
-    });
+buster.testCase("sinon.assert", {
+    setUp: function () {
+        this.global = typeof window !== "undefined" ? window : global;
 
-    function stubSetUp() {
-        this.stub = sinon.stub.create();
-        sinon.stub(sinon.assert, "fail").throws();
-        sinon.stub(sinon.assert, "pass");
-    }
+        this.setUpStubs = function () {
+            this.stub = sinon.stub.create();
+            sinon.stub(sinon.assert, "fail").throws();
+            sinon.stub(sinon.assert, "pass");
+        };
 
-    function stubTearDown() {
-        sinon.assert.fail.restore();
-        sinon.assert.pass.restore();
-    }
+        this.tearDownStubs = function () {
+            sinon.assert.fail.restore();
+            sinon.assert.pass.restore();
+        };
+    },
 
-    testCase("SinonAssertFailTest", {
+    "is object": function () {
+        assert.isObject(sinon.assert);
+    },
+
+    "fail": {
         setUp: function () {
             this.exceptionName = sinon.assert.failException;
         },
@@ -57,7 +42,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.assert.failException = this.exceptionName;
         },
 
-        "should throw exception": function () {
+        "throws exception": function () {
             var failed = false;
             var exception;
 
@@ -68,120 +53,112 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 exception = e;
             }
 
-            assertFalse(failed);
-            assertEquals("AssertError", exception.name);
+            assert.isFalse(failed);
+            assert.equals(exception.name, "AssertError");
         },
 
-        "should throw configured exception type": function () {
+        "throws configured exception type": function () {
             sinon.assert.failException = "RetardError";
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.fail("Some message");
             }, "RetardError");
         }
-    });
+    },
 
-    testCase("SinonAssertCalledTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "called": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should be function": function () {
-            assertFunction(sinon.assert.called);
-        },
-
-        "should fail when method does not exist": function () {
-            assertException(function () {
+        "fails when method does not exist": function () {
+            assert.exception(function () {
                 sinon.assert.called();
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method is not stub": function () {
-            assertException(function () {
+        "fails when method is not stub": function () {
+            assert.exception(function () {
                 sinon.assert.called(function () {});
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method was not called": function () {
+        "fails when method was not called": function () {
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.called(stub);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method was called": function () {
+        "does not fail when method was called": function () {
             var stub = this.stub;
             stub();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.called(stub);
             });
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var stub = this.stub;
             stub();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.called(stub);
             });
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("called"));
         }
-    });
+    },
 
-    testCase("SinonAssertNotCalledTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "notCalled": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should be function": function () {
-            assertFunction(sinon.assert.notCalled);
-        },
-
-        "should fail when method does not exist": function () {
-            assertException(function () {
+        "fails when method does not exist": function () {
+            assert.exception(function () {
                 sinon.assert.notCalled();
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method is not stub": function () {
-            assertException(function () {
+        "fails when method is not stub": function () {
+            assert.exception(function () {
                 sinon.assert.notCalled(function () {});
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method was called": function () {
+        "fails when method was called": function () {
             var stub = this.stub;
             stub();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.notCalled(stub);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method was not called": function () {
+        "passes when method was not called": function () {
             var stub = this.stub;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.notCalled(stub);
             });
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
         "should call pass callback": function () {
@@ -191,66 +168,62 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("notCalled"));
         }
-    });
+    },
 
-    testCase("SinonAssertCalledOnceTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledOnce": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should be function": function () {
-            assertFunction(sinon.assert.calledOnce);
-        },
-
-        "should fail when method does not exist": function () {
-            assertException(function () {
+        "fails when method does not exist": function () {
+            assert.exception(function () {
                 sinon.assert.calledOnce();
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method is not stub": function () {
-            assertException(function () {
+        "fails when method is not stub": function () {
+            assert.exception(function () {
                 sinon.assert.calledOnce(function () {});
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method was not called": function () {
+        "fails when method was not called": function () {
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledOnce(stub);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method was called": function () {
+        "passes when method was called": function () {
             var stub = this.stub;
             stub();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.calledOnce(stub);
             });
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should fail when method was called more than once": function () {
+        "fails when method was called more than once": function () {
             var stub = this.stub;
             stub();
             stub();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledOnce(stub);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var stub = this.stub;
             stub();
             sinon.assert.calledOnce(stub);
@@ -258,32 +231,32 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledOnce"));
         }
-    });
+    },
 
-    testCase("SinonAssertCalledTwiceTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledTwice": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail if called once": function () {
+        "fails if called once": function () {
             var stub = this.stub;
             this.stub();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledTwice(stub);
             });
         },
 
-        "should not fail if called twice": function () {
+        "passes if called twice": function () {
             var stub = this.stub;
             this.stub();
             this.stub();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.calledTwice(stub);
             });
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var stub = this.stub;
             stub();
             stub();
@@ -292,33 +265,33 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledTwice"));
         }
-    });
+    },
 
-    testCase("SinonAssertCalledThriceTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledThrice": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail if called once": function () {
+        "fails if called once": function () {
             var stub = this.stub;
             this.stub();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledThrice(stub);
             });
         },
 
-        "should not fail if called thrice": function () {
+        "passes if called thrice": function () {
             var stub = this.stub;
             this.stub();
             this.stub();
             this.stub();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.calledThrice(stub);
             });
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var stub = this.stub;
             stub();
             stub();
@@ -328,41 +301,37 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledThrice"));
         }
-    });
+    },
 
-    testCase("SinonAssertCallOrderTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "callOrder": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should be function": function () {
-            assertFunction(sinon.assert.callOrder);
-        },
-
-        "should not fail when calls where done in right order": function () {
+        "passes when calls where done in right order": function () {
             var spy1 = sinon.spy();
             var spy2 = sinon.spy();
             spy1();
             spy2();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.callOrder(spy1, spy2);
             });
         },
 
-        "should fail when calls where done in wrong order": function () {
+        "fails when calls where done in wrong order": function () {
             var spy1 = sinon.spy();
             var spy2 = sinon.spy();
             spy2();
             spy1();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.callOrder(spy1, spy2);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when many calls where done in right order": function () {
+        "passes when many calls where done in right order": function () {
             var spy1 = sinon.spy();
             var spy2 = sinon.spy();
             var spy3 = sinon.spy();
@@ -372,12 +341,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy3();
             spy4();
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.callOrder(spy1, spy2, spy3, spy4);
             });
         },
 
-        "should fail when one of many calls where done in wrong order": function () {
+        "fails when one of many calls where done in wrong order": function () {
             var spy1 = sinon.spy();
             var spy2 = sinon.spy();
             var spy3 = sinon.spy();
@@ -387,14 +356,14 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             spy4();
             spy3();
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.callOrder(spy1, spy2, spy3, spy4);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var stubs = [sinon.spy(), sinon.spy()];
             stubs[0]();
             stubs[1]();
@@ -404,7 +373,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledWith("callOrder"));
         },
 
-        "should pass for multiple calls to same spy": function () {
+        "passes for multiple calls to same spy": function () {
             var first = sinon.spy();
             var second = sinon.spy();
 
@@ -412,65 +381,63 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             second();
             first();
 
-            sinon.assert.callOrder(first, second, first);
+            refute.exception(function () {
+                sinon.assert.callOrder(first, second, first);
+            });
         }
-    });
+    },
 
-    testCase("SinonAssertCalledOnTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledOn": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should be function": function () {
-            assertFunction(sinon.assert.calledOn);
-        },
-
-        "should fail when method does not exist": function () {
+        "fails when method does not exist": function () {
             var object = {};
             sinon.stub(this.stub, "calledOn");
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledOn(null, object);
             });
 
-            assertFalse(this.stub.calledOn.calledWith(object));
+            assert.isFalse(this.stub.calledOn.calledWith(object));
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method is not stub": function () {
+        "fails when method is not stub": function () {
             var object = {};
             sinon.stub(this.stub, "calledOn");
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledOn(function () {}, object);
             });
 
-            assertFalse(this.stub.calledOn.calledWith(object));
+            assert.isFalse(this.stub.calledOn.calledWith(object));
             assert(sinon.assert.fail.called);
         },
 
-        "should fail when method fails": function () {
+        "fails when method fails": function () {
             var object = {};
             sinon.stub(this.stub, "calledOn").returns(false);
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledOn(stub, object);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             var object = {};
             sinon.stub(this.stub, "calledOn").returns(true);
             var stub = this.stub;
 
             sinon.assert.calledOn(stub, object);
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var obj = {};
             this.stub.call(obj);
             sinon.assert.calledOn(this.stub, obj);
@@ -478,18 +445,128 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledOn"));
         }
-    });
+    },
 
-    testCase("SinonAssertCalledWithTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledWithNew": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail when method fails": function () {
+        "fails when method does not exist": function () {
+            sinon.stub(this.stub, "calledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(null);
+            });
+
+            assert.isFalse(this.stub.calledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method is not stub": function () {
+            sinon.stub(this.stub, "calledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(function () {});
+            });
+
+            assert.isFalse(this.stub.calledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method fails": function () {
+            sinon.stub(this.stub, "calledWithNew").returns(false);
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinon.assert.calledWithNew(stub);
+            });
+
+            assert(sinon.assert.fail.called);
+        },
+
+        "passes when method doesn't fail": function () {
+            sinon.stub(this.stub, "calledWithNew").returns(true);
+            var stub = this.stub;
+
+            sinon.assert.calledWithNew(stub);
+
+            assert.isFalse(sinon.assert.fail.called);
+        },
+
+        "calls pass callback": function () {
+            var a = new this.stub();
+            sinon.assert.calledWithNew(this.stub);
+
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("calledWithNew"));
+        }
+    },
+
+    "alwaysCalledWithNew": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
+
+        "fails when method does not exist": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(null);
+            });
+
+            assert.isFalse(this.stub.alwaysCalledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method is not stub": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew");
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(function () {});
+            });
+
+            assert.isFalse(this.stub.alwaysCalledWithNew.called);
+            assert(sinon.assert.fail.called);
+        },
+
+        "fails when method fails": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew").returns(false);
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinon.assert.alwaysCalledWithNew(stub);
+            });
+
+            assert(sinon.assert.fail.called);
+        },
+
+        "passes when method doesn't fail": function () {
+            sinon.stub(this.stub, "alwaysCalledWithNew").returns(true);
+            var stub = this.stub;
+
+            sinon.assert.alwaysCalledWithNew(stub);
+
+            assert.isFalse(sinon.assert.fail.called);
+        },
+
+        "calls pass callback": function () {
+            var a = new this.stub();
+            sinon.assert.alwaysCalledWithNew(this.stub);
+
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("alwaysCalledWithNew"));
+        }
+    },
+
+    "calledWith": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
+
+        "fails when method fails": function () {
             var object = {};
             sinon.stub(this.stub, "calledWith").returns(false);
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledWith(stub, object, 1);
             });
 
@@ -497,38 +574,38 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             var object = {};
             sinon.stub(this.stub, "calledWith").returns(true);
             var stub = this.stub;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.calledWith(stub, object, 1);
             });
 
             assert(this.stub.calledWith.calledWith(object, 1));
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             this.stub("yeah");
             sinon.assert.calledWith(this.stub, "yeah");
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledWith"));
         }
-    });
+    },
 
-    testCase("SinonAssertCalledWithExactlyTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "calledWithExactly": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail when method fails": function () {
+        "fails when method fails": function () {
             var object = {};
             sinon.stub(this.stub, "calledWithExactly").returns(false);
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.calledWithExactly(stub, object, 1);
             });
 
@@ -536,38 +613,38 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             var object = {};
             sinon.stub(this.stub, "calledWithExactly").returns(true);
             var stub = this.stub;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.calledWithExactly(stub, object, 1);
             });
 
             assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             this.stub("yeah");
             sinon.assert.calledWithExactly(this.stub, "yeah");
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledWithExactly"));
         }
-    });
+    },
 
-    testCase("SinonAssertNeverCalledWithTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "neverCalledWith": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail when method fails": function () {
+        "fails when method fails": function () {
             var object = {};
             sinon.stub(this.stub, "neverCalledWith").returns(false);
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.neverCalledWith(stub, object, 1);
             });
 
@@ -575,37 +652,37 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             var object = {};
             sinon.stub(this.stub, "neverCalledWith").returns(true);
             var stub = this.stub;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.neverCalledWith(stub, object, 1);
             });
 
             assert(this.stub.neverCalledWith.calledWith(object, 1));
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             this.stub("yeah");
             sinon.assert.neverCalledWith(this.stub, "nah!");
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("neverCalledWith"));
         }
-    });
+    },
 
-    testCase("SinonAssertThrewTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "threwTest": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail when method fails": function () {
+        "fails when method fails": function () {
             sinon.stub(this.stub, "threw").returns(false);
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.threw(stub, 1, 2);
             });
 
@@ -613,19 +690,19 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             sinon.stub(this.stub, "threw").returns(true);
             var stub = this.stub;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.threw(stub, 1, 2);
             });
 
             assert(this.stub.threw.calledWithExactly(1, 2));
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             sinon.stub(this.stub, "threw").returns(true);
             this.stub();
             sinon.assert.threw(this.stub);
@@ -633,90 +710,90 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("threw"));
         }
-    });
+    },
 
-    testCase("SinonAssertCallCountTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "callCount": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail when method fails": function () {
+        "fails when method fails": function () {
             this.stub();
             this.stub();
             var stub = this.stub;
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.callCount(stub, 3);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail when method doesn't fail": function () {
+        "passes when method doesn't fail": function () {
             var stub = this.stub;
             this.stub.callCount = 3;
 
-            assertNoException(function () {
+            refute.exception(function () {
                 sinon.assert.callCount(stub, 3);
             });
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             this.stub();
             sinon.assert.callCount(this.stub, 1);
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("callCount"));
         }
-    });
+    },
 
-    testCase("AssertAlwaysCalledOnTest", {
-        setUp: stubSetUp,
-        tearDown: stubTearDown,
+    "alwaysCalledOn": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
 
-        "should fail if method is missing": function () {
-            assertException(function () {
+        "fails if method is missing": function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledOn();
             });
         },
 
-        "should fail if method is not fake": function () {
-            assertException(function () {
+        "fails if method is not fake": function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledOn(function () {}, {});
             });
         },
 
-        "should fail if stub returns false": function () {
+        "fails if stub returns false": function () {
             var stub = sinon.stub();
             sinon.stub(stub, "alwaysCalledOn").returns(false);
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledOn(stub, {});
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail if stub returns true": function () {
+        "passes if stub returns true": function () {
             var stub = sinon.stub.create();
             sinon.stub(stub, "alwaysCalledOn").returns(true);
 
             sinon.assert.alwaysCalledOn(stub, {});
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             this.stub();
             sinon.assert.alwaysCalledOn(this.stub, this);
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("alwaysCalledOn"));
         }
-    });
+    },
 
-    testCase("AssertAlwaysCalledWithTest", {
+    "alwaysCalledWith": {
         setUp: function () {
             sinon.stub(sinon.assert, "fail").throws();
             sinon.stub(sinon.assert, "pass");
@@ -727,39 +804,39 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.assert.pass.restore();
         },
 
-        "should fail if method is missing": function () {
-            assertException(function () {
+        "fails if method is missing": function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledWith();
             });
         },
 
-        "should fail if method is not fake": function () {
-            assertException(function () {
+        "fails if method is not fake": function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledWith(function () {});
             });
         },
 
-        "should fail if stub returns false": function () {
+        "fails if stub returns false": function () {
             var stub = sinon.stub.create();
             sinon.stub(stub, "alwaysCalledWith").returns(false);
 
-            assertException(function () {
+            assert.exception(function () {
                 sinon.assert.alwaysCalledWith(stub, {}, []);
             });
 
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail if stub returns true": function () {
+        "passes if stub returns true": function () {
             var stub = sinon.stub.create();
             sinon.stub(stub, "alwaysCalledWith").returns(true);
 
             sinon.assert.alwaysCalledWith(stub, {}, []);
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var spy = sinon.spy();
             spy("Hello");
             sinon.assert.alwaysCalledWith(spy, "Hello");
@@ -767,9 +844,9 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("alwaysCalledWith"));
         }
-    });
+    },
 
-    testCase("AssertAlwaysCalledWithExactlyTest", {
+    "alwaysCalledWithExactly": {
         setUp: function () {
             sinon.stub(sinon.assert, "fail");
             sinon.stub(sinon.assert, "pass");
@@ -780,7 +857,7 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             sinon.assert.pass.restore();
         },
 
-        "should fail if stub returns false": function () {
+        "fails if stub returns false": function () {
             var stub = sinon.stub.create();
             sinon.stub(stub, "alwaysCalledWithExactly").returns(false);
 
@@ -789,16 +866,16 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.fail.called);
         },
 
-        "should not fail if stub returns true": function () {
+        "passes if stub returns true": function () {
             var stub = sinon.stub.create();
             sinon.stub(stub, "alwaysCalledWithExactly").returns(true);
 
             sinon.assert.alwaysCalledWithExactly(stub, {}, []);
 
-            assertFalse(sinon.assert.fail.called);
+            assert.isFalse(sinon.assert.fail.called);
         },
 
-        "should call pass callback": function () {
+        "calls pass callback": function () {
             var spy = sinon.spy();
             spy("Hello");
             sinon.assert.alwaysCalledWithExactly(spy, "Hello");
@@ -806,80 +883,78 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("alwaysCalledWithExactly"));
         }
-    });
+    },
 
-    testCase("SinonAssertExposeTest", {
-        "should expose asserts into object": function () {
+    "expose": {
+        "exposes asserts into object": function () {
             var test = {};
             sinon.assert.expose(test);
 
-            assertFunction(test.fail);
-            assertString(test.failException);
-            assertFunction(test.assertCalled);
-            assertFunction(test.assertCalledOn);
-            assertFunction(test.assertCalledWith);
-            assertFunction(test.assertCalledWithExactly);
-            assertFunction(test.assertThrew);
-            assertFunction(test.assertCallCount);
+            assert.isFunction(test.fail);
+            assert.isString(test.failException);
+            assert.isFunction(test.assertCalled);
+            assert.isFunction(test.assertCalledOn);
+            assert.isFunction(test.assertCalledWith);
+            assert.isFunction(test.assertCalledWithExactly);
+            assert.isFunction(test.assertThrew);
+            assert.isFunction(test.assertCallCount);
         },
 
-        "should expose asserts into global": function () {
-            sinon.assert.expose(global, {
+        "exposes asserts into global": function () {
+            sinon.assert.expose(this.global, {
                 includeFail: false
             });
 
-            assertEquals("undefined", typeof failException);
-            assertFunction(assertCalled);
-            assertFunction(assertCalledOn);
-            assertFunction(assertCalledWith);
-            assertFunction(assertCalledWithExactly);
-            assertFunction(assertThrew);
-            assertFunction(assertCallCount);
+            assert.equals(typeof failException, "undefined");
+            assert.isFunction(assertCalled);
+            assert.isFunction(assertCalledOn);
+            assert.isFunction(assertCalledWith);
+            assert.isFunction(assertCalledWithExactly);
+            assert.isFunction(assertThrew);
+            assert.isFunction(assertCallCount);
         },
 
-        "should fail exposed asserts without errors": function () {
-            sinon.assert.expose(global, {
+        "fails exposed asserts without errors": function () {
+            sinon.assert.expose(this.global, {
                 includeFail: false
             });
 
             try {
                 assertCalled(sinon.spy());
             } catch (e) {
-                assertEquals("expected spy to have been called at least once but was never called", e.message);
+                assert.equals(e.message, "expected spy to have been called at least once but was never called");
             }
         },
 
-        "should expose asserts into object without prefixes": function () {
+        "exposes asserts into object without prefixes": function () {
             var test = {};
 
-            sinon.assert.expose(test, {
-                prefix: ""
-            });
+            sinon.assert.expose(test, { prefix: "" });
 
-            assertFunction(test.fail);
-            assertString(test.failException);
-            assertFunction(test.called);
-            assertFunction(test.calledOn);
-            assertFunction(test.calledWith);
-            assertFunction(test.calledWithExactly);
-            assertFunction(test.threw);
-            assertFunction(test.callCount);
+            assert.isFunction(test.fail);
+            assert.isString(test.failException);
+            assert.isFunction(test.called);
+            assert.isFunction(test.calledOn);
+            assert.isFunction(test.calledWith);
+            assert.isFunction(test.calledWithExactly);
+            assert.isFunction(test.threw);
+            assert.isFunction(test.callCount);
         },
 
-        "should throw if target is undefined": function () {
-            assertException(function () {
+        "throws if target is undefined": function () {
+            assert.exception(function () {
                 sinon.assert.expose();
             }, "TypeError");
         },
 
-        "should throw if target is null": function () {
-            assertException(function () {
+        "throws if target is null": function () {
+            assert.exception(function () {
                 sinon.assert.expose(null);
             }, "TypeError");
         }
-    });
+    },
 
-    testCase("AssertionMessageTest", {
+    "message": {
         setUp: function () {
             this.obj = {
                 doSomething: function () {}
@@ -897,17 +972,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
         },
 
         "assert.called exception message": function () {
-            assertEquals("expected doSomething to have been called at " +
-                         "least once but was never called",
-                         this.message("called", this.obj.doSomething));
+            assert.equals(this.message("called", this.obj.doSomething),
+                          "expected doSomething to have been called at " +
+                          "least once but was never called");
         },
 
         "assert.notCalled exception message one call": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " +
-                         "but was called once\n    doSomething()",
-                         this.message("notCalled", this.obj.doSomething));
+            assert.equals(this.message("notCalled", this.obj.doSomething),
+                          "expected doSomething to not have been called " +
+                          "but was called once\n    doSomething()");
         },
 
         "assert.notCalled exception message four calls": function () {
@@ -916,10 +991,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " +
-                         "but was called 4 times\n    doSomething()\n    " +
-                         "doSomething()\n    doSomething()\n    doSomething()",
-                         this.message("notCalled", this.obj.doSomething));
+            assert.equals(this.message("notCalled", this.obj.doSomething),
+                          "expected doSomething to not have been called " +
+                          "but was called 4 times\n    doSomething()\n    " +
+                          "doSomething()\n    doSomething()\n    doSomething()");
         },
 
         "assert.notCalled exception message with calls with arguments": function () {
@@ -928,10 +1003,10 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething(42, 1);
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to not have been called " +
-                         "but was called 4 times\n    doSomething()\n    " +
-                         "doSomething(3)\n    doSomething(42, 1)\n    doSomething()",
-                         this.message("notCalled", this.obj.doSomething));
+            assert.equals(this.message("notCalled", this.obj.doSomething),
+                          "expected doSomething to not have been called " +
+                          "but was called 4 times\n    doSomething()\n    " +
+                          "doSomething(3)\n    doSomething(42, 1)\n    doSomething()");
         },
 
         "assert.callOrder exception message": function () {
@@ -943,40 +1018,42 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
             obj.foo();
 
-            assertEquals("expected doSomething, doop, foo to be called in " +
-                         "order but were called as doop, doSomething, foo",
-                         this.message("callOrder", this.obj.doSomething, obj.doop, obj.foo));
+            var message = this.message("callOrder", this.obj.doSomething, obj.doop, obj.foo);
+
+            assert.equals(message,
+                          "expected doSomething, doop, foo to be called in " +
+                          "order but were called as doop, doSomething, foo");
         },
 
         "assert.callCount exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called thrice but was called " +
-                         "once\n    doSomething()",
-                         this.message("callCount", this.obj.doSomething, 3));
+            assert.equals(this.message("callCount", this.obj.doSomething, 3),
+                          "expected doSomething to be called thrice but was called " +
+                          "once\n    doSomething()");
         },
 
         "assert.calledOnce exception message": function () {
             this.obj.doSomething();
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called once but was called " +
-                         "twice\n    doSomething()\n    doSomething()",
-                         this.message("calledOnce", this.obj.doSomething));
+            assert.equals(this.message("calledOnce", this.obj.doSomething),
+                          "expected doSomething to be called once but was called " +
+                          "twice\n    doSomething()\n    doSomething()");
 
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called once but was called " +
-                         "thrice\n    doSomething()\n    doSomething()\n    doSomething()",
-                         this.message("calledOnce", this.obj.doSomething));
+            assert.equals(this.message("calledOnce", this.obj.doSomething),
+                          "expected doSomething to be called once but was called " +
+                          "thrice\n    doSomething()\n    doSomething()\n    doSomething()");
         },
 
         "assert.calledTwice exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called twice but was called " +
-                         "once\n    doSomething()",
-                         this.message("calledTwice", this.obj.doSomething));
+            assert.equals(this.message("calledTwice", this.obj.doSomething),
+                          "expected doSomething to be called twice but was called " +
+                          "once\n    doSomething()");
         },
 
         "assert.calledThrice exception message": function () {
@@ -985,8 +1062,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething();
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called thrice but was called 4 times\n    doSomething()\n    doSomething()\n    doSomething()\n    doSomething()",
-                         this.message("calledThrice", this.obj.doSomething));
+            assert.equals(this.message("calledThrice", this.obj.doSomething),
+                          "expected doSomething to be called thrice but was called 4 times\n    doSomething()\n    doSomething()\n    doSomething()\n    doSomething()");
         },
 
         "assert.calledOn exception message": function () {
@@ -1000,8 +1077,8 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething.call(obj);
             this.obj.doSomething.call(obj2);
 
-            assertEquals("expected doSomething to be called with [Oh yeah] as this but was called with [Oh no], [Oh well]",
-                         this.message("calledOn", this.obj.doSomething, this.obj));
+            assert.equals(this.message("calledOn", this.obj.doSomething, this.obj),
+                          "expected doSomething to be called with [Oh yeah] as this but was called with [Oh no], [Oh well]");
         },
 
         "assert.alwaysCalledOn exception message": function () {
@@ -1016,125 +1093,213 @@ if (typeof require == "function" && typeof testCase == "undefined") {
             this.obj.doSomething.call(obj2);
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to always be called with [Oh yeah] as this but was called with [Oh no], [Oh well], [Oh yeah]",
-                         this.message("alwaysCalledOn", this.obj.doSomething, this.obj));
+            assert.equals(this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
+                          "expected doSomething to always be called with [Oh yeah] as this but was called with [Oh no], [Oh well], [Oh yeah]");
+        },
+
+        "assert.calledWithNew exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWithNew", this.obj.doSomething),
+                          "expected doSomething to be called with new");
+        },
+
+        "assert.alwaysCalledWithNew exception message": function () {
+            var a = new this.obj.doSomething();
+            this.obj.doSomething();
+
+            assert.equals(this.message("alwaysCalledWithNew", this.obj.doSomething),
+                          "expected doSomething to always be called with new");
         },
 
         "assert.calledWith exception message": function () {
             this.obj.doSomething(1, 3, "hey");
 
-            assertEquals("expected doSomething to be called with arguments 4, 3, " +
-                         "hey\n    doSomething(1, 3, hey)",
-                         this.message("calledWith", this.obj.doSomething, 4, 3, "hey"));
+            assert.equals(this.message("calledWith", this.obj.doSomething, 4, 3, "hey"),
+                          "expected doSomething to be called with arguments 4, 3, " +
+                          "hey\n    doSomething(1, 3, hey)");
         },
 
         "assert.calledWith match.any exception message": function () {
             this.obj.doSomething(true, true);
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "any, false\n    doSomething(true, true)",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.any, false));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.any, false),
+                          "expected doSomething to be called with arguments " +
+                          "any, false\n    doSomething(true, true)");
+        },
+
+        "assert.calledWith match.defined exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.defined),
+                          "expected doSomething to be called with arguments " +
+                          "defined\n    doSomething()");
+        },
+
+        "assert.calledWith match.truthy exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.truthy),
+                         "expected doSomething to be called with arguments " +
+                         "truthy\n    doSomething()");
+        },
+
+        "assert.calledWith match.falsy exception message": function () {
+            this.obj.doSomething(true);
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.falsy),
+                          "expected doSomething to be called with arguments " +
+                          "falsy\n    doSomething(true)");
         },
 
         "assert.calledWith match.same exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "same(1)\n    doSomething()",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.same(1)));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.same(1)),
+                          "expected doSomething to be called with arguments " +
+                          "same(1)\n    doSomething()");
         },
 
         "assert.calledWith match.typeOf exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "typeOf(\"string\")\n    doSomething()",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.typeOf("string")));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.typeOf("string")),
+                          "expected doSomething to be called with arguments " +
+                          "typeOf(\"string\")\n    doSomething()");
         },
 
         "assert.calledWith match.instanceOf exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "instanceOf(CustomType)\n    doSomething()",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.instanceOf(function CustomType() {})));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.instanceOf(function CustomType() {})),
+                          "expected doSomething to be called with arguments " +
+                          "instanceOf(CustomType)\n    doSomething()");
         },
 
-        "assert.calledWith match.re exception message": function () {
+        "assert.calledWith match object exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "re(/[a-z]+/)\n    doSomething()",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.re(/[a-z]+/)));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match({ some: "value", and: 123 })),
+                          "expected doSomething to be called with arguments " +
+                          "match(some: value, and: 123)\n    doSomething()");
         },
 
-        "assert.calledWith match.like exception message": function () {
+        "assert.calledWith match boolean exception message": function () {
             this.obj.doSomething();
 
-            assertEquals("expected doSomething to be called with arguments " +
-                         "like(some: value, and: 123)\n    doSomething()",
-                         this.message("calledWith", this.obj.doSomething,
-                         sinon.match.like({ some: "value", and: 123 })));
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match(true)),
+                          "expected doSomething to be called with arguments " +
+                          "match(true)\n    doSomething()");
+        },
+
+        "assert.calledWith match number exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match(123)),
+                          "expected doSomething to be called with arguments " +
+                          "match(123)\n    doSomething()");
+        },
+
+        "assert.calledWith match string exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match("Sinon")),
+                          "expected doSomething to be called with arguments " +
+                          "match(\"Sinon\")\n    doSomething()");
+        },
+
+        "assert.calledWith match regexp exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match(/[a-z]+/)),
+                          "expected doSomething to be called with arguments " +
+                          "match(/[a-z]+/)\n    doSomething()");
+        },
+
+        "assert.calledWith match test function exception message": function () {
+            this.obj.doSomething();
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match({ test: function custom() {} })),
+                          "expected doSomething to be called with arguments " +
+                          "match(custom)\n    doSomething()");
+        },
+
+        "assert.calledWithMatch exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+
+            assert.equals(this.message("calledWithMatch", this.obj.doSomething, 4, 3, "hey"),
+                          "expected doSomething to be called with match 4, 3, " +
+                          "hey\n    doSomething(1, 3, hey)");
         },
 
         "assert.alwaysCalledWith exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, "hey");
 
-            assertEquals("expected doSomething to always be called with arguments 1" +
-                         ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)",
-                         this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey"));
+            assert.equals(this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey"),
+                          "expected doSomething to always be called with arguments 1" +
+                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)");
+        },
+
+        "assert.alwaysCalledWithMatch exception message": function () {
+            this.obj.doSomething(1, 3, "hey");
+            this.obj.doSomething(1, "hey");
+
+            assert.equals(this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey"),
+                          "expected doSomething to always be called with match 1" +
+                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)");
         },
 
         "assert.calledWithExactly exception message": function () {
             this.obj.doSomething(1, 3, "hey");
 
-            assertEquals("expected doSomething to be called with exact arguments 1" +
-                         ", 3\n    doSomething(1, 3, hey)",
-                         this.message("calledWithExactly", this.obj.doSomething, 1, 3));
+            assert.equals(this.message("calledWithExactly", this.obj.doSomething, 1, 3),
+                          "expected doSomething to be called with exact arguments 1" +
+                          ", 3\n    doSomething(1, 3, hey)");
         },
 
         "assert.alwaysCalledWithExactly exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, 3);
 
-            assertEquals("expected doSomething to always be called with exact " +
-                         "arguments 1, 3\n    doSomething(1, 3, hey)\n    " +
-                         "doSomething(1, 3)",
-                         this.message("alwaysCalledWithExactly",
-                                      this.obj.doSomething, 1, 3));
+            assert.equals(this.message("alwaysCalledWithExactly", this.obj.doSomething, 1, 3),
+                          "expected doSomething to always be called with exact " +
+                          "arguments 1, 3\n    doSomething(1, 3, hey)\n    " +
+                          "doSomething(1, 3)");
         },
 
         "assert.neverCalledWith exception message": function () {
             this.obj.doSomething(1, 2, 3);
 
-            assertEquals("expected doSomething to never be called with " +
-                         "arguments 1, 2\n    doSomething(1, 2, 3)",
-                         this.message("neverCalledWith",
-                                      this.obj.doSomething, 1, 2));
+            assert.equals(this.message("neverCalledWith", this.obj.doSomething, 1, 2),
+                          "expected doSomething to never be called with " +
+                          "arguments 1, 2\n    doSomething(1, 2, 3)");
+        },
+
+        "assert.neverCalledWithMatch exception message": function () {
+            this.obj.doSomething(1, 2, 3);
+
+            assert.equals(this.message("neverCalledWithMatch", this.obj.doSomething, 1, 2),
+                          "expected doSomething to never be called with match " +
+                          "1, 2\n    doSomething(1, 2, 3)");
         },
 
         "assert.threw exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, 3);
 
-            assertEquals("doSomething did not throw exception\n" +
-                         "    doSomething(1, 3, hey)\n    doSomething(1, 3)",
-                         this.message("threw", this.obj.doSomething));
+            assert.equals(this.message("threw", this.obj.doSomething),
+                          "doSomething did not throw exception\n" +
+                          "    doSomething(1, 3, hey)\n    doSomething(1, 3)");
         },
 
         "assert.alwaysThrew exception message": function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, 3);
 
-            assertEquals("doSomething did not always throw exception\n" +
-                         "    doSomething(1, 3, hey)\n    doSomething(1, 3)",
-                         this.message("alwaysThrew", this.obj.doSomething));
+            assert.equals(this.message("alwaysThrew", this.obj.doSomething),
+                          "doSomething did not always throw exception\n" +
+                          "    doSomething(1, 3, hey)\n    doSomething(1, 3)");
         }
-    });
-}(typeof global == "object" ? global : this));
+    }
+});

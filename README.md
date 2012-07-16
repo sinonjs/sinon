@@ -1,5 +1,7 @@
 # Sinon.JS
 
+[![Build status](https://secure.travis-ci.org/cjohansen/Sinon.JS.png?branch=master)](http://travis-ci.org/cjohansen/Sinon.JS)
+
 Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
 
 ## Installation
@@ -33,36 +35,41 @@ See the [sinon project homepage](http://sinonjs.org/)
 * Easily fake any interface
 * Ship with ready-to-use fakes for XMLHttpRequest, timers and more
 
-## Develop?
+## Contribute?
 
-Check out [todo.org](http://github.com/cjohansen/Sinon.JS/raw/1.0.0/todo.org) in the project repository
+Pick [an issue](http://github.com/cjohansen/Sinon.JS/issues) to fix, or pitch
+new features. To avoid wasting your time, please ask for feedback on feature
+suggestions either with [an issue](http://github.com/cjohansen/Sinon.JS/issues/new)
+or on [the mailing list](http://groups.google.com/group/sinonjs).
 
 ## Run the tests
 
+The Sinon.JS developer environment requires Node/NPM. Please make sure you have
+Node installed, and install Sinon's dependencies:
+
+    $ npm install
 
 ### On Node
 
-    $ node test/node/run.js
+    $ npm test
 
-### In the browser, via JsTestDriver
+### In the browser
 
-* Install [Node.js](http://nodejs.org/) &amp; [NPM](http://npmjs.org/)
-* `$ npm install buster-format`
-* Install Java
-* Download [jsTestDriver](http://code.google.com/p/js-test-driver/)
-* Start the JsTestDriver server
-  `$ java -jar JsTestDriver.jar --port 4224`
-* Open a browser, go to [http://localhost:4224/](http://localhost:4224) and click 'Capture this Browser'
-* run the tests
-  `$ java -jar JsTestDriver.jar --tests all --reset`
+Open `test/sinon.html` in a browser. To test against a built distribution, first
+make sure you have a build (requires Ruby and Juicer):
 
+    $ ./build
+
+Then open `test/sinon-dist.html` in a browser.
+
+Some tests needs working XHR to pass. To run the tests over an HTTP server, run
+
+    $ node_modules/http-server/bin/http-server
+
+Then open [localhost:8080/test/sinon.html](http://localhost:8080/test/sinon.html)
+in a browser.
 
 ### On Rhino
 
-I've added a rudimentary setup for running the tests on Rhino with env.js (as
-this is a fairly common test setup, Sinon should support it). The files are
-located in test/rhino, but there are currently quite a few test failures. I
-believe these are not all bugs - many are probably problems with the tests
-running in Rhino. Run tests from the project root (load paths depend on it):
-
-    $ java -jar js.jar -opt -1 test/rhino/run.js
+The Rhino tests are currently out of commission (pending update after switch to
+Buster.JS for tests).

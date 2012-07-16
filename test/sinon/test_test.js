@@ -1,248 +1,203 @@
 /*jslint onevar: false, eqeqeq: false, browser: true*/
-/*globals testCase,
-          sinon,
-          fail,
-          assert,
-          assertNotNull,
-          assertUndefined,
-          assertArray,
-          assertEquals,
-          assertSame,
-          assertNotSame,
-          assertFunction,
-          assertObject,
-          assertException,
-          assertNoException*/
+/*globals sinon, buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
  *
- * Copyright (c) 2010-2011 Christian Johansen
+ * Copyright (c) 2010-2012 Christian Johansen
  */
 "use strict";
 
-if (typeof require == "function" && typeof testCase == "undefined") {
-    var testCase = require("../test_case_shim");
+if (typeof require == "function" && typeof module == "object") {
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 
-(function () {
-    var supportsAjax = typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined";
+buster.testCase("sinon.test", {
+    setUp: function () {
+        this.boundTestCase = function () {
+            var properties = {
+                fn: function () {
+                    properties.self = this;
+                    properties.args = arguments;
+                    properties.spy = this.spy;
+                    properties.stub = this.stub;
+                    properties.mock = this.mock;
+                    properties.clock = this.clock;
+                    properties.server = this.server;
+                    properties.requests = this.requests;
+                    properties.sandbox = this.sandbox;
+                }
+            };
 
-    testCase("SinonTestTest", {
-        tearDown: function () {
-            sinon.config = {};
-        },
+            return properties;
+        };
+    },
 
-        "should throw if argument is not a function": function () {
-            assertException(function () {
-                sinon.test({});
-            });
-        },
+    tearDown: function () {
+        sinon.config = {};
+    },
 
-        "should proxy return value": function () {
-            var object = {};
+    "throws if argument is not a function": function () {
+        assert.exception(function () {
+            sinon.test({});
+        });
+    },
 
-            var result = sinon.test(function () {
-                return object;
-            })();
+    "proxys return value": function () {
+        var object = {};
 
-            assertSame(object, result);
-        },
+        var result = sinon.test(function () {
+            return object;
+        })();
 
-        "should stub inside sandbox": function () {
-            var method = function () {};
-            var object = { method: method };
+        assert.same(result, object);
+    },
 
-            sinon.test(function () {
-                this.stub(object, "method").returns(object);
+    "stubs inside sandbox": function () {
+        var method = function () {};
+        var object = { method: method };
 
-                assertSame(object, object.method());
-            }).call({});
-        },
+        sinon.test(function () {
+            this.stub(object, "method").returns(object);
 
-        "should restore stubs": function () {
-            var method = function () {};
-            var object = { method: method };
+            assert.same(object.method(), object);
+        }).call({});
+    },
 
+    "restores stubs": function () {
+        var method = function () {};
+        var object = { method: method };
+
+        sinon.test(function () {
+            this.stub(object, "method");
+        }).call({});
+
+        assert.same(object.method, method);
+    },
+
+    "restores stubs on all object methods": function() {
+        var method = function () {};
+        var method2 = function () {};
+        var object = { method: method, method2: method2 };
+
+        sinon.test(function () {
+            this.stub(object);
+        }).call({});
+
+        assert.same(object.method, method);
+        assert.same(object.method2, method2);
+    },
+
+    "throws when method throws": function () {
+        var method = function () {};
+        var object = { method: method };
+
+        assert.exception(function () {
             sinon.test(function () {
                 this.stub(object, "method");
+                throw new Error();
             }).call({});
+        }, "Error");
+    },
 
-            assertSame(method, object.method);
-        },
+    "restores stub when method throws": function () {
+        var method = function () {};
+        var object = { method: method };
 
-        "should restore stubs on all object methods": function() {
-            var method = function () {};
-            var method2 = function () {};
-            var object = { method: method, method2: method2 };
-
+        try {
             sinon.test(function () {
-                this.stub(object);
+                this.stub(object, "method");
+                throw new Error();
             }).call({});
+        } catch (e) {}
 
-            assertSame(method, object.method);
-            assertSame(method2, object.method2);
-        },
+        assert.same(object.method, method);
+    },
 
-        "should throw when method throws": function () {
-            var method = function () {};
-            var object = { method: method };
+    "mocks inside sandbox": function () {
+        var method = function () {};
+        var object = { method: method };
 
-            assertException(function () {
-                sinon.test(function () {
-                    this.stub(object, "method");
-                    throw new Error();
-                }).call({});
-            }, "Error");
-        },
+        sinon.test(function () {
+            this.mock(object).expects("method").returns(object);
 
-        "should restore stub when method throws": function () {
-            var method = function () {};
-            var object = { method: method };
+            assert.same(object.method(), object);
+        }).call({});
+    },
 
-            try {
-                sinon.test(function () {
-                    this.stub(object, "method");
-                    throw new Error();
-                }).call({});
-            } catch (e) {}
+    "verifies mocks": function () {
+        var method = function () {};
+        var object = { method: method };
 
-            assertSame(method, object.method);
-        },
-
-        "should mock inside sandbox": function () {
-            var method = function () {};
-            var object = { method: method };
-
+        assert.exception(function () {
             sinon.test(function () {
-                this.mock(object).expects("method").returns(object);
-
-                assertSame(object, object.method());
+                this.mock(object).expects("method");
             }).call({});
-        },
+        }, "ExpectationError");
 
-        "should verify mocks": function () {
-            var method = function () {};
-            var object = { method: method };
+        assert.same(object.method, method);
+    },
 
-            assertException(function () {
-                sinon.test(function () {
-                    this.mock(object).expects("method");
-                }).call({});
-            }, "ExpectationError");
+    "restores mocks": function () {
+        var method = function () {};
+        var object = { method: method };
 
-            assertSame(method, object.method);
-        },
+        try {
+            sinon.test(function () {
+                this.mock(object).expects("method");
+            }).call({});
+        } catch (e) {}
 
-        "should restore mocks": function () {
-            var method = function () {};
-            var object = { method: method };
+        assert.same(object.method, method);
+    },
 
-            try {
-                sinon.test(function () {
-                    this.mock(object).expects("method");
-                }).call({});
-            } catch (e) {}
+    "restores mock when method throws": function () {
+        var method = function () {};
+        var object = { method: method };
 
-            assertSame(method, object.method);
-        },
-
-        "should restore mock when method throws": function () {
-            var method = function () {};
-            var object = { method: method };
-
-            try {
-                sinon.test(function () {
-                    this.mock(object).expects("method").never();
-                    object.method();
-                }).call({});
-            } catch (e) {}
-
-            assertSame(method, object.method);
-        },
-
-        "should append helpers after normal arguments": function () {
-            var object = { method: function () {} };
-
-            sinon.config = {
-                injectIntoThis: false,
-                properties: ["stub", "mock"]
-            };
-
-            sinon.test(function (obj, stub, mock) {
-                mock(object).expects("method").once();
+        try {
+            sinon.test(function () {
+                this.mock(object).expects("method").never();
                 object.method();
+            }).call({});
+        } catch (e) {}
 
-                assertSame(object, obj);
-            })(object);
-        },
+        assert.same(object.method, method);
+    },
 
-        "should maintain the this value": function () {
-            var testCase = {
-                someTest: sinon.test(function (obj, stub, mock) {
-                    return this;
-                })
-            };
+    "appends helpers after normal arguments": function () {
+        var object = { method: function () {} };
 
-            assertSame(testCase, testCase.someTest());
-        }
-    });
-
-    function assertSpy(obj) {
-        assertNotNull(obj);
-        assertFunction(obj.calledWith);
-        assertUndefined(obj.returns);
-    }
-
-    function assertStub(obj) {
-        assertNotNull(obj);
-        assertFunction(obj.calledWith);
-        assertFunction(obj.returns);
-    }
-
-    function assertMock(obj) {
-        assertObject(obj);
-        assertFunction(obj.verify);
-        assertFunction(obj.expects);
-    }
-
-    function assertFakeServer(server) {
-        assertObject(server);
-        assertArray(server.requests);
-        assertFunction(server.respondWith);
-    }
-
-    function assertClock(clock) {
-        assertObject(clock);
-        assertFunction(clock.tick);
-        assertFunction(clock.setTimeout);
-    }
-
-    function boundTestCase() {
-        var properties = {
-            fn: function () {
-                properties.self = this;
-                properties.args = arguments;
-                properties.spy = this.spy;
-                properties.stub = this.stub;
-                properties.mock = this.mock;
-                properties.clock = this.clock;
-                properties.server = this.server;
-                properties.requests = this.requests;
-                properties.sandbox = this.sandbox;
-            }
+        sinon.config = {
+            injectIntoThis: false,
+            properties: ["stub", "mock"]
         };
 
-        return properties;
-    }
+        sinon.test(function (obj, stub, mock) {
+            mock(object).expects("method").once();
+            object.method();
 
-    testCase("ConfigurableTestWithSandboxTest", {
+            assert.same(obj, object);
+        })(object);
+    },
+
+    "maintains the this value": function () {
+        var testCase = {
+            someTest: sinon.test(function (obj, stub, mock) {
+                return this;
+            })
+        };
+
+        assert.same(testCase.someTest(), testCase);
+    },
+
+    "configurable test with sandbox": {
         tearDown: function () {
             sinon.config = {};
         },
 
-        "should yield stub, mock as arguments": function () {
+        "yields stub, mock as arguments": function () {
             var stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -255,14 +210,14 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 stubbed = stub(obj, "meth");
                 mocked = mock(obj);
 
-                assertEquals(2, arguments.length);
+                assert.equals(arguments.length, 2);
             })();
 
-            assertStub(stubbed);
-            assertMock(mocked);
+            assert.stub(stubbed);
+            assert.mock(mocked);
         },
 
-        "should yield spy, stub, mock as arguments": function () {
+        "yields spy, stub, mock as arguments": function () {
             var spied, stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -277,15 +232,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 stubbed = stub(obj, "meth");
                 mocked = mock(obj);
 
-                assertEquals(3, arguments.length);
+                assert.equals(arguments.length, 3);
             })();
 
-            assertSpy(spied);
-            assertStub(stubbed);
-            assertMock(mocked);
+            assert.spy(spied);
+            assert.stub(stubbed);
+            assert.mock(mocked);
         },
 
-        "should not yield server when not faking xhr": function () {
+        "does not yield server when not faking xhr": function () {
             var stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -299,63 +254,107 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 stubbed = stub(obj, "meth");
                 mocked = mock(obj);
 
-                assertEquals(2, arguments.length);
+                assert.equals(arguments.length, 2);
             })();
 
-            assertStub(stubbed);
-            assertMock(mocked);
+            assert.stub(stubbed);
+            assert.mock(mocked);
         },
 
-        "should yield server when faking xhr": function () {
-            if (!supportsAjax) {
-                jstestdriver.console.log("Ajax unavailable, aborting");
-                return;
+        "browser options": {
+            requiresSupportFor: {
+                "ajax/browser": typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined"
+            },
+
+            "yields server when faking xhr": function () {
+                var stubbed, mocked, server;
+                var obj = { meth: function () {} };
+
+                sinon.config = {
+                    injectIntoThis: false,
+                    properties: ["server", "stub", "mock"]
+                };
+
+                sinon.test(function (serv, stub, mock) {
+                    server = serv;
+                    stubbed = stub(obj, "meth");
+                    mocked = mock(obj);
+
+                    assert.equals(arguments.length, 3);
+                })();
+
+                assert.fakeServer(server);
+                assert.stub(stubbed);
+                assert.mock(mocked);
+            },
+
+            "uses serverWithClock when faking xhr": function () {
+                var server;
+
+                sinon.config = {
+                    injectIntoThis: false,
+                    properties: ["server"],
+                    useFakeServer: sinon.fakeServerWithClock
+                };
+
+                sinon.test(function (serv) {
+                    server = serv;
+                })();
+
+                assert.fakeServer(server);
+                assert(sinon.fakeServerWithClock.isPrototypeOf(server));
+            },
+
+            "injects properties into object": function () {
+                var testCase = this.boundTestCase();
+                var obj = {};
+
+                sinon.config = {
+                    injectIntoThis: false,
+                    injectInto: obj,
+                    properties: ["server", "clock", "spy", "stub", "mock", "requests"]
+                };
+
+                sinon.test(testCase.fn).call(testCase);
+
+                assert.equals(testCase.args.length, 0);
+                refute.defined(testCase.server);
+                refute.defined(testCase.clock);
+                refute.defined(testCase.spy);
+                refute.defined(testCase.stub);
+                refute.defined(testCase.mock);
+                refute.defined(testCase.requests);
+                assert.fakeServer(obj.server);
+                assert.clock(obj.clock);
+                assert.isFunction(obj.spy);
+                assert.isFunction(obj.stub);
+                assert.isFunction(obj.mock);
+                assert.isArray(obj.requests);
+            },
+
+            "injects server and clock when only enabling them": function () {
+                var testCase = this.boundTestCase();
+                var obj = {};
+
+                sinon.config = {
+                    useFakeTimers: true,
+                    useFakeServer: true
+                };
+
+                sinon.test(testCase.fn).call(testCase);
+
+                assert.equals(testCase.args.length, 0);
+                assert.isFunction(testCase.spy);
+                assert.isFunction(testCase.stub);
+                assert.isFunction(testCase.mock);
+                assert.fakeServer(testCase.server);
+                assert.isArray(testCase.requests);
+                assert.clock(testCase.clock);
+                refute.defined(testCase.sandbox);
             }
-
-            var stubbed, mocked, server;
-            var obj = { meth: function () {} };
-
-            sinon.config = {
-                injectIntoThis: false,
-                properties: ["server", "stub", "mock"]
-            };
-
-            sinon.test(function (serv, stub, mock) {
-                server = serv;
-                stubbed = stub(obj, "meth");
-                mocked = mock(obj);
-
-                assertEquals(3, arguments.length);
-            })();
-
-            assertFakeServer(server);
-            assertStub(stubbed);
-            assertMock(mocked);
         },
 
-        "should use serverWithClock when faking xhr": function () {
-            if (!supportsAjax) {
-                jstestdriver.console.log("Ajax unavailable, aborting");
-                return;
-            }
-
-            var server;
-
-            sinon.config = {
-                injectIntoThis: false,
-                properties: ["server"],
-                useFakeServer: sinon.fakeServerWithClock
-            };
-
-            sinon.test(function (serv) {
-                server = serv;
-            })();
-
-            assertFakeServer(server);
-            assert(sinon.fakeServerWithClock.isPrototypeOf(server));
-        },
-
-        "should yield clock when faking timers": function () {
+        "yields clock when faking timers": function () {
             var clock;
 
             sinon.config = {
@@ -365,13 +364,13 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             sinon.test(function (c) {
                 clock = c;
-                assertEquals(1, arguments.length);
+                assert.equals(arguments.length, 1);
             })();
 
-            assertClock(clock);
+            assert.clock(clock);
         },
 
-        "should fake specified timers": function () {
+        "fakes specified timers": function () {
             var props;
 
             sinon.config = {
@@ -391,15 +390,15 @@ if (typeof require == "function" && typeof testCase == "undefined") {
                 };
             })();
 
-            assertNotSame(sinon.timers.Date, props.Date);
-            assertNotSame(sinon.timers.setTimeout, props.setTimeout);
-            assertSame(sinon.timers.clearTimeout, props.clearTimeout);
-            assertSame(sinon.timers.setInterval, props.setInterval);
-            assertSame(sinon.timers.clearInterval, props.clearInterval);
+            refute.same(props.Date, sinon.timers.Date);
+            refute.same(props.setTimeout, sinon.timers.setTimeout);
+            assert.same(props.clearTimeout, sinon.timers.clearTimeout);
+            assert.same(props.setInterval, sinon.timers.setInterval);
+            assert.same(props.clearInterval, sinon.timers.clearInterval);
         },
 
-        "should inject properties into test case": function () {
-            var testCase = boundTestCase();
+        "injects properties into test case": function () {
+            var testCase = this.boundTestCase();
 
             sinon.config = {
                 properties: ["clock"]
@@ -407,87 +406,29 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             sinon.test(testCase.fn).call(testCase);
 
-            assertSame(testCase, testCase.self);
-            assertEquals(0, testCase.args.length);
-            assertClock(testCase.clock);
-            assertUndefined(testCase.spy);
-            assertUndefined(testCase.stub);
-            assertUndefined(testCase.mock);
+            assert.same(testCase.self, testCase);
+            assert.equals(testCase.args.length, 0);
+            assert.clock(testCase.clock);
+            refute.defined(testCase.spy);
+            refute.defined(testCase.stub);
+            refute.defined(testCase.mock);
         },
 
-        "should inject properties into object": function () {
-            if (!supportsAjax) {
-                jstestdriver.console.log("Ajax unavailable, aborting");
-                return;
-            }
-
-            var testCase = boundTestCase();
-            var obj = {};
-
-            sinon.config = {
-                injectIntoThis: false,
-                injectInto: obj,
-                properties: ["server", "clock", "spy", "stub", "mock", "requests"]
-            };
-
-            sinon.test(testCase.fn).call(testCase);
-
-            assertEquals(0, testCase.args.length);
-            assertUndefined(testCase.server);
-            assertUndefined(testCase.clock);
-            assertUndefined(testCase.spy);
-            assertUndefined(testCase.stub);
-            assertUndefined(testCase.mock);
-            assertUndefined(testCase.requests);
-            assertFakeServer(obj.server);
-            assertClock(obj.clock);
-            assertFunction(obj.spy);
-            assertFunction(obj.stub);
-            assertFunction(obj.mock);
-            assertArray(obj.requests);
-        },
-
-        "should inject functions into test case by default": function () {
-            var testCase = boundTestCase();
+        "injects functions into test case by default": function () {
+            var testCase = this.boundTestCase();
             var obj = {};
 
             sinon.test(testCase.fn).call(testCase);
 
-            assertEquals(0, testCase.args.length);
-            assertFunction(testCase.spy);
-            assertFunction(testCase.stub);
-            assertFunction(testCase.mock);
-            assertObject(testCase.clock);
+            assert.equals(testCase.args.length, 0);
+            assert.isFunction(testCase.spy);
+            assert.isFunction(testCase.stub);
+            assert.isFunction(testCase.mock);
+            assert.isObject(testCase.clock);
         },
 
-        "should inject server and clock when only enabling them": function () {
-            if (!supportsAjax) {
-                jstestdriver.console.log("Ajax unavailable, aborting");
-                return;
-            }
-
-            var testCase = boundTestCase();
-            var obj = {};
-
-            sinon.config = {
-                useFakeTimers: true,
-                useFakeServer: true
-            };
-
-            sinon.test(testCase.fn).call(testCase);
-
-            assertEquals(0, testCase.args.length);
-            assertFunction(testCase.spy);
-            assertFunction(testCase.stub);
-            assertFunction(testCase.mock);
-            assertFakeServer(testCase.server);
-            assertArray(testCase.requests);
-            assertClock(testCase.clock);
-            assertUndefined(testCase.sandbox);
-        },
-
-        "should inject sandbox": function () {
-            var testCase = boundTestCase();
+        "injects sandbox": function () {
+            var testCase = this.boundTestCase();
             var obj = {};
 
             sinon.config = {
@@ -496,12 +437,12 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             sinon.test(testCase.fn).call(testCase);
 
-            assertEquals(0, testCase.args.length);
-            assertFunction(testCase.spy);
-            assertObject(testCase.sandbox);
+            assert.equals(testCase.args.length, 0);
+            assert.isFunction(testCase.spy);
+            assert.isObject(testCase.sandbox);
         },
 
-        "should use sinon.test to fake time": function () {
+        "uses sinon.test to fake time": function () {
             sinon.config = {
                 useFakeTimers: true
             };
@@ -522,5 +463,5 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(called);
         }
-    });
-}());
+    }
+});

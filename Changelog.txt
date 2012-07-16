@@ -1,3 +1,43 @@
+== 1.4.2 / 2012-07-11
+* sinon.match for arrays (Maximilian Antoni)
+
+== 1.4.1 / 2012-07-11
+* Strengthen a Node.JS inference to avoid quirky behavior with Mocha
+  (which provides a shim process object)
+
+== 1.4.0 / 2012-07-09
+* Argument matchers (Maximillian Antoni)
+  sinon.match.{any, same, typeOf, instanceOf, has, hasOwn, defined, truthy,
+  falsy} as well as typeOf shortcuts for boolean, number, string, object,
+  function, array, regexp and date. The result of a call can be used with
+  spy.calledWith.
+* spy.returned now works with matchers and compares objects deeply.
+* Matcher assertions: calledWithMatch, alwaysCalledWithMatch and
+  neverCalledWithMatch
+* calledWithNew and alwaysCalledWithNew for assert (Maximilian Antoni)
+* Easier stubbed fluent interfaces: stub.returnsThis() (Glen Mailer)
+* allow yields() and family to be used along with returns()/throws() and
+  family (Glen Mailer)
+* Async versions `callsArg*` and `yields*` for stubs (TEHEK)
+* Format args when doing `spy.printf("%*")` (Domenic Denicola)
+* Add notCalled property to spies
+* Fix: spy.reset did not reset fakes created by spy.withArgs (Maximilian Antoni)
+* Properly restore stubs when stubbing entire objects through the sandbox
+  (Konrad Holowinski)
+* Restore global methods properly - delete properties that where not own
+  properties (Keith Cirkel)
+* setTimeout and setInterval pass arguments (Rodion Vynnychenko)
+* Timer callbacks that contain a clock.tick no longer fails (Wesley Waser)
+* spy(undefined, "property") now throws
+* Prevent multiple restore for fake timers (Kevin Decker)
+* Fix toString format under Node (Kevin Decker)
+* Mock expectations emit success and failure events (Kevin Decker)
+* Development improvement: Use Buster.JS to test Sinon
+* Fix bug where expect.atLeast failed when minimum calls where received
+* Make fake server safe to load on node.js
+* Add support for no args on .withArgs and .withExactArgs (Tek Nynja)
+* Avoid hasOwnProperty for host objects
+
 == 1.3.2 / 2012-03-11
 * Stronger Node inference in sandbox
 * Fixed issue with sinon.useFakeTimers() and Rhino.js 1.7R3
