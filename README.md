@@ -14,6 +14,12 @@ in your project, as you would any other third party library.
 Don't forget to include the parts of Sinon.JS that you want to use as well
 (i.e. spy.js).
 
+Or install using ruby and node:
+
+    $ gem install juicer
+    $ npm install buster-format
+    $ ruby build
+
 ## Usage
 
 See the [sinon project homepage](http://sinonjs.org/)
