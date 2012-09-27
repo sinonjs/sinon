@@ -2074,6 +2074,16 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "call.invokeCallback": {
+
+            "is alias for yield": function () {
+                var call = sinon.spy.spyCall.create(function () {});
+
+                assert.same(call.yield, call.invokeCallback);
+            }
+
+        },
+
         "call.yieldTo": {
             setUp: spyCallCallSetup,
 
