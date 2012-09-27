@@ -1,3 +1,10 @@
+== 1.4.2 / 2012-07-11
+* sinon.match for arrays (Maximilian Antoni)
+
+== 1.4.1 / 2012-07-11
+* Strengthen a Node.JS inference to avoid quirky behavior with Mocha
+  (which provides a shim process object)
+
 == 1.4.0 / 2012-07-09
 * Argument matchers (Maximillian Antoni)
   sinon.match.{any, same, typeOf, instanceOf, has, hasOwn, defined, truthy,
