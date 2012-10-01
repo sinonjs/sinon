@@ -591,6 +591,32 @@ if (typeof require === "function" && typeof module === "object") {
                 this.spy();
 
                 assert.isFalse(this.spy.calledOn({}));
+            },
+
+            "is true if called with matcher that returns true": function () {
+                var matcher = sinon.match(function () { return true; });
+                this.spy();
+
+                assert(this.spy.calledOn(matcher));
+            },
+
+            "is false if called with matcher that returns false": function () {
+                var matcher = sinon.match(function () { return false; });
+                this.spy();
+
+                assert.isFalse(this.spy.calledOn(matcher));
+            },
+
+            "invokes matcher.test with given object": function () {
+                var expected = {};
+                var actual;
+                this.spy.call(expected);
+
+                this.spy.calledOn(sinon.match(function (value) {
+                    actual = value;
+                }));
+
+                assert.same(actual, expected);
             }
         },
 
