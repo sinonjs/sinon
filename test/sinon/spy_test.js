@@ -393,6 +393,42 @@ if (typeof require === "function" && typeof module === "object") {
                 } catch (e) {
                     assert.same(e, err);
                 }
+            },
+
+            "retains function length 0": function () {
+                var spy = sinon.spy.create(function () {});
+
+                assert.equals(spy.length, 0);
+            },
+
+            "retains function length 1": function () {
+                var spy = sinon.spy.create(function (a) {});
+
+                assert.equals(spy.length, 1);
+            },
+
+            "retains function length 2": function () {
+                var spy = sinon.spy.create(function (a, b) {});
+
+                assert.equals(spy.length, 2);
+            },
+
+            "retains function length 3": function () {
+                var spy = sinon.spy.create(function (a, b, c) {});
+
+                assert.equals(spy.length, 3);
+            },
+
+            "retains function length 4": function () {
+                var spy = sinon.spy.create(function (a, b, c, d) {});
+
+                assert.equals(spy.length, 4);
+            },
+
+            "retains function length 5": function () {
+                var spy = sinon.spy.create(function (a, b, c, d, e) {});
+
+                assert.equals(spy.length, 5);
             }
         },
 
