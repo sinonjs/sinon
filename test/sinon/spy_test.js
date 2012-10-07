@@ -425,10 +425,10 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.equals(spy.length, 4);
             },
 
-            "retains function length 5": function () {
-                var spy = sinon.spy.create(function (a, b, c, d, e) {});
+            "retains function length 12": function () {
+                var spy = sinon.spy.create(function (a, b, c, d, e, f, g, h, i, j,k,l) {});
 
-                assert.equals(spy.length, 5);
+                assert.equals(spy.length, 12);
             }
         },
 
