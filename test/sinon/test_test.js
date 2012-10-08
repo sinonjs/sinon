@@ -129,13 +129,21 @@ buster.testCase("sinon.test", {
     "verifies mocks": function () {
         var method = function () {};
         var object = { method: method };
+        var exception;
 
-        assert.exception(function () {
+        try {
             sinon.test(function () {
-                this.mock(object).expects("method");
+                this.mock(object).expects("method").withExactArgs(1).once();
+                object.method(42);
             }).call({});
-        }, "ExpectationError");
+        } catch (e) {
+          exception = e;
+        }
 
+        assert.same(exception.name, "ExpectationError");
+        assert.equals(exception.message,
+                      "Unexpected call: method(42)\n" +
+                      "    Expected method(1) once (never called)");
         assert.same(object.method, method);
     },
 

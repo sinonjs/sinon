@@ -22,6 +22,26 @@ buster.testCase("sinon.stub", {
         assert.isFunction(stub.calledOn);
     },
 
+    "should contain asynchronous versions of callsArg*, yields*, and thenYields methods": function() {
+        var stub = sinon.stub.create();
+
+        var syncVersions = 0;
+        var asyncVersions = 0;
+
+        for (var method in stub) {
+            if (stub.hasOwnProperty(method) && method.match(/^(callsArg|yields|thenYields$)/)) {
+                if (!method.match(/Async/)) {
+                    syncVersions++;
+                } else if (method.match(/Async/)) {
+                    asyncVersions++;
+                }
+            }
+        }
+
+        assert.same(syncVersions, asyncVersions,
+            "Stub prototype should contain same amount of synchronous and asynchronous methods");
+    },
+
     "returns": {
         "returns specified value": function () {
             var stub = sinon.stub.create();
@@ -722,7 +742,7 @@ buster.testCase("sinon.stub", {
             var spy = sinon.spy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
-        }
+        },
     },
 
     "yieldsOn": {
@@ -1049,13 +1069,13 @@ buster.testCase("sinon.stub", {
         setUp: function () {
             this.stub = sinon.stub.create();
         },
-        
+
         "passes call to callsArgWith": function () {
             var object = {};
             sinon.spy(this.stub, "callsArgWith");
-            
+
             this.stub.callsArgWithAsync(1, object);
-            
+
             assert(this.stub.callsArgWith.calledWith(1, object));
         },
 
@@ -1063,7 +1083,7 @@ buster.testCase("sinon.stub", {
             var object = {};
             var array = [];
             this.stub.callsArgWithAsync(1, object, array);
-            
+
             var callback = sinon.spy(done(function () {
                 assert(callback.calledWith(object, array));
             }));
@@ -1081,7 +1101,7 @@ buster.testCase("sinon.stub", {
                 foo: "bar"
             };
         },
-        
+
         "passes call to callsArgOn": function () {
             sinon.spy(this.stub, "callsArgOn");
 
@@ -1093,13 +1113,13 @@ buster.testCase("sinon.stub", {
         "asynchronously calls argument at specified index with specified context": function (done) {
             var context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
-            
+
             var callback = sinon.spy(done(function () {
                 assert(callback.calledOn(context));
             }));
 
             this.stub(1, 2, callback);
-            
+
             assert(!callback.called);
         }
     },
@@ -1109,7 +1129,7 @@ buster.testCase("sinon.stub", {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
         },
-        
+
         "passes call to callsArgOnWith": function () {
             var object = {};
             sinon.spy(this.stub, "callsArgOnWith");
@@ -1123,14 +1143,14 @@ buster.testCase("sinon.stub", {
             var object = {};
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
-            
+
             var callback = sinon.spy(done(function () {
                 assert(callback.calledOn(context))
                 assert(callback.calledWith(object));
             }));
 
             this.stub(1, callback);
-            
+
             assert(!callback.called);
         }
     },
@@ -1149,7 +1169,7 @@ buster.testCase("sinon.stub", {
             var stub = sinon.stub().yieldsAsync();
 
             var spy = sinon.spy(done);
-            
+
             stub(spy);
 
             assert(!spy.called);
@@ -1180,9 +1200,9 @@ buster.testCase("sinon.stub", {
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
             }));
-            
+
             this.stub(spy);
-            
+
             assert(!spy.called);
         }
     },
@@ -1196,7 +1216,7 @@ buster.testCase("sinon.stub", {
 
             assert(stub.yieldsTo.calledWith("success"));
         },
-        
+
         "asynchronously yields to property of object argument": function (done) {
             var stub = sinon.stub().yieldsToAsync("success");
 
@@ -1229,7 +1249,7 @@ buster.testCase("sinon.stub", {
         "asynchronously yields to property of object argument with given context": function (done) {
             var context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
-            
+
             var callback = sinon.spy(done(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
@@ -1240,5 +1260,121 @@ buster.testCase("sinon.stub", {
 
             assert(!callback.called);
         }
+    },
+
+    "yields* calls should be chainable to produce a sequence": function () {
+        var context = { foo: "bar" };
+        var obj = { method1: sinon.spy(), method2: sinon.spy() };
+        var obj2 = { method2: sinon.spy() };
+        var stub = sinon.stub().yields(1, 2)
+                               .yieldsOn(context, 3, 4)
+                               .yieldsTo("method1", 5, 6)
+                               .yieldsToOn("method2", context, 7, 8);
+
+        var spy1 = sinon.spy();
+        var spy2 = sinon.spy();
+
+        stub(spy1);
+        stub(spy2);
+        stub(obj);
+        stub(obj);
+        stub(obj2); // should continue doing the last thing
+
+        assert(spy1.calledOnce);
+        assert(spy1.calledWithExactly(1, 2));
+
+        assert(spy2.calledOnce);
+        assert(spy2.calledAfter(spy1));
+        assert(spy2.calledOn(context));
+        assert(spy2.calledWithExactly(3, 4));
+
+        assert(obj.method1.calledOnce);
+        assert(obj.method1.calledAfter(spy2));
+        assert(obj.method1.calledWithExactly(5, 6));
+
+        assert(obj.method2.calledOnce);
+        assert(obj.method2.calledAfter(obj.method1));
+        assert(obj.method2.calledOn(context));
+        assert(obj.method2.calledWithExactly(7, 8));
+
+        assert(obj2.method2.calledOnce);
+        assert(obj2.method2.calledAfter(obj.method2));
+        assert(obj2.method2.calledOn(context));
+        assert(obj2.method2.calledWithExactly(7, 8));
+    },
+
+    "callsArg* calls should be chainable to produce a sequence": function () {
+        var spy1 = sinon.spy();
+        var spy2 = sinon.spy();
+        var spy3 = sinon.spy();
+        var spy4 = sinon.spy();
+        var spy5 = sinon.spy();
+        var decoy = sinon.spy();
+        var context = { foo: "bar" };
+
+        var stub = sinon.stub().callsArg(0)
+                               .callsArgWith(1, "a", "b")
+                               .callsArgOn(2, context)
+                               .callsArgOnWith(3, context, "c", "d");
+
+        stub(spy1);
+        stub(decoy, spy2);
+        stub(decoy, decoy, spy3);
+        stub(decoy, decoy, decoy, spy4);
+        stub(decoy, decoy, decoy, spy5); // should continue doing last thing
+
+        assert(spy1.calledOnce);
+
+        assert(spy2.calledOnce);
+        assert(spy2.calledAfter(spy1));
+        assert(spy2.calledWithExactly("a", "b"));
+
+        assert(spy3.calledOnce);
+        assert(spy3.calledAfter(spy2));
+        assert(spy3.calledOn(context));
+
+        assert(spy4.calledOnce);
+        assert(spy4.calledAfter(spy3));
+        assert(spy4.calledOn(context));
+        assert(spy4.calledWithExactly("c", "d"));
+
+        assert(spy5.calledOnce);
+        assert(spy5.calledAfter(spy4));
+        assert(spy5.calledOn(context));
+        assert(spy5.calledWithExactly("c", "d"));
+
+        assert(decoy.notCalled);
+    },
+
+    "yields* calls and callsArg* in combination should be chainable to produce a sequence": function () {
+        var stub = sinon.stub().yields(1, 2)
+                               .callsArg(1)
+                               .yieldsTo("method")
+                               .callsArgWith(2, "a", "b");
+
+        var obj = { method: sinon.spy() };
+        var spy1 = sinon.spy();
+        var spy2 = sinon.spy();
+        var spy3 = sinon.spy();
+        var decoy = sinon.spy();
+
+        stub(spy1);
+        stub(decoy, spy2);
+        stub(obj);
+        stub(decoy, decoy, spy3);
+
+        assert(spy1.calledOnce);
+
+        assert(spy2.calledOnce);
+        assert(spy2.calledAfter(spy1));
+
+        assert(obj.method.calledOnce);
+        assert(obj.method.calledAfter(spy2));
+
+        assert(spy3.calledOnce);
+        assert(spy3.calledAfter(obj.method));
+        assert(spy3.calledWithExactly("a", "b"));
+
+        assert(decoy.notCalled);
     }
 });
