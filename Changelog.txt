@@ -1,3 +1,16 @@
+== 1.5.0 / 2012-10-19
+* Don't force "use strict" on Sinon consumers
+* Don't assume objects have hasOwnProperties. Fixes problem with e.g.
+  stubbing properties on process.env
+* Preserve function length for spy (Maximilian Antoni)
+* Add 'invokeCallback' alias for 'yield' on calls (Maximilian Antoni)
+* Added matcher support for calledOn (Maximilian Antoni)
+* Retain original expectation messages, for failed mocks under sinon.test
+  (Giorgos Giannoutsos)
+* Allow yields* and callsArg* to create sequences of calls. (Domenic Denicola)
+* sinon.js can catch itself in endless loop while filling stub prototype
+  with asynch methods (Jan Kopriva)
+
 == 1.4.2 / 2012-07-11
 * sinon.match for arrays (Maximilian Antoni)
 
