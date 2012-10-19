@@ -104,6 +104,19 @@ buster.testCase("sinon.collection", {
             };
 
             assert.equals(this.collection.stub(object, "method"), object.method);
+        },
+
+        "on node": {
+            requiresSupportFor: { "process": typeof process !== "undefined" },
+
+            setUp: function () {
+                process.env.HELL = "Ain't too bad";
+            },
+
+            "stubs environment property": function () {
+                this.collection.stub(process.env, "HELL", "froze over");
+                assert.equals(process.env.HELL, "froze over");
+            }
         }
     },
 
