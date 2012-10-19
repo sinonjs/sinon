@@ -26,10 +26,11 @@ def add_license(file, version)
  * #{File.read("LICENSE").split("\n").join("\n * ")}
  */
 
-"use strict";
 PREAMBLE
 
-    f.puts(contents.gsub("\"use strict\";\n", ""))
+    contents = contents.gsub("\"use strict\";\n", "")
+    declaration = "var sinon = (function () {"
+    f.puts(contents.sub(declaration, "#{declaration}\n\"use strict\";\n"))
   end
 end
 
