@@ -105,12 +105,17 @@ buster.testCase("sinon.stub", {
             assert.same(instance.stub(), instance);
         },
 
-        "stub returns undefined when detached": function () {
-            var stub = sinon.stub.create();
-            stub.returnsThis();
+        "stub returns undefined when detached": {
+            requiresSupportFor: {
+                strictMode: (function () { return this; }()) === undefined
+            },
+            "": function () {
+                var stub = sinon.stub.create();
+                stub.returnsThis();
 
-            // Due to strict mode, would be `global` otherwise
-            assert.same(stub(), undefined);
+                // Due to strict mode, would be `global` otherwise
+                assert.same(stub(), undefined);
+            }
         },
 
         "stub respects call/apply": function() {
