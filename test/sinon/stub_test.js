@@ -1381,5 +1381,31 @@ buster.testCase("sinon.stub", {
         assert(spy3.calledWithExactly("a", "b"));
 
         assert(decoy.notCalled);
+    },
+
+    "reset should clear yields* and callsArg* sequence": function () {
+        var stub = sinon.stub().yields(1)
+            .callsArg(2);
+        stub.reset();
+        stub.yields(3);
+        var obj = { method: sinon.spy() };
+        var spy = sinon.spy();
+
+        stub(spy);
+
+        assert(spy.calledOnce);
+        assert(spy.calledWithExactly(3));
+    },
+
+    "reset should also reset spy state": function () {
+        var stub = sinon.stub().yields(1);
+        var spy = sinon.spy();
+        stub(spy);
+        assert(stub.called);
+        assert(spy.called);
+
+        stub.reset();
+
+        assert(!stub.called);
     }
 });
