@@ -1,3 +1,10 @@
+== 1.5.1 / 2012-11-27
+* Ensure window.Image can be stubbed. (Adrian Phinney)
+* Fix spy() in IE 8 (Scott Andrews)
+* Fix sinon base in IE 8 (Scott Andrews)
+* Format arguments ouput when mock excpetation is not met (kbackowski)
+* Calling spy.reset directly from stub.reset (Thomas Meyer)
+
 == 1.5.0 / 2012-10-19
 * Don't force "use strict" on Sinon consumers
 * Don't assume objects have hasOwnProperties. Fixes problem with e.g.
