@@ -1381,5 +1381,17 @@ buster.testCase("sinon.stub", {
         assert(spy3.calledWithExactly("a", "b"));
 
         assert(decoy.notCalled);
+    },
+
+    "reset only resets call history": function () {
+        var obj = { a: function () {} };
+        var spy = sinon.spy();
+        sinon.stub(obj, "a").callsArg(1);
+
+        obj.a(null, spy);
+        obj.a.reset();
+        obj.a(null, spy);
+
+        assert(spy.calledTwice);
     }
 });
