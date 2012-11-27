@@ -1,3 +1,6 @@
+== 1.5.2 / 2012-11-28
+* Revert stub.reset changes that caused existing tests to fail.
+
 == 1.5.1 / 2012-11-27
 * Ensure window.Image can be stubbed. (Adrian Phinney)
 * Fix spy() in IE 8 (Scott Andrews)
