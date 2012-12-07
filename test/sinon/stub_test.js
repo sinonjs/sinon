@@ -1393,5 +1393,124 @@ buster.testCase("sinon.stub", {
         obj.a(null, spy);
 
         assert(spy.calledTwice);
+    },
+
+    "resetBehavior": {
+        "clears yields* and callsArg* sequence": function () {
+            var stub = sinon.stub().yields(1)
+                .callsArg(1);
+            stub.resetBehavior();
+            stub.yields(3);
+            var spyWanted = sinon.spy();
+            var spyNotWanted = sinon.spy();
+
+            stub(spyWanted, spyNotWanted);
+
+            assert(spyNotWanted.notCalled);
+            assert(spyWanted.calledOnce);
+            assert(spyWanted.calledWithExactly(3));
+        },
+
+        "cleans 'returns' behavior": function () {
+            var stub = sinon.stub().returns(1);
+
+            stub.resetBehavior();
+
+            refute.defined(stub());
+        },
+
+        "cleans behavior of fakes returned by withArgs": function () {
+            var stub = sinon.stub();
+            stub.withArgs('lolz').returns(2);
+
+            stub.resetBehavior();
+
+            refute.defined(stub('lolz'));
+        },
+
+        "does not clean parents' behavior when called on a fake returned by withArgs": function () {
+            var parentStub = sinon.stub().returns(false);
+            var childStub = parentStub.withArgs('lolz').returns(true);
+
+            childStub.resetBehavior();
+
+            refute.defined(parentStub('lolz'));
+            assert.same(parentStub(), false);
+        },
+
+        "cleans 'returnsArg' behavior": function () {
+            var stub = sinon.stub().returnsArg(0);
+
+            stub.resetBehavior();
+
+            refute.defined(stub('defined'));
+        },
+
+        "cleans 'returnsThis' behavior": function () {
+            var instance = {};
+            instance.stub = sinon.stub.create();
+            instance.stub.returnsThis();
+
+            instance.stub.resetBehavior();
+
+            refute.defined(instance.stub());
+        },
+
+        "does not touch properties that are reset by 'reset'": {
+            "calledOnce": function () {
+                var stub = sinon.stub();
+                stub(1);
+
+                stub.resetBehavior();
+
+                assert(stub.calledOnce);
+            },
+
+            "called multiple times": function () {
+                var stub = sinon.stub();
+                stub(1);
+                stub(2);
+                stub(3);
+
+                stub.resetBehavior();
+
+                assert(stub.called);
+                assert.equals(stub.args.length, 3);
+                assert.equals(stub.returnValues.length, 3);
+                assert.equals(stub.exceptions.length, 3);
+                assert.equals(stub.thisValues.length, 3);
+                assert.defined(stub.firstCall);
+                assert.defined(stub.secondCall);
+                assert.defined(stub.thirdCall);
+                assert.defined(stub.lastCall);
+            },
+
+            "call order state": function () {
+                var stubs = [sinon.stub(), sinon.stub()];
+                stubs[0]();
+                stubs[1]();
+
+                stubs[0].resetBehavior();
+
+                assert(stubs[0].calledBefore(stubs[1]));
+            },
+
+            "fakes returned by withArgs": function () {
+                var stub = sinon.stub();
+                var fakeA = stub.withArgs("a");
+                var fakeB = stub.withArgs("b");
+                stub("a");
+                stub("b");
+                stub("c");
+                var fakeC = stub.withArgs("c");
+
+                stub.resetBehavior();
+
+                assert(fakeA.calledOnce);
+                assert(fakeB.calledOnce);
+                assert(fakeC.calledOnce);
+            }
+        }
     }
+
 });
