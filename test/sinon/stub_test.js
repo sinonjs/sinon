@@ -1418,7 +1418,7 @@ buster.testCase("sinon.stub", {
         refute.defined(stub());
     },
 
-    "resetBahavior should clean 'returnsArg' behavior": function () {
+    "resetBehavior should clean 'returnsArg' behavior": function () {
         var stub = sinon.stub().returnsArg(0);
 
         stub.resetBehavior();
@@ -1426,7 +1426,7 @@ buster.testCase("sinon.stub", {
         refute.defined(stub('defined'));
     },
 
-    "resetBahavior should clean 'returnsThis' behavior": function () {
+    "resetBehavior should clean 'returnsThis' behavior": function () {
         var instance = {};
         instance.stub = sinon.stub.create();
         instance.stub.returnsThis();
