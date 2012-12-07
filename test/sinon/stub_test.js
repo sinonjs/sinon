@@ -1395,63 +1395,66 @@ buster.testCase("sinon.stub", {
         assert(spy.calledTwice);
     },
 
-    "resetBehavior should clear yields* and callsArg* sequence": function () {
-        var stub = sinon.stub().yields(1)
-            .callsArg(1);
-        stub.resetBehavior();
-        stub.yields(3);
-        var spyWanted = sinon.spy();
-        var spyNotWanted = sinon.spy();
+    "resetBehavior": {
+        "clears yields* and callsArg* sequence": function () {
+            var stub = sinon.stub().yields(1)
+                .callsArg(1);
+            stub.resetBehavior();
+            stub.yields(3);
+            var spyWanted = sinon.spy();
+            var spyNotWanted = sinon.spy();
 
-        stub(spyWanted, spyNotWanted);
+            stub(spyWanted, spyNotWanted);
 
-        assert(spyNotWanted.notCalled);
-        assert(spyWanted.calledOnce);
-        assert(spyWanted.calledWithExactly(3));
-    },
+            assert(spyNotWanted.notCalled);
+            assert(spyWanted.calledOnce);
+            assert(spyWanted.calledWithExactly(3));
+        },
 
-    "resetBehavior should clean 'returns' behavior": function () {
-        var stub = sinon.stub().returns(1);
+        "cleans 'returns' behavior": function () {
+            var stub = sinon.stub().returns(1);
 
-        stub.resetBehavior();
+            stub.resetBehavior();
 
-        refute.defined(stub());
-    },
+            refute.defined(stub());
+        },
 
-    "resetBehavior should clean behavior of fakes returned by withArgs": function () {
-        var stub = sinon.stub();
-        stub.withArgs('lolz').returns(2);
+        "cleans behavior of fakes returned by withArgs": function () {
+            var stub = sinon.stub();
+            stub.withArgs('lolz').returns(2);
 
-        stub.resetBehavior();
+            stub.resetBehavior();
 
-        refute.defined(stub('lolz'));
-    },
+            refute.defined(stub('lolz'));
+        },
 
-    "resetBehavior on a child created with withArgs should not clean parents' behavior": function () {
-        var parentStub = sinon.stub().returns(false);
-        var childStub = parentStub.withArgs('lolz').returns(true);
+        "does not clean parents' behavior when called on a fake returned by withArgs": function () {
+            var parentStub = sinon.stub().returns(false);
+            var childStub = parentStub.withArgs('lolz').returns(true);
 
-        childStub.resetBehavior();
+            childStub.resetBehavior();
 
-        refute.defined(parentStub('lolz'));
-        assert.same(parentStub(), false);
-    },
+            refute.defined(parentStub('lolz'));
+            assert.same(parentStub(), false);
+        },
 
-    "resetBehavior should clean 'returnsArg' behavior": function () {
-        var stub = sinon.stub().returnsArg(0);
+        "cleans 'returnsArg' behavior": function () {
+            var stub = sinon.stub().returnsArg(0);
 
-        stub.resetBehavior();
+            stub.resetBehavior();
 
-        refute.defined(stub('defined'));
-    },
+            refute.defined(stub('defined'));
+        },
 
-    "resetBehavior should clean 'returnsThis' behavior": function () {
-        var instance = {};
-        instance.stub = sinon.stub.create();
-        instance.stub.returnsThis();
+        "cleans 'returnsThis' behavior": function () {
+            var instance = {};
+            instance.stub = sinon.stub.create();
+            instance.stub.returnsThis();
 
-        instance.stub.resetBehavior();
+            instance.stub.resetBehavior();
 
-        refute.defined(instance.stub());
+            refute.defined(instance.stub());
+        }
     }
+
 });
