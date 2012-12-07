@@ -1418,6 +1418,25 @@ buster.testCase("sinon.stub", {
         refute.defined(stub());
     },
 
+    "resetBehavior should clean behavior of fakes returned by withArgs": function () {
+        var stub = sinon.stub();
+        stub.withArgs('lolz').returns(2);
+
+        stub.resetBehavior();
+
+        refute.defined(stub('lolz'));
+    },
+
+    "resetBehavior on a child created with withArgs should not clean parents' behavior": function () {
+        var parentStub = sinon.stub().returns(false);
+        var childStub = parentStub.withArgs('lolz').returns(true);
+
+        childStub.resetBehavior();
+
+        refute.defined(parentStub('lolz'));
+        assert.same(parentStub(), false);
+    },
+
     "resetBehavior should clean 'returnsArg' behavior": function () {
         var stub = sinon.stub().returnsArg(0);
 
