@@ -1393,5 +1393,46 @@ buster.testCase("sinon.stub", {
         obj.a(null, spy);
 
         assert(spy.calledTwice);
+    },
+
+    "resetBehavior should clear yields* and callsArg* sequence": function () {
+        var stub = sinon.stub().yields(1)
+            .callsArg(1);
+        stub.resetBehavior();
+        stub.yields(3);
+        var spyWanted = sinon.spy();
+        var spyNotWanted = sinon.spy();
+
+        stub(spyWanted, spyNotWanted);
+
+        assert(spyNotWanted.notCalled);
+        assert(spyWanted.calledOnce);
+        assert(spyWanted.calledWithExactly(3));
+    },
+
+    "resetBehavior should clean 'returns' behavior": function () {
+        var stub = sinon.stub().returns(1);
+
+        stub.resetBehavior();
+
+        refute.defined(stub());
+    },
+
+    "resetBahavior should clean 'returnsArg' behavior": function () {
+        var stub = sinon.stub().returnsArg(0);
+
+        stub.resetBehavior();
+
+        refute.defined(stub('defined'));
+    },
+
+    "resetBahavior should clean 'returnsThis' behavior": function () {
+        var instance = {};
+        instance.stub = sinon.stub.create();
+        instance.stub.returnsThis();
+
+        instance.stub.resetBehavior();
+
+        refute.defined(instance.stub());
     }
 });
