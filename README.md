@@ -56,6 +56,10 @@ make sure you have a build (requires Ruby and Juicer):
 
 Then open `test/sinon-dist.html` in a browser.
 
+If the build script is unable to find Juicer, try
+
+    $ ruby -rubygems build
+
 Some tests needs working XHR to pass. To run the tests over an HTTP server, run
 
     $ node_modules/http-server/bin/http-server
