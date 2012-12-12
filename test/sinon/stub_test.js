@@ -666,6 +666,30 @@ buster.testCase("sinon.stub", {
             }
         },
 
+        "returns arg if returnsArg is present and no callback is passed": function () {
+            var stub = sinon.stub().yields();
+            var object = {};
+            stub.returnsArg(0);
+
+            assert.same(stub(object), object);
+        },
+
+        "returns this if returnThis is true and no callback is passed": function () {
+            var instance = {};
+            instance.stub = sinon.stub.yields();
+            instance.stub.returnsThis();
+
+            assert.same(instance.stub(), instance);
+        },
+
+        "returns returnValue if present and no callback is passed": function () {
+            var stub = sinon.stub().yields();
+            var object = {};
+            stub.returns(object);
+
+            assert.same(stub(), object);
+        },
+
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = sinon.stub(myObj, "somethingAwesome").yields();
