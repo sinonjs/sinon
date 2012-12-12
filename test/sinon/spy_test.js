@@ -1838,7 +1838,7 @@ if (typeof require === "function" && typeof module === "object") {
                 }
             },
 
-	    "passs additional arguments": function () {
+	    "pass additional arguments": function () {
                 var spy = sinon.spy();
                 var callback = sinon.spy();
                 var array = [];
