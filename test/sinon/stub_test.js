@@ -676,7 +676,7 @@ buster.testCase("sinon.stub", {
 
         "returns this if returnThis is true and no callback is passed": function () {
             var instance = {};
-            instance.stub = sinon.stub.yields();
+            instance.stub = sinon.stub().yields();
             instance.stub.returnsThis();
 
             assert.same(instance.stub(), instance);
