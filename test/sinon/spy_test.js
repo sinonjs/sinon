@@ -2697,8 +2697,19 @@ if (typeof require === "function" && typeof module === "object") {
 
                     assert.equals(spy.printf('%C'), 
                         '\n    spy(' + str + ')' +
+                        '\n\n    spy(' + str + ')' +
+                        '\n\n    spy(' + str + ')');
+
+                    spy.reset();
+
+                    spy('test');
+                    spy('spy\ntest');
+                    spy('spy\ntest');
+
+                    assert.equals(spy.printf('%C'),
+                        '\n    spy(test)' +
                         '\n    spy(' + str + ')' +
-                        '\n    spy(' + str + ')');
+                        '\n\n    spy(' + str + ')');
                 }
             },
             "thisValues" : function () {
