@@ -439,5 +439,66 @@ buster.testCase("sinon", {
         "returns date": function () {
             assert.equals(sinon.typeOf(new Date()), "date");
         }
+    },
+
+    ".createStubInstance": {
+        "stubs existing methods": function() {
+            var Class = function() {};
+            Class.prototype.method = function() {};
+
+            var stub = sinon.createStubInstance(Class);
+            stub.method.returns(3);
+            assert.equals(3, stub.method());
+        },
+
+        "doesn't stub fake methods": function() {
+            var Class = function() {};
+
+            var stub = sinon.createStubInstance(Class);
+            assert.exception(function() {
+                stub.method.returns(3);
+            });
+        },
+
+        "doesn't call the constructor": function() {
+            var Class = function(a, b) {
+                var c = a + b;
+                throw c;
+            };
+            Class.prototype.method = function() {};
+
+            var stub = sinon.createStubInstance(Class);
+            refute.exception(function() {
+                stub.method(3);
+            });
+        },
+
+        "retains non function values": function() {
+            var TYPE = "some-value";
+            var Class = function() {}
+            Class.prototype.type = TYPE;
+
+            var stub = sinon.createStubInstance(Class);
+            assert.equals(TYPE, stub.type);
+        },
+
+        "has no side effects on the prototype": function() {
+            var proto = {'method': function() {throw 'error'}};
+            var Class = function() {};
+            Class.prototype = proto;
+
+            var stub = sinon.createStubInstance(Class);
+            refute.exception(stub.method);
+            assert.exception(proto.method);
+        },
+
+        "throws exception for non function params": function() {
+            var types = [{}, 3, 'hi!'];
+            for (var i = 0; i < types.length; i++) {
+                assert.exception(function() {
+                    sinon.createStubInstance(types[i]);
+                });
+            }
+        }
     }
 });
