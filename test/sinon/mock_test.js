@@ -63,6 +63,24 @@ buster.testCase("sinon.mock", {
             this.expectation = sinon.expectation.create(this.method);
         },
 
+        "creates unnamed expectation": function () {
+            var anonMock = sinon.expectation.create();
+            anonMock.never();
+
+            assert(anonMock.verify());
+        },
+
+        "uses 'anonymous mock expectation' for unnamed expectation": function () {
+            var anonMock = sinon.expectation.create();
+            anonMock.once();
+
+            try {
+                anonMock.verify();
+            } catch (e) {
+                assert.match(e.message, "anonymous mock expectation");
+            }
+        },
+
         "call expectation": function () {
             this.expectation();
 
