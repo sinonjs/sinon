@@ -398,6 +398,12 @@ buster.testCase("sinon.clock", {
             assert.exception(function() {
                 clock.tick(1000);
             });
+        },
+
+        "returns the current now value": function () {
+            var clock = this.clock;
+            var value = clock.tick(200);
+            assert.equals(clock.now, value);
         }
     },
 
