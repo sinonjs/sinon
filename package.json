@@ -18,7 +18,8 @@
         }
     ],
     "scripts": {
-        "test": "node test/node/run.js"
+        "test": "node test/node/run.js",
+        "prepublish": "./build"
     },
     "dependencies": {
         "buster-format": "~0.5"
