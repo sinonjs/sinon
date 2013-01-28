@@ -1383,6 +1383,24 @@ buster.testCase("sinon.stub", {
         assert(decoy.notCalled);
     },
 
+    "callsArgWith sequences should interact correctly with assertions (GH-231)": function () {
+        var stub = sinon.stub();
+        var spy = sinon.spy();
+
+        stub.callsArgWith(0, "a");
+
+        stub(spy);
+        assert(spy.calledWith("a"));
+
+        stub(spy);
+        assert(spy.calledWith("a"));
+
+        stub.callsArgWith(0, "b");
+
+        stub(spy);
+        assert(spy.calledWith("b"));
+    },
+
     "reset only resets call history": function () {
         var obj = { a: function () {} };
         var spy = sinon.spy();
