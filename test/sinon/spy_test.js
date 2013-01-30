@@ -1958,7 +1958,7 @@ if (typeof require === "function" && typeof module === "object") {
             	this.args.push(1, 2, callback);
             	var thisObj = { name1: "value1", name2: "value2" };
 
-            	this.call.callArgOn(2, obj);
+            	this.call.callArgOn(2, thisObj);
 
             	assert(callback.called);
             	assert(callback.calledOn(thisObj));
