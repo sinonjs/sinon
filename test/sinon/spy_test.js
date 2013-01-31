@@ -1725,11 +1725,100 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "callArgOn": {
+            "is function": function () {
+                var spy = sinon.spy();
+
+                assert.isFunction(spy.callArgOn);
+            },
+
+            "invokes argument at index for all calls": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy(1, 2, callback);
+                spy(3, 4, callback);
+
+                spy.callArgOn(2, thisObj);
+
+                assert(callback.calledTwice);
+                assert(callback.alwaysCalledWith());
+                assert(callback.alwaysCalledOn(thisObj));
+            },
+
+            "throws if argument at index is not a function": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy();
+
+                assert.exception(function () {
+                    spy.callArgOn(1, thisObj);
+                }, "TypeError");
+            },
+
+            "throws if spy was not yet invoked": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.callArgOn(0, thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "spy cannot call arg since it was not yet invoked.");
+                }
+            },
+
+            "includes spy name in error message": function () {
+                var api = { someMethod: function () {} };
+                var spy = sinon.spy(api, "someMethod");
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.callArgOn(0, thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "someMethod cannot call arg since it was not yet invoked.");
+                }
+            },
+
+            "throws if index is not a number": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy();
+
+                assert.exception(function () {
+                    spy.callArg("", thisObj);
+                }, "TypeError");
+            },
+
+            "pass additional arguments": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var array = [];
+                var object = {};
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy(callback);
+
+                spy.callArgOn(0, thisObj, "abc", 123, array, object);
+
+                assert(callback.calledWith("abc", 123, array, object));
+                assert(callback.calledOn(thisObj));
+            }
+        },
+
         "callArgWith": {
             "is alias for callArg": function () {
                 var spy = sinon.spy();
 
                 assert.same(spy.callArgWith, spy.callArg);
+            }
+        },
+
+        "callArgOnWith": {
+            "is alias for callArgOn": function () {
+                var spy = sinon.spy();
+
+                assert.same(spy.callArgOnWith, spy.callArgOn);
             }
         },
 
@@ -1796,6 +1885,67 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "yieldOn": {
+            "is function": function () {
+                var spy = sinon.spy();
+
+                assert.isFunction(spy.yieldOn);
+            },
+
+            "invokes first function arg for all calls": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy(1, 2, callback);
+                spy(3, 4, callback);
+
+                spy.yieldOn(thisObj);
+
+                assert(callback.calledTwice);
+                assert(callback.alwaysCalledWith());
+                assert(callback.alwaysCalledOn(thisObj));
+            },
+
+            "throws if spy was not yet invoked": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.yieldOn(thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "spy cannot yield since it was not yet invoked.");
+                }
+            },
+
+            "includes spy name in error message": function () {
+                var api = { someMethod: function () {} };
+                var spy = sinon.spy(api, "someMethod");
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.yieldOn(thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "someMethod cannot yield since it was not yet invoked.");
+                }
+            },
+
+            "pass additional arguments": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var array = [];
+                var object = {};
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy(callback);
+
+                spy.yieldOn(thisObj, "abc", 123, array, object);
+
+                assert(callback.calledWith("abc", 123, array, object));
+                assert(callback.calledOn(thisObj));
+            }
+        },
+
         "yieldTo": {
             "is function": function () {
                 var spy = sinon.spy();
@@ -1838,7 +1988,7 @@ if (typeof require === "function" && typeof module === "object") {
                 }
             },
 
-	    "passs additional arguments": function () {
+        "passs additional arguments": function () {
                 var spy = sinon.spy();
                 var callback = sinon.spy();
                 var array = [];
@@ -1848,6 +1998,67 @@ if (typeof require === "function" && typeof module === "object") {
                 spy.yieldTo("test", "abc", 123, array, object);
 
                 assert(callback.calledWith("abc", 123, array, object));
+            }
+        },
+
+        "yieldToOn": {
+            "is function": function () {
+                var spy = sinon.spy();
+
+                assert.isFunction(spy.yieldToOn);
+            },
+
+            "invokes first function arg for all calls": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy(1, 2, { success: callback });
+                spy(3, 4, { success: callback });
+
+                spy.yieldToOn("success", thisObj);
+
+                assert(callback.calledTwice);
+                assert(callback.alwaysCalledWith());
+                assert(callback.alwaysCalledOn(thisObj));
+            },
+
+            "throws if spy was not yet invoked": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.yieldToOn("success", thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "spy cannot yield to 'success' since it was not yet invoked.");
+                }
+            },
+
+            "includes spy name in error message": function () {
+                var api = { someMethod: function () {} };
+                var spy = sinon.spy(api, "someMethod");
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    spy.yieldToOn("success", thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "someMethod cannot yield to 'success' since it was not yet invoked.");
+                }
+            },
+
+            "pass additional arguments": function () {
+                var spy = sinon.spy();
+                var callback = sinon.spy();
+                var array = [];
+                var object = {};
+                var thisObj = { name1: "value1", name2: "value2" };
+                spy({ test: callback });
+
+                spy.yieldToOn("test", thisObj, "abc", 123, array, object);
+
+                assert(callback.calledWith("abc", 123, array, object));
+                assert(callback.calledOn(thisObj));
             }
         },
 
@@ -1979,6 +2190,40 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "call.callArgOn": {
+            setUp: spyCallCallSetup,
+
+            "calls argument at specified index": function () {
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(1, 2, callback);
+
+                this.call.callArgOn(2, thisObj);
+
+                assert(callback.called);
+                assert(callback.calledOn(thisObj));
+            },
+
+            "throws if argument at specified index is not callable": function () {
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(1);
+                var call = this.call;
+
+                assert.exception(function () {
+                    call.callArgOn(0, thisObj);
+                }, "TypeError");
+            },
+
+            "throws if index is not number": function () {
+                var thisObj = { name1: "value1", name2: "value2" };
+                var call = this.call;
+
+                assert.exception(function () {
+                    call.callArgOn({}, thisObj);
+                }, "TypeError");
+            }
+        },
+
         "call.callArgWith": {
             setUp: spyCallCallSetup,
 
@@ -2025,6 +2270,55 @@ if (typeof require === "function" && typeof module === "object") {
 
                 assert.exception(function () {
                     call.callArgWith({});
+                }, "TypeError");
+            }
+        },
+
+        "call.callArgOnWith": {
+            setUp: spyCallCallSetup,
+
+            "calls argument at specified index with provided args": function () {
+                var object = {};
+                var thisObj = { name1: "value1", name2: "value2" };
+                var callback = sinon.spy();
+                this.args.push(1, callback);
+
+                this.call.callArgOnWith(1, thisObj, object);
+
+                assert(callback.calledWith(object));
+                assert(callback.calledOn(thisObj));
+            },
+
+            "calls callback without args": function () {
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(1, callback);
+
+                this.call.callArgOnWith(1, thisObj);
+
+                assert(callback.calledWith());
+                assert(callback.calledOn(thisObj));
+            },
+
+            "calls callback with multiple args": function () {
+                var object = {};
+                var array = [];
+                var thisObj = { name1: "value1", name2: "value2" };
+                var callback = sinon.spy();
+                this.args.push(1, 2, callback);
+
+                this.call.callArgOnWith(2, thisObj, object, array);
+
+                assert(callback.calledWith(object, array));
+                assert(callback.calledOn(thisObj));
+            },
+
+            "throws if index is not number": function () {
+                var thisObj = { name1: "value1", name2: "value2" };
+                var call = this.call;
+
+                assert.exception(function () {
+                    call.callArgOnWith({}, thisObj);
                 }, "TypeError");
             }
         },
@@ -2120,6 +2414,98 @@ if (typeof require === "function" && typeof module === "object") {
 
         },
 
+        "call.yieldOnTest": {
+            setUp: spyCallCallSetup,
+
+            "invokes only argument as callback": function () {
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(callback);
+
+                this.call.yieldOn(thisObj);
+
+                assert(callback.calledOnce);
+                assert(callback.calledOn(thisObj));
+                assert.equals(callback.args[0].length, 0);
+            },
+
+            "throws understandable error if no callback is passed": function () {
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    call.yieldOn(thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "spy cannot yield since no callback was passed.");
+                }
+            },
+
+            "includes stub name and actual arguments in error": function () {
+                this.proxy.displayName = "somethingAwesome";
+                this.args.push(23, 42);
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    call.yieldOn(thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "somethingAwesome cannot yield since no callback was passed. " +
+                                  "Received [23, 42]");
+                }
+            },
+
+            "invokes last argument as callback": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(24, {}, spy);
+
+                this.call.yieldOn(thisObj);
+
+                assert(spy.calledOnce);
+                assert.equals(spy.args[0].length, 0);
+                assert(spy.calledOn(thisObj));
+            },
+
+            "invokes first of two callbacks": function () {
+                var spy = sinon.spy();
+                var spy2 = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(24, {}, spy, spy2);
+
+                this.call.yieldOn(thisObj);
+
+                assert(spy.calledOnce);
+                assert(spy.calledOn(thisObj));
+                assert.isFalse(spy2.called);
+            },
+
+            "invokes callback with arguments": function () {
+                var obj = { id: 42 };
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(spy);
+
+                this.call.yieldOn(thisObj, obj, "Crazy");
+
+                assert(spy.calledWith(obj, "Crazy"));
+                assert(spy.calledOn(thisObj));
+            },
+
+            "throws if callback throws": function () {
+                this.args.push(function () {
+                    throw new Error("d'oh!");
+                });
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                assert.exception(function () {
+                    call.yieldOn(thisObj);
+                });
+            }
+        },
+
         "call.yieldTo": {
             setUp: spyCallCallSetup,
 
@@ -2201,6 +2587,102 @@ if (typeof require === "function" && typeof module === "object") {
 
                 assert.exception(function () {
                     call.yieldTo("success");
+                });
+            }
+        },
+
+        "call.yieldToOn": {
+            setUp: spyCallCallSetup,
+
+            "invokes only argument as callback": function () {
+                var callback = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push({
+                    success: callback
+                });
+
+                this.call.yieldToOn("success", thisObj);
+
+                assert(callback.calledOnce);
+                assert.equals(callback.args[0].length, 0);
+                assert(callback.calledOn(thisObj));
+            },
+
+            "throws understandable error if no callback is passed": function () {
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    call.yieldToOn("success", thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "spy cannot yield to 'success' since no callback was passed.");
+                }
+            },
+
+            "includes stub name and actual arguments in error": function () {
+                this.proxy.displayName = "somethingAwesome";
+                this.args.push(23, 42);
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                try {
+                    call.yieldToOn("success", thisObj);
+                    throw new Error();
+                } catch (e) {
+                    assert.equals(e.message, "somethingAwesome cannot yield to 'success' since no callback was passed. " +
+                                  "Received [23, 42]");
+                }
+            },
+
+            "invokes property on last argument as callback": function () {
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(24, {}, { success: spy });
+
+                this.call.yieldToOn("success", thisObj);
+
+                assert(spy.calledOnce);
+                assert(spy.calledOn(thisObj));
+                assert.equals(spy.args[0].length, 0);
+            },
+
+            "invokes first of two possible callbacks": function () {
+                var spy = sinon.spy();
+                var spy2 = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push(24, {}, { error: spy }, { error: spy2 });
+
+                this.call.yieldToOn("error", thisObj);
+
+                assert(spy.calledOnce);
+                assert(spy.calledOn(thisObj));
+                assert.isFalse(spy2.called);
+            },
+
+            "invokes callback with arguments": function () {
+                var obj = { id: 42 };
+                var spy = sinon.spy();
+                var thisObj = { name1: "value1", name2: "value2" };
+                this.args.push({ success: spy });
+
+                this.call.yieldToOn("success", thisObj, obj, "Crazy");
+
+                assert(spy.calledWith(obj, "Crazy"));
+                assert(spy.calledOn(thisObj));
+            },
+
+            "throws if callback throws": function () {
+                this.args.push({
+                    success: function () {
+                        throw new Error("d'oh!");
+                    }
+                });
+                var call = this.call;
+                var thisObj = { name1: "value1", name2: "value2" };
+
+                assert.exception(function () {
+                    call.yieldToOn("success", thisObj);
                 });
             }
         },
