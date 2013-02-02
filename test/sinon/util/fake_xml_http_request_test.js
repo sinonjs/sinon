@@ -434,6 +434,16 @@
                 this.xhr.setResponseHeaders(object);
 
                 assert.isFalse(spy.called);
+            },
+
+            "changes readyState to HEADERS_RECEIVED if sync": function () {
+                var object = { id: 42 };
+                this.xhr.open("GET", "/", false);
+                this.xhr.send();
+
+                this.xhr.setResponseHeaders(object);
+
+                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
             }
         },
 
@@ -666,26 +676,37 @@
         "getResponseHeader": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
-                this.xhr.open("GET", "/");
             },
 
             "returns null if request is not finished": function () {
+                this.xhr.open("GET", "/");
                 assert.isNull(this.xhr.getResponseHeader("Content-Type"));
             },
 
             "returns null if header is Set-Cookie": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 assert.isNull(this.xhr.getResponseHeader("Set-Cookie"));
             },
 
             "returns null if header is Set-Cookie2": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 assert.isNull(this.xhr.getResponseHeader("Set-Cookie2"));
             },
 
             "returns header value": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.setResponseHeaders({ "Content-Type": "text/html" });
+
+                assert.equals(this.xhr.getResponseHeader("Content-Type"), "text/html");
+            },
+
+            "returns header value if sync": function () {
+                this.xhr.open("GET", "/", false);
                 this.xhr.send();
                 this.xhr.setResponseHeaders({ "Content-Type": "text/html" });
 
@@ -693,12 +714,14 @@
             },
 
             "returns null if header is not set": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 assert.isNull(this.xhr.getResponseHeader("Content-Type"));
             },
 
             "returns headers case insensitive": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
                 this.xhr.setResponseHeaders({ "Content-Type": "text/html" });
 
@@ -709,14 +732,15 @@
         "getAllResponseHeaders": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
-                this.xhr.open("GET", "/");
             },
 
             "returns empty string if request is not finished": function () {
+                this.xhr.open("GET", "/");
                 assert.equals(this.xhr.getAllResponseHeaders(), "");
             },
 
             "does not return Set-Cookie and Set-Cookie2 headers": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
                 this.xhr.setResponseHeaders({
                     "Set-Cookie": "Hey",
@@ -727,6 +751,19 @@
             },
 
             "returns headers": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.setResponseHeaders({
+                    "Content-Type": "text/html",
+                    "Set-Cookie2": "There",
+                    "Content-Length": "32"
+                });
+
+                assert.equals(this.xhr.getAllResponseHeaders(), "Content-Type: text/html\r\nContent-Length: 32\r\n");
+            },
+
+            "returns headers if sync": function () {
+                this.xhr.open("GET", "/", false);
                 this.xhr.send();
                 this.xhr.setResponseHeaders({
                     "Content-Type": "text/html",
@@ -839,14 +876,15 @@
         "responseXML": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
-                this.xhr.open("GET", "/");
             },
 
             "is initially null": function () {
+                this.xhr.open("GET", "/");
                 assert.isNull(this.xhr.responseXML);
             },
 
             "is null when the response body is empty": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 this.xhr.respond(200, {}, "");
@@ -855,6 +893,7 @@
             },
 
             "parses XML for application/xml": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 this.xhr.respond(200, { "Content-Type": "application/xml" },
@@ -867,6 +906,7 @@
             },
 
             "parses XML for text/xml": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 this.xhr.respond(200, { "Content-Type": "text/xml" },
@@ -876,6 +916,7 @@
             },
 
             "parses XML for custom xml content type": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 this.xhr.respond(200, { "Content-Type": "application/text+xml" },
@@ -885,6 +926,7 @@
             },
 
             "parses XML with no Content-Type": function () {
+                this.xhr.open("GET", "/");
                 this.xhr.send();
 
                 this.xhr.respond(200, {}, "<div><h1>Hola!</h1></div>");
@@ -896,6 +938,16 @@
             },
 
             "does not parse XML with Content-Type text/plain": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.respond(200, { "Content-Type": "text/plain" }, "<div></div>");
+
+                assert.isNull(this.xhr.responseXML);
+            },
+
+            "does not parse XML with Content-Type text/plain if sync": function () {
+                this.xhr.open("GET", "/", false);
                 this.xhr.send();
 
                 this.xhr.respond(200, { "Content-Type": "text/plain" }, "<div></div>");
