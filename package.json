@@ -32,5 +32,8 @@
         "http-server": "*"
     },
     "main": "./lib/sinon.js",
-    "engines": { "node": ">=0.1.103" }
+    "engines": { "node": ">=0.1.103" },
+    "volo": {
+        "url": "http://sinonjs.org/releases/sinon-{version}.js"
+    }
 }
