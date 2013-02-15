@@ -384,6 +384,28 @@ buster.testCase("sinon.assert", {
             refute.exception(function () {
                 sinon.assert.callOrder(first, second, first);
             });
+        },
+
+        "fails if first spy was not called": function () {
+            var first = sinon.spy();
+            var second = sinon.spy();
+
+            second();
+
+            assert.exception(function () {
+                sinon.assert.callOrder(first, second);
+            });
+        },
+
+        "fails if second spy was not called": function () {
+            var first = sinon.spy();
+            var second = sinon.spy();
+
+            first();
+
+            assert.exception(function () {
+                sinon.assert.callOrder(first, second);
+            });
         }
     },
 
