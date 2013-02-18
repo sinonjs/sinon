@@ -1,5 +1,6 @@
 require("../sinon_test.js");
 require("../sinon/spy_test.js");
+require("../sinon/call_test.js");
 require("../sinon/stub_test.js");
 require("../sinon/mock_test.js");
 require("../sinon/util/fake_timers_test.js");
