@@ -1052,14 +1052,6 @@ buster.testCase("sinon.stub", {
             this.stub = sinon.stub.create();
         },
 
-        "passes call to callsArg": function () {
-            var spy = sinon.spy(this.stub, "callsArg");
-
-            this.stub.callsArgAsync(2);
-
-            assert(spy.calledWith(2));
-        },
-
         "asynchronously calls argument at specified index": function (done) {
             this.stub.callsArgAsync(2);
             var callback = sinon.spy(done);
@@ -1073,15 +1065,6 @@ buster.testCase("sinon.stub", {
     "callsArgWithAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
-        },
-
-        "passes call to callsArgWith": function () {
-            var object = {};
-            sinon.spy(this.stub, "callsArgWith");
-
-            this.stub.callsArgWithAsync(1, object);
-
-            assert(this.stub.callsArgWith.calledWith(1, object));
         },
 
         "asynchronously calls callback at specified index with multiple args": function (done) {
@@ -1107,14 +1090,6 @@ buster.testCase("sinon.stub", {
             };
         },
 
-        "passes call to callsArgOn": function () {
-            sinon.spy(this.stub, "callsArgOn");
-
-            this.stub.callsArgOnAsync(2, this.fakeContext);
-
-            assert(this.stub.callsArgOn.calledWith(2, this.fakeContext));
-        },
-
         "asynchronously calls argument at specified index with specified context": function (done) {
             var context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
@@ -1135,15 +1110,6 @@ buster.testCase("sinon.stub", {
             this.fakeContext = { foo: "bar" };
         },
 
-        "passes call to callsArgOnWith": function () {
-            var object = {};
-            sinon.spy(this.stub, "callsArgOnWith");
-
-            this.stub.callsArgOnWithAsync(1, this.fakeContext, object);
-
-            assert(this.stub.callsArgOnWith.calledWith(1, this.fakeContext, object));
-        },
-
         "asynchronously calls argument at specified index with provided context and args": function (done) {
             var object = {};
             var context = this.fakeContext;
@@ -1161,15 +1127,6 @@ buster.testCase("sinon.stub", {
     },
 
     "yieldsAsync": {
-        "passes call to yields": function () {
-            var stub = sinon.stub();
-            sinon.spy(stub, "yields");
-
-            stub.yieldsAsync();
-
-            assert(stub.yields.calledWith());
-        },
-
         "asynchronously invokes only argument as callback": function (done) {
             var stub = sinon.stub().yieldsAsync();
 
@@ -1185,15 +1142,6 @@ buster.testCase("sinon.stub", {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
-        },
-
-        "passes call to yieldsOn": function () {
-            var stub = sinon.stub();
-            sinon.spy(stub, "yieldsOn");
-
-            stub.yieldsOnAsync(this.fakeContext);
-
-            assert(stub.yieldsOn.calledWith(this.fakeContext));
         },
 
         "asynchronously invokes only argument as callback with given context": function (done) {
@@ -1213,15 +1161,6 @@ buster.testCase("sinon.stub", {
     },
 
     "yieldsToAsync": {
-        "passes call to yieldsTo": function () {
-            var stub = sinon.stub();
-            sinon.spy(stub, "yieldsTo");
-
-            stub.yieldsToAsync("success");
-
-            assert(stub.yieldsTo.calledWith("success"));
-        },
-
         "asynchronously yields to property of object argument": function (done) {
             var stub = sinon.stub().yieldsToAsync("success");
 
@@ -1240,15 +1179,6 @@ buster.testCase("sinon.stub", {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
-        },
-
-        "passes call to yieldsToOn": function () {
-            var stub = sinon.stub();
-            sinon.spy(stub, "yieldsToOn");
-
-            stub.yieldsToOnAsync("success", this.fakeContext);
-
-            assert(stub.yieldsToOn.calledWith("success", this.fakeContext));
         },
 
         "asynchronously yields to property of object argument with given context": function (done) {
