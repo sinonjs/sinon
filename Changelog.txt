@@ -1,3 +1,23 @@
+== 1.6.0 / 2013-02-18
+* Add methods to spyCall interface: callArgOn, callArgOnWith, yieldOn,
+  yieldToOn (William Sears)
+* sinon.createStubInstance creates a fully stubbed instance from a constructor
+  (Shawn Krisman)
+* resetBehavior resets fakes created by withArgs (Martin Sander)
+* The fake server now logs to sinon.log, if set (Luis Cardoso)
+* Cleaner npm package that also includes pkg/sinon.js and
+  pkg/sinon-ie.js for cases where npm is used to install Sinon for
+  browser usage (Domenic Denicola)
+* Improved spy formatter %C output (Farid Neshat)
+* clock.tick returns clock.now (Michael Jackson)
+* Fixed issue #248 with callOrder assertion
+  Did not fail if the last given spy was never called (Maximilian Antoni)
+* Fixed issue with setResponseHeader for synchronous requests (goligo)
+* Remove msSetImmediate; it only existed in IE10 previews (Domenic Denicola)
+* Fix #231: not always picking up the latest calls to callsArgWith, etc.
+  (Domenic Denicola)
+* Fix failing anonymous mock expectations
+
 == 1.5.2 / 2012-11-28
 * Revert stub.reset changes that caused existing tests to fail.
 
