@@ -1197,6 +1197,65 @@ buster.testCase("sinon.stub", {
         }
     },
 
+    "onCall": {
+        "can be used with returns to produce sequence": function() {
+            var stub = sinon.stub().returns(3);
+            stub.onFirstCall().returns(1)
+                .onCall(2).returns(2);
+
+            assert.same(stub(), 1);
+            assert.same(stub(), 3);
+            assert.same(stub(), 2);
+            assert.same(stub(), 3);
+        },
+
+        "can be used with returnsArg to produce sequence": function() {
+            var stub = sinon.stub().returns('default');
+            stub.onSecondCall().returnsArg(0);
+
+            assert.same(stub(1), 'default');
+            assert.same(stub(2), 2);
+            assert.same(stub(3), 'default');
+        },
+
+        "can be used with returnsThis to produce sequence": function() {
+            var instance = {};
+            instance.stub = sinon.stub().returns('default');
+            instance.stub.onSecondCall().returnsThis();
+
+            assert.same(instance.stub(), 'default');
+            assert.same(instance.stub(), instance);
+            assert.same(instance.stub(), 'default');
+        },
+
+        "can be used with throwsException to produce sequence": function() {
+            var stub = sinon.stub();
+            var error = new Error();
+            stub.onSecondCall().throwsException(error);
+
+            stub();
+            try {
+                stub();
+                fail("Expected stub to throw");
+            } catch (e) {
+                assert.same(e, error);
+            }
+        },
+
+        "can be combined with withArgs": function() {
+            var stub = sinon.stub().returns(0);
+            stub.withArgs(5).returns(-1)
+                .onFirstCall().returns(1)
+                .onSecondCall().returns(2);
+
+            assert.same(stub(0), 0);
+            assert.same(stub(5), 1);
+            assert.same(stub(0), 0);
+            assert.same(stub(5), 2);
+            assert.same(stub(5), -1);
+        }
+    },
+
     "onCall and yields* should be chainable to produce a sequence": function () {
         var context = { foo: "bar" };
         var obj = { method1: sinon.spy(), method2: sinon.spy() };
