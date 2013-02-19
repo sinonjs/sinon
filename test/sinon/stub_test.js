@@ -1197,14 +1197,15 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yields* calls should be chainable to produce a sequence": function () {
+    "onCall and yields* should be chainable to produce a sequence": function () {
         var context = { foo: "bar" };
         var obj = { method1: sinon.spy(), method2: sinon.spy() };
         var obj2 = { method2: sinon.spy() };
-        var stub = sinon.stub().yields(1, 2)
-                               .yieldsOn(context, 3, 4)
-                               .yieldsTo("method1", 5, 6)
-                               .yieldsToOn("method2", context, 7, 8);
+        var stub = sinon.stub().yieldsToOn("method2", context, 7, 8);
+        stub.onFirstCall().yields(1, 2)
+            .onSecondCall().yieldsOn(context, 3, 4)
+            .onThirdCall().yieldsTo("method1", 5, 6)
+            .onCall(3).yieldsToOn("method2", context, 7, 8);
 
         var spy1 = sinon.spy();
         var spy2 = sinon.spy();
@@ -1213,7 +1214,7 @@ buster.testCase("sinon.stub", {
         stub(spy2);
         stub(obj);
         stub(obj);
-        stub(obj2); // should continue doing the last thing
+        stub(obj2); // should continue with default behavior
 
         assert(spy1.calledOnce);
         assert(spy1.calledWithExactly(1, 2));
@@ -1238,7 +1239,7 @@ buster.testCase("sinon.stub", {
         assert(obj2.method2.calledWithExactly(7, 8));
     },
 
-    "callsArg* calls should be chainable to produce a sequence": function () {
+    "onCall and callsArg* should be chainable to produce a sequence": function () {
         var spy1 = sinon.spy();
         var spy2 = sinon.spy();
         var spy3 = sinon.spy();
@@ -1247,16 +1248,17 @@ buster.testCase("sinon.stub", {
         var decoy = sinon.spy();
         var context = { foo: "bar" };
 
-        var stub = sinon.stub().callsArg(0)
-                               .callsArgWith(1, "a", "b")
-                               .callsArgOn(2, context)
-                               .callsArgOnWith(3, context, "c", "d");
+        var stub = sinon.stub().callsArgOnWith(3, context, "c", "d");
+        stub.onFirstCall().callsArg(0)
+            .onSecondCall().callsArgWith(1, "a", "b")
+            .onThirdCall().callsArgOn(2, context)
+            .onCall(3).callsArgOnWith(3, context, "c", "d");
 
         stub(spy1);
         stub(decoy, spy2);
         stub(decoy, decoy, spy3);
         stub(decoy, decoy, decoy, spy4);
-        stub(decoy, decoy, decoy, spy5); // should continue doing last thing
+        stub(decoy, decoy, decoy, spy5); // should continue with default behavior
 
         assert(spy1.calledOnce);
 
@@ -1281,11 +1283,11 @@ buster.testCase("sinon.stub", {
         assert(decoy.notCalled);
     },
 
-    "yields* calls and callsArg* in combination should be chainable to produce a sequence": function () {
-        var stub = sinon.stub().yields(1, 2)
-                               .callsArg(1)
-                               .yieldsTo("method")
-                               .callsArgWith(2, "a", "b");
+    "onCall, yields* and callsArg* in combination should be chainable to produce a sequence": function () {
+        var stub = sinon.stub().yields(1, 2);
+        stub.onSecondCall().callsArg(1)
+            .onThirdCall().yieldsTo("method")
+            .onCall(3).callsArgWith(2, "a", "b");
 
         var obj = { method: sinon.spy() };
         var spy1 = sinon.spy();
@@ -1313,7 +1315,7 @@ buster.testCase("sinon.stub", {
         assert(decoy.notCalled);
     },
 
-    "callsArgWith sequences should interact correctly with assertions (GH-231)": function () {
+    "onCall sequences should interact correctly with assertions (GH-231)": function () {
         var stub = sinon.stub();
         var spy = sinon.spy();
 
@@ -1325,7 +1327,7 @@ buster.testCase("sinon.stub", {
         stub(spy);
         assert(spy.calledWith("a"));
 
-        stub.callsArgWith(0, "b");
+        stub.onThirdCall().callsArgWith(0, "b");
 
         stub(spy);
         assert(spy.calledWith("b"));
@@ -1345,8 +1347,8 @@ buster.testCase("sinon.stub", {
 
     "resetBehavior": {
         "clears yields* and callsArg* sequence": function () {
-            var stub = sinon.stub().yields(1)
-                .callsArg(1);
+            var stub = sinon.stub().yields(1);
+            stub.onFirstCall().callsArg(1);
             stub.resetBehavior();
             stub.yields(3);
             var spyWanted = sinon.spy();
