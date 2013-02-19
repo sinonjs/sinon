@@ -42,6 +42,17 @@ buster.testCase("sinon.stub", {
             "Stub prototype should contain same amount of synchronous and asynchronous methods");
     },
 
+    "should allow overriding async behavior with sync behavior": function() {
+        var stub = sinon.stub();
+        var callback = sinon.spy();
+
+        stub.callsArgAsync(1);
+        stub.callsArg(1);
+        stub(1, callback);
+
+        assert(callback.called);
+    },
+
     "returns": {
         "returns specified value": function () {
             var stub = sinon.stub.create();
