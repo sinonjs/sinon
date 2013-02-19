@@ -1253,143 +1253,143 @@ buster.testCase("sinon.stub", {
             assert.same(stub(0), 0);
             assert.same(stub(5), 2);
             assert.same(stub(5), -1);
+        },
+
+        "can be used with yields* to produce a sequence": function () {
+            var context = { foo: "bar" };
+            var obj = { method1: sinon.spy(), method2: sinon.spy() };
+            var obj2 = { method2: sinon.spy() };
+            var stub = sinon.stub().yieldsToOn("method2", context, 7, 8);
+            stub.onFirstCall().yields(1, 2)
+                .onSecondCall().yieldsOn(context, 3, 4)
+                .onThirdCall().yieldsTo("method1", 5, 6)
+                .onCall(3).yieldsToOn("method2", context, 7, 8);
+
+            var spy1 = sinon.spy();
+            var spy2 = sinon.spy();
+
+            stub(spy1);
+            stub(spy2);
+            stub(obj);
+            stub(obj);
+            stub(obj2); // should continue with default behavior
+
+            assert(spy1.calledOnce);
+            assert(spy1.calledWithExactly(1, 2));
+
+            assert(spy2.calledOnce);
+            assert(spy2.calledAfter(spy1));
+            assert(spy2.calledOn(context));
+            assert(spy2.calledWithExactly(3, 4));
+
+            assert(obj.method1.calledOnce);
+            assert(obj.method1.calledAfter(spy2));
+            assert(obj.method1.calledWithExactly(5, 6));
+
+            assert(obj.method2.calledOnce);
+            assert(obj.method2.calledAfter(obj.method1));
+            assert(obj.method2.calledOn(context));
+            assert(obj.method2.calledWithExactly(7, 8));
+
+            assert(obj2.method2.calledOnce);
+            assert(obj2.method2.calledAfter(obj.method2));
+            assert(obj2.method2.calledOn(context));
+            assert(obj2.method2.calledWithExactly(7, 8));
+        },
+
+        "can be used with callsArg* to produce a sequence": function () {
+            var spy1 = sinon.spy();
+            var spy2 = sinon.spy();
+            var spy3 = sinon.spy();
+            var spy4 = sinon.spy();
+            var spy5 = sinon.spy();
+            var decoy = sinon.spy();
+            var context = { foo: "bar" };
+
+            var stub = sinon.stub().callsArgOnWith(3, context, "c", "d");
+            stub.onFirstCall().callsArg(0)
+                .onSecondCall().callsArgWith(1, "a", "b")
+                .onThirdCall().callsArgOn(2, context)
+                .onCall(3).callsArgOnWith(3, context, "c", "d");
+
+            stub(spy1);
+            stub(decoy, spy2);
+            stub(decoy, decoy, spy3);
+            stub(decoy, decoy, decoy, spy4);
+            stub(decoy, decoy, decoy, spy5); // should continue with default behavior
+
+            assert(spy1.calledOnce);
+
+            assert(spy2.calledOnce);
+            assert(spy2.calledAfter(spy1));
+            assert(spy2.calledWithExactly("a", "b"));
+
+            assert(spy3.calledOnce);
+            assert(spy3.calledAfter(spy2));
+            assert(spy3.calledOn(context));
+
+            assert(spy4.calledOnce);
+            assert(spy4.calledAfter(spy3));
+            assert(spy4.calledOn(context));
+            assert(spy4.calledWithExactly("c", "d"));
+
+            assert(spy5.calledOnce);
+            assert(spy5.calledAfter(spy4));
+            assert(spy5.calledOn(context));
+            assert(spy5.calledWithExactly("c", "d"));
+
+            assert(decoy.notCalled);
+        },
+
+        "can be used with yields* and callsArg* in combination to produce a sequence": function () {
+            var stub = sinon.stub().yields(1, 2);
+            stub.onSecondCall().callsArg(1)
+                .onThirdCall().yieldsTo("method")
+                .onCall(3).callsArgWith(2, "a", "b");
+
+            var obj = { method: sinon.spy() };
+            var spy1 = sinon.spy();
+            var spy2 = sinon.spy();
+            var spy3 = sinon.spy();
+            var decoy = sinon.spy();
+
+            stub(spy1);
+            stub(decoy, spy2);
+            stub(obj);
+            stub(decoy, decoy, spy3);
+
+            assert(spy1.calledOnce);
+
+            assert(spy2.calledOnce);
+            assert(spy2.calledAfter(spy1));
+
+            assert(obj.method.calledOnce);
+            assert(obj.method.calledAfter(spy2));
+
+            assert(spy3.calledOnce);
+            assert(spy3.calledAfter(obj.method));
+            assert(spy3.calledWithExactly("a", "b"));
+
+            assert(decoy.notCalled);
+        },
+
+        "should interact correctly with assertions (GH-231)": function () {
+            var stub = sinon.stub();
+            var spy = sinon.spy();
+
+            stub.callsArgWith(0, "a");
+
+            stub(spy);
+            assert(spy.calledWith("a"));
+
+            stub(spy);
+            assert(spy.calledWith("a"));
+
+            stub.onThirdCall().callsArgWith(0, "b");
+
+            stub(spy);
+            assert(spy.calledWith("b"));
         }
-    },
-
-    "onCall and yields* should be chainable to produce a sequence": function () {
-        var context = { foo: "bar" };
-        var obj = { method1: sinon.spy(), method2: sinon.spy() };
-        var obj2 = { method2: sinon.spy() };
-        var stub = sinon.stub().yieldsToOn("method2", context, 7, 8);
-        stub.onFirstCall().yields(1, 2)
-            .onSecondCall().yieldsOn(context, 3, 4)
-            .onThirdCall().yieldsTo("method1", 5, 6)
-            .onCall(3).yieldsToOn("method2", context, 7, 8);
-
-        var spy1 = sinon.spy();
-        var spy2 = sinon.spy();
-
-        stub(spy1);
-        stub(spy2);
-        stub(obj);
-        stub(obj);
-        stub(obj2); // should continue with default behavior
-
-        assert(spy1.calledOnce);
-        assert(spy1.calledWithExactly(1, 2));
-
-        assert(spy2.calledOnce);
-        assert(spy2.calledAfter(spy1));
-        assert(spy2.calledOn(context));
-        assert(spy2.calledWithExactly(3, 4));
-
-        assert(obj.method1.calledOnce);
-        assert(obj.method1.calledAfter(spy2));
-        assert(obj.method1.calledWithExactly(5, 6));
-
-        assert(obj.method2.calledOnce);
-        assert(obj.method2.calledAfter(obj.method1));
-        assert(obj.method2.calledOn(context));
-        assert(obj.method2.calledWithExactly(7, 8));
-
-        assert(obj2.method2.calledOnce);
-        assert(obj2.method2.calledAfter(obj.method2));
-        assert(obj2.method2.calledOn(context));
-        assert(obj2.method2.calledWithExactly(7, 8));
-    },
-
-    "onCall and callsArg* should be chainable to produce a sequence": function () {
-        var spy1 = sinon.spy();
-        var spy2 = sinon.spy();
-        var spy3 = sinon.spy();
-        var spy4 = sinon.spy();
-        var spy5 = sinon.spy();
-        var decoy = sinon.spy();
-        var context = { foo: "bar" };
-
-        var stub = sinon.stub().callsArgOnWith(3, context, "c", "d");
-        stub.onFirstCall().callsArg(0)
-            .onSecondCall().callsArgWith(1, "a", "b")
-            .onThirdCall().callsArgOn(2, context)
-            .onCall(3).callsArgOnWith(3, context, "c", "d");
-
-        stub(spy1);
-        stub(decoy, spy2);
-        stub(decoy, decoy, spy3);
-        stub(decoy, decoy, decoy, spy4);
-        stub(decoy, decoy, decoy, spy5); // should continue with default behavior
-
-        assert(spy1.calledOnce);
-
-        assert(spy2.calledOnce);
-        assert(spy2.calledAfter(spy1));
-        assert(spy2.calledWithExactly("a", "b"));
-
-        assert(spy3.calledOnce);
-        assert(spy3.calledAfter(spy2));
-        assert(spy3.calledOn(context));
-
-        assert(spy4.calledOnce);
-        assert(spy4.calledAfter(spy3));
-        assert(spy4.calledOn(context));
-        assert(spy4.calledWithExactly("c", "d"));
-
-        assert(spy5.calledOnce);
-        assert(spy5.calledAfter(spy4));
-        assert(spy5.calledOn(context));
-        assert(spy5.calledWithExactly("c", "d"));
-
-        assert(decoy.notCalled);
-    },
-
-    "onCall, yields* and callsArg* in combination should be chainable to produce a sequence": function () {
-        var stub = sinon.stub().yields(1, 2);
-        stub.onSecondCall().callsArg(1)
-            .onThirdCall().yieldsTo("method")
-            .onCall(3).callsArgWith(2, "a", "b");
-
-        var obj = { method: sinon.spy() };
-        var spy1 = sinon.spy();
-        var spy2 = sinon.spy();
-        var spy3 = sinon.spy();
-        var decoy = sinon.spy();
-
-        stub(spy1);
-        stub(decoy, spy2);
-        stub(obj);
-        stub(decoy, decoy, spy3);
-
-        assert(spy1.calledOnce);
-
-        assert(spy2.calledOnce);
-        assert(spy2.calledAfter(spy1));
-
-        assert(obj.method.calledOnce);
-        assert(obj.method.calledAfter(spy2));
-
-        assert(spy3.calledOnce);
-        assert(spy3.calledAfter(obj.method));
-        assert(spy3.calledWithExactly("a", "b"));
-
-        assert(decoy.notCalled);
-    },
-
-    "onCall sequences should interact correctly with assertions (GH-231)": function () {
-        var stub = sinon.stub();
-        var spy = sinon.spy();
-
-        stub.callsArgWith(0, "a");
-
-        stub(spy);
-        assert(spy.calledWith("a"));
-
-        stub(spy);
-        assert(spy.calledWith("a"));
-
-        stub.onThirdCall().callsArgWith(0, "b");
-
-        stub(spy);
-        assert(spy.calledWith("b"));
     },
 
     "reset only resets call history": function () {
