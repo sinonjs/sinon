@@ -1047,6 +1047,34 @@ buster.testCase("sinon.assert", {
                           "order but were called as doop, doSomething, foo");
         },
 
+        "assert.callOrder with missing first call exception message": function () {
+            var obj = { doop: function () {}, foo: function () {} };
+            sinon.spy(obj, "doop");
+            sinon.spy(obj, "foo");
+
+            obj.foo();
+
+            var message = this.message("callOrder", obj.doop, obj.foo);
+
+            assert.equals(message,
+                          "expected doop, foo to be called in " +
+                          "order but were called as foo");
+        },
+
+        "assert.callOrder with missing last call exception message": function () {
+            var obj = { doop: function () {}, foo: function () {} };
+            sinon.spy(obj, "doop");
+            sinon.spy(obj, "foo");
+
+            obj.doop();
+
+            var message = this.message("callOrder", obj.doop, obj.foo);
+
+            assert.equals(message,
+                          "expected doop, foo to be called in " +
+                          "order but were called as doop");
+        },
+
         "assert.callCount exception message": function () {
             this.obj.doSomething();
 
