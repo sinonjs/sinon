@@ -99,15 +99,14 @@ if (typeof require === "function" && typeof module === "object") {
         this.thisValue = {};
         this.args = [{}, [], new Error(), 3];
         this.returnValue = function () {};
-        this.call = sinon.spyCall.create(function () {}, this.thisValue,
+        this.call = sinon.spyCall(function () {}, this.thisValue,
             this.args, this.returnValue, null, 0);
     }
 
     function spyCallCallSetup() {
         this.args = [];
         this.proxy = sinon.spy();
-        this.call = sinon.spyCall.create(this.proxy, {}, this.args, null,
-            null, 0);
+        this.call = sinon.spyCall(this.proxy, {}, this.args, null, null, 0);
     }
 
     buster.testCase("sinon.spy.call", {
@@ -126,8 +125,7 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "stores given call id": function () {
-                var call = sinon.spyCall.create(function () {}, {},
-                    [], null, null, 42);
+                var call = sinon.spyCall(function () {}, {}, [], null, null, 42);
 
                 assert.same(call.callId, 42);
             },
@@ -200,15 +198,13 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "returns true for no arguments": function () {
-                var call = sinon.spyCall.create(function () {}, {}, [], null,
-                    null, 0);
+                var call = sinon.spyCall(function () {}, {}, [], null, null, 0);
 
                 assert(call.calledWithExactly());
             },
 
             "returns false when called with no args but matching one": function () {
-                var call = sinon.spyCall.create(function () {}, {}, [], null,
-                    null, 0);
+                var call = sinon.spyCall(function () {}, {}, [], null, null, 0);
 
                 assert.isFalse(call.calledWithExactly({}));
             }
@@ -469,8 +465,7 @@ if (typeof require === "function" && typeof module === "object") {
         "call.invokeCallback": {
 
             "is alias for yield": function () {
-                var call = sinon.spyCall.create(function () {}, {}, [], null,
-                    null, 0);
+                var call = sinon.spyCall(function () {}, {}, [], null, null, 0);
 
                 assert.same(call.yield, call.invokeCallback);
             }
