@@ -2,9 +2,11 @@
 /*globals window sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
+ * @author Maximilian Antoni (mail@maxantoni.de)
  * @license BSD
  *
- * Copyright (c) 2010-2012 Christian Johansen
+ * Copyright (c) 2010-2013 Christian Johansen
+ * Copyright (c) 2013 Maximilian Antoni
  */
 "use strict";
 
