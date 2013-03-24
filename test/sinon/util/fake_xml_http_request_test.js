@@ -991,7 +991,7 @@
                 assert.same(sinon.FakeXMLHttpRequest.onCreate, onCreate);
             }
         },
-    
+
         "filtering": {
             setUp: function () {
                 sinon.FakeXMLHttpRequest.useFilters = true;
@@ -1231,6 +1231,113 @@
                 this.fakeXhr.restore();
 
                 assert.same(XMLHttpRequest, globalXMLHttpRequest);
+            }
+        },
+
+        "progress events": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr.open("GET", "/some/url")
+            },
+
+            "triggers 'loadstart' event on #send": function (done) {
+                this.xhr.addEventListener("loadstart", function () {
+                    assert(true);
+
+                    done();
+                });
+
+                this.xhr.send();
+            },
+
+            "triggers 'loadstart' with event target set to the XHR object": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("loadstart", function (event) {
+                    assert.same(xhr, event.target);
+
+                    done();
+                });
+
+                this.xhr.send();
+            },
+
+            "triggers 'load' event on success": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("load", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
+            "triggers 'load' with event target set to the XHR object": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("load", function (event) {
+                    assert.same(xhr, event.target);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
+            "triggers 'abort' event on cancel": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("abort", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.status, 0);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.abort();
+            },
+
+            "triggers 'abort' with event target set to the XHR object": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("abort", function (event) {
+                    assert.same(xhr, event.target);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.abort();
+            },
+
+            "triggers 'loadend' event at the end": function (done) {
+                this.xhr.addEventListener("loadend", function () {
+                    assert(true);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(403, {}, "");
+            },
+
+            "triggers 'loadend' with event target set to the XHR object": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("loadend", function (event) {
+                    assert.same(xhr, event.target);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
             }
         }
     });
