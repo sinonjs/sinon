@@ -1262,6 +1262,16 @@
                 this.xhr.send();
             },
 
+            "calls #onloadstart on #send": function (done) {
+                this.xhr.onloadstart = function () {
+                    assert(true);
+
+                    done();
+                };
+
+                this.xhr.send();
+            },
+
             "triggers 'load' event on success": function (done) {
                 var xhr = this.xhr;
 
@@ -1284,6 +1294,20 @@
 
                     done();
                 });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
+            "calls #onload on success": function () {
+                var xhr = this.xhr;
+
+                this.xhr.onload = function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+
+                    done();
+                };
 
                 this.xhr.send();
                 this.xhr.respond(200, {}, "");
@@ -1316,6 +1340,20 @@
                 this.xhr.abort();
             },
 
+            "calls #onabort on cancel": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.onabort = "abort", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.status, 0);
+
+                    done();
+                };
+
+                this.xhr.send();
+                this.xhr.abort();
+            },
+
             "triggers 'loadend' event at the end": function (done) {
                 this.xhr.addEventListener("loadend", function () {
                     assert(true);
@@ -1338,6 +1376,17 @@
 
                 this.xhr.send();
                 this.xhr.respond(200, {}, "");
+            },
+
+            "calls #onloadend at the end": function (done) {
+                this.xhr.onloadend = function () {
+                    assert(true);
+
+                    done();
+                };
+
+                this.xhr.send();
+                this.xhr.respond(403, {}, "");
             }
         }
     });
