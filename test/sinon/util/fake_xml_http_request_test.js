@@ -1299,7 +1299,7 @@
                 this.xhr.respond(200, {}, "");
             },
 
-            "calls #onload on success": function () {
+            "calls #onload on success": function (done) {
                 var xhr = this.xhr;
 
                 this.xhr.onload = function () {
@@ -1343,7 +1343,7 @@
             "calls #onabort on cancel": function (done) {
                 var xhr = this.xhr;
 
-                this.xhr.onabort = "abort", function () {
+                this.xhr.onabort = function () {
                     assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
                     assert.equals(xhr.status, 0);
 
