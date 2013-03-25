@@ -873,6 +873,81 @@
             }
         },
 
+        "responseType": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            },
+
+            "initial value is the empty string": function () {
+                assert.equals(this.xhr.responseType, "");
+            }
+        },
+
+        "response": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            },
+
+            "default value is the empty string": function () {
+                assert.equals(this.xhr.response, "");
+            },
+
+            "after response retrieval": {
+                setUp: function () {
+                    this.xhr.open("GET", "/some/url")
+                },
+
+                "if responseType is 'arraybuffer' it's value should be an ArrayBuffer": function () {
+                    this.xhr.responseType = "arraybuffer";
+                    this.xhr.send();
+
+                    this.xhr.respond(200, {}, [65, 66, 68]);
+
+                    assert(this.xhr.response instanceof ArrayBuffer);
+
+                    var array = new Uint8Array(this.xhr.response);
+                    assert.equals(array[0], 65);
+                    assert.equals(array[1], 66);
+                    assert.equals(array[2], 68);
+                },
+
+                "if responseType is 'json' it's value should be a JS object": function () {
+                    this.xhr.responseType = "json";
+                    this.xhr.send();
+
+                    this.xhr.respond(200, {}, '{"list":[1, 5, -2]}');
+
+                    assert.match(this.xhr.response, { list: [1, 5, -2] });
+                },
+
+                "if responseType is 'blob' it's value should be a Blob": function () {
+                    this.xhr.responseType = "blob";
+                    this.xhr.send();
+
+                    this.xhr.respond(200, {}, [65, 66, 68]);
+
+                    assert(this.xhr.response instanceof Blob);
+                },
+
+                "if responseType is 'text' it's value should be the raw text response": function () {
+                    this.xhr.responseType = "text";
+                    this.xhr.send();
+
+                    this.xhr.respond(200, {}, '{"list":[1, 5, -2]}');
+
+                    assert.equals(this.xhr.response, '{"list":[1, 5, -2]}');
+                },
+
+                "if responseType is the empty string it's value should be the raw text response": function () {
+                    this.xhr.send();
+
+                    this.xhr.respond(200, {}, '{"list":[1, 5, -2]}');
+
+                    assert.equals(this.xhr.response, '{"list":[1, 5, -2]}');
+                }
+            }
+        },
+
         "responseXML": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
