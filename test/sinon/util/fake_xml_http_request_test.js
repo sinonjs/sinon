@@ -447,6 +447,95 @@
             }
         },
 
+        "setResponseBody": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.setResponseHeaders({});
+            },
+
+            "when the responseType is 'text'": {
+                setUp: function () {
+                    this.xhr.responseType = "text";
+                },
+
+                "sets the responseText": function () {
+                    this.xhr.setResponseBody("ABCDEFG");
+
+                    assert.equals(this.xhr.responseText, "ABCDEFG");
+                },
+
+                "sets the response": function () {
+                    this.xhr.setResponseBody("ABCDEFG");
+
+                    assert.equals(this.xhr.response, "ABCDEFG");
+                }
+            },
+
+            "when the responseType is 'json'": {
+                setUp: function () {
+                    this.xhr.responseType = "json";
+                },
+
+                "it parses a JSON string": function () {
+                    this.xhr.setResponseBody('{"t": 1}');
+
+                    assert.equals(this.xhr.response, {t: 1});
+                },
+
+                "it passes a JS object right through": function () {
+                    this.xhr.setResponseBody({x: {d: 5}});
+
+                    assert.equals(this.xhr.response, {x: {d: 5}});
+                }
+            },
+
+            "when the responseType is 'arraybuffer'": {
+                setUp: function () {
+                    this.xhr.responseType = "arraybuffer";
+                },
+
+                "it puts an array of bytes into an ArrayBuffer": function () {
+                    this.xhr.setResponseBody([65, 66, 67]);
+
+                    var array = new Uint8Array(this.xhr.response);
+
+                    assert.equals(array[0], 65);
+                    assert.equals(array[1], 66);
+                    assert.equals(array[2], 67);
+                },
+
+                "it passes an ArrayBuffer right through": function () {
+                    var buffer = new ArrayBuffer(5);
+
+                    this.xhr.setResponseBody(buffer);
+
+                    assert.same(this.xhr.response, buffer);
+                }
+            },
+
+            "when the responseType is 'blob'": {
+                setUp: function () {
+                    this.xhr.responseType = "blob";
+                },
+
+                "it puts the body into a Blob": function () {
+                    this.xhr.setResponseBody(["test"]);
+
+                    assert.hasPrototype(this.xhr.response, Blob.prototype);
+                },
+
+                "it passes a Blob right through": function () {
+                    var blob = new Blob(["test"]);
+
+                    this.xhr.setResponseBody(blob);
+
+                    assert.same(this.xhr.response, blob);
+                }
+            }
+        },
+
         "setResponseBodyAsync": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
