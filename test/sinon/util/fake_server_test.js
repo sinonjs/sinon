@@ -158,6 +158,28 @@ buster.testCase("sinon.fakeServer", {
             assert(this.getPathAsync.respond.called);
         },
 
+        "does not respond to requests queued after respond() (eg from callbacks)": function () {
+            var xhr;
+            this.getRootAsync.addEventListener("load", function() {
+              xhr = new sinon.FakeXMLHttpRequest();
+              xhr.open("GET", "/", true);
+              xhr.send();
+              sinon.spy(xhr, "respond");
+            });
+
+            this.server.respondWith("Oh yeah! Duffman!");
+
+            this.server.respond();
+
+            assert(this.getRootAsync.respond.called);
+            assert(this.getPathAsync.respond.called);
+            assert(!xhr.respond.called);
+
+            this.server.respond();
+
+            assert(xhr.respond.called);
+        },
+
         "responds with status, headers, and body": function () {
             var headers = { "Content-Type": "X-test" };
             this.server.respondWith([201, headers, "Oh yeah!"]);
