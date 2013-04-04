@@ -438,6 +438,18 @@ buster.testCase("sinon.fakeServer", {
             assert(handler.calledOnce);
         },
 
+        "yields response to request function handler when url contains RegExp characters": function () {
+            var handler = sinon.spy();
+            this.server.respondWith("GET", "/hello?world", handler);
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/hello?world");
+            xhr.send();
+
+            this.server.respond();
+
+            assert(handler.calledOnce);
+        },
+
         "does not yield response to request function handler when method does not match": function () {
             var handler = sinon.spy();
             this.server.respondWith("GET", "/hello", handler);
