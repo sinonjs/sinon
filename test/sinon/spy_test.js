@@ -976,6 +976,10 @@ if (typeof require === "function" && typeof module === "object") {
                 this.spyWithTypeError = sinon.spy.create(function () {
                     throw new TypeError();
                 });
+                
+                this.spyWithStringError = sinon.spy.create(function() {
+                	throw "error";
+                });
             },
 
             "returns exception thrown by function": function () {
@@ -1026,6 +1030,22 @@ if (typeof require === "function" && typeof module === "object") {
                 this.spy();
 
                 assert.isFalse(this.spy.threw("Error"));
+            },
+            
+            "returns true if string matches": function () {
+            	try {
+            		this.spyWithStringError();
+            	} catch (e) {}
+            	
+            	assert(this.spyWithStringError.threw("error"));
+            },
+            
+            "returns false if strings do not match": function() {
+            	try {
+            		this.spyWithStringError();
+            	} catch (e) {}
+            	
+            	assert.isFalse(this.spyWithStringError.threw("not the error"));
             }
         },
 
