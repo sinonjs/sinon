@@ -566,11 +566,20 @@ buster.testCase("sinon.stub", {
             assert.equals(obj.someProp, 42);
         },
 
-        "does not stub function object": function () {
-            assert.exception(function () {
-                sinon.stub(function () {});
-            });
-        }
+        "wraps prototype if a constructor is given": function() {
+            var stub,
+                TestConstructor = sinon.spy();
+
+            TestConstructor.prototype.foo = function() {};
+
+            stub = sinon.stub(TestConstructor);
+
+            assert(stub instanceof TestConstructor);
+            assert(!TestConstructor.called);
+
+            assert.isFunction(stub.foo.returns);
+            assert.isFunction(stub.foo.throws);
+        },
     },
 
     "everything": {
