@@ -504,8 +504,8 @@ buster.testCase("sinon", {
 
     ".restore": {
         "restores all methods of supplied object": function () {
-            var methodA = function () { };
-            var methodB = function () { };
+            var methodA = function () {};
+            var methodB = function () {};
             var obj = { methodA: methodA, methodB: methodB };
 
             sinon.stub(obj);
@@ -516,8 +516,8 @@ buster.testCase("sinon", {
         },
 
         "only restores restorable methods": function () {
-            var stubbedMethod = function () { };
-            var vanillaMethod = function () { };
+            var stubbedMethod = function () {};
+            var vanillaMethod = function () {};
             var obj = { stubbedMethod: stubbedMethod, vanillaMethod: vanillaMethod };
 
             sinon.stub(obj, "stubbedMethod");
@@ -526,9 +526,8 @@ buster.testCase("sinon", {
             assert.same(obj.stubbedMethod, stubbedMethod);
         },
 
-        "restores a single stubbed method": function ()
-        {
-            var method = function () { };
+        "restores a single stubbed method": function () {
+            var method = function () {};
             var obj = { method: method };
 
             sinon.stub(obj);
@@ -536,6 +535,5 @@ buster.testCase("sinon", {
 
             assert.same(obj.method, method);
         }
-
     }
 });
