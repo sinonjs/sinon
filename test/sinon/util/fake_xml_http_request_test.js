@@ -625,6 +625,15 @@
                 this.xhr.send();
             },
 
+            "fire onload event": function () {
+                var fireOnLoad = false;
+                this.onload = function(){
+                    fireOnLoad = true;
+                }
+                this.xhr.respond(200, {}, "");
+                assert.isTrue(fireOnLoad);
+            },
+
             "calls readystate handler with readyState DONE once": function () {
                 this.xhr.respond(200, {}, "");
 
@@ -788,6 +797,7 @@
                 assert.isTrue(this.xhr.aborted);
             },
 
+
             "sets responseText to null": function () {
                 this.xhr.responseText = "Partial data";
 
@@ -802,6 +812,16 @@
                 this.xhr.abort();
 
                 assert.isTrue(this.xhr.errorFlag);
+            },
+
+            "fire onerror event": function () {
+                var testFlag = false,
+                    this.onerror = function(){
+                        testFlag = true;
+                    };
+                this.xhr.aborted = true;
+                this.xhr.abort();
+                assert.isTrue(testFlag);
             },
 
             "nulls request headers": function () {
