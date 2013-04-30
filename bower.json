@@ -1,0 +1,26 @@
+{
+  "name": "sinon",
+  "version": "1.6.0",
+  "description": "JavaScript test spies, stubs and mocks.",
+  "main": "pkg/sinon.js",
+  "homepage": "http://cjohansen.no/sinon/",
+  "author": "Christian Johansen",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/cjohansen/Sinon.JS.git"
+  },
+  "bugs": {
+    "mail": "christian@cjohansen.no",
+    "url": "http://github.com/cjohansen/Sinon.JS/issues"
+  },
+  "licenses": [
+    { "type": "BSD",
+      "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
+    }
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
