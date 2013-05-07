@@ -1,3 +1,12 @@
+== 1.7.0 / 2013-05-07
+
+* Fake XMLHttpRequest updated to call onerror and onsuccess callbacks, fixing
+  jQuery 2.0 problems (Roman Potashow)
+* Implement XMLHttpRequest progress event api (Marten Lienen)
+* Added sinon.restore() (Jonny Reeves)
+* Fix bug where throwing a string was handled incorrectly by Sinon (Brandon Heyer)
+* Web workers support (Victor Costan)
+
 == 1.6.0 / 2013-02-18
 * Add methods to spyCall interface: callArgOn, callArgOnWith, yieldOn,
   yieldToOn (William Sears)
