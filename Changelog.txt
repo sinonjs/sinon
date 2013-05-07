@@ -1,4 +1,4 @@
-== 1.7.0 / 2013-05-07
+== 1.7.1 / 2013-05-07
 
 * Fake XMLHttpRequest updated to call onerror and onsuccess callbacks, fixing
   jQuery 2.0 problems (Roman Potashow)
