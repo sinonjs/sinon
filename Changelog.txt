@@ -1,3 +1,8 @@
+== 1.7.2 / 2013-05-08
+
+* Sinon 1.7 has split calls out to a separate file. This caused some problems,
+  so 1.7.2 ships with spyCall as part of spy.js like it used to be.
+
 == 1.7.1 / 2013-05-07
 
 * Fake XMLHttpRequest updated to call onerror and onsuccess callbacks, fixing
@@ -6,6 +11,10 @@
 * Added sinon.restore() (Jonny Reeves)
 * Fix bug where throwing a string was handled incorrectly by Sinon (Brandon Heyer)
 * Web workers support (Victor Costan)
+
+== 1.7.0
+
+* Failed release, see 1.7.1
 
 == 1.6.0 / 2013-02-18
 * Add methods to spyCall interface: callArgOn, callArgOnWith, yieldOn,
