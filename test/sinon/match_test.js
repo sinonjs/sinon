@@ -140,6 +140,18 @@ buster.testCase("sinon.match", {
         assert(match.test({ one : new Number(1) }));
     },
 
+    "returns true if date objects are equal": function () {
+        var match = sinon.match(new Date(2012, 3, 5));
+
+        assert(match.test(new Date(2012, 3, 5)));
+    },
+
+    "returns false if date objects are not equal": function () {
+        var match = sinon.match(new Date(2013, 3, 5));
+
+        assert.isFalse(match.test(new Date(2012, 3, 5)));
+    },
+
     "returns true if test matches": function () {
         var match = sinon.match({ prop: sinon.match.typeOf("boolean") });
 
