@@ -238,6 +238,20 @@ buster.testCase("sinon", {
             assert(sinon.deepEqual(obj1, obj2));
         },
 
+        "passes equal dates": function () {
+            var date1 = new Date(2012, 3, 5);
+            var date2 = new Date(2012, 3, 5);
+
+            assert(sinon.deepEqual(date1, date2));
+        },
+
+        "fails different dates": function () {
+            var date1 = new Date(2012, 3, 5);
+            var date2 = new Date(2013, 3, 5);
+
+            assert.isFalse(sinon.deepEqual(date1, date2));
+        },
+
         "in browsers": {
             requiresSupportFor: {
                 "document object": typeof document !== "undefined"
