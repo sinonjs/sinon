@@ -87,8 +87,8 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger << "lib/sinon/util/fake_server_with_clock.js"
   merger.save("pkg/sinon-server#{version_string}.js")
   add_license("pkg/sinon-server#{version_string}.js", version)
-  `cp #{output} pkg/sinon.js`
-  `cp pkg/sinon-ie#{version_string}.js pkg/sinon-ie.js`
+  FileUtils.cp(output, 'pkg/sinon.js')
+  FileUtils.cp("pkg/sinon-ie#{version_string}.js", 'pkg/sinon-ie.js')
 
   puts "Built Sinon.JS #{version}"
 end
