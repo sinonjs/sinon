@@ -549,5 +549,52 @@ buster.testCase("sinon", {
 
             assert.same(obj.method, method);
         }
+    },
+
+    ".onInvocation": {
+        "calls when a spy is being called": function (next) {
+            var obj = sinon.spy();
+
+            sinon.onInvocation(obj, function() {
+                assert.same(obj.callCount, 1);
+                next();
+            });
+
+            obj();
+        },
+
+        "calls when a stub is being called": function (next) {
+            var obj = sinon.stub();
+
+            sinon.onInvocation(obj, function() {
+                assert.same(obj.callCount, 1);
+                next();
+            });
+
+            obj();
+        },
+
+        "context of callback is the spy": function (next) {
+            var obj = sinon.stub();
+
+            sinon.onInvocation(obj, function() {
+                assert.same(this, obj);
+                next();
+            });
+
+            obj();
+        },
+
+        "throws exception for non function callback": function () {
+            assert.exception(function() {
+                sinon.onInvocation(sinon.stub(), null);
+            });
+        },
+
+        "throws exception for non spy object": function () {
+            assert.exception(function() {
+                sinon.onInvocation({}, function() {});
+            });
+        }
     }
 });
