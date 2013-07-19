@@ -1,6 +1,6 @@
 {
   "name": "Sinon.JS",
-  "repo": "jamestalmage/Sinon.JS",
+  "repo": "jamestalmage/sinon",
   "description": "JavaScript test spies, stubs and mocks.",
   "version": "0.0.1",
   "keywords": [],
