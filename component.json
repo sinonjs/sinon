@@ -1,5 +1,5 @@
 {
-  "name": "Sinon.JS",
+  "name": "sinon",
   "repo": "jamestalmage/sinon",
   "description": "JavaScript test spies, stubs and mocks.",
   "version": "0.0.1",
