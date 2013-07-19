@@ -1,0 +1,31 @@
+{
+  "name": "Sinon.JS",
+  "repo": "jamestalmage/Sinon.JS",
+  "description": "JavaScript test spies, stubs and mocks.",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "lib/sinon.js",
+  "scripts": [
+      "lib/sinon.js",
+      "lib/sinon/assert.js",
+      "lib/sinon/call.js",
+      "lib/sinon/collection.js",
+      "lib/sinon/match.js",
+      "lib/sinon/mock.js",
+      "lib/sinon/sandbox.js",
+      "lib/sinon/spy.js",
+      "lib/sinon/stub.js",
+      "lib/sinon/test.js",
+      "lib/sinon/test_case.js",
+      "lib/sinon/util/event.js",
+      "lib/sinon/util/fake_server.js",
+      "lib/sinon/util/fake_server_with_clock.js",
+      "lib/sinon/util/fake_timers.js",
+      "lib/sinon/util/fake_xml_http_request.js",
+      "lib/sinon/util/timers_ie.js",
+      "lib/sinon/util/xhr_ie.js"
+  ]
+}
