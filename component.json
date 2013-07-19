@@ -2,7 +2,7 @@
   "name": "sinon",
   "repo": "jamestalmage/sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "0.0.2",
+  "version": "1.7.3",
   "keywords": [],
   "dependencies": {},
   "development": {},
