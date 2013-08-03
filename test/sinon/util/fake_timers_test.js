@@ -152,6 +152,27 @@ buster.testCase("sinon.clock", {
             assert(spies[3].called);
         },
 
+        "triggers multiple simultaneous timers with zero callAt": function () {
+            var test = this;
+            var spies = [
+                sinon.spy(function() {
+                    test.clock.setTimeout(spies[1], 0)
+                }),
+                sinon.spy(),
+                sinon.spy()
+            ];
+
+            // First spy calls another setTimeout with delay=0
+            this.clock.setTimeout(spies[0], 0);
+            this.clock.setTimeout(spies[2], 10);
+
+            this.clock.tick(10);
+
+            assert(spies[0].called);
+            assert(spies[1].called);
+            assert(spies[2].called);
+        },
+
         "waits after setTimeout was called": function () {
             this.clock.tick(100);
             var stub = sinon.stub.create();
