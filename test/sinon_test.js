@@ -231,6 +231,26 @@ buster.testCase("sinon", {
             assert(sinon.deepEqual(arr1, arr2));
         },
 
+        "passes equal arrays with custom properties": function () {
+            var arr1 = [1, 2, 3, "hey", "there"];
+            var arr2 = [1, 2, 3, "hey", "there"];
+
+            arr1.foo = "bar";
+            arr2.foo = "bar";
+
+            assert(sinon.deepEqual(arr1, arr2));
+        },
+
+        "fails arrays with unequal custom properties": function () {
+            var arr1 = [1, 2, 3, "hey", "there"];
+            var arr2 = [1, 2, 3, "hey", "there"];
+
+            arr1.foo = "bar";
+            arr2.foo = "not bar";
+
+            assert.isFalse(sinon.deepEqual(arr1, arr2));
+        },
+
         "passes equal objects": function () {
             var obj1 = { a: 1, b: 2, c: 3, d: "hey", e: "there" };
             var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };
