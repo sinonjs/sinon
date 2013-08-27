@@ -626,12 +626,9 @@
             },
 
             "fire onload event": function () {
-                var fireOnLoad = false;
-                this.onload = function(){
-                    fireOnLoad = true;
-                }
+                this.onload = this.spy;
                 this.xhr.respond(200, {}, "");
-                assert.isTrue(fireOnLoad);
+                assert.equals(this.spy.callCount, 1);
             },
 
             "calls readystate handler with readyState DONE once": function () {
@@ -815,13 +812,10 @@
             },
 
             "fire onerror event": function () {
-                var testFlag = false,
-                    this.onerror = function(){
-                        testFlag = true;
-                    };
-                this.xhr.aborted = true;
+                var spy = sinon.spy();
+                this.xhr.onerror = spy;
                 this.xhr.abort();
-                assert.isTrue(testFlag);
+                assert.equals(spy.callCount, 1);
             },
 
             "nulls request headers": function () {
