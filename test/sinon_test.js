@@ -87,6 +87,23 @@ buster.testCase("sinon", {
             }, "TypeError");
         },
 
+        "originating stack traces": {
+            requiresSupportFor: {
+                "stack traces": !!(new Error("").stack)
+            },
+
+            "throws with stack trace showing original wrapMethod call": function () {
+                var object = { method: function () {} };
+                sinon.wrapMethod(object, "method", function () { return 'original' });
+
+                try {
+                    sinon.wrapMethod(object, "method", function () {});
+                } catch(e) {
+                    assert.match(e.stack, /Stack Trace for original/);
+                }
+            }
+        },
+
         "in browser": {
             requiresSupportFor: {
                 "window object": typeof window !== "undefined"
