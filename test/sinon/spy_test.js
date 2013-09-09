@@ -1578,6 +1578,24 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        "getCalls": {
+            "returns an empty Array by default": function () {
+                var spy = sinon.spy();
+
+                assert.isArray(spy.getCalls());
+                assert.equals(spy.getCalls().length, 0);
+            },
+
+            "is analogous to using getCall(n)": function () {
+                var spy = sinon.spy();
+
+                spy();
+                spy();
+
+                assert.equals(spy.getCalls(), [ spy.getCall(0), spy.getCall(1) ]);
+            }
+        },
+
         "callArg": {
             "is function": function () {
                 var spy = sinon.spy();
