@@ -535,6 +535,14 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.isFalse(this.spy.calledOn({}));
             },
 
+            "is true if called on a bound target": function () {
+                var target = {};
+                this.spy.bind(target);
+                this.spy();
+
+                assert(this.spy.calledOn(target));
+            },
+
             "is true if called with matcher that returns true": function () {
                 var matcher = sinon.match(function () { return true; });
                 this.spy();
@@ -559,7 +567,8 @@ if (typeof require === "function" && typeof module === "object") {
                 }));
 
                 assert.same(actual, expected);
-            }
+            },
+
         },
 
         "alwaysCalledOn": {
@@ -976,7 +985,7 @@ if (typeof require === "function" && typeof module === "object") {
                 this.spyWithTypeError = sinon.spy.create(function () {
                     throw new TypeError();
                 });
-                
+
                 this.spyWithStringError = sinon.spy.create(function() {
                 	throw "error";
                 });
@@ -1031,20 +1040,20 @@ if (typeof require === "function" && typeof module === "object") {
 
                 assert.isFalse(this.spy.threw("Error"));
             },
-            
+
             "returns true if string matches": function () {
             	try {
             		this.spyWithStringError();
             	} catch (e) {}
-            	
+
             	assert(this.spyWithStringError.threw("error"));
             },
-            
+
             "returns false if strings do not match": function() {
             	try {
             		this.spyWithStringError();
             	} catch (e) {}
-            	
+
             	assert.isFalse(this.spyWithStringError.threw("not the error"));
             }
         },
