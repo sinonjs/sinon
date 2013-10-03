@@ -1253,17 +1253,65 @@ buster.testCase("sinon.stub", {
             }
         },
 
-        "can be combined with withArgs": function() {
-            var stub = sinon.stub().returns(0);
-            stub.withArgs(5).returns(-1)
-                .onFirstCall().returns(1)
-                .onSecondCall().returns(2);
+        "in combination with withArgs": {
+            "can produce a sequence for a fake": function() {
+                var stub = sinon.stub().returns(0);
+                stub.withArgs(5).returns(-1)
+                    .onFirstCall().returns(1)
+                    .onSecondCall().returns(2);
 
-            assert.same(stub(0), 0);
-            assert.same(stub(5), 1);
-            assert.same(stub(0), 0);
-            assert.same(stub(5), 2);
-            assert.same(stub(5), -1);
+                assert.same(stub(0), 0);
+                assert.same(stub(5), 1);
+                assert.same(stub(0), 0);
+                assert.same(stub(5), 2);
+                assert.same(stub(5), -1);
+            },
+
+            "falls back to stub default behaviour if fake does not have its own default behaviour": function() {
+                var stub = sinon.stub().returns(0);
+                stub.withArgs(5)
+                    .onFirstCall().returns(1);
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 0);
+            },
+
+            "falls back to stub behaviour for call if fake does not have its own behaviour for call": function() {
+                var stub = sinon.stub().returns(0);
+                stub.withArgs(5).onFirstCall().returns(1);
+                stub.onSecondCall().returns(2);
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 2);
+                assert.same(stub(4), 0);
+            },
+
+            "defaults to undefined behaviour once no more calls have been defined": function() {
+                var stub = sinon.stub();
+                stub.withArgs(5).onFirstCall().returns(1)
+                    .onSecondCall().returns(2);
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 2);
+                refute.defined(stub(5));
+            },
+
+
+            "works with fakes and reset": function() {
+                var stub = sinon.stub();
+                stub.withArgs(5).onFirstCall().returns(1);
+                stub.withArgs(5).onSecondCall().returns(2);
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 2);
+                refute.defined(stub(5));
+
+                stub.reset();
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 2);
+                refute.defined(stub(5));
+            }
         },
 
         "can be used with yields* to produce a sequence": function () {
@@ -1454,7 +1502,7 @@ buster.testCase("sinon.stub", {
 
             childStub.resetBehavior();
 
-            refute.defined(parentStub('lolz'));
+            assert.same(parentStub('lolz'), false);
             assert.same(parentStub(), false);
         },
 
