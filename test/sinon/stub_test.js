@@ -1203,7 +1203,6 @@ buster.testCase("sinon.stub", {
             }));
 
             this.stub({ success: callback });
-
             assert(!callback.called);
         }
     },
@@ -1296,6 +1295,29 @@ buster.testCase("sinon.stub", {
                 refute.defined(stub(5));
             },
 
+            "can filter call behaviour": function() {
+                var stub = sinon.stub().returns(0);
+                stub.onFirstCall().withArgs(5).returns(1);
+                stub.onSecondCall().returns(2);
+
+                assert.same(stub(5), 1);
+                assert.same(stub(5), 2);
+                assert.same(stub(4), 0);
+            },
+
+            "works with reset": function() {
+                var stub = sinon.stub();
+                stub.onFirstCall().withArgs(5).returns(1)
+                    .withArgs(6).returns(2);
+
+                assert.same(stub(5), 1);
+                refute.defined(stub(5));
+
+                stub.reset();
+
+                assert.same(stub(6), 2);
+                refute.defined(stub(6));
+            },
 
             "works with fakes and reset": function() {
                 var stub = sinon.stub();
