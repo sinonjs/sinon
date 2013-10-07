@@ -1305,7 +1305,21 @@ buster.testCase("sinon.stub", {
                 assert.same(stub(4), 0);
             },
 
-            "works with reset": function() {
+            "falls back to stub default behaviour if filter for call does not apply": function() {
+                var stub = sinon.stub().returns(2);
+                stub.onFirstCall().withArgs(5).returns(1);
+
+                assert.same(stub(6), 2);
+            },
+
+            "does not create undefined behaviour just by calling onCall": function() {
+                var stub = sinon.stub().returns(2);
+                stub.onFirstCall();
+
+                assert.same(stub(6), 2);
+            },
+
+            "allows to reset filtered behavior of call": function() {
                 var stub = sinon.stub();
                 stub.onFirstCall().withArgs(5).returns(1)
                     .withArgs(6).returns(2);
