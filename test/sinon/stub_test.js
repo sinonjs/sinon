@@ -1,5 +1,5 @@
 /*jslint onevar: false*/
-/*globals sinon buster*/
+/*globals sinon buster require assert*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
