@@ -1414,7 +1414,6 @@
                 this.xhr.upload.addEventListener("progress", function(e) {
                     assert.equals(e.total, 100);
                     assert.equals(e.loaded, 20);
-                    assert.equals(e.constructor.name, "ProgressEvent");
                     done();
                 });
                 this.xhr.uploadProgress({
@@ -1440,7 +1439,6 @@
                 this.xhr.upload.addEventListener("progress", function(e) {
                     assert.equals(e.total, 100);
                     assert.equals(e.loaded, 100);
-                    assert.equals(e.constructor.name, "ProgressEvent");
                     done();
                 });
 
@@ -1464,8 +1462,7 @@
 
             "error event is triggered with xhr.uploadError(new Error('foobar'))": function(done) {
                 this.xhr.upload.addEventListener("error", function(e) {
-                    assert.equals(e.message, "foobar");
-                    assert.equals(e.constructor.name, "ErrorEvent");
+                    assert.equals(e.detail.message, "foobar");
 
                     done();
                 });
