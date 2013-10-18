@@ -22,14 +22,14 @@ buster.testCase("sinon.stub", {
         assert.isFunction(stub.calledOn);
     },
 
-    "should contain asynchronous versions of callsArg*, yields*, and thenYields methods": function() {
+    "should contain asynchronous versions of callsArg*, and yields* methods": function() {
         var stub = sinon.stub.create();
 
         var syncVersions = 0;
         var asyncVersions = 0;
 
         for (var method in stub) {
-            if (stub.hasOwnProperty(method) && method.match(/^(callsArg|yields|thenYields$)/)) {
+            if (stub.hasOwnProperty(method) && method.match(/^(callsArg|yields)/)) {
                 if (!method.match(/Async/)) {
                     syncVersions++;
                 } else if (method.match(/Async/)) {
