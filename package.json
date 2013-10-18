@@ -22,7 +22,7 @@
         "prepublish": "./build"
     },
     "dependencies": {
-        "buster-format": "~0.5"
+        "formatio": "~1.0"
     },
     "devDependencies": {
         "buster-core": ">=0.6.4",

@@ -34,14 +34,11 @@ PREAMBLE
   end
 end
 
-def add_buster_format(file)
-  if !File.exists?("./node_modules/buster-format")
+def add_formatio(file)
+  if !File.exists?("./node_modules/formatio")
     puts <<-MSG
-buster-format not found, skipping. To build with buster-format support:
-    mkdir node_modules
-    git submodule add git://gitorious.org/buster/buster-format.git node_modules/buster-format
-    cd node_modules/buster-format
-    npm link
+formatio not found, skipping. To build with formatio support:
+    npm install formatio
     MSG
     return file
   end
@@ -49,8 +46,11 @@ buster-format not found, skipping. To build with buster-format support:
 
   File.open(file, "w") do |f|
     f.puts("this.sinon = (function () {")
-    f.puts(File.read("./node_modules/buster-core/lib/buster-core.js"))
-    f.puts(File.read("./node_modules/buster-format/lib/buster-format.js").gsub("var buster = this.buster || {};", ""))
+    f.puts("var samsam, formatio;")
+    f.puts("function define(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else { formatio = fn(samsam); } }")
+    f.puts("define.amd = true;")
+    f.puts(File.read("./node_modules/formatio/node_modules/samsam/lib/samsam.js"))
+    f.puts(File.read("./node_modules/formatio/lib/formatio.js"))
     f.puts(contents)
     f.puts("return sinon;}.call(typeof window != 'undefined' && window || {}));")
   end
@@ -68,7 +68,7 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger << "lib/sinon/test_case.js"
   merger << "lib/sinon/assert.js"
   merger.save(output)
-  add_license(add_buster_format(output), version)
+  add_license(add_formatio(output), version)
 
   File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
     f.puts(File.read("lib/sinon/util/timers_ie.js"))

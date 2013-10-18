@@ -452,7 +452,7 @@ buster.testCase("sinon", {
     },
 
     "format": {
-        "formats with buster by default": function () {
+        "formats with formatio by default": function () {
             assert.equals(sinon.format({ id: 42 }), "{ id: 42 }");
         },
 
