@@ -1402,6 +1402,72 @@
                 this.xhr.send();
                 this.xhr.respond(403, {}, "");
             }
+        },
+
+        "xhr.upload": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr.open("POST", "/some/url", true);
+            },
+
+            "progress event is triggered with xhr.uploadProgress({loaded: 20, total: 100})": function (done) {
+                this.xhr.upload.addEventListener("progress", function(e) {
+                    assert.equals(e.total, 100);
+                    assert.equals(e.loaded, 20);
+                    done();
+                });
+                this.xhr.uploadProgress({
+                    total: 100,
+                    loaded: 20
+                });
+            },
+
+            "triggers 'load' event on success": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.upload.addEventListener("load", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
+            "fires event with 100% progress on 'load'": function(done) {
+                this.xhr.upload.addEventListener("progress", function(e) {
+                    assert.equals(e.total, 100);
+                    assert.equals(e.loaded, 100);
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
+            "calls 'abort' on cancel": function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.upload.addEventListener("abort", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.status, 0);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.abort();
+            },
+
+            "error event is triggered with xhr.uploadError(new Error('foobar'))": function(done) {
+                this.xhr.upload.addEventListener("error", function(e) {
+                    assert.equals(e.detail.message, "foobar");
+
+                    done();
+                });
+                this.xhr.uploadError(new Error("foobar"));
+            }
         }
     });
 }(this));
