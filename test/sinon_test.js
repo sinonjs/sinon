@@ -89,7 +89,11 @@ buster.testCase("sinon", {
 
         "originating stack traces": {
             requiresSupportFor: {
-                "stack traces": !!(new Error("").stack)
+                "stack traces": !!(new Error("").stack),
+                "error message in stack traces": function() {
+                    var error = new Error("foo");
+                    return error.stack && error.stack.match(/foo/);
+                }
             },
 
             "throws with stack trace showing original wrapMethod call": function () {
