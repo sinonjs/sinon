@@ -88,8 +88,19 @@ buster.testCase("sinon", {
         },
 
         "originating stack traces": {
-            requiresSupportFor: {
-                "stack traces": !!(new Error("").stack)
+
+            setUp: function () {
+                this.oldError = Error;
+                this.oldTypeError = TypeError;
+                var i = 0;
+                Error = TypeError = function () {
+                    this.stack = ':STACK' + ++i + ':';
+                }
+            },
+
+            tearDown: function () {
+                Error = this.oldError;
+                TypeError = this.oldTypeError;
             },
 
             "throws with stack trace showing original wrapMethod call": function () {
@@ -99,7 +110,7 @@ buster.testCase("sinon", {
                 try {
                     sinon.wrapMethod(object, "method", function () {});
                 } catch(e) {
-                    assert.match(e.stack, /Stack Trace for original/);
+                    assert.equals(e.stack, ':STACK2:\n--------------\n:STACK1:');
                 }
             }
         },
