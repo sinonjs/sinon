@@ -489,6 +489,23 @@ buster.testCase("sinon.mock", {
                 refute.exception(function () {
                     expectation(1, 2, 3);
                 });
+            },
+            "works with sinon matchers": function(){
+                var expectation = this.expectation;
+                
+                this.expectation.withArgs(sinon.match.number, sinon.match.string, sinon.match.func);
+                this.expectation(1, "test", function(){});
+
+                assert(this.expectation.met());
+            },
+            "throws when sinon matchers fail": function(){
+                var expectation = this.expectation;
+                
+                this.expectation.withArgs(sinon.match.number, sinon.match.string, sinon.match.func);
+                assert.exception(function () {
+                    expectation(1, 2, 3);
+                }, "ExpectationError");
+                
             }
         },
 
