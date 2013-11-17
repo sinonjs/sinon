@@ -1322,7 +1322,7 @@ buster.testCase("sinon.stub", {
                 try {
                     sinon.stub().onFirstCall().withArgs(1);
                 } catch (e) {
-                    assert.match(e.message, /not yet supported/);
+                    assert.match(e.message, /not supported/);
                 }
             }
         },
