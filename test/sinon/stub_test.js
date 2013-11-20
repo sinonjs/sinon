@@ -1295,42 +1295,11 @@ buster.testCase("sinon.stub", {
                 refute.defined(stub(5));
             },
 
-            "can filter call behaviour": function() {
-                var stub = sinon.stub().returns(0);
-                stub.onFirstCall().withArgs(5).returns(1);
-                stub.onSecondCall().returns(2);
-
-                assert.same(stub(5), 1);
-                assert.same(stub(5), 2);
-                assert.same(stub(4), 0);
-            },
-
-            "falls back to stub default behaviour if filter for call does not apply": function() {
-                var stub = sinon.stub().returns(2);
-                stub.onFirstCall().withArgs(5).returns(1);
-
-                assert.same(stub(6), 2);
-            },
-
             "does not create undefined behaviour just by calling onCall": function() {
                 var stub = sinon.stub().returns(2);
                 stub.onFirstCall();
 
                 assert.same(stub(6), 2);
-            },
-
-            "allows to reset filtered behavior of call": function() {
-                var stub = sinon.stub();
-                stub.onFirstCall().withArgs(5).returns(1)
-                    .withArgs(6).returns(2);
-
-                assert.same(stub(5), 1);
-                refute.defined(stub(5));
-
-                stub.reset();
-
-                assert.same(stub(6), 2);
-                refute.defined(stub(6));
             },
 
             "works with fakes and reset": function() {
@@ -1347,6 +1316,14 @@ buster.testCase("sinon.stub", {
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 2);
                 refute.defined(stub(5));
+            },
+
+            "throws an understandable error when trying to use withArgs on behavior": function() {
+                try {
+                    sinon.stub().onFirstCall().withArgs(1);
+                } catch (e) {
+                    assert.match(e.message, /not supported/);
+                }
             }
         },
 
