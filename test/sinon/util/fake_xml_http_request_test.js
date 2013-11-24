@@ -84,6 +84,7 @@
                 assert.isTrue(this.xhr.async);
                 assert.equals(this.xhr.username, "cjno");
                 assert.equals(this.xhr.password, "pass");
+                assert.equals(this.xhr.withCredentials, false);
             },
 
             "is async by default": function () {
