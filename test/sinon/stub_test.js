@@ -1476,6 +1476,23 @@ buster.testCase("sinon.stub", {
         assert(spy.calledTwice);
     },
 
+    "safe": {
+        "protects against calls with unsafe arity": function () {
+            var stubObj = { stubFn: function (one) {} };
+            var stub = sinon.stub(stubObj, 'stubFn').safe();
+            assert.exception(function () {
+              stub(1, 2);
+            }, "ArityError");
+        },
+
+        "allows calls with correct arity": function () {
+            var stubObj = { stubFn: function (one) {} };
+            var stub = sinon.stub(stubObj, 'stubFn').safe();
+            stub(1);
+            assert(stub.calledOnce);
+        }
+    },
+
     "resetBehavior": {
         "clears yields* and callsArg* sequence": function () {
             var stub = sinon.stub().yields(1);
