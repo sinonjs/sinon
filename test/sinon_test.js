@@ -443,14 +443,6 @@ buster.testCase("sinon", {
         }
     },
 
-    "log": {
-        "does nothing gracefully": function () {
-            refute.exception(function () {
-                sinon.log("Oh, hiya");
-            });
-        }
-    },
-
     "format": {
         "formats with buster by default": function () {
             assert.equals(sinon.format({ id: 42 }), "{ id: 42 }");
