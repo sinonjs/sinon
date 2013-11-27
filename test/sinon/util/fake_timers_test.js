@@ -61,7 +61,7 @@ buster.testCase("sinon.clock", {
             assert(stubs[1].called);
         },
 
-        "evals non-function callbacks": function () {
+        "//evals non-function callbacks": function () {
             this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
             this.clock.tick(10);
 
