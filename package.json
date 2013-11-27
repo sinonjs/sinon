@@ -18,6 +18,7 @@
         }
     ],
     "scripts": {
+        "start": "node test/server.js",
         "test": "node test/node/run.js",
         "prepublish": "./build"
     },
@@ -29,7 +30,9 @@
         "buster-assertions": "~0.10",
         "buster-evented-logger": "~0.4",
         "buster-test": "~0.5",
-        "http-server": "*"
+        "http-server": "*",
+        "browserify": "~2.35.4",
+        "node-static": "~0.7.2"
     },
     "main": "./lib/sinon.js",
     "engines": { "node": ">=0.1.103" }
