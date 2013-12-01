@@ -67,6 +67,17 @@
             assert.same(onCreate.getCall(0).args[0], xhr);
         },
 
+        "withCredentials": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            },
+
+            "property is set if we support standards CORS": function () {
+                assert.equals(sinon.xhr.supportsCORS, "withCredentials" in this.xhr);
+            }
+
+        },
+
         "open": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
@@ -84,7 +95,7 @@
                 assert.isTrue(this.xhr.async);
                 assert.equals(this.xhr.username, "cjno");
                 assert.equals(this.xhr.password, "pass");
-                assert.equals(this.xhr.withCredentials, false);
+
             },
 
             "is async by default": function () {
