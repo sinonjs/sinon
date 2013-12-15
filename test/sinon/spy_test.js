@@ -1324,6 +1324,36 @@ if (typeof require === "function" && typeof module === "object") {
                 refute.defined(spy.returnValues[0]);
             },
 
+            "contains the created object for spied constructors": function () {
+                var spy = sinon.spy.create(function() { });
+
+                var result = new spy();
+
+                assert.equals(spy.returnValues[0], result);
+            },
+
+            "contains the return value for spied constructors that explicitly return objects": function () {
+                var spy = sinon.spy.create(function() {
+                    return { isExplicitlyCreatedValue: true };
+                });
+
+                var result = new spy();
+
+                assert.isTrue(result.isExplicitlyCreatedValue);
+                assert.equals(spy.returnValues[0], result);
+            },
+
+            "contains the created object for spied constructors that explicitly return primitive values": function () {
+                var spy = sinon.spy.create(function() {
+                    return 10;
+                });
+
+                var result = new spy();
+
+                refute.equals(result, 10);
+                assert.equals(spy.returnValues[0], result);
+            },
+
             "stacks up return values": function () {
                 var calls = 0;
 
