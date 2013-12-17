@@ -537,7 +537,7 @@ buster.testCase("sinon", {
 
         "retains non function values": function() {
             var TYPE = "some-value";
-            var Class = function() {}
+            var Class = function() {};
             Class.prototype.type = TYPE;
 
             var stub = sinon.createStubInstance(Class);
