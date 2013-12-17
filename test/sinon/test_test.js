@@ -342,7 +342,6 @@ buster.testCase("sinon.test", {
 
             "injects server and clock when only enabling them": function () {
                 var testCase = this.boundTestCase();
-                var obj = {};
 
                 sinon.config = {
                     useFakeTimers: true,
@@ -424,7 +423,6 @@ buster.testCase("sinon.test", {
 
         "injects functions into test case by default": function () {
             var testCase = this.boundTestCase();
-            var obj = {};
 
             sinon.test(testCase.fn).call(testCase);
 
@@ -437,7 +435,6 @@ buster.testCase("sinon.test", {
 
         "injects sandbox": function () {
             var testCase = this.boundTestCase();
-            var obj = {};
 
             sinon.config = {
                 properties: ["sandbox", "spy"]

@@ -485,7 +485,7 @@ buster.testCase("sinon.stub", {
                 return wrapper;
             };
 
-            var result = sinon.stub(this.object, "method");
+            sinon.stub(this.object, "method");
 
             assert.same(args[0], this.object);
             assert.same(args[1], "method");
@@ -550,7 +550,6 @@ buster.testCase("sinon.stub", {
 
         "stub should affect spy": function () {
             var stub = sinon.stub(this.object, "method");
-            var someObj = {};
             stub.throws("TypeError");
 
             try {
@@ -592,7 +591,7 @@ buster.testCase("sinon.stub", {
                 func3: function () {}
             };
 
-            var stub = sinon.stub(obj);
+            sinon.stub(obj);
 
             assert.isFunction(obj.func1.restore);
             assert.isFunction(obj.func2.restore);
@@ -604,7 +603,7 @@ buster.testCase("sinon.stub", {
             Obj.prototype.func1 = function() {};
             var obj = new Obj();
 
-            var stub = sinon.stub(obj);
+            sinon.stub(obj);
 
             assert.isFunction(obj.func1.restore);
         },
@@ -733,7 +732,7 @@ buster.testCase("sinon.stub", {
             var spy = sinon.spy();
             assert.exception(function () {
                 stub(spy);
-            })
+            });
             assert(spy.calledOnce);
         },
 
@@ -1127,7 +1126,7 @@ buster.testCase("sinon.stub", {
             this.stub.callsArgOnWithAsync(1, context, object);
 
             var callback = sinon.spy(done(function () {
-                assert(callback.calledOn(context))
+                assert(callback.calledOn(context));
                 assert(callback.calledWith(object));
             }));
 

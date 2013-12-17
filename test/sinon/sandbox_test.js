@@ -386,7 +386,7 @@ if (typeof require == "function" && typeof module == "object") {
             },
 
             "fakes specified timers": function () {
-                var sandbox = sinon.sandbox.create(sinon.getConfig({
+                sinon.sandbox.create(sinon.getConfig({
                     injectIntoThis: false,
                     properties: ["clock"],
                     useFakeTimers: ["Date", "setTimeout"]

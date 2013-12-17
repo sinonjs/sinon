@@ -611,7 +611,7 @@ buster.testCase("sinon.fakeServer", {
             this.get = function get(url) {
                 var request = new sinon.FakeXMLHttpRequest();
                 sinon.spy(request, "respond");
-                request.open("get", "/path", true);
+                request.open("get", url, true);
                 request.send();
                 return request;
             };

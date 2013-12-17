@@ -491,8 +491,6 @@ buster.testCase("sinon.mock", {
                 });
             },
             "works with sinon matchers": function(){
-                var expectation = this.expectation;
-                
                 this.expectation.withArgs(sinon.match.number, sinon.match.string, sinon.match.func);
                 this.expectation(1, "test", function(){});
 
@@ -564,7 +562,7 @@ buster.testCase("sinon.mock", {
                 assert(this.expectation.met());
             },
 
-            "nots allow excessive args with no expected args": function () {
+            "does not allow excessive args with no expected args": function () {
                 var expectation = this.expectation;
                 expectation.withExactArgs();
 
@@ -597,7 +595,7 @@ buster.testCase("sinon.mock", {
         },
 
         "verify": {
-            "passs if met": function () {
+            "pass if met": function () {
                 sinon.stub(sinon.expectation, "pass");
                 var expectation = this.expectation;
 
@@ -890,8 +888,8 @@ buster.testCase("sinon.mock", {
             this.method = function () {};
             this.object = { method: this.method };
             this.mock = sinon.mock.create(this.object);
-            this.mock1 = this.mock.expects("method");
-            this.mock2 = this.mock.expects("method").on(this.thisValue);
+            this.mock.expects("method");
+            this.mock.expects("method").on(this.thisValue);
         },
 
         "queues expectations": function () {
@@ -979,7 +977,6 @@ buster.testCase("sinon.mock", {
 
         "throws understandable error if no callback is passed": function () {
             var mock = sinon.mock().yields();
-            var spy = sinon.spy();
 
             try {
                 mock();
