@@ -1455,6 +1455,16 @@ if (typeof require === "function" && typeof module === "object") {
                 var call0 = spy.getCall(0);
                 assert.equals(spy.firstCall.callId, call0.callId);
                 assert.same(spy.firstCall.spy, call0.spy);
+            },
+
+            "is tracked even if exceptions are thrown": function () {
+                var spy = sinon.spy(function () { throw "an exception"; });
+
+                try {
+                    spy();
+                } catch (e) { }
+
+                refute.isNull(spy.firstCall);
             }
 
         },
