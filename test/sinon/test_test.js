@@ -392,6 +392,7 @@ buster.testCase("sinon.test", {
                     Date: Date,
                     setTimeout: setTimeout,
                     clearTimeout: clearTimeout,
+                    setImmediate: setImmediate,
                     setInterval: setInterval,
                     clearInterval: clearInterval
                 };
@@ -400,6 +401,7 @@ buster.testCase("sinon.test", {
             refute.same(props.Date, sinon.timers.Date);
             refute.same(props.setTimeout, sinon.timers.setTimeout);
             assert.same(props.clearTimeout, sinon.timers.clearTimeout);
+            assert.same(props.setImmediate, sinon.timers.setImmediate);
             assert.same(props.setInterval, sinon.timers.setInterval);
             assert.same(props.clearInterval, sinon.timers.clearInterval);
         },
