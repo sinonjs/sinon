@@ -458,7 +458,7 @@ buster.testCase("sinon.clock", {
         }
     },
 
-    "terval": {
+    "setInterval": {
         setUp: function () {
             this.clock = sinon.clock.create();
         },
