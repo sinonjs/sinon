@@ -862,27 +862,30 @@ buster.testCase("sinon.clock", {
             assert.same(clearInterval, sinon.timers.clearInterval);
         },
 
-        "//deletes global property if it originally did not have own property": 
-        "Not quite sure why this test was initially commented out - TODO: Fix"
-        /*function () {
-            // remove this properties from the global object ("hasOwnProperty" false)
-            // delete this.global.clearTimeout;
-            // delete this.global.setInterval;
-            // // set these properties to the global object ("hasOwnProperty" true)
-            // this.global.clearInterval = this.global.clearInterval;
-            // this.global.setTimeout = this.global.clearInterval;
+        "deletes global property on restore if it was inherited onto the global object": function () {
+            // Give the global object an inherited 'tick' method
+            delete this.global.tick;
+            this.global.__proto__.tick = function() { };
 
-            // this.clock = sinon.useFakeTimers();
-            // this.clock.restore();
+            this.clock = sinon.useFakeTimers('tick');
+            assert.isTrue(this.global.hasOwnProperty("tick"));
+            this.clock.restore();
 
-            // // these properties should be removed from the global object directly.
-            // assert.isFalse(this.global.hasOwnProperty("clearTimeout"));
-            // assert.isFalse(this.global.hasOwnProperty("setInterval"));
+            assert.isFalse(this.global.hasOwnProperty("tick"));
+            delete this.global.__proto__.tick;
+        },
 
-            // // these properties should be added back into the global object directly.
-            // assert(this.global.hasOwnProperty("clearInterval"));
-            // assert(this.global.hasOwnProperty("setTimeout"));
-        }*/,
+        "restores global property on restore if it is present on the global object itself": function () {
+            // Directly give the global object a tick method
+            this.global.tick = function () { };
+
+            this.clock = sinon.useFakeTimers('tick');
+            assert.isTrue(this.global.hasOwnProperty("tick"));
+            this.clock.restore();
+
+            assert.isTrue(this.global.hasOwnProperty("tick"));
+            delete this.global.tick;
+        },
 
         "fakes Date constructor": function () {
             this.clock = sinon.useFakeTimers(0);
