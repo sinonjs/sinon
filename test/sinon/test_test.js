@@ -392,7 +392,8 @@ buster.testCase("sinon.test", {
                     Date: Date,
                     setTimeout: setTimeout,
                     clearTimeout: clearTimeout,
-                    setImmediate: setImmediate,
+                    // setImmediate is not yet available in all environments
+                    setImmediate: (typeof setImmediate !== "undefined" ? setImmediate : undefined),
                     setInterval: setInterval,
                     clearInterval: clearInterval
                 };
