@@ -576,6 +576,16 @@ buster.testCase("sinon.stub", {
             assert.equals(obj.someProp, 42);
         },
 
+        "successfully stubs falsey properties": function () {
+            var obj = { 0: function() { } };
+
+            sinon.stub(obj, 0, function () {
+                return "stubbed value";
+            });
+
+            assert.equals(obj[0](), "stubbed value");
+        },
+
         "does not stub function object": function () {
             assert.exception(function () {
                 sinon.stub(function () {});
