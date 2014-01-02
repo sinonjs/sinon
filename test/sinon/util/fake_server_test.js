@@ -385,6 +385,16 @@ buster.testCase("sinon.fakeServer", {
             assert.equals(this.getPathAsync.respond.args[0], [200, {}, "Oh yeah! Duffman!"]);
             assert.equals(this.postRootAsync.respond.args[0], [200, {}, "Oh yeah! Duffman!"]);
             assert.equals(this.postPathAsync.respond.args[0], [200, {}, "Oh yeah! Duffman!"]);
+        },
+
+        "responds to most recently defined match": function() {
+            this.server.respondWith("POST", "", "All POSTs");
+            this.server.respondWith("POST", "/path", "Particular POST");
+            
+            this.server.respond();
+
+            assert.equals(this.postRootAsync.respond.args[0], [200, {}, "All POSTs"]);
+            assert.equals(this.postPathAsync.respond.args[0], [200, {}, "Particular POST"]);
         }
     },
 
@@ -504,8 +514,8 @@ buster.testCase("sinon.fakeServer", {
 
         "does not process request further if processed by function": function () {
             var handler = sinon.spy();
-            this.server.respondWith("GET", /\/a.*/, handler);
             this.server.respondWith("GET", "/aloha", [200, {}, "Oh hi"]);
+            this.server.respondWith("GET", /\/a.*/, handler);
             var xhr = new sinon.FakeXMLHttpRequest();
             xhr.respond = sinon.spy();
             xhr.open("GET", "/aloha");
