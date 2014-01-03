@@ -92,6 +92,57 @@ buster.testCase("sinon.clock", {
         }
     },
 
+    "setImmediate": {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+        },
+
+        "returns numeric id": function () {
+            var result = this.clock.setImmediate(function () { });
+
+            assert.isNumber(result);
+        },
+
+        "calls the given callback immediately": function () {
+            var stub = sinon.stub.create();
+
+            this.clock.setImmediate(stub);
+            this.clock.tick(0);
+
+            assert(stub.called);
+        },
+
+        "throws if no arguments": function () {
+            var clock = this.clock;
+
+            assert.exception(function () {
+                clock.setImmediate();
+            });
+        },
+
+        "manages separate timers per clock instance": function () {
+            var clock1 = sinon.clock.create();
+            var clock2 = sinon.clock.create();
+            var stubs = [sinon.stub.create(), sinon.stub.create()];
+
+            clock1.setImmediate(stubs[0]);
+            clock2.setImmediate(stubs[1]);
+            clock2.tick(0);
+
+            assert.isFalse(stubs[0].called);
+            assert(stubs[1].called);
+        },
+
+        "passes extra parameters through to the callback": function () {
+            var stub = sinon.stub.create();
+
+            this.clock.setImmediate(stub, 'value1', 2);
+            this.clock.tick(1);
+
+            assert(stub.calledWithExactly('value1', 2));
+        }
+    },
+
     "tick": {
         setUp: function () {
             this.clock = sinon.useFakeTimers(0);
