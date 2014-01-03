@@ -1093,7 +1093,7 @@
                 });
             },
 
-            "calls legacy onreadystatechange handlers": function () {
+            "calls legacy onreadystatechange handlers with target set to fakeXHR": function () {
                 var workingXHRInstance;
                 var spy;
                 var readyStateCb;
@@ -1105,11 +1105,16 @@
                     this.open = function () {};
                 };
                 var fakeXhr = this.fakeXhr;
+
                 runWithWorkingXHROveride(workingXHROverride, function () {
                     sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
                     fakeXhr.onreadystatechange = spy = sinon.spy();
                     readyStateCb();
                     assert(spy.calledOnce);
+
+                    // Fix to make weinre work
+                    assert.isObject(spy.args[0][0]);
+                    assert.equals(spy.args[0][0].target, fakeXhr);
                 });
             },
 
