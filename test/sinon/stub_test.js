@@ -1057,6 +1057,14 @@ buster.testCase("sinon.stub", {
             assert.equals(stub(), 23);
             assert.equals(stub(42), 99);
         },
+        
+        "chains filters that return values based on arguments": function () {
+            var stub = sinon.stub().withArgs(42).returns(99).withArgs(24).returns(66);
+
+            assert.equals(stub(42), 99);
+            assert.equals(stub(24), 66);
+            
+        },
 
         "filters exceptions based on arguments": function () {
             var stub = sinon.stub().returns(23);
