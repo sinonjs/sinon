@@ -1479,6 +1479,13 @@
                     done();
                 });
                 this.xhr.uploadError(new Error("foobar"));
+            },
+
+            "event listeners can be removed": function() {
+                var callback = function() {};
+                this.xhr.upload.addEventListener("load", callback);
+                this.xhr.upload.removeEventListener("load", callback);
+                assert.equals(this.xhr.upload.eventListeners["load"].length, 0);
             }
         }
     });
