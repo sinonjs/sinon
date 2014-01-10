@@ -2,7 +2,7 @@
 begin
   require "juicer/merger/javascript_merger"
 rescue LoadError => err
-  puts "Install juicer to build Sinon.JS"
+  puts "Install juicer ruby gem to build Sinon.JS. Try `gem install juicer`."
   if !defined?(Gem)
     puts "RubyGems is not loaded. Perhaps that is why juicer can not be found?"
   end
