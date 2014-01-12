@@ -392,8 +392,9 @@ buster.testCase("sinon.test", {
                     Date: Date,
                     setTimeout: setTimeout,
                     clearTimeout: clearTimeout,
-                    // setImmediate is not yet available in all environments
+                    // clear & setImmediate are not yet available in all environments
                     setImmediate: (typeof setImmediate !== "undefined" ? setImmediate : undefined),
+                    clearImmediate: (typeof clearImmediate !== "undefined" ? clearImmediate : undefined),
                     setInterval: setInterval,
                     clearInterval: clearInterval
                 };
@@ -403,6 +404,7 @@ buster.testCase("sinon.test", {
             refute.same(props.setTimeout, sinon.timers.setTimeout);
             assert.same(props.clearTimeout, sinon.timers.clearTimeout);
             assert.same(props.setImmediate, sinon.timers.setImmediate);
+            assert.same(props.clearImmediate, sinon.timers.clearImmediate);
             assert.same(props.setInterval, sinon.timers.setInterval);
             assert.same(props.clearInterval, sinon.timers.clearInterval);
         },
