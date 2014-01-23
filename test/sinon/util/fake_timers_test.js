@@ -14,6 +14,8 @@ if (typeof require == "function" && typeof module == "object") {
     sinon.extend(sinon, require("../../../lib/sinon/util/fake_timers"));
 }
 
+var globalDate = Date;
+
 buster.testCase("sinon.clock", {
     setUp: function () {
         this.global = typeof global != "undefined" ? global : window;
@@ -572,7 +574,7 @@ buster.testCase("sinon.clock", {
 
     "date": {
         setUp: function () {
-            this.now = new Date().getTime() - 3000;
+            this.now = new globalDate().getTime() - 3000;
             this.clock = sinon.clock.create(this.now);
             this.Date = this.global.Date;
         },
@@ -761,7 +763,6 @@ buster.testCase("sinon.clock", {
             assert.same(this.clock.Date.prototype.toUTCString, Date.prototype.toUTCString);
         },
 
-
         "toSource": {
             requiresSupportFor: { "Date.toSource": !!Date.toSource },
 
@@ -808,7 +809,7 @@ buster.testCase("sinon.clock", {
             assert.isFunction(this.clock.tick);
         },
 
-        "haves clock property": function () {
+        "has clock property": function () {
             this.clock = sinon.useFakeTimers();
 
             assert.same(setTimeout.clock, this.clock);
@@ -967,11 +968,19 @@ buster.testCase("sinon.clock", {
             refute.defined(Date.now);
         },
 
+        "mirrors custom Date properties": function () {
+            var f = function () { };
+            this.global.Date.format = f;
+            sinon.useFakeTimers();
+
+            assert.equals(Date.format, f);
+        },
+
         "restores Date constructor": function () {
             this.clock = sinon.useFakeTimers(0);
             this.clock.restore();
 
-            assert.same(Date, sinon.timers.Date);
+            assert.same(globalDate, sinon.timers.Date);
         },
 
         "fakes provided methods": function () {
