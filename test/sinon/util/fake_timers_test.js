@@ -145,6 +145,22 @@ buster.testCase("sinon.clock", {
         }
     },
 
+    "clearImmediate": {
+        setUp: function () {
+            this.clock = sinon.clock.create();
+        },
+
+        "removes immediate callbacks": function () {
+            var callback = sinon.stub.create();
+
+            var id = this.clock.setImmediate(callback);
+            this.clock.clearImmediate(id);
+            this.clock.tick(1);
+
+            assert.isFalse(callback.called);
+        }
+    },
+
     "tick": {
         setUp: function () {
             this.clock = sinon.useFakeTimers(0);
