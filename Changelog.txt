@@ -1,3 +1,27 @@
+== 1.8.0 / 2014-02-02
+
+* Add clearImmediate mocking support to the timers API (Tim Perry)
+* Mirror custom Date properties when faking time
+* Improved Weinre support
+* Update call properties even if exceptions are thrown (Tim Perry)
+* Update call properties even if exceptions are thrown (Tim Perry)
+* Reverse matching order for fake server (Gordon L. Hempton)
+* Fix restoring globals on another frame fails on Firefox (Burak Yiğit Kaya)
+* Handle stubbing falsey properties (Tim Perry)
+* Set returnValues correctly when the spied function is called as a constructor (Tim Perry)
+* When creating a sandbox, do not overwrite existing properties when inject
+  properties into an object (Sergio Cinos)
+* Added withCredentials property to fake xhr (Geries)
+* Refine behavior withArgs error message (Tim Fischbach)
+* Auto-respond to successive requests made with a single XHR object (Jan Suchý)
+* Add the ability for mock to accept sinon.match matchers as expected arguments (Zcicala)
+* Adding support for XMLHttpRequest.upload to FakeXMLHttpRequest (Benjamin Coe)
+* Allow onCall to be combined with returns* and throwsException in stub behavior
+  sequences (Tim Fischbach)
+* Fixed deepEqual to detect properties on array objects
+* Fixed problem with chained timers with delay=0 (Ian Lewis)
+* Use formatio in place of buster-format (Devin Weaver)
+
 == 1.7.3 / 2013-06-20
 
 * Removed use of array forEach, breaks in older browsers (Martin Hansen)
