@@ -1,3 +1,7 @@
+== 1.8.1 / 2014-02-02
+
+* Screwed up NPM release of 1.8.0, unable to replace it
+
 == 1.8.0 / 2014-02-02
 
 * Add clearImmediate mocking support to the timers API (Tim Perry)
