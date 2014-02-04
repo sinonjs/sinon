@@ -688,6 +688,20 @@
                 this.xhr.respond(200, {}, "'tis some body text");
 
                 assert.equals(this.xhr.onreadystatechange.callCount, 4);
+            },
+
+            "sets status before transitioning to readyState HEADERS_RECEIVED": function () {
+                var status, statusText;
+                this.xhr.onreadystatechange = function () {
+                    if (this.readyState == 2) {
+                        status = this.status;
+                        statusText = this.statusText;
+                    }
+                };
+                this.xhr.respond(204);
+
+                assert.equals(status, 204);
+                assert.equals(statusText, "No Content");
             }
         },
 
