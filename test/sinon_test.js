@@ -252,6 +252,12 @@ buster.testCase("sinon", {
             assert(sinon.deepEqual(arr, arr));
         },
 
+        "passes same regexp": function () {
+            var regexp = /foo/;
+
+            assert(sinon.deepEqual(regexp, regexp));
+        },
+
         "passes equal arrays": function () {
             var arr1 = [1, 2, 3, "hey", "there"];
             var arr2 = [1, 2, 3, "hey", "there"];
@@ -277,6 +283,22 @@ buster.testCase("sinon", {
             arr2.foo = "not bar";
 
             assert.isFalse(sinon.deepEqual(arr1, arr2));
+        },
+
+        "passes equal regexps": function () {
+            var regexp1 = /foo/;
+            var regexp2 = /foo/;
+
+            assert(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "fails unequal regexps": function () {
+            var regexp1 = /foo/;
+            var regexp2 = /bar/;
+
+            assert.isFalse(sinon.deepEqual(regexp1, regexp2));
+
         },
 
         "passes equal objects": function () {
