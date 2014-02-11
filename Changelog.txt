@@ -1,3 +1,9 @@
+== 1.8.2 / 2014-02-11
+
+* Fixes an edge case with calledWithNew and spied native functions, and other
+  functions that lack a .prototype
+* Add feature detection for the new ProgressEvent support
+
 == 1.8.1 / 2014-02-02
 
 * Screwed up NPM release of 1.8.0, unable to replace it
