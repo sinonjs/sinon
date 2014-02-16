@@ -301,6 +301,68 @@ buster.testCase("sinon", {
 
         },
 
+        "passes equal regexps with same ignoreCase flags": function () {
+            var regexp1 = /foo/i;
+            var regexp2 = /foo/i;
+
+            assert(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "fails unequal regexps with different ignoreCase flags": function () {
+            var regexp1 = /foo/i;
+            var regexp2 = /foo/;
+
+            assert.isFalse(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "passes equal regexps with same multiline flags": function () {
+            var regexp1 = /foo/m;
+            var regexp2 = /foo/m;
+
+            assert(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "fails unequal regexps with different multiline flags": function () {
+            var regexp1 = /foo/m;
+            var regexp2 = /foo/;
+
+            assert.isFalse(sinon.deepEqual(regexp1, regexp2));
+        },
+
+        "passes equal regexps with same global flags": function () {
+            var regexp1 = /foo/g;
+            var regexp2 = /foo/g;
+
+            assert(sinon.deepEqual(regexp1, regexp2));
+        },
+
+        "fails unequal regexps with different global flags": function () {
+            var regexp1 = /foo/g;
+            var regexp2 = /foo/;
+
+            assert.isFalse(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "passes equal regexps with multiple flags": function () {
+            var regexp1 = /bar/im;
+            var regexp2 = /bar/im;
+
+            assert(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
+        "fails unequal regexps with multiple flags": function () {
+            var regexp1 = /bar/im;
+            var regexp2 = /bar/ig;
+
+            assert.isFalse(sinon.deepEqual(regexp1, regexp2));
+
+        },
+
         "passes equal objects": function () {
             var obj1 = { a: 1, b: 2, c: 3, d: "hey", e: "there" };
             var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };
