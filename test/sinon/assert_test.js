@@ -66,6 +66,24 @@ buster.testCase("sinon.assert", {
         }
     },
 
+    "match": {
+        setUp: function () { this.setUpStubs(); },
+        tearDown: function () { this.tearDownStubs(); },
+
+        "fails when arguments to not match": function () {
+            assert.exception(function () {
+                sinon.assert.match("foo", "bar");
+            });
+
+            assert(sinon.assert.fail.calledOnce);
+        },
+
+        "passes when argumens match": function () {
+            sinon.assert.match("foo", "foo");
+            assert(sinon.assert.pass.calledOnce);
+        }
+    },
+
     "called": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
