@@ -851,6 +851,23 @@ buster.testCase("sinon.clock", {
             assert(stub.called);
         },
 
+        "understand browser work cycle": function() {
+            this.clock = sinon.useFakeTimers();
+
+            var cb2 = sinon.spy();
+            var cb1 = sinon.spy(function() {
+                setTimeout(cb2, 0);
+            });
+
+            setTimeout(cb1, 0);
+            this.clock.tick();
+            assert(   cb1.called);
+            assert( ! cb2.called);
+
+            this.clock.tick();
+            assert(cb2.called);
+        },
+
         "global fake setTimeout should return id": function () {
             this.clock = sinon.useFakeTimers();
             var stub = sinon.stub.create();
