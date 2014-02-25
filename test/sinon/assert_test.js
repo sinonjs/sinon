@@ -1368,6 +1368,13 @@ buster.testCase("sinon.assert", {
             assert.equals(this.message("alwaysThrew", this.obj.doSomething),
                           "doSomething did not always throw exception\n" +
                           "    doSomething(1, 3, hey)\n    doSomething(1, 3)");
+        },
+
+        "assert.match exception message": function () {
+            assert.equals(this.message("match", { foo: 1 }, [1, 3]),
+                          "expected value to match\n" +
+                          "    expected = [1, 3]\n" +
+                          "    actual = { foo: 1 }");
         }
     }
 });
