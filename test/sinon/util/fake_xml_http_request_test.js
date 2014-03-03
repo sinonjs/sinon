@@ -643,6 +643,20 @@
                 assert.equals(this.spy.callCount, 1);
             },
 
+            "fire onload event with this set to the XHR object": function (done) {
+                var xhr = new sinon.FakeXMLHttpRequest();
+                xhr.open("GET", "/");
+
+                xhr.onload = function() {
+                    assert.same(this, xhr);
+
+                    done();
+                };
+
+                xhr.send();
+                xhr.respond(200, {}, "");
+            },
+
             "calls readystate handler with readyState DONE once": function () {
                 this.xhr.respond(200, {}, "");
 
