@@ -456,6 +456,18 @@
                 this.xhr.setResponseHeaders(object);
 
                 assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
+            },
+
+            "throws if headers were already set": function () {
+                var xhr = this.xhr;
+
+                xhr.open("GET", "/", false);
+                xhr.send();
+                xhr.setResponseHeaders({});
+
+                assert.exception(function () {
+                    xhr.setResponseHeaders({});
+                });
             }
         },
 
