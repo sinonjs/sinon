@@ -1,3 +1,14 @@
+== 1.9.0 / 2014-03-05
+
+* Add sinon.assert.match (Robin Pedersen)
+* Added ProgressEvent and CustomEvent. Fixes bug with progress events on IE. (Geries Handal)
+* prevent setRequestHeaders from being called twice (Phred)
+* Fix onload call, 'this' should be equal to XHR object (Niklas Andreasson)
+* Remove sandbox injected values on restore (Marcus Hüsgen)
+* Coerce matcher.or/and arguments into matchers (Glen Mailer)
+* Don't use buster.format any more
+* Fix comparison for regexp deepEqual (Matt Kern)
+
 == 1.8.2 / 2014-02-11
 
 * Fixes an edge case with calledWithNew and spied native functions, and other
