@@ -265,6 +265,13 @@ buster.testCase("sinon", {
             assert(sinon.deepEqual(arr1, arr2));
         },
 
+        "passes when comparing lengths of sparse array": function () {
+            var arr1 = new [].constructor(2);
+            var arr2 = [undefined, undefined];
+
+            assert(sinon.deepEqual(arr1, arr2));
+        },
+
         "passes equal arrays with custom properties": function () {
             var arr1 = [1, 2, 3, "hey", "there"];
             var arr2 = [1, 2, 3, "hey", "there"];
