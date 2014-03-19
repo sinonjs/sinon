@@ -855,9 +855,11 @@ buster.testCase("sinon.clock", {
             this.clock = sinon.useFakeTimers();
             var stub = sinon.stub.create();
 
-            var id = setTimeout(stub, 1000);
+            var to = setTimeout(stub, 1000);
 
-            assert.isNumber(id);
+            assert.isNumber(to.id);
+            assert.isFunction(to.ref);
+            assert.isFunction(to.unref);
         },
 
         "replaces global clearTimeout": function () {
