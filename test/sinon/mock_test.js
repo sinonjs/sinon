@@ -304,6 +304,21 @@ buster.testCase("sinon.mock", {
                     obj.foobar();
                     mock.verify();
                 });
+            },
+
+            "nots throw when exceeding at least expectation and withargs": function () {
+                var obj = { foobar: function () {} };
+                var mock = sinon.mock(obj);
+
+                mock.expects("foobar").withArgs("arg1");
+                mock.expects("foobar").atLeast(1).withArgs("arg2");
+
+                
+                obj.foobar("arg1");
+                obj.foobar("arg2");
+                obj.foobar("arg2");
+
+                assert(mock.verify());
             }
         },
 
