@@ -363,6 +363,10 @@ buster.testCase("sinon", {
 
         },
 
+        "passes NaN and NaN": function () {
+            assert(sinon.deepEqual(NaN, NaN));
+        },
+
         "passes equal objects": function () {
             var obj1 = { a: 1, b: 2, c: 3, d: "hey", e: "there" };
             var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };

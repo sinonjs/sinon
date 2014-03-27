@@ -1,3 +1,7 @@
+== 1.9.1 / 2014-??-??
+
+* Fix an issue passing `NaN` to `calledWith`
+
 == 1.9.0 / 2014-03-05
 
 * Add sinon.assert.match (Robin Pedersen)
