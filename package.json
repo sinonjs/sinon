@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "formatio": "~1.0",
-        "util": "^0.10.3"
+        "util": ">=0.10.3 <1"
     },
     "devDependencies": {
         "buster-core": ">=0.6.4",
