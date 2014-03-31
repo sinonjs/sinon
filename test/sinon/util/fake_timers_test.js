@@ -857,9 +857,14 @@ buster.testCase("sinon.clock", {
 
             var to = setTimeout(stub, 1000);
 
-            assert.isNumber(to.id);
-            assert.isFunction(to.ref);
-            assert.isFunction(to.unref);
+            if (typeof (setTimeout(function() {}, 0)) === 'object') {
+                assert.isNumber(to.id);
+                assert.isFunction(to.ref);
+                assert.isFunction(to.unref);
+            }
+            else {
+                assert.isNumber(to);
+            }
         },
 
         "replaces global clearTimeout": function () {
