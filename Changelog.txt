@@ -1,6 +1,8 @@
-== 1.9.1 / 2014-??-??
+== 1.9.1 / 2014-04-03
 
-* Fix an issue passing `NaN` to `calledWith`
+* Fix an issue passing `NaN` to `calledWith` (Blake Israel)
+* Explicate dependency on util package (Kris Kowal)
+* Fake timers return an object with `ref` and `unref` properties on Node (Ben Fleis)
 
 == 1.9.0 / 2014-03-05
 
