@@ -45,6 +45,14 @@ buster.testCase("sinon", {
             assert.exception(function () {
                 sinon.wrapMethod(object, "prop", function () {});
             });
+
+            try {
+                sinon.wrapMethod(object, "prop", function () {});
+                throw new Error("Didn't throw");
+            } catch (e) {
+                assert.match(e.message,
+                    /Attempted to wrap .* property .* as function/);
+            }
         },
 
         "throws if third argument is missing": function () {
