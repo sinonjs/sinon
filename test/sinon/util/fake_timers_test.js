@@ -37,10 +37,13 @@ buster.testCase("sinon.clock", {
             assert.exception(function () { clock.setTimeout(); });
         },
 
-        "returns numeric id": function () {
+        "returns numeric id or object with numeric id": function () {
             var result = this.clock.setTimeout("");
 
-            assert.isNumber(result);
+            if (typeof result === 'object')
+                assert.isNumber(result.id);
+            else
+                assert.isNumber(result);
         },
 
         "returns unique id": function () {
@@ -99,10 +102,13 @@ buster.testCase("sinon.clock", {
             this.clock = sinon.clock.create();
         },
 
-        "returns numeric id": function () {
+        "returns numeric id or object with numeric id": function () {
             var result = this.clock.setImmediate(function () { });
 
-            assert.isNumber(result);
+            if (typeof result === 'object')
+                assert.isNumber(result.id);
+            else
+                assert.isNumber(result);
         },
 
         "calls the given callback immediately": function () {
@@ -540,10 +546,13 @@ buster.testCase("sinon.clock", {
             });
         },
 
-        "returns numeric id": function () {
+        "returns numeric id or object with numeric id": function () {
             var result = this.clock.setInterval("");
 
-            assert.isNumber(result);
+            if (typeof result === 'object')
+                assert.isNumber(result.id);
+            else
+                assert.isNumber(result);
         },
 
         "returns unique id": function () {
