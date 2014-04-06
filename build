@@ -45,14 +45,16 @@ formatio not found, skipping. To build with formatio support:
   contents = File.read(file)
 
   File.open(file, "w") do |f|
-    f.puts("this.sinon = (function () {")
+    f.puts("(function (define) {")
     f.puts("var samsam, formatio;")
-    f.puts("function define(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else { formatio = fn(samsam); } }")
+    f.puts("var defineOld = define;")
+    f.puts("define = function(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else { formatio = fn(samsam); } }")
     f.puts("define.amd = {};")
     f.puts(File.read("./node_modules/formatio/node_modules/samsam/lib/samsam.js"))
     f.puts(File.read("./node_modules/formatio/lib/formatio.js"))
+    f.puts("define = defineOld;")
     f.puts(contents)
-    f.puts("return sinon;}.call(typeof window != 'undefined' && window || {}));")
+    f.puts("return sinon;}.call(typeof window != 'undefined' && window || {}, typeof define !== 'undefined' && define || {}));")
   end
 
   file
