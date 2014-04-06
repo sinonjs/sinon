@@ -45,7 +45,7 @@ formatio not found, skipping. To build with formatio support:
   contents = File.read(file)
 
   File.open(file, "w") do |f|
-    f.puts("this.sinon = (function () {")
+    f.puts("(function () {")
     f.puts("var samsam, formatio;")
     f.puts("function define(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else { formatio = fn(samsam); } }")
     f.puts("define.amd = {};")
