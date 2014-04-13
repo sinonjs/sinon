@@ -386,6 +386,13 @@ buster.testCase("sinon", {
             assert.isFalse(sinon.deepEqual(obj1, obj2));
         },
 
+        "fails unequal objects with undefined properties with different names (different arg order)": function () {
+            var obj1 = {a: 1, b: 2, foo: undefined};
+            var obj2 = {a: 1, b: 2, c: 3};
+
+            assert.isFalse(sinon.deepEqual(obj1, obj2));
+        },
+
         "passes equal dates": function () {
             var date1 = new Date(2012, 3, 5);
             var date2 = new Date(2012, 3, 5);
