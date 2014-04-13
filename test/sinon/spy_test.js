@@ -946,7 +946,7 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: 'blah'}));
             },
 
-            "returns false when a property of an object argument has a different key/value pair": function () {
+            "returns false when an object argument has a different property/value pair": function () {
                 this.spy({a: 1, b: 2, c: 3});
 
                 assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: 'blah'}));
