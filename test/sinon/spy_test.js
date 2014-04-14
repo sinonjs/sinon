@@ -926,6 +926,48 @@ if (typeof require === "function" && typeof module === "object") {
                 this.spy(object, array);
 
                 assert(this.spy.calledWithExactly(object, array));
+            },
+
+            "returns true when all properties of an object argument match": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert(this.spy.calledWithExactly({a: 1, b: 2, c: 3}));
+            },
+
+            "returns false when a property of an object argument is set to undefined": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: undefined}));
+            },
+
+            "returns false when a property of an object argument is set to a different value": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: 'blah'}));
+            },
+
+            "returns false when an object argument has a different property/value pair": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: 'blah'}));
+            },
+
+            "returns false when a property of an object argument is set to undefined and has a different name": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: undefined}));
+            },
+
+            "returns false when any properties of an object argument aren't present": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2}));
+            },
+
+            "returns false when an object argument has extra properties": function () {
+                this.spy({a: 1, b: 2, c: 3});
+
+                assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: 3, d: 4}));
             }
         },
 

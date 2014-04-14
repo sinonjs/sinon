@@ -352,7 +352,6 @@ buster.testCase("sinon", {
             var regexp2 = /foo/;
 
             assert.isFalse(sinon.deepEqual(regexp1, regexp2));
-
         },
 
         "passes equal regexps with multiple flags": function () {
@@ -360,7 +359,6 @@ buster.testCase("sinon", {
             var regexp2 = /bar/im;
 
             assert(sinon.deepEqual(regexp1, regexp2));
-
         },
 
         "fails unequal regexps with multiple flags": function () {
@@ -368,7 +366,6 @@ buster.testCase("sinon", {
             var regexp2 = /bar/ig;
 
             assert.isFalse(sinon.deepEqual(regexp1, regexp2));
-
         },
 
         "passes NaN and NaN": function () {
@@ -380,6 +377,20 @@ buster.testCase("sinon", {
             var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };
 
             assert(sinon.deepEqual(obj1, obj2));
+        },
+
+        "fails unequal objects with undefined properties with different names": function () {
+            var obj1 = {a: 1, b: 2, c: 3};
+            var obj2 = {a: 1, b: 2, foo: undefined};
+
+            assert.isFalse(sinon.deepEqual(obj1, obj2));
+        },
+
+        "fails unequal objects with undefined properties with different names (different arg order)": function () {
+            var obj1 = {a: 1, b: 2, foo: undefined};
+            var obj2 = {a: 1, b: 2, c: 3};
+
+            assert.isFalse(sinon.deepEqual(obj1, obj2));
         },
 
         "passes equal dates": function () {
