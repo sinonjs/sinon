@@ -1067,6 +1067,70 @@ buster.testCase("sinon.stub", {
         }
     },
 
+    "withExactArgs": {
+      "defines withExactArgs method": function() {
+          var stub = sinon.stub();
+
+          assert.isFunction(stub.withExactArgs);
+      },
+
+      "creates filtered stub": function () {
+          var stub = sinon.stub();
+          var other = stub.withExactArgs(23);
+
+          refute.same(other, stub);
+          assert.isFunction(stub.returns);
+          assert.isFunction(other.returns);
+      },
+
+      "filters return values based on arguments": function () {
+          var stub = sinon.stub().returns(23);
+          stub.withArgs(42).returns(98);
+          stub.withExactArgs(42).returns(99);
+          stub.withArgs(42).returns(100);
+
+          assert.equals(stub(), 23);
+          assert.equals(stub(42), 99);
+          assert.equals(stub(42, 'dolphins'), 100);
+      },
+
+      "filters exceptions based on arguments": function () {
+          var stub = sinon.stub().returns(23);
+          stub.withExactArgs(42).throws();
+
+          refute.exception(stub);
+          assert.exception(function () { stub(42); });
+          refute.exception(function() { stub(42, 'dolphins'); });
+      },
+
+      "return value's withExternalArgs can be used": function() {
+          var stub = sinon.stub();
+
+          var partial = stub.withArgs(1).returns(1);
+          var exact = stub.withExactArgs(2).returns(2);
+
+          partial.withArgs(3).returns(3);
+          exact.withArgs(4).returns(4);
+
+          partial.withExactArgs(5).returns(5);
+          exact.withExactArgs(6).returns(6);
+
+          [1, 2, 3, 4, 5, 6].forEach(function(val) {
+            assert.equals(stub(val), val);
+          });
+      },
+
+      "callCount is not incremented on the looser fake too": function() {
+          var stub = sinon.stub();
+          stub.withArgs(42);
+          stub.withExactArgs(42);
+          stub(42);
+
+          // should it be 1 ?
+          assert.equals(stub.withArgs(42).callCount, 0);
+      }
+    },
+
     "callsArgAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
