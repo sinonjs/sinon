@@ -1601,6 +1601,22 @@ buster.testCase("sinon.stub", {
                 assert(fakeC.calledOnce);
             }
         }
+    },
+
+    "calling reset in a custom function does not throw": function() {
+        var object = {
+            hello: function(who) {
+                return 'hello ' + who;
+            },
+        };
+
+        sinon.stub(object, 'hello', function() {
+            object.hello.reset();
+        });
+
+        refute.exception(function() {
+          object.hello();
+        });
     }
 
 });
