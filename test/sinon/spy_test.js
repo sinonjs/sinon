@@ -233,6 +233,15 @@ if (typeof require === "function" && typeof module === "object") {
             assert.isArray(spy.exceptions);
         },
 
+        "named": {
+            "sets displayName": function() {
+                var spy = sinon.spy();
+                var retval = spy.named("beep");
+                assert.equals(spy.displayName, "beep");
+                assert.same(spy, retval);
+            }
+        },
+
         "call": {
             "calls underlying function": function () {
                 var called = false;
