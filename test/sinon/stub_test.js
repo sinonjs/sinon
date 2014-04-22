@@ -22,6 +22,15 @@ buster.testCase("sinon.stub", {
         assert.isFunction(stub.calledOn);
     },
 
+    "named": {
+        "sets displayName": function() {
+            var spy = sinon.spy();
+            var retval = spy.named("beep");
+            assert.equals(spy.displayName, "beep");
+            assert.same(spy, retval);
+        }
+    },
+
     "should contain asynchronous versions of callsArg*, and yields* methods": function() {
         var stub = sinon.stub.create();
 
