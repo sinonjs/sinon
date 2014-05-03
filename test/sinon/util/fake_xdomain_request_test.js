@@ -281,7 +281,45 @@
                 this.xdr.respond(201);
 
                 assert.equals(this.xdr.status, 201);
+            }
+        },
+
+        "simulatetimeout": {
+            setUp: function () {
+                this.xdr = new sinon.FakeXDomainRequest();
+                this.xdr.open("GET", "/");
+                this.xdr.send();
+                this.xdr.timeout = 100;
             },
+            "fires ontimeout event": function() {
+                var spy = sinon.spy();
+                this.xdr.ontimeout = spy;
+
+                this.xdr.simulatetimeout();
+
+                assert.isTrue(this.xdr.isTimeout);
+                assert.isTrue(spy.called);
+            },
+            "readyState is DONE": function() {
+                this.xdr.simulatetimeout();
+
+                assert.equals(this.xdr.readyState, sinon.FakeXDomainRequest.DONE);
+            },
+            "responseText no longer accessible": function() {
+                var ontimeout = function() {
+                    var xdr = this;
+                    if (typeof xdr.responseText === 'undefined') {
+                        throw 'responseText not accessible';
+                    }
+                };
+                var spy = sinon.spy(ontimeout);
+                this.xdr.ontimeout = spy;
+
+                this.xdr.simulatetimeout();
+
+                assert.isTrue(spy.called);
+                assert.isTrue(spy.threw());
+            }
         },
 
         "abort": {
