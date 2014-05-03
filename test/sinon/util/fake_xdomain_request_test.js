@@ -13,9 +13,6 @@
         }
     };
     buster.testCase("sinon.FakeXDomainRequest", {
-        "is sane": function() {
-            assert.isTrue(true);
-        },
         "is constructor": function () {
             assert.isFunction(sinon.FakeXDomainRequest);
             assert.same(sinon.FakeXDomainRequest.prototype.constructor, sinon.FakeXDomainRequest);
