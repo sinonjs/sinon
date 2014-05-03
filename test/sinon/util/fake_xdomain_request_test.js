@@ -141,9 +141,13 @@
             },
             "calls readyStateChange": function () {
                 this.xdr.open("POST", "/", false);
+                var spy = sinon.spy();
+                this.xdr.readyStateChange = spy;
+
                 this.xdr.send("Data");
 
                 assert.equals(this.xdr.readyState, sinon.FakeXDomainRequest.OPENED);
+                assert.isTrue(spy.called);
             },
         },
 
@@ -161,7 +165,15 @@
 
                 assert(spy.calledWith(sinon.FakeXDomainRequest.LOADING));
             },
-            "invokes onreadystatechange handler for each 10 byte chunk": function () {
+            "fire onprogress event": function() {
+                var spy = sinon.spy();
+                this.xdr.onprogress = spy;
+
+                this.xdr.setResponseBody("Some text goes in here ok?");
+
+                assert.isTrue(spy.called);
+            },
+            "invokes readyStateChange handler for each 10 byte chunk": function () {
                 var spy = sinon.spy();
                 this.xdr.readyStateChange = spy;
                 this.xdr.chunkSize = 10;
@@ -170,7 +182,7 @@
 
                 assert.equals(spy.callCount, 4);
             },
-            "invokes onreadystatechange handler for each x byte chunk": function () {
+            "invokes readyStateChange handler for each x byte chunk": function () {
                 var spy = sinon.spy();
                 this.xdr.readyStateChange = spy;
                 this.xdr.chunkSize = 20;
@@ -179,7 +191,7 @@
 
                 assert.equals(spy.callCount, 3);
             },
-            "invokes onreadystatechange handler with partial data": function () {
+            "invokes readyStateChange handler with partial data": function () {
                 var pieces = [];
 
                 var spy = sinon.spy(function () {
