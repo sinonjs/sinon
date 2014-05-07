@@ -8,10 +8,11 @@
     };
 
     var fakeXdrTearDown = function() {
-        if (typeof this.fakeXhr.restore == "function") {
+        if (typeof this.fakeXdr.restore == "function") {
             this.fakeXdr.restore();
         }
     };
+
     buster.testCase("sinon.FakeXDomainRequest", {
         "is constructor": function () {
             assert.isFunction(sinon.FakeXDomainRequest);
@@ -389,6 +390,39 @@
                 this.xdr.abort();
 
                 assert.isFalse(this.xdr.readyStateChange.called);
+            }
+        },
+
+        "missing native XDR": {
+            requiresSupportFor: { "no native XDR": typeof XDomainRequest == "undefined" },
+            setUp: fakeXdrSetUp,
+            tearDown: fakeXdrTearDown,
+
+            "does not expose XDomainRequest": function () {
+                assert.equals(typeof XDomainRequest, "undefined");
+            },
+
+            "does not expose XDomainRequest after restore": function () {
+                this.fakeXdr.restore();
+
+                assert.equals(typeof XDomainRequest, "undefined");
+            }
+        },
+
+        "native XDR": {
+            requiresSupportFor: { "XDR": typeof XDomainRequest !== "undefined" },
+            setUp: fakeXdrSetUp,
+            tearDown: fakeXdrTearDown,
+
+            "replaces global XDomainRequest": function () {
+                refute.same(XDomainRequest, globalXDomainRequest);
+                assert.same(XDomainRequest, sinon.FakeXDomainRequest);
+            },
+
+            "restores global XDomainRequest": function () {
+                this.fakeXdr.restore();
+
+                assert.same(XDomainRequest, globalXDomainRequest);
             }
         },
 
