@@ -1560,6 +1560,18 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.same(spy.firstCall.spy, call0.spy);
             },
 
+            "is equal to getCall(0) result after first call even when control flow has continued following invocation": function() {
+                function runAsserts() {
+                    var call0 = spy.getCall(0);
+                    assert.equals(spy.firstCall.callId, call0.callId);
+                    assert.same(spy.firstCall.spy, call0.spy);
+                }
+
+                var spy = sinon.spy(runAsserts);
+
+                spy();
+            },
+
             "is tracked even if exceptions are thrown": function () {
                 var spy = sinon.spy(function () { throw "an exception"; });
 
