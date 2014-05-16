@@ -74,6 +74,7 @@ Dir.chdir(File.dirname(__FILE__)) do
     f.puts(File.read("lib/sinon/util/timers_ie.js"))
     f.puts("\n")
     f.puts(File.read("lib/sinon/util/xhr_ie.js"))
+    f.puts(File.read("lib/sinon/util/xdr_ie.js"))
   end
 
   add_license("pkg/sinon-ie#{version_string}.js", version)
