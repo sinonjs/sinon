@@ -67,6 +67,7 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger = Juicer::Merger::JavaScriptMerger.new
   merger << "lib/sinon/test_case.js"
   merger << "lib/sinon/assert.js"
+  merger << "lib/sinon/util/fake_xdomain_request.js"
   merger.save(output)
   add_license(add_formatio(output), version)
 
