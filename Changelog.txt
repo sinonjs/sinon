@@ -1,3 +1,15 @@
+== 1.10.0 / 2014-05-19
+
+* Ensure that spy createCallProperties is set before function invocation (James Barwell)
+* XDomainRequest support (Søren Enemærke, Jonathan Sokolowski)
+* Correct AMD behavior (Tim Branyen)
+* Allow explicit naming of spies and stubs (Glen Mailer)
+* deepEqual test for unequal objects in calledWithExactly (Bryan Donovan)
+* Fix clearTimeout() for Node.js (Xiao Ma)
+* fix fakeServer.respond() in IE8 (John Bernardo)
+* Fix #448 (AMD require.amd)
+* Fix wrapMethod error handling (Nikita Litvin)
+
 == 1.9.1 / 2014-04-03
 
 * Fix an issue passing `NaN` to `calledWith` (Blake Israel)
