@@ -126,6 +126,14 @@ buster.testCase("sinon.test", {
         }).call({});
     },
 
+    "async test with sandbox": function(done) {
+        sinon.test(function(callback) {
+            assert.same(callback, done);
+
+            callback();
+        }).call({}, done);
+    },
+
     "verifies mocks": function () {
         var method = function () {};
         var object = { method: method };
