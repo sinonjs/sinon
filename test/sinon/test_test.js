@@ -128,10 +128,10 @@ buster.testCase("sinon.test", {
 
     "async test with sandbox": function(done) {
         sinon.test(function(callback) {
-            assert.same(callback, done)
+            assert.same(callback, done);
 
-            callback()
-        }).call({}, done)
+            callback();
+        }).call({}, done);
     },
 
     "verifies mocks": function () {
