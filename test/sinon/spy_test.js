@@ -1580,6 +1580,27 @@ if (typeof require === "function" && typeof module === "object") {
                 } catch (e) { }
 
                 refute.isNull(spy.firstCall);
+            },
+
+            "has correct returnValue": function () {
+                var spy = sinon.spy(function () { return 42; });
+
+                spy();
+
+                assert.equals(spy.firstCall.returnValue, 42);
+                assert(spy.firstCall.returned(42));
+            },
+
+            "has correct exception": function () {
+                var err = new Error();
+                var spy = sinon.spy(function () { throw err; });
+
+                try {
+                    spy();
+                } catch (e) {}
+
+                assert.same(spy.firstCall.exception, err);
+                assert(spy.firstCall.threw(err));
             }
 
         },
