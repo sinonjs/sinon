@@ -1,3 +1,7 @@
+== 1.10.2 / 2014-06-02
+
+* Fix `returnValue` and `exception` regression on spy calls (Maximilian Antoni)
+
 == 1.10.1 / 2014-05-30
 
 * Improved mocha compatibility for async tests (Ming Liu)
