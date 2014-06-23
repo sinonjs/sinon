@@ -515,6 +515,11 @@ buster.testCase("sinon.clock", {
             this.clock.tick(50);
 
             assert.isFalse(stub.called);
+        },
+
+        "ignores null argument": function () {
+            this.clock.clearTimeout(null);
+            assert(true); // doesn't fail
         }
     },
 
