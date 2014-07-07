@@ -1191,6 +1191,7 @@
                 req.onreadystatechange = function () {
                     if (this.readyState == 4) {
                         assert.match(this.responseText, /loaded successfully/);
+                        assert.match(this.response, /loaded successfully/);
                         done();
                     }
                 };
@@ -1205,6 +1206,7 @@
                 req.send();
 
                 assert.match(req.responseText, /loaded successfully/);
+                assert.match(req.response, /loaded successfully/);
             }
         },
 
