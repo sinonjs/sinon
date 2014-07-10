@@ -1,3 +1,8 @@
+== 1.10.3 / 2014-07-11
+
+* Fix loading in Web Workers (Victor Costan)
+* Allow null as argument to clearTimeout and clearInterval (Lars Thorup)
+
 == 1.10.2 / 2014-06-02
 
 * Fix `returnValue` and `exception` regression on spy calls (Maximilian Antoni)
