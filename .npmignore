@@ -2,6 +2,7 @@
 /.travis.yml
 /AUTHORS
 /build
+/test
 /Changelog.txt
 /jsl.conf
 /release.sh
