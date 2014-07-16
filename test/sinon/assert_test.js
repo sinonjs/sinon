@@ -981,6 +981,14 @@ buster.testCase("sinon.assert", {
             assert.isFunction(test.callCount);
         },
 
+        "does not expose 'expose'": function() {
+            var test = {};
+
+            sinon.assert.expose(test, { prefix: "" });
+
+            refute(test.expose, "Expose should not be exposed");
+        },
+
         "throws if target is undefined": function () {
             assert.exception(function () {
                 sinon.assert.expose();
