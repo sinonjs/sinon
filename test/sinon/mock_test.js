@@ -824,6 +824,20 @@ buster.testCase("sinon.mock", {
 
             assert.equals(message, "Expected method([...]) at least once and at most twice " +
                           "(never called)");
+        },
+
+        "does not call pass if no expectations": function() {
+            var pass = sinon.stub(sinon.expectation, 'pass');
+
+            var mock = this.mock;
+            mock.expects("method").never();
+            delete mock.expectations;
+
+            mock.verify();
+
+            refute(pass.called, "expectation.pass should not be called"); 
+
+            pass.restore();
         }
     },
 
