@@ -224,7 +224,7 @@ if (typeof require === "function" && typeof module === "object") {
             assert.same(spy.create, object);
         },
 
-        "setups logging arrays": function () {
+        "sets up logging arrays": function () {
             var spy = sinon.spy.create();
 
             assert.isArray(spy.args);
