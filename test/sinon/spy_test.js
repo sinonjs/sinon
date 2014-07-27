@@ -2150,6 +2150,18 @@ if (typeof require === "function" && typeof module === "object") {
                 assert(callback.calledWith("abc", 123, array, object));
                 assert(callback.calledOn(thisObj));
             }
+        },
+
+        "reset": {
+            "throws if called during spy invocation": function () {
+                var spy = sinon.spy(function () {
+                    spy.reset();
+                });
+
+                assert.exception(function () {
+                    spy();
+                }, "InvalidResetException");
+            }
         }
     });
 }());
