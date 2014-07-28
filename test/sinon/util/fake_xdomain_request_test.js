@@ -306,20 +306,15 @@
 
                 assert.equals(this.xdr.readyState, sinon.FakeXDomainRequest.DONE);
             },
-            "responseText no longer accessible": function() {
-                var ontimeout = function() {
-                    var xdr = this;
-                    if (typeof xdr.responseText === 'undefined') {
-                        throw 'responseText not accessible';
-                    }
-                };
-                var spy = sinon.spy(ontimeout);
+
+            "ensures responseText is not accessible": function(){
+                var spy = sinon.spy();
                 this.xdr.ontimeout = spy;
 
                 this.xdr.simulatetimeout();
 
                 assert.isTrue(spy.called);
-                assert.isTrue(spy.threw());
+                refute.defined(this.xdr.responseText);
             }
         },
 
