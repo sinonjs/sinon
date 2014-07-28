@@ -1485,6 +1485,15 @@ buster.testCase("sinon.stub", {
         assert(spy.calledTwice);
     },
 
+    "reset must set 'returns' value to undefined" : function(){
+        var stub = sinon.stub();
+        stub.returns(123);
+        assert.equals(stub(), 123);
+
+        stub.reset();
+        refute.defined(stub());
+    },
+
     "resetBehavior": {
         "clears yields* and callsArg* sequence": function () {
             var stub = sinon.stub().yields(1);
