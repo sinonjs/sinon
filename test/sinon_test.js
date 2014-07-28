@@ -96,6 +96,11 @@ buster.testCase("sinon", {
         },
 
         "originating stack traces": {
+            requiresSupportFor: {
+                "overriding Error and TypeError": (function(){                
+                    return !(typeof navigator === "object" && /PhantomJS/.test(navigator.userAgent));
+                }())
+            },            
 
             setUp: function () {
                 this.oldError = Error;

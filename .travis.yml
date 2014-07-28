@@ -5,3 +5,5 @@ node_js:
   - "0.10"
 before_install:
   - "npm config set strict-ssl false"
+script:
+  - "./test/ci-test.sh"

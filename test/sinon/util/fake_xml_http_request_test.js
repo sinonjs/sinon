@@ -1524,13 +1524,19 @@
                 this.xhr.abort();
             },
 
-            "error event is triggered with xhr.uploadError(new Error('foobar'))": function(done) {
-                this.xhr.upload.addEventListener("error", function(e) {
-                    assert.equals(e.detail.message, "foobar");
+            "error event": {
+                requiresSupportFor: {
+                    "CustomEvent" : typeof CustomEvent !== "undefined"
+                },
 
-                    done();
-                });
-                this.xhr.uploadError(new Error("foobar"));
+                "is triggered with xhr.uploadError(new Error('foobar'))": function(done) {
+                    this.xhr.upload.addEventListener("error", function(e) {
+                        assert.equals(e.detail.message, "foobar");
+
+                        done();
+                    });
+                    this.xhr.uploadError(new Error("foobar"));
+                }
             },
 
             "event listeners can be removed": function() {
