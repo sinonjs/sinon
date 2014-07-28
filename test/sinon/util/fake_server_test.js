@@ -112,6 +112,8 @@ buster.testCase("sinon.fakeServer", {
 
     "respondWith": {
         setUp: function () {
+            this.sandbox = sinon.sandbox.create();
+
             this.server = sinon.fakeServer.create();
 
             this.getRootAsync = new sinon.FakeXMLHttpRequest();
@@ -140,6 +142,7 @@ buster.testCase("sinon.fakeServer", {
 
         tearDown: function () {
             this.server.restore();
+            this.sandbox.restore();
         },
 
         "responds to queued async requests": function () {
@@ -351,6 +354,8 @@ buster.testCase("sinon.fakeServer", {
         },
 
         "notifies all requests when some throw": function () {
+            this.sandbox.stub(sinon, 'logError'); // reduce console spam in the test runner
+
             this.getRootAsync.respond = function () {
                 throw new Error("Oops!");
             };
