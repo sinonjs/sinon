@@ -9,8 +9,9 @@ require("../sinon/assert_test.js");
 require("../sinon/test_test.js");
 require("../sinon/test_case_test.js");
 require("../sinon/match_test.js");
-var buster = require("../runner");
+require("../sinon/issues/issues.js");
 
+var buster = require("../runner");
 var args = process.argv.slice(2);
 
 while (args.length) {
