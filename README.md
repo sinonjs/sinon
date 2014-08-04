@@ -53,7 +53,17 @@ Node installed, and install Sinon's dependencies:
 
 ### In the browser
 
-Open `test/sinon.html` in a browser. To test against a built distribution, first
+Some tests needs working XHR to pass. To run the tests over an HTTP server, run
+
+    $ node_modules/http-server/bin/http-server
+
+#### Testing in development
+
+Open [localhost:8080/test/sinon.html](http://localhost:8080/test/sinon.html) in a browser.
+
+#### Testing a built version
+
+To test against a built distribution, first
 make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
 
     $ ./build
@@ -61,18 +71,11 @@ make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
 [ruby]: https://www.ruby-lang.org/en/
 [juicer]: http://rubygems.org/gems/juicer
 
-Then open `test/sinon-dist.html` in a browser.
-
 If the build script is unable to find Juicer, try
 
     $ ruby -rubygems build
 
-Some tests needs working XHR to pass. To run the tests over an HTTP server, run
-
-    $ node_modules/http-server/bin/http-server
-
-Then open [localhost:8080/test/sinon.html](http://localhost:8080/test/sinon.html)
-in a browser.
+Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist.html) in a browser.
 
 ### On Rhino
 
