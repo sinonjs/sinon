@@ -22,7 +22,7 @@
     "prepublish": "./build"
   },
   "dependencies": {
-    "formatio": "~1.0",
+    "formatio": "~1.1.1",
     "util": ">=0.10.3 <1"
   },
   "devDependencies": {
