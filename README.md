@@ -81,3 +81,11 @@ Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist
 
 The Rhino tests are currently out of commission (pending update after switch to
 Buster.JS for tests).
+
+### In PhantomJS
+
+If you have [PhantomJS](http://phantomjs.org) installed as a global, you can run the test suite in PhantomJS
+
+```
+$ test/phantom/run.sh
+```
