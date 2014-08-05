@@ -30,6 +30,7 @@ load("test/sinon/stub_test.js");
 load("test/sinon/test_case_test.js");
 load("test/sinon/test_test.js");
 load("test/sinon/match_test.js");
+load("test/sinon/format_test.js");
 load("test/sinon/util/fake_server_test.js");
 load("test/sinon/util/fake_server_with_clock_test.js");
 load("test/sinon/util/fake_timers_test.js");
