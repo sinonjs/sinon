@@ -5,6 +5,11 @@ new features. To avoid wasting your time, please ask for feedback on feature
 suggestions either with [an issue](http://github.com/cjohansen/Sinon.JS/issues/new)
 or on [the mailing list](http://groups.google.com/group/sinonjs).
 
+## Use EditorConfig
+
+To save everyone some time, please use [EditorConfig](http://editorconfig.org), so your editor helps make
+sure we all use the same encoding, indentation, line endings, etc.
+
 ## Run the tests
 
 The Sinon.JS developer environment requires Node/NPM. Please make sure you have
