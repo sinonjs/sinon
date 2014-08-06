@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false, browser: true*/
-/*globals window sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -108,26 +106,24 @@ buster.testCase("sinon.EventTarget", {
     },
 
     "notifies ProgressEvent listener with progress data ": function () {
-      var listener = sinon.spy();
-      this.target.addEventListener("dummyProgress", listener);
+        var listener = sinon.spy();
+        this.target.addEventListener("dummyProgress", listener);
 
-      var progressEvent = new sinon.ProgressEvent("dummyProgress", {loaded: 50, total: 120});
-      this.target.dispatchEvent(progressEvent);
+        var progressEvent = new sinon.ProgressEvent("dummyProgress", {loaded: 50, total: 120});
+        this.target.dispatchEvent(progressEvent);
 
-      assert(listener.calledOnce);
-      assert(listener.calledWith(progressEvent));
+        assert(listener.calledOnce);
+        assert(listener.calledWith(progressEvent));
     },
 
     "notifies CustomEvent listener with custom data": function () {
-      var listener = sinon.spy();
-      this.target.addEventListener("dummyCustom", listener);
+        var listener = sinon.spy();
+        this.target.addEventListener("dummyCustom", listener);
 
-      var customEvent = new sinon.CustomEvent("dummyCustom", {"detail": "hola"});
-      this.target.dispatchEvent(customEvent);
+        var customEvent = new sinon.CustomEvent("dummyCustom", {detail: "hola"});
+        this.target.dispatchEvent(customEvent);
 
-      assert(listener.calledOnce);
-      assert(listener.calledWith(customEvent));
+        assert(listener.calledOnce);
+        assert(listener.calledWith(customEvent));
     }
-
-
 });
