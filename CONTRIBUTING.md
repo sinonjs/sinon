@@ -10,12 +10,32 @@ or on [the mailing list](http://groups.google.com/group/sinonjs).
 To save everyone some time, please use [EditorConfig](http://editorconfig.org), so your editor helps make
 sure we all use the same encoding, indentation, line endings, etc.
 
-## Run the tests
+## Installation
 
 The Sinon.JS developer environment requires Node/NPM. Please make sure you have
 Node installed, and install Sinon's dependencies:
 
     $ npm install
+
+## Style
+
+Sinon.JS uses [JSCS](https://github.com/mdevils/node-jscs) to keep consistent style. You probably want to install one of their plugins for your editor.
+
+The JSCS test will be run before unit tests in the CI environment, your build will fail if it doesn't pass the style check.
+
+You can run the jscs test with
+
+```
+$ $(npm bin)/jscs .
+```
+
+or if you have JSCS installed as a global
+
+```
+$ jscs .
+```
+
+## Run the tests
 
 ### On Node
 

@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false, browser: true*/
-/*globals window XMLHttpRequest ActiveXObject sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -22,7 +20,7 @@
         }
     };
 
-    var runWithWorkingXHROveride = function(workingXHR,test) {
+    var runWithWorkingXHROveride = function (workingXHR, test) {
         try {
             var original = sinon.xhr.workingXHR;
             sinon.xhr.workingXHR = workingXHR;
@@ -67,7 +65,7 @@
             assert.same(onCreate.getCall(0).args[0], xhr);
         },
 
-        "withCredentials": {
+        ".withCredentials": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -78,7 +76,7 @@
 
         },
 
-        "open": {
+        ".open": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -156,7 +154,7 @@
             }
         },
 
-        "setRequestHeader": {
+        ".setRequestHeader": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
                 this.xhr.open("GET", "/");
@@ -277,7 +275,7 @@
             }
         },
 
-        "send": {
+        ".send": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -412,7 +410,7 @@
             }
         },
 
-        "setResponseHeaders": {
+        ".setResponseHeaders": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -471,7 +469,7 @@
             }
         },
 
-        "setResponseBodyAsync": {
+        ".setResponseBodyAsync": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
                 this.xhr.open("GET", "/");
@@ -574,7 +572,7 @@
             }
         },
 
-        "setResponseBodySync": {
+        ".setResponseBodySync": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
                 this.xhr.open("GET", "/", false);
@@ -634,7 +632,7 @@
             }
         },
 
-        "respond": {
+        ".respond": {
             setUp: function () {
                 this.sandbox = sinon.sandbox.create();
                 this.xhr = new sinon.FakeXMLHttpRequest();
@@ -650,7 +648,7 @@
                 this.xhr.send();
             },
 
-            "tearDown": function(){
+            tearDown: function () {
                 this.sandbox.restore();
             },
 
@@ -664,7 +662,7 @@
                 var xhr = new sinon.FakeXMLHttpRequest();
                 xhr.open("GET", "/");
 
-                xhr.onload = function() {
+                xhr.onload = function () {
                     assert.same(this, xhr);
 
                     done();
@@ -715,8 +713,8 @@
             },
 
             "completes request when onreadystatechange fails": function () {
-                this.sandbox.stub(sinon, 'logError'); // reduce console spam in the test runner
-                
+                this.sandbox.stub(sinon, "logError"); // reduce console spam in the test runner
+
                 this.xhr.onreadystatechange = sinon.stub().throws();
                 this.xhr.respond(200, {}, "'tis some body text");
 
@@ -738,7 +736,7 @@
             }
         },
 
-        "getResponseHeader": {
+        ".getResponseHeader": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -794,7 +792,7 @@
             }
         },
 
-        "getAllResponseHeaders": {
+        ".getAllResponseHeaders": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -840,7 +838,7 @@
             }
         },
 
-        "abort": {
+        ".abort": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -852,7 +850,6 @@
 
                 assert.isTrue(this.xhr.aborted);
             },
-
 
             "sets responseText to null": function () {
                 this.xhr.responseText = "Partial data";
@@ -946,7 +943,7 @@
             }
         },
 
-        "responseXML": {
+        ".responseXML": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
@@ -1065,7 +1062,7 @@
             }
         },
 
-        "filtering": {
+        ".filtering": {
             setUp: function () {
                 sinon.FakeXMLHttpRequest.useFilters = true;
                 sinon.FakeXMLHttpRequest.filters = [];
@@ -1170,7 +1167,7 @@
                     sinon.FakeXMLHttpRequest.useFilters = true;
                     var spy = sinon.spy();
                     this.fakeXhr.addEventListener("readystatechange", spy);
-                    this.fakeXhr.open("GET","http://example.com", true);
+                    this.fakeXhr.open("GET", "http://example.com", true);
                     assert(spy.calledOnce);
                 } finally {
                     sinon.FakeXMLHttpRequest.useFilters = false;
@@ -1237,7 +1234,7 @@
 
         "native ActiveXObject": {
             requiresSupportFor: {
-                "ActiveXObject": typeof ActiveXObject !== "undefined"
+                ActiveXObject: typeof ActiveXObject !== "undefined"
             },
             setUp: fakeXhrSetUp,
             tearDown: fakeXhrTearDown,
@@ -1298,7 +1295,9 @@
         },
 
         "native XHR": {
-            requiresSupportFor: { "XHR": typeof XMLHttpRequest !== "undefined" },
+            requiresSupportFor: {
+                XHR: typeof XMLHttpRequest !== "undefined"
+            },
             setUp: fakeXhrSetUp,
             tearDown: fakeXhrTearDown,
 
@@ -1477,7 +1476,7 @@
             },
 
             "progress event is triggered with xhr.uploadProgress({loaded: 20, total: 100})": function (done) {
-                this.xhr.upload.addEventListener("progress", function(e) {
+                this.xhr.upload.addEventListener("progress", function (e) {
                     assert.equals(e.total, 100);
                     assert.equals(e.loaded, 20);
                     done();
@@ -1501,8 +1500,8 @@
                 this.xhr.respond(200, {}, "");
             },
 
-            "fires event with 100% progress on 'load'": function(done) {
-                this.xhr.upload.addEventListener("progress", function(e) {
+            "fires event with 100% progress on 'load'": function (done) {
+                this.xhr.upload.addEventListener("progress", function (e) {
                     assert.equals(e.total, 100);
                     assert.equals(e.loaded, 100);
                     done();
@@ -1528,11 +1527,11 @@
 
             "error event": {
                 requiresSupportFor: {
-                    "CustomEvent" : typeof CustomEvent !== "undefined"
+                    CustomEvent: typeof CustomEvent !== "undefined"
                 },
 
-                "is triggered with xhr.uploadError(new Error('foobar'))": function(done) {
-                    this.xhr.upload.addEventListener("error", function(e) {
+                "is triggered with xhr.uploadError(new Error('foobar'))": function (done) {
+                    this.xhr.upload.addEventListener("error", function (e) {
                         assert.equals(e.detail.message, "foobar");
 
                         done();
@@ -1541,11 +1540,11 @@
                 }
             },
 
-            "event listeners can be removed": function() {
-                var callback = function() {};
+            "event listeners can be removed": function () {
+                var callback = function () {};
                 this.xhr.upload.addEventListener("load", callback);
                 this.xhr.upload.removeEventListener("load", callback);
-                assert.equals(this.xhr.upload.eventListeners["load"].length, 0);
+                assert.equals(this.xhr.upload.eventListeners.load.length, 0);
             }
         }
     });

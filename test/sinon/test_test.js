@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false, browser: true*/
-/*globals sinon, buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -76,7 +74,7 @@ buster.testCase("sinon.test", {
         assert.same(object.method, method);
     },
 
-    "restores stubs on all object methods": function() {
+    "restores stubs on all object methods": function () {
         var method = function () {};
         var method2 = function () {};
         var object = { method: method, method2: method2 };
@@ -126,8 +124,8 @@ buster.testCase("sinon.test", {
         }).call({});
     },
 
-    "async test with sandbox": function(done) {
-        sinon.test(function(callback) {
+    "async test with sandbox": function (done) {
+        sinon.test(function (callback) {
             assert.same(callback, done);
 
             callback();
@@ -145,7 +143,7 @@ buster.testCase("sinon.test", {
                 object.method(42);
             }).call({});
         } catch (e) {
-          exception = e;
+            exception = e;
         }
 
         assert.same(exception.name, "ExpectationError");

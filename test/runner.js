@@ -1,6 +1,6 @@
 /**
  * More or less copy-pasted from the 'buster' package. The buster
- * "all inclusive" package includes Sinon, which is why we avoid it. 
+ * "all inclusive" package includes Sinon, which is why we avoid it.
  */
 (function (global, buster, formatio) {
     if (typeof require == "function" && typeof module == "object") {
@@ -43,7 +43,7 @@
     buster.assertions.on("failure", count);
 
     buster.testRunner.onCreate(function (runner) {
-        buster.assertions.bind(runner, { "failure": "assertionFailure" });
+        buster.assertions.bind(runner, { failure: "assertionFailure" });
         runner.console = buster.console;
 
         runner.on("test:async", function () {

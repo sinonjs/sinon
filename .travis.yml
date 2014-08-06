@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - 0.6
-  - 0.8
+  - "0.6"
+  - "0.8"
   - "0.10"
 before_install:
-  - "npm config set strict-ssl false"
+  - "./script/ci-setup.sh"
 script:
   - "./test/ci-test.sh"

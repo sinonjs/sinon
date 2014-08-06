@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false, plusplus: false*/
-/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -24,7 +22,7 @@ buster.testCase("sinon.collection", {
         assert.isFunction(collection.mock);
     },
 
-    "stub": {
+    ".stub": {
         setUp: function () {
             this.stub = sinon.stub;
             this.collection = sinon.create(sinon.collection);
@@ -73,10 +71,13 @@ buster.testCase("sinon.collection", {
             assert.equals(this.collection.fakes, objects);
         },
 
-        "adds all object methods to fake array": function() {
-            var object = { method: function () {}, method2: function() {} };
+        "adds all object methods to fake array": function () {
+            var object = {
+                method: function () {},
+                method2: function () {}
+            };
 
-            sinon.stub = function() {
+            sinon.stub = function () {
                 return object;
             };
 
@@ -86,7 +87,7 @@ buster.testCase("sinon.collection", {
             assert.equals(this.collection.fakes.length, 2);
         },
 
-        "returns a stubbed object": function() {
+        "returns a stubbed object": function () {
             var object = { method: function () {} };
 
             sinon.stub = function () {
@@ -96,7 +97,7 @@ buster.testCase("sinon.collection", {
             assert.equals(this.collection.stub(object), object);
         },
 
-        "returns a stubbed method": function() {
+        "returns a stubbed method": function () {
             var object = { method: function () {} };
 
             sinon.stub = function () {
@@ -107,7 +108,9 @@ buster.testCase("sinon.collection", {
         },
 
         "on node": {
-            requiresSupportFor: { "process": typeof process !== "undefined" },
+            requiresSupportFor: {
+                process: typeof process !== "undefined"
+            },
 
             setUp: function () {
                 process.env.HELL = "Ain't too bad";
@@ -120,7 +123,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "stubAnything": {
+    "stub anything": {
         setUp: function () {
             this.object = { property: 42 };
             this.collection = sinon.create(sinon.collection);
@@ -149,7 +152,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "mock": {
+    ".mock": {
         setUp: function () {
             this.mock = sinon.mock;
             this.collection = sinon.create(sinon.collection);
@@ -199,7 +202,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "stubAndMockTest": {
+    "stub and mock test": {
         setUp: function () {
             this.mock = sinon.mock;
             this.stub = sinon.stub;
@@ -226,7 +229,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "verify": {
+    ".verify": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },
@@ -245,7 +248,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "restore": {
+    ".restore": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
             this.collection.fakes = [{
@@ -283,7 +286,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "verifyAndRestore": {
+    "verify and restore": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },
@@ -319,7 +322,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "injectTest": {
+    "inject test": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },

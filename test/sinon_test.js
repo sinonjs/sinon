@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false*/
-/*globals document sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -97,17 +95,17 @@ buster.testCase("sinon", {
 
         "originating stack traces": {
             requiresSupportFor: {
-                "overriding Error and TypeError": (function(){                
+                "overriding Error and TypeError": (function () {
                     return !(typeof navigator === "object" && /PhantomJS/.test(navigator.userAgent));
                 }())
-            },            
+            },
 
             setUp: function () {
                 this.oldError = Error;
                 this.oldTypeError = TypeError;
                 var i = 0;
                 Error = TypeError = function () {
-                    this.stack = ':STACK' + ++i + ':';
+                    this.stack = ":STACK" + ++i + ":";
                 }
             },
 
@@ -118,12 +116,12 @@ buster.testCase("sinon", {
 
             "throws with stack trace showing original wrapMethod call": function () {
                 var object = { method: function () {} };
-                sinon.wrapMethod(object, "method", function () { return 'original' });
+                sinon.wrapMethod(object, "method", function () { return "original" });
 
                 try {
                     sinon.wrapMethod(object, "method", function () {});
-                } catch(e) {
-                    assert.equals(e.stack, ':STACK2:\n--------------\n:STACK1:');
+                } catch (e) {
+                    assert.equals(e.stack, ":STACK2:\n--------------\n:STACK1:");
                 }
             }
         },
@@ -214,7 +212,7 @@ buster.testCase("sinon", {
         }
     },
 
-    "deepEqual": {
+    ".deepEqual": {
         "passes null": function () {
             assert(sinon.deepEqual(null, null));
         },
@@ -475,7 +473,7 @@ buster.testCase("sinon", {
         }
     },
 
-    "extend": {
+    ".extend": {
         "copies all properties": function () {
             var object1 = {
                 prop1: null,
@@ -528,7 +526,7 @@ buster.testCase("sinon", {
         }
     },
 
-    "config": {
+    ".getConfig": {
         "gets copy of default config": function () {
             var config = sinon.getConfig();
 
@@ -555,7 +553,7 @@ buster.testCase("sinon", {
         }
     },
 
-    "log": {
+    ".log": {
         "does nothing gracefully": function () {
             refute.exception(function () {
                 sinon.log("Oh, hiya");
@@ -563,7 +561,7 @@ buster.testCase("sinon", {
         }
     },
 
-    "typeOf": {
+    ".typeOf": {
         "returns boolean": function () {
             assert.equals(sinon.typeOf(false), "boolean");
         },
@@ -606,49 +604,49 @@ buster.testCase("sinon", {
     },
 
     ".createStubInstance": {
-        "stubs existing methods": function() {
-            var Class = function() {};
-            Class.prototype.method = function() {};
+        "stubs existing methods": function () {
+            var Class = function () {};
+            Class.prototype.method = function () {};
 
             var stub = sinon.createStubInstance(Class);
             stub.method.returns(3);
             assert.equals(3, stub.method());
         },
 
-        "doesn't stub fake methods": function() {
-            var Class = function() {};
+        "doesn't stub fake methods": function () {
+            var Class = function () {};
 
             var stub = sinon.createStubInstance(Class);
-            assert.exception(function() {
+            assert.exception(function () {
                 stub.method.returns(3);
             });
         },
 
-        "doesn't call the constructor": function() {
-            var Class = function(a, b) {
+        "doesn't call the constructor": function () {
+            var Class = function (a, b) {
                 var c = a + b;
                 throw c;
             };
-            Class.prototype.method = function() {};
+            Class.prototype.method = function () {};
 
             var stub = sinon.createStubInstance(Class);
-            refute.exception(function() {
+            refute.exception(function () {
                 stub.method(3);
             });
         },
 
-        "retains non function values": function() {
+        "retains non function values": function () {
             var TYPE = "some-value";
-            var Class = function() {};
+            var Class = function () {};
             Class.prototype.type = TYPE;
 
             var stub = sinon.createStubInstance(Class);
             assert.equals(TYPE, stub.type);
         },
 
-        "has no side effects on the prototype": function() {
-            var proto = {'method': function() {throw 'error'}};
-            var Class = function() {};
+        "has no side effects on the prototype": function () {
+            var proto = {method: function () {throw "error"}};
+            var Class = function () {};
             Class.prototype = proto;
 
             var stub = sinon.createStubInstance(Class);
@@ -656,10 +654,10 @@ buster.testCase("sinon", {
             assert.exception(proto.method);
         },
 
-        "throws exception for non function params": function() {
-            var types = [{}, 3, 'hi!'];
+        "throws exception for non function params": function () {
+            var types = [{}, 3, "hi!"];
             for (var i = 0; i < types.length; i++) {
-                assert.exception(function() {
+                assert.exception(function () {
                     sinon.createStubInstance(types[i]);
                 });
             }

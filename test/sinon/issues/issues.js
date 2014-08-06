@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false*/
-/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -14,24 +12,26 @@ if (typeof require == "function" && typeof module == "object") {
 }
 
 buster.testCase("issues", {
-    setUp : function(){
+    setUp: function () {
         this.sandbox = sinon.sandbox.create();
     },
 
-    tearDown : function(){
+    tearDown: function () {
         this.sandbox.restore();
     },
 
-    "458": {
+    "#458": {
         "on node": {
-            requiresSupportFor: { "process": typeof process !== "undefined" },
+            requiresSupportFor: {
+                process: typeof process !== "undefined"
+            },
 
             "stub out fs.readFileSync": function () {
                 var testCase = this,
-                    fs = require('fs'),
+                    fs = require("fs"),
                     stub;
-                
-                refute.exception(function(){
+
+                refute.exception(function () {
                     testCase.sandbox.stub(fs, "readFileSync");
                 });
             }

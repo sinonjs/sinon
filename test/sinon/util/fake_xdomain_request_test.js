@@ -7,7 +7,7 @@
         this.fakeXdr = sinon.useFakeXDomainRequest();
     };
 
-    var fakeXdrTearDown = function() {
+    var fakeXdrTearDown = function () {
         if (typeof this.fakeXdr.restore == "function") {
             this.fakeXdr.restore();
         }
@@ -41,7 +41,7 @@
             assert.same(onCreate.getCall(0).args[0], xhr);
         },
 
-        "open": {
+        ".open": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
             },
@@ -74,11 +74,10 @@
 
                 assert.isObject(this.xdr.requestHeaders);
                 assert.equals(this.xdr.requestHeaders, {});
-            },
-
+            }
         },
 
-        "send": {
+        ".send": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
             },
@@ -149,10 +148,10 @@
 
                 assert.equals(this.xdr.readyState, sinon.FakeXDomainRequest.OPENED);
                 assert.isTrue(spy.called);
-            },
+            }
         },
 
-        "setResponseBody": {
+        ".setResponseBody": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
                 this.xdr.open("GET", "/");
@@ -166,7 +165,7 @@
 
                 assert(spy.calledWith(sinon.FakeXDomainRequest.LOADING));
             },
-            "fire onprogress event": function() {
+            "fire onprogress event": function () {
                 var spy = sinon.spy();
                 this.xdr.onprogress = spy;
 
@@ -242,7 +241,7 @@
             }
         },
 
-        "respond": {
+        ".respond": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
                 this.xdr.open("GET", "/");
@@ -259,7 +258,7 @@
                 var xdr = new sinon.FakeXDomainRequest();
                 xdr.open("GET", "/");
 
-                xdr.onload = function() {
+                xdr.onload = function () {
                     assert.same(this, xdr);
                     done();
                 };
@@ -285,14 +284,14 @@
             }
         },
 
-        "simulatetimeout": {
+        ".simulatetimeout": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
                 this.xdr.open("GET", "/");
                 this.xdr.send();
                 this.xdr.timeout = 100;
             },
-            "fires ontimeout event": function() {
+            "fires ontimeout event": function () {
                 var spy = sinon.spy();
                 this.xdr.ontimeout = spy;
 
@@ -301,13 +300,13 @@
                 assert.isTrue(this.xdr.isTimeout);
                 assert.isTrue(spy.called);
             },
-            "readyState is DONE": function() {
+            "readyState is DONE": function () {
                 this.xdr.simulatetimeout();
 
                 assert.equals(this.xdr.readyState, sinon.FakeXDomainRequest.DONE);
             },
 
-            "ensures responseText is not accessible": function(){
+            "ensures responseText is not accessible": function () {
                 var spy = sinon.spy();
                 this.xdr.ontimeout = spy;
 
@@ -318,7 +317,7 @@
             }
         },
 
-        "abort": {
+        ".abort": {
             setUp: function () {
                 this.xdr = new sinon.FakeXDomainRequest();
             },
@@ -405,7 +404,9 @@
         },
 
         "native XDR": {
-            requiresSupportFor: { "XDR": typeof XDomainRequest !== "undefined" },
+            requiresSupportFor: {
+                XDR: typeof XDomainRequest !== "undefined"
+            },
             setUp: fakeXdrSetUp,
             tearDown: fakeXdrTearDown,
 
@@ -419,8 +420,6 @@
 
                 assert.same(XDomainRequest, globalXDomainRequest);
             }
-        },
-
+        }
     });
-
 })(this);

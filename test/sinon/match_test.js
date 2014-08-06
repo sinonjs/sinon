@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false*/
-/*globals window sinon buster*/
 /**
 * @author Maximilian Antoni (mail@maxantoni.de)
 * @license BSD
@@ -135,9 +133,9 @@ buster.testCase("sinon.match", {
     },
 
     "returns true if number objects are equal": function () {
-        var match = sinon.match({ one : new Number(1) });
+        var match = sinon.match({ one: new Number(1) });
 
-        assert(match.test({ one : new Number(1) }));
+        assert(match.test({ one: new Number(1) }));
     },
 
     "returns true if test matches": function () {
@@ -279,7 +277,7 @@ buster.testCase("sinon.match", {
         assert(match.test("testing"));
     },
 
-    "toString": {
+    ".toString": {
         "returns message": function () {
             var message = "hello sinon.match";
 
@@ -295,7 +293,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "any": {
+    ".any": {
         "is matcher": function () {
             assert(sinon.match.isMatcher(sinon.match.any));
         },
@@ -305,7 +303,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "defined": {
+    ".defined": {
         "is matcher": function () {
             assert(sinon.match.isMatcher(sinon.match.defined));
         },
@@ -332,7 +330,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "truthy": {
+    ".truthy": {
         "is matcher": function () {
             assert(sinon.match.isMatcher(sinon.match.truthy));
         },
@@ -351,7 +349,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "falsy": {
+    ".falsy": {
         "is matcher": function () {
             assert(sinon.match.isMatcher(sinon.match.falsy));
         },
@@ -370,7 +368,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "same": {
+    ".same": {
         "returns matcher": function () {
             var same = sinon.match.same();
 
@@ -391,7 +389,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "typeOf": {
+    ".typeOf": {
         "throws if given argument is not a string": function () {
             assert.exception(function () {
                 sinon.match.typeOf();
@@ -432,7 +430,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "instanceOf": {
+    ".instanceOf": {
         "throws if given argument is not a function": function () {
             assert.exception(function () {
                 sinon.match.instanceOf();
@@ -461,10 +459,10 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "has": propertyMatcherTests(sinon.match.has),
-    "hasOwn": propertyMatcherTests(sinon.match.hasOwn),
+    ".has": propertyMatcherTests(sinon.match.has),
+    ".hasOwn": propertyMatcherTests(sinon.match.hasOwn),
 
-    "hasSpecial": {
+    ".hasSpecial": {
         "returns true if object has inherited property": function () {
             var has = sinon.match.has("toString");
 
@@ -496,7 +494,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "hasOwnSpecial": {
+    ".hasOwnSpecial": {
         "returns false if object has inherited property": function () {
             var hasOwn = sinon.match.hasOwn("toString");
 
@@ -516,7 +514,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "bool": {
+    ".bool": {
         "is typeOf boolean matcher": function () {
             var bool = sinon.match.bool;
 
@@ -525,7 +523,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "number": {
+    ".number": {
         "is typeOf number matcher": function () {
             var number = sinon.match.number;
 
@@ -534,7 +532,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "string": {
+    ".string": {
         "is typeOf string matcher": function () {
             var string = sinon.match.string;
 
@@ -543,7 +541,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "object": {
+    ".object": {
         "is typeOf object matcher": function () {
             var object = sinon.match.object;
 
@@ -552,7 +550,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "func": {
+    ".func": {
         "is typeOf function matcher": function () {
             var func = sinon.match.func;
 
@@ -561,7 +559,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "array": {
+    ".array": {
         "is typeOf array matcher": function () {
             var array = sinon.match.array;
 
@@ -570,7 +568,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "regexp": {
+    ".regexp": {
         "is typeOf regexp matcher": function () {
             var regexp = sinon.match.regexp;
 
@@ -579,7 +577,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "date": {
+    ".date": {
         "is typeOf regexp matcher": function () {
             var date = sinon.match.date;
 
@@ -588,7 +586,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "or": {
+    ".or": {
         "is matcher": function () {
             var numberOrString = sinon.match.number.or(sinon.match.string);
 
@@ -634,7 +632,7 @@ buster.testCase("sinon.match", {
         }
     },
 
-    "and": {
+    ".and": {
         "is matcher": function () {
             var fooAndBar = sinon.match.has("foo").and(sinon.match.has("bar"));
 

@@ -1,5 +1,3 @@
-/*jslint onevar: false, eqeqeq: false*/
-/*globals window sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @author Maximilian Antoni (mail@maxantoni.de)
@@ -113,7 +111,7 @@ if (typeof require === "function" && typeof module === "object") {
 
     buster.testCase("sinon.spy.call", {
 
-        "callObject": {
+        "call object": {
             setUp: spyCallSetUp,
 
             "gets call object": function () {
@@ -155,7 +153,7 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
-        "callCalledOn": {
+        "call calledOn": {
             setUp: spyCallSetUp,
 
             "calledOn should return true": function () {
@@ -832,7 +830,7 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
-        "constructor": {
+        constructor: {
             setUp: function () {
                 this.CustomConstructor = function () {};
                 this.customPrototype = this.CustomConstructor.prototype;
@@ -858,7 +856,7 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
-        "function": {
+        functions: {
             "throws if spying on non-existent property": function () {
                 var myObj = {};
 
@@ -912,7 +910,7 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
-        "reset": (function () {
+        ".reset": (function () {
             function assertReset(spy) {
                 assert(!spy.called);
                 assert(!spy.calledOnce);
@@ -964,7 +962,7 @@ if (typeof require === "function" && typeof module === "object") {
             }
         }()),
 
-        "withArgs": {
+        ".withArgs": {
             "defines withArgs method": function () {
                 var spy = sinon.spy();
 
@@ -1178,21 +1176,23 @@ if (typeof require === "function" && typeof module === "object") {
                 assert(argSpy2.getCall(1).threw("3"));
             }
         },
-        "printf" : {
-            "name" : {
-                "named" : function () {
+
+        ".printf": {
+            name: {
+                named: function () {
                     var named = sinon.spy(function cool() { });
-                    assert.equals(named.printf('%n'), 'cool');
+                    assert.equals(named.printf("%n"), "cool");
                 },
-                "anon" : function () {
+                anon: function () {
                     var anon = sinon.spy(function () {});
-                    assert.equals(anon.printf('%n'), 'spy');
+                    assert.equals(anon.printf("%n"), "spy");
 
                     var noFn = sinon.spy();
-                    assert.equals(noFn.printf('%n'), 'spy');
-                },
+                    assert.equals(noFn.printf("%n"), "spy");
+                }
             },
-            "count" : function () {
+
+            count: function () {
                 // Throwing just to make sure it has no effect.
                 var spy = sinon.spy(sinon.stub().throws());
                 function call() {
@@ -1202,68 +1202,70 @@ if (typeof require === "function" && typeof module === "object") {
                 }
 
                 call();
-                assert.equals(spy.printf('%c'), 'once');
+                assert.equals(spy.printf("%c"), "once");
                 call();
-                assert.equals(spy.printf('%c'), 'twice');
+                assert.equals(spy.printf("%c"), "twice");
                 call();
-                assert.equals(spy.printf('%c'), 'thrice');
+                assert.equals(spy.printf("%c"), "thrice");
                 call();
-                assert.equals(spy.printf('%c'), '4 times');
+                assert.equals(spy.printf("%c"), "4 times");
             },
-            "calls" : {
-                "oneLine" : function () {
+
+            calls: {
+                oneLine: function () {
                     function test(arg, expected) {
                         var spy = sinon.spy();
                         spy(arg);
-                        assert.equals(spy.printf('%C'), '\n    ' + expected);
+                        assert.equals(spy.printf("%C"), "\n    " + expected);
                     }
 
-                    test(true, 'spy(true)');
-                    test(false, 'spy(false)');
-                    test(undefined, 'spy(undefined)');
-                    test(1, 'spy(1)');
-                    test(0, 'spy(0)');
-                    test(-1, 'spy(-1)');
-                    test(-1.1, 'spy(-1.1)');
-                    test(Infinity, 'spy(Infinity)');
-                    test(['a'], 'spy(["a"])');
-                    test({ a : 'a' }, 'spy({ a: "a" })');
+                    test(true, "spy(true)");
+                    test(false, "spy(false)");
+                    test(undefined, "spy(undefined)");
+                    test(1, "spy(1)");
+                    test(0, "spy(0)");
+                    test(-1, "spy(-1)");
+                    test(-1.1, "spy(-1.1)");
+                    test(Infinity, "spy(Infinity)");
+                    test(["a"], "spy([\"a\"])");
+                    test({ a: "a" }, "spy({ a: \"a\" })");
                 },
-                "multiline" : function () {
-                    var str = 'spy\ntest';
+
+                multiline: function () {
+                    var str = "spy\ntest";
                     var spy = sinon.spy();
 
                     spy(str);
                     spy(str);
                     spy(str);
 
-                    assert.equals(spy.printf('%C'), 
-                        '\n    spy(' + str + ')' +
-                        '\n\n    spy(' + str + ')' +
-                        '\n\n    spy(' + str + ')');
+                    assert.equals(spy.printf("%C"),
+                        "\n    spy(" + str + ")" +
+                        "\n\n    spy(" + str + ")" +
+                        "\n\n    spy(" + str + ")");
 
                     spy.reset();
 
-                    spy('test');
-                    spy('spy\ntest');
-                    spy('spy\ntest');
+                    spy("test");
+                    spy("spy\ntest");
+                    spy("spy\ntest");
 
-                    assert.equals(spy.printf('%C'),
-                        '\n    spy(test)' +
-                        '\n    spy(' + str + ')' +
-                        '\n\n    spy(' + str + ')');
+                    assert.equals(spy.printf("%C"),
+                        "\n    spy(test)" +
+                        "\n    spy(" + str + ")" +
+                        "\n\n    spy(" + str + ")");
                 }
             },
-            "thisValues" : function () {
+
+            thisValues: function () {
                 var spy = sinon.spy();
                 spy();
-                assert.equals(spy.printf('%t'), 'undefined');
+                assert.equals(spy.printf("%t"), "undefined");
 
                 spy.reset();
                 spy.call(true);
-                assert.equals(spy.printf('%t'), 'true');
+                assert.equals(spy.printf("%t"), "true");
             }
         }
     });
 }());
-

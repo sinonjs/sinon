@@ -1,5 +1,3 @@
-/*jslint onevar: false*/
-/*global XMLHttpRequest ActiveXObject window setTimeout sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -38,7 +36,7 @@ if (typeof require == "function" && typeof module == "object") {
             assert(sinon.sandbox.isPrototypeOf(sandbox));
         },
 
-        "useFakeTimers": {
+        ".useFakeTimers": {
             setUp: function () {
                 this.sandbox = sinon.create(sinon.sandbox);
             },
@@ -91,10 +89,10 @@ if (typeof require == "function" && typeof module == "object") {
             //     "XHR/ActiveXObject": globalXHR || globalAXO
             // },
             requiresSupportFor: {
-                "browser": typeof window !== "undefined"
+                browser: typeof window !== "undefined"
             },
 
-            "useFakeXMLHttpRequest": {
+            ".useFakeXMLHttpRequest": {
                 setUp: function () {
                     this.sandbox = sinon.create(sinon.sandbox);
                 },
@@ -119,7 +117,7 @@ if (typeof require == "function" && typeof module == "object") {
                 }
             },
 
-            "useFakeServer": {
+            ".useFakeServer": {
                 setUp: function () {
                     this.sandbox = sinon.create(sinon.sandbox);
                 },
@@ -164,7 +162,7 @@ if (typeof require == "function" && typeof module == "object") {
             }
         },
 
-        "inject": {
+        ".inject": {
             setUp: function () {
                 this.obj = {};
                 this.sandbox = sinon.create(sinon.sandbox);
@@ -297,8 +295,8 @@ if (typeof require == "function" && typeof module == "object") {
                 assert.mock(sandbox.args[1]({}));
             },
 
-            "does not inject properties if they are already present": function() {
-                var server = function(){},
+            "does not inject properties if they are already present": function () {
+                var server = function () {},
                     clock = {},
                     spy = false,
                     object = { server: server, clock: clock, spy: spy};
