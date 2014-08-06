@@ -1,5 +1,3 @@
-/*jslint onevar: false*/
-/*globals sinon buster require assert*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -22,7 +20,7 @@ buster.testCase("sinon.stub", {
         assert.isFunction(stub.calledOn);
     },
 
-    "should contain asynchronous versions of callsArg*, and yields* methods": function() {
+    "should contain asynchronous versions of callsArg*, and yields* methods": function () {
         var stub = sinon.stub.create();
 
         var syncVersions = 0;
@@ -42,7 +40,7 @@ buster.testCase("sinon.stub", {
             "Stub prototype should contain same amount of synchronous and asynchronous methods");
     },
 
-    "should allow overriding async behavior with sync behavior": function() {
+    "should allow overriding async behavior with sync behavior": function () {
         var stub = sinon.stub();
         var callback = sinon.spy();
 
@@ -53,7 +51,7 @@ buster.testCase("sinon.stub", {
         assert(callback.called);
     },
 
-    "returns": {
+    ".returns": {
         "returns specified value": function () {
             var stub = sinon.stub.create();
             var object = {};
@@ -75,8 +73,8 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "returnsArg": {
-        "returns argument at specified index": function() {
+    ".returnsArg": {
+        "returns argument at specified index": function () {
             var stub = sinon.stub.create();
             stub.returnsArg(0);
             var object = {};
@@ -107,7 +105,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "returnsThis": {
+    ".returnsThis": {
         "stub returns this": function () {
             var instance = {};
             instance.stub = sinon.stub.create();
@@ -129,7 +127,7 @@ buster.testCase("sinon.stub", {
             }
         },
 
-        "stub respects call/apply": function() {
+        "stub respects call/apply": function () {
             var stub = sinon.stub.create();
             stub.returnsThis();
             var object = {};
@@ -145,7 +143,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "throws": {
+    ".throws": {
         "throws specified exception": function () {
             var stub = sinon.stub.create();
             var error = new Error();
@@ -210,7 +208,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArg": {
+    ".callsArg": {
         setUp: function () {
             this.stub = sinon.stub.create();
         },
@@ -253,7 +251,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgWith": {
+    ".callsArgWith": {
         setUp: function () {
             this.stub = sinon.stub.create();
         },
@@ -311,7 +309,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgOn": {
+    ".callsArgOn": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = {
@@ -376,7 +374,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgOnWith": {
+    ".callsArgOnWith": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -454,7 +452,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "objectMethod": {
+    ".objectMethod": {
         setUp: function () {
             this.method = function () {};
             this.object = { method: this.method };
@@ -577,7 +575,7 @@ buster.testCase("sinon.stub", {
         },
 
         "successfully stubs falsey properties": function () {
-            var obj = { 0: function() { } };
+            var obj = { 0: function () { } };
 
             sinon.stub(obj, 0, function () {
                 return "stubbed value";
@@ -593,7 +591,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "everything": {
+    everything: {
         "stubs all methods of object without property": function () {
             var obj = {
                 func1: function () {},
@@ -610,7 +608,7 @@ buster.testCase("sinon.stub", {
 
         "stubs prototype methods": function () {
             function Obj() {}
-            Obj.prototype.func1 = function() {};
+            Obj.prototype.func1 = function () {};
             var obj = new Obj();
 
             sinon.stub(obj);
@@ -632,7 +630,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "function": {
+    "stubbed function": {
         "throws if stubbing non-existent property": function () {
             var myObj = {};
 
@@ -665,7 +663,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yields": {
+    ".yields": {
         "invokes only argument as callback": function () {
             var stub = sinon.stub().yields();
             var spy = sinon.spy();
@@ -767,10 +765,10 @@ buster.testCase("sinon.stub", {
             var spy = sinon.spy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
-        },
+        }
     },
 
-    "yieldsOn": {
+    ".yieldsOn": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -863,7 +861,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsTo": {
+    ".yieldsTo": {
         "yields to property of object argument": function () {
             var stub = sinon.stub().yieldsTo("success");
             var callback = sinon.spy();
@@ -881,7 +879,7 @@ buster.testCase("sinon.stub", {
                 stub();
                 throw new Error();
             } catch (e) {
-                assert.equals(e.message, "stub expected to yield to 'success', but no object "+
+                assert.equals(e.message, "stub expected to yield to 'success', but no object " +
                               "with such a property was passed.");
             }
         },
@@ -939,7 +937,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsToOn": {
+    ".yieldsToOn": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -969,7 +967,7 @@ buster.testCase("sinon.stub", {
                 this.stub();
                 throw new Error();
             } catch (e) {
-                assert.equals(e.message, "stub expected to yield to 'success', but no object "+
+                assert.equals(e.message, "stub expected to yield to 'success', but no object " +
                               "with such a property was passed.");
             }
         },
@@ -1034,7 +1032,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "withArgs": {
+    ".withArgs": {
         "defines withArgs method": function () {
             var stub = sinon.stub();
 
@@ -1067,7 +1065,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgAsync": {
+    ".callsArgAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
         },
@@ -1082,7 +1080,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgWithAsync": {
+    ".callsArgWithAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
         },
@@ -1102,7 +1100,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgOnAsync": {
+    ".callsArgOnAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = {
@@ -1124,7 +1122,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "callsArgOnWithAsync": {
+    ".callsArgOnWithAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -1146,7 +1144,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsAsync": {
+    ".yieldsAsync": {
         "asynchronously invokes only argument as callback": function (done) {
             var stub = sinon.stub().yieldsAsync();
 
@@ -1158,7 +1156,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsOnAsync": {
+    ".yieldsOnAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -1180,7 +1178,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsToAsync": {
+    ".yieldsToAsync": {
         "asynchronously yields to property of object argument": function (done) {
             var stub = sinon.stub().yieldsToAsync("success");
 
@@ -1195,7 +1193,7 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "yieldsToOnAsync": {
+    ".yieldsToOnAsync": {
         setUp: function () {
             this.stub = sinon.stub.create();
             this.fakeContext = { foo: "bar" };
@@ -1216,8 +1214,8 @@ buster.testCase("sinon.stub", {
         }
     },
 
-    "onCall": {
-        "can be used with returns to produce sequence": function() {
+    ".onCall": {
+        "can be used with returns to produce sequence": function () {
             var stub = sinon.stub().returns(3);
             stub.onFirstCall().returns(1)
                 .onCall(2).returns(2);
@@ -1228,26 +1226,26 @@ buster.testCase("sinon.stub", {
             assert.same(stub(), 3);
         },
 
-        "can be used with returnsArg to produce sequence": function() {
-            var stub = sinon.stub().returns('default');
+        "can be used with returnsArg to produce sequence": function () {
+            var stub = sinon.stub().returns("default");
             stub.onSecondCall().returnsArg(0);
 
-            assert.same(stub(1), 'default');
+            assert.same(stub(1), "default");
             assert.same(stub(2), 2);
-            assert.same(stub(3), 'default');
+            assert.same(stub(3), "default");
         },
 
-        "can be used with returnsThis to produce sequence": function() {
+        "can be used with returnsThis to produce sequence": function () {
             var instance = {};
-            instance.stub = sinon.stub().returns('default');
+            instance.stub = sinon.stub().returns("default");
             instance.stub.onSecondCall().returnsThis();
 
-            assert.same(instance.stub(), 'default');
+            assert.same(instance.stub(), "default");
             assert.same(instance.stub(), instance);
-            assert.same(instance.stub(), 'default');
+            assert.same(instance.stub(), "default");
         },
 
-        "can be used with throwsException to produce sequence": function() {
+        "can be used with throwsException to produce sequence": function () {
             var stub = sinon.stub();
             var error = new Error();
             stub.onSecondCall().throwsException(error);
@@ -1262,7 +1260,7 @@ buster.testCase("sinon.stub", {
         },
 
         "in combination with withArgs": {
-            "can produce a sequence for a fake": function() {
+            "can produce a sequence for a fake": function () {
                 var stub = sinon.stub().returns(0);
                 stub.withArgs(5).returns(-1)
                     .onFirstCall().returns(1)
@@ -1275,7 +1273,7 @@ buster.testCase("sinon.stub", {
                 assert.same(stub(5), -1);
             },
 
-            "falls back to stub default behaviour if fake does not have its own default behaviour": function() {
+            "falls back to stub default behaviour if fake does not have its own default behaviour": function () {
                 var stub = sinon.stub().returns(0);
                 stub.withArgs(5)
                     .onFirstCall().returns(1);
@@ -1284,7 +1282,7 @@ buster.testCase("sinon.stub", {
                 assert.same(stub(5), 0);
             },
 
-            "falls back to stub behaviour for call if fake does not have its own behaviour for call": function() {
+            "falls back to stub behaviour for call if fake does not have its own behaviour for call": function () {
                 var stub = sinon.stub().returns(0);
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.onSecondCall().returns(2);
@@ -1294,7 +1292,7 @@ buster.testCase("sinon.stub", {
                 assert.same(stub(4), 0);
             },
 
-            "defaults to undefined behaviour once no more calls have been defined": function() {
+            "defaults to undefined behaviour once no more calls have been defined": function () {
                 var stub = sinon.stub();
                 stub.withArgs(5).onFirstCall().returns(1)
                     .onSecondCall().returns(2);
@@ -1304,14 +1302,14 @@ buster.testCase("sinon.stub", {
                 refute.defined(stub(5));
             },
 
-            "does not create undefined behaviour just by calling onCall": function() {
+            "does not create undefined behaviour just by calling onCall": function () {
                 var stub = sinon.stub().returns(2);
                 stub.onFirstCall();
 
                 assert.same(stub(6), 2);
             },
 
-            "works with fakes and reset": function() {
+            "works with fakes and reset": function () {
                 var stub = sinon.stub();
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.withArgs(5).onSecondCall().returns(2);
@@ -1327,7 +1325,7 @@ buster.testCase("sinon.stub", {
                 refute.defined(stub(5));
             },
 
-            "throws an understandable error when trying to use withArgs on behavior": function() {
+            "throws an understandable error when trying to use withArgs on behavior": function () {
                 try {
                     sinon.stub().onFirstCall().withArgs(1);
                 } catch (e) {
@@ -1485,7 +1483,7 @@ buster.testCase("sinon.stub", {
         assert(spy.calledTwice);
     },
 
-    "resetBehavior": {
+    ".resetBehavior": {
         "clears yields* and callsArg* sequence": function () {
             var stub = sinon.stub().yields(1);
             stub.onFirstCall().callsArg(1);
@@ -1511,20 +1509,20 @@ buster.testCase("sinon.stub", {
 
         "cleans behavior of fakes returned by withArgs": function () {
             var stub = sinon.stub();
-            stub.withArgs('lolz').returns(2);
+            stub.withArgs("lolz").returns(2);
 
             stub.resetBehavior();
 
-            refute.defined(stub('lolz'));
+            refute.defined(stub("lolz"));
         },
 
         "does not clean parents' behavior when called on a fake returned by withArgs": function () {
             var parentStub = sinon.stub().returns(false);
-            var childStub = parentStub.withArgs('lolz').returns(true);
+            var childStub = parentStub.withArgs("lolz").returns(true);
 
             childStub.resetBehavior();
 
-            assert.same(parentStub('lolz'), false);
+            assert.same(parentStub("lolz"), false);
             assert.same(parentStub(), false);
         },
 
@@ -1533,7 +1531,7 @@ buster.testCase("sinon.stub", {
 
             stub.resetBehavior();
 
-            refute.defined(stub('defined'));
+            refute.defined(stub("defined"));
         },
 
         "cleans 'returnsThis' behavior": function () {
@@ -1547,7 +1545,7 @@ buster.testCase("sinon.stub", {
         },
 
         "does not touch properties that are reset by 'reset'": {
-            "calledOnce": function () {
+            ".calledOnce": function () {
                 var stub = sinon.stub();
                 stub(1);
 
