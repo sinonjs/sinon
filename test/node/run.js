@@ -16,19 +16,19 @@ var buster = require("../runner");
 var args = process.argv.slice(2);
 
 while (args.length) {
-  switch (args.shift()) {
-    case "-h":
-    case "--help":
-      console.log("Usage: node test/node/run.js [-u]");
-      console.log("  -u, --unstable  Enable unstable tests");
-      console.log("  -h, --help      This cruft");
-      process.exit(1);
-      break;
-    case "-u":
-    case "--unstable":
-      require("../sinon/util/fake_timers_test.js");
-      break;
-  }
+    switch (args.shift()) {
+        case "-h":
+        case "--help":
+            console.log("Usage: node test/node/run.js [-u]");
+            console.log("  -u, --unstable  Enable unstable tests");
+            console.log("  -h, --help      This cruft");
+            process.exit(1);
+            break;
+        case "-u":
+        case "--unstable":
+            require("../sinon/util/fake_timers_test.js");
+            break;
+    }
 }
 
 buster.testRunner.onCreate(function (runner) {
