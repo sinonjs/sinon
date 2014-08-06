@@ -1,0 +1,9 @@
+// should allow comments in this type of config
+{
+    "preset": "crockford",
+
+    // Sinon specific overrides
+    "validateQuoteMarks" : "\"",
+    "requireMultipleVarDecl" : null,
+    "disallowDanglingUnderscores": null // this needs to be only allowed inline, figure out how to do this
+}
