@@ -1,5 +1,3 @@
-/*jslint onevar: false, browser: false, regexp: false, browser: true*/
-/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -121,7 +119,7 @@ buster.testCase("sinon.fakeServerWithClock", {
         }
     },
 
-    "respond": {
+    ".respond": {
         setUp: function () {
             this.server = sinon.fakeServerWithClock.create();
             this.server.addRequest({ async: true });
