@@ -1,5 +1,3 @@
-/*jslint onevar: false*/
-/*globals sinon buster*/
 /**
  * @author Christian Johansen (christian@cjohansen.no)
  * @license BSD
@@ -33,7 +31,7 @@ buster.testCase("sinon.assert", {
         assert.isObject(sinon.assert);
     },
 
-    "fail": {
+    ".fail": {
         setUp: function () {
             this.exceptionName = sinon.assert.failException;
         },
@@ -66,7 +64,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "match": {
+    ".match": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -84,7 +82,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "called": {
+    ".called": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -138,7 +136,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "notCalled": {
+    ".notCalled": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -188,7 +186,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledOnce": {
+    ".calledOnce": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -251,7 +249,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledTwice": {
+    ".calledTwice": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -285,7 +283,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledThrice": {
+    ".calledThrice": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -321,7 +319,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "callOrder": {
+    ".callOrder": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -427,7 +425,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledOn": {
+    ".calledOn": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -487,7 +485,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledWithNew": {
+    ".calledWithNew": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -542,7 +540,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "alwaysCalledWithNew": {
+    ".alwaysCalledWithNew": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -597,7 +595,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledWith": {
+    ".calledWith": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -636,7 +634,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "calledWithExactly": {
+    ".calledWithExactly": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -675,7 +673,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "neverCalledWith": {
+    ".neverCalledWith": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -714,7 +712,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "threwTest": {
+    ".threwTest": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -752,7 +750,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "callCount": {
+    ".callCount": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -788,7 +786,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "alwaysCalledOn": {
+    ".alwaysCalledOn": {
         setUp: function () { this.setUpStubs(); },
         tearDown: function () { this.tearDownStubs(); },
 
@@ -833,7 +831,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "alwaysCalledWith": {
+    ".alwaysCalledWith": {
         setUp: function () {
             sinon.stub(sinon.assert, "fail").throws();
             sinon.stub(sinon.assert, "pass");
@@ -886,7 +884,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "alwaysCalledWithExactly": {
+    ".alwaysCalledWithExactly": {
         setUp: function () {
             sinon.stub(sinon.assert, "fail");
             sinon.stub(sinon.assert, "pass");
@@ -925,7 +923,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "expose": {
+    ".expose": {
         "exposes asserts into object": function () {
             var test = {};
             sinon.assert.expose(test);
@@ -981,7 +979,7 @@ buster.testCase("sinon.assert", {
             assert.isFunction(test.callCount);
         },
 
-        "does not expose 'expose'": function() {
+        "does not expose 'expose'": function () {
             var test = {};
 
             sinon.assert.expose(test, { prefix: "" });
@@ -1002,7 +1000,7 @@ buster.testCase("sinon.assert", {
         }
     },
 
-    "message": {
+    message: {
         setUp: function () {
             this.obj = {
                 doSomething: function () {}
