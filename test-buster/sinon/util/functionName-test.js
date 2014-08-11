@@ -1,7 +1,7 @@
 var buster = require("buster");
 var assert = buster.assert;
 
-var functionName = require("../../lib/sinon/util/functionName");
+var functionName = require("../../../lib/sinon/util/functionName");
 
 buster.testCase("functionName", {
     "is a Function": function () {

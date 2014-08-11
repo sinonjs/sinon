@@ -1,7 +1,7 @@
 var buster = require("buster");
 var assert = buster.assert;
 
-var typeOf = require("../../lib/sinon/util/typeOf");
+var typeOf = require("../../../lib/sinon/util/typeOf");
 
 buster.testCase("typeOf", {
     "returns boolean": function () {

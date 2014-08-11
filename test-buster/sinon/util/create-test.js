@@ -1,7 +1,7 @@
 var buster = require("buster");
 var assert = buster.assert;
 
-var create = require("../../lib/sinon/util/create");
+var create = require("../../../lib/sinon/util/create");
 
 buster.testCase("create", {
     "is a Function": function () {

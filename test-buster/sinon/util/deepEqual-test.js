@@ -1,7 +1,7 @@
 var buster = require("buster");
 var assert = buster.assert;
 
-var deepEqual = require("../../lib/sinon/util/deepEqual");
+var deepEqual = require("../../../lib/sinon/util/deepEqual");
 
 buster.testCase("deepEqual", {
     "passes null": function () {
