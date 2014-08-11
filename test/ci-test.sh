@@ -13,3 +13,6 @@ fi
 
 npm test
 test/phantom/run.sh
+
+# Run the browserify codebase tests in buster
+$(npm bin)/buster-test --config test-buster/buster.js
