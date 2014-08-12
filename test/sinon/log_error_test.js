@@ -1,9 +1,3 @@
-/**
- * @author Christian Johansen (christian@cjohansen.no)
- * @license BSD
- *
- * Copyright (c) 2010-2014 Christian Johansen
- */
 "use strict";
 
 if (typeof require === "function" && typeof module === "object") {
@@ -20,9 +14,11 @@ buster.testCase("sinon.log", {
 buster.testCase("sinon.logError", {
     setUp: function () {
         this.sandbox = sinon.sandbox.create();
+        this.timeOutStub = this.sandbox.stub(sinon.logError, "setTimeout");
     },
 
     tearDown: function () {
+        // setTimeout = realSetTimeout;
         this.sandbox.restore();
     },
 
@@ -31,8 +27,7 @@ buster.testCase("sinon.logError", {
     },
 
     "calls sinon.log with a String": function () {
-        var clock = this.sandbox.useFakeTimers(),
-            spy = this.sandbox.spy(sinon, "log"),
+        var spy = this.sandbox.spy(sinon, "log"),
             name = "Quisque consequat, elit id suscipit.",
             message = "Pellentesque gravida orci in tellus tristique, ac commodo nibh congue.",
             error = new Error();
@@ -40,41 +35,40 @@ buster.testCase("sinon.logError", {
         error.name = name;
         error.message = message;
 
-        assert.exception(function () {
-            sinon.logError("a label", error);
-            clock.tick(1);
+        sinon.logError("a label", error);
 
-            assert(spy.called);
-            assert(spy.calledWithMatch(name));
-            assert(spy.calledWithMatch(message));
-        });
+        assert(spy.called);
+        assert(spy.calledWithMatch(name));
+        assert(spy.calledWithMatch(message));
     },
 
     "calls sinon.log with a stack": function () {
-        var clock = this.sandbox.useFakeTimers(),
-            spy = this.sandbox.spy(sinon, "log"),
-            stack = "Integer rutrum dictum elit, posuere accumsan nisi pretium vel. Phasellus adipiscing.",
-            error = new Error();
+        var spy = this.sandbox.spy(sinon, "log");
+        var stack = "Integer rutrum dictum elit, posuere accumsan nisi pretium vel. Phasellus adipiscing.";
+        var error = new Error();
 
         error.stack = stack;
 
-        assert.exception(function () {
-            sinon.logError("another label", error);
-            clock.tick(1);
+        sinon.logError("another label", error);
 
-            assert(spy.called);
-            assert(spy.calledWithMatch(stack));
-        });
+        assert(spy.called);
+        assert(spy.calledWithMatch(stack));
     },
 
-    "should throw error asynchronously": function () {
-        var clock = this.sandbox.useFakeTimers();
+    "should call logError.setTimeout": function () {
+        var error = new Error();
 
-        assert.exception(function () {
-            var error = new Error();
+        sinon.logError("some wonky label", error);
 
-            sinon.logError("some label", error);
-            clock.tick(1);
-        });
+        assert(this.timeOutStub.calledOnce);
+    },
+
+    "should pass a throwing function to logError.setTimeout": function () {
+        var error = new Error();
+
+        sinon.logError("async error", error);
+
+        var func = this.timeOutStub.args[0][0];
+        assert.exception(func);
     }
 });
