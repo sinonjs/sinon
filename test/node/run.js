@@ -10,6 +10,7 @@ require("../sinon/test_test.js");
 require("../sinon/test_case_test.js");
 require("../sinon/match_test.js");
 require("../sinon/format_test.js");
+require("../sinon/times_in_words_test.js");
 require("../sinon/log_error_test.js");
 require("../sinon/issues/issues.js");
 
