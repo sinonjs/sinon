@@ -5,6 +5,7 @@ load("test/Asserts.js");
 load("test/test_case_shim.js");
 
 load("lib/sinon.js");
+load("lib/sinon/extend.js");
 load("lib/sinon/assert.js");
 load("lib/sinon/collection.js");
 load("lib/sinon/mock.js");
@@ -30,6 +31,7 @@ load("test/sinon/stub_test.js");
 load("test/sinon/test_case_test.js");
 load("test/sinon/test_test.js");
 load("test/sinon/match_test.js");
+load("test/sinon/extend_test.js");
 load("test/sinon/format_test.js");
 load("test/sinon/times_in_words_test.js");
 load("test/sinon/util/fake_server_test.js");
