@@ -34,6 +34,7 @@ load("test/sinon/match_test.js");
 load("test/sinon/extend_test.js");
 load("test/sinon/format_test.js");
 load("test/sinon/times_in_words_test.js");
+load("test/sinon/typeOf_test.js");
 load("test/sinon/util/fake_server_test.js");
 load("test/sinon/util/fake_server_with_clock_test.js");
 load("test/sinon/util/fake_timers_test.js");
