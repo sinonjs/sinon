@@ -327,6 +327,15 @@
                 assert.equals(this.xhr.requestHeaders["Content-Type"], "text/html;charset=utf-8");
             },
 
+            "does not add new 'Content-Type' header if 'content-type' already exists": function () {
+                this.xhr.open("POST", "/");
+                this.xhr.setRequestHeader("content-type", "application/json");
+                this.xhr.send("Data");
+
+                assert.equals(this.xhr.requestHeaders["Content-Type"], undefined);
+                assert.equals(this.xhr.requestHeaders["content-type"], "application/json;charset=utf-8")
+            },
+
             "sets request body to string data": function () {
                 this.xhr.open("POST", "/");
                 this.xhr.send("Data");
