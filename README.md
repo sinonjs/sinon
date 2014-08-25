@@ -26,7 +26,7 @@ See the [sinon project homepage](http://sinonjs.org/)
 
 ### Important: AMD needs pre-built version
 
-Sinon.JS *as source* **doesn't work with AMD loaders** (when they're asynchrnous, like loading via script tags in the browser). For that you will have to use a pre-built version. You can either [build it yourself](CONTRIBUTING.md#testing-a-built-version) or get a numbered version from (http://sinonjs.org)[http://sinonjs.org].
+Sinon.JS *as source* **doesn't work with AMD loaders** (when they're asynchrnous, like loading via script tags in the browser). For that you will have to use a pre-built version. You can either [build it yourself](CONTRIBUTING.md#testing-a-built-version) or get a numbered version from http://sinonjs.org.
 
 This might or might not change in future versions, depending of outcome of investigations. Please don't report this as a bug, just use pre-built versions.
 
