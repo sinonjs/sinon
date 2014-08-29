@@ -27,13 +27,17 @@
     "util": ">=0.10.3 <1"
   },
   "devDependencies": {
-    "buster-core": ">=0.6.4",
+    "buster-amd": "~0.3.1",
     "buster-assertions": "~0.10",
+    "buster-core": ">=0.6.4",
     "buster-evented-logger": "~0.4",
-    "buster-test": "~0.5",
     "buster-format": "~0.5.6",
+    "buster-test": "~0.5",
     "http-server": "*",
-    "jscs": "~1.5.9"
+    "jscs": "~1.5.9",
+    "requirejs": "^2.1.14",
+    "phantomjs": "~1.9.7-15",
+    "buster": "~0.7.13"
   },
   "main": "./lib/sinon.js",
   "engines": {

@@ -13,3 +13,5 @@ fi
 
 npm test
 test/phantom/run.sh
+
+./script/test-buster.sh
