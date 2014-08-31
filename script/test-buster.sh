@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 set -eu
-
-function finish {
-    if [ -n "${TRAVIS+1}" ]; then
-      echo "TRAVIS detected, skip killing child processes"
-    else
-      kill $(jobs -pr)
-    fi
-}
-
-trap finish SIGINT SIGTERM EXIT
-
-echo 'Building Sinon'
-./build
+source ./script/add-node-modules-bin.sh
+source ./script/kill-subprocesses.sh
 
 echo 'Starting buster-server on port 1111'
 buster-server --capture-headless  & # this leaks a phantomjs process, need to report this and have buster fix it
