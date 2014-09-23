@@ -132,6 +132,26 @@ buster.testCase("sinon.test", {
         }).call({}, done);
     },
 
+    "async test with sandbox and spy": function (done) {
+        sinon.test(function (callback) {
+            var globalObj = {
+                addOne: function (arg) {
+                    return this.addOneInner(arg);
+                },
+                addOneInner: function (arg) {
+                    return arg+1;
+                }
+            };
+            var addOneInnerSpy = this.spy();
+            this.stub(globalObj, 'addOneInner', addOneInnerSpy);
+            process.nextTick(function(){
+                var result = globalObj.addOne(41);
+                sinon.assert.calledOnce(addOneInnerSpy);
+                callback();
+            })
+        }).call({}, done);
+    },
+
     "verifies mocks": function () {
         var method = function () {};
         var object = { method: method };
