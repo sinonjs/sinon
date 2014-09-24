@@ -9,6 +9,7 @@
 if (typeof require == "function" && typeof module == "object") {
     var buster = require("../runner");
     var sinon = require("../../lib/sinon");
+    var when = require("when");
 }
 
 buster.testCase("sinon.test", {
@@ -124,32 +125,42 @@ buster.testCase("sinon.test", {
         }).call({});
     },
 
-    "async test with sandbox": function (done) {
+    "async test with sandbox": function () {
+        var deferred = when.defer();
+        var fakeDone = function (args) {
+            assert.equals(args, undefined);
+            deferred.resolver.resolve(args);
+        }
         sinon.test(function (callback) {
-            assert.same(callback, done);
-
-            callback();
-        }).call({}, done);
+            process.nextTick(function () {
+                callback();
+            });
+        }).call({}, fakeDone);
+        return deferred.promise;
     },
 
-    "async test with sandbox and spy": function (done) {
+    "async test with sandbox and spy": function () {
+        var deferred = when.defer();
         sinon.test(function (callback) {
             var globalObj = {
                 addOne: function (arg) {
                     return this.addOneInner(arg);
                 },
                 addOneInner: function (arg) {
-                    return arg+1;
+                    return arg + 1;
                 }
             };
             var addOneInnerSpy = this.spy();
-            this.stub(globalObj, 'addOneInner', addOneInnerSpy);
-            process.nextTick(function(){
+            this.stub(globalObj, "addOneInner", addOneInnerSpy);
+            process.nextTick(function () {
                 var result = globalObj.addOne(41);
-                sinon.assert.calledOnce(addOneInnerSpy);
+                assert(addOneInnerSpy.calledOnce);
                 callback();
             })
-        }).call({}, done);
+        }).call({}, function (args) {
+            deferred.resolver.resolve(args);
+        });
+        return deferred.promise;
     },
 
     "verifies mocks": function () {
