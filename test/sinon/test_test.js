@@ -9,7 +9,6 @@
 if (typeof require == "function" && typeof module == "object") {
     var buster = require("../runner");
     var sinon = require("../../lib/sinon");
-    var when = require("when");
 }
 
 buster.testCase("sinon.test", {
@@ -125,22 +124,19 @@ buster.testCase("sinon.test", {
         }).call({});
     },
 
-    "async test with sandbox": function () {
-        var deferred = when.defer();
+    "async test with sandbox": function (done) {
         var fakeDone = function (args) {
             assert.equals(args, undefined);
-            deferred.resolver.resolve(args);
+            done(args);
         }
         sinon.test(function (callback) {
             process.nextTick(function () {
                 callback();
             });
         }).call({}, fakeDone);
-        return deferred.promise;
     },
 
-    "async test with sandbox and spy": function () {
-        var deferred = when.defer();
+    "async test with sandbox and spy": function (done) {
         sinon.test(function (callback) {
             var globalObj = {
                 addOne: function (arg) {
@@ -157,10 +153,7 @@ buster.testCase("sinon.test", {
                 assert(addOneInnerSpy.calledOnce);
                 callback();
             })
-        }).call({}, function (args) {
-            deferred.resolver.resolve(args);
-        });
-        return deferred.promise;
+        }).call({}, done);
     },
 
     "verifies mocks": function () {
