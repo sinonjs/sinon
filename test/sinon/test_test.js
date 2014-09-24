@@ -130,7 +130,8 @@ buster.testCase("sinon.test", {
             done(args);
         }
         sinon.test(function (callback) {
-            process.nextTick(function () {
+
+            buster.nextTick(function () {
                 callback();
             });
         }).call({}, fakeDone);
@@ -148,11 +149,12 @@ buster.testCase("sinon.test", {
             };
             var addOneInnerSpy = this.spy();
             this.stub(globalObj, "addOneInner", addOneInnerSpy);
-            process.nextTick(function () {
+
+            buster.nextTick(function () {
                 var result = globalObj.addOne(41);
                 assert(addOneInnerSpy.calledOnce);
                 callback();
-            })
+            });
         }).call({}, done);
     },
 
