@@ -612,18 +612,13 @@
                 });
             },
 
-            "does not call onreadystatechange for sync request": function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+            "calls onreadystatechange for sync request with DONE state": function () {
                 var spy = sinon.spy();
-                xhr.onreadystatechange = spy;
-                xhr.open("GET", "/", false);
-                xhr.send();
-                var callCount = spy.callCount;
+                this.xhr.readyStateChange = spy;
 
-                xhr.setResponseHeaders({});
-                xhr.setResponseBody("");
+                this.xhr.setResponseBody("Some text goes in here ok?");
 
-                assert.equals(callCount - spy.callCount, 0);
+                assert(spy.calledWith(sinon.FakeXMLHttpRequest.DONE));
             },
 
             "simulates synchronous request": function () {
