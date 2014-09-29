@@ -158,6 +158,16 @@ buster.testCase("sinon.test", {
         }).call({}, done);
     },
 
+    "async test preserves additional args and pass them in correct order": function (done) {
+        sinon.test(function (arg1, arg2, callback) {
+            assert.equals(arg1, "arg1");
+            assert.equals(typeof (arg2), "object");
+            assert.equals(typeof (callback), "function");
+
+            callback();
+        }).call({}, "arg1", {}, done);
+    },
+
     "verifies mocks": function () {
         var method = function () {};
         var object = { method: method };
