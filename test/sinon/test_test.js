@@ -125,11 +125,47 @@ buster.testCase("sinon.test", {
     },
 
     "async test with sandbox": function (done) {
+        var fakeDone = function (args) {
+            assert.equals(args, undefined);
+            done(args);
+        }
         sinon.test(function (callback) {
-            assert.same(callback, done);
+
+            buster.nextTick(function () {
+                callback();
+            });
+        }).call({}, fakeDone);
+    },
+
+    "async test with sandbox and spy": function (done) {
+        sinon.test(function (callback) {
+            var globalObj = {
+                addOne: function (arg) {
+                    return this.addOneInner(arg);
+                },
+                addOneInner: function (arg) {
+                    return arg + 1;
+                }
+            };
+            var addOneInnerSpy = this.spy();
+            this.stub(globalObj, "addOneInner", addOneInnerSpy);
+
+            buster.nextTick(function () {
+                var result = globalObj.addOne(41);
+                assert(addOneInnerSpy.calledOnce);
+                callback();
+            });
+        }).call({}, done);
+    },
+
+    "async test preserves additional args and pass them in correct order": function (done) {
+        sinon.test(function (arg1, arg2, callback) {
+            assert.equals(arg1, "arg1");
+            assert.equals(typeof (arg2), "object");
+            assert.equals(typeof (callback), "function");
 
             callback();
-        }).call({}, done);
+        }).call({}, "arg1", {}, done);
     },
 
     "verifies mocks": function () {
