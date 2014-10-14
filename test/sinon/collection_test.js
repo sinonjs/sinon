@@ -322,6 +322,27 @@ buster.testCase("sinon.collection", {
         }
     },
 
+    ".reset": {
+        setUp: function () {
+            this.collection = sinon.create(sinon.collection);
+            this.collection.fakes = [{
+                reset: sinon.spy.create()
+            }, {
+                reset: sinon.spy.create()
+            }];
+        },
+
+        "calls reset on all fakes": function () {
+            var fake0 = this.collection.fakes[0];
+            var fake1 = this.collection.fakes[1];
+
+            this.collection.reset();
+
+            assert(fake0.reset.called);
+            assert(fake1.reset.called);
+        }
+    },
+
     "inject test": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
