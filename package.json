@@ -19,7 +19,7 @@
     }
   ],
   "scripts": {
-    "test": "node test/node/run.js",
+    "test": "node test/node/run.js && coffee test/coffee/run.coffee",
     "prepublish": "./build"
   },
   "dependencies": {
