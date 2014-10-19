@@ -818,12 +818,25 @@ buster.testCase("sinon.clock", {
     ".useFakeTimers": {
         setUp: function () {
             this.dateNow = this.global.Date.now;
+            this.original = {
+                Date: this.global.Date,
+                setTimeout: this.global.setTimeout,
+                clearTimeout: this.global.clearTimeout,
+                setInterval: this.global.setInterval,
+                clearInterval: this.global.clearInterval,
+                setImmediate: this.global.setImmediate,
+                clearImmediate: this.global.clearImmediate
+            }
         },
 
         tearDown: function () {
-            if (this.clock) {
-                this.clock.restore();
-            }
+            this.global.Date = this.original.Date;
+            this.global.setTimeout = this.original.setTimeout;
+            this.global.clearTimeout = this.original.clearTimeout;
+            this.global.setInterval = this.original.setInterval;
+            this.global.clearInterval = this.original.clearInterval;
+            this.global.setImmediate = this.original.setImmediate;
+            this.global.clearImmediate = this.original.clearImmediate;
 
             clearTimeout(this.timer);
             if (typeof this.dateNow == "undefined") {
