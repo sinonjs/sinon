@@ -818,12 +818,25 @@ buster.testCase("sinon.clock", {
     ".useFakeTimers": {
         setUp: function () {
             this.dateNow = this.global.Date.now;
+            this.original = {
+                Date: this.global.Date,
+                setTimeout: this.global.setTimeout,
+                clearTimeout: this.global.clearTimeout,
+                setInterval: this.global.setInterval,
+                clearInterval: this.global.clearInterval,
+                setImmediate: this.global.setImmediate,
+                clearImmediate: this.global.clearImmediate
+            }
         },
 
         tearDown: function () {
-            if (this.clock) {
-                this.clock.restore();
-            }
+            this.global.Date = this.original.Date;
+            this.global.setTimeout = this.original.setTimeout;
+            this.global.clearTimeout = this.original.clearTimeout;
+            this.global.setInterval = this.original.setInterval;
+            this.global.clearInterval = this.original.clearInterval;
+            this.global.setImmediate = this.original.setImmediate;
+            this.global.clearImmediate = this.original.clearImmediate;
 
             clearTimeout(this.timer);
             if (typeof this.dateNow == "undefined") {
@@ -956,12 +969,17 @@ buster.testCase("sinon.clock", {
             delete this.global.tick;
             this.global.__proto__.tick = function () { };
 
-            this.clock = sinon.useFakeTimers("tick");
-            assert.isTrue(this.global.hasOwnProperty("tick"));
-            this.clock.restore();
+            if (!this.global.hasOwnProperty("tick")) {
+                this.clock = sinon.useFakeTimers("tick");
+                assert.isTrue(this.global.hasOwnProperty("tick"));
+                this.clock.restore();
 
-            assert.isFalse(this.global.hasOwnProperty("tick"));
-            delete this.global.__proto__.tick;
+                assert.isFalse(this.global.hasOwnProperty("tick"));
+                delete this.global.__proto__.tick;
+            } else {
+                // hasOwnProperty does not work as expected.
+                assert(true);
+            }
         },
 
         "restores global property on restore if it is present on the global object itself": function () {

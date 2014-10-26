@@ -15,6 +15,7 @@ require("../sinon/times_in_words_test.js");
 require("../sinon/typeOf_test.js");
 require("../sinon/log_error_test.js");
 require("../sinon/issues/issues.js");
+require("../sinon/util/fake_timers_test.js");
 
 var buster = require("../runner");
 var args = process.argv.slice(2);
@@ -30,7 +31,6 @@ while (args.length) {
             break;
         case "-u":
         case "--unstable":
-            require("../sinon/util/fake_timers_test.js");
             break;
     }
 }
