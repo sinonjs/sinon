@@ -1,3 +1,14 @@
+== 1.11.0 / 2014-10-26
+
+* Proper AMD support
+* Don't call sinon.expectation.pass if there aren't any expectations (Jeffrey Falgout)
+* Throw error when reset-ing while calling fake
+* Added xhr.response property (Gyandeep Singh)
+* Fixed premature sandbox destruction (Andrew Gurinovich)
+* Add sandbox reset method (vitalets)
+* A bunch of bug fixes (git log)
+* Various source organizational improvements (Morgan Roderick and others)
+
 == 1.10.3 / 2014-07-11
 
 * Fix loading in Web Workers (Victor Costan)
