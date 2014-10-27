@@ -1,3 +1,9 @@
+== 1.11.1 / 2014-10-27
+
+* Expose match on returned sandbox (Duncan Beevers)
+* Fix issue #586 (Antonio D'Ettole)
+* Declare log_error dependency (Kurt Ruppel)
+
 == 1.11.0 / 2014-10-26
 
 * Proper AMD support
