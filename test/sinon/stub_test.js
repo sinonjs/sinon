@@ -205,6 +205,17 @@ buster.testCase("sinon.stub", {
             assert.exception(function () {
                 stub();
             }, "Error");
+        },
+
+        "resets 'invoking' flag": function () {
+            var stub = sinon.stub.create();
+            stub.throws();
+
+            try {
+                stub();
+            } catch (e) {
+                refute.defined(stub.invoking);
+            }
         }
     },
 
