@@ -36,6 +36,12 @@ if (typeof require == "function" && typeof module == "object") {
             assert(sinon.sandbox.isPrototypeOf(sandbox));
         },
 
+        "exposes match": function () {
+            var sandbox = sinon.sandbox.create();
+
+            assert.same(sandbox.match, sinon.match);
+        },
+
         ".useFakeTimers": {
             setUp: function () {
                 this.sandbox = sinon.create(sinon.sandbox);
@@ -404,6 +410,17 @@ if (typeof require == "function" && typeof module == "object") {
                 assert.equals(sandbox.args.length, 0);
                 assert.isFunction(object.spy);
                 assert.isObject(object.sandbox);
+            },
+
+            "injects match": function () {
+                var object = {};
+
+                var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    properties: ["match"],
+                    injectInto: object
+                }));
+
+                assert.same(object.match, sinon.match);
             }
         }
     });
