@@ -744,5 +744,26 @@ buster.testCase("sinon.fakeServer", {
 
             assert.isTrue(request.respond.calledOnce);
         }
+    },
+
+    ".log": {
+        setUp: function () {
+            this.server = sinon.fakeServer.create();
+        },
+
+        tearDown: function () {
+            this.server.restore();
+        },
+
+        "logs response and request": function () {
+            sinon.spy(sinon.fakeServer, "log");
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/hello");
+            xhr.send();
+            var response = [200, {}, "Hello!"];
+            this.server.respond("GET", /.*/, response);
+            assert(sinon.fakeServer.log.calledOnce);
+            assert(sinon.fakeServer.log.calledWithExactly(response, xhr));
+        }
     }
 });
