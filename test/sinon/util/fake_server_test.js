@@ -744,5 +744,37 @@ buster.testCase("sinon.fakeServer", {
 
             assert.isTrue(request.respond.calledOnce);
         }
+    },
+
+    ".log": {
+        setUp: function () {
+            this.server = sinon.fakeServer.create();
+        },
+
+        tearDown: function () {
+            this.server.restore();
+        },
+
+        "logs response and request": function () {
+            sinon.spy(this.server, "log");
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/hello");
+            xhr.send();
+            var response = [200, {}, "Hello!"];
+            this.server.respond("GET", /.*/, response);
+            assert(this.server.log.calledOnce);
+            assert(this.server.log.calledWithExactly(response, xhr));
+        },
+
+        "can be overridden": function () {
+            this.server.log = sinon.spy();
+            var xhr = new sinon.FakeXMLHttpRequest();
+            xhr.open("GET", "/hello");
+            xhr.send();
+            var response = [200, {}, "Hello!"];
+            this.server.respond("GET", /.*/, response);
+            assert(this.server.log.calledOnce);
+            assert(this.server.log.calledWithExactly(response, xhr));
+        }
     }
 });
