@@ -120,6 +120,19 @@ buster.testCase("sinon.clock", {
             assert(stub.called);
         },
 
+        "calls the given callback before setTimeout": function () {
+            var stub1 = sinon.stub.create();
+            var stub2 = sinon.stub.create();
+
+            this.clock.setTimeout(stub1, 0);
+            this.clock.setImmediate(stub2);
+            this.clock.tick(0);
+
+            assert(stub1.calledOnce);
+            assert(stub2.calledOnce);
+            assert(stub2.calledBefore(stub1));
+        },
+
         "throws if no arguments": function () {
             var clock = this.clock;
 
