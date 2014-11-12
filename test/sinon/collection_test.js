@@ -34,41 +34,28 @@ buster.testCase("sinon.collection", {
 
         "calls stub": function () {
             var object = { method: function () {} };
-            var args;
-
-            sinon.stub = function () {
-                args = Array.prototype.slice.call(arguments);
-            };
 
             this.collection.stub(object, "method");
 
-            assert.equals(args, [object, "method"]);
+            assert.isFalse(object.method.called);
         },
 
         "adds stub to fake array": function () {
             var object = { method: function () {} };
 
-            sinon.stub = function () {
-                return object;
-            };
-
             this.collection.stub(object, "method");
 
-            assert.equals(this.collection.fakes, [object]);
+            assert.equals(this.collection.fakes, [object.method]);
         },
 
         "appends stubs to fake array": function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
+            var objects = [{ method: function () {} },
+                           { method: function () {} }];
 
-            sinon.stub = function () {
-                return objects[i++];
-            };
+            this.collection.stub(objects[0], "method");
+            this.collection.stub(objects[1], "method");
 
-            this.collection.stub({ method: function () {} }, "method");
-            this.collection.stub({ method: function () {} }, "method");
-
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes, [objects[0].method, objects[1].method,]);
         },
 
         "adds all object methods to fake array": function () {
@@ -162,43 +149,21 @@ buster.testCase("sinon.collection", {
             sinon.mock = this.mock;
         },
 
-        "calls mock": function () {
-            var object = { id: 42 };
-            var args;
-
-            sinon.mock = function () {
-                args = Array.prototype.slice.call(arguments);
-            };
-
-            this.collection.mock(object, "method");
-
-            assert.equals(args, [object, "method"]);
-        },
-
         "adds mock to fake array": function () {
-            var object = { id: 42 };
+            var object = {};
 
-            sinon.mock = function () {
-                return object;
-            };
+            var mock = this.collection.mock(object, "method");
 
-            this.collection.mock(object, "method");
-
-            assert.equals(this.collection.fakes, [object]);
+            assert.equals(this.collection.fakes, [mock]);
         },
 
         "appends mocks to fake array": function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
+            var objects = [{}, {}];
 
-            sinon.mock = function () {
-                return objects[i++];
-            };
+            var mock1 = this.collection.mock(objects[0], "method");
+            var mock2 = this.collection.mock(objects[1], "method");
 
-            this.collection.mock({}, "method");
-            this.collection.mock({}, "method");
-
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes, [mock1, mock2]);
         }
     },
 
@@ -215,17 +180,13 @@ buster.testCase("sinon.collection", {
         },
 
         "appends mocks and stubs to fake array": function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
+            var objects = [{ method: function () {} },
+                           { method: function () {} }];
 
-            sinon.stub = sinon.mock = function () {
-                return objects[i++];
-            };
+            var mock = this.collection.mock(objects[0], "method");
+            this.collection.stub(objects[1], "method");
 
-            this.collection.mock({ method: function () {} }, "method");
-            this.collection.stub({ method: function () {} }, "method");
-
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes, [mock, objects[1].method]);
         }
     },
 
@@ -343,7 +304,7 @@ buster.testCase("sinon.collection", {
         }
     },
 
-    "inject test": {
+    ".inject": {
         setUp: function () {
             this.collection = sinon.create(sinon.collection);
         },

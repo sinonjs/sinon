@@ -5,7 +5,7 @@ if (typeof require === "function" && typeof module === "object") {
     var sinon = require("../../lib/sinon");
 }
 
-buster.testCase("sinon.timesInWords", {
+buster.testCase("timesInWords", {
     "should return \"once\" for input of 1": function () {
         var result = sinon.timesInWords(1);
         assert.equals(result, "once");

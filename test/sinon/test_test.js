@@ -216,7 +216,7 @@ buster.testCase("sinon.test", {
         assert.same(object.method, method);
     },
 
-    "appends helpers after normal arguments": function () {
+    "// appends helpers after normal arguments": function () {
         var object = { method: function () {} };
 
         sinon.config = {
@@ -247,7 +247,7 @@ buster.testCase("sinon.test", {
             sinon.config = {};
         },
 
-        "yields stub, mock as arguments": function () {
+        "// yields stub, mock as arguments": function () {
             var stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -267,7 +267,7 @@ buster.testCase("sinon.test", {
             assert.mock(mocked);
         },
 
-        "yields spy, stub, mock as arguments": function () {
+        "// yields spy, stub, mock as arguments": function () {
             var spied, stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -290,7 +290,7 @@ buster.testCase("sinon.test", {
             assert.mock(mocked);
         },
 
-        "does not yield server when not faking xhr": function () {
+        "// does not yield server when not faking xhr": function () {
             var stubbed, mocked;
             var obj = { meth: function () {} };
 
@@ -316,7 +316,7 @@ buster.testCase("sinon.test", {
                 "ajax/browser": typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined"
             },
 
-            "yields server when faking xhr": function () {
+            "// yields server when faking xhr": function () {
                 var stubbed, mocked, server;
                 var obj = { meth: function () {} };
 
@@ -338,7 +338,7 @@ buster.testCase("sinon.test", {
                 assert.mock(mocked);
             },
 
-            "uses serverWithClock when faking xhr": function () {
+            "// uses serverWithClock when faking xhr": function () {
                 var server;
 
                 sinon.config = {
@@ -355,7 +355,7 @@ buster.testCase("sinon.test", {
                 assert(sinon.fakeServerWithClock.isPrototypeOf(server));
             },
 
-            "injects properties into object": function () {
+            "// injects properties into object": function () {
                 var obj = {};
 
                 sinon.config = {
@@ -383,7 +383,7 @@ buster.testCase("sinon.test", {
                 sinon.test(testFunction).call({});
             },
 
-            "injects server and clock when only enabling them": function () {
+            "// injects server and clock when only enabling them": function () {
                 sinon.config = {
                     useFakeTimers: true,
                     useFakeServer: true
@@ -404,7 +404,7 @@ buster.testCase("sinon.test", {
             }
         },
 
-        "yields clock when faking timers": function () {
+        "// yields clock when faking timers": function () {
             var clock;
 
             sinon.config = {
@@ -420,7 +420,7 @@ buster.testCase("sinon.test", {
             assert.clock(clock);
         },
 
-        "fakes specified timers": function () {
+        "// fakes specified timers": function () {
             var props;
 
             sinon.config = {
@@ -452,7 +452,7 @@ buster.testCase("sinon.test", {
             assert.same(props.clearInterval, sinon.timers.clearInterval);
         },
 
-        "injects properties into test case": function () {
+        "//injects properties into test case": function () {
             var testCase = {};
 
             sinon.config = {
@@ -471,7 +471,7 @@ buster.testCase("sinon.test", {
             sinon.test(testFunction).call(testCase);
         },
 
-        "injects functions into test case by default": function () {
+        "// injects functions into test case by default": function () {
             function testFunction() {
                 assert.equals(arguments.length, 0);
                 assert.isFunction(this.spy);
@@ -483,7 +483,7 @@ buster.testCase("sinon.test", {
             sinon.test(testFunction).call({});
         },
 
-        "injects sandbox": function () {
+        "// injects sandbox": function () {
             function testFunction() {
                 assert.equals(arguments.length, 0);
                 assert.isFunction(this.spy);
@@ -511,7 +511,7 @@ buster.testCase("sinon.test", {
             refute.defined(testCase.requests);
         },
 
-        "uses sinon.test to fake time": function () {
+        "// uses sinon.test to fake time": function () {
             sinon.config = {
                 useFakeTimers: true
             };
