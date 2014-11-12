@@ -117,11 +117,6 @@ If the build script is unable to find Juicer, try
 
 Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist.html) in a browser.
 
-#### On Rhino
-
-The Rhino tests are currently out of commission (pending update after switch to
-Buster.JS for tests).
-
 #### In PhantomJS
 
 If you have [PhantomJS](http://phantomjs.org) installed as a global, you can run the test suite in PhantomJS

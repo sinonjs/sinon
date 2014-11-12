@@ -3,8 +3,7 @@
     "excludeFiles": [
         "node_modules/**",
         "build/*",
-        "pkg/*",
-        "test/rhino/*"
+        "pkg/*"
     ],
     "preset": "crockford",
 
