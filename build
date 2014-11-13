@@ -45,17 +45,30 @@ formatio not found, skipping. To build with formatio support:
   contents = File.read(file)
 
   File.open(file, "w") do |f|
-    f.puts("this.sinon = (function () {")
-    f.puts("var samsam, formatio;")
-    f.puts("(function () {")
-    f.puts("function define(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else if (typeof fn === \"function\") { formatio = fn(samsam); } }")
-    f.puts("define.amd = {};")
+    f.puts("(function (root, factory) {")
+    f.puts("  if (typeof define === 'function' && define.amd) {")
+    f.puts("    define([], function () {")
+    f.puts("      return (root.sinon = factory());")
+    f.puts("    });")
+    f.puts("  } else if (typeof exports === 'object') {")
+    f.puts("    module.exports = factory();")
+    f.puts("  } else {")
+    f.puts("    root.sinon = factory();")
+    f.puts("  }")
+    f.puts("}(this, function () {")
+    f.puts("  var samsam, formatio;")
+    f.puts("  (function () {")
+    f.puts("    function define(mod, deps, fn) { if (mod == \"samsam\") { samsam = deps(); } else if (typeof fn === \"function\") { formatio = fn(samsam); } }")
+    f.puts("    define.amd = {};")
     f.puts(File.read("./node_modules/formatio/node_modules/samsam/lib/samsam.js"))
     f.puts(File.read("./node_modules/formatio/lib/formatio.js"))
-    f.puts("})();")
+    f.puts("  })();")
+    # mask the real define from the code so that it doesn't use it internally
+    f.puts("  var define;")
     f.puts(contents)
-    f.puts("return sinon;}.call(typeof window != 'undefined' && window || {}));")
-  end
+    f.puts("  return sinon;")
+    f.puts("}));")
+    end
 
   file
 end
