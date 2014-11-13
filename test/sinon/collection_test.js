@@ -55,7 +55,7 @@ buster.testCase("sinon.collection", {
             this.collection.stub(objects[0], "method");
             this.collection.stub(objects[1], "method");
 
-            assert.equals(this.collection.fakes, [objects[0].method, objects[1].method,]);
+            assert.equals(this.collection.fakes, [objects[0].method, objects[1].method]);
         },
 
         "adds all object methods to fake array": function () {
