@@ -27,18 +27,18 @@ buster.testCase("sinon.testCase", {
     },
 
     "only wraps functions with test prefix": sinon.test(function () {
-        this.spy(sinon, "test");
+        var testA = function () {};
+        var doB = function () {};
 
         var testc = {
-            testA: function () {},
-            doB: function () {}
+            testA: testA,
+            doB: doB
         };
 
-        sinon.testCase(testc);
+        var testCase = sinon.testCase(testc);
 
-        assert.isFunction(testc.doB);
-        assert(sinon.test.calledWith(testc.testA));
-        assert.isFalse(sinon.test.calledWith(testc.doB));
+        assert.same(testCase.doB, doB);
+        refute.same(testCase.testA, testA);
     }),
 
     "removes setUp method": function () {

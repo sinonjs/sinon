@@ -118,7 +118,7 @@ buster.testCase("sinon.stub", {
             requiresSupportFor: {
                 strictMode: (function () { return this; }()) === undefined
             },
-            "": function () {
+            "in strict mode": function () {
                 var stub = sinon.stub.create();
                 stub.returnsThis();
 
@@ -472,32 +472,6 @@ buster.testCase("sinon.stub", {
 
         tearDown: function () {
             sinon.wrapMethod = this.wrapMethod;
-        },
-
-        "returns function from wrapMethod": function () {
-            var wrapper = function () {};
-            sinon.wrapMethod = function () {
-                return wrapper;
-            };
-
-            var result = sinon.stub(this.object, "method");
-
-            assert.same(result, wrapper);
-        },
-
-        "passes object and method to wrapMethod": function () {
-            var wrapper = function () {};
-            var args;
-
-            sinon.wrapMethod = function () {
-                args = arguments;
-                return wrapper;
-            };
-
-            sinon.stub(this.object, "method");
-
-            assert.same(args[0], this.object);
-            assert.same(args[1], "method");
         },
 
         "uses provided function as stub": function () {

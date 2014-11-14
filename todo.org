@@ -1,0 +1,5 @@
+* Browserify refactor [0/4]
+** TODO sinon.config no longer works as expected
+** TODO Linting
+** TODO sinon.log doesn't really work at this point
+** TODO Configuring sinon.format no longer works

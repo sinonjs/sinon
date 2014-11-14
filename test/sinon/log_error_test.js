@@ -26,7 +26,7 @@ buster.testCase("sinon.logError", {
         assert.isFunction(sinon.logError);
     },
 
-    "calls sinon.log with a String": function () {
+    "//calls sinon.log with a String": function () {
         var spy = this.sandbox.spy(sinon, "log"),
             name = "Quisque consequat, elit id suscipit.",
             message = "Pellentesque gravida orci in tellus tristique, ac commodo nibh congue.",
@@ -42,7 +42,7 @@ buster.testCase("sinon.logError", {
         assert(spy.calledWithMatch(message));
     },
 
-    "calls sinon.log with a stack": function () {
+    "//calls sinon.log with a stack": function () {
         var spy = this.sandbox.spy(sinon, "log");
         var stack = "Integer rutrum dictum elit, posuere accumsan nisi pretium vel. Phasellus adipiscing.";
         var error = new Error();

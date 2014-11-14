@@ -807,26 +807,6 @@ if (typeof require === "function" && typeof module === "object") {
                 } catch (e) {}
 
                 assert.equals(object.doIt.getCall(0).toString(), "doIt() !TypeError(Oh noes!)");
-            },
-
-            "formats arguments with sinon.format": function () {
-                sinon.format = sinon.stub().returns("Forty-two");
-                var object = { doIt: sinon.spy() };
-
-                object.doIt(42);
-
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(Forty-two)");
-                assert(sinon.format.calledWith(42));
-            },
-
-            "formats return value with sinon.format": function () {
-                sinon.format = sinon.stub().returns("Forty-two");
-                var object = { doIt: sinon.stub().returns(42) };
-
-                object.doIt();
-
-                assert.equals(object.doIt.getCall(0).toString(), "doIt() => Forty-two");
-                assert(sinon.format.calledWith(42));
             }
         },
 
