@@ -20,12 +20,13 @@
   ],
   "scripts": {
     "test": "node test/node/run.js",
-    "prepublish": "./build"
+    "prepublish": "./build",
+    "bundle": "browserify -s sinon -o sinon.js lib/sinon.js"
   },
   "dependencies": {
     "formatio": "~1.1.1",
     "util": ">=0.10.3 <1",
-    "lolex": "~1.0.0"
+    "lolex": "~1.1"
   },
   "devDependencies": {
     "buster-core": ">=0.6.4",
@@ -34,7 +35,8 @@
     "buster-test": "~0.5",
     "buster-format": "~0.5.6",
     "http-server": "*",
-    "jscs": "~1.5.9"
+    "jscs": "~1.5.9",
+    "browserify": "~6.3.2"
   },
   "main": "./lib/sinon.js",
   "engines": {
