@@ -170,7 +170,7 @@ buster.testCase("sinon.stub", {
 
             assert.exception(function () {
                 stub();
-            }, exceptionType);
+            }, {name: exceptionType});
         },
 
         "specifies exception message": function () {

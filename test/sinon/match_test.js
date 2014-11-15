@@ -8,7 +8,7 @@
 "use strict";
 
 if (typeof require == "function" && typeof module == "object") {
-    var testCase = require("../runner");
+    var buster = require("../runner");
     var sinon = require("../../lib/sinon");
 }
 

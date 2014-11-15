@@ -11,6 +11,12 @@ if (typeof require == "function" && typeof module == "object") {
     var sinon = require("../../lib/sinon");
 }
 
+var st = typeof process !== "undefined" ? process.nextTick : setTimeout;
+
+function nextTick(fn) {
+    st(fn, 0);
+};
+
 buster.testCase("sinon.test", {
     setUp: function () {
         this.boundTestCase = function () {
@@ -96,7 +102,7 @@ buster.testCase("sinon.test", {
                 this.stub(object, "method");
                 throw new Error();
             }).call({});
-        }, "Error");
+        }, {name: "Error"});
     },
 
     "restores stub when method throws": function () {
@@ -127,11 +133,10 @@ buster.testCase("sinon.test", {
     "async test with sandbox": function (done) {
         var fakeDone = function (args) {
             assert.equals(args, undefined);
-            done(args);
+            done();
         }
         sinon.test(function (callback) {
-
-            buster.nextTick(function () {
+            nextTick(function () {
                 callback();
             });
         }).call({}, fakeDone);
@@ -150,7 +155,7 @@ buster.testCase("sinon.test", {
             var addOneInnerSpy = this.spy();
             this.stub(globalObj, "addOneInner", addOneInnerSpy);
 
-            buster.nextTick(function () {
+            nextTick(function () {
                 var result = globalObj.addOne(41);
                 assert(addOneInnerSpy.calledOnce);
                 callback();
