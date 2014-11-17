@@ -1,3 +1,7 @@
+== 2.0.0 / ???
+* Breaking changes in 2.0:
+  - spy.calledWithNew is now a property, not a function
+
 == 1.11.1 / 2014-10-27
 
 * Expose match on returned sandbox (Duncan Beevers)

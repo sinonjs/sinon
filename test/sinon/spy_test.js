@@ -624,13 +624,13 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "is false if spy wasn't called": function () {
-                assert.isFalse(this.spy.calledWithNew());
+                assert.isFalse(this.spy.calledWithNew);
             },
 
             "is true if called with new": function () {
                 var result = new this.spy();
 
-                assert(this.spy.calledWithNew());
+                assert(this.spy.calledWithNew);
             },
 
             "is true if called with new on custom constructor": function () {
@@ -640,13 +640,13 @@ if (typeof require === "function" && typeof module === "object") {
                 sinon.spy(ns, "MyThing");
 
                 var result = new ns.MyThing();
-                assert(ns.MyThing.calledWithNew());
+                assert(ns.MyThing.calledWithNew);
             },
 
             "is false if called as function": function () {
                 this.spy();
 
-                assert.isFalse(this.spy.calledWithNew());
+                assert.isFalse(this.spy.calledWithNew);
             },
 
             "in browser": {
@@ -661,7 +661,7 @@ if (typeof require === "function" && typeof module === "object") {
                     this.spy(object);
                     this.spy(window);
 
-                    assert(this.spy.calledWithNew());
+                    assert(this.spy.calledWithNew);
                 }
             },
 
@@ -672,7 +672,7 @@ if (typeof require === "function" && typeof module === "object") {
 
                 var result = new object.MyThing;
 
-                assert(object.MyThing.calledWithNew());
+                assert(object.MyThing.calledWithNew);
             },
 
             "spied native function": {
@@ -693,7 +693,7 @@ if (typeof require === "function" && typeof module === "object") {
 
                     log.info("test");
 
-                    assert.isFalse(log.info.calledWithNew());
+                    assert.isFalse(log.info.calledWithNew);
                 }
             }
         },

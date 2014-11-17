@@ -490,29 +490,22 @@ buster.testCase("sinon.assert", {
         tearDown: function () { this.tearDownStubs(); },
 
         "fails when method does not exist": function () {
-            sinon.stub(this.stub, "calledWithNew");
-
             assert.exception(function () {
                 sinon.assert.calledWithNew(null);
             });
 
-            assert.isFalse(this.stub.calledWithNew.called);
             assert(sinon.assert.fail.called);
         },
 
         "fails when method is not stub": function () {
-            sinon.stub(this.stub, "calledWithNew");
-
             assert.exception(function () {
                 sinon.assert.calledWithNew(function () {});
             });
 
-            assert.isFalse(this.stub.calledWithNew.called);
             assert(sinon.assert.fail.called);
         },
 
         "fails when method fails": function () {
-            sinon.stub(this.stub, "calledWithNew").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
@@ -523,8 +516,8 @@ buster.testCase("sinon.assert", {
         },
 
         "passes when method doesn't fail": function () {
-            sinon.stub(this.stub, "calledWithNew").returns(true);
             var stub = this.stub;
+            var obj = new stub();
 
             sinon.assert.calledWithNew(stub);
 
