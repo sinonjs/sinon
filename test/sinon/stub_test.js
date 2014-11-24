@@ -559,6 +559,18 @@ buster.testCase("sinon.stub", {
             assert.equals(obj.someProp, 42);
         },
 
+        "doesn't throw if property is a native method in oldIE": function () {
+            refute.exception(function () {
+                sinon.stub({
+                    log: {
+                        toString: function () {
+                            return '\nfunction log() { [native code] }\n'
+                        }
+                    }
+                }, 'log');
+            });
+        },
+
         "successfully stubs falsey properties": function () {
             var obj = { 0: function () { } };
 

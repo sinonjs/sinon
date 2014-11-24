@@ -200,6 +200,31 @@ if (typeof require === "function" && typeof module === "object") {
             refute.same(func, spy);
         },
 
+        "throws when trying to spy non-function": function () {
+            assert.exception(function () {
+                sinon.spy({});
+            });
+        },
+
+        "does not throw when function looks like a native in oldIE": function () {
+            refute.exception(function () {
+                sinon.spy({
+                    toString: function () {
+                        return '\nfunction log() { [native code] }\n'
+                    }
+                });
+            });
+            refute.exception(function () {
+                sinon.spy({
+                    log: {
+                        toString: function () {
+                            return '\nfunction log() { [native code] }\n'
+                        }
+                    }
+                }, 'log');
+            });
+        },
+
         "mirrors custom properties on function": function () {
             var func = function () {};
             func.myProp = 42;
