@@ -22,11 +22,11 @@ buster.testCase("sinon.clock", {
     ".setTimeout": {
         setUp: function () {
             this.clock = sinon.clock.create();
-            sinon.clock.evalCalled = false;
+            this.global.sinonClockEvalCalled = false;
         },
 
         tearDown: function () {
-            delete sinon.clock.evalCalled;
+            delete this.global.sinonClockEvalCalled;
         },
 
         "throws if no arguments": function () {
@@ -66,10 +66,11 @@ buster.testCase("sinon.clock", {
         },
 
         "evals non-function callbacks": function () {
-            this.clock.setTimeout("sinon.clock.evalCalled = true", 10);
+            var evalCalledString = (typeof global != "undefined" ? "global" : "window") + '.sinonClockEvalCalled = true';
+            this.clock.setTimeout(evalCalledString, 10);
             this.clock.tick(10);
 
-            assert(sinon.clock.evalCalled);
+            assert(this.global.sinonClockEvalCalled);
         },
 
         "passes setTimeout parameters": function () {
