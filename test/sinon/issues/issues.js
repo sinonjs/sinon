@@ -39,7 +39,7 @@ buster.testCase("issues", {
     },
 
     "#624": {
-        "useFakeTimers should be idempotent": function () {
+        "//useFakeTimers should be idempotent": function () {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now
             // This test verifies that it's working, at least for Date.now
