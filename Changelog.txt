@@ -1,3 +1,6 @@
+== 1.12.2 / 2014-11-16
+* Fixed the formatio dependency version to avoid pulling in breaking changes
+
 == 1.12.1 / 2014-11-16
 * Fixed lolex issue on node
 
