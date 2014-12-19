@@ -18,6 +18,10 @@ buster.testCase("issues", {
 
     tearDown: function () {
         this.sandbox.restore();
+
+        if (this.clock){
+            this.clock.restore();
+        }
     },
 
     "#458": {
@@ -36,5 +40,21 @@ buster.testCase("issues", {
                 });
             }
         }
+    },
+
+    // Issue #624 shows that useFakeTimers is not idempotent when it comes to
+    // using Date.now
+    // This test verifies that it's working, at least for Date.now
+    "#624 - useFakeTimers should be idempotent": function () {
+        var testCase = this;
+
+        testCase.clock = sinon.useFakeTimers(new Date("2014-12-29").getTime());
+        assert.equals(testCase.clock.now, Date.now());
+
+        testCase.clock = sinon.useFakeTimers(new Date("2015-12-15").getTime());
+        assert.equals(testCase.clock.now, Date.now());
+
+        testCase.clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
+        assert.equals(testCase.clock.now, Date.now());
     }
 });
