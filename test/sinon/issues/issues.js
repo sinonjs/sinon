@@ -19,7 +19,7 @@ buster.testCase("issues", {
     tearDown: function () {
         this.sandbox.restore();
 
-        if (this.clock){
+        if (this.clock) {
             this.clock.restore();
         }
     },
