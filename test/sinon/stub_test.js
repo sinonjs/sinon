@@ -70,6 +70,15 @@ buster.testCase("sinon.stub", {
             var stub = sinon.stub.create();
 
             refute.defined(stub());
+        },
+
+        "supersedes previous throws": function () {
+            var stub = sinon.stub.create();
+            stub.throws().returns();
+
+            refute.exception(function () {
+                stub();
+            });
         }
     },
 
