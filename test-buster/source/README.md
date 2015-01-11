@@ -1,0 +1,1 @@
+The tests in this folder should verify the source version of SinonJS
