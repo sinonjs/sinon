@@ -108,10 +108,10 @@ if (typeof require == "function" && typeof module == "object") {
                 },
 
                 "returns xhr": function () {
-                  var xhr = this.sandbox.useFakeXMLHttpRequest();
+                    var xhr = this.sandbox.useFakeXMLHttpRequest();
 
-                  assert.isFunction(xhr);
-                  assert.isFunction(xhr.restore);
+                    assert.isFunction(xhr);
+                    assert.isFunction(xhr.restore);
                 },
 
                 "exposes xhr property": function () {
