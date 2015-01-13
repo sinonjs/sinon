@@ -336,6 +336,15 @@
                 assert.equals(this.xhr.requestHeaders["content-type"], "application/json;charset=utf-8")
             },
 
+            "does not add 'Content-Type' header if data is FormData": function () {
+                this.xhr.open("POST", "/");
+                var formData = new FormData();
+                formData.append("username", "biz");
+                this.xhr.send("Data");
+
+                assert.equals(this.xhr.requestHeaders["content-type"], undefined)
+            },
+
             "sets request body to string data": function () {
                 this.xhr.open("POST", "/");
                 this.xhr.send("Data");
