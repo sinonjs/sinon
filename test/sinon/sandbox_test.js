@@ -107,6 +107,19 @@ if (typeof require == "function" && typeof module == "object") {
                     this.sandbox.restore();
                 },
 
+                "returns xhr": function () {
+                    var xhr = this.sandbox.useFakeXMLHttpRequest();
+
+                    assert.isFunction(xhr);
+                    assert.isFunction(xhr.restore);
+                },
+
+                "exposes xhr property": function () {
+                    var xhr = this.sandbox.useFakeXMLHttpRequest();
+
+                    assert.same(this.sandbox.xhr, xhr);
+                },
+
                 "calls sinon.useFakeXMLHttpRequest": sinon.test(function () {
                     this.stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
                     this.sandbox.useFakeXMLHttpRequest();
