@@ -7,3 +7,6 @@ before_install:
   - "./script/ci-setup.sh"
 script:
   - "./test/ci-test.sh"
+
+git:
+  depth: 10
