@@ -4,6 +4,8 @@ node_js:
   - "0.8"
   - "0.10"
 
+sudo: false
+
 before_install:
   - npm config set strict-ssl false
   # use a more modern npm than ships with 0.6 and 0.8
