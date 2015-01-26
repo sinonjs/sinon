@@ -22,8 +22,6 @@ As a minimum, please report the following:
 * What actually happens
 * Describe **with code** how to reproduce the faulty behaviour
 
-Also, if you could apply any GitHub labels that matches your issue (ex: AMD, XHR) that would be great!
-
 ### Bug report template
 
 Here's a template for a bug report
