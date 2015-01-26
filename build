@@ -98,14 +98,26 @@ Dir.chdir(File.dirname(__FILE__)) do
   merger.save(output)
   add_license(add_deps(output), version)
 
+  File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
+    f.puts(File.read("lib/sinon/util/timers_ie.js"))
+    f.puts("\n")
+    f.puts(File.read("lib/sinon/util/xhr_ie.js"))
+    f.puts(File.read("lib/sinon/util/xdr_ie.js"))
+  end
+
+  add_license("pkg/sinon-ie#{version_string}.js", version)
+
   FileUtils.cp("lib/sinon/util/fake_timers.js", "pkg/sinon-timers#{version_string}.js")
   add_license("pkg/sinon-timers#{version_string}.js", version)
+  FileUtils.cp("lib/sinon/util/timers_ie.js", "pkg/sinon-timers-ie#{version_string}.js")
+  add_license("pkg/sinon-timers-ie#{version_string}.js", version)
 
   merger = Juicer::Merger::JavaScriptMerger.new
   merger << "lib/sinon/util/fake_server_with_clock.js"
   merger.save("pkg/sinon-server#{version_string}.js")
   add_license("pkg/sinon-server#{version_string}.js", version)
   FileUtils.cp(output, 'pkg/sinon.js')
+  FileUtils.cp("pkg/sinon-ie#{version_string}.js", 'pkg/sinon-ie.js')
 
   puts "Built Sinon.JS #{version}"
 end
