@@ -516,6 +516,17 @@ if (typeof require == "function" && typeof testCase == "undefined") {
 
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledWith"));
+        },
+
+        "works with spyCall": function () {
+            var spy = sinon.spy();
+            var object = {};
+            spy();
+            spy(object);
+
+            sinon.assert.calledWith(spy.lastCall, object);
+            assert(sinon.assert.pass.calledOnce);
+            assert(sinon.assert.pass.calledWith("calledWith"));
         }
     });
 
