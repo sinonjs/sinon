@@ -22,7 +22,9 @@ Don't forget to include the parts of Sinon.JS that you want to use as well
 
 ## Usage
 
-See the [sinon project homepage](http://sinonjs.org/)
+See the [sinon project homepage](http://sinonjs.org/) for documentation on usage.
+
+If you have questions that are not covered by the documentation, please post them to the [Sinon.JS mailinglist](http://groups.google.com/group/sinonjs) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a>
 
 ### Important: AMD needs pre-built version
 
