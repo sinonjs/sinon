@@ -20,6 +20,26 @@ buster.testCase("issues", {
         this.sandbox.restore();
     },
 
+    "// #397": function(){
+        var clock = sinon.useFakeTimers();
+
+        var cb2 = sinon.spy();
+        var cb1 = sinon.spy(function() {
+            setTimeout(cb2, 0);
+        });
+
+        setTimeout(cb1, 0);
+
+        clock.tick(10);
+        assert(cb1.called);
+        assert(!cb2.called);
+
+        clock.tick(10);
+        assert(cb2.called);
+
+        clock.restore();
+    },
+
     "#458": {
         "on node": {
             requiresSupportFor: {
