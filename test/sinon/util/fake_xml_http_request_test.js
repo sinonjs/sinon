@@ -1470,6 +1470,18 @@
 
                 this.xhr.send();
                 this.xhr.respond(403, {}, "");
+            },
+            "triggers (download) progress event when response is done": function (done) {
+                this.xhr.addEventListener("progress", function (e) {
+                    assert.equals(e.total, 100);
+                    assert.equals(e.loaded, 20);
+                    assert.isTrue(e.lengthComputable);
+                    done();
+                });
+                this.xhr.downloadProgress({
+                    total: 100,
+                    loaded: 20
+                });
             }
         },
 
@@ -1483,6 +1495,7 @@
                 this.xhr.upload.addEventListener("progress", function (e) {
                     assert.equals(e.total, 100);
                     assert.equals(e.loaded, 20);
+                    assert.isTrue(e.lengthComputable);
                     done();
                 });
                 this.xhr.uploadProgress({
