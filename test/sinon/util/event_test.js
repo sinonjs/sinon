@@ -112,6 +112,7 @@ buster.testCase("sinon.EventTarget", {
         var progressEvent = new sinon.ProgressEvent("dummyProgress", {loaded: 50, total: 120});
         this.target.dispatchEvent(progressEvent);
 
+        assert.isTrue(progressEvent.lengthComputable);
         assert(listener.calledOnce);
         assert(listener.calledWith(progressEvent));
     },
