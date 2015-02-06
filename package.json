@@ -20,6 +20,7 @@
   ],
   "scripts": {
     "test": "node test/node/run.js",
+    "lint": "jscs **/*.js",
     "prepublish": "./build"
   },
   "dependencies": {
