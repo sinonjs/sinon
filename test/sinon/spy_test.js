@@ -2156,6 +2156,13 @@ if (typeof require === "function" && typeof module === "object") {
         },
 
         ".reset": {
+            "return same object": function () {
+                var spy = sinon.spy();
+                var reset = spy.reset();
+
+                assert(reset === spy);
+            },
+
             "throws if called during spy invocation": function () {
                 var spy = sinon.spy(function () {
                     spy.reset();
