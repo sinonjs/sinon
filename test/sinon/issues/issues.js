@@ -20,11 +20,11 @@ buster.testCase("issues", {
         this.sandbox.restore();
     },
 
-    "// #397": function(){
+    "// #397": function () {
         var clock = sinon.useFakeTimers();
 
         var cb2 = sinon.spy();
-        var cb1 = sinon.spy(function() {
+        var cb1 = sinon.spy(function () {
             setTimeout(cb2, 0);
         });
 
