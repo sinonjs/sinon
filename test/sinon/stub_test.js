@@ -1610,6 +1610,21 @@ buster.testCase("sinon.stub", {
                 assert(fakeC.calledOnce);
             }
         }
+    },
+
+    ".length": {
+        "is zero by default": function () {
+            var stub = sinon.stub();
+
+            assert.equals(stub.length, 0);
+        },
+
+        "matches the function length": function () {
+            var api = { someMethod: function (a, b, c) {} };
+            var stub = sinon.stub(api, "someMethod");
+
+            assert.equals(stub.length, 3);
+        }
     }
 
 });

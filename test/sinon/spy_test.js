@@ -2172,6 +2172,21 @@ if (typeof require === "function" && typeof module === "object") {
                     spy();
                 }, "InvalidResetException");
             }
+        },
+
+        ".length": {
+            "is zero by default": function () {
+                var spy = sinon.spy();
+
+                assert.equals(spy.length, 0);
+            },
+
+            "matches the function length": function () {
+                var api = { someMethod: function (a, b, c) {} };
+                var spy = sinon.spy(api, "someMethod");
+
+                assert.equals(spy.length, 3);
+            }
         }
     });
 }());
