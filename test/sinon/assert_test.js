@@ -642,6 +642,19 @@ buster.testCase("sinon.assert", {
             sinon.assert.calledWith(spy.lastCall, object);
             assert(sinon.assert.pass.calledOnce);
             assert(sinon.assert.pass.calledWith("calledWith"));
+        },
+
+        "fails when spyCall failed": function () {
+            var spy = sinon.spy();
+            var object = {};
+            spy();
+            spy(object);
+
+            assert.exception(function () {
+                sinon.assert.calledWith(spy.lastCall, 1);
+            });
+
+            assert(sinon.assert.fail.called);
         }
     },
 
