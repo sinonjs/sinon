@@ -19,7 +19,8 @@
     }
   ],
   "scripts": {
-    "test": "node test/node/run.js",
+    "ci-test": "./scripts/ci-test.sh",
+    "test": "npm run lint && ./scripts/ci-test.sh",
     "lint": "jscs .",
     "prepublish": "./build"
   },
@@ -29,13 +30,9 @@
     "lolex": "1.1.0"
   },
   "devDependencies": {
-    "buster-core": ">=0.6.4",
-    "buster-assertions": "~0.10",
-    "buster-evented-logger": "~0.4",
-    "buster-test": "~0.5",
-    "buster-format": "~0.5.6",
-    "http-server": "*",
-    "jscs": "1.11.3"
+    "buster": "0.7.18",
+    "jscs": "1.11.3",
+    "samsam": "1.1.2"
   },
   "files": ["lib"],
   "main": "./lib/sinon.js",
