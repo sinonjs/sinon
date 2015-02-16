@@ -48,7 +48,7 @@ formatio not found, skipping. To build with formatio support:
   File.open(file, "w") do |f|
     f.puts("(function (root, factory) {")
     f.puts("  if (typeof define === 'function' && define.amd) {")
-    f.puts("    define([], function () {")
+    f.puts("    define('sinon', [], function () {")
     f.puts("      return (root.sinon = factory());")
     f.puts("    });")
     f.puts("  } else if (typeof exports === 'object') {")
