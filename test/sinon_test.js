@@ -15,7 +15,14 @@ buster.testCase("sinon", {
     ".wrapMethod": {
         setUp: function () {
             this.method = function () {};
-            this.object = { method: this.method };
+            this.getter = function () {};
+            this.setter = function () {};
+            this.object = {method: this.method};
+            Object.defineProperty(this.object, "property", {
+                get: this.getter,
+                set: this.setter,
+                configurable: true
+            });
         },
 
         "is function": function () {
@@ -61,11 +68,11 @@ buster.testCase("sinon", {
             }, "TypeError");
         },
 
-        "throws if third argument is not function": function () {
+        "throws if third argument is not a function or a property descriptor": function () {
             var object = this.object;
 
             assert.exception(function () {
-                sinon.wrapMethod(object, "method", {});
+                sinon.wrapMethod(object, "method", 1);
             }, "TypeError");
         },
 
@@ -76,12 +83,33 @@ buster.testCase("sinon", {
             assert.isFunction(this.object.method);
         },
 
+        "replaces getter": function () {
+            sinon.wrapMethod(this.object, "property", { get: function () {} });
+
+            refute.same(this.getter, Object.getOwnPropertyDescriptor(this.object, "property").get);
+            assert.isFunction(Object.getOwnPropertyDescriptor(this.object, "property").get);
+        },
+
+        "replaces setter": function () {
+            sinon.wrapMethod(this.object, "property", { set: function () {} });
+
+            refute.same(this.setter, Object.getOwnPropertyDescriptor(this.object, "property").set);
+            assert.isFunction(Object.getOwnPropertyDescriptor(this.object, "property").set);
+        },
+
         "throws if method is already wrapped": function () {
-            var object = { method: function () {} };
-            sinon.wrapMethod(object, "method", function () {});
+            sinon.wrapMethod(this.object, "method", function () {});
 
             assert.exception(function () {
-                sinon.wrapMethod(object, "method", function () {});
+                sinon.wrapMethod(this.object, "method", function () {});
+            }, "TypeError");
+        },
+
+        "throws if property descriptor is already wrapped": function () {
+            sinon.wrapMethod(this.object, "property", { get: function () {} });
+
+            assert.exception(function () {
+                sinon.wrapMethod(this.object, "property", { get: function () {} });
             }, "TypeError");
         },
 
