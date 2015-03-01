@@ -74,7 +74,7 @@ The JSCS test will be run before unit tests in the CI environment, your build wi
 You can run the jscs test with
 
 ```
-$ $(npm bin)/jscs .
+$ npm run lint
 ```
 
 or if you have JSCS installed as a global
