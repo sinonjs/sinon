@@ -44,6 +44,12 @@ if (typeof require === "function" && typeof module === "object") {
                 assert.isFalse(this.spy[method](1, 2, 3));
             },
 
+            "returns false if not called with undefined": function () {
+                this.spy();
+
+                assert.isFalse(this.spy[method](undefined));
+            },
+
             "returns true for partial match": function () {
                 this.spy(1, 3, 3);
                 this.spy(2);
