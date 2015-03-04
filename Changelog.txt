@@ -1,3 +1,24 @@
+== 1.13.0 / 2014-03-04
+* fix @depends-require mismatches (fixes AMD issues) (Ben Hockey)
+* Fix spy.calledWith(undefined) to return false if it was called without args
+* yieldsRight (Alexander Schmidt)
+* stubs retain function arity (Charlie Rudolph)
+* (AMD) use explicit define in built version
+* spy().reset() returns this (Ali Shakiba)
+* Add lengthComputable and download progress (Tamas Szebeni)
+* Don't setContent-type when sending FormData (AJ Ortega)
+* sinon.assert with spyCall (Alex Urbano)
+* fakeXHR requests in Node. (Jmeas)
+* Enhancement: run builds on docker (till@php.net)
+* Use FakeXDomainRequest when XHR does not support CORS. Fixes #584 (Eric Wendelin)
+* More lenient check for ActiveXObject
+* aligned sandbox.useFakeXMLHttpRequest API to documentation (Phred)
+* Fix #643. Returns supersedes previous throws (Adam Hull)
+* Safely overwrite properties in IE - no more IE files!
+* Add check for setInterval/clearInterval (kdpecker)
+* Add safety check for document.createElement (kdpecker)
+* Fix #633. Use a try/catch when deleting a property in IE8. (Garrick Cheung)
+
 == 1.12.1 / 2014-11-16
 * Fixed lolex issue on node
 
