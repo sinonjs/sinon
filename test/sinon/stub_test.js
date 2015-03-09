@@ -519,11 +519,11 @@ buster.testCase("sinon.stub", {
             assert.isFunction(stub.restore);
         },
 
-        "throws if third argument is provided but not function": function () {
+        "throws if third argument is provided but not a function or proprety descriptor": function () {
             var object = this.object;
 
             assert.exception(function () {
-                sinon.stub(object, "method", {});
+                sinon.stub(object, "method", 1);
             }, "TypeError");
         },
 
