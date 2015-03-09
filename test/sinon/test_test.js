@@ -138,8 +138,8 @@ buster.testCase("sinon.test", {
     },
 
     "async test with sandbox using mocha interface": function (done) {
-        var it = function(title, fn) {
-            var mochaDone = function(args) {
+        var it = function (title, fn) {
+            var mochaDone = function (args) {
                 assert.equals(args, undefined);
                 done(args);
             };
@@ -150,7 +150,7 @@ buster.testCase("sinon.test", {
             }
         };
         it("works", sinon.test(function (callback) {
-            buster.nextTick(function() {
+            buster.nextTick(function () {
                 callback();
             });
         }));
