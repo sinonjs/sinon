@@ -746,6 +746,39 @@ buster.testCase("sinon.fakeServer", {
         }
     },
 
+    ".respondImmediately": {
+        setUp: function () {
+            this.get = function get(url) {
+                var request = new sinon.FakeXMLHttpRequest();
+                sinon.spy(request, "respond");
+                request.open("get", url, true);
+                request.send();
+                return request;
+            };
+
+            this.server = sinon.fakeServer.create();
+            this.server.respondImmediately = true;
+        },
+
+        tearDown: function () {
+            this.server.restore();
+        },
+
+        "responds synchronously": function () {
+            var request = this.get("/path");
+            assert.isTrue(request.respond.calledOnce);
+        },
+
+        "doesn't rely on a clock": function () {
+            this.clock = sinon.useFakeTimers();
+
+            var request = this.get("/path");
+            assert.isTrue(request.respond.calledOnce);
+
+            this.clock.restore();
+        }
+    },
+
     ".log": {
         setUp: function () {
             this.server = sinon.fakeServer.create();
