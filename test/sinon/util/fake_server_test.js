@@ -764,12 +764,12 @@ buster.testCase("sinon.fakeServer", {
             this.server.restore();
         },
 
-        "responds synchronously": function() {
+        "responds synchronously": function () {
             var request = this.get("/path");
             assert.isTrue(request.respond.calledOnce);
         },
 
-        "doesn't rely on a clock": function() {
+        "doesn't rely on a clock": function () {
             this.clock = sinon.useFakeTimers();
 
             var request = this.get("/path");
