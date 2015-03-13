@@ -1,4 +1,4 @@
-== 1.13.0 / 2014-03-04
+== 1.13.0 / 2015-03-04
 * fix @depends-require mismatches (fixes AMD issues) (Ben Hockey)
 * Fix spy.calledWith(undefined) to return false if it was called without args
 * yieldsRight (Alexander Schmidt)
@@ -264,7 +264,7 @@
 * New method: stub.returnsArg(), causes stub to return one of its arguments.
   (Gavin Huang)
 * Stubs now work for inherited methods. This was previously prohibited to avoid
-  stubbing not-yet-implemented methods. (Felix Geisendörfer)
+  stubbing not-yet-implemented methods. (Felix Geisendörfer)
 * server.respond() can now accept the same arguments as server.respondWith() for
   quick-and-dirty respondWith+respond. (Gavin Huang)
 * Format objects with buster-format in the default bundle. Default to
@@ -277,8 +277,8 @@
 * Bug fix: sinon.test: use try/finally instead of catch and throw - preserves
   stack traces (Kevin Turner)
 * Bug fix: Fake `setTimeout` now returns ids greater than 0. (Domenic Denicola)
-* Bug fix: NPM install warning (Felix Geisendörfer)
-* Bug fix: Fake timers no longer swallows exceptions (Felix Geisendörfer)
+* Bug fix: NPM install warning (Felix Geisendörfer)
+* Bug fix: Fake timers no longer swallows exceptions (Felix Geisendörfer)
 * Bug fix: Properly expose all needed asserts for node
 * Bug fix: wrapMethod on window property (i.e. when stubbing/spying on global
   functions)
