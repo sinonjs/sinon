@@ -1,3 +1,8 @@
+== 1.14.0 / 2015-03-13
+* Stub & spy getters & setters (Simon Zack)
+* Fix #702 async sinon.test using mocha interface (Mohayonao)
+* Add respondImmediately to fake servers (Jonathan Freeman)
+
 == 1.13.0 / 2015-03-04
 * fix @depends-require mismatches (fixes AMD issues) (Ben Hockey)
 * Fix spy.calledWith(undefined) to return false if it was called without args
