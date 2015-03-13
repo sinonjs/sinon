@@ -137,6 +137,25 @@ buster.testCase("sinon.test", {
         }).call({}, fakeDone);
     },
 
+    "async test with sandbox using mocha interface": function (done) {
+        var it = function (title, fn) {
+            var mochaDone = function (args) {
+                assert.equals(args, undefined);
+                done(args);
+            };
+            if (fn.length) {
+                fn.call(this, mochaDone);
+            } else {
+                fn.call(this);
+            }
+        };
+        it("works", sinon.test(function (callback) {
+            buster.nextTick(function () {
+                callback();
+            });
+        }));
+    },
+
     "async test with sandbox and spy": function (done) {
         sinon.test(function (callback) {
             var globalObj = {
