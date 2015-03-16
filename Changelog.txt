@@ -1,3 +1,7 @@
+== 1.14.1 / 2015-03-16
+* Fallback for .restore() native code functions on Chrome & PhantomJS (なつき)
+* Restore support for sinon in IE<9 (Harry Wolff)
+
 == 1.14.0 / 2015-03-13
 * Stub & spy getters & setters (Simon Zack)
 * Fix #702 async sinon.test using mocha interface (Mohayonao)
