@@ -907,6 +907,72 @@ if (typeof require === "function" && typeof module === "object") {
             }
         },
 
+        ".argNames": {
+            //jscs:disable disallowDanglingUnderscores
+            setUp: function () {
+                this.spy = sinon.spy.create();
+                this.spy.argNames = ["foo", "bar"];
+            },
+
+            "creates aliased argument arrays on spy": function () {
+                this.spy("baz", 1);
+                this.spy(false, {a:"b"});
+
+                assert.equals(this.spy._foo, ["baz", false]);
+                assert.equals(this.spy._bar, [1, {a:"b"}]);
+            },
+
+            "creates aliased argument properties on spyCalls": function () {
+                this.spy("baz", 1);
+                this.spy(false, {a:"b"});
+
+                assert.equals(this.spy.firstCall._foo, "baz");
+                assert.equals(this.spy.firstCall._bar, 1);
+                assert.equals(this.spy.secondCall._foo, false);
+                assert.equals(this.spy.secondCall._bar, {a:"b"});
+            },
+
+            "creates aliased argument arrays on withArgs fakes": function () {
+                this.spy("baz", "quz");
+                this.spy("fred", "waldo");
+                this.spy("baz", 1);
+                this.spy("fred", 2);
+                this.spy("baz", true);
+                this.spy("fred", {a:"b"});
+
+                var bazFake = this.spy.withArgs("baz");
+                var fredFake = this.spy.withArgs("fred");
+
+                assert.equals(bazFake._foo, ["baz", "baz", "baz"]);
+                assert.equals(bazFake._bar, ["quz", 1, true]);
+                assert.equals(fredFake._foo, ["fred", "fred", "fred"]);
+                assert.equals(fredFake._bar, ["waldo", 2, {a:"b"}]);
+            },
+
+            "creates aliased argument properties on withArgs spyCalls": function () {
+                this.spy("baz", "quz");
+                this.spy("fred", "waldo");
+                this.spy("baz", 1);
+                this.spy("fred", 2);
+                this.spy("baz", true);
+                this.spy("fred", {a:"b"});
+
+                var bazFake = this.spy.withArgs("baz");
+                var fredFake = this.spy.withArgs("fred");
+
+                assert.equals(bazFake.firstCall._foo, "baz");
+                assert.equals(bazFake.firstCall._bar, "quz");
+                assert.equals(bazFake.secondCall._bar, 1);
+                assert.equals(bazFake.thirdCall._bar, true);
+
+                assert.equals(fredFake.firstCall._foo, "fred");
+                assert.equals(fredFake.firstCall._bar, "waldo");
+                assert.equals(fredFake.secondCall._bar, 2);
+                assert.equals(fredFake.thirdCall._bar, {a:"b"});
+            }
+            //jscs:enable disallowDanglingUnderscores
+        },
+
         ".calledWithExactly": {
             setUp: function () {
                 this.spy = sinon.spy.create();
