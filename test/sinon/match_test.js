@@ -248,13 +248,17 @@ buster.testCase("sinon.match", {
     },
 
     "returns true if test function in object returns true": function () {
-        var match = sinon.match({ test: function () { return true; }});
+        var match = sinon.match({ test: function () {
+            return true;
+        }});
 
         assert(match.test());
     },
 
     "returns false if test function in object returns false": function () {
-        var match = sinon.match({ test: function () { return false; }});
+        var match = sinon.match({ test: function () {
+            return false;
+        }});
 
         assert.isFalse(match.test());
     },
@@ -266,7 +270,9 @@ buster.testCase("sinon.match", {
     },
 
     "passes actual value to test function in object": function () {
-        var match = sinon.match({ test: function (arg) { return arg; }});
+        var match = sinon.match({ test: function (arg) {
+            return arg;
+        }});
 
         assert(match.test(true));
     },

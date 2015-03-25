@@ -551,14 +551,18 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "is true if called with matcher that returns true": function () {
-                var matcher = sinon.match(function () { return true; });
+                var matcher = sinon.match(function () {
+                    return true;
+                });
                 this.spy();
 
                 assert(this.spy.calledOn(matcher));
             },
 
             "is false if called with matcher that returns false": function () {
-                var matcher = sinon.match(function () { return false; });
+                var matcher = sinon.match(function () {
+                    return false;
+                });
                 this.spy();
 
                 assert.isFalse(this.spy.calledOn(matcher));
@@ -672,7 +676,9 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "is true newed constructor returns object": function () {
-                function MyThing() { return {}; }
+                function MyThing() {
+                    return {};
+                }
                 var object = { MyThing: MyThing };
                 sinon.spy(object, "MyThing");
 
@@ -1582,7 +1588,9 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "is tracked even if exceptions are thrown": function () {
-                var spy = sinon.spy(function () { throw "an exception"; });
+                var spy = sinon.spy(function () {
+                    throw "an exception";
+                });
 
                 try {
                     spy();
@@ -1592,7 +1600,9 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "has correct returnValue": function () {
-                var spy = sinon.spy(function () { return 42; });
+                var spy = sinon.spy(function () {
+                    return 42;
+                });
 
                 spy();
 
@@ -1602,7 +1612,9 @@ if (typeof require === "function" && typeof module === "object") {
 
             "has correct exception": function () {
                 var err = new Error();
-                var spy = sinon.spy(function () { throw err; });
+                var spy = sinon.spy(function () {
+                    throw err;
+                });
 
                 try {
                     spy();

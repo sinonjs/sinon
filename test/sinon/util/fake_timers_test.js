@@ -32,7 +32,9 @@ buster.testCase("sinon.clock", {
         "throws if no arguments": function () {
             var clock = this.clock;
 
-            assert.exception(function () { clock.setTimeout(); });
+            assert.exception(function () {
+                clock.setTimeout();
+            });
         },
 
         "returns numeric id or object with numeric id": function () {
@@ -87,7 +89,9 @@ buster.testCase("sinon.clock", {
         "calls correct timeout on recursive tick": function () {
             var clock = sinon.clock.create();
             var stub = sinon.stub.create();
-            var recurseCallback = function () { clock.tick(100); };
+            var recurseCallback = function () {
+                clock.tick(100);
+            };
 
             clock.setTimeout(recurseCallback, 50);
             clock.setTimeout(stub, 100);

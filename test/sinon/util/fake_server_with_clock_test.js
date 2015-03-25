@@ -14,7 +14,9 @@ buster.testCase("sinon.fakeServerWithClock", {
 
         tearDown: function () {
             this.server.restore();
-            if (this.clock) { this.clock.restore(); }
+            if (this.clock) {
+                this.clock.restore();
+            }
         },
 
         "calls 'super' when adding requests": sinon.test(function () {

@@ -32,13 +32,17 @@
         }
     };
 
-    if (asciiFormat) { buster.assertions.format = asciiFormat; }
+    if (asciiFormat) {
+        buster.assertions.format = asciiFormat;
+    }
     global.assert = buster.assertions.assert;
     global.refute = buster.assertions.refute;
 
     // Assertion counting
     var assertions = 0;
-    var count = function () { assertions += 1; };
+    var count = function () {
+        assertions += 1;
+    };
     buster.assertions.on("pass", count);
     buster.assertions.on("failure", count);
 
@@ -65,7 +69,9 @@
         });
     });
 
-    buster.testRunner.assertionCount = function () { return assertions; };
+    buster.testRunner.assertionCount = function () {
+        return assertions;
+    };
 
     var runner = buster.autoRun({
         cwd: typeof process != "undefined" ? process.cwd() : null

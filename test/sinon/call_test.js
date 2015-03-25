@@ -1126,7 +1126,9 @@ if (typeof require === "function" && typeof module === "object") {
             },
 
             "initializes filtered spy with return values": function () {
-                var spy = sinon.spy(function (value) { return value; });
+                var spy = sinon.spy(function (value) {
+                    return value;
+                });
                 spy("a");
                 spy("b");
                 spy("b");

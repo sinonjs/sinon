@@ -116,7 +116,9 @@ buster.testCase("sinon.stub", {
 
         "stub returns undefined when detached": {
             requiresSupportFor: {
-                strictMode: (function () { return this; }()) === undefined
+                strictMode: (function () {
+                    return this;
+                }()) === undefined
             },
             "": function () {
                 var stub = sinon.stub.create();
@@ -1177,7 +1179,9 @@ buster.testCase("sinon.stub", {
             stub.withArgs(42).throws();
 
             refute.exception(stub);
-            assert.exception(function () { stub(42); });
+            assert.exception(function () {
+                stub(42);
+            });
         }
     },
 

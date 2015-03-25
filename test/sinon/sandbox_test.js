@@ -264,7 +264,9 @@ if (typeof require == "function" && typeof module == "object") {
 
             tearDown: function () {
                 sinon.useFakeTimers.restore();
-                if (sinon.fakeServer) { sinon.fakeServer.create.restore(); }
+                if (sinon.fakeServer) {
+                    sinon.fakeServer.create.restore();
+                }
             },
 
             "yields stub, mock as arguments": function () {
