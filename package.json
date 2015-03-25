@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "test": "node test/node/run.js",
-    "lint": "jscs **/*.js",
+    "lint": "jscs .",
     "prepublish": "./build"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "buster-test": "~0.5",
     "buster-format": "~0.5.6",
     "http-server": "*",
-    "jscs": "~1.5.9"
+    "jscs": "1.11.3"
   },
   "main": "./lib/sinon.js",
   "engines": {
