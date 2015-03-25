@@ -71,17 +71,11 @@ Sinon.JS uses [JSCS](https://github.com/mdevils/node-jscs) to keep consistent st
 
 The JSCS test will be run before unit tests in the CI environment, your build will fail if it doesn't pass the style check.
 
-You can run the jscs test with
-
 ```
 $ npm run lint
 ```
 
-or if you have JSCS installed as a global
-
-```
-$ jscs .
-```
+To ensure consistent reporting of lint warnings, you should use the same version as CI environment (defined in `package.json`)
 
 ### Run the tests
 
