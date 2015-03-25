@@ -25,8 +25,12 @@ buster.testCase("sinon.extend", {
     },
 
     "should copy toString method into target": function () {
-        var target = { hello: "world", toString: function () { return "hello world"; }},
-            source = { toString: function () { return "hello source"; }};
+        var target = { hello: "world", toString: function () {
+                return "hello world";
+            }},
+            source = { toString: function () {
+                return "hello source";
+            }};
 
         sinon.extend(target, source);
 

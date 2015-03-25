@@ -1093,7 +1093,9 @@
             "does not defake XHR requests that don't match a filter": function () {
                 sinon.stub(sinon.FakeXMLHttpRequest, "defake");
 
-                sinon.FakeXMLHttpRequest.addFilter(function () { return false; });
+                sinon.FakeXMLHttpRequest.addFilter(function () {
+                    return false;
+                });
                 new XMLHttpRequest().open("GET", "http://example.com");
 
                 refute(sinon.FakeXMLHttpRequest.defake.called);
@@ -1102,7 +1104,9 @@
             "defakes XHR requests that match a filter": function () {
                 sinon.stub(sinon.FakeXMLHttpRequest, "defake");
 
-                sinon.FakeXMLHttpRequest.addFilter(function () { return true; });
+                sinon.FakeXMLHttpRequest.addFilter(function () {
+                    return true;
+                });
                 new XMLHttpRequest().open("GET", "http://example.com");
 
                 assert(sinon.FakeXMLHttpRequest.defake.calledOnce);
@@ -1193,7 +1197,9 @@
                 sinon.FakeXMLHttpRequest.useFilters = true;
                 sinon.FakeXMLHttpRequest.filters = [];
                 sinon.useFakeXMLHttpRequest();
-                sinon.FakeXMLHttpRequest.addFilter(function () { return true; });
+                sinon.FakeXMLHttpRequest.addFilter(function () {
+                    return true;
+                });
             },
 
             tearDown: function () {

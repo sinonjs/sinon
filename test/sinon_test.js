@@ -144,7 +144,9 @@ buster.testCase("sinon", {
 
             "throws with stack trace showing original wrapMethod call": function () {
                 var object = { method: function () {} };
-                sinon.wrapMethod(object, "method", function () { return "original" });
+                sinon.wrapMethod(object, "method", function () {
+                    return "original"
+                });
 
                 try {
                     sinon.wrapMethod(object, "method", function () {});
@@ -631,7 +633,9 @@ buster.testCase("sinon", {
         },
 
         "has no side effects on the prototype": function () {
-            var proto = {method: function () {throw "error"}};
+            var proto = {method: function () {
+                throw "error"
+            }};
             var Class = function () {};
             Class.prototype = proto;
 

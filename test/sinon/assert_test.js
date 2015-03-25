@@ -65,8 +65,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".match": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when arguments to not match": function () {
             assert.exception(function () {
@@ -83,8 +88,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".called": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             assert.exception(function () {
@@ -137,8 +147,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".notCalled": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             assert.exception(function () {
@@ -187,8 +202,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledOnce": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             assert.exception(function () {
@@ -250,8 +270,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledTwice": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails if called once": function () {
             var stub = this.stub;
@@ -284,8 +309,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledThrice": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails if called once": function () {
             var stub = this.stub;
@@ -320,8 +350,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".callOrder": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "passes when calls where done in right order": function () {
             var spy1 = sinon.spy();
@@ -426,8 +461,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledOn": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             var object = {};
@@ -486,8 +526,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledWithNew": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             sinon.stub(this.stub, "calledWithNew");
@@ -541,8 +586,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".alwaysCalledWithNew": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method does not exist": function () {
             sinon.stub(this.stub, "alwaysCalledWithNew");
@@ -596,8 +646,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledWith": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method fails": function () {
             var object = {};
@@ -659,8 +714,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".calledWithExactly": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method fails": function () {
             var object = {};
@@ -698,8 +758,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".neverCalledWith": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method fails": function () {
             var object = {};
@@ -737,8 +802,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".threwTest": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method fails": function () {
             sinon.stub(this.stub, "threw").returns(false);
@@ -775,8 +845,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".callCount": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails when method fails": function () {
             this.stub();
@@ -811,8 +886,13 @@ buster.testCase("sinon.assert", {
     },
 
     ".alwaysCalledOn": {
-        setUp: function () { this.setUpStubs(); },
-        tearDown: function () { this.tearDownStubs(); },
+        setUp: function () {
+            this.setUpStubs();
+        },
+
+        tearDown: function () {
+            this.tearDownStubs();
+        },
 
         "fails if method is missing": function () {
             assert.exception(function () {
@@ -1169,8 +1249,16 @@ buster.testCase("sinon.assert", {
                 return "[Oh yeah]";
             };
 
-            var obj = { toString: function () { return "[Oh no]"; } };
-            var obj2 = { toString: function () { return "[Oh well]"; } };
+            var obj = {
+                toString: function () {
+                    return "[Oh no]";
+                }
+             };
+            var obj2 = {
+                toString: function () {
+                    return "[Oh well]";
+                }
+            };
 
             this.obj.doSomething.call(obj);
             this.obj.doSomething.call(obj2);
@@ -1184,8 +1272,16 @@ buster.testCase("sinon.assert", {
                 return "[Oh yeah]";
             };
 
-            var obj = { toString: function () { return "[Oh no]"; } };
-            var obj2 = { toString: function () { return "[Oh well]"; } };
+            var obj = {
+                toString: function () {
+                    return "[Oh no]";
+                }
+             };
+            var obj2 = {
+                toString: function () {
+                    return "[Oh well]";
+                }
+            };
 
             this.obj.doSomething.call(obj);
             this.obj.doSomething.call(obj2);
