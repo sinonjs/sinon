@@ -637,6 +637,12 @@ buster.testCase("sinon.stub", {
 
         "only stubs functions": function () {
             var object = { foo: "bar" };
+            Object.defineProperty(object, "bar", {
+                get: function() {
+                    fail("Expected not to be called");
+                },
+                enumerable: true
+            });
             sinon.stub(object);
 
             assert.equals(object.foo, "bar");
