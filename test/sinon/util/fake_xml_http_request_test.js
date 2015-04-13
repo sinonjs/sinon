@@ -1543,6 +1543,28 @@
                 this.xhr.respond(200, {}, "");
             },
 
+            "fires events in an order similar to a browser": function (done) {
+                var xhr = this.xhr,
+                    events = [];
+
+                this.xhr.upload.addEventListener("progress", function (e) {
+                    events.push(e.type);
+                });
+                this.xhr.upload.addEventListener("load", function (e) {
+                    events.push(e.type);
+                });
+                this.xhr.addEventListener("readystatechange", function (e) {
+                    if (xhr.readyState === 4) {
+                        events.push(e.type);
+                        assert.equals(events, ["progress", "load", "readystatechange"]);
+                        done();
+                    }
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            },
+
             "calls 'abort' on cancel": function (done) {
                 var xhr = this.xhr;
 
