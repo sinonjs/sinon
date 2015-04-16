@@ -1338,11 +1338,13 @@ buster.testCase("sinon.stub", {
         "can be used with returns to produce sequence": function () {
             var stub = sinon.stub().returns(3);
             stub.onFirstCall().returns(1)
-                .onCall(2).returns(2);
+                .onCall(2).returns(2)
+                .onLastCall().returns(4);
 
             assert.same(stub(), 1);
             assert.same(stub(), 3);
             assert.same(stub(), 2);
+            assert.same(stub(), 4);
             assert.same(stub(), 3);
         },
 
