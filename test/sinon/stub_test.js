@@ -1339,7 +1339,7 @@ buster.testCase("sinon.stub", {
             var stub = sinon.stub().returns(3);
             stub.onFirstCall().returns(1)
                 .onCall(2).returns(2)
-                .onLastCall().returns(4);
+                .onCall().returns(4);
 
             assert.same(stub(), 1);
             assert.same(stub(), 3);
