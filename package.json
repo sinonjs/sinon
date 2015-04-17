@@ -37,6 +37,7 @@
     "http-server": "*",
     "jscs": "1.11.3"
   },
+  "files": ["lib"],
   "main": "./lib/sinon.js",
   "engines": {
     "node": ">=0.1.103"
