@@ -14,11 +14,11 @@ before_install:
   - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.8" ]; then npm install -g npm@1.4; fi'
 
 before_script:
-  - 'if [ "x$TRAVIS_NODE_VERSION" != "x0.6" ]; then $(npm bin)/jscs .; fi'
+  # we only need to run jscs once per build, so let's conserve a few resources
+  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then $(npm bin)/jscs .; fi'
 
 script:
-  - npm test
-  - "./test/phantom/run.sh"
+  - ./scripts/ci-test.sh
 
 git:
   depth: 10

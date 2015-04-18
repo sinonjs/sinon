@@ -65,6 +65,12 @@ Node installed, and install Sinon's dependencies:
 
     $ npm install
 
+#### PhantomJS
+
+In order to run the tests, you'll need a [PhantomJS](http://phantomjs.org) global.
+
+The test suite runs well with both `1.9.x` and `2.0.0`
+
 ### Style
 
 Sinon.JS uses [JSCS](https://github.com/mdevils/node-jscs) to keep consistent style. You probably want to install one of their plugins for your editor.
@@ -79,21 +85,38 @@ To ensure consistent reporting of lint warnings, you should use the same version
 
 ### Run the tests
 
-#### On Node
+This runs linting as well as unit tests in both PhantomJS and node
 
     $ npm test
 
-#### In the browser
-
-Some tests needs working XHR to pass. To run the tests over an HTTP server, run
-
-    $ node_modules/http-server/bin/http-server
-
 ##### Testing in development
 
-Open [localhost:8080/test/sinon.html](http://localhost:8080/test/sinon.html) in a browser.
+Sinon.JS uses [Buster.JS](http://busterjs.org), please read those docs if you're unfamiliar with it.
+
+If you just want to run tests a few times
+
+    $ npm run ci-test
+
+If you're doing more than a one line edit, you'll want to have finer control and less restarting of the Buster server and PhantomJS process
+
+    # start a server
+    $ $(npm bin)/buster-server
+
+    # capture a browser by pointing it to http://localhost:1111/capture
+    # run tests (in both browser and node)
+    $ $(npm bin)/buster-test
+
+    # run tests only in browser
+    $ $(npm bin)/buster-test --config-group browser
+
+    # run tests only in node
+    $ $(npm bin)/buster-test --config-group node
+
+If you install `Buster.JS` as a global, you can remove `$(npm-bin)/` from the lines above.
 
 ##### Testing a built version
+
+FIXME: This section needs updating
 
 To test against a built distribution, first
 make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
@@ -108,11 +131,3 @@ If the build script is unable to find Juicer, try
     $ ruby -rubygems build
 
 Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist.html) in a browser.
-
-#### In PhantomJS
-
-If you have [PhantomJS](http://phantomjs.org) installed as a global, you can run the test suite in PhantomJS
-
-```
-$ test/phantom/run.sh
-```
