@@ -47,6 +47,7 @@ formatio not found, skipping. To build with formatio support:
 
   File.open(file, "w") do |f|
     f.puts("(function (root, factory) {")
+    f.puts("  'use strict';");
     f.puts("  if (typeof define === 'function' && define.amd) {")
     f.puts("    define('sinon', [], function () {")
     f.puts("      return (root.sinon = factory());")
@@ -57,7 +58,8 @@ formatio not found, skipping. To build with formatio support:
     f.puts("    root.sinon = factory();")
     f.puts("  }")
     f.puts("}(this, function () {")
-    f.puts("  var samsam, formatio;")
+    f.puts("  'use strict';");
+    f.puts("  var samsam, formatio, lolex;")
     f.puts("  (function () {")
     f.puts(<<EOF)
                 function define(mod, deps, fn) {
@@ -71,7 +73,7 @@ formatio not found, skipping. To build with formatio support:
                 }
 EOF
     f.puts("    define.amd = {};")
-    f.puts(File.read("./node_modules/formatio/node_modules/samsam/lib/samsam.js"))
+    f.puts(File.read("./node_modules/samsam/lib/samsam.js"))
     f.puts(File.read("./node_modules/formatio/lib/formatio.js"))
     f.puts(File.read("./node_modules/lolex/lolex.js"))
     f.puts("  })();")

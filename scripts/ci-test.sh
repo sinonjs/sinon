@@ -11,13 +11,22 @@ function finish {
 
 trap finish SIGINT SIGTERM EXIT
 
+echo
 echo starting buster-server
 ./node_modules/buster/bin/buster-server & # fork to a subshell
 sleep 4 # takes a while for buster server to start
 
+echo
 echo starting phantomjs
 phantomjs ./node_modules/buster/script/phantom.js &
 sleep 1 # give phantomjs a second to warm up
 
-echo starting buster-test
+echo
+echo "starting buster-test (source)"
 ./node_modules/buster/bin/buster-test
+
+
+echo
+echo "starting buster-test (packaged)"
+./build
+./node_modules/buster/bin/buster-test --config test/buster-packaged.js
