@@ -53,6 +53,20 @@ new features. To avoid wasting your time, please ask for feedback on feature
 suggestions either with [an issue](http://github.com/cjohansen/Sinon.JS/issues/new)
 or on [the mailing list](http://groups.google.com/group/sinonjs).
 
+### Making a pull request
+
+Please try to [write great commit messages](http://chris.beams.io/posts/git-commit/).
+
+There are numerous benefits to great commit messages
+
+* They allow Sinon.JS users to easily understand the consequences of updating to a newer version
+* They help contributors understand what is going on with the codebase, allowing features and fixes to be developed faster
+* They save maintainers time when compiling the changelog for a new release
+
+If you're already a few commits in by the time you read this, you can still [change your commit messages](https://help.github.com/articles/changing-a-commit-message/).
+
+Also, before making your pull request, consider if your commits make sense on their own (and potentially should be multiple pull requests) or if they can be squashed down to one commit (with a great message). There are no hard and fast rules about this, but being mindful of your readers greatly help you author good commits.
+
 ### Use EditorConfig
 
 To save everyone some time, please use [EditorConfig](http://editorconfig.org), so your editor helps make
@@ -116,8 +130,6 @@ If you install `Buster.JS` as a global, you can remove `$(npm-bin)/` from the li
 
 ##### Testing a built version
 
-FIXME: This section needs updating
-
 To test against a built distribution, first
 make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
 
@@ -130,4 +142,7 @@ If the build script is unable to find Juicer, try
 
     $ ruby -rubygems build
 
-Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist.html) in a browser.
+Once built, you can run the tests against the packaged version as part of the `ci-test.sh` script.
+
+    ./scripts/ci-test.sh
+
