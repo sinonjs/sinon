@@ -130,8 +130,6 @@ If you install `Buster.JS` as a global, you can remove `$(npm-bin)/` from the li
 
 ##### Testing a built version
 
-FIXME: This section needs updating
-
 To test against a built distribution, first
 make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
 
@@ -144,5 +142,7 @@ If the build script is unable to find Juicer, try
 
     $ ruby -rubygems build
 
-Open [localhost:8080/test/sinon-dist.html](http://localhost:8080/test/sinon-dist.html) in a browser.
+Once built, you can run the tests against the packaged version as part of the `ci-test.sh` script.
+
+    ./scripts/ci-test.sh
 
