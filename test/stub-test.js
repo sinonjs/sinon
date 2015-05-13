@@ -600,7 +600,7 @@
         },
 
         everything: {
-           "stubs all methods of object without property": function () {
+            "stubs all methods of object without property": function () {
                 var obj = {
                     func1: function () {},
                     func2: function () {},

@@ -914,6 +914,22 @@
                 assert.equals(this.xhr.requestHeaders, {});
             },
 
+            "does not have undefined response headers": function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.abort();
+
+                assert.defined(this.xhr.responseHeaders);
+            },
+
+            "nulls response headers": function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.abort();
+
+                assert.equals(this.xhr.responseHeaders, {});
+            },
+
             "sets state to DONE if sent before": function () {
                 var readyState;
                 this.xhr.open("GET", "/");
