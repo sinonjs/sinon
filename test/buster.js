@@ -22,6 +22,18 @@ config.browser = {
     ]
 };
 
+config.coverage = {
+    extends: "browser",
+    "buster-istanbul": {
+        outputDirectory: "coverage",
+        format: "lcov",
+        excludes: ["**/*.json"]
+    },
+    extensions: [
+        require("buster-istanbul")
+    ]
+};
+
 config.node = {
     environment: "node",
     rootPath: "../",

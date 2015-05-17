@@ -3,6 +3,7 @@
     "excludeFiles": [
         "node_modules/**",
         "build/*",
+        "coverage/*",
         "pkg/*"
     ],
     "preset": "crockford",
