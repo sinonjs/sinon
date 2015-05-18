@@ -32,9 +32,12 @@
   },
   "devDependencies": {
     "buster": "0.7.18",
-    "jscs": "1.11.3"
+    "jscs": "1.11.3",
+    "buster-istanbul": "0.1.13"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "main": "./lib/sinon.js",
   "engines": {
     "node": ">=0.1.103"
