@@ -12,12 +12,7 @@
     "mail": "christian@cjohansen.no",
     "url": "http://github.com/cjohansen/Sinon.JS/issues"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "http://github.com/cjohansen/Sinon.JS/blob/master/LICENSE"
-    }
-  ],
+  "license": "BSD-3-Clause",
   "scripts": {
     "ci-test": "./scripts/ci-test.sh",
     "test": "npm run lint && ./scripts/ci-test.sh",
