@@ -26,6 +26,20 @@
             assert.isObject(sinon.assert);
         },
 
+        "supports proxy property": function () {
+            var failed = false;
+            var api = { method: function () {} };
+            api.method.proxy = function () {};
+            sinon.spy(api, "method");
+            api.method();
+            try {
+                sinon.assert.calledOnce(api.method);
+            } catch (e) {
+                failed = true;
+            }
+            assert.isFalse(failed);
+        },
+
         ".fail": {
             setUp: function () {
                 this.exceptionName = sinon.assert.failException;
