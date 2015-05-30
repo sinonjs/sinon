@@ -1,3 +1,28 @@
+1.15.0 / 2015-05-30
+==================
+* Fixed bug where assertions don't handle functions that have a property named proxy
+* update license attribute
+* Add test coverage report
+* responseHeaders on abort are empty object
+* Fix pre-existing style error
+* Update documentation to cover testing built version
+* Update CONTRIBUTING.md with section about "Making a pull request"
+* Improve RELEASE.md to reduce effort when cutting a new release
+* Deprecate mock
+* Release.md
+* Make `npm docs sinon` work.
+* Run unit tests against packaged version in CI environment
+* Remove unused Gruntfile
+* Use Vanilla Buster.JS
+* Use `files` in package.json
+* Fix code style
+* Don't stub getter properties
+* Event listeners for `progress`, `load` and `readystatechange` in the `readyStateChange` function in  `FakeXMLHttpRequest` are dispatched in a different order in comparison to a browser. Reorder the events dispatched to reflect general browser behaviour.
+* Update linting instructions in CONTRIBUTING.md
+* Lint all files with new linter
+* Update JSCS to 1.11.3 and make npm lint task verify all files
+* Cleanup .restore()
+
 == 1.14.1 / 2015-03-16
 * Fallback for .restore() native code functions on Chrome & PhantomJS (なつき)
 * Restore support for sinon in IE<9 (Harry Wolff)
