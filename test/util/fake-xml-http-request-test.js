@@ -990,6 +990,65 @@
             }
         },
 
+        ".response": {
+            requiresSupportFor: {
+                "browser": typeof window !== "undefined"
+            },
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            },
+
+            "is initially the empty string if responseType !== 'json'": function () {
+                this.xhr.responseType = "arraybuffer";
+                this.xhr.open("GET", "/");
+                assert.isString(this.xhr.response);
+                assert.equals(this.xhr.response, "");
+            },
+
+            "is initially null if responseType === 'json'": function () {
+                this.xhr.responseType = "json";
+                this.xhr.open("GET", "/");
+                assert.isNull(this.xhr.response);
+            },
+
+            "is the empty string when the response body is empty": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.respond(200, {}, "");
+
+                assert.isString(this.xhr.response);
+                assert.equals(this.xhr.response, "");
+            },
+
+            "parses JSON for responseType='json'": function () {
+                this.xhr.responseType = "json";
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.respond(200, { "Content-Type": "application/json" },
+                                 JSON.stringify({foo: true}));
+
+                var response = this.xhr.response;
+                assert.isObject(response);
+                assert.isTrue(response.foo);
+            },
+
+            "does not parse JSON if responseType!='json'": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                var responseText = JSON.stringify({foo: true});
+
+                this.xhr.respond(200, { "Content-Type": "application/json" },
+                                 responseText);
+
+                var response = this.xhr.response;
+                assert.isString(response);
+                assert.equals(response, responseText);
+            }
+        },
+
         ".responseXML": {
             requiresSupportFor: {
                 "browser": typeof window !== "undefined"
