@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "1.15.2",
+  "version": "1.15.3",
   "homepage": "http://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -31,7 +31,13 @@
     "buster-istanbul": "0.1.13"
   },
   "files": [
-    "lib"
+    "lib",
+    "pkg",
+    "AUTHORS",
+    "CONTRIBUTING.md",
+    "Changelog.txt",
+    "LICENSE",
+    "README.md"
   ],
   "main": "./lib/sinon.js",
   "engines": {
