@@ -749,35 +749,35 @@
                 var object = { doIt: sinon.spy() };
                 object.doIt();
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt()");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt()");
             },
 
             "includes single argument": function () {
                 var object = { doIt: sinon.spy() };
                 object.doIt(42);
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(42)");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42)");
             },
 
             "includes all arguments": function () {
                 var object = { doIt: sinon.spy() };
                 object.doIt(42, "Hey");
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(42, Hey)");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42, Hey)");
             },
 
             "includes explicit return value": function () {
                 var object = { doIt: sinon.stub().returns(42) };
                 object.doIt(42, "Hey");
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(42, Hey) => 42");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42, Hey) => 42");
             },
 
             "includes empty string return value": function () {
                 var object = { doIt: sinon.stub().returns("") };
                 object.doIt(42, "Hey");
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(42, Hey) => ");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42, Hey) => ");
             },
 
             "includes exception": function () {
@@ -787,7 +787,7 @@
                     object.doIt();
                 } catch (e) {}
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt() !TypeError");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError");
             },
 
             "includes exception message if any": function () {
@@ -797,7 +797,7 @@
                     object.doIt();
                 } catch (e) {}
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt() !TypeError(Oh noes!)");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError(Oh noes!)");
             },
 
             "formats arguments with sinon.format": function () {
@@ -806,7 +806,7 @@
 
                 object.doIt(42);
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt(Forty-two)");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(Forty-two)");
                 assert(sinon.format.calledWith(42));
             },
 
@@ -816,7 +816,7 @@
 
                 object.doIt();
 
-                assert.equals(object.doIt.getCall(0).toString(), "doIt() => Forty-two");
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() => Forty-two");
                 assert(sinon.format.calledWith(42));
             }
         },
@@ -1209,7 +1209,7 @@
                     function test(arg, expected) {
                         var spy = sinon.spy();
                         spy(arg);
-                        assert.equals(spy.printf("%C"), "\n    " + expected);
+                        assert.equals(spy.printf("%C").replace(/ at.*/g, ""), "\n    " + expected);
                     }
 
                     test(true, "spy(true)");
@@ -1232,7 +1232,7 @@
                     spy(str);
                     spy(str);
 
-                    assert.equals(spy.printf("%C"),
+                    assert.equals(spy.printf("%C").replace(/ at.*/g, ""),
                         "\n    spy(" + str + ")" +
                         "\n\n    spy(" + str + ")" +
                         "\n\n    spy(" + str + ")");
@@ -1243,7 +1243,7 @@
                     spy("spy\ntest");
                     spy("spy\ntest");
 
-                    assert.equals(spy.printf("%C"),
+                    assert.equals(spy.printf("%C").replace(/ at.*/g, ""),
                         "\n    spy(test)" +
                         "\n    spy(" + str + ")" +
                         "\n\n    spy(" + str + ")");
