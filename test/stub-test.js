@@ -222,10 +222,10 @@
           },
 
           "calls fake function" : function () {
-              var callback = sinon.stub.create();
-              this.stub.callsFake(callback);
-              this.stub(1, 2, callback);
-              assert(callback.called);
+              var fake = sinon.stub.create();
+              this.stub.callsFake(fake);
+              this.stub(1, 2);
+              assert(fake.calledWith(1, 2));
           }
         },
         ".callsArg": {
