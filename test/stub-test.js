@@ -215,7 +215,19 @@
                 }
             }
         },
+        ".callsFake" : {
 
+          setUp: function () {
+              this.stub = sinon.stub.create();
+          },
+
+          "calls fake function" : function () {
+              var fake = sinon.stub.create();
+              this.stub.callsFake(fake);
+              this.stub(1, 2);
+              assert(fake.calledWith(1, 2));
+          }
+        },
         ".callsArg": {
             setUp: function () {
                 this.stub = sinon.stub.create();
