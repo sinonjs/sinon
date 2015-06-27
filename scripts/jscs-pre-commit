@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Adapted from
+# https://raw.githubusercontent.com/flightjs/flight/master/jscs-pre-commit
+
+export JSCS_PATH='node_modules/.bin/jscs'
+
+# Extract staged files to a temp directory
+TMPDIR=
+TMPFILE=
+if [ "$IS_LINUX" == "true" ]; then
+    TMPFILE=`mktemp jscs_tmp_XXXXXX`
+    TMPDIR=`mktemp -d jscs_tmp_XXXXXX`
+else
+    TMPFILE=`mktemp -t tmp/jscs_tmp_XXXXXX`
+    TMPDIR=`mktemp -t tmp/jscs_tmp -d`
+fi
+git diff --cached --name-only --diff-filter=ACMR | xargs git checkout-index --prefix=$TMPDIR/ --
+
+# Check JavaScript code style
+RUN_JSCS=1
+TOTAL_ERRORS=0
+PLURAL_SUFFIX=
+
+JSFILES=$(git diff-index --name-status --cached HEAD | grep -v ^D | egrep '.js$' | cut -c3-)
+if [ -z "$JSFILES" ]; then
+    # No JavaScript file changed for this commit
+    RUN_JSCS=0
+elif [ -z "$JSCS_PATH" ]; then
+    echo -e "\033[0;31mIf you \033[1;34mnpm install jscs -g\033[0;31m I'll check your JS style\033[0;0m"
+    RUN_JSCS=0
+fi
+
+# Run JSCS
+if [ $RUN_JSCS -ne 0 ]; then
+    echo -e "\033[0;34mChecking JS style...\033[0;0m"
+    OUT=`$JSCS_PATH -r text $TMPDIR`
+    CODE=$?
+    # Erase last output line
+    # echo -ne '\r\033[K'
+    if [ $CODE -ne 0 ]; then
+        # Remove temp dir from output and color the filename
+        OUT=`echo "$OUT" | sed "s,$TMPDIR/\([^ ]*\),\`echo -e \"\033[0;34m\1\033[0m\"\`,"`
+        TOTAL_ERRORS=`echo -e "$OUT" | sed 's/[^0-9]//g' | tail -1`
+        # echo output minus last line
+        echo "$OUT" | sed '$ d'
+        if [ $TOTAL_ERRORS -ne 1 ]; then
+          PLURAL_SUFFIX="s"
+        fi
+        echo -e "\033[0;31m$TOTAL_ERRORS code style error$PLURAL_SUFFIX found.\033[0;0m"
+        echo "Please fix and re-commit."
+        echo -e "Need to commit right away? commit with the \033[0;34m-n\033[0m flag"
+        rm -Rf $TMPDIR $TMPFILE
+        exit $CODE
+    else
+        echo -e "\033[0;32mNo JS code style errors found.\033[0;0m"
+    fi
+fi
+
+# Clean up
+rm -Rf $TMPDIR $TMPFILE
