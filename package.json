@@ -14,8 +14,8 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
-    "ci-test": "./scripts/ci-test.sh",
-    "test": "npm run lint && ./scripts/ci-test.sh",
+    "ci-test": "$(npm bin)/jscs . && ./scripts/ci-test.sh",
+    "test": "./scripts/ci-test.sh",
     "lint": "$(npm bin)/jscs .",
     "prepublish": "./build",
     "jscs-pre-commit" : "./scripts/jscs-pre-commit"
