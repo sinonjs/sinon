@@ -1,6 +1,7 @@
 // should allow comments in this type of config
 {
     "excludeFiles": [
+        "coverage",
         "node_modules/**",
         "build/*",
         "coverage/*",
