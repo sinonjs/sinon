@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "buster": "0.7.18",
-    "jscs": "1.11.3",
-    "buster-istanbul": "0.1.13"
+    "buster-istanbul": "0.1.13",
+    "jscs": "1.13.1"
   },
   "files": [
     "lib",
