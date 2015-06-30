@@ -3,7 +3,7 @@
 # Runs JSCS style checker using definitions in `.jscsrc`
 #
 
-# pre-commit.sh
+# Stash all un-staged changes, we only want to verify staged files
 git stash -q --keep-index
 
 # Test prospective commit
