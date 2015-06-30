@@ -577,7 +577,7 @@
             },
 
             "calls pass callback": function () {
-                var a = new this.stub();
+                new this.stub(); // eslint-disable-line no-new, new-cap
                 sinon.assert.calledWithNew(this.stub);
 
                 assert(sinon.assert.pass.calledOnce);
@@ -636,7 +636,7 @@
             },
 
             "calls pass callback": function () {
-                var a = new this.stub();
+                new this.stub(); // eslint-disable-line no-new, new-cap
                 sinon.assert.alwaysCalledWithNew(this.stub);
 
                 assert(sinon.assert.pass.calledOnce);
@@ -1041,12 +1041,14 @@
                 });
 
                 assert.equals(typeof failException, "undefined");
+                /*eslint-disable no-undef*/
                 assert.isFunction(assertCalled);
                 assert.isFunction(assertCalledOn);
                 assert.isFunction(assertCalledWith);
                 assert.isFunction(assertCalledWithExactly);
                 assert.isFunction(assertThrew);
                 assert.isFunction(assertCallCount);
+                /*eslint-enable no-undef*/
             },
 
             "fails exposed asserts without errors": function () {
@@ -1055,7 +1057,7 @@
                 });
 
                 try {
-                    assertCalled(sinon.spy());
+                    assertCalled(sinon.spy()); // eslint-disable-line no-undef
                 } catch (e) {
                     assert.equals(e.message, "expected spy to have been called at least once but was never called");
                 }
@@ -1233,8 +1235,11 @@
                 this.obj.doSomething();
                 this.obj.doSomething();
 
-                assert.equals(this.message("calledThrice", this.obj.doSomething),
-                              "expected doSomething to be called thrice but was called 4 times\n    doSomething()\n    doSomething()\n    doSomething()\n    doSomething()");
+                assert.equals(
+                    this.message("calledThrice", this.obj.doSomething),
+                    "expected doSomething to be called thrice but was called 4 times\n" +
+                    "    doSomething()\n    doSomething()\n    doSomething()\n    doSomething()"
+                );
             },
 
             "assert.calledOn exception message": function () {
@@ -1256,8 +1261,10 @@
                 this.obj.doSomething.call(obj);
                 this.obj.doSomething.call(obj2);
 
-                assert.equals(this.message("calledOn", this.obj.doSomething, this.obj),
-                              "expected doSomething to be called with [Oh yeah] as this but was called with [Oh no], [Oh well]");
+                assert.equals(
+                    this.message("calledOn", this.obj.doSomething, this.obj),
+                  "expected doSomething to be called with [Oh yeah] as this but was called with [Oh no], [Oh well]"
+                );
             },
 
             "assert.alwaysCalledOn exception message": function () {
@@ -1280,8 +1287,11 @@
                 this.obj.doSomething.call(obj2);
                 this.obj.doSomething();
 
-                assert.equals(this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
-                              "expected doSomething to always be called with [Oh yeah] as this but was called with [Oh no], [Oh well], [Oh yeah]");
+                assert.equals(
+                    this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
+                    "expected doSomething to always be called with [Oh yeah] as this but was called with " +
+                    "[Oh no], [Oh well], [Oh yeah]"
+                );
             },
 
             "assert.calledWithNew exception message": function () {
@@ -1292,7 +1302,7 @@
             },
 
             "assert.alwaysCalledWithNew exception message": function () {
-                var a = new this.obj.doSomething();
+                new this.obj.doSomething(); // eslint-disable-line no-new, new-cap
                 this.obj.doSomething();
 
                 assert.equals(this.message("alwaysCalledWithNew", this.obj.doSomething),
@@ -1358,17 +1368,19 @@
             "assert.calledWith match.instanceOf exception message": function () {
                 this.obj.doSomething();
 
-                assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.instanceOf(function CustomType() {})),
-                              "expected doSomething to be called with arguments " +
-                              "instanceOf(CustomType)\n    doSomething()");
+                assert.equals(
+                    this.message("calledWith", this.obj.doSomething, sinon.match.instanceOf(function CustomType() {})),
+                    "expected doSomething to be called with arguments instanceOf(CustomType)\n    doSomething()"
+                );
             },
 
             "assert.calledWith match object exception message": function () {
                 this.obj.doSomething();
 
-                assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match({ some: "value", and: 123 })),
-                              "expected doSomething to be called with arguments " +
-                              "match(some: value, and: 123)\n    doSomething()");
+                assert.equals(
+                    this.message("calledWith", this.obj.doSomething, sinon.match({ some: "value", and: 123 })),
+                    "expected doSomething to be called with arguments match(some: value, and: 123)\n    doSomething()"
+                );
             },
 
             "assert.calledWith match boolean exception message": function () {
@@ -1406,9 +1418,10 @@
             "assert.calledWith match test function exception message": function () {
                 this.obj.doSomething();
 
-                assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match({ test: function custom() {} })),
-                              "expected doSomething to be called with arguments " +
-                              "match(custom)\n    doSomething()");
+                assert.equals(
+                    this.message("calledWith", this.obj.doSomething, sinon.match({ test: function custom() {} })),
+                    "expected doSomething to be called with arguments match(custom)\n    doSomething()"
+                );
             },
 
             "assert.calledWithMatch exception message": function () {

@@ -97,7 +97,8 @@
 
             try {
                 result.test();
-            } catch (e) {}
+            }
+            catch (e) {} // eslint-disable-line no-empty
 
             refute.exception(function () {
                 sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
@@ -115,7 +116,8 @@
 
             try {
                 result.test();
-            } catch (e) {}
+            }
+            catch (e) {} // eslint-disable-line no-empty
 
             refute.exception(function () {
                 sinon.assert.callOrder(testCase.setUp, testCase.test, testCase.tearDown);
