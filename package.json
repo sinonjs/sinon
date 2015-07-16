@@ -16,13 +16,11 @@
   "scripts": {
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test": "./scripts/ci-test.sh",
-    "lint": "$(npm bin)/jscs . && $(npm bin)/eslint .",
+    "lint": "$(npm bin)/eslint .",
     "prepublish": "./build",
-    "jscs-pre-commit": "./scripts/jscs-pre-commit",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [
-    "jscs-pre-commit",
     "eslint-pre-commit"
   ],
   "dependencies": {
