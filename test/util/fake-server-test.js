@@ -677,7 +677,7 @@
             },
 
             "customizes HTTP method extraction": function () {
-                this.server.getHTTPMethod = function (request) {
+                this.server.getHTTPMethod = function () {
                     return "PUT";
                 };
 
@@ -783,7 +783,7 @@
                 assert.isTrue(request.respond.calledTwice);
             },
 
-            "auto-responds if timeout elapses between creating a XHR object and sending a request with it": function () {
+            "auto-responds if timeout elapses between creating XHR object and sending request with it": function () {
                 this.server.autoRespond = true;
 
                 var request = new sinon.FakeXMLHttpRequest();

@@ -10,7 +10,7 @@
 
     buster.testCase("sinon.clock", {
         setUp: function () {
-            this.global = typeof global != "undefined" ? global : window;
+            this.global = typeof global !== "undefined" ? global : window;
         },
 
         ".setTimeout": {
@@ -62,7 +62,8 @@
             },
 
             "evals non-function callbacks": function () {
-                var evalCalledString = (typeof global != "undefined" ? "global" : "window") + ".sinonClockEvalCalled = true";
+                var evalCalledString = (typeof global !== "undefined" ? "global" : "window") +
+                    ".sinonClockEvalCalled = true";
                 this.clock.setTimeout(evalCalledString, 10);
                 this.clock.tick(10);
 
@@ -230,7 +231,7 @@
                 var test = this;
                 var spies = [
                     sinon.spy(function () {
-                        test.clock.setTimeout(spies[1], 0)
+                        test.clock.setTimeout(spies[1], 0);
                     }),
                     sinon.spy(),
                     sinon.spy()
@@ -385,7 +386,7 @@
             "does not fire canceled intervals": function () {
                 var id;
                 var callback = sinon.spy(function () {
-                    if (callback.callCount == 3) {
+                    if (callback.callCount === 3) {
                         clearTimeout(id);
                     }
                 });
@@ -487,7 +488,7 @@
                 var clock = this.clock;
 
                 clock.setTimeout(function () {
-                    throw new Exception("oh no!");
+                    throw new Error("oh no!");
                 }, 1000);
 
                 assert.exception(function () {
@@ -579,7 +580,7 @@
                 var clock = this.clock;
                 var id;
                 var stub = sinon.spy.create(function () {
-                    if (stub.callCount == 3) {
+                    if (stub.callCount === 3) {
                         clock.clearInterval(id);
                     }
                 });
@@ -631,7 +632,8 @@
 
             "creates real Date objects when Date constructor is gone": function () {
                 var realDate = new Date();
-                Date = function () {};
+
+                Date = function () {}; // eslint-disable-line no-undef, no-native-reassign
                 this.global.Date = function () {};
 
                 var date = new this.clock.Date();
@@ -825,7 +827,7 @@
                     clearInterval: this.global.clearInterval,
                     setImmediate: this.global.setImmediate,
                     clearImmediate: this.global.clearImmediate
-                }
+                };
             },
 
             tearDown: function () {
@@ -838,7 +840,7 @@
                 this.global.clearImmediate = this.original.clearImmediate;
 
                 clearTimeout(this.timer);
-                if (typeof this.dateNow == "undefined") {
+                if (typeof this.dateNow === "undefined") {
                     delete this.global.Date.now;
                 } else {
                     this.global.Date.now = this.dateNow;
@@ -966,6 +968,7 @@
             "deletes global property on restore if it was inherited onto the global object": function () {
                 // Give the global object an inherited 'tick' method
                 delete this.global.tick;
+                /*eslint-disable no-proto*/
                 this.global.__proto__.tick = function () { };
 
                 if (!this.global.hasOwnProperty("tick")) {
@@ -979,6 +982,7 @@
                     // hasOwnProperty does not work as expected.
                     assert(true);
                 }
+                /*eslint-enable no-proto*/
             },
 
             "restores global property on restore if it is present on the global object itself": function () {
