@@ -8,22 +8,49 @@
 
     buster.testCase("sinon.fakeServer", {
         ".create": {
-            "allows valid init settings" : function () {
+            "allows 'autoRespond' init settings" : function () {
                 var server = sinon.fakeServer.create({
                     autoRespond: true
                 });
                 assert(
                     server.autoRespond,
-                    "serve.create should accept whitelisted settings"
+                    "fakeServer.create should accept 'autoRespond' setting"
                 );
             },
-            "does not assign invalid settings": function () {
+            "allows 'autoRespondAfter' init settings" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'autoRespondAfter' setting"
+                );
+            },
+            "allows 'respondImmediately' init settings" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'respondImmediately' setting"
+                );
+            },
+            "allows 'fakeHTTPMethods' init settings" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'fakeHTTPMethods' setting"
+                );
+            },
+            "does not assign non-whitelisted settings": function () {
                 var server = sinon.fakeServer.create({
                     foo: true
                 });
                 refute(
                     server.foo,
-                    "server should not accept non-whitelisted settings"
+                    "fakeServer.create should not accept 'foo' settings"
                 );
             }
         }
