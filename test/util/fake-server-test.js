@@ -26,7 +26,53 @@
 
             assert.isFunction(this.server.restore);
         },
-
+        ".create": {
+            "allows the 'autoRespond' setting" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'autoRespond' setting"
+                );
+            },
+            "allows the 'autoRespondAfter' setting" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'autoRespondAfter' setting"
+                );
+            },
+            "allows the 'respondImmediately' setting" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'respondImmediately' setting"
+                );
+            },
+            "allows the 'fakeHTTPMethods' setting" : function () {
+                var server = sinon.fakeServer.create({
+                    autoRespond: true
+                });
+                assert(
+                    server.autoRespond,
+                    "fakeServer.create should accept 'fakeHTTPMethods' setting"
+                );
+            },
+            "does not assign a non-whitelisted setting": function () {
+                var server = sinon.fakeServer.create({
+                    foo: true
+                });
+                refute(
+                    server.foo,
+                    "fakeServer.create should not accept 'foo' settings"
+                );
+            }
+        },
         "fakes XMLHttpRequest": sinon.test(function () {
             this.stub(sinon, "useFakeXMLHttpRequest").returns({
                 restore: this.stub()
