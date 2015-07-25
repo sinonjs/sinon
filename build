@@ -120,6 +120,9 @@ Dir.chdir(File.dirname(__FILE__)) do
   add_license("pkg/sinon-server#{version_string}.js", version)
   FileUtils.cp(output, 'pkg/sinon.js')
   FileUtils.cp("pkg/sinon-ie#{version_string}.js", 'pkg/sinon-ie.js')
-
+  FileUtils.cp("pkg/sinon-server#{version_string}.js", 'pkg/sinon-server.js')
+  FileUtils.cp("pkg/sinon-timers#{version_string}.js", 'pkg/sinon-timers.js')
+  FileUtils.cp("pkg/sinon-timers-ie#{version_string}.js", 'pkg/sinon-timers-ie.js')
+  
   puts "Built Sinon.JS #{version}"
 end
