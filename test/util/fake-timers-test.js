@@ -1038,22 +1038,24 @@
             },
 
             "fakes provided methods": function () {
-                this.clock = sinon.useFakeTimers("setTimeout", "Date");
+                this.clock = sinon.useFakeTimers("setTimeout", "Date", "setImmediate");
 
                 refute.same(setTimeout, sinon.timers.setTimeout);
                 refute.same(Date, sinon.timers.Date);
+                refute.same(setImmediate, sinon.timers.setImmediate);
             },
 
             "resets faked methods": function () {
-                this.clock = sinon.useFakeTimers("setTimeout", "Date");
+                this.clock = sinon.useFakeTimers("setTimeout", "Date", "setImmediate");
                 this.clock.restore();
 
                 assert.same(setTimeout, sinon.timers.setTimeout);
                 assert.same(Date, sinon.timers.Date);
+                assert.same(setImmediate, sinon.timers.setImmediate);
             },
 
             "does not fake methods not provided": function () {
-                this.clock = sinon.useFakeTimers("setTimeout", "Date");
+                this.clock = sinon.useFakeTimers("setTimeout", "Date", "setImmediate");
 
                 assert.same(clearTimeout, sinon.timers.clearTimeout);
                 assert.same(setInterval, sinon.timers.setInterval);

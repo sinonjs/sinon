@@ -18,7 +18,7 @@
     "test": "./scripts/ci-test.sh",
     "lint": "$(npm bin)/jscs .",
     "prepublish": "./build",
-    "jscs-pre-commit" : "./scripts/jscs-pre-commit"
+    "jscs-pre-commit": "./scripts/jscs-pre-commit"
   },
   "pre-commit": [
     "jscs-pre-commit"
@@ -33,6 +33,7 @@
     "buster": "0.7.18",
     "buster-istanbul": "0.1.13",
     "jscs": "1.13.1",
+    "lolex": "^1.2.2",
     "pre-commit": "1.0.10"
   },
   "files": [
