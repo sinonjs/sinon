@@ -447,7 +447,7 @@
                 sinon.config = {
                     injectIntoThis: false,
                     properties: ["clock"],
-                    useFakeTimers: ["Date", "setTimeout"]
+                    useFakeTimers: ["Date", "setTimeout", "setImmediate"]
                 };
 
                 sinon.test(function (c) {
@@ -467,7 +467,7 @@
                 refute.same(props.Date, sinon.timers.Date);
                 refute.same(props.setTimeout, sinon.timers.setTimeout);
                 assert.same(props.clearTimeout, sinon.timers.clearTimeout);
-                assert.same(props.setImmediate, sinon.timers.setImmediate);
+                refute.same(props.setImmediate, sinon.timers.setImmediate);
                 assert.same(props.clearImmediate, sinon.timers.clearImmediate);
                 assert.same(props.setInterval, sinon.timers.setInterval);
                 assert.same(props.clearInterval, sinon.timers.clearInterval);

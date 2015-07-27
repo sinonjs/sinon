@@ -35,6 +35,7 @@
     "eslint": "0.24.0",
     "eslint-config-defaults": "^2.1.0",
     "jscs": "1.13.1",
+    "lolex": "^1.2.2",
     "pre-commit": "1.0.10"
   },
   "files": [
