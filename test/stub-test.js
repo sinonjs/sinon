@@ -646,6 +646,50 @@
                 sinon.stub(object);
 
                 assert.equals(object.foo, "bar");
+            },
+
+            "handles non-enumerable properties": function () {
+                var obj = {
+                    func1: function () {},
+                    func2: function () {}
+                };
+
+                Object.defineProperty(obj, "func3", {
+                    value: function () {},
+                    writable: true,
+                    configurable: true
+                });
+
+                sinon.stub(obj);
+
+                assert.isFunction(obj.func1.restore);
+                assert.isFunction(obj.func2.restore);
+                assert.isFunction(obj.func3.restore);
+            },
+
+            "handles non-enumerable properties on prototypes": function () {
+                function Obj() {}
+                Object.defineProperty(Obj.prototype, "func1", {
+                    value: function () {},
+                    writable: true,
+                    configurable: true
+                });
+
+                var obj = new Obj();
+
+                sinon.stub(obj);
+
+                assert.isFunction(obj.func1.restore);
+            },
+
+            "does not stub non-enumerable properties from Object.prototype": function () {
+                var obj = {};
+
+                sinon.stub(obj);
+
+                refute.isFunction(obj.toString.restore);
+                refute.isFunction(obj.toLocaleString.restore);
+                refute.isFunction(obj.propertyIsEnumerable.restore);
             }
         },
 
