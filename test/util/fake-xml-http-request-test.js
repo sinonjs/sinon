@@ -17,7 +17,7 @@
     };
 
     var fakeXhrTearDown = function () {
-        if (typeof this.fakeXhr.restore == "function") {
+        if (typeof this.fakeXhr.restore === "function") {
             this.fakeXhr.restore();
         }
     };
@@ -57,7 +57,8 @@
             var onCreate = sinon.spy();
             sinon.FakeXMLHttpRequest.onCreate = onCreate;
 
-            var xhr = new sinon.FakeXMLHttpRequest();
+            // instantiating FakeXMLHttpRequest for it's onCreate side effect
+            var xhr = new sinon.FakeXMLHttpRequest(); // eslint-disable-line no-unused-vars
 
             assert(onCreate.called);
         },
@@ -319,11 +320,11 @@
             },
 
             "sets mime to text/plain": {
-                requiresSupportFor : {
+                requiresSupportFor: {
                     "FormData": supportsFormData
                 },
 
-                test : function () {
+                test: function () {
                     this.xhr.open("POST", "/");
                     this.xhr.send("Data");
 
@@ -345,21 +346,21 @@
                 this.xhr.send("Data");
 
                 assert.equals(this.xhr.requestHeaders["Content-Type"], undefined);
-                assert.equals(this.xhr.requestHeaders["content-type"], "application/json;charset=utf-8")
+                assert.equals(this.xhr.requestHeaders["content-type"], "application/json;charset=utf-8");
             },
 
             "does not add 'Content-Type' header if data is FormData": {
-                requiresSupportFor : {
-                    "FormData" : supportsFormData
+                requiresSupportFor: {
+                    "FormData": supportsFormData
                 },
 
-                test:  function () {
+                test: function () {
                     this.xhr.open("POST", "/");
                     var formData = new FormData();
                     formData.append("username", "biz");
                     this.xhr.send("Data");
 
-                    assert.equals(this.xhr.requestHeaders["content-type"], undefined)
+                    assert.equals(this.xhr.requestHeaders["content-type"], undefined);
                 }
             },
 
@@ -671,7 +672,7 @@
                 var spy = this.spy = sinon.spy();
 
                 this.xhr.onreadystatechange = function () {
-                    if (this.readyState == 4) {
+                    if (this.readyState === 4) {
                         spy.call(this);
                     }
                 };
@@ -755,7 +756,7 @@
             "sets status before transitioning to readyState HEADERS_RECEIVED": function () {
                 var status, statusText;
                 this.xhr.onreadystatechange = function () {
-                    if (this.readyState == 2) {
+                    if (this.readyState === 2) {
                         status = this.status;
                         statusText = this.statusText;
                     }
@@ -1261,11 +1262,9 @@
             },
 
             "calls legacy onreadystatechange handlers with target set to fakeXHR": function () {
-                var workingXHRInstance;
                 var spy;
                 var readyStateCb;
                 var workingXHROverride = function () {
-                    workingXHRInstance = this;
                     this.addEventListener = function (str, fn) {
                         readyStateCb = fn;
                     };
@@ -1318,7 +1317,7 @@
                 var req = new XMLHttpRequest();
 
                 req.onreadystatechange = function () {
-                    if (this.readyState == 4) {
+                    if (this.readyState === 4) {
                         assert.match(this.responseText, /loaded successfully/);
                         assert.match(this.response, /loaded successfully/);
                         done();
@@ -1367,7 +1366,7 @@
             "hijacks ActiveXObject": function () {
                 refute.same(root.ActiveXObject, globalActiveXObject);
                 refute.same(window.ActiveXObject, globalActiveXObject);
-                refute.same(ActiveXObject, globalActiveXObject);
+                refute.same(ActiveXObject, globalActiveXObject); // eslint-disable-line no-undef
             },
 
             "restores global ActiveXObject": function () {
@@ -1375,36 +1374,36 @@
 
                 assert.same(root.ActiveXObject, globalActiveXObject);
                 assert.same(window.ActiveXObject, globalActiveXObject);
-                assert.same(ActiveXObject, globalActiveXObject);
+                assert.same(ActiveXObject, globalActiveXObject); // eslint-disable-line no-undef
             },
 
             "creates FakeXHR object with ActiveX Microsoft.XMLHTTP": function () {
-                var xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                var xhr = new ActiveXObject("Microsoft.XMLHTTP"); // eslint-disable-line no-undef
 
                 assert(xhr instanceof sinon.FakeXMLHttpRequest);
             },
 
             "creates FakeXHR object with ActiveX Msxml2.XMLHTTP": function () {
-                var xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                var xhr = new ActiveXObject("Msxml2.XMLHTTP"); // eslint-disable-line no-undef
 
                 assert(xhr instanceof sinon.FakeXMLHttpRequest);
             },
 
             "creates FakeXHR object with ActiveX Msxml2.XMLHTTP.3.0": function () {
-                var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0");
+                var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0"); // eslint-disable-line no-undef
 
                 assert(xhr instanceof sinon.FakeXMLHttpRequest);
             },
 
             "creates FakeXHR object with ActiveX Msxml2.XMLHTTP.6.0": function () {
-                var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0");
+                var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0"); // eslint-disable-line no-undef
 
                 assert(xhr instanceof sinon.FakeXMLHttpRequest);
             }
         },
 
         "missing native XHR": {
-            requiresSupportFor: { "no native XHR": typeof XMLHttpRequest == "undefined" },
+            requiresSupportFor: { "no native XHR": typeof XMLHttpRequest === "undefined" },
             setUp: fakeXhrSetUp,
             tearDown: fakeXhrTearDown,
 
@@ -1441,7 +1440,7 @@
         "progress events": {
             setUp: function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
-                this.xhr.open("GET", "/some/url")
+                this.xhr.open("GET", "/some/url");
             },
 
             "triggers 'loadstart' event on #send": function (done) {
@@ -1620,8 +1619,8 @@
 
 
             "progress event is triggered with xhr.uploadProgress({loaded: 20, total: 100})": {
-                requiresSupportFor : {
-                    "ProgressEvent" : supportsProgressEvents
+                requiresSupportFor: {
+                    "ProgressEvent": supportsProgressEvents
                 },
                 test: function (done) {
                     this.xhr.upload.addEventListener("progress", function (e) {
@@ -1651,8 +1650,8 @@
             },
 
             "fires event with 100% progress on 'load'": {
-                requiresSupportFor : {
-                    "ProgressEvent" : supportsProgressEvents
+                requiresSupportFor: {
+                    "ProgressEvent": supportsProgressEvents
                 },
 
                 test: function (done) {

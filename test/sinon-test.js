@@ -86,7 +86,9 @@
             },
 
             "replaces setter": function () {
-                sinon.wrapMethod(this.object, "property", { set: function () {} });
+                sinon.wrapMethod(this.object, "property", { // eslint-disable-line accessor-pairs
+                    set: function () {}
+                });
 
                 refute.same(this.setter, Object.getOwnPropertyDescriptor(this.object, "property").set);
                 assert.isFunction(Object.getOwnPropertyDescriptor(this.object, "property").set);
@@ -126,21 +128,27 @@
                 setUp: function () {
                     this.oldError = Error;
                     this.oldTypeError = TypeError;
+
                     var i = 0;
+
+                    /*eslint-disable no-native-reassign, no-undef*/
                     Error = TypeError = function () {
                         this.stack = ":STACK" + ++i + ":";
-                    }
+                    };
+                    /*eslint-enable no-native-reassign, no-undef*/
                 },
 
                 tearDown: function () {
+                    /*eslint-disable no-native-reassign, no-undef*/
                     Error = this.oldError;
                     TypeError = this.oldTypeError;
+                    /*eslint-enable no-native-reassign, no-undef*/
                 },
 
                 "throws with stack trace showing original wrapMethod call": function () {
                     var object = { method: function () {} };
                     sinon.wrapMethod(object, "method", function () {
-                        return "original"
+                        return "original";
                     });
 
                     try {
@@ -218,7 +226,8 @@
             setUp: function () {
                 this.type = function () {};
                 this.type.prototype.method = function () {};
-                this.object = new this.type();
+
+                this.object = new this.type(); //eslint-disable-line new-cap
             },
 
             "wrap adds owned property": function () {
@@ -630,7 +639,7 @@
             "has no side effects on the prototype": function () {
                 var proto = {
                     method: function () {
-                        throw "error"
+                        throw "error";
                     }
                 };
                 var Class = function () {};
@@ -643,8 +652,10 @@
 
             "throws exception for non function params": function () {
                 var types = [{}, 3, "hi!"];
+
                 for (var i = 0; i < types.length; i++) {
-                    assert.exception(function () {
+                    // yes, it's silly to create functions in a loop, it's also a test
+                    assert.exception(function () { // eslint-disable-line no-loop-func
                         sinon.createStubInstance(types[i]);
                     });
                 }

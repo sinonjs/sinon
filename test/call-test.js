@@ -6,6 +6,20 @@
         assert = buster.assert,
         refute = buster.refute;
 
+    function spyCallSetUp() {
+        this.thisValue = {};
+        this.args = [{}, [], new Error(), 3];
+        this.returnValue = function () {};
+        this.call = sinon.spyCall(function () {}, this.thisValue,
+            this.args, this.returnValue, null, 0);
+    }
+
+    function spyCallCallSetup() {
+        this.args = [];
+        this.proxy = sinon.spy();
+        this.call = sinon.spyCall(this.proxy, {}, this.args, null, null, 0);
+    }
+
     function spyCallCalledTests(method) {
         return {
             setUp: spyCallSetUp,
@@ -86,19 +100,6 @@
         };
     }
 
-    function spyCallSetUp() {
-        this.thisValue = {};
-        this.args = [{}, [], new Error(), 3];
-        this.returnValue = function () {};
-        this.call = sinon.spyCall(function () {}, this.thisValue,
-            this.args, this.returnValue, null, 0);
-    }
-
-    function spyCallCallSetup() {
-        this.args = [];
-        this.proxy = sinon.spy();
-        this.call = sinon.spyCall(this.proxy, {}, this.args, null, null, 0);
-    }
 
     buster.testCase("sinon.spy.call", {
 
@@ -590,8 +591,10 @@
                     call.yieldTo("success");
                     throw new Error();
                 } catch (e) {
-                    assert.equals(e.message, "somethingAwesome cannot yield to 'success' since no callback was passed. " +
-                                  "Received [23, 42]");
+                    assert.equals(
+                        e.message,
+                        "somethingAwesome cannot yield to 'success' since no callback was passed. Received [23, 42]"
+                    );
                 }
             },
 
@@ -679,8 +682,10 @@
                     call.yieldToOn("success", thisObj);
                     throw new Error();
                 } catch (e) {
-                    assert.equals(e.message, "somethingAwesome cannot yield to 'success' since no callback was passed. " +
-                                  "Received [23, 42]");
+                    assert.equals(
+                        e.message,
+                        "somethingAwesome cannot yield to 'success' since no callback was passed. Received [23, 42]"
+                    );
                 }
             },
 
@@ -785,7 +790,8 @@
 
                 try {
                     object.doIt();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError");
             },
@@ -795,7 +801,8 @@
 
                 try {
                     object.doIt();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError(Oh noes!)");
             },
@@ -841,7 +848,7 @@
             },
 
             "records usage": function () {
-                var myInstance = new this.CustomConstructor();
+                var myInstance = new this.CustomConstructor(); // eslint-disable-line no-unused-vars
 
                 assert(this.CustomConstructor.called);
             }
@@ -950,7 +957,7 @@
                     assertReset(fakeB);
                     assertReset(fakeC);
                 }
-            }
+            };
         }()),
 
         ".withArgs": {
@@ -1151,6 +1158,7 @@
                     error.name = y;
                     throw error;
                 });
+                /*eslint-disable no-empty*/
                 try {
                     spy("a", "1");
                 } catch (ignored) {}
@@ -1160,6 +1168,7 @@
                 try {
                     spy("b", "3");
                 } catch (ignored) {}
+                /*eslint-enable no-empty*/
 
                 var argSpy1 = spy.withArgs("a");
                 var argSpy2 = spy.withArgs("b");
@@ -1191,7 +1200,8 @@
                 function call() {
                     try {
                         spy();
-                    } catch (e) {}
+                    }
+                    catch (e) {} // eslint-disable-line no-empty
                 }
 
                 call();

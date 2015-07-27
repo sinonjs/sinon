@@ -14,14 +14,14 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
-    "ci-test": "$(npm bin)/jscs . && ./scripts/ci-test.sh",
+    "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test": "./scripts/ci-test.sh",
-    "lint": "$(npm bin)/jscs .",
+    "lint": "$(npm bin)/eslint .",
     "prepublish": "./build",
-    "jscs-pre-commit": "./scripts/jscs-pre-commit"
+    "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [
-    "jscs-pre-commit"
+    "eslint-pre-commit"
   ],
   "dependencies": {
     "formatio": "1.1.1",
@@ -32,6 +32,8 @@
   "devDependencies": {
     "buster": "0.7.18",
     "buster-istanbul": "0.1.13",
+    "eslint": "0.24.0",
+    "eslint-config-defaults": "^2.1.0",
     "jscs": "1.13.1",
     "lolex": "^1.2.2",
     "pre-commit": "1.0.10"

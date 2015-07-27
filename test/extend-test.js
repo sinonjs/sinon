@@ -3,8 +3,7 @@
 
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+        assert = buster.assert;
 
     buster.testCase("sinon.extend", {
         "should return unaltered target when only one argument": function () {
@@ -44,7 +43,7 @@
         },
 
         "must copy the last occuring property into the target": function () {
-            var target =  { a: 0, b: 0, c: 0, d: 0 },
+            var target = { a: 0, b: 0, c: 0, d: 0 },
                 source1 = { a: 1, b: 1, c: 1 },
                 source2 = { a: 2, b: 2 },
                 soruce3 = { a: 3 };

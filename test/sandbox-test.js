@@ -4,9 +4,10 @@
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
         assert = buster.assert,
-        refute = buster.refute;
+        refute = buster.refute,
+        samsam = root.samsam || require("samsam");
 
-    var supportsAjax = typeof XMLHttpRequest != "undefined" || typeof ActiveXObject != "undefined";
+    var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
     var globalXHR = root.XMLHttpRequest;
     var globalAXO = root.ActiveXObject;
 
@@ -238,7 +239,10 @@
                     setTimeout(spy, 10);
 
                     this.sandbox.clock.tick(10);
-                    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+                    var xhr = window.XMLHttpRequest ?
+                                new XMLHttpRequest() :
+                                new ActiveXObject("Microsoft.XMLHTTP"); //eslint-disable-line no-undef
 
                     assert.isFunction(this.obj.spy);
                     assert.isFunction(this.obj.stub);
