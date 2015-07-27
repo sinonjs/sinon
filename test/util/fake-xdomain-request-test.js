@@ -13,7 +13,7 @@
     };
 
     var fakeXdrTearDown = function () {
-        if (typeof this.fakeXdr.restore == "function") {
+        if (typeof this.fakeXdr.restore === "function") {
             this.fakeXdr.restore();
         }
     };
@@ -39,6 +39,8 @@
 
             var xhr = new sinon.FakeXDomainRequest();
 
+            // makes the linter happy
+            assert(xhr);
             assert(onCreate.called);
         },
         "passes new object to onCreate if set": function () {
@@ -122,8 +124,8 @@
             },
             "sets mime to text/plain for all methods": function () {
                 var methods = ["GET", "HEAD", "POST"];
-                for (var method in methods) {
-                    this.xdr.open(method, "/");
+                for (var i = 0; i < methods.length; i++) {
+                    this.xdr.open(methods[i], "/");
                     this.xdr.send("Data");
 
                     assert.equals(this.xdr.requestHeaders["Content-Type"], "text/plain;charset=utf-8");
@@ -397,7 +399,7 @@
         },
 
         "missing native XDR": {
-            requiresSupportFor: { "no native XDR": typeof XDomainRequest == "undefined" },
+            requiresSupportFor: { "no native XDR": typeof XDomainRequest === "undefined" },
             setUp: fakeXdrSetUp,
             tearDown: fakeXdrTearDown,
 

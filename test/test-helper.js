@@ -30,7 +30,7 @@
     buster.referee.add("fakeServer", {
         assert: function (obj) {
             return obj !== null &&
-                Object.prototype.toString.call(obj.requests) == "[object Array]" &&
+                Object.prototype.toString.call(obj.requests) === "[object Array]" &&
                 typeof obj.respondWith === "function";
         },
         assertMessage: "Expected object ${0} to be a fake server"
