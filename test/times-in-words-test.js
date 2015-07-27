@@ -3,8 +3,7 @@
 
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+        assert = buster.assert;
 
     buster.testCase("sinon.timesInWords", {
         "should return \"once\" for input of 1": function () {
@@ -22,7 +21,7 @@
             assert.equals(result, "thrice");
         },
 
-        "should return \"n times\" for n larger than 3": function () {
+        "should return \"n times\" for n larger than 3": function () {
             var result, i;
 
             for (i = 4; i < 100; i++) {

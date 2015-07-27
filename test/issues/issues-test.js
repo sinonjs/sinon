@@ -75,9 +75,8 @@
                 },
 
                 "stub out fs.readFileSync": function () {
-                    var testCase = this,
-                        fs = require("fs"),
-                        stub;
+                    var fs = require("fs");
+                    var testCase = this;
 
                     refute.exception(function () {
                         testCase.sandbox.stub(fs, "readFileSync");

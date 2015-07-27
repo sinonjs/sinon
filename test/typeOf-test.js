@@ -3,8 +3,7 @@
 
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+        assert = buster.assert;
 
     buster.testCase("sinon.typeOf", {
         "returns boolean": function () {

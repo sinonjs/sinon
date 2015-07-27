@@ -4,7 +4,8 @@
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
         assert = buster.assert,
-        refute = buster.refute;
+        refute = buster.refute,
+        fail = buster.referee.fail;
 
     buster.testCase("sinon.stub", {
         "is spy": function () {
@@ -560,7 +561,8 @@
 
                 try {
                     this.object.method();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(stub.threw("TypeError"));
             },
@@ -1724,7 +1726,7 @@
             },
 
             "matches the function length": function () {
-                var api = { someMethod: function (a, b, c) {} };
+                var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
                 var stub = sinon.stub(api, "someMethod");
 
                 assert.equals(stub.length, 3);

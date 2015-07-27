@@ -147,6 +147,9 @@
                 setInterval(function () {}, 13);
                 this.server.respond();
                 var xhr = new sinon.FakeXMLHttpRequest();
+                // please the linter, we can't have unused variables
+                // even when we're instantiating FakeXMLHttpRequest for it's side effects
+                assert(xhr);
                 setInterval(function () {}, 17);
                 this.server.respond();
 

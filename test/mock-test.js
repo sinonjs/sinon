@@ -414,7 +414,8 @@
 
                     try {
                         this.expectation();
-                    } catch (e) {}
+                    }
+                    catch (e) {} // eslint-disable-line no-empty
 
                     assert.isFalse(this.expectation.met());
                 }
@@ -670,8 +671,10 @@
                     message = e.message;
                 }
 
-                assert.equals(message,
-                              "Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)");
+                assert.equals(
+                    message,
+                    "Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)"
+                );
             },
 
             "includes exact expected arguments in error message": function () {
@@ -856,21 +859,21 @@
             },
 
             "reverts expectation": function () {
-                var method = this.mock.expects("method");
+                this.mock.expects("method");
                 this.object.method.restore();
 
                 assert.same(this.object.method, this.method);
             },
 
             "reverts mock": function () {
-                var method = this.mock.expects("method");
+                this.mock.expects("method");
                 this.mock.restore();
 
                 assert.same(this.object.method, this.method);
             },
 
             "verifies mock": function () {
-                var method = this.mock.expects("method");
+                this.mock.expects("method");
                 this.object.method();
                 var mock = this.mock;
 
@@ -880,7 +883,7 @@
             },
 
             "verifies mock with unmet expectations": function () {
-                var method = this.mock.expects("method");
+                this.mock.expects("method");
                 var mock = this.mock;
 
                 assert.exception(function () {

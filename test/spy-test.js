@@ -315,31 +315,32 @@
             },
 
             "retains function length 1": function () {
-                var spy = sinon.spy.create(function (a) {});
+                var spy = sinon.spy.create(function (a) {}); // eslint-disable-line no-unused-vars
 
                 assert.equals(spy.length, 1);
             },
 
             "retains function length 2": function () {
-                var spy = sinon.spy.create(function (a, b) {});
+                var spy = sinon.spy.create(function (a, b) {}); // eslint-disable-line no-unused-vars
 
                 assert.equals(spy.length, 2);
             },
 
             "retains function length 3": function () {
-                var spy = sinon.spy.create(function (a, b, c) {});
+                var spy = sinon.spy.create(function (a, b, c) {}); // eslint-disable-line no-unused-vars
 
                 assert.equals(spy.length, 3);
             },
 
             "retains function length 4": function () {
-                var spy = sinon.spy.create(function (a, b, c, d) {});
+                var spy = sinon.spy.create(function (a, b, c, d) {}); // eslint-disable-line no-unused-vars
 
                 assert.equals(spy.length, 4);
             },
 
             "retains function length 12": function () {
-                var spy = sinon.spy.create(function (a, b, c, d, e, f, g, h, i, j, k, l) {});
+                var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}, // eslint-disable-line no-unused-vars
+                    spy = sinon.spy.create(func12Args);
 
                 assert.equals(spy.length, 12);
             }
@@ -632,7 +633,7 @@
             },
 
             "is true if called with new": function () {
-                var result = new this.spy();
+                var result = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
 
                 assert(this.spy.calledWithNew());
             },
@@ -643,7 +644,7 @@
                 var ns = { MyThing: MyThing };
                 sinon.spy(ns, "MyThing");
 
-                var result = new ns.MyThing();
+                var result = new ns.MyThing(); // eslint-disable-line no-unused-vars
                 assert(ns.MyThing.calledWithNew());
             },
 
@@ -661,7 +662,7 @@
                 "is true if called with new at least once": function () {
                     var object = {};
                     this.spy();
-                    var a = new this.spy();
+                    var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
                     this.spy(object);
                     this.spy(window);
 
@@ -676,7 +677,7 @@
                 var object = { MyThing: MyThing };
                 sinon.spy(object, "MyThing");
 
-                var result = new object.MyThing;
+                var result = new object.MyThing(); // eslint-disable-line no-unused-vars
 
                 assert(object.MyThing.calledWithNew());
             },
@@ -685,7 +686,7 @@
                 requiresSupportFor: {
                     applyableNatives: function () {
                         try {
-                            console.log.apply({}, []);
+                            console.log.apply({}, []); // eslint-disable-line no-console
                             return true;
                         } catch (e) {
                             return false;
@@ -694,7 +695,7 @@
                 },
 
                 "is false when called on spied native function": function () {
-                    var log = { info: console.log };
+                    var log = { info: console.log };  // eslint-disable-line no-console
                     sinon.spy(log, "info");
 
                     log.info("test");
@@ -714,16 +715,20 @@
             },
 
             "is true if always called with new": function () {
+                /*eslint-disable no-unused-vars, new-cap*/
                 var result = new this.spy();
                 var result2 = new this.spy();
                 var result3 = new this.spy();
+                /*eslint-enable no-unused-vars, new-cap*/
 
                 assert(this.spy.alwaysCalledWithNew());
             },
 
             "is false if called as function once": function () {
+                /*eslint-disable no-unused-vars, new-cap*/
                 var result = new this.spy();
                 var result2 = new this.spy();
+                /*eslint-enable no-unused-vars, new-cap*/
                 this.spy();
 
                 assert.isFalse(this.spy.alwaysCalledWithNew());
@@ -970,7 +975,7 @@
                 assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: "blah"}));
             },
 
-            "returns false when a property of an object argument is set to undefined and has a different name": function () {
+            "returns false when property of Object argument is set to undefined and has a different name": function () {
                 this.spy({a: 1, b: 2, c: 3});
 
                 assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: undefined}));
@@ -1073,7 +1078,8 @@
 
                 try {
                     spy();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(spy.threw(err));
             },
@@ -1087,7 +1093,8 @@
             "returns true if spy threw": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.spyWithTypeError.threw());
             },
@@ -1095,7 +1102,8 @@
             "returns true if string type matches": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.spyWithTypeError.threw("TypeError"));
             },
@@ -1103,7 +1111,8 @@
             "returns false if string did not match": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.isFalse(this.spyWithTypeError.threw("Error"));
             },
@@ -1117,7 +1126,8 @@
             "returns true if string matches": function () {
                 try {
                     this.spyWithStringError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.spyWithStringError.threw("error"));
             },
@@ -1125,7 +1135,8 @@
             "returns false if strings do not match": function () {
                 try {
                     this.spyWithStringError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.isFalse(this.spyWithStringError.threw("not the error"));
             }
@@ -1149,7 +1160,8 @@
 
                 try {
                     spy();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(spy.alwaysThrew(err));
             },
@@ -1163,7 +1175,8 @@
             "returns true if spy threw": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.spyWithTypeError.alwaysThrew());
             },
@@ -1171,7 +1184,8 @@
             "returns true if string type matches": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.spyWithTypeError.alwaysThrew("TypeError"));
             },
@@ -1179,7 +1193,8 @@
             "returns false if string did not match": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.isFalse(this.spyWithTypeError.alwaysThrew("Error"));
             },
@@ -1199,7 +1214,8 @@
 
                 try {
                     this.spy();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 this.spy();
 
@@ -1207,6 +1223,7 @@
             },
 
             "returns true if all calls threw": function () {
+                /*eslint-disable no-empty*/
                 try {
                     this.spyWithTypeError();
                 } catch (e1) {}
@@ -1214,11 +1231,13 @@
                 try {
                     this.spyWithTypeError();
                 } catch (e2) {}
+                /*eslint-enable no-empty*/
 
                 assert(this.spyWithTypeError.alwaysThrew());
             },
 
             "returns true if all calls threw same type": function () {
+                /*eslint-disable no-empty*/
                 try {
                     this.spyWithTypeError();
                 } catch (e1) {}
@@ -1226,6 +1245,7 @@
                 try {
                     this.spyWithTypeError();
                 } catch (e2) {}
+                /*eslint-enable no-empty*/
 
                 assert(this.spyWithTypeError.alwaysThrew("TypeError"));
             }
@@ -1244,7 +1264,8 @@
             "contains exception thrown by function": function () {
                 try {
                     this.spyWithTypeError();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.equals(this.spyWithTypeError.exceptions, [this.error]);
             },
@@ -1270,6 +1291,7 @@
 
                 spy();
 
+                /*eslint-disable no-empty*/
                 try {
                     spy();
                 } catch (e1) {}
@@ -1279,6 +1301,7 @@
                 try {
                     spy();
                 } catch (e2) {}
+                /*eslint-enable no-empty*/
 
                 spy();
 
@@ -1399,8 +1422,8 @@
 
                 try {
                     spy();
-                } catch (e) {
                 }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.equals(spy.returnValues.length, 1);
                 refute.defined(spy.returnValues[0]);
@@ -1569,14 +1592,16 @@
                 assert.same(spy.firstCall.spy, call0.spy);
             },
 
-            "is equal to getCall(0) result after first call even when control flow has continued following invocation": function () {
+            "is equal to getCall(0) after first call when control flow has continued after invocation": function () {
+                var spy;
+
                 function runAsserts() {
                     var call0 = spy.getCall(0);
                     assert.equals(spy.firstCall.callId, call0.callId);
                     assert.same(spy.firstCall.spy, call0.spy);
                 }
 
-                var spy = sinon.spy(runAsserts);
+                spy = sinon.spy(runAsserts);
 
                 spy();
             },
@@ -1588,7 +1613,8 @@
 
                 try {
                     spy();
-                } catch (e) { }
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 refute.isNull(spy.firstCall);
             },
@@ -1612,7 +1638,8 @@
 
                 try {
                     spy();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert.same(spy.firstCall.exception, err);
                 assert(spy.firstCall.threw(err));
@@ -2194,7 +2221,7 @@
             },
 
             "matches the function length": function () {
-                var api = { someMethod: function (a, b, c) {} };
+                var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
                 var spy = sinon.spy(api, "someMethod");
 
                 assert.equals(spy.length, 3);

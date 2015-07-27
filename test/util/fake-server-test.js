@@ -27,7 +27,7 @@
             assert.isFunction(this.server.restore);
         },
         ".create": {
-            "allows the 'autoRespond' setting" : function () {
+            "allows the 'autoRespond' setting": function () {
                 var server = sinon.fakeServer.create({
                     autoRespond: true
                 });
@@ -36,7 +36,7 @@
                     "fakeServer.create should accept 'autoRespond' setting"
                 );
             },
-            "allows the 'autoRespondAfter' setting" : function () {
+            "allows the 'autoRespondAfter' setting": function () {
                 var server = sinon.fakeServer.create({
                     autoRespond: true
                 });
@@ -45,7 +45,7 @@
                     "fakeServer.create should accept 'autoRespondAfter' setting"
                 );
             },
-            "allows the 'respondImmediately' setting" : function () {
+            "allows the 'respondImmediately' setting": function () {
                 var server = sinon.fakeServer.create({
                     autoRespond: true
                 });
@@ -54,7 +54,7 @@
                     "fakeServer.create should accept 'respondImmediately' setting"
                 );
             },
-            "allows the 'fakeHTTPMethods' setting" : function () {
+            "allows the 'fakeHTTPMethods' setting": function () {
                 var server = sinon.fakeServer.create({
                     autoRespond: true
                 });
@@ -677,7 +677,7 @@
             },
 
             "customizes HTTP method extraction": function () {
-                this.server.getHTTPMethod = function (request) {
+                this.server.getHTTPMethod = function () {
                     return "PUT";
                 };
 
@@ -783,7 +783,7 @@
                 assert.isTrue(request.respond.calledTwice);
             },
 
-            "auto-responds if timeout elapses between creating a XHR object and sending a request with it": function () {
+            "auto-responds if timeout elapses between creating XHR object and sending request with it": function () {
                 this.server.autoRespond = true;
 
                 var request = new sinon.FakeXMLHttpRequest();

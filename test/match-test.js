@@ -3,8 +3,7 @@
 
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+        assert = buster.assert;
 
     function propertyMatcherTests(matcher) {
         return {
@@ -127,9 +126,11 @@
         },
 
         "returns true if number objects are equal": function () {
+            /*eslint-disable no-new-wrappers*/
             var match = sinon.match({ one: new Number(1) });
 
             assert(match.test({ one: new Number(1) }));
+            /*eslint-enable no-new-wrappers*/
         },
 
         "returns true if test matches": function () {

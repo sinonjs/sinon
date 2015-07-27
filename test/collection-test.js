@@ -3,8 +3,7 @@
 
     var buster = root.buster || require("buster"),
         sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+        assert = buster.assert;
 
     buster.testCase("sinon.collection", {
         "creates fake collection": function () {
@@ -265,7 +264,7 @@
 
             "removes from collection when restored": function () {
                 this.collection.restore();
-                assert(this.collection.fakes.length == 0);
+                assert(this.collection.fakes.length === 0);
             },
 
             "restores functions when stubbing entire object": function () {
@@ -311,7 +310,8 @@
 
                 try {
                     this.collection.verifyAndRestore();
-                } catch (e) {}
+                }
+                catch (e) {} // eslint-disable-line no-empty
 
                 assert(this.collection.restore.called);
             }
