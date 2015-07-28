@@ -92,14 +92,25 @@
                 target = new Target(),
                 rcvr = {},
                 iterator = sinon.spy(),
-                err = null;
+                err = null,
+                numCalls = 0,
+                placeholder; // eslint-disable-line no-unused-vars
 
             Target.prototype.foo = 15;
             delete Object.getOwnPropertyNames;
 
+            // Different environments are inconsistent in how they handle for..in, therefore we
+            // use it to track the number of expected calls, rather than setting it to a hard
+            // number.
+            /* eslint-disable guard-for-in */
+            for (placeholder in target) {
+                numCalls++;
+            }
+            /* eslint-enable guard-for-in */
+
             try {
                 sinon.walk(target, iterator, rcvr);
-                assert(iterator.calledTwice);
+                assert.equals(iterator.callCount, numCalls);
                 assert(iterator.alwaysCalledOn(rcvr));
                 assert(iterator.calledWith("world", "hello"));
                 assert(iterator.calledWith(15, "foo"));
