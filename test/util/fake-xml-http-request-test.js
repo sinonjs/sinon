@@ -393,16 +393,19 @@
             },
 
             "dispatches onreadystatechange": function () {
-                var state;
+                var event, state;
                 this.xhr.open("POST", "/", false);
 
-                this.xhr.onreadystatechange = function () {
+                this.xhr.onreadystatechange = function (e) {
+                    event = e;
                     state = this.readyState;
                 };
 
                 this.xhr.send("Data");
 
                 assert.equals(state, sinon.FakeXMLHttpRequest.OPENED);
+                assert.equals(event.type, "readystatechange");
+                assert.defined(event.target);
             },
 
             "dispatches event using DOM Event interface": function () {
@@ -414,6 +417,7 @@
 
                 assert(listener.calledOnce);
                 assert.equals(listener.args[0][0].type, "readystatechange");
+                assert.defined(listener.args[0][0].target);
             },
 
             "dispatches onSend callback if set": function () {
