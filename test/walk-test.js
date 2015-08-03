@@ -97,9 +97,9 @@
                 placeholder; // eslint-disable-line no-unused-vars
 
             Target.prototype.foo = 15;
-            delete Object.getOwnPropertyNames;
+            Object.getOwnPropertyNames = null;
 
-            // Different environments are inconsistent in how they handle for..in, therefore we
+            // Different environments may be inconsistent in how they handle for..in, therefore we
             // use it to track the number of expected calls, rather than setting it to a hard
             // number.
             /* eslint-disable guard-for-in */
