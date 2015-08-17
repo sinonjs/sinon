@@ -1,10 +1,10 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../../lib/sinon");
+    var assert = buster.assert;
+    var refute = buster.refute;
 
     var globalXMLHttpRequest = root.XMLHttpRequest;
     var globalActiveXObject = root.ActiveXObject;
@@ -1230,8 +1230,8 @@
             },
 
             "updates attributes from working XHR object when ready state changes": function () {
-                var workingXHRInstance;
-                var readyStateCb;
+                var workingXHRInstance,
+                    readyStateCb;
                 var workingXHROverride = function () {
                     workingXHRInstance = this;
                     this.addEventListener = function (str, fn) {
@@ -1250,8 +1250,8 @@
             },
 
             "passes on methods to working XHR object": function () {
-                var workingXHRInstance;
-                var spy;
+                var workingXHRInstance,
+                    spy;
                 var workingXHROverride = function () {
                     workingXHRInstance = this;
                     this.addEventListener = this.open = function () {};
@@ -1266,8 +1266,8 @@
             },
 
             "calls legacy onreadystatechange handlers with target set to fakeXHR": function () {
-                var spy;
-                var readyStateCb;
+                var spy,
+                    readyStateCb;
                 var workingXHROverride = function () {
                     this.addEventListener = function (str, fn) {
                         readyStateCb = fn;
@@ -1671,8 +1671,8 @@
             },
 
             "fires events in an order similar to a browser": function (done) {
-                var xhr = this.xhr,
-                    events = [];
+                var xhr = this.xhr;
+                var events = [];
 
                 this.xhr.upload.addEventListener("progress", function (e) {
                     events.push(e.type);

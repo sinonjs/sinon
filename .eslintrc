@@ -149,7 +149,12 @@
         "newline-after-var": 0,
         "object-curly-spacing": [0, "never"],
         "object-shorthand": 0,
-        "one-var": 0,
+        "one-var": [2, {
+             // Exactly one declaration for uninitialized variables per function (var) or block (let or const)
+            "uninitialized": "always",
+             // Exactly one declarator per initialized variable declaration per function (var) or block (let or const)
+            "initialized": "never"
+        }],
         "operator-assignment": [0, "always"],
         "operator-linebreak": 0,
         "padded-blocks": 0,

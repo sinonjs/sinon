@@ -1,9 +1,9 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
 
     buster.testCase("sinon.timesInWords", {
         "should return \"once\" for input of 1": function () {
@@ -31,8 +31,8 @@
         },
 
         "should return \"0 times\" for falsy input": function () {
-            var falsies = [0, NaN, null, false, undefined, ""],
-                result, i;
+            var falsies = [0, NaN, null, false, undefined, ""];
+            var result, i;
 
             for (i = 0; i < falsies.length; i++) {
                 result = sinon.timesInWords(falsies[i]);

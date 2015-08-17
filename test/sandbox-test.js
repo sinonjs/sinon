@@ -1,11 +1,11 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute,
-        samsam = root.samsam || require("samsam");
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
+    var refute = buster.refute;
+    var samsam = root.samsam || require("samsam");
 
     var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
     var globalXHR = root.XMLHttpRequest;
@@ -315,11 +315,11 @@
             },
 
             "does not inject properties if they are already present": function () {
-                var server = function () {},
-                    clock = {},
-                    spy = false,
-                    object = { server: server, clock: clock, spy: spy},
-                    sandbox = sinon.sandbox.create(sinon.getConfig({
+                var server = function () {};
+                var clock = {};
+                var spy = false;
+                var object = { server: server, clock: clock, spy: spy};
+                var sandbox = sinon.sandbox.create(sinon.getConfig({
                         properties: ["server", "clock", "spy"],
                         injectInto: object
                     }));
