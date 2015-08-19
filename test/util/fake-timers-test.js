@@ -386,7 +386,7 @@
                 var id;
                 var callback = sinon.spy(function () {
                     if (callback.callCount === 3) {
-                        clearTimeout(id);
+                        clearInterval(id);
                     }
                 });
 
