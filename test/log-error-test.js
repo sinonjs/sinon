@@ -1,9 +1,9 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
 
     buster.testCase("sinon.log", {
         "is a function": function () {
@@ -27,10 +27,10 @@
         },
 
         "calls sinon.log with a String": function () {
-            var spy = this.sandbox.spy(sinon, "log"),
-                name = "Quisque consequat, elit id suscipit.",
-                message = "Pellentesque gravida orci in tellus tristique, ac commodo nibh congue.",
-                error = new Error();
+            var spy = this.sandbox.spy(sinon, "log");
+            var name = "Quisque consequat, elit id suscipit.";
+            var message = "Pellentesque gravida orci in tellus tristique, ac commodo nibh congue.";
+            var error = new Error();
 
             error.name = name;
             error.message = message;

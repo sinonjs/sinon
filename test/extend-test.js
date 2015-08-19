@@ -1,9 +1,9 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
 
     buster.testCase("sinon.extend", {
         "should return unaltered target when only one argument": function () {
@@ -26,16 +26,16 @@
 
         "should copy toString method into target": function () {
             var target = {
-                    hello: "world",
-                    toString: function () {
-                        return "hello world";
-                    }
-                },
-                source = {
-                    toString: function () {
-                        return "hello source";
-                    }
-                };
+                hello: "world",
+                toString: function () {
+                    return "hello world";
+                }
+            };
+            var source = {
+                toString: function () {
+                    return "hello source";
+                }
+            };
 
             sinon.extend(target, source);
 
@@ -43,12 +43,12 @@
         },
 
         "must copy the last occuring property into the target": function () {
-            var target = { a: 0, b: 0, c: 0, d: 0 },
-                source1 = { a: 1, b: 1, c: 1 },
-                source2 = { a: 2, b: 2 },
-                soruce3 = { a: 3 };
+            var target = { a: 0, b: 0, c: 0, d: 0 };
+            var source1 = { a: 1, b: 1, c: 1 };
+            var source2 = { a: 2, b: 2 };
+            var source3 = { a: 3 };
 
-            sinon.extend(target, source1, source2, soruce3);
+            sinon.extend(target, source1, source2, source3);
 
             assert.equals(target.a, 3);
             assert.equals(target.b, 2);

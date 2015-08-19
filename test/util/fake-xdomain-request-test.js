@@ -1,17 +1,14 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
-
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../../lib/sinon");
+    var assert = buster.assert;
+    var refute = buster.refute;
     var globalXDomainRequest = root.XDomainRequest;
-
     var fakeXdrSetUp = function () {
         this.fakeXdr = sinon.useFakeXDomainRequest();
     };
-
     var fakeXdrTearDown = function () {
         if (typeof this.fakeXdr.restore === "function") {
             this.fakeXdr.restore();

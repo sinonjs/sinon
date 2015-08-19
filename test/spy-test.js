@@ -1,10 +1,10 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
+    var refute = buster.refute;
 
     function spyCalledTests(method) {
         return {
@@ -339,8 +339,8 @@
             },
 
             "retains function length 12": function () {
-                var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}, // eslint-disable-line no-unused-vars
-                    spy = sinon.spy.create(func12Args);
+                var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}; // eslint-disable-line no-unused-vars
+                var spy = sinon.spy.create(func12Args);
 
                 assert.equals(spy.length, 12);
             }

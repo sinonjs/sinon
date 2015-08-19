@@ -1,10 +1,10 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert,
-        refute = buster.refute;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
+    var refute = buster.refute;
 
     buster.testCase("sinon", {
         ".wrapMethod": {
@@ -550,7 +550,9 @@
             },
 
             "guesses name from any call where property can be located": function () {
-                var obj = {}, otherObj = { id: 42 };
+                var obj = {};
+                var otherObj = { id: 42 };
+
                 obj.doStuff = sinon.spy();
                 obj.doStuff.call({});
                 obj.doStuff();
