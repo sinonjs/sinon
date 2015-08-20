@@ -1,3 +1,7 @@
+1.16.1 / 2015-08-20
+===================
+* Bump Lolex to stop throwing an error when faking Date but not setTimeout
+
 1.16.0 / 2015-08-19
 ===================
 * Capture the stack on each spy call
