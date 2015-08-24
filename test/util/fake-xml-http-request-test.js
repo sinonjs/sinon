@@ -36,7 +36,11 @@
 
     var assertArrayBufferMatches = function (actual, expected) {
         assert(actual instanceof ArrayBuffer, "${0} expected to be an ArrayBuffer");
-        var actualString = String.fromCharCode.apply(null, new Uint8Array(actual));
+        var actualString = "";
+        var actualView = new Uint8Array(actual);
+        for (var i = 0; i < actualView.length; i++) {
+            actualString += String.fromCharCode(actualView[i]);
+        }
         assert.same(actualString, expected, "ArrayBuffer [${0}] expected to match ArrayBuffer [${1}]");
     };
 
