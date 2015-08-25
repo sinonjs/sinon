@@ -11,6 +11,8 @@
 
     var supportsProgressEvents = typeof ProgressEvent !== "undefined";
     var supportsFormData = typeof FormData !== "undefined";
+    var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
+    var supportsBlob = typeof Blob === "function";
 
     var fakeXhrSetUp = function () {
         this.fakeXhr = sinon.useFakeXMLHttpRequest();
@@ -30,6 +32,24 @@
         } finally {
             sinon.xhr.workingXHR = original;
         }
+    };
+
+    var assertArrayBufferMatches = function (actual, expected) {
+        assert(actual instanceof ArrayBuffer, "${0} expected to be an ArrayBuffer");
+        var actualString = "";
+        var actualView = new Uint8Array(actual);
+        for (var i = 0; i < actualView.length; i++) {
+            actualString += String.fromCharCode(actualView[i]);
+        }
+        assert.same(actualString, expected, "ArrayBuffer [${0}] expected to match ArrayBuffer [${1}]");
+    };
+
+    var assertBlobMatches = function (actual, expected, done) {
+        var actualReader = new FileReader();
+        actualReader.onloadend = done(function () {
+            assert.same(actualReader.result, expected);
+        });
+        actualReader.readAsBinaryString(actual);
     };
 
     buster.testCase("sinon.FakeXMLHttpRequest", {
@@ -115,10 +135,22 @@
                 assert.isFalse(this.xhr.async);
             },
 
-            "sets responseText to null": function () {
+            "sets response to empty string": function () {
                 this.xhr.open("GET", "/my/url");
 
-                assert.isNull(this.xhr.responseText);
+                assert.same(this.xhr.response, "");
+            },
+
+            "sets responseText to empty string": function () {
+                this.xhr.open("GET", "/my/url");
+
+                assert.same(this.xhr.responseText, "");
+            },
+
+            "sets responseXML to null": function () {
+                this.xhr.open("GET", "/my/url");
+
+                assert.isNull(this.xhr.responseXML);
             },
 
             "sets requestHeaders to blank object": function () {
@@ -154,7 +186,9 @@
                 assert.isTrue(state.async);
                 refute.defined(state.username);
                 refute.defined(state.password);
-                assert.isNull(state.responseText);
+                assert.same(state.response, "");
+                assert.same(state.responseText, "");
+                assert.isNull(state.responseXML);
                 refute.defined(state.responseHeaders);
                 assert.equals(state.readyState, sinon.FakeXMLHttpRequest.OPENED);
                 assert.isFalse(state.sendFlag);
@@ -549,16 +583,19 @@
 
             "invokes onreadystatechange handler with partial data": function () {
                 var pieces = [];
+                var mismatch = false;
 
-                var spy = sinon.spy(function () {
+                this.xhr.readyStateChange = function () {
+                    if (this.response !== this.responseText) {
+                        mismatch = true;
+                    }
                     pieces.push(this.responseText);
-                });
-
-                this.xhr.readyStateChange = spy;
+                };
                 this.xhr.chunkSize = 9;
 
                 this.xhr.setResponseBody("Some text goes in here ok?");
 
+                assert.isFalse(mismatch);
                 assert.equals(pieces[1], "Some text");
             },
 
@@ -610,6 +647,42 @@
                 assert.exception(function () {
                     xhr.setResponseBody({});
                 }, "InvalidBodyException");
+            },
+
+            "with ArrayBuffer support": {
+                requiresSupportFor: {
+                    "ArrayBuffer": supportsArrayBuffer
+                },
+
+                "invokes onreadystatechange for each chunk when responseType='arraybuffer'": function () {
+                    var spy = sinon.spy();
+                    this.xhr.readyStateChange = spy;
+                    this.xhr.chunkSize = 10;
+
+                    this.xhr.responseType = "arraybuffer";
+
+                    this.xhr.setResponseBody("Some text goes in here ok?");
+
+                    assert.equals(spy.callCount, 4);
+                }
+            },
+
+            "with Blob support": {
+                requiresSupportFor: {
+                    "Blob": supportsBlob
+                },
+
+                "invokes onreadystatechange handler for each 10 byte chunk when responseType='blob'": function () {
+                    var spy = sinon.spy();
+                    this.xhr.readyStateChange = spy;
+                    this.xhr.chunkSize = 10;
+
+                    this.xhr.responseType = "blob";
+
+                    this.xhr.setResponseBody("Some text goes in here ok?");
+
+                    assert.equals(spy.callCount, 4);
+                }
             }
         },
 
@@ -887,12 +960,20 @@
                 assert.isTrue(this.xhr.aborted);
             },
 
-            "sets responseText to null": function () {
+            "sets response to empty string": function () {
                 this.xhr.responseText = "Partial data";
 
                 this.xhr.abort();
 
-                assert.isNull(this.xhr.responseText);
+                assert.same(this.xhr.response, "");
+            },
+
+            "sets responseText to empty string": function () {
+                this.xhr.responseText = "Partial data";
+
+                this.xhr.abort();
+
+                assert.same(this.xhr.responseText, "");
             },
 
             "sets errorFlag to true": function () {
@@ -1003,15 +1084,26 @@
                 this.xhr = new sinon.FakeXMLHttpRequest();
             },
 
-            "is initially the empty string if responseType !== 'json'": function () {
-                this.xhr.responseType = "arraybuffer";
+            "is initially the empty string if responseType === ''": function () {
+                this.xhr.responseType = "";
                 this.xhr.open("GET", "/");
-                assert.isString(this.xhr.response);
-                assert.equals(this.xhr.response, "");
+                assert.same(this.xhr.response, "");
+            },
+
+            "is initially the empty string if responseType === 'text'": function () {
+                this.xhr.responseType = "text";
+                this.xhr.open("GET", "/");
+                assert.same(this.xhr.response, "");
             },
 
             "is initially null if responseType === 'json'": function () {
                 this.xhr.responseType = "json";
+                this.xhr.open("GET", "/");
+                assert.isNull(this.xhr.response);
+            },
+
+            "is initially null if responseType === 'document'": function () {
+                this.xhr.responseType = "document";
                 this.xhr.open("GET", "/");
                 assert.isNull(this.xhr.response);
             },
@@ -1022,8 +1114,7 @@
 
                 this.xhr.respond(200, {}, "");
 
-                assert.isString(this.xhr.response);
-                assert.equals(this.xhr.response, "");
+                assert.same(this.xhr.response, "");
             },
 
             "parses JSON for responseType='json'": function () {
@@ -1051,6 +1142,89 @@
                 var response = this.xhr.response;
                 assert.isString(response);
                 assert.equals(response, responseText);
+            },
+
+            "with ArrayBuffer support": {
+                requiresSupportFor: {
+                    "ArrayBuffer": supportsArrayBuffer
+                },
+
+                "is initially null if responseType === 'arraybuffer'": function () {
+                    this.xhr.responseType = "arraybuffer";
+                    this.xhr.open("GET", "/");
+                    assert.isNull(this.xhr.response);
+                },
+
+                "defaults to empty ArrayBuffer response": function () {
+                    this.xhr.responseType = "arraybuffer";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond();
+                    assertArrayBufferMatches(this.xhr.response, "");
+                },
+
+                "returns ArrayBuffer when responseType='arraybuffer'": function () {
+                    this.xhr.responseType = "arraybuffer";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond(200, { "Content-Type": "application/octet-stream" }, "a test buffer");
+
+                    assertArrayBufferMatches(this.xhr.response, "a test buffer");
+                },
+
+                "returns binary data correctly when responseType='arraybuffer'": function () {
+                    this.xhr.responseType = "arraybuffer";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond(200, { "Content-Type": "application/octet-stream" }, "\xFF");
+
+                    assertArrayBufferMatches(this.xhr.response, "\xFF");
+                }
+            },
+
+            "with Blob support": {
+                requiresSupportFor: {
+                    "Blob": supportsBlob
+                },
+
+                "is initially null if responseType === 'blob'": function () {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    assert.isNull(this.xhr.response);
+                },
+
+                "defaults to empty Blob response": function (done) {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond();
+
+                    assertBlobMatches(this.xhr.response, "", done);
+                },
+
+                "returns blob with correct data": function (done) {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond(200, { "Content-Type": "application/octet-stream" }, "a test blob");
+
+                    assertBlobMatches(this.xhr.response, "a test blob", done);
+                },
+
+                "returns blob with correct binary data": function (done) {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    this.xhr.respond(200, { "Content-Type": "application/octet-stream" }, "\xFF");
+
+                    assertBlobMatches(this.xhr.response, "\xFF", done);
+                }
             }
         },
 
