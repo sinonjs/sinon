@@ -2,6 +2,7 @@
     "use strict";
 
     var buster = root.buster || require("buster");
+    var nextTick = buster.nextTick || require("buster-core").nextTick;
     var sinon = root.sinon || require("../lib/sinon");
     var assert = buster.assert;
     var refute = buster.refute;
@@ -128,10 +129,9 @@
             };
 
             sinon.test(function (callback) {
-                // FIXME: Why does this not finish in node but works fine in browsers?
-                // buster.nextTick(function () {
-                callback();
-                // });
+                nextTick(function () {
+                    callback();
+                });
             }).call({}, fakeDone);
         },
 
@@ -147,11 +147,30 @@
                     fn.call(this);
                 }
             };
+
             it("works", sinon.test(function (callback) {
-                // FIXME: Why does this not finish in node but works fine in browsers?
-                // buster.nextTick(function () {
+                nextTick(function () {
+                    callback();
+                });
+            }));
+
+        },
+
+        "async test with sandbox using mocha interface throwing error": function (done) {
+            var it = function (title, fn) {
+                var mochaDone = function (args) {
+                    assert.equals(args, undefined);
+                    done(args);
+                };
+                if (fn.length) {
+                    fn.call(this, mochaDone);
+                } else {
+                    fn.call(this);
+                }
+            };
+
+            it("works", sinon.test(function (callback) {
                 callback();
-                // });
             }));
         },
 
@@ -168,12 +187,11 @@
                 var addOneInnerSpy = this.spy();
                 this.stub(globalObj, "addOneInner", addOneInnerSpy);
 
-                // FIXME: Why does this not finish in node but works fine in browsers?
-                // buster.nextTick(function () {
-                globalObj.addOne(41);
-                assert(addOneInnerSpy.calledOnce);
-                callback();
-                // });
+                nextTick(function () {
+                    globalObj.addOne(41);
+                    assert(addOneInnerSpy.calledOnce);
+                    callback();
+                });
             }).call({}, done);
         },
 
