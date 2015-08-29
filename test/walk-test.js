@@ -1,15 +1,15 @@
 (function (root) {
     "use strict";
 
-    var buster = root.buster || require("buster"),
-        sinon = root.sinon || require("../lib/sinon"),
-        assert = buster.assert;
+    var buster = root.buster || require("buster");
+    var sinon = root.sinon || require("../lib/sinon");
+    var assert = buster.assert;
 
     buster.testCase("sinon.walk", {
         "should call iterator with value, key, and obj, with context as the receiver": function () {
-            var target = Object.create(null),
-                rcvr = {},
-                iterator = sinon.spy();
+            var target = Object.create(null);
+            var rcvr = {};
+            var iterator = sinon.spy();
 
             target.hello = "world";
             target.foo = 15;
@@ -23,8 +23,8 @@
         },
 
         "should work with non-enumerable properties": function () {
-            var target = Object.create(null),
-                iterator = sinon.spy();
+            var target = Object.create(null);
+            var iterator = sinon.spy();
 
             target.hello = "world";
             Object.defineProperty(target, "foo", {
@@ -85,16 +85,16 @@
         },
 
         "should fall back to for..in if getOwnPropertyNames is not available": function () {
-            var getOwnPropertyNames = Object.getOwnPropertyNames,
-                Target = function Target() {
-                    this.hello = "world";
-                },
-                target = new Target(),
-                rcvr = {},
-                iterator = sinon.spy(),
-                err = null,
-                numCalls = 0,
-                placeholder; // eslint-disable-line no-unused-vars
+            var getOwnPropertyNames = Object.getOwnPropertyNames;
+            var Target = function Target() {
+                this.hello = "world";
+            };
+            var target = new Target();
+            var rcvr = {};
+            var iterator = sinon.spy();
+            var err = null;
+            var numCalls = 0;
+            var placeholder; // eslint-disable-line no-unused-vars
 
             Target.prototype.foo = 15;
             Object.getOwnPropertyNames = null;
