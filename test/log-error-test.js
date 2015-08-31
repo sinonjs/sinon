@@ -4,6 +4,7 @@
     var buster = root.buster || require("buster");
     var sinon = root.sinon || require("../lib/sinon");
     var assert = buster.assert;
+    var refute = buster.refute;
 
     buster.testCase("sinon.log", {
         "is a function": function () {
@@ -70,6 +71,43 @@
 
             var func = this.timeOutStub.args[0][0];
             assert.exception(func);
+        }
+    });
+
+    buster.testCase("sinon.logError.useImmediateExceptions", {
+        setUp: function () {
+            this.sandbox = sinon.sandbox.create();
+            this.timeOutStub = this.sandbox.stub(sinon.logError, "setTimeout");
+            this.originalFlag = sinon.logError.useImmediateExceptions;
+        },
+
+        tearDown: function () {
+            // setTimeout = realSetTimeout;
+            this.sandbox.restore();
+            sinon.logError.useImmediateExceptions = this.originalFlag;
+        },
+
+        "throws the logged error immediately, does not call logError.setTimeout when flag is true": function () {
+
+            var error = new Error();
+
+            sinon.logError.useImmediateExceptions = true;
+
+            assert.exception(function () {
+                sinon.logError("an error", error);
+            });
+            assert(this.timeOutStub.notCalled);
+        },
+
+        "does not throw logged error immediately and calls logError.setTimeout when flag is false": function () {
+            var error = new Error();
+
+            sinon.logError.useImmediateExceptions = false;
+
+            refute.exception(function () {
+                sinon.logError("an error", error);
+            });
+            assert(this.timeOutStub.called);
         }
     });
 }(this));
