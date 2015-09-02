@@ -38,28 +38,29 @@
             },
             "allows the 'autoRespondAfter' setting": function () {
                 var server = sinon.fakeServer.create({
-                    autoRespond: true
+                    autoRespondAfter: 500
                 });
-                assert(
-                    server.autoRespond,
+                assert.equals(
+                    server.autoRespondAfter,
+                    500,
                     "fakeServer.create should accept 'autoRespondAfter' setting"
                 );
             },
             "allows the 'respondImmediately' setting": function () {
                 var server = sinon.fakeServer.create({
-                    autoRespond: true
+                    respondImmediately: true
                 });
                 assert(
-                    server.autoRespond,
+                    server.respondImmediately,
                     "fakeServer.create should accept 'respondImmediately' setting"
                 );
             },
             "allows the 'fakeHTTPMethods' setting": function () {
                 var server = sinon.fakeServer.create({
-                    autoRespond: true
+                    fakeHTTPMethods: true
                 });
                 assert(
-                    server.autoRespond,
+                    server.fakeHTTPMethods,
                     "fakeServer.create should accept 'fakeHTTPMethods' setting"
                 );
             },
