@@ -122,6 +122,21 @@
             }).call({});
         },
 
+        "passes on errors to callbacks": function () {
+
+            var fn = sinon.test(function (callback) {
+                callback(new Error("myerror"));
+            });
+
+            function errorChecker(err) {
+                errorChecker.called = true;
+                assert.equals(err instanceof Error, true);
+            }
+
+            fn(errorChecker);
+            assert.equals(errorChecker.called, true);
+        },
+
         "async test with sandbox": function (done) {
             var fakeDone = function (args) {
                 assert.equals(args, undefined);
