@@ -1490,8 +1490,8 @@
 
                     stub.reset();
 
-                    assert.same(stub(5), 1);
-                    assert.same(stub(5), 2);
+                    assert.same(stub(5), undefined);
+                    assert.same(stub(5), undefined);
                     refute.defined(stub(5));
                 },
 
@@ -1641,16 +1641,29 @@
             }
         },
 
-        "reset only resets call history": function () {
-            var obj = { a: function () {} };
-            var spy = sinon.spy();
-            sinon.stub(obj, "a").callsArg(1);
+        ".reset": {
+            "resets behavior": function () {
+                var obj = { a: function () {} };
+                var spy = sinon.spy();
+                sinon.stub(obj, "a").callsArg(1);
 
-            obj.a(null, spy);
-            obj.a.reset();
-            obj.a(null, spy);
+                obj.a(null, spy);
+                obj.a.reset();
+                obj.a(null, spy);
 
-            assert(spy.calledTwice);
+                assert(spy.calledOnce);
+            },
+
+            "resets call history": function () {
+                var stub = sinon.stub();
+
+                stub(1);
+                stub.reset();
+                stub(2);
+
+                assert(stub.calledOnce);
+                assert.equals(stub.getCall(0).args[0], 2);
+            }
         },
 
         ".resetBehavior": {
