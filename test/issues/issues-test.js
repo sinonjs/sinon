@@ -5,13 +5,16 @@
     var sinon = root.sinon || require("../../lib/sinon");
     var assert = buster.assert;
     var refute = buster.refute;
+    var useImmediateExceptions;
 
     buster.testCase("issues", {
         setUp: function () {
             this.sandbox = sinon.sandbox.create();
+            useImmediateExceptions = sinon.logError.useImmediateExceptions;
         },
 
         tearDown: function () {
+            sinon.logError.useImmediateExceptions = useImmediateExceptions;
             this.sandbox.restore();
         },
 
@@ -100,6 +103,26 @@
 
                 clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
                 assert.equals(clock.now, Date.now());
+            }
+        },
+
+        "#835": {
+            "logError() throws an exception if the passed err is read-only": function () {
+                sinon.logError.useImmediateExceptions = true;
+                // passes
+                var err = { name: "TestError", message: "this is a proper exception" };
+                try {
+                    sinon.logError("#835 test", err);
+                } catch(ex) {
+                    assert.equals(ex.name, err.name);
+                }
+
+                // fails until this issue is fixed
+                try {
+                    sinon.logError("#835 test", "this literal string is not a proper exception");
+                } catch(ex) {
+                    assert.equals(ex.name, "#835 test");
+                }
             }
         }
     });
