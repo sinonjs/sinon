@@ -30,6 +30,7 @@
     "samsam": "1.1.2"
   },
   "devDependencies": {
+    "browserify": "^11.1.0",
     "buster": "0.7.18",
     "buster-core": "^0.6.4",
     "buster-istanbul": "0.1.13",
