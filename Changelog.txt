@@ -1,5 +1,5 @@
 
-1.7.0 / 2015-09-22
+1.17.0 / 2015-09-22
 ==================
 
   * Fix #821 where Sinon.JS would leak a setImmdiate into global scope
