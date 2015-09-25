@@ -101,6 +101,20 @@
                 clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
                 assert.equals(clock.now, Date.now());
             }
+        },
+
+        "#852 - createStubInstance on intherited constructors": {
+            "must not throw error": function () {
+                var A = function () {};
+                var B = function () {};
+
+                B.prototype = Object.create(A.prototype);
+                B.prototype.constructor = A;
+
+                refute.exception(function () {
+                    var b = sinon.createStubInstance(B); // eslint-disable-line no-unused-vars
+                });
+            }
         }
     });
 }(this));
