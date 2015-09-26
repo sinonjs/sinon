@@ -101,6 +101,30 @@
                 clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
                 assert.equals(clock.now, Date.now());
             }
+        },
+
+        "#852 - createStubInstance on intherited constructors": {
+            "must not throw error": function () {
+                var A = function () {};
+                var B = function () {};
+
+                B.prototype = Object.create(A.prototype);
+                B.prototype.constructor = A;
+
+                refute.exception(function () {
+                    sinon.createStubInstance(B);
+                });
+            }
+        },
+
+        "#852(2) - createStubInstance should on same constructor": {
+            "must be idempotent": function () {
+                var A = function () {};
+                refute.exception(function () {
+                    sinon.createStubInstance(A);
+                    sinon.createStubInstance(A);
+                });
+            }
         }
     });
 }(this));
