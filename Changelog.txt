@@ -1,5 +1,11 @@
+1.17.1 / 2015-09-26
+==================
 
-1.7.0 / 2015-09-22
+  * Fix #851: Do not attempt to re-stub constructors
+  * Fix #847: Ensure walk invokes accessors directly on target
+  * Run tests in node 4.1.x also
+
+1.17.0 / 2015-09-22
 ==================
 
   * Fix #821 where Sinon.JS would leak a setImmdiate into global scope
