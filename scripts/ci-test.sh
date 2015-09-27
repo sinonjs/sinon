@@ -5,11 +5,12 @@ function finish {
     if [ -n "${TRAVIS+1}" ]; then
       echo "TRAVIS detected, skip killing child processes"
     else
-      kill $(jobs -pr)
+      pkill -P 1 -u $(id -u) -n xulrunner # clean up any leftover xulrunner processes from slimerjs
     fi
 }
 
 trap finish SIGINT SIGTERM EXIT
+# trap "kill -- -$BASHPID" SIGINT SIGTERM EXIT
 
 echo
 echo starting buster-server
@@ -17,8 +18,8 @@ echo starting buster-server
 sleep 4 # takes a while for buster server to start
 
 echo
-echo starting phantomjs
-phantomjs ./node_modules/buster/script/phantom.js &
+echo starting slimerjs
+./node_modules/.bin/slimerjs --load-images=false ./node_modules/buster/script/phantom.js &
 sleep 1 # give phantomjs a second to warm up
 
 echo
