@@ -226,6 +226,19 @@
             }
         },
 
+        ".callsFake": {
+           setUp: function () {
+               this.stub = sinon.stub.create();
+           },
+
+           "calls fake function": function () {
+               var fake = sinon.stub.create();
+               this.stub.callsFake(fake);
+               this.stub(1, 2);
+               assert(fake.calledWith(1, 2));
+           }
+       },
+
         ".callsArg": {
             setUp: function () {
                 this.stub = sinon.stub.create();
@@ -541,11 +554,11 @@
                 assert.isFunction(stub.throws);
             },
 
-            "custom stubbed method should not be proper stub": function () {
+            "custom stubbed method should be proper stub": function () {
                 var stub = sinon.stub(this.object, "method", function () {});
 
-                refute.defined(stub.returns);
-                refute.defined(stub.throws);
+                assert.isFunction(stub.onCall);
+                assert.isFunction(stub.resetBehavior);
             },
 
             "stub should be spy": function () {
