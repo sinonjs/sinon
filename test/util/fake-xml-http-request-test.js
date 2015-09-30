@@ -959,15 +959,13 @@
             },
 
             "sets aborted flag to true": function () {
-                this.xhr.aborted = true;
-
                 this.xhr.abort();
 
                 assert.isTrue(this.xhr.aborted);
             },
 
             "sets response to empty string": function () {
-                this.xhr.responseText = "Partial data";
+                this.xhr.response = "Partial data";
 
                 this.xhr.abort();
 
@@ -983,8 +981,6 @@
             },
 
             "sets errorFlag to true": function () {
-                this.xhr.errorFlag = true;
-
                 this.xhr.abort();
 
                 assert.isTrue(this.xhr.errorFlag);
