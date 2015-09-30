@@ -1731,6 +1731,22 @@
                 this.xhr.respond(200, {}, "");
             },
 
+            "does not trigger 'load' event on abort": function (done) {
+                this.xhr.addEventListener("load", function () {
+                    assert(false);
+                });
+
+                this.xhr.addEventListener("abort", function () {
+                    assert(true);
+
+                    // finish on next tick
+                    setTimeout(done, 0);
+                });
+
+                this.xhr.send();
+                this.xhr.abort();
+            },
+
             "triggers 'abort' event on cancel": function (done) {
                 var xhr = this.xhr;
 
