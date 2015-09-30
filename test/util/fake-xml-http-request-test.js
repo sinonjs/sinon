@@ -1751,10 +1751,13 @@
                 var xhr = this.xhr;
 
                 this.xhr.addEventListener("abort", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
-                    done();
+                    setTimeout(function () {
+                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        done();
+                    }, 0);
                 });
 
                 this.xhr.send();
@@ -1778,10 +1781,13 @@
                 var xhr = this.xhr;
 
                 this.xhr.onabort = function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
-                    done();
+                    setTimeout(function () {
+                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        done();
+                    }, 0);
                 };
 
                 this.xhr.send();
@@ -1929,10 +1935,13 @@
                 var xhr = this.xhr;
 
                 this.xhr.upload.addEventListener("abort", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
-                    done();
+                    setTimeout(function () {
+                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        done();
+                    }, 0);
                 });
 
                 this.xhr.send();
