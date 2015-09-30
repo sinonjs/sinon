@@ -1,3 +1,15 @@
+
+1.17.0 / 2015-09-22
+==================
+
+  * Fix #821 where Sinon.JS would leak a setImmdiate into global scope
+  * Removed sinon-timers from the build. refs #811
+  * Added flag that, when set to true, makes sinon.logError throw errors synchronously.
+  * Fix #777: Support non-enumerable props when stubbing objects
+  * Made the sinon.test() function pass on errors to the callback
+  * Expand conversion from ArrayBuffer to binary string
+  * Add support for ArrayBuffer, blob responseTypes
+
 1.16.1 / 2015-08-20
 ===================
 * Bump Lolex to stop throwing an error when faking Date but not setTimeout

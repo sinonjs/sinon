@@ -124,6 +124,30 @@
                     assert.equals(ex.name, "#835 test");
                 }
             }
+        },
+
+        "#852(1) - createStubInstance on inherited constructors": {
+            "must not throw error": function () {
+                var A = function () {};
+                var B = function () {};
+
+                B.prototype = Object.create(A.prototype);
+                B.prototype.constructor = A;
+
+                refute.exception(function () {
+                    sinon.createStubInstance(B);
+                });
+            }
+        },
+
+        "#852(2) - createStubInstance should on same constructor": {
+            "must be idempotent": function () {
+                var A = function () {};
+                refute.exception(function () {
+                    sinon.createStubInstance(A);
+                    sinon.createStubInstance(A);
+                });
+            }
         }
     });
 }(this));
