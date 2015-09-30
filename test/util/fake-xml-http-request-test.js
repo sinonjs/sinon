@@ -52,6 +52,12 @@
         actualReader.readAsBinaryString(actual);
     };
 
+    var assertProgressEvent = function (event, progress) {
+        assert.equals(event.loaded, progress);
+        assert.equals(event.total, progress);
+        assert.equals(event.lengthComputable, !!progress);
+    };
+
     buster.testCase("sinon.FakeXMLHttpRequest", {
         requiresSupportFor: {
             "browser": typeof window !== "undefined"
@@ -984,13 +990,6 @@
                 assert.isTrue(this.xhr.errorFlag);
             },
 
-            "fire onerror event": function () {
-                var spy = sinon.spy();
-                this.xhr.onerror = spy;
-                this.xhr.abort();
-                assert.equals(spy.callCount, 1);
-            },
-
             "nulls request headers": function () {
                 this.xhr.open("GET", "/");
                 this.xhr.setRequestHeader("X-Test", "Sumptn");
@@ -1073,6 +1072,44 @@
                 this.xhr.abort();
 
                 assert.isFalse(this.xhr.onreadystatechange.called);
+            },
+
+            // see: https://xhr.spec.whatwg.org/#request-error-steps
+            "should follow request error steps": function (done) {
+                var expectedOrder = [
+                    "upload:progress",
+                    "upload:abort",
+                    "upload:loadend",
+                    "xhr:progress",
+                    "xhr:onabort",
+                    "xhr:abort"
+                ];
+                var eventOrder = [];
+
+                function observe(name) {
+                    return function (e) {
+                        assertProgressEvent(e, 0);
+                        eventOrder.push(name);
+                    };
+                }
+
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.upload.addEventListener("progress", observe("upload:progress"));
+                this.xhr.upload.addEventListener("abort", observe("upload:abort"));
+                this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
+                this.xhr.addEventListener("progress", observe("xhr:progress"));
+                this.xhr.addEventListener("abort", observe("xhr:abort"));
+                this.xhr.onabort = observe("xhr:onabort");
+                this.xhr.addEventListener("loadend", function (e) {
+                    assertProgressEvent(e, 0);
+                    assert.equals(eventOrder, expectedOrder);
+
+                    done();
+                });
+
+                this.xhr.abort();
             }
         },
 
