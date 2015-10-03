@@ -1666,6 +1666,19 @@
             }
         },
 
+        ".resetHistory": {
+            "resets history": function () {
+                var stub = sinon.stub();
+
+                stub(1);
+                stub.reset();
+                stub(2);
+
+                assert(stub.calledOnce);
+                assert.equals(stub.getCall(0).args[0], 2);
+            }
+        },
+
         ".resetBehavior": {
             "clears yields* and callsArg* sequence": function () {
                 var stub = sinon.stub().yields(1);
