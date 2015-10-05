@@ -111,14 +111,6 @@
                 assert.exception(function () {
                     stub.returnsArg();
                 }, "TypeError");
-            },
-
-            "throws if index is not number": function () {
-                var stub = sinon.stub.create();
-
-                assert.exception(function () {
-                    stub.returnsArg({});
-                }, "TypeError");
             }
         },
 
@@ -357,6 +349,26 @@
                 assert(callback.calledOn(this.fakeContext));
             },
 
+            "calls argument at specified index with undefined context": function () {
+                this.stub.callsArgOn(2, undefined);
+                var callback = sinon.stub.create();
+
+                this.stub(1, 2, callback);
+
+                assert(callback.called);
+                assert(callback.calledOn(undefined));
+            },
+
+            "calls argument at specified index with number context": function () {
+                this.stub.callsArgOn(2, 5);
+                var callback = sinon.stub.create();
+
+                this.stub(1, 2, callback);
+
+                assert(callback.called);
+                assert(callback.calledOn(5));
+            },
+
             "returns stub": function () {
                 var stub = this.stub.callsArgOn(2, this.fakeContext);
 
@@ -379,27 +391,11 @@
                 }, "TypeError");
             },
 
-            "throws if no context is specified": function () {
-                var stub = this.stub;
-
-                assert.exception(function () {
-                    stub.callsArgOn(3);
-                }, "TypeError");
-            },
-
             "throws if index is not number": function () {
                 var stub = this.stub;
 
                 assert.exception(function () {
                     stub.callsArgOn(this.fakeContext, 2);
-                }, "TypeError");
-            },
-
-            "throws if context is not an object": function () {
-                var stub = this.stub;
-
-                assert.exception(function () {
-                    stub.callsArgOn(2, 2);
                 }, "TypeError");
             }
         },
@@ -419,6 +415,50 @@
 
                 assert(callback.calledWith(object));
                 assert(callback.calledOn(this.fakeContext));
+            },
+
+            "calls argument at specified index with provided args and undefined context": function () {
+                var object = {};
+                this.stub.callsArgOnWith(1, undefined, object);
+                var callback = sinon.stub.create();
+
+                this.stub(1, callback);
+
+                assert(callback.calledWith(object));
+                assert(callback.calledOn(undefined));
+            },
+
+            "calls argument at specified index with provided args and number context": function () {
+                var object = {};
+                this.stub.callsArgOnWith(1, 5, object);
+                var callback = sinon.stub.create();
+
+                this.stub(1, callback);
+
+                assert(callback.calledWith(object));
+                assert(callback.calledOn(5));
+            },
+
+            "calls argument at specified index with provided args with undefined context": function () {
+                var object = {};
+                this.stub.callsArgOnWith(1, undefined, object);
+                var callback = sinon.stub.create();
+
+                this.stub(1, callback);
+
+                assert(callback.calledWith(object));
+                assert(callback.calledOn(undefined));
+            },
+
+            "calls argument at specified index with provided args with number context": function () {
+                var object = {};
+                this.stub.callsArgOnWith(1, 5, object);
+                var callback = sinon.stub.create();
+
+                this.stub(1, callback);
+
+                assert(callback.calledWith(object));
+                assert(callback.calledOn(5));
             },
 
             "returns function": function () {
@@ -457,27 +497,11 @@
                 }, "TypeError");
             },
 
-            "throws if no context is specified": function () {
-                var stub = this.stub;
-
-                assert.exception(function () {
-                    stub.callsArgOnWith(3);
-                }, "TypeError");
-            },
-
             "throws if index is not number": function () {
                 var stub = this.stub;
 
                 assert.exception(function () {
                     stub.callsArgOnWith({});
-                }, "TypeError");
-            },
-
-            "throws if context is not an object": function () {
-                var stub = this.stub;
-
-                assert.exception(function () {
-                    stub.callsArgOnWith(2, 2);
                 }, "TypeError");
             }
         },
@@ -1146,10 +1170,26 @@
                 assert.equals(callback.args[0].length, 0);
             },
 
-            "throws if no context is specified": function () {
-                assert.exception(function () {
-                    this.stub.yieldsToOn("success");
-                }, "TypeError");
+            "yields to property of object argument with undefined context": function () {
+                this.stub.yieldsToOn("success", undefined);
+                var callback = sinon.spy();
+
+                this.stub({ success: callback });
+
+                assert(callback.calledOnce);
+                assert(callback.calledOn(undefined));
+                assert.equals(callback.args[0].length, 0);
+            },
+
+            "yields to property of object argument with number context": function () {
+                this.stub.yieldsToOn("success", 5);
+                var callback = sinon.spy();
+
+                this.stub({ success: callback });
+
+                assert(callback.calledOnce);
+                assert(callback.calledOn(5));
+                assert.equals(callback.args[0].length, 0);
             },
 
             "throws understandable error if no object with callback is passed": function () {
