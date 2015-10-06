@@ -702,6 +702,18 @@
                 refute.isFunction(obj.toString.restore);
                 refute.isFunction(obj.toLocaleString.restore);
                 refute.isFunction(obj.propertyIsEnumerable.restore);
+            },
+
+            "does not fail on overrides": function () {
+                var parent = {
+                    func: function () {}
+                };
+                var child = sinon.create(parent);
+                child.func = function () {};
+
+                refute.exception(function () {
+                    sinon.stub(child);
+                });
             }
         },
 
