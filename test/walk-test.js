@@ -139,6 +139,19 @@
             }
 
             assert.isNull(err, "sinon.walk tests failed with message '" + (err && err.message) + "'");
+        },
+
+        "does not walk the same property twice": function () {
+            var parent = {
+                func: function () {}
+            };
+            var child = sinon.create(parent);
+            child.func = function () {};
+            var iterator = sinon.spy();
+
+            sinon.walk(child, iterator);
+
+            assert.equals(iterator.callCount, 1);
         }
     });
 }(this));
