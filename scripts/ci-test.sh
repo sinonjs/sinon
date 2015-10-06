@@ -24,7 +24,6 @@ sleep 1 # give phantomjs a second to warm up
 echo
 echo "starting buster-test (source)"
 ./node_modules/buster/bin/buster-test --config-group coverage
-./node_modules/buster/bin/buster-test --config-group node
 
 echo
 echo "starting buster-test (packaged)"
