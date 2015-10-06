@@ -1,14 +1,4 @@
 #!/usr/bin/env ruby
-begin
-  require "juicer/merger/javascript_merger"
-rescue LoadError => err
-  puts "Install juicer ruby gem to build Sinon.JS. Try `gem install juicer`."
-  if !defined?(Gem)
-    puts "RubyGems is not loaded. Perhaps that is why juicer can not be found?"
-  end
-  exit
-end
-
 require "fileutils"
 require "pathname"
 
@@ -28,61 +18,27 @@ def add_license(file, version)
 
 PREAMBLE
 
-    contents = contents.gsub("\"use strict\";\n", "")
-    declaration = "var sinon = (function () {"
-    f.puts(contents.sub(declaration, "#{declaration}\n\"use strict\";\n"))
+    f.puts(contents)
   end
 end
 
-def add_deps(file)
-  if !File.exists?("./node_modules/formatio")
-    puts <<-MSG
-formatio not found, skipping. To build with formatio support:
-    npm install formatio
-    MSG
-    return file
-  end
+# This code is an awful hack that is done here only because
+# PhantomJS 1.x incorrectly handles "use strict" statement in
+# some cases leading to sinon spy executing in a non-strict
+# mode, even though it explicitly says otherwise. Since the
+# people still use PhantomJS 1.x, this has to remain here
+# to add another wrapper with another "use strict" on top
+# of UMD bundle packaged by browserify.
+def add_use_strict(file)
 
   contents = File.read(file)
 
   File.open(file, "w") do |f|
-    f.puts("(function (root, factory) {")
-    f.puts("  'use strict';");
-    f.puts("  if (typeof define === 'function' && define.amd) {")
-    f.puts("    define('sinon', [], function () {")
-    f.puts("      return (root.sinon = factory());")
-    f.puts("    });")
-    f.puts("  } else if (typeof exports === 'object') {")
-    f.puts("    module.exports = factory();")
-    f.puts("  } else {")
-    f.puts("    root.sinon = factory();")
-    f.puts("  }")
-    f.puts("}(this, function () {")
-    f.puts("  'use strict';");
-    f.puts("  var samsam, formatio, lolex;")
-    f.puts("  (function () {")
-    f.puts(<<EOF)
-                function define(mod, deps, fn) {
-                  if (mod == "samsam") {
-                    samsam = deps();
-                  } else if (typeof deps === "function" && mod.length === 0) {
-                    lolex = deps();
-                  } else if (typeof fn === "function") {
-                    formatio = fn(samsam);
-                  }
-                }
-EOF
-    f.puts("    define.amd = {};")
-    f.puts(File.read("./node_modules/samsam/lib/samsam.js"))
-    f.puts(File.read("./node_modules/formatio/lib/formatio.js"))
-    f.puts(File.read("./node_modules/lolex/lolex.js"))
-    f.puts("  })();")
-    # mask the real define from the code so that it doesn't use it internally
-    f.puts("  var define;")
+    f.puts("(function () {")
+    f.puts("  'use strict';")
     f.puts(contents)
-    f.puts("  return sinon;")
-    f.puts("}));")
-    end
+    f.puts("}());")
+  end
 
   file
 end
@@ -91,14 +47,11 @@ Dir.chdir(File.dirname(__FILE__)) do
   version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
   version_string = ARGV[0] == "plain" ? "" : "-#{version}"
   output = "pkg/sinon#{version_string}.js"
+  browserify = "./node_modules/.bin/browserify"
 
   FileUtils.mkdir("pkg") unless File.exists?("pkg")
-  merger = Juicer::Merger::JavaScriptMerger.new
-  merger << "lib/sinon/test_case.js"
-  merger << "lib/sinon/assert.js"
-  merger << "lib/sinon/util/fake_xdomain_request.js"
-  merger.save(output)
-  add_license(add_deps(output), version)
+  `#{browserify} -s sinon lib/sinon.js -o #{output}`
+  add_license(add_use_strict(output), version)
 
   File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
     f.puts(File.read("lib/sinon/util/timers_ie.js"))
@@ -109,9 +62,11 @@ Dir.chdir(File.dirname(__FILE__)) do
 
   add_license("pkg/sinon-ie#{version_string}.js", version)
 
-  merger = Juicer::Merger::JavaScriptMerger.new
-  merger << "lib/sinon/util/fake_server_with_clock.js"
-  merger.save("pkg/sinon-server#{version_string}.js")
+  output_server = "pkg/sinon-server#{version_string}.js"
+  server_entry_point = "lib/sinon/util/fake_server_with_clock.js"
+  simulate_empty_sinon_core = "-i './lib/sinon/util/core.js'"
+  `#{browserify} #{server_entry_point} #{simulate_empty_sinon_core} -s sinon -o #{output_server}`
+
   add_license("pkg/sinon-server#{version_string}.js", version)
   FileUtils.cp(output, 'pkg/sinon.js')
   FileUtils.cp("pkg/sinon-ie#{version_string}.js", 'pkg/sinon-ie.js')

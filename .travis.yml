@@ -20,9 +20,6 @@ before_install:
   - npm install buster@0.7.18
 
 before_script:
-  - rvm install 2.2.0
-  - rvm use 2.2.0 --default
-  - gem install juicer
   # we only need to run eslint once per build, so let's conserve a few resources
   - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then $(npm bin)/eslint .; fi'
 

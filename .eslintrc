@@ -132,7 +132,7 @@
         "func-style": [0, "declaration"],
         "generator-star": 0,
         "generator-star-spacing": 0,
-        "global-strict": [2, "never"],
+        "global-strict": [2, "always"],
         "guard-for-in": 2,
         "handle-callback-err": 0,
         "indent": [2, 4, {"indentSwitchCase": true}],

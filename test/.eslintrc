@@ -1,0 +1,5 @@
+{
+    "rules": {
+        "global-strict": [2, "never"]
+    }
+}
