@@ -26,6 +26,18 @@
                 sinon.stub = this.stub;
             },
 
+            "fails if stubbing property on null": function () {
+                var error;
+
+                try {
+                    this.collection.stub(null, "prop");
+                } catch (e) {
+                    error = e;
+                }
+
+                assert.equals(error.message, "Trying to stub property 'prop' of null");
+            },
+
             "calls stub": function () {
                 var object = { method: function () {} };
                 var args;

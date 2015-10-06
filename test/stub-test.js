@@ -16,6 +16,18 @@
             assert.isFunction(stub.calledOn);
         },
 
+        "fails if stubbing property on null": function () {
+            var error;
+
+            try {
+                sinon.stub(null, "prop");
+            } catch (e) {
+                error = e;
+            }
+
+            assert.equals(error.message, "Trying to stub property 'prop' of null");
+        },
+
         "should contain asynchronous versions of callsArg*, and yields* methods": function () {
             var stub = sinon.stub.create();
 
