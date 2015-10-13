@@ -1,6 +1,6 @@
 # Sinon.JS
 
-[![Build status](https://secure.travis-ci.org/cjohansen/Sinon.JS.svg?branch=master)](http://travis-ci.org/cjohansen/Sinon.JS)
+[![Build status](https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master)](http://travis-ci.org/sinonjs/sinon)
 
 Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
 
