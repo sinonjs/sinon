@@ -7,17 +7,14 @@ node_js:
 
 sudo: false
 
+cache:
+  directories:
+  - node_modules
+
 before_install:
   - npm config set strict-ssl false
   # use a more modern npm than ships with 0.8
   - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.8" ]; then npm install -g npm@1.4; fi'
-  # Workaround for intermittent build failures
-  # install buster separately from `npm install`, as it uses the C compiler, which might cause the
-  #   npm ERR! cb() never called!
-  # errror to appear, causing the builds to fail
-  #
-  # See this discussion: https://github.com/npm/npm/issues/7014
-  - npm install buster@0.7.18
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources
