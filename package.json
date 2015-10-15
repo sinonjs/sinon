@@ -16,7 +16,7 @@
   "scripts": {
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test": "./scripts/ci-test.sh",
-    "lint": "$(npm bin)/eslint .",
+    "lint": "eslint .",
     "prepublish": "./build",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
