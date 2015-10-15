@@ -7,6 +7,10 @@ node_js:
 
 sudo: false
 
+cache:
+  directories:
+  - node_modules
+
 before_install:
   - npm config set strict-ssl false
   # use a more modern npm than ships with 0.8
