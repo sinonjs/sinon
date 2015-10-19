@@ -34,7 +34,7 @@
     "buster": "0.7.18",
     "buster-core": "^0.6.4",
     "buster-istanbul": "0.1.13",
-    "eslint": "0.24.0",
+    "eslint": "^1.7.1",
     "eslint-config-defaults": "^2.1.0",
     "jscs": "1.13.1",
     "pre-commit": "1.0.10"

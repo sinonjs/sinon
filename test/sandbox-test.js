@@ -320,9 +320,9 @@
                 var spy = false;
                 var object = { server: server, clock: clock, spy: spy};
                 var sandbox = sinon.sandbox.create(sinon.getConfig({
-                        properties: ["server", "clock", "spy"],
-                        injectInto: object
-                    }));
+                    properties: ["server", "clock", "spy"],
+                    injectInto: object
+                }));
 
                 assert.same(object.server, server);
                 assert.same(object.clock, clock);
