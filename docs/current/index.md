@@ -10,7 +10,8 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [JSON-P](./json-p.md)
 * [Assertions](./assertions.md)
 * [Matchers](./matchers.md)
-
+* [Sandboxes](./sandbox.md)
+* [Utils](./utils.md)
 
 ## Stuck?
 
