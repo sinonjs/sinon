@@ -5,3 +5,4 @@
 * Build documentation for 1.17.x
 * Build changelong for each release
 * Updating CONTRIBUTING.md
+* Use consistent quoting in examples
