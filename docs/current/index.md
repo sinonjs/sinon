@@ -5,6 +5,7 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [Spies](./spies.md)
 * [Stubs](./stubs.md)
 * [Mocks](./mocks.md)
+* [Fake timers](./fake-timers.md)
 
 ## Stuck?
 
