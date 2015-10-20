@@ -3,6 +3,7 @@
 
     var buster = root.buster || require("buster");
     var sinon = root.sinon || require("../../lib/sinon");
+    var TextDecoder = root.TextDecoder || require("text-encoding").TextDecoder;
     var assert = buster.assert;
     var refute = buster.refute;
 
@@ -34,13 +35,9 @@
         }
     };
 
-    var assertArrayBufferMatches = function (actual, expected) {
+    var assertArrayBufferMatches = function (actual, expected, encoding) {
         assert(actual instanceof ArrayBuffer, "${0} expected to be an ArrayBuffer");
-        var actualString = "";
-        var actualView = new Uint8Array(actual);
-        for (var i = 0; i < actualView.length; i++) {
-            actualString += String.fromCharCode(actualView[i]);
-        }
+        var actualString = new TextDecoder(encoding || "utf-8").decode(actual);
         assert.same(actualString, expected, "ArrayBuffer [${0}] expected to match ArrayBuffer [${1}]");
     };
 
@@ -49,7 +46,7 @@
         actualReader.onloadend = done(function () {
             assert.same(actualReader.result, expected);
         });
-        actualReader.readAsBinaryString(actual);
+        actualReader.readAsText(actual);
     };
 
     var assertProgressEvent = function (event, progress) {
@@ -1257,6 +1254,19 @@
                     this.xhr.respond(200, { "Content-Type": "application/octet-stream" }, "\xFF");
 
                     assertBlobMatches(this.xhr.response, "\xFF", done);
+                },
+
+                "does parse utf-8 content outside ASCII range properly": function (done) {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    this.xhr.send();
+
+                    var responseText = JSON.stringify({foo: "♥"});
+
+                    this.xhr.respond(200, { "Content-Type": "application/octet-stream" },
+                                   responseText);
+
+                    assertBlobMatches(this.xhr.response, responseText, done);
                 }
             }
         },
