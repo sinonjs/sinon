@@ -9,6 +9,7 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [Fake <code>XHR</code> and server](./fake-xhr-and-server.md)
 * [JSON-P](./json-p.md)
 * [Assertions](./assertions.md)
+* [Matchers](./matchers.md)
 
 
 ## Stuck?
