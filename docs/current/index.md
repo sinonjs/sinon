@@ -8,6 +8,7 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [Fake timers](./fake-timers.md)
 * [Fake <code>XHR</code> and server](./fake-xhr-and-server.md)
 * [JSON-P](./json-p.md)
+* [Assertions](./assertions.md)
 
 
 ## Stuck?
