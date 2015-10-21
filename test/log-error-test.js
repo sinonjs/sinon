@@ -14,6 +14,7 @@
 
     buster.testCase("sinon.logError", {
         setUp: function () {
+            sinon.logError.useImmediateExceptions = false;
             this.sandbox = sinon.sandbox.create();
             this.timeOutStub = this.sandbox.stub(sinon.logError, "setTimeout");
         },
