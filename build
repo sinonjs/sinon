@@ -54,10 +54,10 @@ Dir.chdir(File.dirname(__FILE__)) do
   add_license(add_use_strict(output), version)
 
   File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
-    f.puts(File.read("lib/sinon/util/timers_ie.js"))
+    f.puts(File.read("lib/sinon/util-ie/timers.js"))
     f.puts("\n")
-    f.puts(File.read("lib/sinon/util/xhr_ie.js"))
-    f.puts(File.read("lib/sinon/util/xdr_ie.js"))
+    f.puts(File.read("lib/sinon/util-ie/xhr.js"))
+    f.puts(File.read("lib/sinon/util-ie/xdr.js"))
   end
 
   add_license("pkg/sinon-ie#{version_string}.js", version)

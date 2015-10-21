@@ -5,7 +5,8 @@ config.node = {
     rootPath: "../",
     sources: [
         "lib/sinon.js",
-        "lib/**/*.js"
+        "lib/sinon/*.js",
+        "lib/sinon/util/*.js"
     ],
     tests: [
         "test/**/*.js"
