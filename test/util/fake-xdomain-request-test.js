@@ -106,12 +106,6 @@
                     xdr.send();
                 });
             },
-            "sets GET body to null": function () {
-                this.xdr.open("GET", "/");
-                this.xdr.send("Data");
-
-                assert.isNull(this.xdr.requestBody);
-            },
 
             "sets HEAD body to null": function () {
                 this.xdr.open("HEAD", "/");
