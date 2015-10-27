@@ -1,5 +1,7 @@
 # Sinon.JS
 
+[![Join the chat at https://gitter.im/sinonjs/sinon](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sinonjs/sinon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build status](https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master)](http://travis-ci.org/sinonjs/sinon) [![bitHound Score](https://www.bithound.io/github/sinonjs/sinon/badges/score.svg)](https://www.bithound.io/github/sinonjs/sinon)
 
 Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
