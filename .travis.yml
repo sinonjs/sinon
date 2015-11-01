@@ -9,7 +9,6 @@ sudo: false
 
 cache:
   directories:
-  - .eslintcache
   - node_modules
 
 before_install:

@@ -3,5 +3,7 @@ set -eu
 
 # This script runs eslint on all files
 # It's configuration is specific to running on Travis CI and might not work locally
+# Travis build cache doens't support caching single files, so we'll store the
+# ESLint cache file in `node_modules`, which does get cached between builds.
 
-time $(npm bin)/eslint --cache .
+time $(npm bin)/eslint --cache --cache-file ./node_modules/.eslintcache .
