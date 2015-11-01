@@ -106,12 +106,6 @@
                     xdr.send();
                 });
             },
-            "sets GET body to null": function () {
-                this.xdr.open("GET", "/");
-                this.xdr.send("Data");
-
-                assert.isNull(this.xdr.requestBody);
-            },
 
             "sets HEAD body to null": function () {
                 this.xdr.open("HEAD", "/");
@@ -128,7 +122,13 @@
                     assert.equals(this.xdr.requestHeaders["Content-Type"], "text/plain;charset=utf-8");
                 }
             },
-            "sets request body to string data": function () {
+            "sets request body to string data for GET": function () {
+                this.xdr.open("GET", "/");
+                this.xdr.send("Data");
+
+                assert.equals(this.xdr.requestBody, "Data");
+            },
+            "sets request body to string data for POST": function () {
                 this.xdr.open("POST", "/");
                 this.xdr.send("Data");
 
