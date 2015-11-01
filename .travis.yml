@@ -9,6 +9,7 @@ sudo: false
 
 cache:
   directories:
+  - .eslintcache
   - node_modules
 
 before_install:
@@ -18,7 +19,7 @@ before_install:
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources
-  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then $(npm bin)/eslint .; fi'
+  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then ./scripts/ci-eslint; fi'
 
 script:
   - ./scripts/ci-test.sh

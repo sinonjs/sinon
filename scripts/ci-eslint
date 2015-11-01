@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eu
+
+# This script runs eslint on all files
+# It's configuration is specific to running on Travis CI and might not work locally
+
+time $(npm bin)/eslint --cache .
