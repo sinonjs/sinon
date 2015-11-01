@@ -342,13 +342,6 @@
                 });
             },
 
-            "sets GET body to null": function () {
-                this.xhr.open("GET", "/");
-                this.xhr.send("Data");
-
-                assert.isNull(this.xhr.requestBody);
-            },
-
             "sets HEAD body to null": function () {
                 this.xhr.open("HEAD", "/");
                 this.xhr.send("Data");
@@ -401,7 +394,14 @@
                 }
             },
 
-            "sets request body to string data": function () {
+            "sets request body to string data for GET": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send("Data");
+
+                assert.equals(this.xhr.requestBody, "Data");
+            },
+
+            "sets request body to string data for POST": function () {
                 this.xhr.open("POST", "/");
                 this.xhr.send("Data");
 
