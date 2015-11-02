@@ -25,3 +25,12 @@ script:
 
 git:
   depth: 10
+
+# set up SauceLabs
+env:
+  global:
+    - secure: false
+    - secure: false
+
+addons:
+  sauce_connect: true
