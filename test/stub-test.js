@@ -714,6 +714,21 @@
                 refute.exception(function () {
                     sinon.stub(child);
                 });
+            },
+
+            "does not call getter during restore": function () {
+                var obj = {
+                    get prop() {
+                        fail("should not call getter");
+                    }
+                };
+                var stub = sinon.stub(obj, "prop", {get: function () {
+                    return 43;
+                }});
+
+                assert.equals(obj.prop, 43);
+
+                stub.restore();
             }
         },
 
