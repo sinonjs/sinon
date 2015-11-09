@@ -1268,6 +1268,12 @@
                 spy.reset();
                 spy.call(true);
                 assert.equals(spy.printf("%t"), "true");
+            },
+
+            unmatched: function () {
+                var spy = sinon.spy();
+
+                assert.equals(spy.printf("%λ"), "%λ");
             }
         }
     });
