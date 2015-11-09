@@ -231,6 +231,55 @@
             assert.isArray(spy.exceptions);
         },
 
+        "works with getters": function () {
+            var object = {
+                get property() {
+                    return 42;
+                }
+            };
+            var spy = sinon.spy(object, "property", ["get"]);
+
+            assert.equals(object.property, 42);
+            assert(spy.get.calledOnce);
+        },
+
+        "works with setters": function () {
+            var object = {
+                get test() {
+                    return this.property;
+                },
+                set test(value) {
+                    this.property = value * 2;
+                }
+            };
+            var spy = sinon.spy(object, "test", ["set"]);
+
+            object.test = 42;
+            assert(spy.set.calledOnce);
+            assert(spy.set.calledWith(42));
+
+            assert.equals(object.test, 84);
+            assert.equals(object.property, 84);
+        },
+
+        "works with setters and getters combined": function () {
+            var object = {
+                get test() {
+                    return this.property;
+                },
+                set test(value) {
+                    this.property = value * 2;
+                }
+            };
+            var spy = sinon.spy(object, "test", ["get", "set"]);
+
+            object.test = 42;
+            assert(spy.set.calledOnce);
+
+            assert.equals(object.test, 84);
+            assert(spy.get.calledOnce);
+        },
+
         ".named": {
             "sets displayName": function () {
                 var spy = sinon.spy();
