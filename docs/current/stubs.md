@@ -24,7 +24,6 @@ The following example is yet another test from [PubSubJS][pubsubjs] which shows 
 ```javascript
 "test should call all subscribers, even if there are exceptions" : function(){
     var message = 'an example message';
-    var error = 'an example error message';
     var stub = sinon.stub().throws();
     var spy1 = sinon.spy();
     var spy2 = sinon.spy();
