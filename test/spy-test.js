@@ -258,7 +258,7 @@
             assert(spy.set.calledOnce);
             assert(spy.set.calledWith(42));
 
-            assert.equals(object.test, 42);
+            assert.equals(object.test, 84);
             assert.equals(object.property, 84);
         },
 
@@ -268,7 +268,7 @@
                     return this.property;
                 },
                 set test(value) {
-                    this.property = value;
+                    this.property = value * 2;
                 }
             };
             var spy = sinon.spy(object, "test", ["get", "set"]);
@@ -276,7 +276,7 @@
             object.test = 42;
             assert(spy.set.calledOnce);
 
-            assert.equals(object.test, 42);
+            assert.equals(object.test, 84);
             assert(spy.get.calledOnce);
         },
 
