@@ -1,3 +1,4 @@
 pkg
 node_modules
 coverage/
+.eslintcache
