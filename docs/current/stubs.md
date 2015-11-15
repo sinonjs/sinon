@@ -69,12 +69,9 @@ Creates an anonymous stub function
 
 #### `var stub = sinon.stub(object, \"method\");`
 
-Replaces `object.method` with a stub function.
+Replaces `object.method` with a stub function. An exception is thrown if the property is not already a function.
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
-
-An exception is thrown if the property is not already a function, to help avoid typos when stubbing methods.
-
 
 #### `var stub = sinon.stub(object, \"method\", func);`
 
