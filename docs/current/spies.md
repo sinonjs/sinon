@@ -221,7 +221,7 @@ Returns `true` if the spy was called after `anotherSpy`
 
 #### `spy.calledOn(obj);`
 
-Returns `true` if the spy was called at least once with `obj` as `this`.
+Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](#matchers)).
 
 
 #### `spy.alwaysCalledOn(obj);`
@@ -412,7 +412,7 @@ assertEquals("/stuffs", spyCall.args[0]);
 
 #### `spyCall.calledOn(obj);`
 
-Returns `true` if `obj` was `this` for this call.
+Returns `true` if `obj` was `this` for this call. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](#matchers)).
 
 
 #### `spyCall.calledWith(arg1, arg2, ...);`
