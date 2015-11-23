@@ -742,12 +742,10 @@
         },
 
         "call.toString": {
-            setUp: function () {
-                this.format = sinon.format;
-            },
-
             tearDown: function () {
-                sinon.format = this.format;
+                if (this.format) {
+                    this.format.restore();
+                }
             },
 
             "includes spy name": function () {
@@ -807,8 +805,9 @@
                 assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError(Oh noes!)");
             },
 
+            // these tests are ensuring that call.toString is tightly coupled to sinon.format
             "formats arguments with sinon.format": function () {
-                sinon.format = sinon.stub().returns("Forty-two");
+                this.format = sinon.stub(sinon, "format").returns("Forty-two");
                 var object = { doIt: sinon.spy() };
 
                 object.doIt(42);
@@ -818,7 +817,7 @@
             },
 
             "formats return value with sinon.format": function () {
-                sinon.format = sinon.stub().returns("Forty-two");
+                this.format = sinon.stub(sinon, "format").returns("Forty-two");
                 var object = { doIt: sinon.stub().returns(42) };
 
                 object.doIt();
