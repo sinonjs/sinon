@@ -2275,6 +2275,22 @@
 
                 assert.equals(spy.length, 3);
             }
+        },
+
+        ".func": {
+            "is set when no function is passed to sinon.spy": function () {
+                var spy = sinon.spy();
+
+                assert.equals(typeof spy.func, "function");
+            },
+
+            "is set to the argument passed to sinon.spy": function () {
+                var original = function () {};
+                var api = { someMethod: original }; // eslint-disable-line no-unused-vars
+                var spy = sinon.spy(api, "someMethod");
+
+                assert.equals(spy.func, original);
+            }
         }
     });
 }(this));
