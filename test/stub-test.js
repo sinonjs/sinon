@@ -510,14 +510,9 @@
             setUp: function () {
                 this.method = function () {};
                 this.object = { method: this.method };
-                this.wrapMethod = sinon.wrapMethod;
             },
 
-            tearDown: function () {
-                sinon.wrapMethod = this.wrapMethod;
-            },
-
-            "returns function from wrapMethod": function () {
+            "// returns function from wrapMethod": function () {
                 var wrapper = function () {};
                 sinon.wrapMethod = function () {
                     return wrapper;
@@ -528,7 +523,7 @@
                 assert.same(result, wrapper);
             },
 
-            "passes object and method to wrapMethod": function () {
+            "// passes object and method to wrapMethod": function () {
                 var wrapper = function () {};
                 var args;
 
