@@ -1,26 +1,18 @@
 var config = module.exports;
 
 config.node = {
-    environment: "node",
+    environment: "browser",
     rootPath: "../",
+    libs: [
+        "node_modules/samsam/lib/samsam.js",
+        "node_modules/text-encoding/lib/encoding.js"
+    ],
     sources: [
-        "lib/sinon.js",
-        "lib/sinon/*.js",
-        "lib/sinon/util/*.js"
+
+    ],
+    testHelpers: [
     ],
     tests: [
-        "test/**/*.js"
-    ]
-};
-
-config.coverage = {
-    extends: "node",
-    "buster-istanbul": {
-        outputDirectory: "coverage",
-        format: "lcov",
-        excludes: ["**/*.json"]
-    },
-    extensions: [
-        require("buster-istanbul")
+        "tmp/test-bundle.js"
     ]
 };

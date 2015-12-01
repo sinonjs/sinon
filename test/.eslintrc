@@ -1,5 +1,5 @@
 {
     "rules": {
-        "strict": [2, "function"]
+        "strict": 0
     }
 }
