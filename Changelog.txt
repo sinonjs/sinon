@@ -1,4 +1,94 @@
 
+2.0.0 / 2015-12-02
+==================
+
+  * Extract `util/fake_server_with_clock` into a CommonJS module
+  * Extract `util/fake_server` into a CommonJS module.
+  * Extract `util/fake_timers` into a CommonJS module.
+  * Extract `util/fake_xml_http_request` into a CommonJS module.
+  * Extract `util/fake_xdomain_request` into a CommonJS module.
+  * Extract `util/event` into a CommonJS module.
+  * Extract `sinon.logError` into a CommonJS module.
+  * Extract (most of) sinon.collection into a CommonJS module
+  * Extract `sinon.mock` into a CommonJS module.
+  * Import mock's dependencies are CommonJS modules.
+  * Extract `createSpyCall` into a CommonJS module.
+  * Extract `sinon.assert` into a CommonJS module.
+  * Remove `walk` from sinon's public API.
+  * Patch up linting errors
+  * Remove `sinon` import from stub
+  * Extract `sinon.behavior` into a CommonJS module
+  * Extract `sinon.walk` into a CommonJS module.
+  * Export stub as a CommonJS module
+  * Import `wrapMethod` as a CommonJS module
+  * Import core dependencies as CommonJS modules
+  * Delete .jscsrc
+  * Ensure sinon can run in a  WebWorker
+  * Updated docs to reflect that calledOn accepts a matcher
+  * simplified test and added a note
+  * updated to require spy in its new cjs form
+  * ./commonjs
+  * expose sinon.spy and sinon.spyCall
+  * converted spy to commonjs format
+  * moved sinon.format() to core
+  * fixed spy tests
+  * added missing test (pushes spy coverage to 100%)
+  * added spy getter/setter tests
+  * updated sinon.spy() to properly handle getters and setters
+  * Remove unnecessary error variable
+  * Prevent stubbed getter from being called during restore() - fixes #897
+  * Allowed GET requests to have request bodies
+  * Remove JSCS from devDependencies
+  * Add Gitter badge
+  * Allow yieldsOn, callsArgOn, callsArgOnWith, yieldsToOn to use any context
+  * Add bithound badge to README.md
+  * removed switch statement in favor of object lookup
+  * Use immediate exceptions
+  * lib/sinon/util: Remove window conditionals from IE files.
+  * Add docs for sandbox and utils
+  * Add documentation for matchers
+  * Add docs for assertions
+  * Add docs for JSON-P
+  * Add docs for fake server
+  * Add docs for fake timers
+  * Add mock api descriptions
+  * Add mocks introduction
+  * Add stubs api
+  * Update TODO
+  * Use Object.prototype.hasOwnProperty in deepEqual to cope with cases where hasOwnProperty doesn't exist, ie. Object.create(null), or has been overridden on an object. With tests.
+  * Add docs TODO to track outstanding tasks
+  * Add stubs.md with introduction to stubs
+  * Import docs
+  * Fix #875 Proper support UTF8 payloads * introduced new dependency "text-encoding" * delegate encoding operations to TextEncoder/TextDecoder * added unit test to verify proper utf-8 encoding
+  * finished eslint'ing
+  * upgraded ESLint to 1.7.1 (latest and greatest)
+  * Run tests in node 4.2 LTS (Argon)
+  * removed unneeded path resolution
+  * Let npm install handle buster again, now that we have caching of node_modules
+  * Make travis cache node_modules to speed up builds
+  * removed duplicate implementation of sinon.timesInWords
+  * fix travis-ci build svg in README
+  * reviewer comments
+  * cleaning up left over blank lines
+  * CommonJS-ified *some* of the things
+  * updated readyStateChange to align to the w3c spec (somewhat)
+  * cleaned up a few unreleated tests
+  * updated tests to reflect reality
+  * added some additional progress event verification
+  * added a test to ensure load is not fired before abort
+  * added test to ensure event ordering
+  * allow progress events with loaded/total values of 0
+  * Fix #867: Walk properties only once
+  * Removed unnecessary module wrappers and double test run in NodeJS.
+  * null-check the object passed to sinon.stub
+  * implemented stub#resetHistory method - fixes #863
+  * Fix #851: Do not attempt to re-stub constructors
+  * Fix #847: Ensure walk invokes accessors directly on target
+  * Run tests in node 4.1.x also
+  * First effort towards moving to CommonJS
+  * Update Changelog.txt
+  * stub.reset also resets behavior
+
 1.17.0 / 2015-09-22
 ==================
 
