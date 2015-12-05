@@ -8,7 +8,7 @@ Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
 
 ## Installation
 
-via [npm (node package manager)](http://github.com/isaacs/npm)
+via [npm (node package manager)](https://github.com/npm/npm)
 
     $ npm install sinon
 
