@@ -244,7 +244,7 @@ See [options](#options) below for configuration parameters.
 
 Causes the server to respond to any request not matched by another response with the provided data. The default catch-all response is `[404, {}, ""]`.
 
-`response` can be on of three things:
+`response` can be one of three things:
 
 1. A `String` representing the response body
 2. An `Array` with status, headers and response body, e.g. `[200, { "Content-Type": "text/html", "Content-Length": 2 }, "OK"]`
