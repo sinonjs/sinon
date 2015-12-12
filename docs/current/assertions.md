@@ -71,7 +71,7 @@ Passes if `spy` was called exactly `num` times.
 
 
 #### `sinon.assert.callOrder(spy1, spy2, ...)`
-Passes if provided spies where called in the specified order.
+Passes if provided spies were called in the specified order.
 
 
 #### `sinon.assert.calledOn(spy, obj)`
