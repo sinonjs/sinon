@@ -137,7 +137,7 @@ All response headers as an object.
 
 ### Filtered requests
 
-When using Sinon.JS for mockups or partial integration/functional testing, you might want to fake some requests, while allowing others to go throught to the backend server. With filtered `FakeXMLHttpRequest`s (new in v1.3.0), you can.
+When using Sinon.JS for mockups or partial integration/functional testing, you might want to fake some requests, while allowing others to go through to the backend server. With filtered `FakeXMLHttpRequest`s (new in v1.3.0), you can.
 
 
 #### `FakeXMLHttpRequest.useFilters`
