@@ -1,0 +1,8 @@
+#!/bin/bash
+set -eu
+
+sh -e /etc/init.d/xvfb start
+echo 'Installing Slimer'
+wget http://download.slimerjs.org/v0.9/0.9.6/slimerjs-0.9.6.zip
+unzip slimerjs-0.9.6.zip
+mv slimerjs-0.9.6 ./slimerjs
