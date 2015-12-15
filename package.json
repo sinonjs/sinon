@@ -8,6 +8,14 @@
     "type": "git",
     "url": "http://github.com/cjohansen/Sinon.JS.git"
   },
+  "browserify-shim": {
+    "buster": "global:buster"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
   "bugs": {
     "mail": "christian@cjohansen.no",
     "url": "http://github.com/cjohansen/Sinon.JS/issues"
@@ -32,6 +40,7 @@
   },
   "devDependencies": {
     "browserify": "^11.1.0",
+    "browserify-shim": "^3.8.11",
     "buster": "0.7.18",
     "buster-core": "^0.6.4",
     "buster-istanbul": "0.1.13",

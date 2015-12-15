@@ -23,9 +23,9 @@ sleep 1 # give phantomjs a second to warm up
 
 echo
 echo "starting buster-test (source)"
-./node_modules/buster/bin/buster-test --config-group coverage
+$(npm bin)/buster-test --config-group coverage
 
 echo
 echo "starting buster-test (packaged)"
-./build
-./node_modules/buster/bin/buster-test --config test/buster-packaged.js
+$(npm bin)/browserify $(find ./test -name "*-test.js") > tmp/test-bundle.js
+$(npm bin)/buster-test --config test/buster-packaged.js
