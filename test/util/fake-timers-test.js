@@ -637,6 +637,10 @@
 
                 var date = new this.clock.Date();
 
+                // restore directly after use, because tearDown is async in buster-next and
+                // the overridden Date is used in node 0.x native code
+                this.global.Date = this.Date;
+
                 assert.same(date.constructor.prototype, realDate.constructor.prototype);
             },
 
