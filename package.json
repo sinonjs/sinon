@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "browserify": "^11.1.0",
-    "buster": "0.7.18",
+    "buster": "git://github.com/busterjs/buster.git#update-deps",
     "buster-core": "^0.6.4",
     "buster-istanbul": "0.1.13",
     "eslint": "^1.7.1",
