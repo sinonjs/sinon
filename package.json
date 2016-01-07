@@ -27,8 +27,7 @@
     "formatio": "1.1.1",
     "lolex": "^1.4.0",
     "samsam": "^1.1.3",
-    "text-encoding": "0.5.2",
-    "util": ">=0.10.3 <1"
+    "text-encoding": "0.5.2"
   },
   "devDependencies": {
     "browserify": "^12.0.1",
