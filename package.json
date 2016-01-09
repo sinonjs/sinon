@@ -6,11 +6,11 @@
   "author": "Christian Johansen",
   "repository": {
     "type": "git",
-    "url": "http://github.com/cjohansen/Sinon.JS.git"
+    "url": "http://github.com/sinonjs/sinon.git"
   },
   "bugs": {
     "mail": "christian@cjohansen.no",
-    "url": "http://github.com/cjohansen/Sinon.JS/issues"
+    "url": "http://github.com/sinonjs/sinon/issues"
   },
   "license": "BSD-3-Clause",
   "scripts": {
