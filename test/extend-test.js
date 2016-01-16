@@ -54,6 +54,29 @@
             assert.equals(target.b, 2);
             assert.equals(target.c, 1);
             assert.equals(target.d, 0);
+        },
+
+        "copies all properties": function () {
+            var object1 = {
+                prop1: null,
+                prop2: false
+            };
+
+            var object2 = {
+                prop3: "hey",
+                prop4: 4
+            };
+
+            var result = sinon.extend({}, object1, object2);
+
+            var expected = {
+                prop1: null,
+                prop2: false,
+                prop3: "hey",
+                prop4: 4
+            };
+
+            assert.equals(result, expected);
         }
     });
 }(this));
