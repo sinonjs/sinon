@@ -1306,6 +1306,14 @@
                 assert.exception(function () {
                     stub(42);
                 });
+            },
+
+            "ensure stub recognizes sinon.match fuzzy arguments": function () {
+                var stub = sinon.stub().returns(23);
+                stub.withArgs(sinon.match({ foo: "bar" })).returns(99);
+
+                assert.equals(stub(), 23);
+                assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
             }
         },
 
