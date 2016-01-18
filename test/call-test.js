@@ -805,25 +805,21 @@
                 assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError(Oh noes!)");
             },
 
-            // these tests are ensuring that call.toString is tightly coupled to sinon.format
-            "formats arguments with sinon.format": function () {
-                this.format = sinon.stub(sinon, "format").returns("Forty-two");
+            // these tests are ensuring that call.toString is handled by sinonFormat
+            "formats arguments with sinonFormat": function () {
                 var object = { doIt: sinon.spy() };
 
                 object.doIt(42);
 
-                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(Forty-two)");
-                assert(sinon.format.calledWith(42));
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42)");
             },
 
-            "formats return value with sinon.format": function () {
-                this.format = sinon.stub(sinon, "format").returns("Forty-two");
+            "formats return value with sinonFormat": function () {
                 var object = { doIt: sinon.stub().returns(42) };
 
                 object.doIt();
 
-                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() => Forty-two");
-                assert(sinon.format.calledWith(42));
+                assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() => 42");
             }
         },
 
