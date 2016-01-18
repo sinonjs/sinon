@@ -2,7 +2,7 @@
     "use strict";
 
     var buster = root.buster || require("buster");
-    var sinon = root.sinon || require("../lib/sinon");
+    var sinon = root.sinon || require("../../../lib/sinon");
     var assert = buster.assert;
 
     buster.testCase("sinon.walk", {
