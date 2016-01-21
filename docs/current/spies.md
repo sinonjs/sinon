@@ -7,15 +7,17 @@
 ### What is a test spy?
 
 A test spy is a function that records arguments, return value, the value of
-`this` and exception thrown (if any) for all its calls. A test spy can be an
-anonymous function or it can wrap an existing function.
+`this` and exception thrown (if any) for all its calls. There are two types of spies:
+Some are anonymous functions, while others wrap methods that already exist in
+the system under test.
 
 
-### When to use spies?
+### Creating a spy as an anonymous function
 
-Test spies are useful to test both callbacks and how certain functions/methods
-are used throughout the system under test. The following simplified example
-shows how to use spies to test how a function handles a callback:
+When the behavior of the spied-on function is not under test, you can use an
+anonymous function spy. The spy won't do anything except record information
+about its calls. A common use case for this type of spy is testing how a function
+handles a callback, as in the following simplified example:
 
 ```javascript
 "test should call subscribers on publish": function () {
@@ -29,12 +31,12 @@ shows how to use spies to test how a function handles a callback:
 ```
 
 
-### Spying on existing methods
+### Using a spy to wrap an existing method
 
-`sinon.spy` can also spy on existing functions. When doing so, the original
-function will behave just as normal (including when used as a constructor) but
-you will have access to data about all calls. The following is a slightly
-contrived example:
+`sinon.spy(object, "method")` creates a spy that wraps the existing function
+`object.method`. The spy will behave exactly like the original method
+(including when used as a constructor), but you will have access to data about
+all calls. The following is a slightly contrived example:
 
 ```javascript
 {
@@ -57,7 +59,7 @@ contrived example:
 ```
 
 
-### Creating spies: `sinon.spy()`
+### Creating spies: `sinon.spy()` Method Signatures
 
 <dl>
   <dt><code>var spy = sinon.spy();</code></dt>
@@ -70,8 +72,9 @@ contrived example:
   <dt><code>var spy = sinon.spy(object, "method");</code></dt>
   <dd>
     Creates a <a href="#spyprops">spy</a> for <code>object.method</code> and
-    replaces the original method with the spy. The spy acts exactly like the
-    original method in all cases. The original method can be restored by calling
+    replaces the original method with the spy. An exception is thrown if the property
+    is not already a function. The spy acts exactly like the original method in
+    all cases. The original method can be restored by calling
     <code>object.method.restore()</code>. The returned spy is the function
     object which replaced the original method. <code>spy === object.method</code>.
   </dd>
@@ -368,6 +371,11 @@ If the call did not explicitly return a value, the value at the call's location 
 #### `spy.reset()`
 
 Resets the state of a spy.
+
+
+#### `spy.restore()`
+
+Replaces the spy with the original method. Only available if the spy replaced an existing method.
 
 
 #### `spy.printf(format string\", [arg1, arg2, ...])`
