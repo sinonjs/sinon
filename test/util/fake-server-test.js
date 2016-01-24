@@ -167,7 +167,10 @@
             setUp: function () {
                 this.sandbox = sinon.sandbox.create();
 
-                this.server = sinon.fakeServer.create();
+                this.server = sinon.fakeServer.create({
+                    setTimeout: this.sandbox.spy(),
+                    useImmediateExceptions: false
+                });
 
                 this.getRootAsync = new sinon.FakeXMLHttpRequest();
                 this.getRootAsync.open("GET", "/", true);
@@ -407,8 +410,6 @@
             },
 
             "notifies all requests when some throw": function () {
-                this.sandbox.stub(sinon, "logError"); // reduce console spam in the test runner
-
                 this.getRootAsync.respond = function () {
                     throw new Error("Oops!");
                 };

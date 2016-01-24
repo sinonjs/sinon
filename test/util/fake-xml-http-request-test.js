@@ -747,7 +747,10 @@
         ".respond": {
             setUp: function () {
                 this.sandbox = sinon.sandbox.create();
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new sinon.FakeXMLHttpRequest({
+                    setTimeout: this.sandbox.spy(),
+                    useImmediateExceptions: false
+                });
                 this.xhr.open("GET", "/");
                 var spy = this.spy = sinon.spy();
 
@@ -825,8 +828,6 @@
             },
 
             "completes request when onreadystatechange fails": function () {
-                this.sandbox.stub(sinon, "logError"); // reduce console spam in the test runner
-
                 this.xhr.onreadystatechange = sinon.stub().throws();
                 this.xhr.respond(200, {}, "'tis some body text");
 
