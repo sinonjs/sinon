@@ -70,8 +70,8 @@
                 assert.isFunction(this.sandbox.clock.restore);
             },
 
-            "passes arguments to sinon.useFakeTimers": sinon.test(function () {
-                var stub = this.stub(sinon, "useFakeTimers").returns({ restore: function () {} });
+            "passes arguments to sinon.useFakeTimers": function () {
+                var stub = sinon.stub(sinon, "useFakeTimers").returns({ restore: function () {} });
                 this.sandbox.useFakeTimers("Date", "setTimeout");
                 this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
 
@@ -79,7 +79,7 @@
                 assert(sinon.useFakeTimers.calledWith("setTimeout", "clearTimeout", "setInterval"));
 
                 stub.restore();
-            }),
+            },
 
             "adds clock to fake collection": function () {
                 this.sandbox.useFakeTimers();

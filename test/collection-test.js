@@ -370,12 +370,12 @@
                 assert.same(this.collection.inject(obj), obj);
             },
 
-            "injects spy, stub, mock bound to collection": sinon.test(function () {
+            "injects spy, stub, mock bound to collection": function () {
                 var obj = {};
                 this.collection.inject(obj);
-                this.stub(this.collection, "spy");
-                this.stub(this.collection, "stub");
-                this.stub(this.collection, "mock");
+                sinon.stub(this.collection, "spy");
+                sinon.stub(this.collection, "stub");
+                sinon.stub(this.collection, "mock");
 
                 obj.spy();
                 var fn = obj.spy;
@@ -392,7 +392,7 @@
                 assert(this.collection.spy.calledTwice);
                 assert(this.collection.stub.calledTwice);
                 assert(this.collection.mock.calledTwice);
-            })
+            }
         }
     });
 }(this));
