@@ -1,4 +1,12 @@
 
+1.17.3 / 2016-01-27
+==================
+
+  * Fix toString() calls
+  * Ensure sinon can run in a  WebWorker
+  * Changed the priority of which global is chosen first.
+  * Fixed #785 by checking the global variables are set
+
 1.17.2 / 2015-10-21
 ==================
 

@@ -6,15 +6,16 @@ Tim Fischbach <mail@timfischbach.de>
 Max Antoni <mail@maxantoni.de>
 Tim Ruffles <timruffles@googlemail.com>
 Jonathan Sokolowski <jonathan.sokolowski@gmail.com>
-Phred <fearphage@gmail.com>
 Domenic Denicola <domenic@domenicdenicola.com>
-William Sears <MrBigDog2U@gmail.com>
-Andreas Lind <andreas@one.com>
-Tim Ruffles <timr@picklive.com>
+Phred <fearphage@gmail.com>
 Tim Perry <pimterry@gmail.com>
-pimterry <pimterry@gmail.com>
-Felix Geisendörfer <felix@debuggable.com>
+Andreas Lind <andreas@one.com>
+William Sears <MrBigDog2U@gmail.com>
+Tim Ruffles <timr@picklive.com>
 kpdecker <kpdecker@gmail.com>
+Felix Geisendörfer <felix@debuggable.com>
+Carl-Erik Kopseng <carlerik@gmail.com>
+pimterry <pimterry@gmail.com>
 Bryan Donovan <bdondo@gmail.com>
 Andrew Gurinovich <altmind@gmail.com>
 Martin Sander <forke@uni-bonn.de>
@@ -23,7 +24,7 @@ Keith Cirkel <github@keithcirkel.co.uk>
 Tristan Koch <tristan.koch@1und1.de>
 Tobias Ebnöther <ebi@gorn.ch>
 Cory <seeflanigan@gmail.com>
-Christian Johansen <christian.johansen@nrk.no>
+zcicala <zcicala@fitbit.com>
 Marten Lienen <marten.lienen@gmail.com>
 Travis Kaufman <travis.kaufman@gmail.com>
 Benjamin Coe <ben@yesware.com>
@@ -32,14 +33,12 @@ Garrick Cheung <garrick@garrickcheung.com>
 Gavin Huang <gravof@gmail.com>
 Jonny Reeves <github@jonnyreeves.co.uk>
 Konrad Holowinski <konrad.holowinski@gmail.com>
-zcicala <zcicala@fitbit.com>
-Duncan Beevers <duncan@dweebd.com>
-Jmeas <jellyes2@gmail.com>
+Christian Johansen <christian.johansen@nrk.no>
+Soutaro Matsumoto <matsumoto@soutaro.com>
 August Lilleaas <august.lilleaas@gmail.com>
 Scott Andrews <scothis@gmail.com>
 Robin Pedersen <robinp@snap.tv>
 Garrick <gcheung@fitbit.com>
-Carl-Erik Kopseng <carlerik@gmail.com>
 geries <geries.handal@videoplaza.com>
 Cormac Flynn <cormac.flynn@viadeoteam.com>
 Ming Liu <vmliu1@gmail.com>
@@ -47,7 +46,8 @@ Thomas Meyer <meyertee@gmail.com>
 Roman Potashow <justgook@gmail.com>
 Tamas Szebeni <tamas_szebeni@epam.com>
 Glen Mailer <glen.mailer@bskyb.com>
-Soutaro Matsumoto <matsumoto@soutaro.com>
+Duncan Beevers <duncan@dweebd.com>
+Jmeas <jellyes2@gmail.com>
 なつき <i@ntk.me>
 Alex Urbano <asgaroth.belem@gmail.com>
 Alexander Schmidt <alexanderschmidt1@gmail.com>
@@ -70,6 +70,7 @@ Martin Hansen <martin@martinhansen.no>
 Matt Kern <matt@bloomcrush.com>
 Max Calabrese <max.calabrese@ymail.com>
 Márton Salomváry <salomvary@gmail.com>
+Patrick van Vuuren <patrick@proforto.nl>
 Satoshi Nakamura <snakamura@infoteria.com>
 Simen Bekkhus <sbekkhus91@gmail.com>
 Spencer Elliott <me@elliottsj.com>
@@ -80,15 +81,15 @@ mohayonao <mohayonao@gmail.com>
 vitalets <vitalets@yandex-team.ru>
 yoshimura-toshihide <toshihide0105yoshimura@gmail.com>
 Ian Thomas <ian@ian-thomas.net>
-jamestalmage <james.talmage@jrtechnical.com>
+hashchange <heim@zeilenwechsel.de>
 Mario Pareja <mpareja@360incentives.com>
 Ian Lewis <IanMLewis@gmail.com>
 Martin Brochhaus <mbrochh@gmail.com>
-kbackowski <kbackowski@gmail.com>
+jamestalmage <james.talmage@jrtechnical.com>
 Harry Wolff <hswolff@gmail.com>
-Adrian Phinney <adrian.phinney@bellaliant.net>
+kbackowski <kbackowski@gmail.com>
 Gyandeep Singh <gyandeeps@gmail.com>
-AJ Ortega <ajo@google.com>
+Adrian Phinney <adrian.phinney@bellaliant.net>
 Max Klymyshyn <klymyshyn@gmail.com>
 Gordon L. Hempton <ghempton@gmail.com>
 Michael Jackson <mjijackson@gmail.com>
@@ -96,11 +97,12 @@ Mikolaj Banasik <d1sover@gmail.com>
 Gord Tanner <gord@tinyhippos.com>
 Glen Mailer <glenjamin@gmail.com>
 Mustafa Sak <mustafa.sak@1und1.de>
-ngryman <ngryman@gmail.com>
+AJ Ortega <ajo@google.com>
 Nicholas Stephan <nicholas.stephan@gmail.com>
 Nikita Litvin <deltaidea@derpy.ru>
 Niklas Andreasson <eaglus_@hotmail.com>
 Olmo Maldonado <olmo.maldonado@gmail.com>
+ngryman <ngryman@gmail.com>
 Giorgos Giannoutsos <contact@nuc.gr>
 Rajeesh C V <cvrajeesh@gmail.com>
 Raynos <raynos2@gmail.com>
@@ -146,14 +148,14 @@ Alexander Aivars <alex@aivars.se>
 brandonheyer <brandonheyer@gmail.com>
 charlierudolph <charles.w.rudolph@gmail.com>
 Alex Kessaris <alex@artsy.ca>
-goligo <ich@malte.de>
 John Bernardo <jbernardo@linkedin.com>
-wwalser <waw325@gmail.com>
+goligo <ich@malte.de>
 Jason Anderson <diurnalist@gmail.com>
 Jan Suchý <jan.sandokan@gmail.com>
 Jordan Hawker <hawker.jordan@gmail.com>
+Joscha Feth <jfeth@atlassian.com>
 Joseph Spens <joseph@workmarket.com>
-hashchange <heim@zeilenwechsel.de>
+wwalser <waw325@gmail.com>
 Jan Kopriva <jan.kopriva@gooddata.com>
 Kevin Turner <kevin@decipherinc.com>
 Kim Joar Bekkelund <kjbekkelund@gmail.com>
