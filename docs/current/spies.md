@@ -177,6 +177,11 @@ The number of recorded calls.
 `true` if the spy was called at least once
 
 
+#### `spy.notCalled`
+
+`true` if the spy was not called
+
+
 #### `spy.calledOnce`
 
 `true` if spy was called exactly once
