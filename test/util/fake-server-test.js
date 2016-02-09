@@ -74,23 +74,27 @@
                 );
             }
         },
-        "fakes XMLHttpRequest": sinon.test(function () {
-            this.stub(sinon, "useFakeXMLHttpRequest").returns({
+        "fakes XMLHttpRequest": function () {
+            var sandbox = sinon.sandbox.create();
+            sandbox.stub(sinon, "useFakeXMLHttpRequest").returns({
                 restore: this.stub()
             });
 
             this.server = sinon.fakeServer.create();
 
             assert(sinon.useFakeXMLHttpRequest.called);
-        }),
+            sandbox.restore();
+        },
 
-        "mirrors FakeXMLHttpRequest restore method": sinon.test(function () {
+        "mirrors FakeXMLHttpRequest restore method": function () {
+            var sandbox = sinon.sandbox.create();
             this.server = sinon.fakeServer.create();
-            var restore = this.stub(sinon.FakeXMLHttpRequest, "restore");
+            var restore = sandbox.stub(sinon.FakeXMLHttpRequest, "restore");
             this.server.restore();
 
             assert(restore.called);
-        }),
+            sandbox.restore();
+        },
 
         ".requests": {
             setUp: function () {

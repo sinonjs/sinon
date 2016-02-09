@@ -23,14 +23,16 @@
                 }
             },
 
-            "calls 'super' when adding requests": sinon.test(function () {
-                var addRequest = this.stub(sinon.fakeServer, "addRequest");
+            "calls 'super' when adding requests": function () {
+                var sandbox = sinon.sandbox.create();
+                var addRequest = sandbox.stub(sinon.fakeServer, "addRequest");
                 var xhr = {};
                 this.server.addRequest(xhr);
 
                 assert(addRequest.calledWith(xhr));
                 assert(addRequest.calledOn(this.server));
-            }),
+                sandbox.restore();
+            },
 
             "sets reference to clock when adding async request": function () {
                 this.server.addRequest({ async: true });
