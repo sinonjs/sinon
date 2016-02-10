@@ -1,6 +1,7 @@
 (function (root) {
     "use strict";
     var buster = root.buster || require("buster");
+    buster.testRunner.timeout = 1000;
 
     buster.referee.add("spy", {
         assert: function (obj) {

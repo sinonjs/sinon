@@ -28,6 +28,9 @@ config.webworkerSupport = {
         "pkg/sinon.js",
         "test/webworker-script.js"
     ],
+    testHelpers: [
+        "test/test-helper.js"
+    ],
     tests: [
         "test/webworker-support-assessment.js"
     ]
