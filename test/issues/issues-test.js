@@ -125,6 +125,102 @@
                     sinon.createStubInstance(A);
                 });
             }
+        },
+
+        "#947 - sandbox.reset - prototype methods": {
+            "should reset callCount": function () {
+                function Car() {}
+
+                Car.prototype.honk = function () {
+                    return "honk honk";
+                };
+
+                var sandbox = sinon.sandbox.create();
+                var car1 = new Car();
+                var car2 = new Car();
+
+                var honkSpy = sandbox.spy(car1, "honk");
+                var honkStub = sandbox.stub(car2, "honk");
+
+                car1.honk();
+                car2.honk();
+
+                assert.equals(honkSpy.callCount, 1);
+                assert.equals(honkStub.callCount, 1);
+
+                sandbox.reset();
+
+                assert.equals(car1.honk.callCount, 0);
+                assert.equals(car2.honk.callCount, 0);
+
+                sandbox.restore();
+            }
+        },
+
+        "#947 - sandbox.reset - on instance methods": {
+            "should reset callCount": function () {
+                function Car() {
+                    this.honk = function () {
+                        return "honky honky";
+                    };
+                }
+
+                var sandbox = sinon.sandbox.create();
+                var car1 = new Car();
+                var car2 = new Car();
+
+                var honkSpy = sandbox.spy(car1, "honk");
+                var honkStub = sandbox.stub(car2, "honk");
+
+                honkStub.returns("forty two");
+
+                car1.honk();
+                car2.honk();
+
+                assert.equals(honkSpy.callCount, 1);
+                assert.equals(honkStub.callCount, 1);
+
+                sandbox.reset();
+
+                assert.equals(car1.honk.callCount, 0);
+                assert.equals(car2.honk.callCount, 0);
+
+                sandbox.restore();
+            }
+        },
+
+        "#947 - sandbox.reset - on literal object members": {
+            "should reset callCount": function () {
+                var car = {
+                    honk: function () {
+                        return "honker";
+                    },
+
+                    honky: function () {
+                        return "honkity honk";
+                    }
+                };
+
+                var sandbox = sinon.sandbox.create();
+
+                var honkSpy = sandbox.spy(car, "honk");
+                var honkStub = sandbox.stub(car, "honky", function () {
+                    return 42;
+                });
+
+                car.honk();
+                car.honky();
+
+                assert.equals(honkSpy.callCount, 1);
+                assert.equals(honkStub.callCount, 1);
+
+                sandbox.reset();
+
+                assert.equals(car.honk.callCount, 0);
+                assert.equals(car.honky.callCount, 0);
+
+                sandbox.restore();
+            }
         }
     });
 }(this));
