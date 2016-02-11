@@ -1467,6 +1467,118 @@
                 });
             },
 
+            "updates response, responseText and responseXML if responseType is an empty string": function () {
+                var workingXHRInstance,
+                    readyStateCb;
+                var workingXHROverride = function () {
+                    workingXHRInstance = this;
+                    this.addEventListener = function (str, fn) {
+                        readyStateCb = fn;
+                    };
+                    this.open = function () {};
+                    this.send = function () {
+                        readyStateCb();
+                    };
+                };
+                var fakeXhr = this.fakeXhr;
+
+                runWithWorkingXHROveride(workingXHROverride, function () {
+                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.responseType = "";
+                    workingXHRInstance.response = "This is the response of the real XHR";
+                    workingXHRInstance.responseText = "This is the responseText of the real XHR";
+                    workingXHRInstance.responseXML = "This is the responseXML of the real XHR";
+                    fakeXhr.send();
+                    assert.equals(fakeXhr.response, "This is the response of the real XHR");
+                    assert.equals(fakeXhr.responseText, "This is the responseText of the real XHR");
+                    assert.equals(fakeXhr.responseXML, "This is the responseXML of the real XHR");
+                });
+            },
+
+            "updates only response and responseXML if the responseType is document": function () {
+                var workingXHRInstance,
+                    readyStateCb;
+                var workingXHROverride = function () {
+                    workingXHRInstance = this;
+                    this.addEventListener = function (str, fn) {
+                        readyStateCb = fn;
+                    };
+                    this.open = function () {};
+                    this.send = function () {
+                        readyStateCb();
+                    };
+                };
+                var fakeXhr = this.fakeXhr;
+
+                runWithWorkingXHROveride(workingXHROverride, function () {
+                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.responseType = "document";
+                    workingXHRInstance.response = "This is the response of the real XHR";
+                    workingXHRInstance.responseText = "This is the responseText of the real XHR";
+                    workingXHRInstance.responseXML = "This is the responseXML of the real XHR";
+                    fakeXhr.send();
+                    assert.equals(fakeXhr.responseText, undefined);
+                    assert.equals(fakeXhr.response, "This is the response of the real XHR");
+                    assert.equals(fakeXhr.responseXML, "This is the responseXML of the real XHR");
+                });
+            },
+
+            "updates only response and responseText if the responseType is 'text'": function () {
+                var workingXHRInstance,
+                    readyStateCb;
+                var workingXHROverride = function () {
+                    workingXHRInstance = this;
+                    this.addEventListener = function (str, fn) {
+                        readyStateCb = fn;
+                    };
+                    this.open = function () {};
+                    this.send = function () {
+                        readyStateCb();
+                    };
+                };
+                var fakeXhr = this.fakeXhr;
+
+                runWithWorkingXHROveride(workingXHROverride, function () {
+                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.responseType = "text";
+                    workingXHRInstance.response = "This is the response of the real XHR";
+                    workingXHRInstance.responseText = "This is the responseText of the real XHR";
+                    workingXHRInstance.responseXML = "This is the responseXML of the real XHR";
+                    fakeXhr.send();
+                    assert.equals(fakeXhr.response, "This is the response of the real XHR");
+                    assert.equals(fakeXhr.responseText, "This is the responseText of the real XHR");
+                    assert.equals(fakeXhr.responseXML, undefined);
+                });
+            },
+
+            "updates only response if the responseType is not not '', document or text": function () {
+                var workingXHRInstance,
+                    readyStateCb;
+                var workingXHROverride = function () {
+                    workingXHRInstance = this;
+                    this.addEventListener = function (str, fn) {
+                        readyStateCb = fn;
+                    };
+                    this.open = function () {};
+                    this.send = function () {
+                        readyStateCb();
+                    };
+                };
+                var fakeXhr = this.fakeXhr;
+
+                runWithWorkingXHROveride(workingXHROverride, function () {
+                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.responseType = "arraybuffer";
+                    workingXHRInstance.response = "This is the response of the real XHR";
+                    workingXHRInstance.responseText = "This is the responseText of the real XHR";
+                    workingXHRInstance.responseXML = "This is the responseXML of the real XHR";
+                    fakeXhr.send();
+                    assert.equals(fakeXhr.response, "This is the response of the real XHR");
+                    assert.equals(fakeXhr.responseText, undefined);
+                    assert.equals(fakeXhr.responseXML, undefined);
+                });
+            },
+
             "passes on methods to working XHR object": function () {
                 var workingXHRInstance,
                     spy;
@@ -1503,6 +1615,24 @@
                     // Fix to make weinre work
                     assert.isObject(spy.args[0][0]);
                     assert.equals(spy.args[0][0].target, fakeXhr);
+                });
+            },
+
+            "configures responseType on send": function () {
+                var workingXHRInstance;
+                var workingXHROverride = function () {
+                    workingXHRInstance = this;
+                    this.addEventListener = function () {};
+                    this.send = function () {};
+                    this.open = function () {};
+                };
+                var fakeXhr = this.fakeXhr;
+
+                runWithWorkingXHROveride(workingXHROverride, function () {
+                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.responseType = "arraybuffer";
+                    fakeXhr.send();
+                    assert.equals(workingXHRInstance.responseType, "arraybuffer");
                 });
             },
 
