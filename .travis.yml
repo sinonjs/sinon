@@ -1,9 +1,8 @@
 language: node_js
 node_js:
-  - "0.8"
-  - "0.10"
   - "0.12"
-  - "4.2"
+  # LTS release per February 2016
+  - "4.3"
   - "5"
 
 sudo: false
@@ -14,8 +13,6 @@ cache:
 
 before_install:
   - npm config set strict-ssl false
-  # use a more modern npm than ships with 0.8
-  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.8" ]; then npm install -g npm@1.4; fi'
 
 before_script:
   # we only need to run eslint once per build, so let's conserve a few resources

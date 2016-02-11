@@ -22,27 +22,6 @@ PREAMBLE
   end
 end
 
-# This code is an awful hack that is done here only because
-# PhantomJS 1.x incorrectly handles "use strict" statement in
-# some cases leading to sinon spy executing in a non-strict
-# mode, even though it explicitly says otherwise. Since the
-# people still use PhantomJS 1.x, this has to remain here
-# to add another wrapper with another "use strict" on top
-# of UMD bundle packaged by browserify.
-def add_use_strict(file)
-
-  contents = File.read(file)
-
-  File.open(file, "w") do |f|
-    f.puts("(function () {")
-    f.puts("  'use strict';")
-    f.puts(contents)
-    f.puts("}());")
-  end
-
-  file
-end
-
 Dir.chdir(File.dirname(__FILE__)) do
   version = File.read("package.json").match(/"version":\s+"(.*)"/)[1]
   version_string = ARGV[0] == "plain" ? "" : "-#{version}"
@@ -51,7 +30,7 @@ Dir.chdir(File.dirname(__FILE__)) do
 
   FileUtils.mkdir("pkg") unless File.exists?("pkg")
   `#{browserify} -s sinon lib/sinon.js -o #{output}`
-  add_license(add_use_strict(output), version)
+  add_license(output, version)
 
   File.open("pkg/sinon-ie#{version_string}.js", "w") do |f|
     f.puts(File.read("lib/sinon/util-ie/timers.js"))
