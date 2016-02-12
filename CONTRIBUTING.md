@@ -3,7 +3,7 @@
 There are several ways of contributing to Sinon.JS
 
 * Help [improve the documentation](https://github.com/sinonjs/sinon-docs) published at [the Sinon.JS website](http://sinonjs.org)
-* Help someone understand and use Sinon.JS on the [the mailing list](http://groups.google.com/group/sinonjs)
+* Help someone understand and use Sinon.JS on [the mailing list](http://groups.google.com/group/sinonjs)
 * Report an issue, please read instructions below
 * Help with triaging the [issues](http://github.com/cjohansen/Sinon.JS/issues). The clearer they are, the more likely they are to be fixed soon.
 * Contribute to the code base.
