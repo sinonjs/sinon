@@ -30,5 +30,11 @@ buster-test --config-group coverage
 
 echo
 echo "starting buster-test (packaged)"
-./build
+mkdir -p tmp
+./node_modules/.bin/browserify ./test/**/*-test.js ./test/test-helper.js --exclude buster -t browserify-shim -o tmp/testrunner-packaged.js
 buster-test --config test/buster-packaged.js
+
+echo
+echo "starting buster-test (webworker)"
+./build
+buster-test --config test/buster-webworker.js

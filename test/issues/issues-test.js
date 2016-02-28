@@ -1,152 +1,151 @@
-(function (root) {
-    "use strict";
+"use strict";
 
-    var buster = root.buster || require("buster");
-    var sinon = root.sinon || require("../../lib/sinon");
-    var assert = buster.assert;
-    var refute = buster.refute;
-    var configureLogError = sinon.configureLogError || require("../../lib/sinon/util/core/log_error.js");
+var buster = require("buster");
+var sinon = require("../../lib/sinon");
+var configureLogError = require("../../lib/sinon/util/core/log_error.js");
+var assert = buster.assert;
+var refute = buster.refute;
 
-    buster.testCase("issues", {
-        setUp: function () {
-            this.sandbox = sinon.sandbox.create();
-        },
 
-        tearDown: function () {
-            this.sandbox.restore();
-        },
+buster.testCase("issues", {
+    setUp: function () {
+        this.sandbox = sinon.sandbox.create();
+    },
 
-        "// #283": function () {
-            function testSinonFakeTimersWith(interval, ticks) {
-                var clock = sinon.useFakeTimers();
+    tearDown: function () {
+        this.sandbox.restore();
+    },
 
-                var spy = sinon.spy();
-                var id = setInterval(spy, interval);
-                assert(!spy.calledOnce);
-                clock.tick(ticks);
-                assert(spy.calledOnce);
-
-                clearInterval(id);
-                clock.restore();
-            }
-
-            // FAILS
-            testSinonFakeTimersWith(10, 101);
-
-            // PASS
-            testSinonFakeTimersWith(99, 101);
-
-            // FAILS
-            testSinonFakeTimersWith(100, 200);
-
-            // PASS
-            testSinonFakeTimersWith(199, 200);
-
-            // FAILS
-            testSinonFakeTimersWith(500, 1001);
-
-            // PASS
-            testSinonFakeTimersWith(1000, 1001);
-        },
-
-        "// #397": function () {
+    "// #283": function () {
+        function testSinonFakeTimersWith(interval, ticks) {
             var clock = sinon.useFakeTimers();
 
-            var cb2 = sinon.spy();
-            var cb1 = sinon.spy(function () {
-                setTimeout(cb2, 0);
-            });
+            var spy = sinon.spy();
+            var id = setInterval(spy, interval);
+            assert(!spy.calledOnce);
+            clock.tick(ticks);
+            assert(spy.calledOnce);
 
-            setTimeout(cb1, 0);
-
-            clock.tick(10);
-            assert(cb1.called);
-            assert(!cb2.called);
-
-            clock.tick(10);
-            assert(cb2.called);
-
+            clearInterval(id);
             clock.restore();
-        },
+        }
 
-        "#458": {
-            "on node": {
-                requiresSupportFor: {
-                    process: typeof process !== "undefined"
-                },
+        // FAILS
+        testSinonFakeTimersWith(10, 101);
 
-                "stub out fs.readFileSync": function () {
-                    var fs = require("fs");
-                    var testCase = this;
+        // PASS
+        testSinonFakeTimersWith(99, 101);
 
-                    refute.exception(function () {
-                        testCase.sandbox.stub(fs, "readFileSync");
-                    });
-                }
-            }
-        },
+        // FAILS
+        testSinonFakeTimersWith(100, 200);
 
-        "#624": {
-            "//useFakeTimers should be idempotent": function () {
-                // Issue #624 shows that useFakeTimers is not idempotent when it comes to
-                // using Date.now
-                // This test verifies that it's working, at least for Date.now
-                var clock;
+        // PASS
+        testSinonFakeTimersWith(199, 200);
 
-                clock = sinon.useFakeTimers(new Date("2014-12-29").getTime());
-                assert.equals(clock.now, Date.now());
+        // FAILS
+        testSinonFakeTimersWith(500, 1001);
 
-                clock = sinon.useFakeTimers(new Date("2015-12-15").getTime());
-                assert.equals(clock.now, Date.now());
+        // PASS
+        testSinonFakeTimersWith(1000, 1001);
+    },
 
-                clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
-                assert.equals(clock.now, Date.now());
-            }
-        },
+    "// #397": function () {
+        var clock = sinon.useFakeTimers();
 
-        "#852 - createStubInstance on intherited constructors": {
-            "must not throw error": function () {
-                var A = function () {};
-                var B = function () {};
+        var cb2 = sinon.spy();
+        var cb1 = sinon.spy(function () {
+            setTimeout(cb2, 0);
+        });
 
-                B.prototype = Object.create(A.prototype);
-                B.prototype.constructor = A;
+        setTimeout(cb1, 0);
+
+        clock.tick(10);
+        assert(cb1.called);
+        assert(!cb2.called);
+
+        clock.tick(10);
+        assert(cb2.called);
+
+        clock.restore();
+    },
+
+    "#458": {
+        "on node": {
+            requiresSupportFor: {
+                fs: typeof require("fs").readFileSync !== "undefined"
+            },
+
+            "stub out fs.readFileSync": function () {
+                var fs = require("fs");
+                var testCase = this;
 
                 refute.exception(function () {
-                    sinon.createStubInstance(B);
+                    testCase.sandbox.stub(fs, "readFileSync");
                 });
-            }
-        },
-
-        "#852(2) - createStubInstance should on same constructor": {
-            "must be idempotent": function () {
-                var A = function () {};
-                refute.exception(function () {
-                    sinon.createStubInstance(A);
-                    sinon.createStubInstance(A);
-                });
-            }
-        },
-
-        "#835": {
-            "logError() throws an exception if the passed err is read-only": function () {
-                var logError = configureLogError({useImmediateExceptions: true});
-
-                // passes
-                var err = { name: "TestError", message: "this is a proper exception" };
-                try {
-                    logError("#835 test", err);
-                } catch (ex) {
-                    assert.equals(ex.name, err.name);
-                }
-
-                // fails until this issue is fixed
-                try {
-                    logError("#835 test", "this literal string is not a proper exception");
-                } catch (ex) {
-                    assert.equals(ex.name, "#835 test");
-                }
             }
         }
-    });
-}(this));
+    },
+
+    "#624": {
+        "//useFakeTimers should be idempotent": function () {
+            // Issue #624 shows that useFakeTimers is not idempotent when it comes to
+            // using Date.now
+            // This test verifies that it's working, at least for Date.now
+            var clock;
+
+            clock = sinon.useFakeTimers(new Date("2014-12-29").getTime());
+            assert.equals(clock.now, Date.now());
+
+            clock = sinon.useFakeTimers(new Date("2015-12-15").getTime());
+            assert.equals(clock.now, Date.now());
+
+            clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
+            assert.equals(clock.now, Date.now());
+        }
+    },
+
+    "#835": {
+        "logError() throws an exception if the passed err is read-only": function () {
+            var logError = configureLogError({useImmediateExceptions: true});
+
+            // passes
+            var err = { name: "TestError", message: "this is a proper exception" };
+            try {
+                logError("#835 test", err);
+            } catch (ex) {
+                assert.equals(ex.name, err.name);
+            }
+
+            // fails until this issue is fixed
+            try {
+                logError("#835 test", "this literal string is not a proper exception");
+            } catch (ex) {
+                assert.equals(ex.name, "#835 test");
+            }
+        }
+    },
+
+    "#852 - createStubInstance on intherited constructors": {
+        "must not throw error": function () {
+            var A = function () {};
+            var B = function () {};
+
+            B.prototype = Object.create(A.prototype);
+            B.prototype.constructor = A;
+
+            refute.exception(function () {
+                sinon.createStubInstance(B);
+            });
+        }
+    },
+
+    "#852(2) - createStubInstance should on same constructor": {
+        "must be idempotent": function () {
+            var A = function () {};
+            refute.exception(function () {
+                sinon.createStubInstance(A);
+                sinon.createStubInstance(A);
+            });
+        }
+    }
+});
