@@ -5,6 +5,7 @@
     var sinon = root.sinon || require("../../lib/sinon");
     var assert = buster.assert;
     var refute = buster.refute;
+    var configureLogError = sinon.configureLogError || require("../../lib/sinon/util/core/log_error.js");
 
     buster.testCase("issues", {
         setUp: function () {
@@ -124,6 +125,27 @@
                     sinon.createStubInstance(A);
                     sinon.createStubInstance(A);
                 });
+            }
+        },
+
+        "#835": {
+            "logError() throws an exception if the passed err is read-only": function () {
+                var logError = configureLogError({useImmediateExceptions: true});
+
+                // passes
+                var err = { name: "TestError", message: "this is a proper exception" };
+                try {
+                    logError("#835 test", err);
+                } catch (ex) {
+                    assert.equals(ex.name, err.name);
+                }
+
+                // fails until this issue is fixed
+                try {
+                    logError("#835 test", "this literal string is not a proper exception");
+                } catch (ex) {
+                    assert.equals(ex.name, "#835 test");
+                }
             }
         }
     });
