@@ -9,13 +9,19 @@
         "restores all methods of supplied object": function () {
             var methodA = function () {};
             var methodB = function () {};
-            var obj = { methodA: methodA, methodB: methodB };
+            var nonEnumerableMethod = function () {};
+            var obj = { methodA: methodA, methodB: methodB, nonEnumerableMethod: nonEnumerableMethod };
+
+            Object.defineProperty(obj, "nonEnumerableMethod", {
+                enumerable: false
+            });
 
             sinon.stub(obj);
             sinon.restore(obj);
 
             assert.same(obj.methodA, methodA);
             assert.same(obj.methodB, methodB);
+            assert.same(obj.nonEnumerableMethod, nonEnumerableMethod);
         },
 
         "only restores restorable methods": function () {

@@ -80,8 +80,13 @@
             "adds all object methods to fake array": function () {
                 var object = {
                     method: function () {},
-                    method2: function () {}
+                    method2: function () {},
+                    method3: function () {}
                 };
+
+                Object.defineProperty(object, "method3", {
+                    enumerable: false
+                });
 
                 sinon.stub = function () {
                     return object;
@@ -89,8 +94,8 @@
 
                 this.collection.stub(object);
 
-                assert.equals(this.collection.fakes, [object.method, object.method2]);
-                assert.equals(this.collection.fakes.length, 2);
+                assert.equals(this.collection.fakes, [object.method, object.method2, object.method3]);
+                assert.equals(this.collection.fakes.length, 3);
             },
 
             "returns a stubbed object": function () {
