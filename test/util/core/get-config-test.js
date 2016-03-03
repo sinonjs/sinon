@@ -2,13 +2,14 @@
 
 var buster = require("buster");
 var sinon = require("../../../lib/sinon");
+var getConfig = require("../../../lib/sinon/util/core/get-config");
 var assert = buster.assert;
 var refute = buster.refute;
 
-buster.testCase("sinon.getConfig", {
+buster.testCase("core/util/getConfig", {
     ".getConfig": {
         "gets copy of default config": function () {
-            var config = sinon.getConfig();
+            var config = getConfig();
 
             refute.same(config, sinon.defaultConfig);
             assert.equals(config.injectIntoThis, sinon.defaultConfig.injectIntoThis);
@@ -19,7 +20,7 @@ buster.testCase("sinon.getConfig", {
         },
 
         "should override specified properties": function () {
-            var config = sinon.getConfig({
+            var config = getConfig({
                 properties: ["stub", "mock"],
                 useFakeServer: false
             });

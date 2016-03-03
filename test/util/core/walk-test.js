@@ -1,19 +1,21 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../../../lib/sinon");
+var walk = require("../../../lib/sinon/util/core/walk");
+var createInstance = require("../../../lib/sinon/util/core/create");
+var createSpy = require("../../../lib/sinon/spy");
 var assert = buster.assert;
 
-buster.testCase("sinon.walk", {
+buster.testCase("util/core/walk", {
     "should call iterator with value, key, and obj, with context as the receiver": function () {
         var target = Object.create(null);
         var rcvr = {};
-        var iterator = sinon.spy();
+        var iterator = createSpy();
 
         target.hello = "world";
         target.foo = 15;
 
-        sinon.walk(target, iterator, rcvr);
+        walk(target, iterator, rcvr);
 
         assert(iterator.calledTwice);
         assert(iterator.alwaysCalledOn(rcvr));
@@ -23,14 +25,14 @@ buster.testCase("sinon.walk", {
 
     "should work with non-enumerable properties": function () {
         var target = Object.create(null);
-        var iterator = sinon.spy();
+        var iterator = createSpy();
 
         target.hello = "world";
         Object.defineProperty(target, "foo", {
             value: 15
         });
 
-        sinon.walk(target, iterator);
+        walk(target, iterator);
 
         assert(iterator.calledTwice);
         assert(iterator.calledWith("world", "hello"));
@@ -70,9 +72,9 @@ buster.testCase("sinon.walk", {
             }
         });
 
-        iterator = sinon.spy();
+        iterator = createSpy();
 
-        sinon.walk(target, iterator);
+        walk(target, iterator);
 
         assert.equals(iterator.callCount, 6);
         assert(iterator.calledWith("non-enumerable own prop", "nonEnumerableOwnProp", target));
@@ -94,9 +96,9 @@ buster.testCase("sinon.walk", {
             }
         });
         var target = new Target();
-        var iterator = sinon.spy();
+        var iterator = createSpy();
 
-        sinon.walk(target, iterator);
+        walk(target, iterator);
 
         assert(iterator.calledWith("computed foo", "computedFoo", target));
     },
@@ -108,7 +110,7 @@ buster.testCase("sinon.walk", {
         };
         var target = new Target();
         var rcvr = {};
-        var iterator = sinon.spy();
+        var iterator = createSpy();
         var err = null;
         var numCalls = 0;
         var placeholder; // eslint-disable-line no-unused-vars
@@ -126,7 +128,7 @@ buster.testCase("sinon.walk", {
         /* eslint-enable guard-for-in */
 
         try {
-            sinon.walk(target, iterator, rcvr);
+            walk(target, iterator, rcvr);
             assert.equals(iterator.callCount, numCalls);
             assert(iterator.alwaysCalledOn(rcvr));
             assert(iterator.calledWith("world", "hello"));
@@ -137,18 +139,18 @@ buster.testCase("sinon.walk", {
             Object.getOwnPropertyNames = getOwnPropertyNames;
         }
 
-        assert.isNull(err, "sinon.walk tests failed with message '" + (err && err.message) + "'");
+        assert.isNull(err, "walk tests failed with message '" + (err && err.message) + "'");
     },
 
     "does not walk the same property twice": function () {
         var parent = {
             func: function () {}
         };
-        var child = sinon.create(parent);
+        var child = createInstance(parent);
         child.func = function () {};
-        var iterator = sinon.spy();
+        var iterator = createSpy();
 
-        sinon.walk(child, iterator);
+        walk(child, iterator);
 
         assert.equals(iterator.callCount, 1);
     }

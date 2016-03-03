@@ -1,10 +1,11 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../../../lib/sinon");
+var restore = require("../../../lib/sinon/util/core/restore");
+var createStub = require("../../../lib/sinon/stub");
 var assert = buster.assert;
 
-buster.testCase("sinon.restore", {
+buster.testCase("util/core/restore", {
     "restores all methods of supplied object": function () {
         var methodA = function () {};
         var methodB = function () {};
@@ -14,8 +15,8 @@ buster.testCase("sinon.restore", {
             enumerable: false
         });
 
-        sinon.stub(obj);
-        sinon.restore(obj);
+        createStub(obj);
+        restore(obj);
 
         assert.same(obj.methodA, methodA);
         assert.same(obj.methodB, methodB);
@@ -27,8 +28,8 @@ buster.testCase("sinon.restore", {
         var vanillaMethod = function () {};
         var obj = { stubbedMethod: stubbedMethod, vanillaMethod: vanillaMethod };
 
-        sinon.stub(obj, "stubbedMethod");
-        sinon.restore(obj);
+        createStub(obj, "stubbedMethod");
+        restore(obj);
 
         assert.same(obj.stubbedMethod, stubbedMethod);
     },
@@ -37,8 +38,8 @@ buster.testCase("sinon.restore", {
         var method = function () {};
         var obj = { method: method };
 
-        sinon.stub(obj);
-        sinon.restore(obj.method);
+        createStub(obj);
+        restore(obj.method);
 
         assert.same(obj.method, method);
     }

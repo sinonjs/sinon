@@ -1,22 +1,22 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../../../lib/sinon");
+var timesInWords = require("../../../lib/sinon/util/core/times-in-words");
 var assert = buster.assert;
 
-buster.testCase("sinon.timesInWords", {
+buster.testCase("util/core/timesInWords", {
     "should return \"once\" for input of 1": function () {
-        var result = sinon.timesInWords(1);
+        var result = timesInWords(1);
         assert.equals(result, "once");
     },
 
     "should return \"twice\" for input of 2": function () {
-        var result = sinon.timesInWords(2);
+        var result = timesInWords(2);
         assert.equals(result, "twice");
     },
 
     "should return \"thrice\" for input of 3": function () {
-        var result = sinon.timesInWords(3);
+        var result = timesInWords(3);
         assert.equals(result, "thrice");
     },
 
@@ -24,7 +24,7 @@ buster.testCase("sinon.timesInWords", {
         var result, i;
 
         for (i = 4; i < 100; i++) {
-            result = sinon.timesInWords(i);
+            result = timesInWords(i);
             assert.equals(result, i + " times");
         }
     },
@@ -34,7 +34,7 @@ buster.testCase("sinon.timesInWords", {
         var result, i;
 
         for (i = 0; i < falsies.length; i++) {
-            result = sinon.timesInWords(falsies[i]);
+            result = timesInWords(falsies[i]);
             assert.equals(result, "0 times");
         }
     }
