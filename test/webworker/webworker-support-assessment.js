@@ -11,7 +11,7 @@
         },
 
         "should not crash": function (done) {
-            var worker = new root.Worker("./test/webworker-script.js");
+            var worker = new root.Worker("./test/webworker/webworker-script.js");
 
             worker.onmessage = function (msg) {
                 try {

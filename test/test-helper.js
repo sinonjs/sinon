@@ -1,3 +1,4 @@
+/*eslint strict: [2, "function"]*/
 (function (root) {
     "use strict";
     var buster = root.buster || require("buster");
