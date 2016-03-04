@@ -1,11 +1,13 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../../../lib/sinon");
+var wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
+var createSpy = require("../../../lib/sinon/spy");
+var createStub = require("../../../lib/sinon/stub");
 var assert = buster.assert;
 var refute = buster.refute;
 
-buster.testCase("sinon.wrapMethod", {
+buster.testCase("util/core/wrapMethod", {
     setUp: function () {
         this.method = function () {};
         this.getter = function () {};
@@ -19,12 +21,12 @@ buster.testCase("sinon.wrapMethod", {
     },
 
     "is function": function () {
-        assert.isFunction(sinon.wrapMethod);
+        assert.isFunction(wrapMethod);
     },
 
     "throws if first argument is not object": function () {
         assert.exception(function () {
-            sinon.wrapMethod();
+            wrapMethod();
         }, "TypeError");
     },
 
@@ -33,7 +35,7 @@ buster.testCase("sinon.wrapMethod", {
         var object = this.object;
 
         assert.exception(function () {
-            sinon.wrapMethod(object, "prop", function () {});
+            wrapMethod(object, "prop", function () {});
         }, "TypeError");
     },
 
@@ -41,11 +43,11 @@ buster.testCase("sinon.wrapMethod", {
         var object = this.object;
 
         assert.exception(function () {
-            sinon.wrapMethod(object, "prop", function () {});
+            wrapMethod(object, "prop", function () {});
         });
 
         try {
-            sinon.wrapMethod(object, "prop", function () {});
+            wrapMethod(object, "prop", function () {});
             throw new Error("Didn't throw");
         } catch (e) {
             assert.match(e.message,
@@ -57,7 +59,7 @@ buster.testCase("sinon.wrapMethod", {
         var object = this.object;
 
         assert.exception(function () {
-            sinon.wrapMethod(object, "method");
+            wrapMethod(object, "method");
         }, "TypeError");
     },
 
@@ -65,26 +67,26 @@ buster.testCase("sinon.wrapMethod", {
         var object = this.object;
 
         assert.exception(function () {
-            sinon.wrapMethod(object, "method", 1);
+            wrapMethod(object, "method", 1);
         }, "TypeError");
     },
 
     "replaces object method": function () {
-        sinon.wrapMethod(this.object, "method", function () {});
+        wrapMethod(this.object, "method", function () {});
 
         refute.same(this.method, this.object.method);
         assert.isFunction(this.object.method);
     },
 
     "replaces getter": function () {
-        sinon.wrapMethod(this.object, "property", { get: function () {} });
+        wrapMethod(this.object, "property", { get: function () {} });
 
         refute.same(this.getter, Object.getOwnPropertyDescriptor(this.object, "property").get);
         assert.isFunction(Object.getOwnPropertyDescriptor(this.object, "property").get);
     },
 
     "replaces setter": function () {
-        sinon.wrapMethod(this.object, "property", { // eslint-disable-line accessor-pairs
+        wrapMethod(this.object, "property", { // eslint-disable-line accessor-pairs
             set: function () {}
         });
 
@@ -93,26 +95,26 @@ buster.testCase("sinon.wrapMethod", {
     },
 
     "throws if method is already wrapped": function () {
-        sinon.wrapMethod(this.object, "method", function () {});
+        wrapMethod(this.object, "method", function () {});
 
         assert.exception(function () {
-            sinon.wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () {});
         }, "TypeError");
     },
 
     "throws if property descriptor is already wrapped": function () {
-        sinon.wrapMethod(this.object, "property", { get: function () {} });
+        wrapMethod(this.object, "property", { get: function () {} });
 
         assert.exception(function () {
-            sinon.wrapMethod(this.object, "property", { get: function () {} });
+            wrapMethod(this.object, "property", { get: function () {} });
         }, "TypeError");
     },
 
     "throws if method is already a spy": function () {
-        var object = { method: sinon.spy() };
+        var object = { method: createSpy() };
 
         assert.exception(function () {
-            sinon.wrapMethod(object, "method", function () {});
+            wrapMethod(object, "method", function () {});
         }, "TypeError");
     },
 
@@ -145,12 +147,12 @@ buster.testCase("sinon.wrapMethod", {
 
         "throws with stack trace showing original wrapMethod call": function () {
             var object = { method: function () {} };
-            sinon.wrapMethod(object, "method", function () {
+            wrapMethod(object, "method", function () {
                 return "original";
             });
 
             try {
-                sinon.wrapMethod(object, "method", function () {});
+                wrapMethod(object, "method", function () {});
             } catch (e) {
                 assert.equals(e.stack, ":STACK2:\n--------------\n:STACK1:");
             }
@@ -166,7 +168,7 @@ buster.testCase("sinon.wrapMethod", {
             window.sinonTestMethod = function () {};
             try {
                 refute.exception(function () {
-                    sinon.wrapMethod(window, "sinonTestMethod", function () {});
+                    wrapMethod(window, "sinonTestMethod", function () {});
                 });
             } finally {
                 // IE 8 does not support delete on global properties.
@@ -179,7 +181,7 @@ buster.testCase("sinon.wrapMethod", {
         var object = { method: function () {} };
         object.method.prop = 42;
 
-        sinon.wrapMethod(object, "method", function () {});
+        wrapMethod(object, "method", function () {});
 
         assert.equals(object.method.prop, 42);
     },
@@ -188,7 +190,7 @@ buster.testCase("sinon.wrapMethod", {
         var object = { method: function () {} };
         object.method.called = 42;
 
-        sinon.stub(object, "method");
+        createStub(object, "method");
 
         assert.isFalse(object.method.called);
     },
@@ -200,19 +202,19 @@ buster.testCase("sinon.wrapMethod", {
         },
 
         "defines restore method": function () {
-            sinon.wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () {});
 
             assert.isFunction(this.object.method.restore);
         },
 
         "returns wrapper": function () {
-            var wrapper = sinon.wrapMethod(this.object, "method", function () {});
+            var wrapper = wrapMethod(this.object, "method", function () {});
 
             assert.same(this.object.method, wrapper);
         },
 
         "restore brings back original method": function () {
-            sinon.wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () {});
             this.object.method.restore();
 
             assert.same(this.object.method, this.method);
@@ -228,14 +230,14 @@ buster.testCase("sinon.wrapMethod", {
         },
 
         "wrap adds owned property": function () {
-            var wrapper = sinon.wrapMethod(this.object, "method", function () {});
+            var wrapper = wrapMethod(this.object, "method", function () {});
 
             assert.same(this.object.method, wrapper);
             assert(this.object.hasOwnProperty("method"));
         },
 
         "restore removes owned property": function () {
-            sinon.wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () {});
             this.object.method.restore();
 
             assert.same(this.object.method, this.type.prototype.method);

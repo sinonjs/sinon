@@ -1,12 +1,12 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../../../lib/sinon");
+var format = require("../../../lib/sinon/util/core/format");
 var assert = buster.assert;
 
-buster.testCase("sinon.format", {
+buster.testCase("util/core/format", {
     "formats with formatio by default": function () {
-        assert.equals(sinon.format({ id: 42 }), "{ id: 42 }");
+        assert.equals(format({ id: 42 }), "{ id: 42 }");
     },
 
     "// should configure formatio to use maximum 250 entries": function () {
@@ -17,6 +17,6 @@ buster.testCase("sinon.format", {
     },
 
     "formats strings without quotes": function () {
-        assert.equals(sinon.format("Hey"), "Hey");
+        assert.equals(format("Hey"), "Hey");
     }
 });
