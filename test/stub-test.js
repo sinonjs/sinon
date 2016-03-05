@@ -1,14 +1,18 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../lib/sinon");
+var createStub = require("../lib/sinon/stub");
+var createStubInstance = require("../lib/sinon/stub").createStubInstance;
+var createSpy = require("../lib/sinon/spy");
+var sinonMatch = require("../lib/sinon/match");
+var createInstance = require("../lib/sinon/util/core/create");
 var assert = buster.assert;
 var refute = buster.refute;
 var fail = buster.referee.fail;
 
-buster.testCase("sinon.stub", {
+buster.testCase("stub", {
     "is spy": function () {
-        var stub = sinon.stub.create();
+        var stub = createStub.create();
 
         assert.isFalse(stub.called);
         assert.isFunction(stub.calledWith);
@@ -19,7 +23,7 @@ buster.testCase("sinon.stub", {
         var error;
 
         try {
-            sinon.stub(null, "prop");
+            createStub(null, "prop");
         } catch (e) {
             error = e;
         }
@@ -28,7 +32,7 @@ buster.testCase("sinon.stub", {
     },
 
     "should contain asynchronous versions of callsArg*, and yields* methods": function () {
-        var stub = sinon.stub.create();
+        var stub = createStub.create();
 
         var syncVersions = 0;
         var asyncVersions = 0;
@@ -48,8 +52,8 @@ buster.testCase("sinon.stub", {
     },
 
     "should allow overriding async behavior with sync behavior": function () {
-        var stub = sinon.stub();
-        var callback = sinon.spy();
+        var stub = createStub();
+        var callback = createSpy();
 
         stub.callsArgAsync(1);
         stub.callsArg(1);
@@ -60,7 +64,7 @@ buster.testCase("sinon.stub", {
 
     ".returns": {
         "returns specified value": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             var object = {};
             stub.returns(object);
 
@@ -68,19 +72,19 @@ buster.testCase("sinon.stub", {
         },
 
         "returns should return stub": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             assert.same(stub.returns(""), stub);
         },
 
         "returns undefined": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             refute.defined(stub());
         },
 
         "supersedes previous throws": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.throws().returns(1);
 
             refute.exception(function () {
@@ -91,7 +95,7 @@ buster.testCase("sinon.stub", {
 
     ".returnsArg": {
         "returns argument at specified index": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.returnsArg(0);
             var object = {};
 
@@ -99,13 +103,13 @@ buster.testCase("sinon.stub", {
         },
 
         "returns stub": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             assert.same(stub.returnsArg(0), stub);
         },
 
         "throws if no index is specified": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             assert.exception(function () {
                 stub.returnsArg();
@@ -116,7 +120,7 @@ buster.testCase("sinon.stub", {
     ".returnsThis": {
         "stub returns this": function () {
             var instance = {};
-            instance.stub = sinon.stub.create();
+            instance.stub = createStub.create();
             instance.stub.returnsThis();
 
             assert.same(instance.stub(), instance);
@@ -129,7 +133,7 @@ buster.testCase("sinon.stub", {
                 }()) === undefined
             },
             "": function () {
-                var stub = sinon.stub.create();
+                var stub = createStub.create();
                 stub.returnsThis();
 
                 // Due to strict mode, would be `global` otherwise
@@ -138,7 +142,7 @@ buster.testCase("sinon.stub", {
         },
 
         "stub respects call/apply": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.returnsThis();
             var object = {};
 
@@ -147,7 +151,7 @@ buster.testCase("sinon.stub", {
         },
 
         "returns stub": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             assert.same(stub.returnsThis(), stub);
         }
@@ -155,7 +159,7 @@ buster.testCase("sinon.stub", {
 
     ".throws": {
         "throws specified exception": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             var error = new Error();
             stub.throws(error);
 
@@ -168,13 +172,13 @@ buster.testCase("sinon.stub", {
         },
 
         "returns stub": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
 
             assert.same(stub.throws({}), stub);
         },
 
         "sets type of exception to throw": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             var exceptionType = "TypeError";
             stub.throws(exceptionType);
 
@@ -184,7 +188,7 @@ buster.testCase("sinon.stub", {
         },
 
         "specifies exception message": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             var message = "Oh no!";
             stub.throws("Error", message);
 
@@ -197,7 +201,7 @@ buster.testCase("sinon.stub", {
         },
 
         "does not specify exception message if not provided": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.throws("Error");
 
             try {
@@ -209,7 +213,7 @@ buster.testCase("sinon.stub", {
         },
 
         "throws generic error": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.throws();
 
             assert.exception(function () {
@@ -218,7 +222,7 @@ buster.testCase("sinon.stub", {
         },
 
         "resets 'invoking' flag": function () {
-            var stub = sinon.stub.create();
+            var stub = createStub.create();
             stub.throws();
 
             try {
@@ -231,12 +235,12 @@ buster.testCase("sinon.stub", {
 
     ".callsArg": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
         },
 
         "calls argument at specified index": function () {
             this.stub.callsArg(2);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, 2, callback);
 
@@ -274,13 +278,13 @@ buster.testCase("sinon.stub", {
 
     ".callsArgWith": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
         },
 
         "calls argument at specified index with provided args": function () {
             var object = {};
             this.stub.callsArgWith(1, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -295,7 +299,7 @@ buster.testCase("sinon.stub", {
 
         "calls callback without args": function () {
             this.stub.callsArgWith(1);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -306,7 +310,7 @@ buster.testCase("sinon.stub", {
             var object = {};
             var array = [];
             this.stub.callsArgWith(1, object, array);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -332,7 +336,7 @@ buster.testCase("sinon.stub", {
 
     ".callsArgOn": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = {
                 foo: "bar"
             };
@@ -340,7 +344,7 @@ buster.testCase("sinon.stub", {
 
         "calls argument at specified index": function () {
             this.stub.callsArgOn(2, this.fakeContext);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, 2, callback);
 
@@ -350,7 +354,7 @@ buster.testCase("sinon.stub", {
 
         "calls argument at specified index with undefined context": function () {
             this.stub.callsArgOn(2, undefined);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, 2, callback);
 
@@ -360,7 +364,7 @@ buster.testCase("sinon.stub", {
 
         "calls argument at specified index with number context": function () {
             this.stub.callsArgOn(2, 5);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, 2, callback);
 
@@ -401,14 +405,14 @@ buster.testCase("sinon.stub", {
 
     ".callsArgOnWith": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
         "calls argument at specified index with provided args": function () {
             var object = {};
             this.stub.callsArgOnWith(1, this.fakeContext, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -419,7 +423,7 @@ buster.testCase("sinon.stub", {
         "calls argument at specified index with provided args and undefined context": function () {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -430,7 +434,7 @@ buster.testCase("sinon.stub", {
         "calls argument at specified index with provided args and number context": function () {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -441,7 +445,7 @@ buster.testCase("sinon.stub", {
         "calls argument at specified index with provided args with undefined context": function () {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -452,7 +456,7 @@ buster.testCase("sinon.stub", {
         "calls argument at specified index with provided args with number context": function () {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -468,7 +472,7 @@ buster.testCase("sinon.stub", {
 
         "calls callback without args": function () {
             this.stub.callsArgOnWith(1, this.fakeContext);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -480,7 +484,7 @@ buster.testCase("sinon.stub", {
             var object = {};
             var array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
-            var callback = sinon.stub.create();
+            var callback = createStub.create();
 
             this.stub(1, callback);
 
@@ -512,17 +516,20 @@ buster.testCase("sinon.stub", {
         },
 
         "// returns function from wrapMethod": function () {
+            /*
             var wrapper = function () {};
             sinon.wrapMethod = function () {
                 return wrapper;
             };
 
-            var result = sinon.stub(this.object, "method");
+            var result = createStub(this.object, "method");
 
             assert.same(result, wrapper);
+            */
         },
 
         "// passes object and method to wrapMethod": function () {
+            /*
             var wrapper = function () {};
             var args;
 
@@ -531,15 +538,16 @@ buster.testCase("sinon.stub", {
                 return wrapper;
             };
 
-            sinon.stub(this.object, "method");
+            createStub(this.object, "method");
 
             assert.same(args[0], this.object);
             assert.same(args[1], "method");
+            */
         },
 
         "uses provided function as stub": function () {
             var called = false;
-            var stub = sinon.stub(this.object, "method", function () {
+            var stub = createStub(this.object, "method", function () {
                 called = true;
             });
 
@@ -550,7 +558,7 @@ buster.testCase("sinon.stub", {
 
         "wraps provided function": function () {
             var customStub = function () {};
-            var stub = sinon.stub(this.object, "method", customStub);
+            var stub = createStub(this.object, "method", customStub);
 
             refute.same(stub, customStub);
             assert.isFunction(stub.restore);
@@ -560,26 +568,26 @@ buster.testCase("sinon.stub", {
             var object = this.object;
 
             assert.exception(function () {
-                sinon.stub(object, "method", 1);
+                createStub(object, "method", 1);
             }, "TypeError");
         },
 
         "stubbed method should be proper stub": function () {
-            var stub = sinon.stub(this.object, "method");
+            var stub = createStub(this.object, "method");
 
             assert.isFunction(stub.returns);
             assert.isFunction(stub.throws);
         },
 
         "custom stubbed method should not be proper stub": function () {
-            var stub = sinon.stub(this.object, "method", function () {});
+            var stub = createStub(this.object, "method", function () {});
 
             refute.defined(stub.returns);
             refute.defined(stub.throws);
         },
 
         "stub should be spy": function () {
-            var stub = sinon.stub(this.object, "method");
+            var stub = createStub(this.object, "method");
             this.object.method();
 
             assert(stub.called);
@@ -587,7 +595,7 @@ buster.testCase("sinon.stub", {
         },
 
         "custom stubbed method should be spy": function () {
-            var stub = sinon.stub(this.object, "method", function () {});
+            var stub = createStub(this.object, "method", function () {});
             this.object.method();
 
             assert(stub.called);
@@ -595,7 +603,7 @@ buster.testCase("sinon.stub", {
         },
 
         "stub should affect spy": function () {
-            var stub = sinon.stub(this.object, "method");
+            var stub = createStub(this.object, "method");
             stub.throws("TypeError");
 
             try {
@@ -607,7 +615,7 @@ buster.testCase("sinon.stub", {
         },
 
         "returns standalone stub without arguments": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             assert.isFunction(stub);
             assert.isFalse(stub.called);
@@ -617,7 +625,7 @@ buster.testCase("sinon.stub", {
             var obj = { someProp: 42 };
 
             assert.exception(function () {
-                sinon.stub(obj, "someProp");
+                createStub(obj, "someProp");
             });
 
             assert.equals(obj.someProp, 42);
@@ -626,7 +634,7 @@ buster.testCase("sinon.stub", {
         "successfully stubs falsey properties": function () {
             var obj = { 0: function () { } };
 
-            sinon.stub(obj, 0, function () {
+            createStub(obj, 0, function () {
                 return "stubbed value";
             });
 
@@ -635,7 +643,7 @@ buster.testCase("sinon.stub", {
 
         "does not stub function object": function () {
             assert.exception(function () {
-                sinon.stub(function () {});
+                createStub(function () {});
             });
         }
     },
@@ -648,7 +656,7 @@ buster.testCase("sinon.stub", {
                 func3: function () {}
             };
 
-            sinon.stub(obj);
+            createStub(obj);
 
             assert.isFunction(obj.func1.restore);
             assert.isFunction(obj.func2.restore);
@@ -660,7 +668,7 @@ buster.testCase("sinon.stub", {
             Obj.prototype.func1 = function () {};
             var obj = new Obj();
 
-            sinon.stub(obj);
+            createStub(obj);
 
             assert.isFunction(obj.func1.restore);
         },
@@ -668,12 +676,12 @@ buster.testCase("sinon.stub", {
         "returns object": function () {
             var object = {};
 
-            assert.same(sinon.stub(object), object);
+            assert.same(createStub(object), object);
         },
 
         "only stubs functions": function () {
             var object = { foo: "bar" };
-            sinon.stub(object);
+            createStub(object);
 
             assert.equals(object.foo, "bar");
         },
@@ -690,7 +698,7 @@ buster.testCase("sinon.stub", {
                 configurable: true
             });
 
-            sinon.stub(obj);
+            createStub(obj);
 
             assert.isFunction(obj.func1.restore);
             assert.isFunction(obj.func2.restore);
@@ -707,7 +715,7 @@ buster.testCase("sinon.stub", {
 
             var obj = new Obj();
 
-            sinon.stub(obj);
+            createStub(obj);
 
             assert.isFunction(obj.func1.restore);
         },
@@ -715,7 +723,7 @@ buster.testCase("sinon.stub", {
         "does not stub non-enumerable properties from Object.prototype": function () {
             var obj = {};
 
-            sinon.stub(obj);
+            createStub(obj);
 
             refute.isFunction(obj.toString.restore);
             refute.isFunction(obj.toLocaleString.restore);
@@ -726,11 +734,11 @@ buster.testCase("sinon.stub", {
             var parent = {
                 func: function () {}
             };
-            var child = sinon.create(parent);
+            var child = createInstance(parent);
             child.func = function () {};
 
             refute.exception(function () {
-                sinon.stub(child);
+                createStub(child);
             });
         },
 
@@ -740,7 +748,7 @@ buster.testCase("sinon.stub", {
                     fail("should not call getter");
                 }
             };
-            var stub = sinon.stub(obj, "prop", {get: function () {
+            var stub = createStub(obj, "prop", {get: function () {
                 return 43;
             }});
 
@@ -755,7 +763,7 @@ buster.testCase("sinon.stub", {
             var myObj = {};
 
             assert.exception(function () {
-                sinon.stub(myObj, "ouch");
+                createStub(myObj, "ouch");
             });
 
             refute.defined(myObj.ouch);
@@ -763,20 +771,20 @@ buster.testCase("sinon.stub", {
 
         "has toString method": function () {
             var obj = { meth: function () {} };
-            sinon.stub(obj, "meth");
+            createStub(obj, "meth");
 
             assert.equals(obj.meth.toString(), "meth");
         },
 
         "toString should say 'stub' when unable to infer name": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             assert.equals(stub.toString(), "stub");
         },
 
         "toString should prefer property name if possible": function () {
             var obj = {};
-            obj.meth = sinon.stub();
+            obj.meth = createStub();
             obj.meth();
 
             assert.equals(obj.meth.toString(), "meth");
@@ -785,8 +793,8 @@ buster.testCase("sinon.stub", {
 
     ".yields": {
         "invokes only argument as callback": function () {
-            var stub = sinon.stub().yields();
-            var spy = sinon.spy();
+            var stub = createStub().yields();
+            var spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
@@ -794,7 +802,7 @@ buster.testCase("sinon.stub", {
         },
 
         "throws understandable error if no callback is passed": function () {
-            var stub = sinon.stub().yields();
+            var stub = createStub().yields();
 
             try {
                 stub();
@@ -806,7 +814,7 @@ buster.testCase("sinon.stub", {
 
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
-            var stub = sinon.stub(myObj, "somethingAwesome").yields();
+            var stub = createStub(myObj, "somethingAwesome").yields();
 
             try {
                 stub(23, 42);
@@ -818,8 +826,8 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes last argument as callback": function () {
-            var stub = sinon.stub().yields();
-            var spy = sinon.spy();
+            var stub = createStub().yields();
+            var spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
@@ -827,9 +835,9 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes first of two callbacks": function () {
-            var stub = sinon.stub().yields();
-            var spy = sinon.spy();
-            var spy2 = sinon.spy();
+            var stub = createStub().yields();
+            var spy = createSpy();
+            var spy2 = createSpy();
             stub(24, {}, spy, spy2);
 
             assert(spy.calledOnce);
@@ -838,8 +846,8 @@ buster.testCase("sinon.stub", {
 
         "invokes callback with arguments": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yields(obj, "Crazy");
-            var spy = sinon.spy();
+            var stub = createStub().yields(obj, "Crazy");
+            var spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
@@ -847,8 +855,8 @@ buster.testCase("sinon.stub", {
 
         "throws if callback throws": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yields(obj, "Crazy");
-            var callback = sinon.stub().throws();
+            var stub = createStub().yields(obj, "Crazy");
+            var callback = createStub().throws();
 
             assert.exception(function () {
                 stub(callback);
@@ -856,8 +864,8 @@ buster.testCase("sinon.stub", {
         },
 
         "plays nice with throws": function () {
-            var stub = sinon.stub().throws().yields();
-            var spy = sinon.spy();
+            var stub = createStub().throws().yields();
+            var spy = createSpy();
             assert.exception(function () {
                 stub(spy);
             });
@@ -866,23 +874,23 @@ buster.testCase("sinon.stub", {
 
         "plays nice with returns": function () {
             var obj = {};
-            var stub = sinon.stub().returns(obj).yields();
-            var spy = sinon.spy();
+            var stub = createStub().returns(obj).yields();
+            var spy = createSpy();
             assert.same(stub(spy), obj);
             assert(spy.calledOnce);
         },
 
         "plays nice with returnsArg": function () {
-            var stub = sinon.stub().returnsArg(0).yields();
-            var spy = sinon.spy();
+            var stub = createStub().returnsArg(0).yields();
+            var spy = createSpy();
             assert.same(stub(spy), spy);
             assert(spy.calledOnce);
         },
 
         "plays nice with returnsThis": function () {
             var obj = {};
-            var stub = sinon.stub().returnsThis().yields();
-            var spy = sinon.spy();
+            var stub = createStub().returnsThis().yields();
+            var spy = createSpy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
         }
@@ -890,8 +898,8 @@ buster.testCase("sinon.stub", {
 
     ".yieldsRight": {
         "invokes only argument as callback": function () {
-            var stub = sinon.stub().yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().yieldsRight();
+            var spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
@@ -899,7 +907,7 @@ buster.testCase("sinon.stub", {
         },
 
         "throws understandable error if no callback is passed": function () {
-            var stub = sinon.stub().yieldsRight();
+            var stub = createStub().yieldsRight();
 
             try {
                 stub();
@@ -911,7 +919,7 @@ buster.testCase("sinon.stub", {
 
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
-            var stub = sinon.stub(myObj, "somethingAwesome").yieldsRight();
+            var stub = createStub(myObj, "somethingAwesome").yieldsRight();
 
             try {
                 stub(23, 42);
@@ -923,8 +931,8 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes last argument as callback": function () {
-            var stub = sinon.stub().yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().yieldsRight();
+            var spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
@@ -932,9 +940,9 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes the last of two callbacks": function () {
-            var stub = sinon.stub().yieldsRight();
-            var spy = sinon.spy();
-            var spy2 = sinon.spy();
+            var stub = createStub().yieldsRight();
+            var spy = createSpy();
+            var spy2 = createSpy();
             stub(24, {}, spy, spy2);
 
             assert(!spy.called);
@@ -943,8 +951,8 @@ buster.testCase("sinon.stub", {
 
         "invokes callback with arguments": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yieldsRight(obj, "Crazy");
-            var spy = sinon.spy();
+            var stub = createStub().yieldsRight(obj, "Crazy");
+            var spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
@@ -952,8 +960,8 @@ buster.testCase("sinon.stub", {
 
         "throws if callback throws": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yieldsRight(obj, "Crazy");
-            var callback = sinon.stub().throws();
+            var stub = createStub().yieldsRight(obj, "Crazy");
+            var callback = createStub().throws();
 
             assert.exception(function () {
                 stub(callback);
@@ -961,8 +969,8 @@ buster.testCase("sinon.stub", {
         },
 
         "plays nice with throws": function () {
-            var stub = sinon.stub().throws().yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().throws().yieldsRight();
+            var spy = createSpy();
             assert.exception(function () {
                 stub(spy);
             });
@@ -971,23 +979,23 @@ buster.testCase("sinon.stub", {
 
         "plays nice with returns": function () {
             var obj = {};
-            var stub = sinon.stub().returns(obj).yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().returns(obj).yieldsRight();
+            var spy = createSpy();
             assert.same(stub(spy), obj);
             assert(spy.calledOnce);
         },
 
         "plays nice with returnsArg": function () {
-            var stub = sinon.stub().returnsArg(0).yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().returnsArg(0).yieldsRight();
+            var spy = createSpy();
             assert.same(stub(spy), spy);
             assert(spy.calledOnce);
         },
 
         "plays nice with returnsThis": function () {
             var obj = {};
-            var stub = sinon.stub().returnsThis().yieldsRight();
-            var spy = sinon.spy();
+            var stub = createStub().returnsThis().yieldsRight();
+            var spy = createSpy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
         }
@@ -995,12 +1003,12 @@ buster.testCase("sinon.stub", {
 
     ".yieldsOn": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
         "invokes only argument as callback": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             this.stub.yieldsOn(this.fakeContext);
             this.stub(spy);
@@ -1029,7 +1037,7 @@ buster.testCase("sinon.stub", {
 
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
-            var stub = sinon.stub(myObj, "somethingAwesome").yieldsOn(this.fakeContext);
+            var stub = createStub(myObj, "somethingAwesome").yieldsOn(this.fakeContext);
 
             try {
                 stub(23, 42);
@@ -1041,7 +1049,7 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes last argument as callback": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             this.stub.yieldsOn(this.fakeContext);
 
             this.stub(24, {}, spy);
@@ -1052,8 +1060,8 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes first of two callbacks": function () {
-            var spy = sinon.spy();
-            var spy2 = sinon.spy();
+            var spy = createSpy();
+            var spy2 = createSpy();
 
             this.stub.yieldsOn(this.fakeContext);
             this.stub(24, {}, spy, spy2);
@@ -1065,7 +1073,7 @@ buster.testCase("sinon.stub", {
 
         "invokes callback with arguments": function () {
             var obj = { id: 42 };
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
             this.stub(spy);
@@ -1076,7 +1084,7 @@ buster.testCase("sinon.stub", {
 
         "throws if callback throws": function () {
             var obj = { id: 42 };
-            var callback = sinon.stub().throws();
+            var callback = createStub().throws();
 
             this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
 
@@ -1088,8 +1096,8 @@ buster.testCase("sinon.stub", {
 
     ".yieldsTo": {
         "yields to property of object argument": function () {
-            var stub = sinon.stub().yieldsTo("success");
-            var callback = sinon.spy();
+            var stub = createStub().yieldsTo("success");
+            var callback = createSpy();
 
             stub({ success: callback });
 
@@ -1098,7 +1106,7 @@ buster.testCase("sinon.stub", {
         },
 
         "throws understandable error if no object with callback is passed": function () {
-            var stub = sinon.stub().yieldsTo("success");
+            var stub = createStub().yieldsTo("success");
 
             try {
                 stub();
@@ -1111,7 +1119,7 @@ buster.testCase("sinon.stub", {
 
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
-            var stub = sinon.stub(myObj, "somethingAwesome").yieldsTo("success");
+            var stub = createStub(myObj, "somethingAwesome").yieldsTo("success");
 
             try {
                 stub(23, 42);
@@ -1124,8 +1132,8 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes property on last argument as callback": function () {
-            var stub = sinon.stub().yieldsTo("success");
-            var callback = sinon.spy();
+            var stub = createStub().yieldsTo("success");
+            var callback = createSpy();
             stub(24, {}, { success: callback });
 
             assert(callback.calledOnce);
@@ -1133,9 +1141,9 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes first of two possible callbacks": function () {
-            var stub = sinon.stub().yieldsTo("error");
-            var callback = sinon.spy();
-            var callback2 = sinon.spy();
+            var stub = createStub().yieldsTo("error");
+            var callback = createSpy();
+            var callback2 = createSpy();
             stub(24, {}, { error: callback }, { error: callback2 });
 
             assert(callback.calledOnce);
@@ -1144,8 +1152,8 @@ buster.testCase("sinon.stub", {
 
         "invokes callback with arguments": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yieldsTo("success", obj, "Crazy");
-            var callback = sinon.spy();
+            var stub = createStub().yieldsTo("success", obj, "Crazy");
+            var callback = createSpy();
             stub({ success: callback });
 
             assert(callback.calledWith(obj, "Crazy"));
@@ -1153,8 +1161,8 @@ buster.testCase("sinon.stub", {
 
         "throws if callback throws": function () {
             var obj = { id: 42 };
-            var stub = sinon.stub().yieldsTo("error", obj, "Crazy");
-            var callback = sinon.stub().throws();
+            var stub = createStub().yieldsTo("error", obj, "Crazy");
+            var callback = createStub().throws();
 
             assert.exception(function () {
                 stub({ error: callback });
@@ -1164,13 +1172,13 @@ buster.testCase("sinon.stub", {
 
     ".yieldsToOn": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
         "yields to property of object argument": function () {
             this.stub.yieldsToOn("success", this.fakeContext);
-            var callback = sinon.spy();
+            var callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -1181,7 +1189,7 @@ buster.testCase("sinon.stub", {
 
         "yields to property of object argument with undefined context": function () {
             this.stub.yieldsToOn("success", undefined);
-            var callback = sinon.spy();
+            var callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -1192,7 +1200,7 @@ buster.testCase("sinon.stub", {
 
         "yields to property of object argument with number context": function () {
             this.stub.yieldsToOn("success", 5);
-            var callback = sinon.spy();
+            var callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -1215,7 +1223,7 @@ buster.testCase("sinon.stub", {
 
         "includes stub name and actual arguments in error": function () {
             var myObj = { somethingAwesome: function () {} };
-            var stub = sinon.stub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
+            var stub = createStub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
 
             try {
                 stub(23, 42);
@@ -1228,7 +1236,7 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes property on last argument as callback": function () {
-            var callback = sinon.spy();
+            var callback = createSpy();
 
             this.stub.yieldsToOn("success", this.fakeContext);
             this.stub(24, {}, { success: callback });
@@ -1239,8 +1247,8 @@ buster.testCase("sinon.stub", {
         },
 
         "invokes first of two possible callbacks": function () {
-            var callback = sinon.spy();
-            var callback2 = sinon.spy();
+            var callback = createSpy();
+            var callback2 = createSpy();
 
             this.stub.yieldsToOn("error", this.fakeContext);
             this.stub(24, {}, { error: callback }, { error: callback2 });
@@ -1252,7 +1260,7 @@ buster.testCase("sinon.stub", {
 
         "invokes callback with arguments": function () {
             var obj = { id: 42 };
-            var callback = sinon.spy();
+            var callback = createSpy();
 
             this.stub.yieldsToOn("success", this.fakeContext, obj, "Crazy");
             this.stub({ success: callback });
@@ -1263,7 +1271,7 @@ buster.testCase("sinon.stub", {
 
         "throws if callback throws": function () {
             var obj = { id: 42 };
-            var callback = sinon.stub().throws();
+            var callback = createStub().throws();
 
             this.stub.yieldsToOn("error", this.fakeContext, obj, "Crazy");
 
@@ -1275,13 +1283,13 @@ buster.testCase("sinon.stub", {
 
     ".withArgs": {
         "defines withArgs method": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             assert.isFunction(stub.withArgs);
         },
 
         "creates filtered stub": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
             var other = stub.withArgs(23);
 
             refute.same(other, stub);
@@ -1290,7 +1298,7 @@ buster.testCase("sinon.stub", {
         },
 
         "filters return values based on arguments": function () {
-            var stub = sinon.stub().returns(23);
+            var stub = createStub().returns(23);
             stub.withArgs(42).returns(99);
 
             assert.equals(stub(), 23);
@@ -1298,7 +1306,7 @@ buster.testCase("sinon.stub", {
         },
 
         "filters exceptions based on arguments": function () {
-            var stub = sinon.stub().returns(23);
+            var stub = createStub().returns(23);
             stub.withArgs(42).throws();
 
             refute.exception(stub);
@@ -1307,9 +1315,9 @@ buster.testCase("sinon.stub", {
             });
         },
 
-        "ensure stub recognizes sinon.match fuzzy arguments": function () {
-            var stub = sinon.stub().returns(23);
-            stub.withArgs(sinon.match({ foo: "bar" })).returns(99);
+        "ensure stub recognizes sinonMatch fuzzy arguments": function () {
+            var stub = createStub().returns(23);
+            stub.withArgs(sinonMatch({ foo: "bar" })).returns(99);
 
             assert.equals(stub(), 23);
             assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
@@ -1318,12 +1326,12 @@ buster.testCase("sinon.stub", {
 
     ".callsArgAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
         },
 
         "asynchronously calls argument at specified index": function (done) {
             this.stub.callsArgAsync(2);
-            var callback = sinon.spy(done);
+            var callback = createSpy(done);
 
             this.stub(1, 2, callback);
 
@@ -1333,7 +1341,7 @@ buster.testCase("sinon.stub", {
 
     ".callsArgWithAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
         },
 
         "asynchronously calls callback at specified index with multiple args": function (done) {
@@ -1341,7 +1349,7 @@ buster.testCase("sinon.stub", {
             var array = [];
             this.stub.callsArgWithAsync(1, object, array);
 
-            var callback = sinon.spy(done(function () {
+            var callback = createSpy(done(function () {
                 assert(callback.calledWith(object, array));
             }));
 
@@ -1353,7 +1361,7 @@ buster.testCase("sinon.stub", {
 
     ".callsArgOnAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = {
                 foo: "bar"
             };
@@ -1363,7 +1371,7 @@ buster.testCase("sinon.stub", {
             var context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
 
-            var callback = sinon.spy(done(function () {
+            var callback = createSpy(done(function () {
                 assert(callback.calledOn(context));
             }));
 
@@ -1375,7 +1383,7 @@ buster.testCase("sinon.stub", {
 
     ".callsArgOnWithAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
@@ -1384,7 +1392,7 @@ buster.testCase("sinon.stub", {
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
 
-            var callback = sinon.spy(done(function () {
+            var callback = createSpy(done(function () {
                 assert(callback.calledOn(context));
                 assert(callback.calledWith(object));
             }));
@@ -1397,9 +1405,9 @@ buster.testCase("sinon.stub", {
 
     ".yieldsAsync": {
         "asynchronously invokes only argument as callback": function (done) {
-            var stub = sinon.stub().yieldsAsync();
+            var stub = createStub().yieldsAsync();
 
-            var spy = sinon.spy(done);
+            var spy = createSpy(done);
 
             stub(spy);
 
@@ -1409,7 +1417,7 @@ buster.testCase("sinon.stub", {
 
     ".yieldsOnAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
@@ -1417,7 +1425,7 @@ buster.testCase("sinon.stub", {
             var context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            var spy = sinon.spy(done(function () {
+            var spy = createSpy(done(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
@@ -1431,9 +1439,9 @@ buster.testCase("sinon.stub", {
 
     ".yieldsToAsync": {
         "asynchronously yields to property of object argument": function (done) {
-            var stub = sinon.stub().yieldsToAsync("success");
+            var stub = createStub().yieldsToAsync("success");
 
-            var callback = sinon.spy(done(function () {
+            var callback = createSpy(done(function () {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
             }));
@@ -1446,7 +1454,7 @@ buster.testCase("sinon.stub", {
 
     ".yieldsToOnAsync": {
         setUp: function () {
-            this.stub = sinon.stub.create();
+            this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
         },
 
@@ -1454,7 +1462,7 @@ buster.testCase("sinon.stub", {
             var context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
 
-            var callback = sinon.spy(done(function () {
+            var callback = createSpy(done(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
@@ -1467,7 +1475,7 @@ buster.testCase("sinon.stub", {
 
     ".onCall": {
         "can be used with returns to produce sequence": function () {
-            var stub = sinon.stub().returns(3);
+            var stub = createStub().returns(3);
             stub.onFirstCall().returns(1)
                 .onCall(2).returns(2);
 
@@ -1478,7 +1486,7 @@ buster.testCase("sinon.stub", {
         },
 
         "can be used with returnsArg to produce sequence": function () {
-            var stub = sinon.stub().returns("default");
+            var stub = createStub().returns("default");
             stub.onSecondCall().returnsArg(0);
 
             assert.same(stub(1), "default");
@@ -1488,7 +1496,7 @@ buster.testCase("sinon.stub", {
 
         "can be used with returnsThis to produce sequence": function () {
             var instance = {};
-            instance.stub = sinon.stub().returns("default");
+            instance.stub = createStub().returns("default");
             instance.stub.onSecondCall().returnsThis();
 
             assert.same(instance.stub(), "default");
@@ -1497,7 +1505,7 @@ buster.testCase("sinon.stub", {
         },
 
         "can be used with throwsException to produce sequence": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
             var error = new Error();
             stub.onSecondCall().throwsException(error);
 
@@ -1512,7 +1520,7 @@ buster.testCase("sinon.stub", {
 
         "in combination with withArgs": {
             "can produce a sequence for a fake": function () {
-                var stub = sinon.stub().returns(0);
+                var stub = createStub().returns(0);
                 stub.withArgs(5).returns(-1)
                     .onFirstCall().returns(1)
                     .onSecondCall().returns(2);
@@ -1525,7 +1533,7 @@ buster.testCase("sinon.stub", {
             },
 
             "falls back to stub default behaviour if fake does not have its own default behaviour": function () {
-                var stub = sinon.stub().returns(0);
+                var stub = createStub().returns(0);
                 stub.withArgs(5)
                     .onFirstCall().returns(1);
 
@@ -1534,7 +1542,7 @@ buster.testCase("sinon.stub", {
             },
 
             "falls back to stub behaviour for call if fake does not have its own behaviour for call": function () {
-                var stub = sinon.stub().returns(0);
+                var stub = createStub().returns(0);
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.onSecondCall().returns(2);
 
@@ -1544,7 +1552,7 @@ buster.testCase("sinon.stub", {
             },
 
             "defaults to undefined behaviour once no more calls have been defined": function () {
-                var stub = sinon.stub();
+                var stub = createStub();
                 stub.withArgs(5).onFirstCall().returns(1)
                     .onSecondCall().returns(2);
 
@@ -1554,14 +1562,14 @@ buster.testCase("sinon.stub", {
             },
 
             "does not create undefined behaviour just by calling onCall": function () {
-                var stub = sinon.stub().returns(2);
+                var stub = createStub().returns(2);
                 stub.onFirstCall();
 
                 assert.same(stub(6), 2);
             },
 
             "works with fakes and reset": function () {
-                var stub = sinon.stub();
+                var stub = createStub();
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.withArgs(5).onSecondCall().returns(2);
 
@@ -1578,7 +1586,7 @@ buster.testCase("sinon.stub", {
 
             "throws an understandable error when trying to use withArgs on behavior": function () {
                 try {
-                    sinon.stub().onFirstCall().withArgs(1);
+                    createStub().onFirstCall().withArgs(1);
                 } catch (e) {
                     assert.match(e.message, /not supported/);
                 }
@@ -1587,16 +1595,16 @@ buster.testCase("sinon.stub", {
 
         "can be used with yields* to produce a sequence": function () {
             var context = { foo: "bar" };
-            var obj = { method1: sinon.spy(), method2: sinon.spy() };
-            var obj2 = { method2: sinon.spy() };
-            var stub = sinon.stub().yieldsToOn("method2", context, 7, 8);
+            var obj = { method1: createSpy(), method2: createSpy() };
+            var obj2 = { method2: createSpy() };
+            var stub = createStub().yieldsToOn("method2", context, 7, 8);
             stub.onFirstCall().yields(1, 2)
                 .onSecondCall().yieldsOn(context, 3, 4)
                 .onThirdCall().yieldsTo("method1", 5, 6)
                 .onCall(3).yieldsToOn("method2", context, 7, 8);
 
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
+            var spy1 = createSpy();
+            var spy2 = createSpy();
 
             stub(spy1);
             stub(spy2);
@@ -1628,15 +1636,15 @@ buster.testCase("sinon.stub", {
         },
 
         "can be used with callsArg* to produce a sequence": function () {
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
-            var spy3 = sinon.spy();
-            var spy4 = sinon.spy();
-            var spy5 = sinon.spy();
-            var decoy = sinon.spy();
+            var spy1 = createSpy();
+            var spy2 = createSpy();
+            var spy3 = createSpy();
+            var spy4 = createSpy();
+            var spy5 = createSpy();
+            var decoy = createSpy();
             var context = { foo: "bar" };
 
-            var stub = sinon.stub().callsArgOnWith(3, context, "c", "d");
+            var stub = createStub().callsArgOnWith(3, context, "c", "d");
             stub.onFirstCall().callsArg(0)
                 .onSecondCall().callsArgWith(1, "a", "b")
                 .onThirdCall().callsArgOn(2, context)
@@ -1672,16 +1680,16 @@ buster.testCase("sinon.stub", {
         },
 
         "can be used with yields* and callsArg* in combination to produce a sequence": function () {
-            var stub = sinon.stub().yields(1, 2);
+            var stub = createStub().yields(1, 2);
             stub.onSecondCall().callsArg(1)
                 .onThirdCall().yieldsTo("method")
                 .onCall(3).callsArgWith(2, "a", "b");
 
-            var obj = { method: sinon.spy() };
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
-            var spy3 = sinon.spy();
-            var decoy = sinon.spy();
+            var obj = { method: createSpy() };
+            var spy1 = createSpy();
+            var spy2 = createSpy();
+            var spy3 = createSpy();
+            var decoy = createSpy();
 
             stub(spy1);
             stub(decoy, spy2);
@@ -1704,8 +1712,8 @@ buster.testCase("sinon.stub", {
         },
 
         "should interact correctly with assertions (GH-231)": function () {
-            var stub = sinon.stub();
-            var spy = sinon.spy();
+            var stub = createStub();
+            var spy = createSpy();
 
             stub.callsArgWith(0, "a");
 
@@ -1725,8 +1733,8 @@ buster.testCase("sinon.stub", {
     ".reset": {
         "resets behavior": function () {
             var obj = { a: function () {} };
-            var spy = sinon.spy();
-            sinon.stub(obj, "a").callsArg(1);
+            var spy = createSpy();
+            createStub(obj, "a").callsArg(1);
 
             obj.a(null, spy);
             obj.a.reset();
@@ -1736,7 +1744,7 @@ buster.testCase("sinon.stub", {
         },
 
         "resets call history": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             stub(1);
             stub.reset();
@@ -1749,7 +1757,7 @@ buster.testCase("sinon.stub", {
 
     ".resetHistory": {
         "resets history": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             stub(1);
             stub.reset();
@@ -1762,12 +1770,12 @@ buster.testCase("sinon.stub", {
 
     ".resetBehavior": {
         "clears yields* and callsArg* sequence": function () {
-            var stub = sinon.stub().yields(1);
+            var stub = createStub().yields(1);
             stub.onFirstCall().callsArg(1);
             stub.resetBehavior();
             stub.yields(3);
-            var spyWanted = sinon.spy();
-            var spyNotWanted = sinon.spy();
+            var spyWanted = createSpy();
+            var spyNotWanted = createSpy();
 
             stub(spyWanted, spyNotWanted);
 
@@ -1777,7 +1785,7 @@ buster.testCase("sinon.stub", {
         },
 
         "cleans 'returns' behavior": function () {
-            var stub = sinon.stub().returns(1);
+            var stub = createStub().returns(1);
 
             stub.resetBehavior();
 
@@ -1785,7 +1793,7 @@ buster.testCase("sinon.stub", {
         },
 
         "cleans behavior of fakes returned by withArgs": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
             stub.withArgs("lolz").returns(2);
 
             stub.resetBehavior();
@@ -1794,7 +1802,7 @@ buster.testCase("sinon.stub", {
         },
 
         "does not clean parents' behavior when called on a fake returned by withArgs": function () {
-            var parentStub = sinon.stub().returns(false);
+            var parentStub = createStub().returns(false);
             var childStub = parentStub.withArgs("lolz").returns(true);
 
             childStub.resetBehavior();
@@ -1804,7 +1812,7 @@ buster.testCase("sinon.stub", {
         },
 
         "cleans 'returnsArg' behavior": function () {
-            var stub = sinon.stub().returnsArg(0);
+            var stub = createStub().returnsArg(0);
 
             stub.resetBehavior();
 
@@ -1813,7 +1821,7 @@ buster.testCase("sinon.stub", {
 
         "cleans 'returnsThis' behavior": function () {
             var instance = {};
-            instance.stub = sinon.stub.create();
+            instance.stub = createStub.create();
             instance.stub.returnsThis();
 
             instance.stub.resetBehavior();
@@ -1823,7 +1831,7 @@ buster.testCase("sinon.stub", {
 
         "does not touch properties that are reset by 'reset'": {
             ".calledOnce": function () {
-                var stub = sinon.stub();
+                var stub = createStub();
                 stub(1);
 
                 stub.resetBehavior();
@@ -1832,7 +1840,7 @@ buster.testCase("sinon.stub", {
             },
 
             "called multiple times": function () {
-                var stub = sinon.stub();
+                var stub = createStub();
                 stub(1);
                 stub(2);
                 stub(3);
@@ -1851,7 +1859,7 @@ buster.testCase("sinon.stub", {
             },
 
             "call order state": function () {
-                var stubs = [sinon.stub(), sinon.stub()];
+                var stubs = [createStub(), createStub()];
                 stubs[0]();
                 stubs[1]();
 
@@ -1861,7 +1869,7 @@ buster.testCase("sinon.stub", {
             },
 
             "fakes returned by withArgs": function () {
-                var stub = sinon.stub();
+                var stub = createStub();
                 var fakeA = stub.withArgs("a");
                 var fakeB = stub.withArgs("b");
                 stub("a");
@@ -1880,14 +1888,14 @@ buster.testCase("sinon.stub", {
 
     ".length": {
         "is zero by default": function () {
-            var stub = sinon.stub();
+            var stub = createStub();
 
             assert.equals(stub.length, 0);
         },
 
         "matches the function length": function () {
             var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
-            var stub = sinon.stub(api, "someMethod");
+            var stub = createStub(api, "someMethod");
 
             assert.equals(stub.length, 3);
         }
@@ -1898,7 +1906,7 @@ buster.testCase("sinon.stub", {
             var Class = function () {};
             Class.prototype.method = function () {};
 
-            var stub = sinon.createStubInstance(Class);
+            var stub = createStubInstance(Class);
             stub.method.returns(3);
             assert.equals(3, stub.method());
         },
@@ -1906,7 +1914,7 @@ buster.testCase("sinon.stub", {
         "doesn't stub fake methods": function () {
             var Class = function () {};
 
-            var stub = sinon.createStubInstance(Class);
+            var stub = createStubInstance(Class);
             assert.exception(function () {
                 stub.method.returns(3);
             });
@@ -1919,7 +1927,7 @@ buster.testCase("sinon.stub", {
             };
             Class.prototype.method = function () {};
 
-            var stub = sinon.createStubInstance(Class);
+            var stub = createStubInstance(Class);
             refute.exception(function () {
                 stub.method(3);
             });
@@ -1930,7 +1938,7 @@ buster.testCase("sinon.stub", {
             var Class = function () {};
             Class.prototype.type = TYPE;
 
-            var stub = sinon.createStubInstance(Class);
+            var stub = createStubInstance(Class);
             assert.equals(TYPE, stub.type);
         },
 
@@ -1943,7 +1951,7 @@ buster.testCase("sinon.stub", {
             var Class = function () {};
             Class.prototype = proto;
 
-            var stub = sinon.createStubInstance(Class);
+            var stub = createStubInstance(Class);
             refute.exception(stub.method);
             assert.exception(proto.method);
         },
@@ -1954,7 +1962,7 @@ buster.testCase("sinon.stub", {
             for (var i = 0; i < types.length; i++) {
                 // yes, it's silly to create functions in a loop, it's also a test
                 assert.exception(function () { // eslint-disable-line no-loop-func
-                    sinon.createStubInstance(types[i]);
+                    createStubInstance(types[i]);
                 });
             }
         }
