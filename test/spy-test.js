@@ -1,14 +1,15 @@
 "use strict";
 
 var buster = require("buster");
-var sinon = require("../lib/sinon");
+var createSpy = require("../lib/sinon/spy");
+var sinonMatch = require("../lib/sinon/match");
 var assert = buster.assert;
 var refute = buster.refute;
 
 function spyCalledTests(method) {
     return {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "returns false if spy was not called": function () {
@@ -60,13 +61,13 @@ function spyCalledTests(method) {
         "uses matcher": function () {
             this.spy("abc");
 
-            assert(this.spy[method](sinon.match.typeOf("string")));
+            assert(this.spy[method](sinonMatch.typeOf("string")));
         },
 
         "uses matcher in object": function () {
             this.spy({ some: "abc" });
 
-            assert(this.spy[method]({ some: sinon.match.typeOf("string") }));
+            assert(this.spy[method]({ some: sinonMatch.typeOf("string") }));
         }
     };
 }
@@ -74,7 +75,7 @@ function spyCalledTests(method) {
 function spyAlwaysCalledTests(method) {
     return {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "returns false if spy was not called": function () {
@@ -129,7 +130,7 @@ function spyAlwaysCalledTests(method) {
 function spyNeverCalledTests(method) {
     return {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "returns true if spy was not called": function () {
@@ -174,15 +175,15 @@ function spyNeverCalledTests(method) {
     };
 }
 
-buster.testCase("sinon.spy", {
+buster.testCase("spy", {
     "does not throw if called without function": function () {
         refute.exception(function () {
-            sinon.spy.create();
+            createSpy.create();
         });
     },
 
     "does not throw when calling anonymous spy": function () {
-        var spy = sinon.spy.create();
+        var spy = createSpy.create();
 
         refute.exception(function () {
             spy();
@@ -193,7 +194,7 @@ buster.testCase("sinon.spy", {
 
     "returns spy function": function () {
         var func = function () {};
-        var spy = sinon.spy.create(func);
+        var spy = createSpy.create(func);
 
         assert.isFunction(spy);
         refute.same(func, spy);
@@ -202,13 +203,13 @@ buster.testCase("sinon.spy", {
     "mirrors custom properties on function": function () {
         var func = function () {};
         func.myProp = 42;
-        var spy = sinon.spy.create(func);
+        var spy = createSpy.create(func);
 
         assert.equals(spy.myProp, func.myProp);
     },
 
     "does not define create method": function () {
-        var spy = sinon.spy.create();
+        var spy = createSpy.create();
 
         refute.defined(spy.create);
     },
@@ -216,13 +217,13 @@ buster.testCase("sinon.spy", {
     "does not overwrite original create property": function () {
         var func = function () {};
         var object = func.create = {};
-        var spy = sinon.spy.create(func);
+        var spy = createSpy.create(func);
 
         assert.same(spy.create, object);
     },
 
     "sets up logging arrays": function () {
-        var spy = sinon.spy.create();
+        var spy = createSpy.create();
 
         assert.isArray(spy.args);
         assert.isArray(spy.returnValues);
@@ -236,7 +237,7 @@ buster.testCase("sinon.spy", {
                 return 42;
             }
         };
-        var spy = sinon.spy(object, "property", ["get"]);
+        var spy = createSpy(object, "property", ["get"]);
 
         assert.equals(object.property, 42);
         assert(spy.get.calledOnce);
@@ -251,7 +252,7 @@ buster.testCase("sinon.spy", {
                 this.property = value * 2;
             }
         };
-        var spy = sinon.spy(object, "test", ["set"]);
+        var spy = createSpy(object, "test", ["set"]);
 
         object.test = 42;
         assert(spy.set.calledOnce);
@@ -270,7 +271,7 @@ buster.testCase("sinon.spy", {
                 this.property = value * 2;
             }
         };
-        var spy = sinon.spy(object, "test", ["get", "set"]);
+        var spy = createSpy(object, "test", ["get", "set"]);
 
         object.test = 42;
         assert(spy.set.calledOnce);
@@ -281,7 +282,7 @@ buster.testCase("sinon.spy", {
 
     ".named": {
         "sets displayName": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var retval = spy.named("beep");
             assert.equals(spy.displayName, "beep");
             assert.same(spy, retval);
@@ -292,7 +293,7 @@ buster.testCase("sinon.spy", {
         "calls underlying function": function () {
             var called = false;
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 called = true;
             });
 
@@ -309,7 +310,7 @@ buster.testCase("sinon.spy", {
             };
 
             var args = [1, {}, [], ""];
-            var spy = sinon.spy.create(func);
+            var spy = createSpy.create(func);
             spy(args[0], args[1], args[2], args[3]);
 
             assert.equals(actualArgs, args);
@@ -323,7 +324,7 @@ buster.testCase("sinon.spy", {
             };
 
             var object = {};
-            var spy = sinon.spy.create(func);
+            var spy = createSpy.create(func);
             spy.call(object);
 
             assert.same(actualThis, object);
@@ -336,7 +337,7 @@ buster.testCase("sinon.spy", {
                 return object;
             };
 
-            var spy = sinon.spy.create(func);
+            var spy = createSpy.create(func);
             var actualReturn = spy();
 
             assert.same(actualReturn, object);
@@ -344,7 +345,7 @@ buster.testCase("sinon.spy", {
 
         "throws if function throws": function () {
             var err = new Error();
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 throw err;
             });
 
@@ -357,38 +358,38 @@ buster.testCase("sinon.spy", {
         },
 
         "retains function length 0": function () {
-            var spy = sinon.spy.create(function () {});
+            var spy = createSpy.create(function () {});
 
             assert.equals(spy.length, 0);
         },
 
         "retains function length 1": function () {
-            var spy = sinon.spy.create(function (a) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 1);
         },
 
         "retains function length 2": function () {
-            var spy = sinon.spy.create(function (a, b) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 2);
         },
 
         "retains function length 3": function () {
-            var spy = sinon.spy.create(function (a, b, c) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b, c) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 3);
         },
 
         "retains function length 4": function () {
-            var spy = sinon.spy.create(function (a, b, c, d) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b, c, d) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 4);
         },
 
         "retains function length 12": function () {
             var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}; // eslint-disable-line no-unused-vars
-            var spy = sinon.spy.create(func12Args);
+            var spy = createSpy.create(func12Args);
 
             assert.equals(spy.length, 12);
         }
@@ -396,7 +397,7 @@ buster.testCase("sinon.spy", {
 
     ".called": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false prior to calling the spy": function () {
@@ -419,7 +420,7 @@ buster.testCase("sinon.spy", {
 
     ".notCalled": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is true prior to calling the spy": function () {
@@ -435,7 +436,7 @@ buster.testCase("sinon.spy", {
 
     ".calledOnce": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false prior to calling the spy": function () {
@@ -458,7 +459,7 @@ buster.testCase("sinon.spy", {
 
     ".calledTwice": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false prior to calling the spy": function () {
@@ -489,7 +490,7 @@ buster.testCase("sinon.spy", {
 
     ".calledThrice": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false prior to calling the spy": function () {
@@ -523,7 +524,7 @@ buster.testCase("sinon.spy", {
 
     ".callCount": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "reports 0 calls": function () {
@@ -555,7 +556,7 @@ buster.testCase("sinon.spy", {
 
     ".calledOn": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false if spy wasn't called": function () {
@@ -594,7 +595,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is true if called with matcher that returns true": function () {
-            var matcher = sinon.match(function () {
+            var matcher = sinonMatch(function () {
                 return true;
             });
             this.spy();
@@ -603,7 +604,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is false if called with matcher that returns false": function () {
-            var matcher = sinon.match(function () {
+            var matcher = sinonMatch(function () {
                 return false;
             });
             this.spy();
@@ -616,7 +617,7 @@ buster.testCase("sinon.spy", {
             var actual;
             this.spy.call(expected);
 
-            this.spy.calledOn(sinon.match(function (value) {
+            this.spy.calledOn(sinonMatch(function (value) {
                 actual = value;
             }));
 
@@ -626,7 +627,7 @@ buster.testCase("sinon.spy", {
 
     ".alwaysCalledOn": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false prior to calling the spy": function () {
@@ -673,7 +674,7 @@ buster.testCase("sinon.spy", {
 
     ".calledWithNew": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false if spy wasn't called": function () {
@@ -690,7 +691,7 @@ buster.testCase("sinon.spy", {
             function MyThing() {}
             MyThing.prototype = {};
             var ns = { MyThing: MyThing };
-            sinon.spy(ns, "MyThing");
+            createSpy(ns, "MyThing");
 
             var result = new ns.MyThing(); // eslint-disable-line no-unused-vars
             assert(ns.MyThing.calledWithNew());
@@ -723,7 +724,7 @@ buster.testCase("sinon.spy", {
                 return {};
             }
             var object = { MyThing: MyThing };
-            sinon.spy(object, "MyThing");
+            createSpy(object, "MyThing");
 
             var result = new object.MyThing(); // eslint-disable-line no-unused-vars
 
@@ -744,7 +745,7 @@ buster.testCase("sinon.spy", {
 
             "is false when called on spied native function": function () {
                 var log = { info: console.log };  // eslint-disable-line no-console
-                sinon.spy(log, "info");
+                createSpy(log, "info");
 
                 log.info("test");
 
@@ -755,7 +756,7 @@ buster.testCase("sinon.spy", {
 
     ".alwaysCalledWithNew": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "is false if spy wasn't called": function () {
@@ -785,7 +786,7 @@ buster.testCase("sinon.spy", {
 
     ".thisValues": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "contains one object": function () {
@@ -813,7 +814,7 @@ buster.testCase("sinon.spy", {
 
     ".calledWithMatchSpecial": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "checks substring match": function () {
@@ -843,7 +844,7 @@ buster.testCase("sinon.spy", {
 
     ".alwaysCalledWithMatchSpecial": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "checks true": function () {
@@ -893,7 +894,7 @@ buster.testCase("sinon.spy", {
 
     ".neverCalledWithMatchSpecial": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "checks substring match": function () {
@@ -925,7 +926,7 @@ buster.testCase("sinon.spy", {
 
     ".args": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "contains real arrays": function () {
@@ -962,7 +963,7 @@ buster.testCase("sinon.spy", {
 
     ".calledWithExactly": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "returns false for partial match": function () {
@@ -1044,7 +1045,7 @@ buster.testCase("sinon.spy", {
 
     ".alwaysCalledWithExactly": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
         },
 
         "returns false for partial match": function () {
@@ -1106,13 +1107,13 @@ buster.testCase("sinon.spy", {
 
     ".threw": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
 
-            this.spyWithTypeError = sinon.spy.create(function () {
+            this.spyWithTypeError = createSpy.create(function () {
                 throw new TypeError();
             });
 
-            this.spyWithStringError = sinon.spy.create(function () {
+            this.spyWithStringError = createSpy.create(function () {
                 throw "error";
             });
         },
@@ -1120,7 +1121,7 @@ buster.testCase("sinon.spy", {
         "returns exception thrown by function": function () {
             var err = new Error();
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 throw err;
             });
 
@@ -1192,9 +1193,9 @@ buster.testCase("sinon.spy", {
 
     ".alwaysThrew": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
 
-            this.spyWithTypeError = sinon.spy.create(function () {
+            this.spyWithTypeError = createSpy.create(function () {
                 throw new TypeError();
             });
         },
@@ -1202,7 +1203,7 @@ buster.testCase("sinon.spy", {
         "returns true when spy threw": function () {
             var err = new Error();
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 throw err;
             });
 
@@ -1254,9 +1255,12 @@ buster.testCase("sinon.spy", {
         },
 
         "returns false if some calls did not throw": function () {
-            var spy = sinon.stub.create(function () {
-                if (spy.callCount === 0) {
-                    throw new Error();
+            var callCount = 0;
+
+            this.spy = createSpy(function () {
+                callCount += 1;
+                if (callCount === 1) {
+                    throw new Error("throwing on first call");
                 }
             });
 
@@ -1301,10 +1305,10 @@ buster.testCase("sinon.spy", {
 
     ".exceptions": {
         setUp: function () {
-            this.spy = sinon.spy.create();
+            this.spy = createSpy.create();
             var error = this.error = {};
 
-            this.spyWithTypeError = sinon.spy.create(function () {
+            this.spyWithTypeError = createSpy.create(function () {
                 throw error;
             });
         },
@@ -1329,7 +1333,7 @@ buster.testCase("sinon.spy", {
             var calls = 0;
             var err = this.error;
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -1364,14 +1368,14 @@ buster.testCase("sinon.spy", {
 
     ".returned": {
         "returns true when no argument": function () {
-            var spy = sinon.spy.create();
+            var spy = createSpy.create();
             spy();
 
             assert(spy.returned());
         },
 
         "returns true for undefined when no explicit return": function () {
-            var spy = sinon.spy.create();
+            var spy = createSpy.create();
             spy();
 
             assert(spy.returned(undefined));
@@ -1379,7 +1383,7 @@ buster.testCase("sinon.spy", {
 
         "returns true when returned value once": function () {
             var values = [{}, 2, "hey", function () {}];
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return values[spy.callCount];
             });
 
@@ -1393,7 +1397,7 @@ buster.testCase("sinon.spy", {
 
         "returns false when value is never returned": function () {
             var values = [{}, 2, "hey", function () {}];
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return values[spy.callCount];
             });
 
@@ -1407,7 +1411,7 @@ buster.testCase("sinon.spy", {
 
         "returns true when value is returned several times": function () {
             var object = { id: 42 };
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return object;
             });
 
@@ -1420,7 +1424,7 @@ buster.testCase("sinon.spy", {
 
         "compares values deeply": function () {
             var object = { deep: { id: 42 } };
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return object;
             });
 
@@ -1431,20 +1435,20 @@ buster.testCase("sinon.spy", {
 
         "compares values strictly using match.same": function () {
             var object = { id: 42 };
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return object;
             });
 
             spy();
 
-            assert.isFalse(spy.returned(sinon.match.same({ id: 42 })));
-            assert(spy.returned(sinon.match.same(object)));
+            assert.isFalse(spy.returned(sinonMatch.same({ id: 42 })));
+            assert(spy.returned(sinonMatch.same(object)));
         }
     },
 
     ".returnValues": {
         "contains undefined when function does not return explicitly": function () {
-            var spy = sinon.spy.create();
+            var spy = createSpy.create();
             spy();
 
             assert.equals(spy.returnValues.length, 1);
@@ -1454,7 +1458,7 @@ buster.testCase("sinon.spy", {
         "contains return value": function () {
             var object = { id: 42 };
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 return object;
             });
 
@@ -1464,7 +1468,7 @@ buster.testCase("sinon.spy", {
         },
 
         "contains undefined when function throws": function () {
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 throw new Error();
             });
 
@@ -1478,7 +1482,7 @@ buster.testCase("sinon.spy", {
         },
 
         "contains the created object for spied constructors": function () {
-            var Spy = sinon.spy.create(function () { });
+            var Spy = createSpy.create(function () { });
 
             var result = new Spy();
 
@@ -1486,7 +1490,7 @@ buster.testCase("sinon.spy", {
         },
 
         "contains the return value for spied constructors that explicitly return objects": function () {
-            var Spy = sinon.spy.create(function () {
+            var Spy = createSpy.create(function () {
                 return { isExplicitlyCreatedValue: true };
             });
 
@@ -1497,7 +1501,7 @@ buster.testCase("sinon.spy", {
         },
 
         "contains the created object for spied constructors that explicitly return primitive values": function () {
-            var Spy = sinon.spy.create(function () {
+            var Spy = createSpy.create(function () {
                 return 10;
             });
 
@@ -1510,7 +1514,7 @@ buster.testCase("sinon.spy", {
         "stacks up return values": function () {
             var calls = 0;
 
-            var spy = sinon.spy.create(function () {
+            var spy = createSpy.create(function () {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -1535,8 +1539,8 @@ buster.testCase("sinon.spy", {
 
     ".calledBefore": {
         setUp: function () {
-            this.spy1 = sinon.spy();
-            this.spy2 = sinon.spy();
+            this.spy1 = createSpy();
+            this.spy2 = createSpy();
         },
 
         "is function": function () {
@@ -1580,8 +1584,8 @@ buster.testCase("sinon.spy", {
 
     ".calledAfter": {
         setUp: function () {
-            this.spy1 = sinon.spy();
-            this.spy2 = sinon.spy();
+            this.spy1 = createSpy();
+            this.spy2 = createSpy();
         },
 
         "is function": function () {
@@ -1625,13 +1629,13 @@ buster.testCase("sinon.spy", {
 
     ".firstCall": {
         "is undefined by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isNull(spy.firstCall);
         },
 
         "is equal to getCall(0) result after first call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
 
@@ -1649,13 +1653,13 @@ buster.testCase("sinon.spy", {
                 assert.same(spy.firstCall.spy, call0.spy);
             }
 
-            spy = sinon.spy(runAsserts);
+            spy = createSpy(runAsserts);
 
             spy();
         },
 
         "is tracked even if exceptions are thrown": function () {
-            var spy = sinon.spy(function () {
+            var spy = createSpy(function () {
                 throw "an exception";
             });
 
@@ -1668,7 +1672,7 @@ buster.testCase("sinon.spy", {
         },
 
         "has correct returnValue": function () {
-            var spy = sinon.spy(function () {
+            var spy = createSpy(function () {
                 return 42;
             });
 
@@ -1680,7 +1684,7 @@ buster.testCase("sinon.spy", {
 
         "has correct exception": function () {
             var err = new Error();
-            var spy = sinon.spy(function () {
+            var spy = createSpy(function () {
                 throw err;
             });
 
@@ -1697,20 +1701,20 @@ buster.testCase("sinon.spy", {
 
     ".secondCall": {
         "is null by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isNull(spy.secondCall);
         },
 
         "stills be null after first call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             spy();
 
             assert.isNull(spy.secondCall);
         },
 
         "is equal to getCall(1) result after second call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1723,13 +1727,13 @@ buster.testCase("sinon.spy", {
 
     ".thirdCall": {
         "is undefined by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isNull(spy.thirdCall);
         },
 
         "stills be undefined after second call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             spy();
             spy();
 
@@ -1737,7 +1741,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is equal to getCall(1) result after second call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1751,13 +1755,13 @@ buster.testCase("sinon.spy", {
 
     ".lastCall": {
         "is undefined by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isNull(spy.lastCall);
         },
 
         "is same as firstCall after first call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
 
@@ -1766,7 +1770,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is same as secondCall after second call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1776,7 +1780,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is same as thirdCall after third call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1787,7 +1791,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is equal to getCall(3) result after fourth call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1800,7 +1804,7 @@ buster.testCase("sinon.spy", {
         },
 
         "is equal to getCall(4) result after fifth call": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1816,14 +1820,14 @@ buster.testCase("sinon.spy", {
 
     ".getCalls": {
         "returns an empty Array by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isArray(spy.getCalls());
             assert.equals(spy.getCalls().length, 0);
         },
 
         "is analogous to using getCall(n)": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             spy();
             spy();
@@ -1834,14 +1838,14 @@ buster.testCase("sinon.spy", {
 
     ".callArg": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.callArg);
         },
 
         "invokes argument at index for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -1852,7 +1856,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if argument at index is not a function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             spy();
 
             assert.exception(function () {
@@ -1861,7 +1865,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             try {
                 spy.callArg(0);
@@ -1873,7 +1877,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
 
             try {
                 spy.callArg(0);
@@ -1884,7 +1888,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if index is not a number": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             spy();
 
             assert.exception(function () {
@@ -1893,8 +1897,8 @@ buster.testCase("sinon.spy", {
         },
 
         "passs additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             spy(callback);
@@ -1907,14 +1911,14 @@ buster.testCase("sinon.spy", {
 
     ".callArgOn": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.callArgOn);
         },
 
         "invokes argument at index for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
@@ -1927,7 +1931,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if argument at index is not a function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy();
 
@@ -1937,7 +1941,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -1950,7 +1954,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -1962,7 +1966,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if index is not a number": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy();
 
@@ -1972,8 +1976,8 @@ buster.testCase("sinon.spy", {
         },
 
         "pass additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             var thisObj = { name1: "value1", name2: "value2" };
@@ -1988,7 +1992,7 @@ buster.testCase("sinon.spy", {
 
     ".callArgWith": {
         "is alias for callArg": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.same(spy.callArgWith, spy.callArg);
         }
@@ -1996,7 +2000,7 @@ buster.testCase("sinon.spy", {
 
     ".callArgOnWith": {
         "is alias for callArgOn": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.same(spy.callArgOnWith, spy.callArgOn);
         }
@@ -2004,14 +2008,14 @@ buster.testCase("sinon.spy", {
 
     ".yield": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.yield);
         },
 
         "invokes first function arg for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -2022,7 +2026,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             try {
                 spy.yield();
@@ -2034,7 +2038,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
 
             try {
                 spy.yield();
@@ -2045,8 +2049,8 @@ buster.testCase("sinon.spy", {
         },
 
         "passs additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             spy(callback);
@@ -2059,7 +2063,7 @@ buster.testCase("sinon.spy", {
 
     ".invokeCallback": {
         "is alias for yield": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.same(spy.invokeCallback, spy.yield);
         }
@@ -2067,14 +2071,14 @@ buster.testCase("sinon.spy", {
 
     ".yieldOn": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.yieldOn);
         },
 
         "invokes first function arg for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
@@ -2087,7 +2091,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -2100,7 +2104,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -2112,8 +2116,8 @@ buster.testCase("sinon.spy", {
         },
 
         "pass additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2128,14 +2132,14 @@ buster.testCase("sinon.spy", {
 
     ".yieldTo": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.yieldTo);
         },
 
         "invokes first function arg for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
 
@@ -2146,7 +2150,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             try {
                 spy.yieldTo("success");
@@ -2158,7 +2162,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
 
             try {
                 spy.yieldTo("success");
@@ -2169,8 +2173,8 @@ buster.testCase("sinon.spy", {
         },
 
         "pass additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             spy({ test: callback });
@@ -2183,14 +2187,14 @@ buster.testCase("sinon.spy", {
 
     ".yieldToOn": {
         "is function": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.isFunction(spy.yieldToOn);
         },
 
         "invokes first function arg for all calls": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
@@ -2203,7 +2207,7 @@ buster.testCase("sinon.spy", {
         },
 
         "throws if spy was not yet invoked": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -2216,7 +2220,7 @@ buster.testCase("sinon.spy", {
 
         "includes spy name in error message": function () {
             var api = { someMethod: function () {} };
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
             try {
@@ -2228,8 +2232,8 @@ buster.testCase("sinon.spy", {
         },
 
         "pass additional arguments": function () {
-            var spy = sinon.spy();
-            var callback = sinon.spy();
+            var spy = createSpy();
+            var callback = createSpy();
             var array = [];
             var object = {};
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2244,14 +2248,14 @@ buster.testCase("sinon.spy", {
 
     ".reset": {
         "return same object": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
             var reset = spy.reset();
 
             assert(reset === spy);
         },
 
         "throws if called during spy invocation": function () {
-            var spy = sinon.spy(function () {
+            var spy = createSpy(function () {
                 spy.reset();
             });
 
@@ -2263,14 +2267,14 @@ buster.testCase("sinon.spy", {
 
     ".length": {
         "is zero by default": function () {
-            var spy = sinon.spy();
+            var spy = createSpy();
 
             assert.equals(spy.length, 0);
         },
 
         "matches the function length": function () {
             var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
-            var spy = sinon.spy(api, "someMethod");
+            var spy = createSpy(api, "someMethod");
 
             assert.equals(spy.length, 3);
         }
