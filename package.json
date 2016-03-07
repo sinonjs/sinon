@@ -23,6 +23,8 @@
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "lint": "eslint .",
     "prepublish": "rimraf pkg && ./build",
+    "preversion": "./scripts/preversion.sh",
+    "postversion": "./scripts/postversion.sh",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [

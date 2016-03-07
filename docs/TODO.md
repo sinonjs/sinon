@@ -1,3 +1,7 @@
+---
+published: false
+---
+
 # TODO for new documentation site
 
 * TOC in each file

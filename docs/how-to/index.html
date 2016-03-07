@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<h1>How To articles</h1>
+
+<p>
+    This is a collection of how to articles for common scenarious using Sinon.JS.
+</p>
+
+<ul>
+{% assign sorted_articles = site.howto | sort  %}
+{% for article in sorted_articles %}
+        <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+{% endfor %}
+</ul>

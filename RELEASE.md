@@ -1,44 +1,48 @@
 # Rolling Sinon releases
 
-You'll need a working installation of [git-extras](https://github.com/tj/git-extras) for this.
+You will need a working installation of [git-extras](https://github.com/tj/git-extras) for this.
 
-## Update Changelog.txt
+The release process is mostly automated, here is a brief overview of the steps
 
-Compile interesting highlights from [`git changelog`](https://github.com/tj/git-extras/blob/master/Commands.md#git-changelog) into Changelog.md
+1. `npm version [keyword]`
+    - Updates `Changelog.txt` - you will need to edit this
+    - Updates `AUTHORS`
+    - Updates `package.json` with new version
+    - Creates a new git tag
+    - Copies new release documentation into place in `docs/_releases/`, using the new release id
+2. `npm publish` publishes the new release to the npm registry
+3. `git push origin --follow-tags` pushes the changes to GitHub
 
-    git changelog --no-merges
+Each step is described in detail below.
 
-## Update AUTHORS
+## 1. Create a new version and compile the changelog
 
-    git authors --list > AUTHORS
+Prefer the builtin options over explicit version when you can:
 
-## Create a new version
-
-Update package.json and create a new tag.
-
-```
-$ npm version x.y.z
-```
-
-## Publish to NPM
-
-```
-$ npm publish
+```shell
+npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]
 ```
 
-## Push new commits to GitHub
+If you absolutely **have** to, then you can also specify a specific version:
+
+```shell
+npm version x.y.z
 ```
-$ git push origin
+
+After this, your default editor will show the updated `Changelog.txt`. Please make edits to this to remove service commits (like updating `devDependencies`) and commits that only change documentation.
+
+## 2. Publish to NPM
+
+```shell
+npm publish
 ```
+
+## 3. Push new commits to GitHub
+
+This adds both the tags and the documentation for the new release to GitHub, which will then build a new site for GitHub Pages.
+
+```shell
+git push origin --follow-tags
+```
+
 Assuming `origin` is pointing to the main GitHub repo.
-
-## Update static site
-
-### Copy files into the static site
-
-    cp Changelog.txt ../sinon-docs/resources/public/.
-    cp pkg/* ../sinon-docs/resources/public/releases/.
-
-### Publish the site
-
-    cd ../sinon-docs && ./publish.sh
