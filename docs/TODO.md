@@ -1,7 +1,7 @@
 # TODO for new documentation site
 
 * TOC in each file
-* Build new site using `metalsmith`
+* Build new site using [`Jekyll`](http://jekyllrb.com)
 * Verify that there are anchors for everything
 * Build documentation for 1.17.x
 * Build changelong for each release
