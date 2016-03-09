@@ -1,188 +1,190 @@
+/*eslint-env mocha*/
+/*eslint max-nested-callbacks: 0*/
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var createSpy = require("../lib/sinon/spy");
 var sinonMatch = require("../lib/sinon/match");
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
 function spyCalledTests(method) {
-    return {
-        setUp: function () {
+    return function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "returns false if spy was not called": function () {
+        it("returns false if spy was not called", function () {
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns true if spy was called with args": function () {
+        it("returns true if spy was called with args", function () {
             this.spy(1, 2, 3);
 
             assert(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns true if called with args at least once": function () {
+        it("returns true if called with args at least once", function () {
             this.spy(1, 3, 3);
             this.spy(1, 2, 3);
             this.spy(3, 2, 3);
 
             assert(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if not called with args": function () {
+        it("returns false if not called with args", function () {
             this.spy(1, 3, 3);
             this.spy(2);
             this.spy();
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if not called with undefined": function () {
+        it("returns false if not called with undefined", function () {
             this.spy();
 
             assert.isFalse(this.spy[method](undefined));
-        },
+        });
 
-        "returns true for partial match": function () {
+        it("returns true for partial match", function () {
             this.spy(1, 3, 3);
             this.spy(2);
             this.spy();
 
             assert(this.spy[method](1, 3));
-        },
+        });
 
-        "matchs all arguments individually, not as array": function () {
+        it("matchs all arguments individually, not as array", function () {
             this.spy([1, 2, 3]);
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "uses matcher": function () {
+        it("uses matcher", function () {
             this.spy("abc");
 
             assert(this.spy[method](sinonMatch.typeOf("string")));
-        },
+        });
 
-        "uses matcher in object": function () {
+        it("uses matcher in object", function () {
             this.spy({ some: "abc" });
 
             assert(this.spy[method]({ some: sinonMatch.typeOf("string") }));
-        }
+        });
     };
 }
 
 function spyAlwaysCalledTests(method) {
-    return {
-        setUp: function () {
+    return function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "returns false if spy was not called": function () {
+        it("returns false if spy was not called", function () {
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns true if spy was called with args": function () {
+        it("returns true if spy was called with args", function () {
             this.spy(1, 2, 3);
 
             assert(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if called with args only once": function () {
+        it("returns false if called with args only once", function () {
             this.spy(1, 3, 3);
             this.spy(1, 2, 3);
             this.spy(3, 2, 3);
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if not called with args": function () {
+        it("returns false if not called with args", function () {
             this.spy(1, 3, 3);
             this.spy(2);
             this.spy();
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns true for partial match": function () {
+        it("returns true for partial match", function () {
             this.spy(1, 3, 3);
 
             assert(this.spy[method](1, 3));
-        },
+        });
 
-        "returns true for partial match on many calls": function () {
+        it("returns true for partial match on many calls", function () {
             this.spy(1, 3, 3);
             this.spy(1, 3);
             this.spy(1, 3, 4, 5);
             this.spy(1, 3, 1);
 
             assert(this.spy[method](1, 3));
-        },
+        });
 
-        "matchs all arguments individually, not as array": function () {
+        it("matchs all arguments individually, not as array", function () {
             this.spy([1, 2, 3]);
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        }
+        });
     };
 }
 
 function spyNeverCalledTests(method) {
-    return {
-        setUp: function () {
+    return function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "returns true if spy was not called": function () {
+        it("returns true if spy was not called", function () {
             assert(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if spy was called with args": function () {
+        it("returns false if spy was called with args", function () {
             this.spy(1, 2, 3);
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false if called with args at least once": function () {
+        it("returns false if called with args at least once", function () {
             this.spy(1, 3, 3);
             this.spy(1, 2, 3);
             this.spy(3, 2, 3);
 
             assert.isFalse(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns true if not called with args": function () {
+        it("returns true if not called with args", function () {
             this.spy(1, 3, 3);
             this.spy(2);
             this.spy();
 
             assert(this.spy[method](1, 2, 3));
-        },
+        });
 
-        "returns false for partial match": function () {
+        it("returns false for partial match", function () {
             this.spy(1, 3, 3);
             this.spy(2);
             this.spy();
 
             assert.isFalse(this.spy[method](1, 3));
-        },
+        });
 
-        "matchs all arguments individually, not as array": function () {
+        it("matchs all arguments individually, not as array", function () {
             this.spy([1, 2, 3]);
 
             assert(this.spy[method](1, 2, 3));
-        }
+        });
     };
 }
 
-buster.testCase("spy", {
-    "does not throw if called without function": function () {
+describe("spy", function () {
+    it("does not throw if called without function", function () {
         refute.exception(function () {
             createSpy.create();
         });
-    },
+    });
 
-    "does not throw when calling anonymous spy": function () {
+    it("does not throw when calling anonymous spy", function () {
         var spy = createSpy.create();
 
         refute.exception(function () {
@@ -190,48 +192,48 @@ buster.testCase("spy", {
         });
 
         assert(spy.called);
-    },
+    });
 
-    "returns spy function": function () {
+    it("returns spy function", function () {
         var func = function () {};
         var spy = createSpy.create(func);
 
         assert.isFunction(spy);
         refute.same(func, spy);
-    },
+    });
 
-    "mirrors custom properties on function": function () {
+    it("mirrors custom properties on function", function () {
         var func = function () {};
         func.myProp = 42;
         var spy = createSpy.create(func);
 
         assert.equals(spy.myProp, func.myProp);
-    },
+    });
 
-    "does not define create method": function () {
+    it("does not define create method", function () {
         var spy = createSpy.create();
 
         refute.defined(spy.create);
-    },
+    });
 
-    "does not overwrite original create property": function () {
+    it("does not overwrite original create property", function () {
         var func = function () {};
         var object = func.create = {};
         var spy = createSpy.create(func);
 
         assert.same(spy.create, object);
-    },
+    });
 
-    "sets up logging arrays": function () {
+    it("sets up logging arrays", function () {
         var spy = createSpy.create();
 
         assert.isArray(spy.args);
         assert.isArray(spy.returnValues);
         assert.isArray(spy.thisValues);
         assert.isArray(spy.exceptions);
-    },
+    });
 
-    "works with getters": function () {
+    it("works with getters", function () {
         var object = {
             get property() {
                 return 42;
@@ -241,9 +243,9 @@ buster.testCase("spy", {
 
         assert.equals(object.property, 42);
         assert(spy.get.calledOnce);
-    },
+    });
 
-    "works with setters": function () {
+    it("works with setters", function () {
         var object = {
             get test() {
                 return this.property;
@@ -260,9 +262,9 @@ buster.testCase("spy", {
 
         assert.equals(object.test, 84);
         assert.equals(object.property, 84);
-    },
+    });
 
-    "works with setters and getters combined": function () {
+    it("works with setters and getters combined", function () {
         var object = {
             get test() {
                 return this.property;
@@ -278,19 +280,19 @@ buster.testCase("spy", {
 
         assert.equals(object.test, 84);
         assert(spy.get.calledOnce);
-    },
+    });
 
-    ".named": {
-        "sets displayName": function () {
+    describe(".named", function () {
+        it("sets displayName", function () {
             var spy = createSpy();
             var retval = spy.named("beep");
             assert.equals(spy.displayName, "beep");
             assert.same(spy, retval);
-        }
-    },
+        });
+    });
 
-    call: {
-        "calls underlying function": function () {
+    describe("call", function () {
+        it("calls underlying function", function () {
             var called = false;
 
             var spy = createSpy.create(function () {
@@ -300,9 +302,9 @@ buster.testCase("spy", {
             spy();
 
             assert(called);
-        },
+        });
 
-        "passs arguments to function": function () {
+        it("passs arguments to function", function () {
             var actualArgs;
 
             var func = function (a, b, c, d) {
@@ -314,9 +316,9 @@ buster.testCase("spy", {
             spy(args[0], args[1], args[2], args[3]);
 
             assert.equals(actualArgs, args);
-        },
+        });
 
-        "maintains this binding": function () {
+        it("maintains this binding", function () {
             var actualThis;
 
             var func = function () {
@@ -328,9 +330,9 @@ buster.testCase("spy", {
             spy.call(object);
 
             assert.same(actualThis, object);
-        },
+        });
 
-        "returns function's return value": function () {
+        it("returns function's return value", function () {
             var object = {};
 
             var func = function () {
@@ -341,9 +343,9 @@ buster.testCase("spy", {
             var actualReturn = spy();
 
             assert.same(actualReturn, object);
-        },
+        });
 
-        "throws if function throws": function () {
+        it("throws if function throws", function () {
             var err = new Error();
             var spy = createSpy.create(function () {
                 throw err;
@@ -351,268 +353,266 @@ buster.testCase("spy", {
 
             try {
                 spy();
-                buster.referee.fail("Expected spy to throw exception");
+                referee.fail("Expected spy to throw exception");
             } catch (e) {
                 assert.same(e, err);
             }
-        },
+        });
 
-        "retains function length 0": function () {
+        it("retains function length 0", function () {
             var spy = createSpy.create(function () {});
 
             assert.equals(spy.length, 0);
-        },
+        });
 
-        "retains function length 1": function () {
+        it("retains function length 1", function () {
             var spy = createSpy.create(function (a) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 1);
-        },
+        });
 
-        "retains function length 2": function () {
+        it("retains function length 2", function () {
             var spy = createSpy.create(function (a, b) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 2);
-        },
+        });
 
-        "retains function length 3": function () {
+        it("retains function length 3", function () {
             var spy = createSpy.create(function (a, b, c) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 3);
-        },
+        });
 
-        "retains function length 4": function () {
+        it("retains function length 4", function () {
             var spy = createSpy.create(function (a, b, c, d) {}); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 4);
-        },
+        });
 
-        "retains function length 12": function () {
+        it("retains function length 12", function () {
             var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}; // eslint-disable-line no-unused-vars
             var spy = createSpy.create(func12Args);
 
             assert.equals(spy.length, 12);
-        }
-    },
+        });
+    });
 
-    ".called": {
-        setUp: function () {
+    describe(".called", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false prior to calling the spy": function () {
+        it("is false prior to calling the spy", function () {
             assert.isFalse(this.spy.called);
-        },
+        });
 
-        "is true after calling the spy once": function () {
+        it("is true after calling the spy once", function () {
             this.spy();
 
             assert(this.spy.called);
-        },
+        });
 
-        "is true after calling the spy twice": function () {
+        it("is true after calling the spy twice", function () {
             this.spy();
             this.spy();
 
             assert(this.spy.called);
-        }
-    },
+        });
+    });
 
-    ".notCalled": {
-        setUp: function () {
+    describe(".notCalled", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is true prior to calling the spy": function () {
+        it("is true prior to calling the spy", function () {
             assert.isTrue(this.spy.notCalled);
-        },
+        });
 
-        "is false after calling the spy once": function () {
+        it("is false after calling the spy once", function () {
             this.spy();
 
             assert.isFalse(this.spy.notCalled);
-        }
-    },
+        });
+    });
 
-    ".calledOnce": {
-        setUp: function () {
+    describe(".calledOnce", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false prior to calling the spy": function () {
+        it("is false prior to calling the spy", function () {
             assert.isFalse(this.spy.calledOnce);
-        },
+        });
 
-        "is true after calling the spy once": function () {
+        it("is true after calling the spy once", function () {
             this.spy();
 
             assert(this.spy.calledOnce);
-        },
+        });
 
-        "is false after calling the spy twice": function () {
+        it("is false after calling the spy twice", function () {
             this.spy();
             this.spy();
 
             assert.isFalse(this.spy.calledOnce);
-        }
-    },
+        });
+    });
 
-    ".calledTwice": {
-        setUp: function () {
+    describe(".calledTwice", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false prior to calling the spy": function () {
+        it("is false prior to calling the spy", function () {
             assert.isFalse(this.spy.calledTwice);
-        },
+        });
 
-        "is false after calling the spy once": function () {
+        it("is false after calling the spy once", function () {
             this.spy();
 
             assert.isFalse(this.spy.calledTwice);
-        },
+        });
 
-        "is true after calling the spy twice": function () {
+        it("is true after calling the spy twice", function () {
             this.spy();
             this.spy();
 
             assert(this.spy.calledTwice);
-        },
+        });
 
-        "is false after calling the spy thrice": function () {
+        it("is false after calling the spy thrice", function () {
             this.spy();
             this.spy();
             this.spy();
 
             assert.isFalse(this.spy.calledTwice);
-        }
-    },
+        });
+    });
 
-    ".calledThrice": {
-        setUp: function () {
+    describe(".calledThrice", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false prior to calling the spy": function () {
+        it("is false prior to calling the spy", function () {
             assert.isFalse(this.spy.calledThrice);
-        },
+        });
 
-        "is false after calling the spy twice": function () {
+        it("is false after calling the spy twice", function () {
             this.spy();
             this.spy();
 
             assert.isFalse(this.spy.calledThrice);
-        },
+        });
 
-        "is true after calling the spy thrice": function () {
+        it("is true after calling the spy thrice", function () {
             this.spy();
             this.spy();
             this.spy();
 
             assert(this.spy.calledThrice);
-        },
+        });
 
-        "is false after calling the spy four times": function () {
+        it("is false after calling the spy four times", function () {
             this.spy();
             this.spy();
             this.spy();
             this.spy();
 
             assert.isFalse(this.spy.calledThrice);
-        }
-    },
+        });
+    });
 
-    ".callCount": {
-        setUp: function () {
+    describe(".callCount", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "reports 0 calls": function () {
+        it("reports 0 calls", function () {
             assert.equals(this.spy.callCount, 0);
-        },
+        });
 
-        "records one call": function () {
+        it("records one call", function () {
             this.spy();
 
             assert.equals(this.spy.callCount, 1);
-        },
+        });
 
-        "records two calls": function () {
+        it("records two calls", function () {
             this.spy();
             this.spy();
 
             assert.equals(this.spy.callCount, 2);
-        },
+        });
 
-        "increases call count for each call": function () {
+        it("increases call count for each call", function () {
             this.spy();
             this.spy();
             assert.equals(this.spy.callCount, 2);
 
             this.spy();
             assert.equals(this.spy.callCount, 3);
-        }
-    },
+        });
+    });
 
-    ".calledOn": {
-        setUp: function () {
+    describe(".calledOn", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false if spy wasn't called": function () {
+        it("is false if spy wasn't called", function () {
             assert.isFalse(this.spy.calledOn({}));
-        },
+        });
 
-        "is true if called with thisValue": function () {
+        it("is true if called with thisValue", function () {
             var object = {};
             this.spy.call(object);
 
             assert(this.spy.calledOn(object));
-        },
+        });
 
-        "in browser": {
-            requiresSupportFor: {
-                browser: typeof window !== "undefined"
-            },
+        if (typeof window !== "undefined") {
+            describe("in browser", function () {
+                it("is true if called on object at least once", function () {
+                    var object = {};
+                    this.spy();
+                    this.spy.call({});
+                    this.spy.call(object);
+                    this.spy.call(window);
 
-            "is true if called on object at least once": function () {
-                var object = {};
-                this.spy();
-                this.spy.call({});
-                this.spy.call(object);
-                this.spy.call(window);
+                    assert(this.spy.calledOn(object));
+                });
+            });
+        }
 
-                assert(this.spy.calledOn(object));
-            }
-        },
-
-        "returns false if not called on object": function () {
+        it("returns false if not called on object", function () {
             var object = {};
             this.spy.call(object);
             this.spy();
 
             assert.isFalse(this.spy.calledOn({}));
-        },
+        });
 
-        "is true if called with matcher that returns true": function () {
+        it("is true if called with matcher that returns true", function () {
             var matcher = sinonMatch(function () {
                 return true;
             });
             this.spy();
 
             assert(this.spy.calledOn(matcher));
-        },
+        });
 
-        "is false if called with matcher that returns false": function () {
+        it("is false if called with matcher that returns false", function () {
             var matcher = sinonMatch(function () {
                 return false;
             });
             this.spy();
 
             assert.isFalse(this.spy.calledOn(matcher));
-        },
+        });
 
-        "invokes matcher.test with given object": function () {
+        it("invokes matcher.test with given object", function () {
             var expected = {};
             var actual;
             this.spy.call(expected);
@@ -622,26 +622,26 @@ buster.testCase("spy", {
             }));
 
             assert.same(actual, expected);
-        }
-    },
+        });
+    });
 
-    ".alwaysCalledOn": {
-        setUp: function () {
+    describe(".alwaysCalledOn", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false prior to calling the spy": function () {
+        it("is false prior to calling the spy", function () {
             assert.isFalse(this.spy.alwaysCalledOn({}));
-        },
+        });
 
-        "is true if called with thisValue once": function () {
+        it("is true if called with thisValue once", function () {
             var object = {};
             this.spy.call(object);
 
             assert(this.spy.alwaysCalledOn(object));
-        },
+        });
 
-        "is true if called with thisValue many times": function () {
+        it("is true if called with thisValue many times", function () {
             var object = {};
             this.spy.call(object);
             this.spy.call(object);
@@ -649,9 +649,9 @@ buster.testCase("spy", {
             this.spy.call(object);
 
             assert(this.spy.alwaysCalledOn(object));
-        },
+        });
 
-        "is false if called with another object atleast once": function () {
+        it("is false if called with another object atleast once", function () {
             var object = {};
             this.spy.call(object);
             this.spy.call(object);
@@ -660,34 +660,34 @@ buster.testCase("spy", {
             this.spy.call(object);
 
             assert.isFalse(this.spy.alwaysCalledOn(object));
-        },
+        });
 
-        "is false if never called with expected object": function () {
+        it("is false if never called with expected object", function () {
             var object = {};
             this.spy();
             this.spy();
             this.spy();
 
             assert.isFalse(this.spy.alwaysCalledOn(object));
-        }
-    },
+        });
+    });
 
-    ".calledWithNew": {
-        setUp: function () {
+    describe(".calledWithNew", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false if spy wasn't called": function () {
+        it("is false if spy wasn't called", function () {
             assert.isFalse(this.spy.calledWithNew());
-        },
+        });
 
-        "is true if called with new": function () {
+        it("is true if called with new", function () {
             var result = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
 
             assert(this.spy.calledWithNew());
-        },
+        });
 
-        "is true if called with new on custom constructor": function () {
+        it("is true if called with new on custom constructor", function () {
             function MyThing() {}
             MyThing.prototype = {};
             var ns = { MyThing: MyThing };
@@ -695,31 +695,29 @@ buster.testCase("spy", {
 
             var result = new ns.MyThing(); // eslint-disable-line no-unused-vars
             assert(ns.MyThing.calledWithNew());
-        },
+        });
 
-        "is false if called as function": function () {
+        it("is false if called as function", function () {
             this.spy();
 
             assert.isFalse(this.spy.calledWithNew());
-        },
+        });
 
-        "in browser": {
-            requiresSupportFor: {
-                browser: typeof window !== "undefined"
-            },
+        if (typeof window !== "undefined") {
+            describe("in browser", function () {
+                it("is true if called with new at least once", function () {
+                    var object = {};
+                    this.spy();
+                    var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
+                    this.spy(object);
+                    this.spy(window);
 
-            "is true if called with new at least once": function () {
-                var object = {};
-                this.spy();
-                var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
-                this.spy(object);
-                this.spy(window);
+                    assert(this.spy.calledWithNew());
+                });
+            });
+        }
 
-                assert(this.spy.calledWithNew());
-            }
-        },
-
-        "is true newed constructor returns object": function () {
+        it("is true newed constructor returns object", function () {
             function MyThing() {
                 return {};
             }
@@ -729,41 +727,40 @@ buster.testCase("spy", {
             var result = new object.MyThing(); // eslint-disable-line no-unused-vars
 
             assert(object.MyThing.calledWithNew());
-        },
+        });
 
-        "spied native function": {
-            requiresSupportFor: {
-                applyableNatives: function () {
-                    try {
-                        console.log.apply({}, []); // eslint-disable-line no-console
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                }
-            },
-
-            "is false when called on spied native function": function () {
-                var log = { info: console.log };  // eslint-disable-line no-console
-                createSpy(log, "info");
-
-                log.info("test");
-
-                assert.isFalse(log.info.calledWithNew());
+        var applyableNatives = (function () {
+            try {
+                console.log.apply({}, []); // eslint-disable-line no-console
+                return true;
+            } catch (e) {
+                return false;
             }
+        }());
+        if (applyableNatives) {
+            describe("spied native function", function () {
+                it("is false when called on spied native function", function () {
+                    var log = { info: console.log }; // eslint-disable-line no-console
+                    createSpy(log, "info");
+
+                    log.info("test");
+
+                    assert.isFalse(log.info.calledWithNew());
+                });
+            });
         }
-    },
+    });
 
-    ".alwaysCalledWithNew": {
-        setUp: function () {
+    describe(".alwaysCalledWithNew", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "is false if spy wasn't called": function () {
+        it("is false if spy wasn't called", function () {
             assert.isFalse(this.spy.alwaysCalledWithNew());
-        },
+        });
 
-        "is true if always called with new": function () {
+        it("is true if always called with new", function () {
             /*eslint-disable no-unused-vars, new-cap*/
             var result = new this.spy();
             var result2 = new this.spy();
@@ -771,9 +768,9 @@ buster.testCase("spy", {
             /*eslint-enable no-unused-vars, new-cap*/
 
             assert(this.spy.alwaysCalledWithNew());
-        },
+        });
 
-        "is false if called as function once": function () {
+        it("is false if called as function once", function () {
             /*eslint-disable no-unused-vars, new-cap*/
             var result = new this.spy();
             var result2 = new this.spy();
@@ -781,22 +778,22 @@ buster.testCase("spy", {
             this.spy();
 
             assert.isFalse(this.spy.alwaysCalledWithNew());
-        }
-    },
+        });
+    });
 
-    ".thisValues": {
-        setUp: function () {
+    describe(".thisValues", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "contains one object": function () {
+        it("contains one object", function () {
             var object = {};
             this.spy.call(object);
 
             assert.equals(this.spy.thisValues, [object]);
-        },
+        });
 
-        "stacks up objects": function () {
+        it("stacks up objects", function () {
             function MyConstructor() {}
             var objects = [{}, [], new MyConstructor(), { id: 243 }];
             this.spy();
@@ -806,148 +803,148 @@ buster.testCase("spy", {
             this.spy.call(objects[3]);
 
             assert.equals(this.spy.thisValues, [this].concat(objects));
-        }
-    },
+        });
+    });
 
-    ".calledWith": spyCalledTests("calledWith"),
-    ".calledWithMatch": spyCalledTests("calledWithMatch"),
+    describe(".calledWith", spyCalledTests("calledWith"));
+    describe(".calledWithMatch", spyCalledTests("calledWithMatch"));
 
-    ".calledWithMatchSpecial": {
-        setUp: function () {
+    describe(".calledWithMatchSpecial", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "checks substring match": function () {
+        it("checks substring match", function () {
             this.spy("I like it");
 
             assert(this.spy.calledWithMatch("like"));
             assert.isFalse(this.spy.calledWithMatch("nope"));
-        },
+        });
 
-        "checks for regexp match": function () {
+        it("checks for regexp match", function () {
             this.spy("I like it");
 
             assert(this.spy.calledWithMatch(/[a-z ]+/i));
             assert.isFalse(this.spy.calledWithMatch(/[0-9]+/));
-        },
+        });
 
-        "checks for partial object match": function () {
+        it("checks for partial object match", function () {
             this.spy({ foo: "foo", bar: "bar" });
 
             assert(this.spy.calledWithMatch({ bar: "bar" }));
             assert.isFalse(this.spy.calledWithMatch({ same: "same" }));
-        }
-    },
+        });
+    });
 
-    ".alwaysCalledWith": spyAlwaysCalledTests("alwaysCalledWith"),
-    ".alwaysCalledWithMatch": spyAlwaysCalledTests("alwaysCalledWithMatch"),
+    describe(".alwaysCalledWith", spyAlwaysCalledTests("alwaysCalledWith"));
+    describe(".alwaysCalledWithMatch", spyAlwaysCalledTests("alwaysCalledWithMatch"));
 
-    ".alwaysCalledWithMatchSpecial": {
-        setUp: function () {
+    describe(".alwaysCalledWithMatchSpecial", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "checks true": function () {
+        it("checks true", function () {
             this.spy(true);
 
             assert(this.spy.alwaysCalledWithMatch(true));
             assert.isFalse(this.spy.alwaysCalledWithMatch(false));
-        },
+        });
 
-        "checks false": function () {
+        it("checks false", function () {
             this.spy(false);
 
             assert(this.spy.alwaysCalledWithMatch(false));
             assert.isFalse(this.spy.alwaysCalledWithMatch(true));
-        },
+        });
 
-        "checks substring match": function () {
+        it("checks substring match", function () {
             this.spy("test case");
             this.spy("some test");
             this.spy("all tests");
 
             assert(this.spy.alwaysCalledWithMatch("test"));
             assert.isFalse(this.spy.alwaysCalledWithMatch("case"));
-        },
+        });
 
-        "checks regexp match": function () {
+        it("checks regexp match", function () {
             this.spy("1");
             this.spy("2");
             this.spy("3");
 
             assert(this.spy.alwaysCalledWithMatch(/[123]/));
             assert.isFalse(this.spy.alwaysCalledWithMatch(/[12]/));
-        },
+        });
 
-        "checks partial object match": function () {
+        it("checks partial object match", function () {
             this.spy({ a: "a", b: "b" });
             this.spy({ c: "c", b: "b" });
             this.spy({ b: "b", d: "d" });
 
             assert(this.spy.alwaysCalledWithMatch({ b: "b" }));
             assert.isFalse(this.spy.alwaysCalledWithMatch({ a: "a" }));
-        }
-    },
+        });
+    });
 
-    ".neverCalledWith": spyNeverCalledTests("neverCalledWith"),
-    ".neverCalledWithMatch": spyNeverCalledTests("neverCalledWithMatch"),
+    describe(".neverCalledWith", spyNeverCalledTests("neverCalledWith"));
+    describe(".neverCalledWithMatch", spyNeverCalledTests("neverCalledWithMatch"));
 
-    ".neverCalledWithMatchSpecial": {
-        setUp: function () {
+    describe(".neverCalledWithMatchSpecial", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "checks substring match": function () {
+        it("checks substring match", function () {
             this.spy("a test", "b test");
 
             assert(this.spy.neverCalledWithMatch("a", "a"));
             assert(this.spy.neverCalledWithMatch("b", "b"));
             assert(this.spy.neverCalledWithMatch("b", "a"));
             assert.isFalse(this.spy.neverCalledWithMatch("a", "b"));
-        },
+        });
 
-        "checks regexp match": function () {
+        it("checks regexp match", function () {
             this.spy("a test", "b test");
 
             assert(this.spy.neverCalledWithMatch(/a/, /a/));
             assert(this.spy.neverCalledWithMatch(/b/, /b/));
             assert(this.spy.neverCalledWithMatch(/b/, /a/));
             assert.isFalse(this.spy.neverCalledWithMatch(/a/, /b/));
-        },
+        });
 
-        "checks partial object match": function () {
+        it("checks partial object match", function () {
             this.spy({ a: "test", b: "test" });
 
             assert(this.spy.neverCalledWithMatch({ a: "nope" }));
             assert(this.spy.neverCalledWithMatch({ c: "test" }));
             assert.isFalse(this.spy.neverCalledWithMatch({ b: "test" }));
-        }
-    },
+        });
+    });
 
-    ".args": {
-        setUp: function () {
+    describe(".args", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "contains real arrays": function () {
+        it("contains real arrays", function () {
             this.spy();
 
             assert.isArray(this.spy.args[0]);
-        },
+        });
 
-        "contains empty array when no arguments": function () {
+        it("contains empty array when no arguments", function () {
             this.spy();
 
             assert.equals(this.spy.args, [[]]);
-        },
+        });
 
-        "contains array with first call's arguments": function () {
+        it("contains array with first call's arguments", function () {
             this.spy(1, 2, 3);
 
             assert.equals(this.spy.args, [[1, 2, 3]]);
-        },
+        });
 
-        "stacks up arguments in nested array": function () {
+        it("stacks up arguments in nested array", function () {
             var objects = [{}, [], { id: 324 }];
             this.spy(1, objects[0], 3);
             this.spy(1, 2, objects[1]);
@@ -958,39 +955,39 @@ buster.testCase("spy", {
                 [1, 2, objects[1]],
                 [objects[2], 2, 3]
             ]);
-        }
-    },
+        });
+    });
 
-    ".calledWithExactly": {
-        setUp: function () {
+    describe(".calledWithExactly", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "returns false for partial match": function () {
+        it("returns false for partial match", function () {
             this.spy(1, 2, 3);
 
             assert.isFalse(this.spy.calledWithExactly(1, 2));
-        },
+        });
 
-        "returns false for missing arguments": function () {
+        it("returns false for missing arguments", function () {
             this.spy(1, 2, 3);
 
             assert.isFalse(this.spy.calledWithExactly(1, 2, 3, 4));
-        },
+        });
 
-        "returns true for exact match": function () {
+        it("returns true for exact match", function () {
             this.spy(1, 2, 3);
 
             assert(this.spy.calledWithExactly(1, 2, 3));
-        },
+        });
 
-        "matchs by strict comparison": function () {
+        it("matchs by strict comparison", function () {
             this.spy({}, []);
 
             assert.isFalse(this.spy.calledWithExactly({}, [], null));
-        },
+        });
 
-        "returns true for one exact match": function () {
+        it("returns true for one exact match", function () {
             var object = {};
             var array = [];
             this.spy({}, []);
@@ -998,81 +995,81 @@ buster.testCase("spy", {
             this.spy(object, array);
 
             assert(this.spy.calledWithExactly(object, array));
-        },
+        });
 
-        "returns true when all properties of an object argument match": function () {
+        it("returns true when all properties of an object argument match", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert(this.spy.calledWithExactly({a: 1, b: 2, c: 3}));
-        },
+        });
 
-        "returns false when a property of an object argument is set to undefined": function () {
+        it("returns false when a property of an object argument is set to undefined", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: undefined}));
-        },
+        });
 
-        "returns false when a property of an object argument is set to a different value": function () {
+        it("returns false when a property of an object argument is set to a different value", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: "blah"}));
-        },
+        });
 
-        "returns false when an object argument has a different property/value pair": function () {
+        it("returns false when an object argument has a different property/value pair", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: "blah"}));
-        },
+        });
 
-        "returns false when property of Object argument is set to undefined and has a different name": function () {
+        it("returns false when property of Object argument is set to undefined and has a different name", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, foo: undefined}));
-        },
+        });
 
-        "returns false when any properties of an object argument aren't present": function () {
+        it("returns false when any properties of an object argument aren't present", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2}));
-        },
+        });
 
-        "returns false when an object argument has extra properties": function () {
+        it("returns false when an object argument has extra properties", function () {
             this.spy({a: 1, b: 2, c: 3});
 
             assert.isFalse(this.spy.calledWithExactly({a: 1, b: 2, c: 3, d: 4}));
-        }
-    },
+        });
+    });
 
-    ".alwaysCalledWithExactly": {
-        setUp: function () {
+    describe(".alwaysCalledWithExactly", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
-        },
+        });
 
-        "returns false for partial match": function () {
+        it("returns false for partial match", function () {
             this.spy(1, 2, 3);
 
             assert.isFalse(this.spy.alwaysCalledWithExactly(1, 2));
-        },
+        });
 
-        "returns false for missing arguments": function () {
+        it("returns false for missing arguments", function () {
             this.spy(1, 2, 3);
 
             assert.isFalse(this.spy.alwaysCalledWithExactly(1, 2, 3, 4));
-        },
+        });
 
-        "returns true for exact match": function () {
+        it("returns true for exact match", function () {
             this.spy(1, 2, 3);
 
             assert(this.spy.alwaysCalledWithExactly(1, 2, 3));
-        },
+        });
 
-        "returns false for excess arguments": function () {
+        it("returns false for excess arguments", function () {
             this.spy({}, []);
 
             assert.isFalse(this.spy.alwaysCalledWithExactly({}, [], null));
-        },
+        });
 
-        "returns false for one exact match": function () {
+        it("returns false for one exact match", function () {
             var object = {};
             var array = [];
             this.spy({}, []);
@@ -1080,9 +1077,9 @@ buster.testCase("spy", {
             this.spy(object, array);
 
             assert(this.spy.alwaysCalledWithExactly(object, array));
-        },
+        });
 
-        "returns true for only exact matches": function () {
+        it("returns true for only exact matches", function () {
             var object = {};
             var array = [];
 
@@ -1091,9 +1088,9 @@ buster.testCase("spy", {
             this.spy(object, array);
 
             assert(this.spy.alwaysCalledWithExactly(object, array));
-        },
+        });
 
-        "returns false for no exact matches": function () {
+        it("returns false for no exact matches", function () {
             var object = {};
             var array = [];
 
@@ -1102,11 +1099,11 @@ buster.testCase("spy", {
             this.spy(object, array, "");
 
             assert.isFalse(this.spy.alwaysCalledWithExactly(object, array));
-        }
-    },
+        });
+    });
 
-    ".threw": {
-        setUp: function () {
+    describe(".threw", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
 
             this.spyWithTypeError = createSpy.create(function () {
@@ -1116,9 +1113,9 @@ buster.testCase("spy", {
             this.spyWithStringError = createSpy.create(function () {
                 throw "error";
             });
-        },
+        });
 
-        "returns exception thrown by function": function () {
+        it("returns exception thrown by function", function () {
             var err = new Error();
 
             var spy = createSpy.create(function () {
@@ -1131,76 +1128,76 @@ buster.testCase("spy", {
             catch (e) {} // eslint-disable-line no-empty
 
             assert(spy.threw(err));
-        },
+        });
 
-        "returns false if spy did not throw": function () {
+        it("returns false if spy did not throw", function () {
             this.spy();
 
             assert.isFalse(this.spy.threw());
-        },
+        });
 
-        "returns true if spy threw": function () {
+        it("returns true if spy threw", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.threw());
-        },
+        });
 
-        "returns true if string type matches": function () {
+        it("returns true if string type matches", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.threw("TypeError"));
-        },
+        });
 
-        "returns false if string did not match": function () {
+        it("returns false if string did not match", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert.isFalse(this.spyWithTypeError.threw("Error"));
-        },
+        });
 
-        "returns false if spy did not throw specified error": function () {
+        it("returns false if spy did not throw specified error", function () {
             this.spy();
 
             assert.isFalse(this.spy.threw("Error"));
-        },
+        });
 
-        "returns true if string matches": function () {
+        it("returns true if string matches", function () {
             try {
                 this.spyWithStringError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert(this.spyWithStringError.threw("error"));
-        },
+        });
 
-        "returns false if strings do not match": function () {
+        it("returns false if strings do not match", function () {
             try {
                 this.spyWithStringError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert.isFalse(this.spyWithStringError.threw("not the error"));
-        }
-    },
+        });
+    });
 
-    ".alwaysThrew": {
-        setUp: function () {
+    describe(".alwaysThrew", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
 
             this.spyWithTypeError = createSpy.create(function () {
                 throw new TypeError();
             });
-        },
+        });
 
-        "returns true when spy threw": function () {
+        it("returns true when spy threw", function () {
             var err = new Error();
 
             var spy = createSpy.create(function () {
@@ -1213,48 +1210,48 @@ buster.testCase("spy", {
             catch (e) {} // eslint-disable-line no-empty
 
             assert(spy.alwaysThrew(err));
-        },
+        });
 
-        "returns false if spy did not throw": function () {
+        it("returns false if spy did not throw", function () {
             this.spy();
 
             assert.isFalse(this.spy.alwaysThrew());
-        },
+        });
 
-        "returns true if spy threw": function () {
+        it("returns true if spy threw", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.alwaysThrew());
-        },
+        });
 
-        "returns true if string type matches": function () {
+        it("returns true if string type matches", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.alwaysThrew("TypeError"));
-        },
+        });
 
-        "returns false if string did not match": function () {
+        it("returns false if string did not match", function () {
             try {
                 this.spyWithTypeError();
             }
             catch (e) {} // eslint-disable-line no-empty
 
             assert.isFalse(this.spyWithTypeError.alwaysThrew("Error"));
-        },
+        });
 
-        "returns false if spy did not throw specified error": function () {
+        it("returns false if spy did not throw specified error", function () {
             this.spy();
 
             assert.isFalse(this.spy.alwaysThrew("Error"));
-        },
+        });
 
-        "returns false if some calls did not throw": function () {
+        it("returns false if some calls did not throw", function () {
             var callCount = 0;
 
             this.spy = createSpy(function () {
@@ -1266,70 +1263,64 @@ buster.testCase("spy", {
 
             try {
                 this.spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            } catch (e) {} // eslint-disable-line no-empty
 
             this.spy();
 
             assert.isFalse(this.spy.alwaysThrew());
-        },
+        });
 
-        "returns true if all calls threw": function () {
-            /*eslint-disable no-empty*/
+        it("returns true if all calls threw", function () {
             try {
                 this.spyWithTypeError();
-            } catch (e1) {}
+            } catch (e1) {} // eslint-disable-line no-empty
 
             try {
                 this.spyWithTypeError();
-            } catch (e2) {}
-            /*eslint-enable no-empty*/
+            } catch (e2) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.alwaysThrew());
-        },
+        });
 
-        "returns true if all calls threw same type": function () {
-            /*eslint-disable no-empty*/
+        it("returns true if all calls threw same type", function () {
             try {
                 this.spyWithTypeError();
-            } catch (e1) {}
+            } catch (e1) {} // eslint-disable-line no-empty
 
             try {
                 this.spyWithTypeError();
-            } catch (e2) {}
-            /*eslint-enable no-empty*/
+            } catch (e2) {} // eslint-disable-line no-empty
 
             assert(this.spyWithTypeError.alwaysThrew("TypeError"));
-        }
-    },
+        });
+    });
 
-    ".exceptions": {
-        setUp: function () {
+    describe(".exceptions", function () {
+        beforeEach(function () {
             this.spy = createSpy.create();
             var error = this.error = {};
 
             this.spyWithTypeError = createSpy.create(function () {
                 throw error;
             });
-        },
+        });
 
-        "contains exception thrown by function": function () {
+        it("contains exception thrown by function", function () {
             try {
                 this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            } catch (e) {} // eslint-disable-line no-empty
 
             assert.equals(this.spyWithTypeError.exceptions, [this.error]);
-        },
+        });
 
-        "contains undefined entry when function did not throw": function () {
+        it("contains undefined entry when function did not throw", function () {
             this.spy();
 
             assert.equals(this.spy.exceptions.length, 1);
             refute.defined(this.spy.exceptions[0]);
-        },
+        });
 
-        "stacks up exceptions and undefined": function () {
+        it("stacks up exceptions and undefined", function () {
             var calls = 0;
             var err = this.error;
 
@@ -1343,17 +1334,15 @@ buster.testCase("spy", {
 
             spy();
 
-            /*eslint-disable no-empty*/
             try {
                 spy();
-            } catch (e1) {}
+            } catch (e1) {} // eslint-disable-line no-empty
 
             spy();
 
             try {
                 spy();
-            } catch (e2) {}
-            /*eslint-enable no-empty*/
+            } catch (e2) {} // eslint-disable-line no-empty
 
             spy();
 
@@ -1363,25 +1352,25 @@ buster.testCase("spy", {
             refute.defined(spy.exceptions[2]);
             assert.equals(spy.exceptions[3], err);
             refute.defined(spy.exceptions[4]);
-        }
-    },
+        });
+    });
 
-    ".returned": {
-        "returns true when no argument": function () {
+    describe(".returned", function () {
+        it("returns true when no argument", function () {
             var spy = createSpy.create();
             spy();
 
             assert(spy.returned());
-        },
+        });
 
-        "returns true for undefined when no explicit return": function () {
+        it("returns true for undefined when no explicit return", function () {
             var spy = createSpy.create();
             spy();
 
             assert(spy.returned(undefined));
-        },
+        });
 
-        "returns true when returned value once": function () {
+        it("returns true when returned value once", function () {
             var values = [{}, 2, "hey", function () {}];
             var spy = createSpy.create(function () {
                 return values[spy.callCount];
@@ -1393,9 +1382,9 @@ buster.testCase("spy", {
             spy();
 
             assert(spy.returned(values[3]));
-        },
+        });
 
-        "returns false when value is never returned": function () {
+        it("returns false when value is never returned", function () {
             var values = [{}, 2, "hey", function () {}];
             var spy = createSpy.create(function () {
                 return values[spy.callCount];
@@ -1407,9 +1396,9 @@ buster.testCase("spy", {
             spy();
 
             assert.isFalse(spy.returned({ id: 42 }));
-        },
+        });
 
-        "returns true when value is returned several times": function () {
+        it("returns true when value is returned several times", function () {
             var object = { id: 42 };
             var spy = createSpy.create(function () {
                 return object;
@@ -1420,9 +1409,9 @@ buster.testCase("spy", {
             spy();
 
             assert(spy.returned(object));
-        },
+        });
 
-        "compares values deeply": function () {
+        it("compares values deeply", function () {
             var object = { deep: { id: 42 } };
             var spy = createSpy.create(function () {
                 return object;
@@ -1431,9 +1420,9 @@ buster.testCase("spy", {
             spy();
 
             assert(spy.returned({ deep: { id: 42 } }));
-        },
+        });
 
-        "compares values strictly using match.same": function () {
+        it("compares values strictly using match.same", function () {
             var object = { id: 42 };
             var spy = createSpy.create(function () {
                 return object;
@@ -1443,19 +1432,19 @@ buster.testCase("spy", {
 
             assert.isFalse(spy.returned(sinonMatch.same({ id: 42 })));
             assert(spy.returned(sinonMatch.same(object)));
-        }
-    },
+        });
+    });
 
-    ".returnValues": {
-        "contains undefined when function does not return explicitly": function () {
+    describe(".returnValues", function () {
+        it("contains undefined when function does not return explicitly", function () {
             var spy = createSpy.create();
             spy();
 
             assert.equals(spy.returnValues.length, 1);
             refute.defined(spy.returnValues[0]);
-        },
+        });
 
-        "contains return value": function () {
+        it("contains return value", function () {
             var object = { id: 42 };
 
             var spy = createSpy.create(function () {
@@ -1465,31 +1454,30 @@ buster.testCase("spy", {
             spy();
 
             assert.equals(spy.returnValues, [object]);
-        },
+        });
 
-        "contains undefined when function throws": function () {
+        it("contains undefined when function throws", function () {
             var spy = createSpy.create(function () {
                 throw new Error();
             });
 
             try {
                 spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            } catch (e) {} // eslint-disable-line no-empty
 
             assert.equals(spy.returnValues.length, 1);
             refute.defined(spy.returnValues[0]);
-        },
+        });
 
-        "contains the created object for spied constructors": function () {
+        it("contains the created object for spied constructors", function () {
             var Spy = createSpy.create(function () { });
 
             var result = new Spy();
 
             assert.equals(Spy.returnValues[0], result);
-        },
+        });
 
-        "contains the return value for spied constructors that explicitly return objects": function () {
+        it("contains the return value for spied constructors that explicitly return objects", function () {
             var Spy = createSpy.create(function () {
                 return { isExplicitlyCreatedValue: true };
             });
@@ -1498,9 +1486,9 @@ buster.testCase("spy", {
 
             assert.isTrue(result.isExplicitlyCreatedValue);
             assert.equals(Spy.returnValues[0], result);
-        },
+        });
 
-        "contains the created object for spied constructors that explicitly return primitive values": function () {
+        it("contains the created object for spied constructors that explicitly return primitive values", function () {
             var Spy = createSpy.create(function () {
                 return 10;
             });
@@ -1509,9 +1497,9 @@ buster.testCase("spy", {
 
             refute.equals(result, 10);
             assert.equals(Spy.returnValues[0], result);
-        },
+        });
 
-        "stacks up return values": function () {
+        it("stacks up return values", function () {
             var calls = 0;
 
             var spy = createSpy.create(function () {
@@ -1534,107 +1522,107 @@ buster.testCase("spy", {
             refute.defined(spy.returnValues[2]);
             assert.equals(spy.returnValues[3], 4);
             refute.defined(spy.returnValues[4]);
-        }
-    },
+        });
+    });
 
-    ".calledBefore": {
-        setUp: function () {
+    describe(".calledBefore", function () {
+        beforeEach(function () {
             this.spy1 = createSpy();
             this.spy2 = createSpy();
-        },
+        });
 
-        "is function": function () {
+        it("is function", function () {
             assert.isFunction(this.spy1.calledBefore);
-        },
+        });
 
-        "returns true if first call to A was before first to B": function () {
+        it("returns true if first call to A was before first to B", function () {
             this.spy1();
             this.spy2();
 
             assert(this.spy1.calledBefore(this.spy2));
-        },
+        });
 
-        "compares call order of calls directly": function () {
+        it("compares call order of calls directly", function () {
             this.spy1();
             this.spy2();
 
             assert(this.spy1.getCall(0).calledBefore(this.spy2.getCall(0)));
-        },
+        });
 
-        "returns false if not called": function () {
+        it("returns false if not called", function () {
             this.spy2();
 
             assert.isFalse(this.spy1.calledBefore(this.spy2));
-        },
+        });
 
-        "returns true if other not called": function () {
+        it("returns true if other not called", function () {
             this.spy1();
 
             assert(this.spy1.calledBefore(this.spy2));
-        },
+        });
 
-        "returns false if other called first": function () {
+        it("returns false if other called first", function () {
             this.spy2();
             this.spy1();
             this.spy2();
 
             assert(this.spy1.calledBefore(this.spy2));
-        }
-    },
+        });
+    });
 
-    ".calledAfter": {
-        setUp: function () {
+    describe(".calledAfter", function () {
+        beforeEach(function () {
             this.spy1 = createSpy();
             this.spy2 = createSpy();
-        },
+        });
 
-        "is function": function () {
+        it("is function", function () {
             assert.isFunction(this.spy1.calledAfter);
-        },
+        });
 
-        "returns true if first call to A was after first to B": function () {
+        it("returns true if first call to A was after first to B", function () {
             this.spy2();
             this.spy1();
 
             assert(this.spy1.calledAfter(this.spy2));
-        },
+        });
 
-        "compares calls directly": function () {
+        it("compares calls directly", function () {
             this.spy2();
             this.spy1();
 
             assert(this.spy1.getCall(0).calledAfter(this.spy2.getCall(0)));
-        },
+        });
 
-        "returns false if not called": function () {
+        it("returns false if not called", function () {
             this.spy2();
 
             assert.isFalse(this.spy1.calledAfter(this.spy2));
-        },
+        });
 
-        "returns false if other not called": function () {
+        it("returns false if other not called", function () {
             this.spy1();
 
             assert.isFalse(this.spy1.calledAfter(this.spy2));
-        },
+        });
 
-        "returns false if other called last": function () {
+        it("returns false if other called last", function () {
             this.spy2();
             this.spy1();
             this.spy2();
 
             assert.isFalse(this.spy1.calledAfter(this.spy2));
-        }
-    },
+        });
+    });
 
-    ".firstCall": {
-        "is undefined by default": function () {
+    describe(".firstCall", function () {
+        it("is undefined by default", function () {
             var spy = createSpy();
 
             assert.isNull(spy.firstCall);
-        },
+        });
 
-        "is equal to getCall(0) result after first call": function () {
+        it("is equal to getCall(0) result after first call", function () {
             var spy = createSpy();
 
             spy();
@@ -1642,9 +1630,9 @@ buster.testCase("spy", {
             var call0 = spy.getCall(0);
             assert.equals(spy.firstCall.callId, call0.callId);
             assert.same(spy.firstCall.spy, call0.spy);
-        },
+        });
 
-        "is equal to getCall(0) after first call when control flow has continued after invocation": function () {
+        it("is equal to getCall(0) after first call when control flow has continued after invocation", function () {
             var spy;
 
             function runAsserts() {
@@ -1656,9 +1644,9 @@ buster.testCase("spy", {
             spy = createSpy(runAsserts);
 
             spy();
-        },
+        });
 
-        "is tracked even if exceptions are thrown": function () {
+        it("is tracked even if exceptions are thrown", function () {
             var spy = createSpy(function () {
                 throw "an exception";
             });
@@ -1669,9 +1657,9 @@ buster.testCase("spy", {
             catch (e) {} // eslint-disable-line no-empty
 
             refute.isNull(spy.firstCall);
-        },
+        });
 
-        "has correct returnValue": function () {
+        it("has correct returnValue", function () {
             var spy = createSpy(function () {
                 return 42;
             });
@@ -1680,9 +1668,9 @@ buster.testCase("spy", {
 
             assert.equals(spy.firstCall.returnValue, 42);
             assert(spy.firstCall.returned(42));
-        },
+        });
 
-        "has correct exception": function () {
+        it("has correct exception", function () {
             var err = new Error();
             var spy = createSpy(function () {
                 throw err;
@@ -1695,25 +1683,25 @@ buster.testCase("spy", {
 
             assert.same(spy.firstCall.exception, err);
             assert(spy.firstCall.threw(err));
-        }
+        });
 
-    },
+    });
 
-    ".secondCall": {
-        "is null by default": function () {
+    describe(".secondCall", function () {
+        it("is null by default", function () {
             var spy = createSpy();
 
             assert.isNull(spy.secondCall);
-        },
+        });
 
-        "stills be null after first call": function () {
+        it("stills be null after first call", function () {
             var spy = createSpy();
             spy();
 
             assert.isNull(spy.secondCall);
-        },
+        });
 
-        "is equal to getCall(1) result after second call": function () {
+        it("is equal to getCall(1) result after second call", function () {
             var spy = createSpy();
 
             spy();
@@ -1722,25 +1710,25 @@ buster.testCase("spy", {
             var call1 = spy.getCall(1);
             assert.equals(spy.secondCall.callId, call1.callId);
             assert.same(spy.secondCall.spy, call1.spy);
-        }
-    },
+        });
+    });
 
-    ".thirdCall": {
-        "is undefined by default": function () {
+    describe(".thirdCall", function () {
+        it("is undefined by default", function () {
             var spy = createSpy();
 
             assert.isNull(spy.thirdCall);
-        },
+        });
 
-        "stills be undefined after second call": function () {
+        it("stills be undefined after second call", function () {
             var spy = createSpy();
             spy();
             spy();
 
             assert.isNull(spy.thirdCall);
-        },
+        });
 
-        "is equal to getCall(1) result after second call": function () {
+        it("is equal to getCall(1) result after second call", function () {
             var spy = createSpy();
 
             spy();
@@ -1750,26 +1738,26 @@ buster.testCase("spy", {
             var call2 = spy.getCall(2);
             assert.equals(spy.thirdCall.callId, call2.callId);
             assert.same(spy.thirdCall.spy, call2.spy);
-        }
-    },
+        });
+    });
 
-    ".lastCall": {
-        "is undefined by default": function () {
+    describe(".lastCall", function () {
+        it("is undefined by default", function () {
             var spy = createSpy();
 
             assert.isNull(spy.lastCall);
-        },
+        });
 
-        "is same as firstCall after first call": function () {
+        it("is same as firstCall after first call", function () {
             var spy = createSpy();
 
             spy();
 
             assert.same(spy.lastCall.callId, spy.firstCall.callId);
             assert.same(spy.lastCall.spy, spy.firstCall.spy);
-        },
+        });
 
-        "is same as secondCall after second call": function () {
+        it("is same as secondCall after second call", function () {
             var spy = createSpy();
 
             spy();
@@ -1777,9 +1765,9 @@ buster.testCase("spy", {
 
             assert.same(spy.lastCall.callId, spy.secondCall.callId);
             assert.same(spy.lastCall.spy, spy.secondCall.spy);
-        },
+        });
 
-        "is same as thirdCall after third call": function () {
+        it("is same as thirdCall after third call", function () {
             var spy = createSpy();
 
             spy();
@@ -1788,9 +1776,9 @@ buster.testCase("spy", {
 
             assert.same(spy.lastCall.callId, spy.thirdCall.callId);
             assert.same(spy.lastCall.spy, spy.thirdCall.spy);
-        },
+        });
 
-        "is equal to getCall(3) result after fourth call": function () {
+        it("is equal to getCall(3) result after fourth call", function () {
             var spy = createSpy();
 
             spy();
@@ -1801,9 +1789,9 @@ buster.testCase("spy", {
             var call3 = spy.getCall(3);
             assert.equals(spy.lastCall.callId, call3.callId);
             assert.same(spy.lastCall.spy, call3.spy);
-        },
+        });
 
-        "is equal to getCall(4) result after fifth call": function () {
+        it("is equal to getCall(4) result after fifth call", function () {
             var spy = createSpy();
 
             spy();
@@ -1815,35 +1803,35 @@ buster.testCase("spy", {
             var call4 = spy.getCall(4);
             assert.equals(spy.lastCall.callId, call4.callId);
             assert.same(spy.lastCall.spy, call4.spy);
-        }
-    },
+        });
+    });
 
-    ".getCalls": {
-        "returns an empty Array by default": function () {
+    describe(".getCalls", function () {
+        it("returns an empty Array by default", function () {
             var spy = createSpy();
 
             assert.isArray(spy.getCalls());
             assert.equals(spy.getCalls().length, 0);
-        },
+        });
 
-        "is analogous to using getCall(n)": function () {
+        it("is analogous to using getCall(n)", function () {
             var spy = createSpy();
 
             spy();
             spy();
 
             assert.equals(spy.getCalls(), [spy.getCall(0), spy.getCall(1)]);
-        }
-    },
+        });
+    });
 
-    ".callArg": {
-        "is function": function () {
+    describe(".callArg", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.callArg);
-        },
+        });
 
-        "invokes argument at index for all calls": function () {
+        it("invokes argument at index for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             spy(1, 2, callback);
@@ -1853,18 +1841,18 @@ buster.testCase("spy", {
 
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
-        },
+        });
 
-        "throws if argument at index is not a function": function () {
+        it("throws if argument at index is not a function", function () {
             var spy = createSpy();
             spy();
 
             assert.exception(function () {
                 spy.callArg(1);
             }, "TypeError");
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
             try {
@@ -1873,9 +1861,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot call arg since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
@@ -1885,18 +1873,18 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot call arg since it was not yet invoked.");
             }
-        },
+        });
 
-        "throws if index is not a number": function () {
+        it("throws if index is not a number", function () {
             var spy = createSpy();
             spy();
 
             assert.exception(function () {
                 spy.callArg("");
             }, "TypeError");
-        },
+        });
 
-        "passs additional arguments": function () {
+        it("passs additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -1906,17 +1894,17 @@ buster.testCase("spy", {
             spy.callArg(0, "abc", 123, array, object);
 
             assert(callback.calledWith("abc", 123, array, object));
-        }
-    },
+        });
+    });
 
-    ".callArgOn": {
-        "is function": function () {
+    describe(".callArgOn", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.callArgOn);
-        },
+        });
 
-        "invokes argument at index for all calls": function () {
+        it("invokes argument at index for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
@@ -1928,9 +1916,9 @@ buster.testCase("spy", {
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
             assert(callback.alwaysCalledOn(thisObj));
-        },
+        });
 
-        "throws if argument at index is not a function": function () {
+        it("throws if argument at index is not a function", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy();
@@ -1938,9 +1926,9 @@ buster.testCase("spy", {
             assert.exception(function () {
                 spy.callArgOn(1, thisObj);
             }, "TypeError");
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -1950,9 +1938,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot call arg since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
@@ -1963,9 +1951,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot call arg since it was not yet invoked.");
             }
-        },
+        });
 
-        "throws if index is not a number": function () {
+        it("throws if index is not a number", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
             spy();
@@ -1973,9 +1961,9 @@ buster.testCase("spy", {
             assert.exception(function () {
                 spy.callArg("", thisObj);
             }, "TypeError");
-        },
+        });
 
-        "pass additional arguments": function () {
+        it("pass additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -1987,33 +1975,33 @@ buster.testCase("spy", {
 
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
-        }
-    },
+        });
+    });
 
-    ".callArgWith": {
-        "is alias for callArg": function () {
+    describe(".callArgWith", function () {
+        it("is alias for callArg", function () {
             var spy = createSpy();
 
             assert.same(spy.callArgWith, spy.callArg);
-        }
-    },
+        });
+    });
 
-    ".callArgOnWith": {
-        "is alias for callArgOn": function () {
+    describe(".callArgOnWith", function () {
+        it("is alias for callArgOn", function () {
             var spy = createSpy();
 
             assert.same(spy.callArgOnWith, spy.callArgOn);
-        }
-    },
+        });
+    });
 
-    ".yield": {
-        "is function": function () {
+    describe(".yield", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.yield);
-        },
+        });
 
-        "invokes first function arg for all calls": function () {
+        it("invokes first function arg for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             spy(1, 2, callback);
@@ -2023,9 +2011,9 @@ buster.testCase("spy", {
 
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
             try {
@@ -2034,9 +2022,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot yield since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
@@ -2046,9 +2034,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot yield since it was not yet invoked.");
             }
-        },
+        });
 
-        "passs additional arguments": function () {
+        it("passs additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -2058,25 +2046,25 @@ buster.testCase("spy", {
             spy.yield("abc", 123, array, object);
 
             assert(callback.calledWith("abc", 123, array, object));
-        }
-    },
+        });
+    });
 
-    ".invokeCallback": {
-        "is alias for yield": function () {
+    describe(".invokeCallback", function () {
+        it("is alias for yield", function () {
             var spy = createSpy();
 
             assert.same(spy.invokeCallback, spy.yield);
-        }
-    },
+        });
+    });
 
-    ".yieldOn": {
-        "is function": function () {
+    describe(".yieldOn", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.yieldOn);
-        },
+        });
 
-        "invokes first function arg for all calls": function () {
+        it("invokes first function arg for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2088,9 +2076,9 @@ buster.testCase("spy", {
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
             assert(callback.alwaysCalledOn(thisObj));
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -2100,9 +2088,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot yield since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2113,9 +2101,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot yield since it was not yet invoked.");
             }
-        },
+        });
 
-        "pass additional arguments": function () {
+        it("pass additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -2127,17 +2115,17 @@ buster.testCase("spy", {
 
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
-        }
-    },
+        });
+    });
 
-    ".yieldTo": {
-        "is function": function () {
+    describe(".yieldTo", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.yieldTo);
-        },
+        });
 
-        "invokes first function arg for all calls": function () {
+        it("invokes first function arg for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             spy(1, 2, { success: callback });
@@ -2147,9 +2135,9 @@ buster.testCase("spy", {
 
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
             try {
@@ -2158,9 +2146,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot yield to 'success' since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
@@ -2170,9 +2158,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot yield to 'success' since it was not yet invoked.");
             }
-        },
+        });
 
-        "pass additional arguments": function () {
+        it("pass additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -2182,17 +2170,17 @@ buster.testCase("spy", {
             spy.yieldTo("test", "abc", 123, array, object);
 
             assert(callback.calledWith("abc", 123, array, object));
-        }
-    },
+        });
+    });
 
-    ".yieldToOn": {
-        "is function": function () {
+    describe(".yieldToOn", function () {
+        it("is function", function () {
             var spy = createSpy();
 
             assert.isFunction(spy.yieldToOn);
-        },
+        });
 
-        "invokes first function arg for all calls": function () {
+        it("invokes first function arg for all calls", function () {
             var spy = createSpy();
             var callback = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2204,9 +2192,9 @@ buster.testCase("spy", {
             assert(callback.calledTwice);
             assert(callback.alwaysCalledWith());
             assert(callback.alwaysCalledOn(thisObj));
-        },
+        });
 
-        "throws if spy was not yet invoked": function () {
+        it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -2216,9 +2204,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "spy cannot yield to 'success' since it was not yet invoked.");
             }
-        },
+        });
 
-        "includes spy name in error message": function () {
+        it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
@@ -2229,9 +2217,9 @@ buster.testCase("spy", {
             } catch (e) {
                 assert.equals(e.message, "someMethod cannot yield to 'success' since it was not yet invoked.");
             }
-        },
+        });
 
-        "pass additional arguments": function () {
+        it("pass additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
             var array = [];
@@ -2243,18 +2231,18 @@ buster.testCase("spy", {
 
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
-        }
-    },
+        });
+    });
 
-    ".reset": {
-        "return same object": function () {
+    describe(".reset", function () {
+        it("return same object", function () {
             var spy = createSpy();
             var reset = spy.reset();
 
             assert(reset === spy);
-        },
+        });
 
-        "throws if called during spy invocation": function () {
+        it("throws if called during spy invocation", function () {
             var spy = createSpy(function () {
                 spy.reset();
             });
@@ -2262,21 +2250,21 @@ buster.testCase("spy", {
             assert.exception(function () {
                 spy();
             }, "InvalidResetException");
-        }
-    },
+        });
+    });
 
-    ".length": {
-        "is zero by default": function () {
+    describe(".length", function () {
+        it("is zero by default", function () {
             var spy = createSpy();
 
             assert.equals(spy.length, 0);
-        },
+        });
 
-        "matches the function length": function () {
+        it("matches the function length", function () {
             var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
             var spy = createSpy(api, "someMethod");
 
             assert.equals(spy.length, 3);
-        }
-    }
+        });
+    });
 });
