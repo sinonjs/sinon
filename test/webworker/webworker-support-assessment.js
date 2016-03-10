@@ -1,33 +1,32 @@
-(function (root) {
-    "use strict";
-    var supportsWorkers = typeof root.Worker !== "undefined";
-    var buster = root.buster || require("buster");
-    var assert = buster.assert;
+/*eslint-env mocha*/
+"use strict";
 
-    buster.testCase("WebWorker support", {
+var referee = require("referee");
+var assert = referee.assert;
 
-        requiresSupportFor: {
-            WebWorker: supportsWorkers
-        },
 
-        "should not crash": function (done) {
-            var worker = new root.Worker("./test/webworker/webworker-script.js");
+if (typeof Worker !== "undefined") {
+
+    describe("WebWorker support", function () {
+        it("should not crash", function (done) {
+            var worker = new Worker("file://" + __dirname + "/webworker-script.js");
 
             worker.onmessage = function (msg) {
                 try {
                     assert.same(msg.data, "worker response");
                     done();
-                }catch (err) { done(err); }
+                } catch (err) {
+                    done(err);
+                }
             };
 
             function onError(err) {
-                done(new Error(err.message));
+                done(new Error(err.message || "unknown error"));
             }
 
             worker.addEventListener("error", onError, false);
 
             worker.postMessage("whatever");
-        }
+        });
     });
-
-})(this);
+}
