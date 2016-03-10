@@ -15,7 +15,9 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
-    "test": "./scripts/ci-test.sh",
+    "test-node": "mocha --recursive -R dot test/",
+    "test-headless": "mochify --recursive -R dot test/",
+    "test": "npm run test-node && npm run test-headless",
     "lint": "eslint .",
     "prepublish": "./build",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
@@ -39,7 +41,6 @@
     "eslint-config-defaults": "^2.1.0",
     "mocha": "^2.4.5",
     "mochify": "^2.17.0",
-    "phantomjs-prebuilt": "^2.1.4",
     "pre-commit": "^1.1.2"
   },
   "files": [
