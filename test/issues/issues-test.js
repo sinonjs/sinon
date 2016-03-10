@@ -1,22 +1,24 @@
+/*eslint-env mocha*/
+/*eslint max-nested-callbacks: 0*/
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("../../lib/sinon");
 var configureLogError = require("../../lib/sinon/util/core/log_error.js");
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
 
-buster.testCase("issues", {
-    setUp: function () {
+describe("issues", function () {
+    beforeEach(function () {
         this.sandbox = sinon.sandbox.create();
-    },
+    });
 
-    tearDown: function () {
+    afterEach(function () {
         this.sandbox.restore();
-    },
+    });
 
-    "// #283": function () {
+    it.skip("#283", function () {
         function testSinonFakeTimersWith(interval, ticks) {
             var clock = sinon.useFakeTimers();
 
@@ -47,9 +49,9 @@ buster.testCase("issues", {
 
         // PASS
         testSinonFakeTimersWith(1000, 1001);
-    },
+    });
 
-    "// #397": function () {
+    it.skip("#397", function () {
         var clock = sinon.useFakeTimers();
 
         var cb2 = sinon.spy();
@@ -67,27 +69,25 @@ buster.testCase("issues", {
         assert(cb2.called);
 
         clock.restore();
-    },
+    });
 
-    "#458": {
-        "on node": {
-            requiresSupportFor: {
-                fs: typeof require("fs").readFileSync !== "undefined"
-            },
+    describe("#458", function () {
+        if (typeof require("fs").readFileSync !== "undefined") {
+            describe("on node", function () {
+                it("stub out fs.readFileSync", function () {
+                    var fs = require("fs");
+                    var testCase = this;
 
-            "stub out fs.readFileSync": function () {
-                var fs = require("fs");
-                var testCase = this;
-
-                refute.exception(function () {
-                    testCase.sandbox.stub(fs, "readFileSync");
+                    refute.exception(function () {
+                        testCase.sandbox.stub(fs, "readFileSync");
+                    });
                 });
-            }
+            });
         }
-    },
+    });
 
-    "#624": {
-        "//useFakeTimers should be idempotent": function () {
+    describe("#624", function () {
+        it.skip("useFakeTimers should be idempotent", function () {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now
             // This test verifies that it's working, at least for Date.now
@@ -101,11 +101,11 @@ buster.testCase("issues", {
 
             clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
             assert.equals(clock.now, Date.now());
-        }
-    },
+        });
+    });
 
-    "#835": {
-        "logError() throws an exception if the passed err is read-only": function () {
+    describe("#835", function () {
+        it("logError() throws an exception if the passed err is read-only", function () {
             var logError = configureLogError({useImmediateExceptions: true});
 
             // passes
@@ -122,11 +122,11 @@ buster.testCase("issues", {
             } catch (ex) {
                 assert.equals(ex.name, "#835 test");
             }
-        }
-    },
+        });
+    });
 
-    "#852 - createStubInstance on intherited constructors": {
-        "must not throw error": function () {
+    describe("#852 - createStubInstance on intherited constructors", function () {
+        it("must not throw error", function () {
             var A = function () {};
             var B = function () {};
 
@@ -136,16 +136,16 @@ buster.testCase("issues", {
             refute.exception(function () {
                 sinon.createStubInstance(B);
             });
-        }
-    },
+        });
+    });
 
-    "#852(2) - createStubInstance should on same constructor": {
-        "must be idempotent": function () {
+    describe("#852(2) - createStubInstance should on same constructor", function () {
+        it("must be idempotent", function () {
             var A = function () {};
             refute.exception(function () {
                 sinon.createStubInstance(A);
                 sinon.createStubInstance(A);
             });
-        }
-    }
+        });
+    });
 });
