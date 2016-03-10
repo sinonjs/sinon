@@ -1,27 +1,29 @@
+/*eslint-env mocha*/
+/*eslint max-nested-callbacks: 0*/
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var configureLogError = require("../../../lib/sinon/util/core/log_error");
 var sandbox = require("../../../lib/sinon/sandbox");
-var assert = buster.assert;
-var refute = buster.refute;
+var assert = referee.assert;
+var refute = referee.refute;
 
-buster.testCase("util/core/configureLogError", {
-    setUp: function () {
+describe("util/core/configureLogError", function () {
+    beforeEach(function () {
         this.sandbox = sandbox.create();
         this.timeOutStub = sandbox.stub();
-    },
+    });
 
-    tearDown: function () {
+    afterEach(function () {
         this.sandbox.restore();
-    },
+    });
 
-    "is a function": function () {
+    it("is a function", function () {
         var instance = configureLogError();
         assert.isFunction(instance);
-    },
+    });
 
-    "calls config.logger function with a String": function () {
+    it("calls config.logger function with a String", function () {
         var spy = this.sandbox.spy();
         var logError = configureLogError({
             logger: spy,
@@ -40,9 +42,9 @@ buster.testCase("util/core/configureLogError", {
         assert(spy.called);
         assert(spy.calledWithMatch(name));
         assert(spy.calledWithMatch(message));
-    },
+    });
 
-    "calls config.logger function with a stack": function () {
+    it("calls config.logger function with a stack", function () {
         var spy = this.sandbox.spy();
         var logError = configureLogError({
             logger: spy,
@@ -58,9 +60,9 @@ buster.testCase("util/core/configureLogError", {
 
         assert(spy.called);
         assert(spy.calledWithMatch(stack));
-    },
+    });
 
-    "should call config.setTimeout": function () {
+    it("should call config.setTimeout", function () {
         var logError = configureLogError({
             setTimeout: this.timeOutStub,
             useImmediateExceptions: false
@@ -70,9 +72,9 @@ buster.testCase("util/core/configureLogError", {
         logError("some wonky label", error);
 
         assert(this.timeOutStub.calledOnce);
-    },
+    });
 
-    "should pass a throwing function to config.setTimeout": function () {
+    it("should pass a throwing function to config.setTimeout", function () {
         var logError = configureLogError({
             setTimeout: this.timeOutStub,
             useImmediateExceptions: false
@@ -83,19 +85,19 @@ buster.testCase("util/core/configureLogError", {
 
         var func = this.timeOutStub.args[0][0];
         assert.exception(func);
-    },
+    });
 
-    "config.useImmediateExceptions": {
-        setUp: function () {
+    describe("config.useImmediateExceptions", function () {
+        beforeEach(function () {
             this.sandbox = sandbox.create();
             this.timeOutStub = this.sandbox.stub();
-        },
+        });
 
-        tearDown: function () {
+        afterEach(function () {
             this.sandbox.restore();
-        },
+        });
 
-        "throws the logged error immediately, does not call logError.setTimeout when flag is true": function () {
+        it("throws the logged error immediately, does not call logError.setTimeout when flag is true", function () {
             var error = new Error();
             var logError = configureLogError({
                 setTimeout: this.timeOutStub,
@@ -106,9 +108,9 @@ buster.testCase("util/core/configureLogError", {
                 logError("an error", error);
             });
             assert(this.timeOutStub.notCalled);
-        },
+        });
 
-        "does not throw logged error immediately and calls logError.setTimeout when flag is false": function () {
+        it("does not throw logged error immediately and calls logError.setTimeout when flag is false", function () {
             var error = new Error();
             var logError = configureLogError({
                 setTimeout: this.timeOutStub,
@@ -119,6 +121,6 @@ buster.testCase("util/core/configureLogError", {
                 logError("an error", error);
             });
             assert(this.timeOutStub.called);
-        }
-    }
+        });
+    });
 });

@@ -1,12 +1,13 @@
+/*eslint-env mocha*/
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var restore = require("../../../lib/sinon/util/core/restore");
 var createStub = require("../../../lib/sinon/stub");
-var assert = buster.assert;
+var assert = referee.assert;
 
-buster.testCase("util/core/restore", {
-    "restores all methods of supplied object": function () {
+describe("util/core/restore", function () {
+    it("restores all methods of supplied object", function () {
         var methodA = function () {};
         var methodB = function () {};
         var nonEnumerableMethod = function () {};
@@ -21,9 +22,9 @@ buster.testCase("util/core/restore", {
         assert.same(obj.methodA, methodA);
         assert.same(obj.methodB, methodB);
         assert.same(obj.nonEnumerableMethod, nonEnumerableMethod);
-    },
+    });
 
-    "only restores restorable methods": function () {
+    it("only restores restorable methods", function () {
         var stubbedMethod = function () {};
         var vanillaMethod = function () {};
         var obj = { stubbedMethod: stubbedMethod, vanillaMethod: vanillaMethod };
@@ -32,9 +33,9 @@ buster.testCase("util/core/restore", {
         restore(obj);
 
         assert.same(obj.stubbedMethod, stubbedMethod);
-    },
+    });
 
-    "restores a single stubbed method": function () {
+    it("restores a single stubbed method", function () {
         var method = function () {};
         var obj = { method: method };
 
@@ -42,5 +43,5 @@ buster.testCase("util/core/restore", {
         restore(obj.method);
 
         assert.same(obj.method, method);
-    }
+    });
 });
