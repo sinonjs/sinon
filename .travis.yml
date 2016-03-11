@@ -11,15 +11,24 @@ cache:
   directories:
   - node_modules
 
+env:
+  global:
+    - SAUCE_USERNAME=sinonjs
+    - secure: "T0/TMZgx6NoqtAj8hvXUp1WGLdeqQR01EEWY/cvhJBv54dBLCvcIqEwBmG7w3shPmBMvFsvfrSgXqnoGeHm1dep7kanA1XfK4/OaDSfuBlFFVgIvwQph/lPqUBAHGItk/g+ky9OwJL2mNpTJmTNsf8/HulueDuRK9pUr/t98KxQ="
+
 before_install:
   - npm config set strict-ssl false
 
 before_script:
-  # we only need to run eslint once per build, so let's conserve a few resources
-  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then $(npm bin)/eslint .; fi'
+  # these build targets only need to run once per build, so let's conserve a few resources
+  - if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then npm run lint; fi
+  # run these on node 5 to have npm 3 with flat dependencies
+  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-headless; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-webworker; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-cloud; fi
 
 script:
-  - ./scripts/ci-test.sh
+  - npm run test-node
 
 git:
   depth: 10

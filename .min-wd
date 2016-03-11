@@ -1,0 +1,12 @@
+{
+  "sauceLabs": true,
+  "browsers": [{
+    "name": "firefox"
+  }, {
+    "name": "internet explorer",
+    "version": "10"
+  }, {
+    "name": "internet explorer",
+    "version": "11"
+  }]
+}
