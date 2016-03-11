@@ -965,25 +965,27 @@ describe("sinon.clock", function () {
             assert.same(clearInterval, sinon.timers.clearInterval);
         });
 
-        it("deletes global property on restore if it was inherited onto the global object", function () {
-            // Give the global object an inherited 'tick' method
-            delete this.global.tick;
-            /*eslint-disable no-proto*/
-            this.global.__proto__.tick = function () { };
+        /*eslint-disable no-proto*/
+        if (Object.__proto__) {
+            it("deletes global property on restore if it was inherited onto the global object", function () {
+                // Give the global object an inherited 'tick' method
+                delete this.global.tick;
+                this.global.__proto__.tick = function () { };
 
-            if (!this.global.hasOwnProperty("tick")) {
-                this.clock = sinon.useFakeTimers("tick");
-                assert.isTrue(this.global.hasOwnProperty("tick"));
-                this.clock.restore();
+                if (!this.global.hasOwnProperty("tick")) {
+                    this.clock = sinon.useFakeTimers("tick");
+                    assert.isTrue(this.global.hasOwnProperty("tick"));
+                    this.clock.restore();
 
-                assert.isFalse(this.global.hasOwnProperty("tick"));
-                delete this.global.__proto__.tick;
-            } else {
-                // hasOwnProperty does not work as expected.
-                assert(true);
-            }
-            /*eslint-enable no-proto*/
-        });
+                    assert.isFalse(this.global.hasOwnProperty("tick"));
+                    delete this.global.__proto__.tick;
+                } else {
+                    // hasOwnProperty does not work as expected.
+                    assert(true);
+                }
+            });
+        }
+        /*eslint-enable no-proto*/
 
         it("restores global property on restore if it is present on the global object itself", function () {
             // Directly give the global object a tick method
