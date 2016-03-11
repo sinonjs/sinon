@@ -17,6 +17,7 @@
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test-node": "mocha --recursive -R dot test/",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
+    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text ] test/",
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
@@ -40,6 +41,7 @@
     "eslint-plugin-mocha": "^1.1.0",
     "mocha": "^2.4.5",
     "mochify": "^2.17.0",
+    "mochify-istanbul": "^2.4.1",
     "pre-commit": "^1.1.2",
     "referee": "^1.2.0"
   },
