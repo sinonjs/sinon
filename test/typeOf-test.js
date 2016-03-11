@@ -1,5 +1,3 @@
-/*eslint-env mocha*/
-/*eslint max-nested-callbacks: 0*/
 "use strict";
 
 var referee = require("referee");

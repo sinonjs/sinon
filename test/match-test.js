@@ -1,5 +1,3 @@
-/*eslint-env mocha*/
-/*eslint max-nested-callbacks: [1, 3]*/
 "use strict";
 
 var assert = require("referee").assert;
