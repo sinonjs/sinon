@@ -50,9 +50,10 @@ var assertArrayBufferMatches = function (actual, expected, encoding) {
 
 var assertBlobMatches = function (actual, expected, done) {
     var actualReader = new FileReader();
-    actualReader.onloadend = done(function () {
+    actualReader.onloadend = function () {
         assert.same(actualReader.result, expected);
-    });
+        done();
+    };
     actualReader.readAsText(actual);
 };
 
