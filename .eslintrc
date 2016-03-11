@@ -5,7 +5,11 @@
         "node": true,
         "amd": true
     },
+    "plugins": [
+        "mocha"
+    ],
     "rules": {
+        "mocha/no-exclusive-tests": 2,
         "no-alert": 2,
         "no-array-constructor": 2,
         "no-bitwise": 2,
