@@ -1,47 +1,47 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("../lib/sinon");
-var assert = buster.assert;
+var assert = referee.assert;
 
-buster.testCase("sinon.typeOf", {
-    "returns boolean": function () {
+describe("sinon.typeOf", function () {
+    it("returns boolean", function () {
         assert.equals(sinon.typeOf(false), "boolean");
-    },
+    });
 
-    "returns string": function () {
+    it("returns string", function () {
         assert.equals(sinon.typeOf("Sinon.JS"), "string");
-    },
+    });
 
-    "returns number": function () {
+    it("returns number", function () {
         assert.equals(sinon.typeOf(123), "number");
-    },
+    });
 
-    "returns object": function () {
+    it("returns object", function () {
         assert.equals(sinon.typeOf({}), "object");
-    },
+    });
 
-    "returns function": function () {
+    it("returns function", function () {
         assert.equals(sinon.typeOf(function () {}), "function");
-    },
+    });
 
-    "returns undefined": function () {
+    it("returns undefined", function () {
         assert.equals(sinon.typeOf(undefined), "undefined");
-    },
+    });
 
-    "returns null": function () {
+    it("returns null", function () {
         assert.equals(sinon.typeOf(null), "null");
-    },
+    });
 
-    "returns array": function () {
+    it("returns array", function () {
         assert.equals(sinon.typeOf([]), "array");
-    },
+    });
 
-    "returns regexp": function () {
+    it("returns regexp", function () {
         assert.equals(sinon.typeOf(/.*/), "regexp");
-    },
+    });
 
-    "returns date": function () {
+    it("returns date", function () {
         assert.equals(sinon.typeOf(new Date()), "date");
-    }
+    });
 });

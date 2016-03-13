@@ -1,15 +1,15 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("../../lib/sinon");
-var assert = buster.assert;
+var assert = referee.assert;
 
-buster.testCase("sinon.EventTarget", {
-    setUp: function () {
+describe("sinon.EventTarget", function () {
+    beforeEach(function () {
         this.target = sinon.extend({}, sinon.EventTarget);
-    },
+    });
 
-    "notifies event listener": function () {
+    it("notifies event listener", function () {
         var listener = sinon.spy();
         this.target.addEventListener("dummy", listener);
 
@@ -18,9 +18,9 @@ buster.testCase("sinon.EventTarget", {
 
         assert(listener.calledOnce);
         assert(listener.calledWith(event));
-    },
+    });
 
-    "notifies event listener with target as this": function () {
+    it("notifies event listener with target as this", function () {
         var listener = sinon.spy();
         this.target.addEventListener("dummy", listener);
 
@@ -28,9 +28,9 @@ buster.testCase("sinon.EventTarget", {
         this.target.dispatchEvent(event);
 
         assert(listener.calledOn(this.target));
-    },
+    });
 
-    "notifies all event listeners": function () {
+    it("notifies all event listeners", function () {
         var listeners = [sinon.spy(), sinon.spy()];
         this.target.addEventListener("dummy", listeners[0]);
         this.target.addEventListener("dummy", listeners[1]);
@@ -40,18 +40,18 @@ buster.testCase("sinon.EventTarget", {
 
         assert(listeners[0].calledOnce);
         assert(listeners[0].calledOnce);
-    },
+    });
 
-    "notifies event listener of type listener": function () {
+    it("notifies event listener of type listener", function () {
         var listener = { handleEvent: sinon.spy() };
         this.target.addEventListener("dummy", listener);
 
         this.target.dispatchEvent(new sinon.Event("dummy"));
 
         assert(listener.handleEvent.calledOnce);
-    },
+    });
 
-    "does not notify listeners of other events": function () {
+    it("does not notify listeners of other events", function () {
         var listeners = [sinon.spy(), sinon.spy()];
         this.target.addEventListener("dummy", listeners[0]);
         this.target.addEventListener("other", listeners[1]);
@@ -59,9 +59,9 @@ buster.testCase("sinon.EventTarget", {
         this.target.dispatchEvent(new sinon.Event("dummy"));
 
         assert.isFalse(listeners[1].called);
-    },
+    });
 
-    "does not notify unregistered listeners": function () {
+    it("does not notify unregistered listeners", function () {
         var listener = sinon.spy();
         this.target.addEventListener("dummy", listener);
         this.target.removeEventListener("dummy", listener);
@@ -69,9 +69,9 @@ buster.testCase("sinon.EventTarget", {
         this.target.dispatchEvent(new sinon.Event("dummy"));
 
         assert.isFalse(listener.called);
-    },
+    });
 
-    "notifies existing listeners after removing one": function () {
+    it("notifies existing listeners after removing one", function () {
         var listeners = [sinon.spy(), sinon.spy(), sinon.spy()];
         this.target.addEventListener("dummy", listeners[0]);
         this.target.addEventListener("dummy", listeners[1]);
@@ -82,18 +82,18 @@ buster.testCase("sinon.EventTarget", {
 
         assert(listeners[0].calledOnce);
         assert(listeners[2].calledOnce);
-    },
+    });
 
-    "returns false when event.preventDefault is not called": function () {
+    it("returns false when event.preventDefault is not called", function () {
         this.target.addEventListener("dummy", sinon.spy());
 
         var event = new sinon.Event("dummy");
         var result = this.target.dispatchEvent(event);
 
         assert.isFalse(result);
-    },
+    });
 
-    "returns true when event.preventDefault is called": function () {
+    it("returns true when event.preventDefault is called", function () {
         this.target.addEventListener("dummy", function (e) {
             e.preventDefault();
         });
@@ -101,9 +101,9 @@ buster.testCase("sinon.EventTarget", {
         var result = this.target.dispatchEvent(new sinon.Event("dummy"));
 
         assert.isTrue(result);
-    },
+    });
 
-    "notifies ProgressEvent listener with progress data ": function () {
+    it("notifies ProgressEvent listener with progress data ", function () {
         var listener = sinon.spy();
         this.target.addEventListener("dummyProgress", listener);
 
@@ -113,9 +113,9 @@ buster.testCase("sinon.EventTarget", {
         assert.isTrue(progressEvent.lengthComputable);
         assert(listener.calledOnce);
         assert(listener.calledWith(progressEvent));
-    },
+    });
 
-    "notifies CustomEvent listener with custom data": function () {
+    it("notifies CustomEvent listener with custom data", function () {
         var listener = sinon.spy();
         this.target.addEventListener("dummyCustom", listener);
 
@@ -124,5 +124,5 @@ buster.testCase("sinon.EventTarget", {
 
         assert(listener.calledOnce);
         assert(listener.calledWith(customEvent));
-    }
+    });
 });

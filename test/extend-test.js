@@ -1,19 +1,19 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var sinon = require("../lib/sinon");
-var assert = buster.assert;
+var assert = referee.assert;
 
-buster.testCase("sinon.extend", {
-    "should return unaltered target when only one argument": function () {
+describe("sinon.extend", function () {
+    it("should return unaltered target when only one argument", function () {
         var target = { hello: "world" };
 
         sinon.extend(target);
 
         assert.equals(target, { hello: "world" });
-    },
+    });
 
-    "should copy all (own) properties into first argument, from all subsequent arguments": function () {
+    it("should copy all (own) properties into first argument, from all subsequent arguments", function () {
         var target = { hello: "world" };
 
         sinon.extend(target, { a: "a" }, { b: "b" });
@@ -21,9 +21,9 @@ buster.testCase("sinon.extend", {
         assert.equals(target.hello, "world");
         assert.equals(target.a, "a");
         assert.equals(target.b, "b");
-    },
+    });
 
-    "should copy toString method into target": function () {
+    it("should copy toString method into target", function () {
         var target = {
             hello: "world",
             toString: function () {
@@ -39,9 +39,9 @@ buster.testCase("sinon.extend", {
         sinon.extend(target, source);
 
         assert.same(target.toString, source.toString);
-    },
+    });
 
-    "must copy the last occuring property into the target": function () {
+    it("must copy the last occuring property into the target", function () {
         var target = { a: 0, b: 0, c: 0, d: 0 };
         var source1 = { a: 1, b: 1, c: 1 };
         var source2 = { a: 2, b: 2 };
@@ -53,9 +53,9 @@ buster.testCase("sinon.extend", {
         assert.equals(target.b, 2);
         assert.equals(target.c, 1);
         assert.equals(target.d, 0);
-    },
+    });
 
-    "copies all properties": function () {
+    it("copies all properties", function () {
         var object1 = {
             prop1: null,
             prop2: false
@@ -76,5 +76,5 @@ buster.testCase("sinon.extend", {
         };
 
         assert.equals(result, expected);
-    }
+    });
 });

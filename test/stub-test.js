@@ -1,25 +1,25 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
 var sinonMatch = require("../lib/sinon/match");
 var createInstance = require("../lib/sinon/util/core/create");
-var assert = buster.assert;
-var refute = buster.refute;
-var fail = buster.referee.fail;
+var assert = referee.assert;
+var refute = referee.refute;
+var fail = referee.fail;
 
-buster.testCase("stub", {
-    "is spy": function () {
+describe("stub", function () {
+    it("is spy", function () {
         var stub = createStub.create();
 
         assert.isFalse(stub.called);
         assert.isFunction(stub.calledWith);
         assert.isFunction(stub.calledOn);
-    },
+    });
 
-    "fails if stubbing property on null": function () {
+    it("fails if stubbing property on null", function () {
         var error;
 
         try {
@@ -29,9 +29,9 @@ buster.testCase("stub", {
         }
 
         assert.equals(error.message, "Trying to stub property 'prop' of null");
-    },
+    });
 
-    "should contain asynchronous versions of callsArg*, and yields* methods": function () {
+    it("should contain asynchronous versions of callsArg*, and yields* methods", function () {
         var stub = createStub.create();
 
         var syncVersions = 0;
@@ -49,9 +49,9 @@ buster.testCase("stub", {
 
         assert.same(syncVersions, asyncVersions,
             "Stub prototype should contain same amount of synchronous and asynchronous methods");
-    },
+    });
 
-    "should allow overriding async behavior with sync behavior": function () {
+    it("should allow overriding async behavior with sync behavior", function () {
         var stub = createStub();
         var callback = createSpy();
 
@@ -60,105 +60,103 @@ buster.testCase("stub", {
         stub(1, callback);
 
         assert(callback.called);
-    },
+    });
 
-    ".returns": {
-        "returns specified value": function () {
+    describe(".returns", function () {
+        it("returns specified value", function () {
             var stub = createStub.create();
             var object = {};
             stub.returns(object);
 
             assert.same(stub(), object);
-        },
+        });
 
-        "returns should return stub": function () {
+        it("returns should return stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.returns(""), stub);
-        },
+        });
 
-        "returns undefined": function () {
+        it("returns undefined", function () {
             var stub = createStub.create();
 
             refute.defined(stub());
-        },
+        });
 
-        "supersedes previous throws": function () {
+        it("supersedes previous throws", function () {
             var stub = createStub.create();
             stub.throws().returns(1);
 
             refute.exception(function () {
                 stub();
             });
-        }
-    },
+        });
+    });
 
-    ".returnsArg": {
-        "returns argument at specified index": function () {
+    describe(".returnsArg", function () {
+        it("returns argument at specified index", function () {
             var stub = createStub.create();
             stub.returnsArg(0);
             var object = {};
 
             assert.same(stub(object), object);
-        },
+        });
 
-        "returns stub": function () {
+        it("returns stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.returnsArg(0), stub);
-        },
+        });
 
-        "throws if no index is specified": function () {
+        it("throws if no index is specified", function () {
             var stub = createStub.create();
 
             assert.exception(function () {
                 stub.returnsArg();
             }, "TypeError");
-        }
-    },
+        });
+    });
 
-    ".returnsThis": {
-        "stub returns this": function () {
+    describe(".returnsThis", function () {
+        it("stub returns this", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.returnsThis();
 
             assert.same(instance.stub(), instance);
-        },
+        });
 
-        "stub returns undefined when detached": {
-            requiresSupportFor: {
-                strictMode: (function () {
-                    return this;
-                }()) === undefined
-            },
-            "": function () {
+        var strictMode = (function () {
+            return this;
+        }()) === undefined;
+        if (strictMode) {
+            it("stub returns undefined when detached", function () {
                 var stub = createStub.create();
                 stub.returnsThis();
 
                 // Due to strict mode, would be `global` otherwise
                 assert.same(stub(), undefined);
-            }
-        },
+            });
+        }
 
-        "stub respects call/apply": function () {
+        it("stub respects call/apply", function () {
             var stub = createStub.create();
             stub.returnsThis();
             var object = {};
 
             assert.same(stub.call(object), object);
             assert.same(stub.apply(object), object);
-        },
+        });
 
-        "returns stub": function () {
+        it("returns stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.returnsThis(), stub);
-        }
-    },
+        });
+    });
 
-    ".throws": {
-        "throws specified exception": function () {
+    describe(".throws", function () {
+        it("throws specified exception", function () {
             var stub = createStub.create();
             var error = new Error();
             stub.throws(error);
@@ -169,15 +167,15 @@ buster.testCase("stub", {
             } catch (e) {
                 assert.same(e, error);
             }
-        },
+        });
 
-        "returns stub": function () {
+        it("returns stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.throws({}), stub);
-        },
+        });
 
-        "sets type of exception to throw": function () {
+        it("sets type of exception to throw", function () {
             var stub = createStub.create();
             var exceptionType = "TypeError";
             stub.throws(exceptionType);
@@ -185,43 +183,43 @@ buster.testCase("stub", {
             assert.exception(function () {
                 stub();
             }, exceptionType);
-        },
+        });
 
-        "specifies exception message": function () {
+        it("specifies exception message", function () {
             var stub = createStub.create();
             var message = "Oh no!";
             stub.throws("Error", message);
 
             try {
                 stub();
-                buster.referee.fail("Expected stub to throw");
+                referee.fail("Expected stub to throw");
             } catch (e) {
                 assert.equals(e.message, message);
             }
-        },
+        });
 
-        "does not specify exception message if not provided": function () {
+        it("does not specify exception message if not provided", function () {
             var stub = createStub.create();
             stub.throws("Error");
 
             try {
                 stub();
-                buster.referee.fail("Expected stub to throw");
+                referee.fail("Expected stub to throw");
             } catch (e) {
                 assert.equals(e.message, "");
             }
-        },
+        });
 
-        "throws generic error": function () {
+        it("throws generic error", function () {
             var stub = createStub.create();
             stub.throws();
 
             assert.exception(function () {
                 stub();
             }, "Error");
-        },
+        });
 
-        "resets 'invoking' flag": function () {
+        it("resets 'invoking' flag", function () {
             var stub = createStub.create();
             stub.throws();
 
@@ -230,58 +228,58 @@ buster.testCase("stub", {
             } catch (e) {
                 refute.defined(stub.invoking);
             }
-        }
-    },
+        });
+    });
 
-    ".callsArg": {
-        setUp: function () {
+    describe(".callsArg", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
-        },
+        });
 
-        "calls argument at specified index": function () {
+        it("calls argument at specified index", function () {
             this.stub.callsArg(2);
             var callback = createStub.create();
 
             this.stub(1, 2, callback);
 
             assert(callback.called);
-        },
+        });
 
-        "returns stub": function () {
+        it("returns stub", function () {
             assert.isFunction(this.stub.callsArg(2));
-        },
+        });
 
-        "throws if argument at specified index is not callable": function () {
+        it("throws if argument at specified index is not callable", function () {
             this.stub.callsArg(0);
 
             assert.exception(function () {
                 this.stub(1);
             }, "TypeError");
-        },
+        });
 
-        "throws if no index is specified": function () {
+        it("throws if no index is specified", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArg();
             }, "TypeError");
-        },
+        });
 
-        "throws if index is not number": function () {
+        it("throws if index is not number", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArg({});
             }, "TypeError");
-        }
-    },
+        });
+    });
 
-    ".callsArgWith": {
-        setUp: function () {
+    describe(".callsArgWith", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
-        },
+        });
 
-        "calls argument at specified index with provided args": function () {
+        it("calls argument at specified index with provided args", function () {
             var object = {};
             this.stub.callsArgWith(1, object);
             var callback = createStub.create();
@@ -289,24 +287,24 @@ buster.testCase("stub", {
             this.stub(1, callback);
 
             assert(callback.calledWith(object));
-        },
+        });
 
-        "returns function": function () {
+        it("returns function", function () {
             var stub = this.stub.callsArgWith(2, 3);
 
             assert.isFunction(stub);
-        },
+        });
 
-        "calls callback without args": function () {
+        it("calls callback without args", function () {
             this.stub.callsArgWith(1);
             var callback = createStub.create();
 
             this.stub(1, callback);
 
             assert(callback.calledWith());
-        },
+        });
 
-        "calls callback with multiple args": function () {
+        it("calls callback with multiple args", function () {
             var object = {};
             var array = [];
             this.stub.callsArgWith(1, object, array);
@@ -315,34 +313,34 @@ buster.testCase("stub", {
             this.stub(1, callback);
 
             assert(callback.calledWith(object, array));
-        },
+        });
 
-        "throws if no index is specified": function () {
+        it("throws if no index is specified", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgWith();
             }, "TypeError");
-        },
+        });
 
-        "throws if index is not number": function () {
+        it("throws if index is not number", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgWith({});
             }, "TypeError");
-        }
-    },
+        });
+    });
 
-    ".callsArgOn": {
-        setUp: function () {
+    describe(".callsArgOn", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = {
                 foo: "bar"
             };
-        },
+        });
 
-        "calls argument at specified index": function () {
+        it("calls argument at specified index", function () {
             this.stub.callsArgOn(2, this.fakeContext);
             var callback = createStub.create();
 
@@ -350,9 +348,9 @@ buster.testCase("stub", {
 
             assert(callback.called);
             assert(callback.calledOn(this.fakeContext));
-        },
+        });
 
-        "calls argument at specified index with undefined context": function () {
+        it("calls argument at specified index with undefined context", function () {
             this.stub.callsArgOn(2, undefined);
             var callback = createStub.create();
 
@@ -360,9 +358,9 @@ buster.testCase("stub", {
 
             assert(callback.called);
             assert(callback.calledOn(undefined));
-        },
+        });
 
-        "calls argument at specified index with number context": function () {
+        it("calls argument at specified index with number context", function () {
             this.stub.callsArgOn(2, 5);
             var callback = createStub.create();
 
@@ -370,46 +368,46 @@ buster.testCase("stub", {
 
             assert(callback.called);
             assert(callback.calledOn(5));
-        },
+        });
 
-        "returns stub": function () {
+        it("returns stub", function () {
             var stub = this.stub.callsArgOn(2, this.fakeContext);
 
             assert.isFunction(stub);
-        },
+        });
 
-        "throws if argument at specified index is not callable": function () {
+        it("throws if argument at specified index is not callable", function () {
             this.stub.callsArgOn(0, this.fakeContext);
 
             assert.exception(function () {
                 this.stub(1);
             }, "TypeError");
-        },
+        });
 
-        "throws if no index is specified": function () {
+        it("throws if no index is specified", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgOn();
             }, "TypeError");
-        },
+        });
 
-        "throws if index is not number": function () {
+        it("throws if index is not number", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgOn(this.fakeContext, 2);
             }, "TypeError");
-        }
-    },
+        });
+    });
 
-    ".callsArgOnWith": {
-        setUp: function () {
+    describe(".callsArgOnWith", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "calls argument at specified index with provided args": function () {
+        it("calls argument at specified index with provided args", function () {
             var object = {};
             this.stub.callsArgOnWith(1, this.fakeContext, object);
             var callback = createStub.create();
@@ -418,9 +416,9 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object));
             assert(callback.calledOn(this.fakeContext));
-        },
+        });
 
-        "calls argument at specified index with provided args and undefined context": function () {
+        it("calls argument at specified index with provided args and undefined context", function () {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
             var callback = createStub.create();
@@ -429,9 +427,9 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object));
             assert(callback.calledOn(undefined));
-        },
+        });
 
-        "calls argument at specified index with provided args and number context": function () {
+        it("calls argument at specified index with provided args and number context", function () {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
             var callback = createStub.create();
@@ -440,9 +438,9 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object));
             assert(callback.calledOn(5));
-        },
+        });
 
-        "calls argument at specified index with provided args with undefined context": function () {
+        it("calls argument at specified index with provided args with undefined context", function () {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
             var callback = createStub.create();
@@ -451,9 +449,9 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object));
             assert(callback.calledOn(undefined));
-        },
+        });
 
-        "calls argument at specified index with provided args with number context": function () {
+        it("calls argument at specified index with provided args with number context", function () {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
             var callback = createStub.create();
@@ -462,15 +460,15 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object));
             assert(callback.calledOn(5));
-        },
+        });
 
-        "returns function": function () {
+        it("returns function", function () {
             var stub = this.stub.callsArgOnWith(2, this.fakeContext, 3);
 
             assert.isFunction(stub);
-        },
+        });
 
-        "calls callback without args": function () {
+        it("calls callback without args", function () {
             this.stub.callsArgOnWith(1, this.fakeContext);
             var callback = createStub.create();
 
@@ -478,9 +476,9 @@ buster.testCase("stub", {
 
             assert(callback.calledWith());
             assert(callback.calledOn(this.fakeContext));
-        },
+        });
 
-        "calls callback with multiple args": function () {
+        it("calls callback with multiple args", function () {
             var object = {};
             var array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
@@ -490,32 +488,32 @@ buster.testCase("stub", {
 
             assert(callback.calledWith(object, array));
             assert(callback.calledOn(this.fakeContext));
-        },
+        });
 
-        "throws if no index is specified": function () {
+        it("throws if no index is specified", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgOnWith();
             }, "TypeError");
-        },
+        });
 
-        "throws if index is not number": function () {
+        it("throws if index is not number", function () {
             var stub = this.stub;
 
             assert.exception(function () {
                 stub.callsArgOnWith({});
             }, "TypeError");
-        }
-    },
+        });
+    });
 
-    ".objectMethod": {
-        setUp: function () {
+    describe(".objectMethod", function () {
+        beforeEach(function () {
             this.method = function () {};
             this.object = { method: this.method };
-        },
+        });
 
-        "// returns function from wrapMethod": function () {
+        it.skip("returns function from wrapMethod", function () {
             /*
             var wrapper = function () {};
             sinon.wrapMethod = function () {
@@ -526,9 +524,9 @@ buster.testCase("stub", {
 
             assert.same(result, wrapper);
             */
-        },
+        });
 
-        "// passes object and method to wrapMethod": function () {
+        it.skip("passes object and method to wrapMethod", function () {
             /*
             var wrapper = function () {};
             var args;
@@ -543,9 +541,9 @@ buster.testCase("stub", {
             assert.same(args[0], this.object);
             assert.same(args[1], "method");
             */
-        },
+        });
 
-        "uses provided function as stub": function () {
+        it("uses provided function as stub", function () {
             var called = false;
             var stub = createStub(this.object, "method", function () {
                 called = true;
@@ -554,55 +552,55 @@ buster.testCase("stub", {
             stub();
 
             assert(called);
-        },
+        });
 
-        "wraps provided function": function () {
+        it("wraps provided function", function () {
             var customStub = function () {};
             var stub = createStub(this.object, "method", customStub);
 
             refute.same(stub, customStub);
             assert.isFunction(stub.restore);
-        },
+        });
 
-        "throws if third argument is provided but not a function or proprety descriptor": function () {
+        it("throws if third argument is provided but not a function or proprety descriptor", function () {
             var object = this.object;
 
             assert.exception(function () {
                 createStub(object, "method", 1);
             }, "TypeError");
-        },
+        });
 
-        "stubbed method should be proper stub": function () {
+        it("stubbed method should be proper stub", function () {
             var stub = createStub(this.object, "method");
 
             assert.isFunction(stub.returns);
             assert.isFunction(stub.throws);
-        },
+        });
 
-        "custom stubbed method should not be proper stub": function () {
+        it("custom stubbed method should not be proper stub", function () {
             var stub = createStub(this.object, "method", function () {});
 
             refute.defined(stub.returns);
             refute.defined(stub.throws);
-        },
+        });
 
-        "stub should be spy": function () {
+        it("stub should be spy", function () {
             var stub = createStub(this.object, "method");
             this.object.method();
 
             assert(stub.called);
             assert(stub.calledOn(this.object));
-        },
+        });
 
-        "custom stubbed method should be spy": function () {
+        it("custom stubbed method should be spy", function () {
             var stub = createStub(this.object, "method", function () {});
             this.object.method();
 
             assert(stub.called);
             assert(stub.calledOn(this.object));
-        },
+        });
 
-        "stub should affect spy": function () {
+        it("stub should affect spy", function () {
             var stub = createStub(this.object, "method");
             stub.throws("TypeError");
 
@@ -612,16 +610,16 @@ buster.testCase("stub", {
             catch (e) {} // eslint-disable-line no-empty
 
             assert(stub.threw("TypeError"));
-        },
+        });
 
-        "returns standalone stub without arguments": function () {
+        it("returns standalone stub without arguments", function () {
             var stub = createStub();
 
             assert.isFunction(stub);
             assert.isFalse(stub.called);
-        },
+        });
 
-        "throws if property is not a function": function () {
+        it("throws if property is not a function", function () {
             var obj = { someProp: 42 };
 
             assert.exception(function () {
@@ -629,9 +627,9 @@ buster.testCase("stub", {
             });
 
             assert.equals(obj.someProp, 42);
-        },
+        });
 
-        "successfully stubs falsey properties": function () {
+        it("successfully stubs falsey properties", function () {
             var obj = { 0: function () { } };
 
             createStub(obj, 0, function () {
@@ -639,17 +637,17 @@ buster.testCase("stub", {
             });
 
             assert.equals(obj[0](), "stubbed value");
-        },
+        });
 
-        "does not stub function object": function () {
+        it("does not stub function object", function () {
             assert.exception(function () {
                 createStub(function () {});
             });
-        }
-    },
+        });
+    });
 
-    everything: {
-        "stubs all methods of object without property": function () {
+    describe("everything", function () {
+        it("stubs all methods of object without property", function () {
             var obj = {
                 func1: function () {},
                 func2: function () {},
@@ -661,9 +659,9 @@ buster.testCase("stub", {
             assert.isFunction(obj.func1.restore);
             assert.isFunction(obj.func2.restore);
             assert.isFunction(obj.func3.restore);
-        },
+        });
 
-        "stubs prototype methods": function () {
+        it("stubs prototype methods", function () {
             function Obj() {}
             Obj.prototype.func1 = function () {};
             var obj = new Obj();
@@ -671,22 +669,22 @@ buster.testCase("stub", {
             createStub(obj);
 
             assert.isFunction(obj.func1.restore);
-        },
+        });
 
-        "returns object": function () {
+        it("returns object", function () {
             var object = {};
 
             assert.same(createStub(object), object);
-        },
+        });
 
-        "only stubs functions": function () {
+        it("only stubs functions", function () {
             var object = { foo: "bar" };
             createStub(object);
 
             assert.equals(object.foo, "bar");
-        },
+        });
 
-        "handles non-enumerable properties": function () {
+        it("handles non-enumerable properties", function () {
             var obj = {
                 func1: function () {},
                 func2: function () {}
@@ -703,9 +701,9 @@ buster.testCase("stub", {
             assert.isFunction(obj.func1.restore);
             assert.isFunction(obj.func2.restore);
             assert.isFunction(obj.func3.restore);
-        },
+        });
 
-        "handles non-enumerable properties on prototypes": function () {
+        it("handles non-enumerable properties on prototypes", function () {
             function Obj() {}
             Object.defineProperty(Obj.prototype, "func1", {
                 value: function () {},
@@ -718,9 +716,9 @@ buster.testCase("stub", {
             createStub(obj);
 
             assert.isFunction(obj.func1.restore);
-        },
+        });
 
-        "does not stub non-enumerable properties from Object.prototype": function () {
+        it("does not stub non-enumerable properties from Object.prototype", function () {
             var obj = {};
 
             createStub(obj);
@@ -728,9 +726,9 @@ buster.testCase("stub", {
             refute.isFunction(obj.toString.restore);
             refute.isFunction(obj.toLocaleString.restore);
             refute.isFunction(obj.propertyIsEnumerable.restore);
-        },
+        });
 
-        "does not fail on overrides": function () {
+        it("does not fail on overrides", function () {
             var parent = {
                 func: function () {}
             };
@@ -740,9 +738,9 @@ buster.testCase("stub", {
             refute.exception(function () {
                 createStub(child);
             });
-        },
+        });
 
-        "does not call getter during restore": function () {
+        it("does not call getter during restore", function () {
             var obj = {
                 get prop() {
                     fail("should not call getter");
@@ -755,11 +753,11 @@ buster.testCase("stub", {
             assert.equals(obj.prop, 43);
 
             stub.restore();
-        }
-    },
+        });
+    });
 
-    "stubbed function": {
-        "throws if stubbing non-existent property": function () {
+    describe("stubbed function", function () {
+        it("throws if stubbing non-existent property", function () {
             var myObj = {};
 
             assert.exception(function () {
@@ -767,41 +765,41 @@ buster.testCase("stub", {
             });
 
             refute.defined(myObj.ouch);
-        },
+        });
 
-        "has toString method": function () {
+        it("has toString method", function () {
             var obj = { meth: function () {} };
             createStub(obj, "meth");
 
             assert.equals(obj.meth.toString(), "meth");
-        },
+        });
 
-        "toString should say 'stub' when unable to infer name": function () {
+        it("toString should say 'stub' when unable to infer name", function () {
             var stub = createStub();
 
             assert.equals(stub.toString(), "stub");
-        },
+        });
 
-        "toString should prefer property name if possible": function () {
+        it("toString should prefer property name if possible", function () {
             var obj = {};
             obj.meth = createStub();
             obj.meth();
 
             assert.equals(obj.meth.toString(), "meth");
-        }
-    },
+        });
+    });
 
-    ".yields": {
-        "invokes only argument as callback": function () {
+    describe(".yields", function () {
+        it("invokes only argument as callback", function () {
             var stub = createStub().yields();
             var spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "throws understandable error if no callback is passed": function () {
+        it("throws understandable error if no callback is passed", function () {
             var stub = createStub().yields();
 
             try {
@@ -810,9 +808,9 @@ buster.testCase("stub", {
             } catch (e) {
                 assert.equals(e.message, "stub expected to yield, but no callback was passed.");
             }
-        },
+        });
 
-        "includes stub name and actual arguments in error": function () {
+        it("includes stub name and actual arguments in error", function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = createStub(myObj, "somethingAwesome").yields();
 
@@ -823,18 +821,18 @@ buster.testCase("stub", {
                 assert.equals(e.message, "somethingAwesome expected to yield, but no callback " +
                               "was passed. Received [23, 42]");
             }
-        },
+        });
 
-        "invokes last argument as callback": function () {
+        it("invokes last argument as callback", function () {
             var stub = createStub().yields();
             var spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "invokes first of two callbacks": function () {
+        it("invokes first of two callbacks", function () {
             var stub = createStub().yields();
             var spy = createSpy();
             var spy2 = createSpy();
@@ -842,18 +840,18 @@ buster.testCase("stub", {
 
             assert(spy.calledOnce);
             assert(!spy2.called);
-        },
+        });
 
-        "invokes callback with arguments": function () {
+        it("invokes callback with arguments", function () {
             var obj = { id: 42 };
             var stub = createStub().yields(obj, "Crazy");
             var spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
-        },
+        });
 
-        "throws if callback throws": function () {
+        it("throws if callback throws", function () {
             var obj = { id: 42 };
             var stub = createStub().yields(obj, "Crazy");
             var callback = createStub().throws();
@@ -861,52 +859,52 @@ buster.testCase("stub", {
             assert.exception(function () {
                 stub(callback);
             });
-        },
+        });
 
-        "plays nice with throws": function () {
+        it("plays nice with throws", function () {
             var stub = createStub().throws().yields();
             var spy = createSpy();
             assert.exception(function () {
                 stub(spy);
             });
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returns": function () {
+        it("plays nice with returns", function () {
             var obj = {};
             var stub = createStub().returns(obj).yields();
             var spy = createSpy();
             assert.same(stub(spy), obj);
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returnsArg": function () {
+        it("plays nice with returnsArg", function () {
             var stub = createStub().returnsArg(0).yields();
             var spy = createSpy();
             assert.same(stub(spy), spy);
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returnsThis": function () {
+        it("plays nice with returnsThis", function () {
             var obj = {};
             var stub = createStub().returnsThis().yields();
             var spy = createSpy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
-        }
-    },
+        });
+    });
 
-    ".yieldsRight": {
-        "invokes only argument as callback": function () {
+    describe(".yieldsRight", function () {
+        it("invokes only argument as callback", function () {
             var stub = createStub().yieldsRight();
             var spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "throws understandable error if no callback is passed": function () {
+        it("throws understandable error if no callback is passed", function () {
             var stub = createStub().yieldsRight();
 
             try {
@@ -915,9 +913,9 @@ buster.testCase("stub", {
             } catch (e) {
                 assert.equals(e.message, "stub expected to yield, but no callback was passed.");
             }
-        },
+        });
 
-        "includes stub name and actual arguments in error": function () {
+        it("includes stub name and actual arguments in error", function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = createStub(myObj, "somethingAwesome").yieldsRight();
 
@@ -928,18 +926,18 @@ buster.testCase("stub", {
                 assert.equals(e.message, "somethingAwesome expected to yield, but no callback " +
                 "was passed. Received [23, 42]");
             }
-        },
+        });
 
-        "invokes last argument as callback": function () {
+        it("invokes last argument as callback", function () {
             var stub = createStub().yieldsRight();
             var spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "invokes the last of two callbacks": function () {
+        it("invokes the last of two callbacks", function () {
             var stub = createStub().yieldsRight();
             var spy = createSpy();
             var spy2 = createSpy();
@@ -947,18 +945,18 @@ buster.testCase("stub", {
 
             assert(!spy.called);
             assert(spy2.calledOnce);
-        },
+        });
 
-        "invokes callback with arguments": function () {
+        it("invokes callback with arguments", function () {
             var obj = { id: 42 };
             var stub = createStub().yieldsRight(obj, "Crazy");
             var spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
-        },
+        });
 
-        "throws if callback throws": function () {
+        it("throws if callback throws", function () {
             var obj = { id: 42 };
             var stub = createStub().yieldsRight(obj, "Crazy");
             var callback = createStub().throws();
@@ -966,48 +964,48 @@ buster.testCase("stub", {
             assert.exception(function () {
                 stub(callback);
             });
-        },
+        });
 
-        "plays nice with throws": function () {
+        it("plays nice with throws", function () {
             var stub = createStub().throws().yieldsRight();
             var spy = createSpy();
             assert.exception(function () {
                 stub(spy);
             });
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returns": function () {
+        it("plays nice with returns", function () {
             var obj = {};
             var stub = createStub().returns(obj).yieldsRight();
             var spy = createSpy();
             assert.same(stub(spy), obj);
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returnsArg": function () {
+        it("plays nice with returnsArg", function () {
             var stub = createStub().returnsArg(0).yieldsRight();
             var spy = createSpy();
             assert.same(stub(spy), spy);
             assert(spy.calledOnce);
-        },
+        });
 
-        "plays nice with returnsThis": function () {
+        it("plays nice with returnsThis", function () {
             var obj = {};
             var stub = createStub().returnsThis().yieldsRight();
             var spy = createSpy();
             assert.same(stub.call(obj, spy), obj);
             assert(spy.calledOnce);
-        }
-    },
+        });
+    });
 
-    ".yieldsOn": {
-        setUp: function () {
+    describe(".yieldsOn", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "invokes only argument as callback": function () {
+        it("invokes only argument as callback", function () {
             var spy = createSpy();
 
             this.stub.yieldsOn(this.fakeContext);
@@ -1016,15 +1014,15 @@ buster.testCase("stub", {
             assert(spy.calledOnce);
             assert(spy.calledOn(this.fakeContext));
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "throws if no context is specified": function () {
+        it("throws if no context is specified", function () {
             assert.exception(function () {
                 this.stub.yieldsOn();
             }, "TypeError");
-        },
+        });
 
-        "throws understandable error if no callback is passed": function () {
+        it("throws understandable error if no callback is passed", function () {
             this.stub.yieldsOn(this.fakeContext);
 
             try {
@@ -1033,9 +1031,9 @@ buster.testCase("stub", {
             } catch (e) {
                 assert.equals(e.message, "stub expected to yield, but no callback was passed.");
             }
-        },
+        });
 
-        "includes stub name and actual arguments in error": function () {
+        it("includes stub name and actual arguments in error", function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = createStub(myObj, "somethingAwesome").yieldsOn(this.fakeContext);
 
@@ -1046,9 +1044,9 @@ buster.testCase("stub", {
                 assert.equals(e.message, "somethingAwesome expected to yield, but no callback " +
                               "was passed. Received [23, 42]");
             }
-        },
+        });
 
-        "invokes last argument as callback": function () {
+        it("invokes last argument as callback", function () {
             var spy = createSpy();
             this.stub.yieldsOn(this.fakeContext);
 
@@ -1057,9 +1055,9 @@ buster.testCase("stub", {
             assert(spy.calledOnce);
             assert(spy.calledOn(this.fakeContext));
             assert.equals(spy.args[0].length, 0);
-        },
+        });
 
-        "invokes first of two callbacks": function () {
+        it("invokes first of two callbacks", function () {
             var spy = createSpy();
             var spy2 = createSpy();
 
@@ -1069,9 +1067,9 @@ buster.testCase("stub", {
             assert(spy.calledOnce);
             assert(spy.calledOn(this.fakeContext));
             assert(!spy2.called);
-        },
+        });
 
-        "invokes callback with arguments": function () {
+        it("invokes callback with arguments", function () {
             var obj = { id: 42 };
             var spy = createSpy();
 
@@ -1080,9 +1078,9 @@ buster.testCase("stub", {
 
             assert(spy.calledWith(obj, "Crazy"));
             assert(spy.calledOn(this.fakeContext));
-        },
+        });
 
-        "throws if callback throws": function () {
+        it("throws if callback throws", function () {
             var obj = { id: 42 };
             var callback = createStub().throws();
 
@@ -1091,11 +1089,11 @@ buster.testCase("stub", {
             assert.exception(function () {
                 this.stub(callback);
             });
-        }
-    },
+        });
+    });
 
-    ".yieldsTo": {
-        "yields to property of object argument": function () {
+    describe(".yieldsTo", function () {
+        it("yields to property of object argument", function () {
             var stub = createStub().yieldsTo("success");
             var callback = createSpy();
 
@@ -1103,9 +1101,9 @@ buster.testCase("stub", {
 
             assert(callback.calledOnce);
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "throws understandable error if no object with callback is passed": function () {
+        it("throws understandable error if no object with callback is passed", function () {
             var stub = createStub().yieldsTo("success");
 
             try {
@@ -1115,9 +1113,9 @@ buster.testCase("stub", {
                 assert.equals(e.message, "stub expected to yield to 'success', but no object " +
                               "with such a property was passed.");
             }
-        },
+        });
 
-        "includes stub name and actual arguments in error": function () {
+        it("includes stub name and actual arguments in error", function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = createStub(myObj, "somethingAwesome").yieldsTo("success");
 
@@ -1129,18 +1127,18 @@ buster.testCase("stub", {
                               "no object with such a property was passed. " +
                               "Received [23, 42]");
             }
-        },
+        });
 
-        "invokes property on last argument as callback": function () {
+        it("invokes property on last argument as callback", function () {
             var stub = createStub().yieldsTo("success");
             var callback = createSpy();
             stub(24, {}, { success: callback });
 
             assert(callback.calledOnce);
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "invokes first of two possible callbacks": function () {
+        it("invokes first of two possible callbacks", function () {
             var stub = createStub().yieldsTo("error");
             var callback = createSpy();
             var callback2 = createSpy();
@@ -1148,18 +1146,18 @@ buster.testCase("stub", {
 
             assert(callback.calledOnce);
             assert(!callback2.called);
-        },
+        });
 
-        "invokes callback with arguments": function () {
+        it("invokes callback with arguments", function () {
             var obj = { id: 42 };
             var stub = createStub().yieldsTo("success", obj, "Crazy");
             var callback = createSpy();
             stub({ success: callback });
 
             assert(callback.calledWith(obj, "Crazy"));
-        },
+        });
 
-        "throws if callback throws": function () {
+        it("throws if callback throws", function () {
             var obj = { id: 42 };
             var stub = createStub().yieldsTo("error", obj, "Crazy");
             var callback = createStub().throws();
@@ -1167,16 +1165,16 @@ buster.testCase("stub", {
             assert.exception(function () {
                 stub({ error: callback });
             });
-        }
-    },
+        });
+    });
 
-    ".yieldsToOn": {
-        setUp: function () {
+    describe(".yieldsToOn", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "yields to property of object argument": function () {
+        it("yields to property of object argument", function () {
             this.stub.yieldsToOn("success", this.fakeContext);
             var callback = createSpy();
 
@@ -1185,9 +1183,9 @@ buster.testCase("stub", {
             assert(callback.calledOnce);
             assert(callback.calledOn(this.fakeContext));
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "yields to property of object argument with undefined context": function () {
+        it("yields to property of object argument with undefined context", function () {
             this.stub.yieldsToOn("success", undefined);
             var callback = createSpy();
 
@@ -1196,9 +1194,9 @@ buster.testCase("stub", {
             assert(callback.calledOnce);
             assert(callback.calledOn(undefined));
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "yields to property of object argument with number context": function () {
+        it("yields to property of object argument with number context", function () {
             this.stub.yieldsToOn("success", 5);
             var callback = createSpy();
 
@@ -1207,9 +1205,9 @@ buster.testCase("stub", {
             assert(callback.calledOnce);
             assert(callback.calledOn(5));
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "throws understandable error if no object with callback is passed": function () {
+        it("throws understandable error if no object with callback is passed", function () {
             this.stub.yieldsToOn("success", this.fakeContext);
 
             try {
@@ -1219,9 +1217,9 @@ buster.testCase("stub", {
                 assert.equals(e.message, "stub expected to yield to 'success', but no object " +
                               "with such a property was passed.");
             }
-        },
+        });
 
-        "includes stub name and actual arguments in error": function () {
+        it("includes stub name and actual arguments in error", function () {
             var myObj = { somethingAwesome: function () {} };
             var stub = createStub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
 
@@ -1233,9 +1231,9 @@ buster.testCase("stub", {
                               "no object with such a property was passed. " +
                               "Received [23, 42]");
             }
-        },
+        });
 
-        "invokes property on last argument as callback": function () {
+        it("invokes property on last argument as callback", function () {
             var callback = createSpy();
 
             this.stub.yieldsToOn("success", this.fakeContext);
@@ -1244,9 +1242,9 @@ buster.testCase("stub", {
             assert(callback.calledOnce);
             assert(callback.calledOn(this.fakeContext));
             assert.equals(callback.args[0].length, 0);
-        },
+        });
 
-        "invokes first of two possible callbacks": function () {
+        it("invokes first of two possible callbacks", function () {
             var callback = createSpy();
             var callback2 = createSpy();
 
@@ -1256,9 +1254,9 @@ buster.testCase("stub", {
             assert(callback.calledOnce);
             assert(callback.calledOn(this.fakeContext));
             assert(!callback2.called);
-        },
+        });
 
-        "invokes callback with arguments": function () {
+        it("invokes callback with arguments", function () {
             var obj = { id: 42 };
             var callback = createSpy();
 
@@ -1267,9 +1265,9 @@ buster.testCase("stub", {
 
             assert(callback.calledOn(this.fakeContext));
             assert(callback.calledWith(obj, "Crazy"));
-        },
+        });
 
-        "throws if callback throws": function () {
+        it("throws if callback throws", function () {
             var obj = { id: 42 };
             var callback = createStub().throws();
 
@@ -1278,34 +1276,34 @@ buster.testCase("stub", {
             assert.exception(function () {
                 this.stub({ error: callback });
             });
-        }
-    },
+        });
+    });
 
-    ".withArgs": {
-        "defines withArgs method": function () {
+    describe(".withArgs", function () {
+        it("defines withArgs method", function () {
             var stub = createStub();
 
             assert.isFunction(stub.withArgs);
-        },
+        });
 
-        "creates filtered stub": function () {
+        it("creates filtered stub", function () {
             var stub = createStub();
             var other = stub.withArgs(23);
 
             refute.same(other, stub);
             assert.isFunction(stub.returns);
             assert.isFunction(other.returns);
-        },
+        });
 
-        "filters return values based on arguments": function () {
+        it("filters return values based on arguments", function () {
             var stub = createStub().returns(23);
             stub.withArgs(42).returns(99);
 
             assert.equals(stub(), 23);
             assert.equals(stub(42), 99);
-        },
+        });
 
-        "filters exceptions based on arguments": function () {
+        it("filters exceptions based on arguments", function () {
             var stub = createStub().returns(23);
             stub.withArgs(42).throws();
 
@@ -1313,98 +1311,101 @@ buster.testCase("stub", {
             assert.exception(function () {
                 stub(42);
             });
-        },
+        });
 
-        "ensure stub recognizes sinonMatch fuzzy arguments": function () {
+        it("ensure stub recognizes sinonMatch fuzzy arguments", function () {
             var stub = createStub().returns(23);
             stub.withArgs(sinonMatch({ foo: "bar" })).returns(99);
 
             assert.equals(stub(), 23);
             assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
-        }
-    },
+        });
+    });
 
-    ".callsArgAsync": {
-        setUp: function () {
+    describe(".callsArgAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
-        },
+        });
 
-        "asynchronously calls argument at specified index": function (done) {
+        it("asynchronously calls argument at specified index", function (done) {
             this.stub.callsArgAsync(2);
             var callback = createSpy(done);
 
             this.stub(1, 2, callback);
 
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".callsArgWithAsync": {
-        setUp: function () {
+    describe(".callsArgWithAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
-        },
+        });
 
-        "asynchronously calls callback at specified index with multiple args": function (done) {
+        it("asynchronously calls callback at specified index with multiple args", function (done) {
             var object = {};
             var array = [];
             this.stub.callsArgWithAsync(1, object, array);
 
-            var callback = createSpy(done(function () {
+            var callback = createSpy(function () {
                 assert(callback.calledWith(object, array));
-            }));
+                done();
+            });
 
             this.stub(1, callback);
 
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".callsArgOnAsync": {
-        setUp: function () {
+    describe(".callsArgOnAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = {
                 foo: "bar"
             };
-        },
+        });
 
-        "asynchronously calls argument at specified index with specified context": function (done) {
+        it("asynchronously calls argument at specified index with specified context", function (done) {
             var context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
 
-            var callback = createSpy(done(function () {
+            var callback = createSpy(function () {
                 assert(callback.calledOn(context));
-            }));
+                done();
+            });
 
             this.stub(1, 2, callback);
 
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".callsArgOnWithAsync": {
-        setUp: function () {
+    describe(".callsArgOnWithAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "asynchronously calls argument at specified index with provided context and args": function (done) {
+        it("asynchronously calls argument at specified index with provided context and args", function (done) {
             var object = {};
             var context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
 
-            var callback = createSpy(done(function () {
+            var callback = createSpy(function () {
                 assert(callback.calledOn(context));
                 assert(callback.calledWith(object));
-            }));
+                done();
+            });
 
             this.stub(1, callback);
 
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".yieldsAsync": {
-        "asynchronously invokes only argument as callback": function (done) {
+    describe(".yieldsAsync", function () {
+        it("asynchronously invokes only argument as callback", function (done) {
             var stub = createStub().yieldsAsync();
 
             var spy = createSpy(done);
@@ -1412,69 +1413,72 @@ buster.testCase("stub", {
             stub(spy);
 
             assert(!spy.called);
-        }
-    },
+        });
+    });
 
-    ".yieldsOnAsync": {
-        setUp: function () {
+    describe(".yieldsOnAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "asynchronously invokes only argument as callback with given context": function (done) {
+        it("asynchronously invokes only argument as callback with given context", function (done) {
             var context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            var spy = createSpy(done(function () {
+            var spy = createSpy(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
-            }));
+                done();
+            });
 
             this.stub(spy);
 
             assert(!spy.called);
-        }
-    },
+        });
+    });
 
-    ".yieldsToAsync": {
-        "asynchronously yields to property of object argument": function (done) {
+    describe(".yieldsToAsync", function () {
+        it("asynchronously yields to property of object argument", function (done) {
             var stub = createStub().yieldsToAsync("success");
 
-            var callback = createSpy(done(function () {
+            var callback = createSpy(function () {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
-            }));
+                done();
+            });
 
             stub({ success: callback });
 
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".yieldsToOnAsync": {
-        setUp: function () {
+    describe(".yieldsToOnAsync", function () {
+        beforeEach(function () {
             this.stub = createStub.create();
             this.fakeContext = { foo: "bar" };
-        },
+        });
 
-        "asynchronously yields to property of object argument with given context": function (done) {
+        it("asynchronously yields to property of object argument with given context", function (done) {
             var context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
 
-            var callback = createSpy(done(function () {
+            var callback = createSpy(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
-            }));
+                done();
+            });
 
             this.stub({ success: callback });
             assert(!callback.called);
-        }
-    },
+        });
+    });
 
-    ".onCall": {
-        "can be used with returns to produce sequence": function () {
+    describe(".onCall", function () {
+        it("can be used with returns to produce sequence", function () {
             var stub = createStub().returns(3);
             stub.onFirstCall().returns(1)
                 .onCall(2).returns(2);
@@ -1483,18 +1487,18 @@ buster.testCase("stub", {
             assert.same(stub(), 3);
             assert.same(stub(), 2);
             assert.same(stub(), 3);
-        },
+        });
 
-        "can be used with returnsArg to produce sequence": function () {
+        it("can be used with returnsArg to produce sequence", function () {
             var stub = createStub().returns("default");
             stub.onSecondCall().returnsArg(0);
 
             assert.same(stub(1), "default");
             assert.same(stub(2), 2);
             assert.same(stub(3), "default");
-        },
+        });
 
-        "can be used with returnsThis to produce sequence": function () {
+        it("can be used with returnsThis to produce sequence", function () {
             var instance = {};
             instance.stub = createStub().returns("default");
             instance.stub.onSecondCall().returnsThis();
@@ -1502,9 +1506,9 @@ buster.testCase("stub", {
             assert.same(instance.stub(), "default");
             assert.same(instance.stub(), instance);
             assert.same(instance.stub(), "default");
-        },
+        });
 
-        "can be used with throwsException to produce sequence": function () {
+        it("can be used with throwsException to produce sequence", function () {
             var stub = createStub();
             var error = new Error();
             stub.onSecondCall().throwsException(error);
@@ -1516,10 +1520,10 @@ buster.testCase("stub", {
             } catch (e) {
                 assert.same(e, error);
             }
-        },
+        });
 
-        "in combination with withArgs": {
-            "can produce a sequence for a fake": function () {
+        describe("in combination with withArgs", function () {
+            it("can produce a sequence for a fake", function () {
                 var stub = createStub().returns(0);
                 stub.withArgs(5).returns(-1)
                     .onFirstCall().returns(1)
@@ -1530,18 +1534,18 @@ buster.testCase("stub", {
                 assert.same(stub(0), 0);
                 assert.same(stub(5), 2);
                 assert.same(stub(5), -1);
-            },
+            });
 
-            "falls back to stub default behaviour if fake does not have its own default behaviour": function () {
+            it("falls back to stub default behaviour if fake does not have its own default behaviour", function () {
                 var stub = createStub().returns(0);
                 stub.withArgs(5)
                     .onFirstCall().returns(1);
 
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 0);
-            },
+            });
 
-            "falls back to stub behaviour for call if fake does not have its own behaviour for call": function () {
+            it("falls back to stub behaviour for call if fake does not have its own behaviour for call", function () {
                 var stub = createStub().returns(0);
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.onSecondCall().returns(2);
@@ -1549,9 +1553,9 @@ buster.testCase("stub", {
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 2);
                 assert.same(stub(4), 0);
-            },
+            });
 
-            "defaults to undefined behaviour once no more calls have been defined": function () {
+            it("defaults to undefined behaviour once no more calls have been defined", function () {
                 var stub = createStub();
                 stub.withArgs(5).onFirstCall().returns(1)
                     .onSecondCall().returns(2);
@@ -1559,16 +1563,16 @@ buster.testCase("stub", {
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 2);
                 refute.defined(stub(5));
-            },
+            });
 
-            "does not create undefined behaviour just by calling onCall": function () {
+            it("does not create undefined behaviour just by calling onCall", function () {
                 var stub = createStub().returns(2);
                 stub.onFirstCall();
 
                 assert.same(stub(6), 2);
-            },
+            });
 
-            "works with fakes and reset": function () {
+            it("works with fakes and reset", function () {
                 var stub = createStub();
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.withArgs(5).onSecondCall().returns(2);
@@ -1582,18 +1586,18 @@ buster.testCase("stub", {
                 assert.same(stub(5), undefined);
                 assert.same(stub(5), undefined);
                 refute.defined(stub(5));
-            },
+            });
 
-            "throws an understandable error when trying to use withArgs on behavior": function () {
+            it("throws an understandable error when trying to use withArgs on behavior", function () {
                 try {
                     createStub().onFirstCall().withArgs(1);
                 } catch (e) {
                     assert.match(e.message, /not supported/);
                 }
-            }
-        },
+            });
+        });
 
-        "can be used with yields* to produce a sequence": function () {
+        it("can be used with yields* to produce a sequence", function () {
             var context = { foo: "bar" };
             var obj = { method1: createSpy(), method2: createSpy() };
             var obj2 = { method2: createSpy() };
@@ -1633,9 +1637,9 @@ buster.testCase("stub", {
             assert(obj2.method2.calledAfter(obj.method2));
             assert(obj2.method2.calledOn(context));
             assert(obj2.method2.calledWithExactly(7, 8));
-        },
+        });
 
-        "can be used with callsArg* to produce a sequence": function () {
+        it("can be used with callsArg* to produce a sequence", function () {
             var spy1 = createSpy();
             var spy2 = createSpy();
             var spy3 = createSpy();
@@ -1677,9 +1681,9 @@ buster.testCase("stub", {
             assert(spy5.calledWithExactly("c", "d"));
 
             assert(decoy.notCalled);
-        },
+        });
 
-        "can be used with yields* and callsArg* in combination to produce a sequence": function () {
+        it("can be used with yields* and callsArg* in combination to produce a sequence", function () {
             var stub = createStub().yields(1, 2);
             stub.onSecondCall().callsArg(1)
                 .onThirdCall().yieldsTo("method")
@@ -1709,9 +1713,9 @@ buster.testCase("stub", {
             assert(spy3.calledWithExactly("a", "b"));
 
             assert(decoy.notCalled);
-        },
+        });
 
-        "should interact correctly with assertions (GH-231)": function () {
+        it("should interact correctly with assertions (GH-231)", function () {
             var stub = createStub();
             var spy = createSpy();
 
@@ -1727,11 +1731,11 @@ buster.testCase("stub", {
 
             stub(spy);
             assert(spy.calledWith("b"));
-        }
-    },
+        });
+    });
 
-    ".reset": {
-        "resets behavior": function () {
+    describe(".reset", function () {
+        it("resets behavior", function () {
             var obj = { a: function () {} };
             var spy = createSpy();
             createStub(obj, "a").callsArg(1);
@@ -1741,9 +1745,9 @@ buster.testCase("stub", {
             obj.a(null, spy);
 
             assert(spy.calledOnce);
-        },
+        });
 
-        "resets call history": function () {
+        it("resets call history", function () {
             var stub = createStub();
 
             stub(1);
@@ -1752,11 +1756,11 @@ buster.testCase("stub", {
 
             assert(stub.calledOnce);
             assert.equals(stub.getCall(0).args[0], 2);
-        }
-    },
+        });
+    });
 
-    ".resetHistory": {
-        "resets history": function () {
+    describe(".resetHistory", function () {
+        it("resets history", function () {
             var stub = createStub();
 
             stub(1);
@@ -1765,11 +1769,11 @@ buster.testCase("stub", {
 
             assert(stub.calledOnce);
             assert.equals(stub.getCall(0).args[0], 2);
-        }
-    },
+        });
+    });
 
-    ".resetBehavior": {
-        "clears yields* and callsArg* sequence": function () {
+    describe(".resetBehavior", function () {
+        it("clears yields* and callsArg* sequence", function () {
             var stub = createStub().yields(1);
             stub.onFirstCall().callsArg(1);
             stub.resetBehavior();
@@ -1782,26 +1786,26 @@ buster.testCase("stub", {
             assert(spyNotWanted.notCalled);
             assert(spyWanted.calledOnce);
             assert(spyWanted.calledWithExactly(3));
-        },
+        });
 
-        "cleans 'returns' behavior": function () {
+        it("cleans 'returns' behavior", function () {
             var stub = createStub().returns(1);
 
             stub.resetBehavior();
 
             refute.defined(stub());
-        },
+        });
 
-        "cleans behavior of fakes returned by withArgs": function () {
+        it("cleans behavior of fakes returned by withArgs", function () {
             var stub = createStub();
             stub.withArgs("lolz").returns(2);
 
             stub.resetBehavior();
 
             refute.defined(stub("lolz"));
-        },
+        });
 
-        "does not clean parents' behavior when called on a fake returned by withArgs": function () {
+        it("does not clean parents' behavior when called on a fake returned by withArgs", function () {
             var parentStub = createStub().returns(false);
             var childStub = parentStub.withArgs("lolz").returns(true);
 
@@ -1809,17 +1813,17 @@ buster.testCase("stub", {
 
             assert.same(parentStub("lolz"), false);
             assert.same(parentStub(), false);
-        },
+        });
 
-        "cleans 'returnsArg' behavior": function () {
+        it("cleans 'returnsArg' behavior", function () {
             var stub = createStub().returnsArg(0);
 
             stub.resetBehavior();
 
             refute.defined(stub("defined"));
-        },
+        });
 
-        "cleans 'returnsThis' behavior": function () {
+        it("cleans 'returnsThis' behavior", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.returnsThis();
@@ -1827,19 +1831,19 @@ buster.testCase("stub", {
             instance.stub.resetBehavior();
 
             refute.defined(instance.stub());
-        },
+        });
 
-        "does not touch properties that are reset by 'reset'": {
-            ".calledOnce": function () {
+        describe("does not touch properties that are reset by 'reset'", function () {
+            it(".calledOnce", function () {
                 var stub = createStub();
                 stub(1);
 
                 stub.resetBehavior();
 
                 assert(stub.calledOnce);
-            },
+            });
 
-            "called multiple times": function () {
+            it("called multiple times", function () {
                 var stub = createStub();
                 stub(1);
                 stub(2);
@@ -1856,9 +1860,9 @@ buster.testCase("stub", {
                 assert.defined(stub.secondCall);
                 assert.defined(stub.thirdCall);
                 assert.defined(stub.lastCall);
-            },
+            });
 
-            "call order state": function () {
+            it("call order state", function () {
                 var stubs = [createStub(), createStub()];
                 stubs[0]();
                 stubs[1]();
@@ -1866,9 +1870,9 @@ buster.testCase("stub", {
                 stubs[0].resetBehavior();
 
                 assert(stubs[0].calledBefore(stubs[1]));
-            },
+            });
 
-            "fakes returned by withArgs": function () {
+            it("fakes returned by withArgs", function () {
                 var stub = createStub();
                 var fakeA = stub.withArgs("a");
                 var fakeB = stub.withArgs("b");
@@ -1882,45 +1886,45 @@ buster.testCase("stub", {
                 assert(fakeA.calledOnce);
                 assert(fakeB.calledOnce);
                 assert(fakeC.calledOnce);
-            }
-        }
-    },
+            });
+        });
+    });
 
-    ".length": {
-        "is zero by default": function () {
+    describe(".length", function () {
+        it("is zero by default", function () {
             var stub = createStub();
 
             assert.equals(stub.length, 0);
-        },
+        });
 
-        "matches the function length": function () {
+        it("matches the function length", function () {
             var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
             var stub = createStub(api, "someMethod");
 
             assert.equals(stub.length, 3);
-        }
-    },
+        });
+    });
 
-    ".createStubInstance": {
-        "stubs existing methods": function () {
+    describe(".createStubInstance", function () {
+        it("stubs existing methods", function () {
             var Class = function () {};
             Class.prototype.method = function () {};
 
             var stub = createStubInstance(Class);
             stub.method.returns(3);
             assert.equals(3, stub.method());
-        },
+        });
 
-        "doesn't stub fake methods": function () {
+        it("doesn't stub fake methods", function () {
             var Class = function () {};
 
             var stub = createStubInstance(Class);
             assert.exception(function () {
                 stub.method.returns(3);
             });
-        },
+        });
 
-        "doesn't call the constructor": function () {
+        it("doesn't call the constructor", function () {
             var Class = function (a, b) {
                 var c = a + b;
                 throw c;
@@ -1931,18 +1935,18 @@ buster.testCase("stub", {
             refute.exception(function () {
                 stub.method(3);
             });
-        },
+        });
 
-        "retains non function values": function () {
+        it("retains non function values", function () {
             var TYPE = "some-value";
             var Class = function () {};
             Class.prototype.type = TYPE;
 
             var stub = createStubInstance(Class);
             assert.equals(TYPE, stub.type);
-        },
+        });
 
-        "has no side effects on the prototype": function () {
+        it("has no side effects on the prototype", function () {
             var proto = {
                 method: function () {
                     throw "error";
@@ -1954,9 +1958,9 @@ buster.testCase("stub", {
             var stub = createStubInstance(Class);
             refute.exception(stub.method);
             assert.exception(proto.method);
-        },
+        });
 
-        "throws exception for non function params": function () {
+        it("throws exception for non function params", function () {
             var types = [{}, 3, "hi!"];
 
             for (var i = 0; i < types.length; i++) {
@@ -1965,7 +1969,7 @@ buster.testCase("stub", {
                     createStubInstance(types[i]);
                 });
             }
-        }
-    }
+        });
+    });
 
 });

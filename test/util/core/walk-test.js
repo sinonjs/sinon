@@ -1,13 +1,13 @@
 "use strict";
 
-var buster = require("buster");
+var referee = require("referee");
 var walk = require("../../../lib/sinon/util/core/walk");
 var createInstance = require("../../../lib/sinon/util/core/create");
 var createSpy = require("../../../lib/sinon/spy");
-var assert = buster.assert;
+var assert = referee.assert;
 
-buster.testCase("util/core/walk", {
-    "should call iterator with value, key, and obj, with context as the receiver": function () {
+describe("util/core/walk", function () {
+    it("should call iterator with value, key, and obj, with context as the receiver", function () {
         var target = Object.create(null);
         var rcvr = {};
         var iterator = createSpy();
@@ -21,9 +21,9 @@ buster.testCase("util/core/walk", {
         assert(iterator.alwaysCalledOn(rcvr));
         assert(iterator.calledWithExactly("world", "hello", target));
         assert(iterator.calledWithExactly(15, "foo", target));
-    },
+    });
 
-    "should work with non-enumerable properties": function () {
+    it("should work with non-enumerable properties", function () {
         var target = Object.create(null);
         var iterator = createSpy();
 
@@ -37,9 +37,9 @@ buster.testCase("util/core/walk", {
         assert(iterator.calledTwice);
         assert(iterator.calledWith("world", "hello"));
         assert(iterator.calledWith(15, "foo"));
-    },
+    });
 
-    "should walk the prototype chain of an object": function () {
+    it("should walk the prototype chain of an object", function () {
         var parentProto, proto, target, iterator;
 
         parentProto = Object.create(null, {
@@ -83,9 +83,9 @@ buster.testCase("util/core/walk", {
         assert(iterator.calledWith("enumerable prop", "enumerableProp", proto));
         assert(iterator.calledWith("non-enumerable parent prop", "nonEnumerableParentProp", parentProto));
         assert(iterator.calledWith("enumerable parent prop", "enumerableParentProp", parentProto));
-    },
+    });
 
-    "should always invoke getters on the original receiving object": function () {
+    it("should always invoke getters on the original receiving object", function () {
         var Target = function Target() {
             this.o = { foo: "foo" };
         };
@@ -101,9 +101,9 @@ buster.testCase("util/core/walk", {
         walk(target, iterator);
 
         assert(iterator.calledWith("computed foo", "computedFoo", target));
-    },
+    });
 
-    "should fall back to for..in if getOwnPropertyNames is not available": function () {
+    it("should fall back to for..in if getOwnPropertyNames is not available", function () {
         var getOwnPropertyNames = Object.getOwnPropertyNames;
         var Target = function Target() {
             this.hello = "world";
@@ -140,9 +140,9 @@ buster.testCase("util/core/walk", {
         }
 
         assert.isNull(err, "walk tests failed with message '" + (err && err.message) + "'");
-    },
+    });
 
-    "does not walk the same property twice": function () {
+    it("does not walk the same property twice", function () {
         var parent = {
             func: function () {}
         };
@@ -153,5 +153,5 @@ buster.testCase("util/core/walk", {
         walk(child, iterator);
 
         assert.equals(iterator.callCount, 1);
-    }
+    });
 });

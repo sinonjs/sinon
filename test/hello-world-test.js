@@ -1,10 +1,10 @@
 "use strict";
 
-var buster = require("buster");
-var assert = buster.assert;
+var referee = require("referee");
+var assert = referee.assert;
 
-buster.testCase("hello world", {
-    "hello world test": function () {
+describe("hello world", function () {
+    it("hello world test", function () {
         assert(true);
-    }
+    });
 });
