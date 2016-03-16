@@ -113,6 +113,13 @@ describe("sinon.sandbox", function () {
                     assert(sinon.useFakeXMLHttpRequest.called);
                 });
 
+                it("doesn't secretly use useFakeServer", function () {
+                    this.sandbox.stub(sinon.fakeServer, "create").returns({ restore: function () {} });
+                    this.sandbox.useFakeXMLHttpRequest();
+
+                    assert(sinon.fakeServer.create.notCalled);
+                });
+
                 it("adds fake xhr to fake collection", function () {
                     this.sandbox.useFakeXMLHttpRequest();
                     this.sandbox.restore();
