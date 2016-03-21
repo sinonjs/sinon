@@ -25,7 +25,7 @@ before_script:
   # run these on node 5 to have npm 3 with flat dependencies
   - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-headless; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-webworker; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-cloud; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
 
 script:
   - npm run test-node
