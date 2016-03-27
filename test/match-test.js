@@ -406,6 +406,13 @@ describe("sinon.match", function () {
             assert(same.test(object));
         });
 
+        it("returns true if test is called with same symbol", function () {
+            var symbol = Symbol();
+            var same = sinon.match.same(symbol);
+
+            assert(same.test(symbol));
+        });
+
         it("returns false if test is not called with same argument", function () {
             var same = sinon.match.same({});
 
