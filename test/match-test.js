@@ -448,6 +448,12 @@ describe("sinon.match", function () {
             assert.isFalse(typeOf.test(123));
         });
 
+        it("returns true if test is called with symbol", function () {
+            var typeOf = sinon.match.typeOf("symbol");
+
+            assert(typeOf.test(Symbol()));
+        });
+
         it("returns true if test is called with regexp", function () {
             var typeOf = sinon.match.typeOf("regexp");
 
@@ -622,6 +628,15 @@ describe("sinon.match", function () {
 
             assert(sinon.match.isMatcher(date));
             assert.equals(date.toString(), "typeOf(\"date\")");
+        });
+    });
+
+    describe(".symbol", function () {
+        it("is typeOf symbol matcher", function () {
+            var symbol = sinon.match.symbol;
+
+            assert(sinon.match.isMatcher(symbol));
+            assert.equals(symbol.toString(), "typeOf(\"symbol\")");
         });
     });
 
