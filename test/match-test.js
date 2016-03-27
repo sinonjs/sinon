@@ -240,6 +240,31 @@ describe("sinon.match", function () {
         assert.isFalse(match.test({}));
     });
 
+    it("returns true for Symbol match", function () {
+        var symbol = Symbol();
+
+        var match = sinon.match(symbol);
+
+        assert(match.test(symbol));
+    });
+
+    it("returns false for Symbol mismatch", function () {
+        var match = sinon.match(Symbol());
+
+        assert.isFalse(match.test());
+        assert.isFalse(match.test(Symbol(null)));
+        assert.isFalse(match.test(Symbol()));
+        assert.isFalse(match.test(Symbol({})));
+    });
+
+    it("returns true for Symbol inside object", function () {
+        var symbol = Symbol();
+
+        var match = sinon.match({ prop: symbol });
+
+        assert(match.test({ prop: symbol }));
+    });
+
     it("returns true if test function in object returns true", function () {
         var match = sinon.match({ test: function () {
             return true;
