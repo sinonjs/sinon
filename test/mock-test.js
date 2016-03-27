@@ -630,6 +630,17 @@ describe("sinon.mock", function () {
                     expectation();
                 }, "ExpectationError");
             });
+
+            it("throws if calls on wrong Symbol", function () {
+                var expectation = sinon.expectation.create("method");
+                expectation.on(Symbol());
+
+                assert.exception(function () {
+                    expectation.call(Symbol());
+                }, function (err) {
+                    return err.message === "method called with Symbol() as thisValue, expected Symbol()";
+                });
+            });
         });
 
         describe(".verify", function () {
