@@ -2158,6 +2158,16 @@ describe("spy", function () {
             }
         });
 
+        it("throws readable message for symbol when spy was not yet invoked", function () {
+            var spy = createSpy();
+
+            try {
+                spy.yieldTo(Symbol());
+            } catch (e) {
+                assert.equals(e.message, "spy cannot yield to 'Symbol()' since it was not yet invoked.");
+            }
+        });
+
         it("pass additional arguments", function () {
             var spy = createSpy();
             var callback = createSpy();
