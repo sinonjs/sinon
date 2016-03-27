@@ -31,6 +31,14 @@ describe("stub", function () {
         assert.equals(error.message, "Trying to stub property 'prop' of null");
     });
 
+    it("throws a readable error if stubbing Symbol on null", function () {
+        try {
+            createStub(null, Symbol());
+        } catch (err) {
+            assert.equals(err.message, "Trying to stub property 'Symbol()' of null");
+        }
+    });
+
     it("should contain asynchronous versions of callsArg*, and yields* methods", function () {
         var stub = createStub.create();
 
