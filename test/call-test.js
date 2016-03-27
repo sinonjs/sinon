@@ -671,6 +671,18 @@ describe("sinon.spy.call", function () {
             }
         });
 
+        it("throws understandable error if symbol prop is not found", function () {
+            var call = this.call;
+            var symbol = Symbol();
+
+            assert.exception(function () {
+                call.yieldToOn(symbol, {});
+            }, function (err) {
+                return err.message === "spy cannot yield to 'Symbol()' since no callback was passed.";
+            });
+
+        });
+
         it("includes stub name and actual arguments in error", function () {
             this.proxy.displayName = "somethingAwesome";
             this.args.push(23, 42);
