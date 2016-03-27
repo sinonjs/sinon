@@ -523,6 +523,14 @@ describe("sinon.match", function () {
 
             assert(has.test(0));
         });
+
+        it("returns true if object has Symbol", function () {
+            var symbol = Symbol();
+
+            var has = sinon.match.has("prop", symbol);
+
+            assert(has.test({ prop: symbol }));
+        });
     });
 
     describe(".hasOwnSpecial", function () {
