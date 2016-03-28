@@ -38,15 +38,16 @@ describe("sinon.collection", function () {
         });
 
         it("fails if stubbing symbol on null", function () {
-            var error;
+            if (typeof Symbol === "function") {
+                var error;
 
-            try {
-                this.collection.stub(null, Symbol());
-            } catch (e) {
-                error = e;
+                try {
+                    this.collection.stub(null, Symbol());
+                } catch (e) {
+                    error = e;
+                }
+                assert.equals(error.message, "Trying to stub property 'Symbol()' of null");
             }
-
-            assert.equals(error.message, "Trying to stub property 'Symbol()' of null");
         });
 
         it("calls stub", function () {
@@ -172,14 +173,16 @@ describe("sinon.collection", function () {
         });
 
         it("fails if Symbol does not exist", function () {
-            var collection = this.collection;
-            var object = {};
+            if (typeof Symbol === "function") {
+                var collection = this.collection;
+                var object = {};
 
-            assert.exception(function () {
-                collection.stub(object, Symbol(), 1);
-            }, function (err) {
-                return err.message === "Cannot stub non-existent own property Symbol()";
-            });
+                assert.exception(function () {
+                    collection.stub(object, Symbol(), 1);
+                }, function (err) {
+                    return err.message === "Cannot stub non-existent own property Symbol()";
+                });
+            }
         });
     });
 

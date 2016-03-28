@@ -228,13 +228,15 @@ describe("sinon.mock", function () {
             });
 
             it("throws with Symbol", function () {
-                var expectation = this.expectation;
+                if (typeof Symbol === "function") {
+                    var expectation = this.expectation;
 
-                assert.exception(function () {
-                    expectation.exactly(Symbol());
-                }, function (err) {
-                    return err.message === "'Symbol()' is not a number";
-                });
+                    assert.exception(function () {
+                        expectation.exactly(Symbol());
+                    }, function (err) {
+                        return err.message === "'Symbol()' is not a number";
+                    });
+                }
             });
         });
 
@@ -256,13 +258,15 @@ describe("sinon.mock", function () {
             });
 
             it("throws with Symbol", function () {
-                var expectation = this.expectation;
+                if (typeof Symbol === "function") {
+                    var expectation = this.expectation;
 
-                assert.exception(function () {
-                    expectation.atLeast(Symbol());
-                }, function (err) {
-                    return err.message === "'Symbol()' is not number";
-                });
+                    assert.exception(function () {
+                        expectation.atLeast(Symbol());
+                    }, function (err) {
+                        return err.message === "'Symbol()' is not number";
+                    });
+                }
             });
 
             it("returns expectation for chaining", function () {
@@ -351,13 +355,15 @@ describe("sinon.mock", function () {
             });
 
             it("throws with Symbol", function () {
-                var expectation = this.expectation;
+                if (typeof Symbol === "function") {
+                    var expectation = this.expectation;
 
-                assert.exception(function () {
-                    expectation.atMost(Symbol());
-                }, function (err) {
-                    return err.message === "'Symbol()' is not number";
-                });
+                    assert.exception(function () {
+                        expectation.atMost(Symbol());
+                    }, function (err) {
+                        return err.message === "'Symbol()' is not number";
+                    });
+                }
             });
 
             it("returns expectation for chaining", function () {
@@ -632,14 +638,16 @@ describe("sinon.mock", function () {
             });
 
             it("throws if calls on wrong Symbol", function () {
-                var expectation = sinon.expectation.create("method");
-                expectation.on(Symbol());
+                if (typeof Symbol === "function") {
+                    var expectation = sinon.expectation.create("method");
+                    expectation.on(Symbol());
 
-                assert.exception(function () {
-                    expectation.call(Symbol());
-                }, function (err) {
-                    return err.message === "method called with Symbol() as thisValue, expected Symbol()";
-                });
+                    assert.exception(function () {
+                        expectation.call(Symbol());
+                    }, function (err) {
+                        return err.message === "method called with Symbol() as thisValue, expected Symbol()";
+                    });
+                }
             });
         });
 

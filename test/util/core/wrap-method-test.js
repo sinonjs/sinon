@@ -40,15 +40,17 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws Symbol() if object defines property but is not function", function () {
-        var symbol = Symbol();
-        var object = {};
-        object[symbol] = 42;
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = 42;
 
-        assert.exception(function () {
-            wrapMethod(object, symbol, function () {});
-        }, function (err) {
-            return err.message === "Attempted to wrap number property Symbol() as function";
-        });
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap number property Symbol() as function";
+            });
+        }
     });
 
     it("throws if object does not define property", function () {
@@ -115,16 +117,18 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws Symbol if method is already wrapped", function () {
-        var symbol = Symbol();
-        var object = {};
-        object[symbol] = function () {};
-        wrapMethod(object, symbol, function () {});
-
-        assert.exception(function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = function () {};
             wrapMethod(object, symbol, function () {});
-        }, function (err) {
-            return err.message === "Attempted to wrap Symbol() which is already wrapped";
-        });
+
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap Symbol() which is already wrapped";
+            });
+        }
     });
 
     it("throws if property descriptor is already wrapped", function () {
@@ -144,15 +148,17 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if Symbol method is already a spy", function () {
-        var symbol = Symbol();
-        var object = {};
-        object[symbol] = createSpy();
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = createSpy();
 
-        assert.exception(function () {
-            wrapMethod(object, symbol, function () {});
-        }, function (err) {
-            return err.message === "Attempted to wrap Symbol() which is already spied on";
-        });
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap Symbol() which is already spied on";
+            });
+        }
     });
 
     var overridingErrorAndTypeError = (function () {

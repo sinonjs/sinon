@@ -32,10 +32,12 @@ describe("stub", function () {
     });
 
     it("throws a readable error if stubbing Symbol on null", function () {
-        try {
-            createStub(null, Symbol());
-        } catch (err) {
-            assert.equals(err.message, "Trying to stub property 'Symbol()' of null");
+        if (typeof Symbol === "function") {
+            try {
+                createStub(null, Symbol());
+            } catch (err) {
+                assert.equals(err.message, "Trying to stub property 'Symbol()' of null");
+            }
         }
     });
 
@@ -1124,16 +1126,18 @@ describe("stub", function () {
         });
 
         it("throws understandable error if failing to yield callback by symbol", function () {
-            var symbol = Symbol();
+            if (typeof Symbol === "function") {
+                var symbol = Symbol();
 
-            var stub = createStub().yieldsTo(symbol);
+                var stub = createStub().yieldsTo(symbol);
 
-            assert.exception(function () {
-                stub();
-            }, function (err) {
-                return err.message === "stub expected to yield to 'Symbol()', but no object with " +
-                                       "such a property was passed.";
-            });
+                assert.exception(function () {
+                    stub();
+                }, function (err) {
+                    return err.message === "stub expected to yield to 'Symbol()', but no object with " +
+                                           "such a property was passed.";
+                });
+            }
         });
 
         it("includes stub name and actual arguments in error", function () {
