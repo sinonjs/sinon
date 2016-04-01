@@ -385,7 +385,7 @@
 * New methods stub.callsArgOn, stub.callsArgOnWith,
   stub.yieldsOn, stub.yieldsToOn
 * Implemented
-* Fixing `clearTimeout` to not throw when called for nonexistant IDs.
+* Fixing `clearTimeout` to not throw when called for nonexistent IDs.
 * Spys that are created using 'withArgs' now get initialized with previous
   calls to the original spy.
 * Minor bug fixes and docs cleanup.

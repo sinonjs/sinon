@@ -41,7 +41,7 @@ describe("sinon.extend", function () {
         assert.same(target.toString, source.toString);
     });
 
-    it("must copy the last occuring property into the target", function () {
+    it("must copy the last occurring property into the target", function () {
         var target = { a: 0, b: 0, c: 0, d: 0 };
         var source1 = { a: 1, b: 1, c: 1 };
         var source2 = { a: 2, b: 2 };
