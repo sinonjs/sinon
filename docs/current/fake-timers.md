@@ -42,7 +42,7 @@ set of features and was previously extracted from Sinon.JS.
 
 #### `var clock = sinon.useFakeTimers();`
 
-Causes Sinon to replace the global `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval` and `Date` with a custom implementation which is bound to the returned `clock` object.
+Causes Sinon to replace the global `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate` and `Date` with a custom implementation which is bound to the returned `clock` object.
 
 Starts the clock at the UNIX epoch (timestamp of 0).
 
@@ -56,7 +56,7 @@ As above, but rather than starting the clock with a timestamp of 0, start at the
 
 Sets the clock start timestamp and names functions to fake.
 
-Possible functions are setTimeout, clearTimeout, setInterval, clearInterval, and Date. Can also be called without the timestamp.
+Possible functions are `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate` and `Date`. Can also be called without the timestamp.
 
 
 #### `clock.tick(ms);`
