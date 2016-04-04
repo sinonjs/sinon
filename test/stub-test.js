@@ -31,6 +31,16 @@ describe("stub", function () {
         assert.equals(error.message, "Trying to stub property 'prop' of null");
     });
 
+    it("throws a readable error if stubbing Symbol on null", function () {
+        if (typeof Symbol === "function") {
+            try {
+                createStub(null, Symbol());
+            } catch (err) {
+                assert.equals(err.message, "Trying to stub property 'Symbol()' of null");
+            }
+        }
+    });
+
     it("should contain asynchronous versions of callsArg*, and yields* methods", function () {
         var stub = createStub.create();
 
@@ -1112,6 +1122,21 @@ describe("stub", function () {
             } catch (e) {
                 assert.equals(e.message, "stub expected to yield to 'success', but no object " +
                               "with such a property was passed.");
+            }
+        });
+
+        it("throws understandable error if failing to yield callback by symbol", function () {
+            if (typeof Symbol === "function") {
+                var symbol = Symbol();
+
+                var stub = createStub().yieldsTo(symbol);
+
+                assert.exception(function () {
+                    stub();
+                }, function (err) {
+                    return err.message === "stub expected to yield to 'Symbol()', but no object with " +
+                                           "such a property was passed.";
+                });
             }
         });
 

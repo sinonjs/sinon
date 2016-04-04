@@ -240,6 +240,37 @@ describe("sinon.match", function () {
         assert.isFalse(match.test({}));
     });
 
+    it("returns true for Symbol match", function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+
+            var match = sinon.match(symbol);
+
+            assert(match.test(symbol));
+        }
+    });
+
+    it("returns false for Symbol mismatch", function () {
+        if (typeof Symbol === "function") {
+            var match = sinon.match(Symbol());
+
+            assert.isFalse(match.test());
+            assert.isFalse(match.test(Symbol(null)));
+            assert.isFalse(match.test(Symbol()));
+            assert.isFalse(match.test(Symbol({})));
+        }
+    });
+
+    it("returns true for Symbol inside object", function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+
+            var match = sinon.match({ prop: symbol });
+
+            assert(match.test({ prop: symbol }));
+        }
+    });
+
     it("returns true if test function in object returns true", function () {
         var match = sinon.match({ test: function () {
             return true;
@@ -381,6 +412,15 @@ describe("sinon.match", function () {
             assert(same.test(object));
         });
 
+        it("returns true if test is called with same symbol", function () {
+            if (typeof Symbol === "function") {
+                var symbol = Symbol();
+                var same = sinon.match.same(symbol);
+
+                assert(same.test(symbol));
+            }
+        });
+
         it("returns false if test is not called with same argument", function () {
             var same = sinon.match.same({});
 
@@ -414,6 +454,14 @@ describe("sinon.match", function () {
             var typeOf = sinon.match.typeOf("string");
 
             assert.isFalse(typeOf.test(123));
+        });
+
+        it("returns true if test is called with symbol", function () {
+            if (typeof Symbol === "function") {
+                var typeOf = sinon.match.typeOf("symbol");
+
+                assert(typeOf.test(Symbol()));
+            }
         });
 
         it("returns true if test is called with regexp", function () {
@@ -490,6 +538,16 @@ describe("sinon.match", function () {
             var has = sinon.match.has("toFixed", sinon.match.func);
 
             assert(has.test(0));
+        });
+
+        it("returns true if object has Symbol", function () {
+            if (typeof Symbol === "function") {
+                var symbol = Symbol();
+
+                var has = sinon.match.has("prop", symbol);
+
+                assert(has.test({ prop: symbol }));
+            }
         });
     });
 
@@ -582,6 +640,15 @@ describe("sinon.match", function () {
 
             assert(sinon.match.isMatcher(date));
             assert.equals(date.toString(), "typeOf(\"date\")");
+        });
+    });
+
+    describe(".symbol", function () {
+        it("is typeOf symbol matcher", function () {
+            var symbol = sinon.match.symbol;
+
+            assert(sinon.match.isMatcher(symbol));
+            assert.equals(symbol.toString(), "typeOf(\"symbol\")");
         });
     });
 

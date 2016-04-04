@@ -39,6 +39,20 @@ describe("util/core/wrapMethod", function () {
         }, "TypeError");
     });
 
+    it("throws Symbol() if object defines property but is not function", function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = 42;
+
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap number property Symbol() as function";
+            });
+        }
+    });
+
     it("throws if object does not define property", function () {
         var object = this.object;
 
@@ -102,6 +116,21 @@ describe("util/core/wrapMethod", function () {
         }, "TypeError");
     });
 
+    it("throws Symbol if method is already wrapped", function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = function () {};
+            wrapMethod(object, symbol, function () {});
+
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap Symbol() which is already wrapped";
+            });
+        }
+    });
+
     it("throws if property descriptor is already wrapped", function () {
         wrapMethod(this.object, "property", { get: function () {} });
 
@@ -116,6 +145,20 @@ describe("util/core/wrapMethod", function () {
         assert.exception(function () {
             wrapMethod(object, "method", function () {});
         }, "TypeError");
+    });
+
+    it("throws if Symbol method is already a spy", function () {
+        if (typeof Symbol === "function") {
+            var symbol = Symbol();
+            var object = {};
+            object[symbol] = createSpy();
+
+            assert.exception(function () {
+                wrapMethod(object, symbol, function () {});
+            }, function (err) {
+                return err.message === "Attempted to wrap Symbol() which is already spied on";
+            });
+        }
     });
 
     var overridingErrorAndTypeError = (function () {

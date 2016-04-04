@@ -118,6 +118,11 @@ Requires the value to be a regular expression.
 Requires the value to be a `Date object.
 
 
+#### `sinon.match.symbol"
+
+Requires the value to be a `Symbol.
+
+
 #### `sinon.match.same(ref)"
 
 Requires the value to strictly equal `ref`.
@@ -134,8 +139,9 @@ Requires the value to be of the given type, where `type` can be one of
     `"object"`,
     `"function"`,
     `"array"`,
-    `"regexp"` or
-    `"date"`.
+    `"regexp"`,
+    `"date"` or
+    `"symbol"`.
 
 
 #### `sinon.match.instanceOf(type)"
