@@ -1281,4 +1281,19 @@ describe("sinon.spy.call", function () {
             assert.equals(spy.printf("%λ"), "%λ");
         });
     });
+
+    it("captures a stack trace", function () {
+        var spy = sinon.spy();
+        spy();
+        assert.isString(spy.getCall(0).stack);
+    });
+
+    describe("getStackFrames", function () {
+        it("makes the non-Sinon stack frames available as an array", function () {
+            var spy = sinon.spy();
+            spy();
+
+            assert.isString(spy.getCall(0).getStackFrames()[0]);
+        });
+    });
 });
