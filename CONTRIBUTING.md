@@ -10,7 +10,7 @@ There are several ways of contributing to Sinon.JS
 
 ## Reporting an issue
 
-To save everyone time and make it much more likely for your issue to be understood, worked on and resolved quickly, it would help if you're mindful of [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) when pressing the "Submit new issue" button.
+To save everyone time and make it much more likely for your issue to be understood, worked on and resolved quickly, it would help if you're mindful of [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) when pressing the "Submit new issue" button. 
 
 As a minimum, please report the following:
 
@@ -22,29 +22,7 @@ As a minimum, please report the following:
 * What actually happens
 * Describe **with code** how to reproduce the faulty behaviour
 
-### Bug report template
-
-Here's a template for a bug report
-
-> Sinon version :
-> Environment   :
-> Example URL   :
->
-> ##### Bug description
-
-Here's an example use of the template
-
-> Sinon version : 1.10.3
-> Environment   : OSX Chrome 37.0.2062.94
-> Example URL   : http://jsbin.com/iyebiWI/8/edit
->
-> ##### Bug description
->
-> If `respondWith` called with a URL including query parameter and a function , it doesn't work.
-> This error reported in console.
-> ```
-> `TypeError: requestUrl.match(...) is null`
-> ```
+See [our issue template](https://github.com/sinonjs/sinon/blob/master/.github/) for all details.
 
 ## Contributing to the code base
 
