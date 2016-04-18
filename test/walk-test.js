@@ -132,7 +132,7 @@
                 assert(iterator.alwaysCalledOn(rcvr));
                 assert(iterator.calledWith("world", "hello"));
                 assert(iterator.calledWith(15, "foo"));
-            } catch(e) {
+            } catch (e) {
                 err = e;
             } finally {
                 Object.getOwnPropertyNames = getOwnPropertyNames;
