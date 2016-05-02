@@ -12,7 +12,13 @@
     var supportsProgressEvents = typeof ProgressEvent !== "undefined";
     var supportsFormData = typeof FormData !== "undefined";
     var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-    var supportsBlob = typeof Blob === "function";
+    var supportsBlob = (function () {
+        try {
+            return !!new Blob();
+        } catch (e) {
+            return false;
+        }
+    })();
 
     var fakeXhrSetUp = function () {
         this.fakeXhr = sinon.useFakeXMLHttpRequest();
