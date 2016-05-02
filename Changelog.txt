@@ -1,4 +1,12 @@
 
+1.17.4 / 2016-05-02
+==================
+
+  * Improve Blob support detection logics (#1039)
+  * Re-did #861 for v1.17 branch
+  * Caught exceptions from async tests are thrown by simon.test.
+  * Add tests for #947
+
 1.17.3 / 2016-01-27
 ==================
 
