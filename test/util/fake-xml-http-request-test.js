@@ -1121,6 +1121,81 @@ if (typeof window !== "undefined") {
             });
         });
 
+        describe(".error", function () {
+            beforeEach(function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            });
+
+            it("sets response to empty string", function () {
+                this.xhr.response = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.response, "");
+            });
+
+            it("sets responseText to empty string", function () {
+                this.xhr.responseText = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.responseText, "");
+            });
+
+            it("sets errorFlag to true", function () {
+                this.xhr.error();
+
+                assert.isTrue(this.xhr.errorFlag);
+            });
+
+            it("nulls request headers", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.setRequestHeader("X-Test", "Sumptn");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.requestHeaders, {});
+            });
+
+            it("does not have undefined response headers", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.defined(this.xhr.responseHeaders);
+            });
+
+            it("nulls response headers", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.responseHeaders, {});
+            });
+
+            it("dispatches readystatechange event if sent before", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.onreadystatechange = sinon.stub();
+
+                this.xhr.error();
+
+                assert(this.xhr.onreadystatechange.called);
+            });
+
+            it("sets readyState to DONE", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+            });
+
+            assertEventOrdering("error", 0, function (xhr) {
+                xhr.error();
+            });
+        });
+
         describe(".response", function () {
             beforeEach(function () {
                 this.xhr = new sinon.FakeXMLHttpRequest();
