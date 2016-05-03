@@ -1750,7 +1750,6 @@ if (typeof window !== "undefined") {
                 this.xhr.respond(500, {}, "");
             });
 
-
             it("calls #onerror on failure", function (done) {
                 var xhr = this.xhr;
 
@@ -1763,6 +1762,21 @@ if (typeof window !== "undefined") {
 
                 this.xhr.send();
                 this.xhr.respond(500, {}, "");
+            });
+
+            it("calls #onerror on failure", function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.onerror = function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+
+                    done();
+                };
+
+                this.xhr.send();
+
+                this.xhr.respond(403, {}, "");
             });
 
             it("does not trigger 'load' event on abort", function (done) {
