@@ -61,6 +61,45 @@ var assertProgressEvent = function (event, progress) {
     assert.equals(event.lengthComputable, !!progress);
 };
 
+var assertEventOrdering = function (event, progress, callback) {
+    it("should follow request sequence for " + event, function (done) {
+        var expectedOrder = [
+            "upload:progress",
+            "upload:" + event,
+            "upload:loadend",
+            "xhr:progress",
+            "xhr:on" + event,
+            "xhr:" + event
+        ];
+        var eventOrder = [];
+
+        function observe(name) {
+            return function (e) {
+                assertProgressEvent(e, progress);
+                eventOrder.push(name);
+            };
+        }
+
+        this.xhr.open("GET", "/");
+        this.xhr.send();
+
+        this.xhr.upload.addEventListener("progress", observe("upload:progress"));
+        this.xhr.upload.addEventListener(event, observe("upload:" + event));
+        this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
+        this.xhr.addEventListener("progress", observe("xhr:progress"));
+        this.xhr.addEventListener(event, observe("xhr:" + event));
+        this.xhr["on" + event] = observe("xhr:on" + event);
+        this.xhr.addEventListener("loadend", function (e) {
+            assertProgressEvent(e, progress);
+            assert.equals(eventOrder, expectedOrder);
+
+            done();
+        });
+
+        callback(this.xhr);
+    });
+};
+
 if (typeof window !== "undefined") {
     describe("sinon.FakeXMLHttpRequest", function () {
 
@@ -1064,42 +1103,16 @@ if (typeof window !== "undefined") {
                 assert.isFalse(this.xhr.onreadystatechange.called);
             });
 
-            // see: https://xhr.spec.whatwg.org/#request-error-steps
-            it("should follow request error steps", function (done) {
-                var expectedOrder = [
-                    "upload:progress",
-                    "upload:abort",
-                    "upload:loadend",
-                    "xhr:progress",
-                    "xhr:onabort",
-                    "xhr:abort"
-                ];
-                var eventOrder = [];
+            assertEventOrdering("abort", 0, function (xhr) {
+                xhr.abort();
+            });
 
-                function observe(name) {
-                    return function (e) {
-                        assertProgressEvent(e, 0);
-                        eventOrder.push(name);
-                    };
-                }
+            assertEventOrdering("error", 0, function (xhr) {
+                xhr.respond(500, {}, "");
+            });
 
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-
-                this.xhr.upload.addEventListener("progress", observe("upload:progress"));
-                this.xhr.upload.addEventListener("abort", observe("upload:abort"));
-                this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
-                this.xhr.addEventListener("progress", observe("xhr:progress"));
-                this.xhr.addEventListener("abort", observe("xhr:abort"));
-                this.xhr.onabort = observe("xhr:onabort");
-                this.xhr.addEventListener("loadend", function (e) {
-                    assertProgressEvent(e, 0);
-                    assert.equals(eventOrder, expectedOrder);
-
-                    done();
-                });
-
-                this.xhr.abort();
+            assertEventOrdering("load", 100, function (xhr) {
+                xhr.respond(200, {}, "");
             });
         });
 
@@ -1708,6 +1721,48 @@ if (typeof window !== "undefined") {
 
                 this.xhr.send();
                 this.xhr.respond(200, {}, "");
+            });
+
+            it("triggers 'error' event on failure", function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("error", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(500, {}, "");
+            });
+
+            it("triggers 'error' with event target set to the XHR object", function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("error", function (event) {
+                    assert.same(xhr, event.target);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(500, {}, "");
+            });
+
+
+            it("calls #onerror on failure", function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.onerror = function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    refute.equals(xhr.status, 0);
+
+                    done();
+                };
+
+                this.xhr.send();
+                this.xhr.respond(500, {}, "");
             });
 
             it("does not trigger 'load' event on abort", function (done) {
