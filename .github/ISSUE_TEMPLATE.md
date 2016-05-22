@@ -1,6 +1,6 @@
 > We understand you have a problem and are in a hurry, but please provide us with some info to make it much more likely for your issue to be understood, worked on and resolved quickly.
 
-* Sinon version : <please verify that the bug exists in the latest release>
+* Sinon version : _please verify that the bug exists in the latest Sinon release_
 * Environment   :
 * Example URL   :
 * Other libraries you are using:
