@@ -504,6 +504,18 @@
                 };
 
                 assert(sinon.deepEqual(obj1, obj2));
+            },
+
+            "passes objects without a prototype": function () {
+                function Obj() {}
+                Obj.prototype = Object.create(null);
+
+                var obj = new Obj();
+                obj.foo = "bar";
+
+                var pojo = { foo: "bar" };
+
+                assert(sinon.deepEqual(obj, pojo));
             }
         },
 
