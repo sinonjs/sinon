@@ -84,17 +84,30 @@ var assertEventOrdering = function (event, progress, callback) {
         this.xhr.send();
 
         this.xhr.upload.addEventListener("progress", observe("upload:progress"));
-        this.xhr.upload.addEventListener(event, observe("upload:" + event));
         this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
         this.xhr.addEventListener("progress", observe("xhr:progress"));
-        this.xhr.addEventListener(event, observe("xhr:" + event));
-        this.xhr["on" + event] = observe("xhr:on" + event);
         this.xhr.addEventListener("loadend", function (e) {
             assertProgressEvent(e, progress);
-            assert.equals(eventOrder, expectedOrder);
 
-            done();
+            // finish next tick to allow any events that might fire
+            // after loadend to trigger
+            setTimeout(function () {
+                assert.equals(eventOrder, expectedOrder);
+
+                done();
+            }, 1);
         });
+
+        // listen for abort, error, and load events to make sure only
+        // the expected events fire
+        ["abort", "error", "load"].forEach(
+            function (name) {
+                this.xhr.upload.addEventListener(name, observe("upload:" + name));
+                this.xhr.addEventListener(name, observe("xhr:" + name));
+                this.xhr["on" + name] = observe("xhr:on" + name);
+            },
+            this
+        );
 
         callback(this.xhr);
     });
