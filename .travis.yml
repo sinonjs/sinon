@@ -3,7 +3,7 @@ node_js:
   - "0.12"
   # LTS release per February 2016
   - "4.3"
-  - "5"
+  - "6"
 
 sudo: false
 
@@ -22,10 +22,10 @@ before_install:
 before_script:
   # these build targets only need to run once per build, so let's conserve a few resources
   - if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then npm run lint; fi
-  # run these on node 5 to have npm 3 with flat dependencies
-  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-headless; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ]; then npm run test-webworker; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x5" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
+  # run these on node 6 to have npm 3 with flat dependencies
+  - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-headless; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-webworker; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x6" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
 
 script:
   - npm run test-node
