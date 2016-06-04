@@ -504,6 +504,49 @@
                 };
 
                 assert(sinon.deepEqual(obj1, obj2));
+            },
+
+            "passes object without prototype compared to equal object with prototype": function () {
+                var obj1 = Object.create(null);
+                obj1.a = 1;
+                obj1.b = 2;
+                obj1.c = "hey";
+
+                var obj2 = { a: 1, b: 2, c: "hey" };
+
+                assert(sinon.deepEqual(obj1, obj2));
+            },
+
+            "passes object with prototype compared to equal object without prototype": function () {
+                var obj1 = { a: 1, b: 2, c: "hey" };
+
+                var obj2 = Object.create(null);
+                obj2.a = 1;
+                obj2.b = 2;
+                obj2.c = "hey";
+
+                assert(sinon.deepEqual(obj1, obj2));
+            },
+
+            "passes equal objects without prototypes": function () {
+                var obj1 = Object.create(null);
+                obj1.a = 1;
+                obj1.b = 2;
+                obj1.c = "hey";
+
+                var obj2 = Object.create(null);
+                obj2.a = 1;
+                obj2.b = 2;
+                obj2.c = "hey";
+
+                assert(sinon.deepEqual(obj1, obj2));
+            },
+
+            "passes equal objects that override hasOwnProperty": function () {
+                var obj1 = { a: 1, b: 2, c: "hey", hasOwnProperty: "silly" };
+                var obj2 = { a: 1, b: 2, c: "hey", hasOwnProperty: "silly" };
+
+                assert(sinon.deepEqual(obj1, obj2));
             }
         },
 
