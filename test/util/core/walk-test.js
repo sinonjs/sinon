@@ -19,8 +19,8 @@ describe("util/core/walk", function () {
 
         assert(iterator.calledTwice);
         assert(iterator.alwaysCalledOn(rcvr));
-        assert(iterator.calledWithExactly("world", "hello", target));
-        assert(iterator.calledWithExactly(15, "foo", target));
+        assert(iterator.calledWithExactly("hello", target));
+        assert(iterator.calledWithExactly("foo", target));
     });
 
     it("should work with non-enumerable properties", function () {
@@ -35,8 +35,8 @@ describe("util/core/walk", function () {
         walk(target, iterator);
 
         assert(iterator.calledTwice);
-        assert(iterator.calledWith("world", "hello"));
-        assert(iterator.calledWith(15, "foo"));
+        assert(iterator.calledWith("hello"));
+        assert(iterator.calledWith("foo"));
     });
 
     it("should walk the prototype chain of an object", function () {
@@ -77,30 +77,28 @@ describe("util/core/walk", function () {
         walk(target, iterator);
 
         assert.equals(iterator.callCount, 6);
-        assert(iterator.calledWith("non-enumerable own prop", "nonEnumerableOwnProp", target));
-        assert(iterator.calledWith("enumerable own prop", "enumerableOwnProp", target));
-        assert(iterator.calledWith("non-enumerable prop", "nonEnumerableProp", proto));
-        assert(iterator.calledWith("enumerable prop", "enumerableProp", proto));
-        assert(iterator.calledWith("non-enumerable parent prop", "nonEnumerableParentProp", parentProto));
-        assert(iterator.calledWith("enumerable parent prop", "enumerableParentProp", parentProto));
+        assert(iterator.calledWith("nonEnumerableOwnProp", target));
+        assert(iterator.calledWith("enumerableOwnProp", target));
+        assert(iterator.calledWith("nonEnumerableProp", proto));
+        assert(iterator.calledWith("enumerableProp", proto));
+        assert(iterator.calledWith("nonEnumerableParentProp", parentProto));
+        assert(iterator.calledWith("enumerableParentProp", parentProto));
     });
 
-    it("should always invoke getters on the original receiving object", function () {
-        var Target = function Target() {
-            this.o = { foo: "foo" };
-        };
+    it("should not invoke getters on the original receiving object", function () {
+        var Target = function Target() {};
+        var getter = createSpy();
         Object.defineProperty(Target.prototype, "computedFoo", {
             enumerable: true,
-            get: function () {
-                return "computed " + this.o.foo;
-            }
+            get: getter
         });
         var target = new Target();
         var iterator = createSpy();
 
         walk(target, iterator);
 
-        assert(iterator.calledWith("computed foo", "computedFoo", target));
+        assert(iterator.calledWith("computedFoo", target));
+        assert(getter.notCalled);
     });
 
     it("should fall back to for..in if getOwnPropertyNames is not available", function () {
