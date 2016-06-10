@@ -346,6 +346,8 @@ describe("sinon.clock", function () {
         });
 
         it("fires timers in correct order", function () {
+            this.timeout(5000);
+
             var spy13 = sinon.spy.create();
             var spy10 = sinon.spy.create();
 
@@ -414,6 +416,8 @@ describe("sinon.clock", function () {
         });
 
         it("passes 2 hours, 34 minutes and 12 seconds", function () {
+            this.timeout(50000);
+
             var spy = sinon.spy.create();
             this.clock.setInterval(spy, 10000);
 
