@@ -1119,13 +1119,73 @@ if (typeof window !== "undefined") {
             assertEventOrdering("abort", 0, function (xhr) {
                 xhr.abort();
             });
+        });
 
-            assertEventOrdering("error", 0, function (xhr) {
-                xhr.respond(500, {}, "");
+        describe(".error", function () {
+            beforeEach(function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
             });
 
-            assertEventOrdering("load", 100, function (xhr) {
-                xhr.respond(200, {}, "");
+            it("sets response to empty string", function () {
+                this.xhr.response = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.response, "");
+            });
+
+            it("sets responseText to empty string", function () {
+                this.xhr.responseText = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.responseText, "");
+            });
+
+            it("sets errorFlag to true", function () {
+                this.xhr.errorFlag = false;
+                this.xhr.error();
+
+                assert.isTrue(this.xhr.errorFlag);
+            });
+
+            it("nulls request headers", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.setRequestHeader("X-Test", "Sumptn");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.requestHeaders, {});
+            });
+
+            it("nulls response headers", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.responseHeaders, {});
+            });
+
+            it("dispatches readystatechange event if sent before", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.onreadystatechange = sinon.stub();
+
+                this.xhr.error();
+
+                assert(this.xhr.onreadystatechange.called);
+            });
+
+            it("sets readyState to DONE", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+            });
+
+            assertEventOrdering("error", 0, function (xhr) {
+                xhr.error();
             });
         });
 
@@ -1709,6 +1769,20 @@ if (typeof window !== "undefined") {
                 this.xhr.respond(200, {}, "");
             });
 
+            it("triggers 'load' event on for non-200 events", function (done) {
+                var xhr = this.xhr;
+
+                this.xhr.addEventListener("load", function () {
+                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.status, 500);
+
+                    done();
+                });
+
+                this.xhr.send();
+                this.xhr.respond(500, {}, "");
+            });
+
             it("triggers 'load' with event target set to the XHR object", function (done) {
                 var xhr = this.xhr;
 
@@ -1736,40 +1810,12 @@ if (typeof window !== "undefined") {
                 this.xhr.respond(200, {}, "");
             });
 
-            it("triggers 'error' event on failure", function (done) {
+            it("calls #onload for non-200 events", function (done) {
                 var xhr = this.xhr;
 
-                this.xhr.addEventListener("error", function () {
+                this.xhr.onload = function () {
                     assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
-                    refute.equals(xhr.status, 0);
-
-                    done();
-                });
-
-                this.xhr.send();
-                this.xhr.respond(500, {}, "");
-            });
-
-            it("triggers 'error' with event target set to the XHR object", function (done) {
-                var xhr = this.xhr;
-
-                this.xhr.addEventListener("error", function (event) {
-                    assert.same(xhr, event.target);
-
-                    done();
-                });
-
-                this.xhr.send();
-                this.xhr.respond(500, {}, "");
-            });
-
-
-            it("calls #onerror on failure", function (done) {
-                var xhr = this.xhr;
-
-                this.xhr.onerror = function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
-                    refute.equals(xhr.status, 0);
+                    assert.equals(xhr.status, 500);
 
                     done();
                 };
@@ -1843,7 +1889,7 @@ if (typeof window !== "undefined") {
 
             it("triggers 'loadend' event at the end", function (done) {
                 this.xhr.addEventListener("loadend", function (e) {
-                    assertProgressEvent(e, 0);
+                    assertProgressEvent(e, 100);
                     assert(true);
 
                     done();
@@ -1869,7 +1915,7 @@ if (typeof window !== "undefined") {
 
             it("calls #onloadend at the end", function (done) {
                 this.xhr.onloadend = function (e) {
-                    assertProgressEvent(e, 0);
+                    assertProgressEvent(e, 100);
                     assert(true);
 
                     done();
@@ -1893,6 +1939,10 @@ if (typeof window !== "undefined") {
                     });
                 });
             }
+
+            assertEventOrdering("load", 100, function (xhr) {
+                xhr.respond(200, {}, "");
+            });
         });
 
         describe("xhr.upload", function () {
