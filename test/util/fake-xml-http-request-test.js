@@ -1143,6 +1143,7 @@ if (typeof window !== "undefined") {
             });
 
             it("sets errorFlag to true", function () {
+                this.xhr.errorFlag = false;
                 this.xhr.error();
 
                 assert.isTrue(this.xhr.errorFlag);
@@ -1155,14 +1156,6 @@ if (typeof window !== "undefined") {
                 this.xhr.error();
 
                 assert.equals(this.xhr.requestHeaders, {});
-            });
-
-            it("does not have undefined response headers", function () {
-                this.xhr.open("GET", "/");
-
-                this.xhr.error();
-
-                assert.defined(this.xhr.responseHeaders);
             });
 
             it("nulls response headers", function () {
