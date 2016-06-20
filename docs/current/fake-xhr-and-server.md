@@ -174,6 +174,9 @@ Calls the above two methods and sets the `status` and `statusText` properties.
 
 Status should be a number, the status text is looked up from `sinon.FakeXMLHttpRequest.statusCodes`.
 
+#### `request.error();`
+
+Simulates a network error on the request. The `onerror` handler will be called and the `status` will be `0`.
 
 #### `Boolean request.autoRespond`
 
