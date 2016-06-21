@@ -104,6 +104,10 @@ Access requests through `sandbox.requests` and server through `sandbox.server`
 
 Restores all fakes created through sandbox.
 
+#### `sandbox.reset();`
+
+Resets the internal state of all spies created through sandbox.
+
 
 ## Test methods
 
