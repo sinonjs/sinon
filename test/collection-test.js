@@ -378,6 +378,48 @@ describe("sinon.collection", function () {
         });
     });
 
+    describe(".resetBehavior", function () {
+        beforeEach(function () {
+            this.collection = sinon.create(sinon.collection);
+            this.collection.fakes = [{
+                resetBehavior: sinon.spy.create()
+            }, {
+                resetBehavior: sinon.spy.create()
+            }];
+        });
+
+        it("calls resetBehavior on all fakes", function () {
+            var fake0 = this.collection.fakes[0];
+            var fake1 = this.collection.fakes[1];
+
+            this.collection.resetBehavior();
+
+            assert(fake0.resetBehavior.called);
+            assert(fake1.resetBehavior.called);
+        });
+    });
+
+    describe(".resetHistory", function () {
+        beforeEach(function () {
+            this.collection = sinon.create(sinon.collection);
+            this.collection.fakes = [{
+                resetHistory: sinon.spy.create()
+            }, {
+                resetHistory: sinon.spy.create()
+            }];
+        });
+
+        it("calls resetHistory on all fakes", function () {
+            var fake0 = this.collection.fakes[0];
+            var fake1 = this.collection.fakes[1];
+
+            this.collection.resetHistory();
+
+            assert(fake0.resetHistory.called);
+            assert(fake1.resetHistory.called);
+        });
+    });
+
     describe("inject test", function () {
         beforeEach(function () {
             this.collection = sinon.create(sinon.collection);
