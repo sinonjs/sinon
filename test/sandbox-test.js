@@ -40,6 +40,12 @@ describe("sinon.sandbox", function () {
         assert.same(sandbox.match, sinon.match);
     });
 
+    it("exposes assert", function () {
+        var sandbox = sinon.sandbox.create();
+
+        assert.same(sandbox.assert, sinon.assert);
+    });
+
     describe(".useFakeTimers", function () {
         beforeEach(function () {
             this.sandbox = sinon.create(sinon.sandbox);
