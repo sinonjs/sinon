@@ -1,7 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../lib/sinon");
+var calledInOrder = require("../../../lib/sinon/util/core/called-in-order");
+var sinonStub = require("../../../lib/sinon/stub");
 var assert = referee.assert;
 
 var testObject1 = {someFunction: function () {}};
@@ -14,11 +15,11 @@ function testMethod() {
     testObject3.thirdFunction();
 }
 
-describe("sinon.calledInOrder", function () {
+describe("util/core/calledInOrder", function () {
     beforeEach(function () {
-        sinon.stub(testObject1, "someFunction");
-        sinon.stub(testObject2, "otherFunction");
-        sinon.stub(testObject3, "thirdFunction");
+        sinonStub(testObject1, "someFunction");
+        sinonStub(testObject2, "otherFunction");
+        sinonStub(testObject3, "thirdFunction");
         testMethod();
     });
     afterEach(function () {
@@ -30,14 +31,14 @@ describe("sinon.calledInOrder", function () {
     describe("With array parameter given", function () {
 
         it("returns true, if stubs were called in given order", function () {
-            assert(sinon.calledInOrder([testObject1.someFunction, testObject2.otherFunction]));
-            assert(sinon.calledInOrder([testObject1.someFunction, testObject2.otherFunction,
+            assert(calledInOrder([testObject1.someFunction, testObject2.otherFunction]));
+            assert(calledInOrder([testObject1.someFunction, testObject2.otherFunction,
                                         testObject3.thirdFunction]));
         });
 
         it("returns false, if stubs were called in wrong order", function () {
-            assert( !sinon.calledInOrder([testObject2.otherFunction, testObject1.someFunction]));
-            assert( !sinon.calledInOrder([testObject2.otherFunction, testObject1.someFunction,
+            assert( !calledInOrder([testObject2.otherFunction, testObject1.someFunction]));
+            assert( !calledInOrder([testObject2.otherFunction, testObject1.someFunction,
                                           testObject3.thirdFunction]));
         });
     });
@@ -45,14 +46,14 @@ describe("sinon.calledInOrder", function () {
     describe("With multiple parameters given", function () {
 
         it("returns true, if stubs were called in given order", function () {
-            assert(sinon.calledInOrder(testObject1.someFunction, testObject2.otherFunction));
-            assert(sinon.calledInOrder(testObject1.someFunction, testObject2.otherFunction,
+            assert(calledInOrder(testObject1.someFunction, testObject2.otherFunction));
+            assert(calledInOrder(testObject1.someFunction, testObject2.otherFunction,
                                        testObject3.thirdFunction));
         });
 
         it("returns false, if stubs were called in wrong order", function () {
-            assert( !sinon.calledInOrder(testObject2.otherFunction, testObject1.someFunction));
-            assert( !sinon.calledInOrder(testObject2.otherFunction, testObject1.someFunction,
+            assert( !calledInOrder(testObject2.otherFunction, testObject1.someFunction));
+            assert( !calledInOrder(testObject2.otherFunction, testObject1.someFunction,
                                          testObject3.thirdFunction));
         });
     });
