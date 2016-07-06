@@ -1,8 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../../../lib/sinon");
 var getConfig = require("../../../lib/sinon/util/core/get-config");
+var defaultConfig = require("../../../lib/sinon/util/core/default-config");
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -11,12 +11,12 @@ describe("core/util/getConfig", function () {
         it("gets copy of default config", function () {
             var config = getConfig();
 
-            refute.same(config, sinon.defaultConfig);
-            assert.equals(config.injectIntoThis, sinon.defaultConfig.injectIntoThis);
-            assert.equals(config.injectInto, sinon.defaultConfig.injectInto);
-            assert.equals(config.properties, sinon.defaultConfig.properties);
-            assert.equals(config.useFakeTimers, sinon.defaultConfig.useFakeTimers);
-            assert.equals(config.useFakeServer, sinon.defaultConfig.useFakeServer);
+            refute.same(config, defaultConfig);
+            assert.equals(config.injectIntoThis, defaultConfig.injectIntoThis);
+            assert.equals(config.injectInto, defaultConfig.injectInto);
+            assert.equals(config.properties, defaultConfig.properties);
+            assert.equals(config.useFakeTimers, defaultConfig.useFakeTimers);
+            assert.equals(config.useFakeServer, defaultConfig.useFakeServer);
         });
 
         it("should override specified properties", function () {
@@ -25,11 +25,11 @@ describe("core/util/getConfig", function () {
                 useFakeServer: false
             });
 
-            refute.same(config, sinon.defaultConfig);
-            assert.equals(config.injectIntoThis, sinon.defaultConfig.injectIntoThis);
-            assert.equals(config.injectInto, sinon.defaultConfig.injectInto);
+            refute.same(config, defaultConfig);
+            assert.equals(config.injectIntoThis, defaultConfig.injectIntoThis);
+            assert.equals(config.injectInto, defaultConfig.injectInto);
             assert.equals(config.properties, ["stub", "mock"]);
-            assert.equals(config.useFakeTimers, sinon.defaultConfig.useFakeTimers);
+            assert.equals(config.useFakeTimers, defaultConfig.useFakeTimers);
             assert.isFalse(config.useFakeServer);
         });
     });
