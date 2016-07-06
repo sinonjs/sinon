@@ -106,7 +106,9 @@ describe("sinon.collection", function () {
 
             this.collection.stub(object);
 
-            assert.equals(this.collection.fakes, [object.method, object.method2, object.method3]);
+            assert.contains(this.collection.fakes, object.method);
+            assert.contains(this.collection.fakes, object.method2);
+            assert.contains(this.collection.fakes, object.method3);
             assert.equals(this.collection.fakes.length, 3);
         });
 
