@@ -22,7 +22,7 @@
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "lint": "eslint .",
-    "prepublish": "./build",
+    "prepublish": "rimraf pkg && ./build",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [
@@ -45,7 +45,8 @@
     "mochify-istanbul": "^2.4.1",
     "phantomic": "^1.4.0",
     "pre-commit": "^1.1.2",
-    "referee": "^1.2.0"
+    "referee": "^1.2.0",
+    "rimraf": "^2.5.3"
   },
   "files": [
     "lib",
