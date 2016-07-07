@@ -26,6 +26,12 @@ $ npm version x.y.z
 $ npm publish
 ```
 
+## Push new commits to GitHub
+```
+$ git push origin
+```
+Assuming `origin` is pointing to the main GitHub repo.
+
 ## Update static site
 
 ### Copy files into the static site
