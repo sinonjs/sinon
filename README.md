@@ -12,21 +12,13 @@ via [npm (node package manager)](https://github.com/npm/npm)
 
     $ npm install sinon
 
-via [NuGet (package manager for Microsoft development platform)](https://www.nuget.org/packages/SinonJS)
-
-    Install-Package SinonJS
-
-or install via git by cloning the repository and including sinon.js
-in your project, as you would any other third party library.
-
-Don't forget to include the parts of Sinon.JS that you want to use as well
-(i.e. spy.js).
+or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/download/).
 
 ## Usage
 
 See the [sinon project homepage](http://sinonjs.org/) for documentation on usage.
 
-If you have questions that are not covered by the documentation, please post them to the [Sinon.JS mailing list](http://groups.google.com/group/sinonjs) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a>
+If you have questions that are not covered by the documentation, please post them to the [Sinon.JS mailing list](http://groups.google.com/group/sinonjs) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a> or the [Gitter channel](https://gitter.im/sinonjs/sinon).
 
 ### Important: AMD needs pre-built version
 
