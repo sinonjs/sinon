@@ -1,28 +1,32 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../lib/sinon");
+var sinonMock = require("../lib/sinon/mock");
+var sinonExpectation = require("../lib/sinon/mock-expectation");
+var sinonMatch = require("../lib/sinon/match");
+var sinonStub = require("../lib/sinon/stub");
+var sinonSpy = require("../lib/sinon/spy");
 var assert = referee.assert;
 var refute = referee.refute;
 
-describe("sinon.mock", function () {
+describe("sinonMock", function () {
     describe(".create", function () {
         it("returns function with expects method", function () {
-            var mock = sinon.mock.create({});
+            var mock = sinonMock.create({});
 
             assert.isFunction(mock.expects);
         });
 
         it("throws without object", function () {
             assert.exception(function () {
-                sinon.mock.create();
+                sinonMock.create();
             }, "TypeError");
         });
     });
 
     describe(".expects", function () {
         beforeEach(function () {
-            this.mock = sinon.mock.create({ someMethod: function () {} });
+            this.mock = sinonMock.create({ someMethod: function () {} });
         });
 
         it("throws without method", function () {
@@ -52,18 +56,18 @@ describe("sinon.mock", function () {
     describe(".expectation", function () {
         beforeEach(function () {
             this.method = "myMeth";
-            this.expectation = sinon.expectation.create(this.method);
+            this.expectation = sinonExpectation.create(this.method);
         });
 
         it("creates unnamed expectation", function () {
-            var anonMock = sinon.expectation.create();
+            var anonMock = sinonExpectation.create();
             anonMock.never();
 
             assert(anonMock.verify());
         });
 
         it("uses 'anonymous mock expectation' for unnamed expectation", function () {
-            var anonMock = sinon.expectation.create();
+            var anonMock = sinonExpectation.create();
             anonMock.once();
 
             try {
@@ -311,7 +315,7 @@ describe("sinon.mock", function () {
 
             it("should not throw when exceeding at least expectation", function () {
                 var obj = { foobar: function () {} };
-                var mock = sinon.mock(obj);
+                var mock = sinonMock(obj);
                 mock.expects("foobar").atLeast(1);
 
                 obj.foobar();
@@ -324,7 +328,7 @@ describe("sinon.mock", function () {
 
             it("should not throw when exceeding at least expectation and withargs", function () {
                 var obj = { foobar: function () {} };
-                var mock = sinon.mock(obj);
+                var mock = sinonMock(obj);
 
                 mock.expects("foobar").withArgs("arg1");
                 mock.expects("foobar").atLeast(1).withArgs("arg2");
@@ -535,7 +539,7 @@ describe("sinon.mock", function () {
             });
 
             it("works with sinon matchers", function () {
-                this.expectation.withArgs(sinon.match.number, sinon.match.string, sinon.match.func);
+                this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
                 this.expectation(1, "test", function () {});
 
                 assert(this.expectation.met());
@@ -544,7 +548,7 @@ describe("sinon.mock", function () {
             it("throws when sinon matchers fail", function () {
                 var expectation = this.expectation;
 
-                this.expectation.withArgs(sinon.match.number, sinon.match.string, sinon.match.func);
+                this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
                 assert.exception(function () {
                     expectation(1, 2, 3);
                 }, "ExpectationError");
@@ -639,7 +643,7 @@ describe("sinon.mock", function () {
 
             it("throws if calls on wrong Symbol", function () {
                 if (typeof Symbol === "function") {
-                    var expectation = sinon.expectation.create("method");
+                    var expectation = sinonExpectation.create("method");
                     expectation.on(Symbol());
 
                     assert.exception(function () {
@@ -653,14 +657,14 @@ describe("sinon.mock", function () {
 
         describe(".verify", function () {
             it("pass if met", function () {
-                sinon.stub(sinon.expectation, "pass");
+                sinonStub(sinonExpectation, "pass");
                 var expectation = this.expectation;
 
                 expectation();
                 expectation.verify();
 
-                assert.equals(sinon.expectation.pass.callCount, 1);
-                sinon.expectation.pass.restore();
+                assert.equals(sinonExpectation.pass.callCount, 1);
+                sinonExpectation.pass.restore();
             });
 
             it("throws if not called enough times", function () {
@@ -689,7 +693,7 @@ describe("sinon.mock", function () {
         beforeEach(function () {
             this.method = function () {};
             this.object = { method: this.method };
-            this.mock = sinon.mock.create(this.object);
+            this.mock = sinonMock.create(this.object);
         });
 
         it("restores mocks", function () {
@@ -701,14 +705,14 @@ describe("sinon.mock", function () {
         });
 
         it("passes verified mocks", function () {
-            sinon.stub(sinon.expectation, "pass");
+            sinonStub(sinonExpectation, "pass");
 
             this.mock.expects("method").once();
             this.object.method();
             this.mock.verify();
 
-            assert.equals(sinon.expectation.pass.callCount, 1);
-            sinon.expectation.pass.restore();
+            assert.equals(sinonExpectation.pass.callCount, 1);
+            sinonExpectation.pass.restore();
         });
 
         it("restores if not met", function () {
@@ -886,7 +890,7 @@ describe("sinon.mock", function () {
         });
 
         it("does not call pass if no expectations", function () {
-            var pass = sinon.stub(sinon.expectation, "pass");
+            var pass = sinonStub(sinonExpectation, "pass");
 
             var mock = this.mock;
             mock.expects("method").never();
@@ -904,7 +908,7 @@ describe("sinon.mock", function () {
         beforeEach(function () {
             this.method = function () {};
             this.object = { method: this.method };
-            this.mock = sinon.mock.create(this.object);
+            this.mock = sinonMock.create(this.object);
         });
 
         it("mocks object method", function () {
@@ -960,7 +964,7 @@ describe("sinon.mock", function () {
             this.thisValue = {};
             this.method = function () {};
             this.object = { method: this.method };
-            this.mock = sinon.mock.create(this.object);
+            this.mock = sinonMock.create(this.object);
             this.mock.expects("method");
             this.mock.expects("method").on(this.thisValue);
         });
@@ -994,7 +998,7 @@ describe("sinon.mock", function () {
 
         it("allows mock calls in any order", function () {
             var object = { method: function () {} };
-            var mock = sinon.mock(object);
+            var mock = sinonMock(object);
             mock.expects("method").once().withArgs(42);
             mock.expects("method").twice().withArgs("Yeah");
 
@@ -1022,7 +1026,7 @@ describe("sinon.mock", function () {
 
     describe("mock function", function () {
         it("returns mock method", function () {
-            var mock = sinon.mock();
+            var mock = sinonMock();
 
             assert.isFunction(mock);
             assert.isFunction(mock.atLeast);
@@ -1030,7 +1034,7 @@ describe("sinon.mock", function () {
         });
 
         it("returns mock object", function () {
-            var mock = sinon.mock({});
+            var mock = sinonMock({});
 
             assert.isObject(mock);
             assert.isFunction(mock.expects);
@@ -1040,8 +1044,8 @@ describe("sinon.mock", function () {
 
     describe(".yields", function () {
         it("invokes only argument as callback", function () {
-            var mock = sinon.mock().yields();
-            var spy = sinon.spy();
+            var mock = sinonMock().yields();
+            var spy = sinonSpy();
             mock(spy);
 
             assert(spy.calledOnce);
@@ -1049,7 +1053,7 @@ describe("sinon.mock", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var mock = sinon.mock().yields();
+            var mock = sinonMock().yields();
 
             try {
                 mock();
