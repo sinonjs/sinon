@@ -5,6 +5,15 @@ var samsam = require("samsam");
 var sinon = require("../lib/sinon");
 var assert = referee.assert;
 var refute = referee.refute;
+var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
+var sinonSandbox = require("../lib/sinon/sandbox");
+var sinonCollection = require("../lib/sinon/collection");
+var createInstance = require("../lib/sinon/util/core/create");
+var sinonSpy = require("../lib/sinon/spy");
+var sinonStub = require("../lib/sinon/stub");
+var sinonConfig = require("../lib/sinon/util/core/get-config");
+var sinonMatch = require("../lib/sinon/match");
+var sinonAssert = require("../lib/sinon/assert");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
 var globalXHR = global.XMLHttpRequest;
@@ -17,38 +26,38 @@ if (!assert.stub) {
 referee.add("fakeServerWithClock", {
     assert: function (obj, fakeServer) {
         return samsam.deepEqual(obj, fakeServer) &&
-            sinon.fakeServer.create.calledOn(sinon.fakeServerWithClock);
+            sinon.fakeServer.create.calledOn(fakeServerWithClock);
     },
     assertMessage: "Expected object ${0} to be a fake server with clock"
 });
 
-describe("sinon.sandbox", function () {
+describe("sinonSandbox", function () {
     it("inherits collection", function () {
-        assert(sinon.collection.isPrototypeOf(sinon.sandbox));
+        assert(sinonCollection.isPrototypeOf(sinonSandbox));
     });
 
     it("creates sandboxes", function () {
-        var sandbox = sinon.sandbox.create();
+        var sandbox = sinonSandbox.create();
 
         assert.isObject(sandbox);
-        assert(sinon.sandbox.isPrototypeOf(sandbox));
+        assert(sinonSandbox.isPrototypeOf(sandbox));
     });
 
     it("exposes match", function () {
-        var sandbox = sinon.sandbox.create();
+        var sandbox = sinonSandbox.create();
 
-        assert.same(sandbox.match, sinon.match);
+        assert.same(sandbox.match, sinonMatch);
     });
 
     it("exposes assert", function () {
-        var sandbox = sinon.sandbox.create();
+        var sandbox = sinonSandbox.create();
 
-        assert.same(sandbox.assert, sinon.assert);
+        assert.same(sandbox.assert, sinonAssert);
     });
 
     describe(".useFakeTimers", function () {
         beforeEach(function () {
-            this.sandbox = sinon.create(sinon.sandbox);
+            this.sandbox = createInstance(sinonSandbox);
         });
 
         afterEach(function () {
@@ -76,7 +85,7 @@ describe("sinon.sandbox", function () {
         });
 
         it("passes arguments to sinon.useFakeTimers", function () {
-            var stub = sinon.stub(sinon, "useFakeTimers").returns({ restore: function () {} });
+            var stub = sinonStub(sinon, "useFakeTimers").returns({ restore: function () {} });
             this.sandbox.useFakeTimers("Date", "setTimeout");
             this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
 
@@ -105,7 +114,7 @@ describe("sinon.sandbox", function () {
 
             describe(".useFakeXMLHttpRequest", function () {
                 beforeEach(function () {
-                    this.sandbox = sinon.sandbox.create();
+                    this.sandbox = sinonSandbox.create();
                 });
 
                 afterEach(function () {
@@ -130,7 +139,7 @@ describe("sinon.sandbox", function () {
 
             describe(".useFakeServer", function () {
                 beforeEach(function () {
-                    this.sandbox = sinon.create(sinon.sandbox);
+                    this.sandbox = createInstance(sinonSandbox);
                 });
 
                 afterEach(function () {
@@ -177,7 +186,7 @@ describe("sinon.sandbox", function () {
     describe(".inject", function () {
         beforeEach(function () {
             this.obj = {};
-            this.sandbox = sinon.sandbox.create();
+            this.sandbox = sinonSandbox.create();
         });
 
         afterEach(function () {
@@ -239,7 +248,7 @@ describe("sinon.sandbox", function () {
                     this.sandbox.useFakeTimers();
                     this.sandbox.inject(this.obj);
 
-                    var spy = sinon.spy();
+                    var spy = sinonSpy();
                     setTimeout(spy, 10);
 
                     this.sandbox.clock.tick(10);
@@ -265,10 +274,10 @@ describe("sinon.sandbox", function () {
             this.fakeServer = { requests: this.requests };
             this.clock = {};
 
-            sinon.stub(sinon, "useFakeTimers").returns(this.clock);
+            sinonStub(sinon, "useFakeTimers").returns(this.clock);
 
             if (sinon.fakeServer) {
-                sinon.stub(sinon.fakeServer, "create").returns(this.fakeServer);
+                sinonStub(sinon.fakeServer, "create").returns(this.fakeServer);
             }
         });
 
@@ -280,7 +289,7 @@ describe("sinon.sandbox", function () {
         });
 
         it("yields stub, mock as arguments", function () {
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["stub", "mock"]
             }));
@@ -293,7 +302,7 @@ describe("sinon.sandbox", function () {
         });
 
         it("yields spy, stub, mock as arguments", function () {
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["spy", "stub", "mock"]
             }));
@@ -306,7 +315,7 @@ describe("sinon.sandbox", function () {
         });
 
         it("does not yield server when not faking xhr", function () {
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["server", "stub", "mock"],
                 useFakeServer: false
@@ -324,7 +333,7 @@ describe("sinon.sandbox", function () {
             var clock = {};
             var spy = false;
             var object = { server: server, clock: clock, spy: spy};
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 properties: ["server", "clock", "spy"],
                 injectInto: object
             }));
@@ -340,7 +349,7 @@ describe("sinon.sandbox", function () {
             describe("ajax options", function () {
 
                 it("yields server when faking xhr", function () {
-                    var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    var sandbox = sinonSandbox.create(sinonConfig({
                         injectIntoThis: false,
                         properties: ["server", "stub", "mock"]
                     }));
@@ -354,7 +363,7 @@ describe("sinon.sandbox", function () {
                 });
 
                 it("uses serverWithClock when faking xhr", function () {
-                    var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    var sandbox = sinonSandbox.create(sinonConfig({
                         injectIntoThis: false,
                         properties: ["server"],
                         useFakeServer: sinon.fakeServerWithClock
@@ -366,7 +375,7 @@ describe("sinon.sandbox", function () {
                 });
 
                 it("yields clock when faking timers", function () {
-                    var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    var sandbox = sinonSandbox.create(sinonConfig({
                         injectIntoThis: false,
                         properties: ["server", "clock"]
                     }));
@@ -380,7 +389,7 @@ describe("sinon.sandbox", function () {
                 it("injects properties into object", function () {
                     var object = {};
 
-                    var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    var sandbox = sinonSandbox.create(sinonConfig({
                         properties: ["server", "clock"],
                         injectInto: object
                     }));
@@ -399,7 +408,7 @@ describe("sinon.sandbox", function () {
                 it("should inject server and clock when only enabling them", function () {
                     var object = {};
 
-                    var sandbox = sinon.sandbox.create(sinon.getConfig({
+                    var sandbox = sinonSandbox.create(sinonConfig({
                         injectInto: object,
                         useFakeTimers: true,
                         useFakeServer: true
@@ -420,7 +429,7 @@ describe("sinon.sandbox", function () {
         }
 
         it("fakes specified timers", function () {
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["clock"],
                 useFakeTimers: ["Date", "setTimeout"]
@@ -434,7 +443,7 @@ describe("sinon.sandbox", function () {
         it("injects sandbox", function () {
             var object = {};
 
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 properties: ["sandbox", "spy"],
                 injectInto: object
             }));
@@ -449,12 +458,12 @@ describe("sinon.sandbox", function () {
         it("injects match", function () {
             var object = {};
 
-            var sandbox = sinon.sandbox.create(sinon.getConfig({
+            var sandbox = sinonSandbox.create(sinonConfig({
                 properties: ["match"],
                 injectInto: object
             }));
 
-            assert.same(object.match, sinon.match);
+            assert.same(object.match, sinonMatch);
 
             sandbox.restore();
         });
