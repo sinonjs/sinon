@@ -1,14 +1,14 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../lib/sinon");
+var extend = require("../lib/sinon/extend");
 var assert = referee.assert;
 
-describe("sinon.extend", function () {
+describe("extend", function () {
     it("should return unaltered target when only one argument", function () {
         var target = { hello: "world" };
 
-        sinon.extend(target);
+        extend(target);
 
         assert.equals(target, { hello: "world" });
     });
@@ -16,7 +16,7 @@ describe("sinon.extend", function () {
     it("should copy all (own) properties into first argument, from all subsequent arguments", function () {
         var target = { hello: "world" };
 
-        sinon.extend(target, { a: "a" }, { b: "b" });
+        extend(target, { a: "a" }, { b: "b" });
 
         assert.equals(target.hello, "world");
         assert.equals(target.a, "a");
@@ -36,7 +36,7 @@ describe("sinon.extend", function () {
             }
         };
 
-        sinon.extend(target, source);
+        extend(target, source);
 
         assert.same(target.toString, source.toString);
     });
@@ -47,7 +47,7 @@ describe("sinon.extend", function () {
         var source2 = { a: 2, b: 2 };
         var source3 = { a: 3 };
 
-        sinon.extend(target, source1, source2, source3);
+        extend(target, source1, source2, source3);
 
         assert.equals(target.a, 3);
         assert.equals(target.b, 2);
@@ -66,7 +66,7 @@ describe("sinon.extend", function () {
             prop4: 4
         };
 
-        var result = sinon.extend({}, object1, object2);
+        var result = extend({}, object1, object2);
 
         var expected = {
             prop1: null,
