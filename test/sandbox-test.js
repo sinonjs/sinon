@@ -2,7 +2,6 @@
 
 var referee = require("referee");
 var samsam = require("samsam");
-var sinon = require("../lib/sinon");
 var assert = referee.assert;
 var refute = referee.refute;
 var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
@@ -86,66 +85,33 @@ describe("sinonSandbox", function () {
             assert.clock(this.sandbox.clock);
         });
 
-        // Not sure how we can test this without monkey-patching or testing the implementation of lolex.
-        it.skip("passes arguments to sinon.useFakeTimers", function () {
-            /*
-            var useFakeTimersSpy = sinon.spy(sinonClock, "useFakeTimers");
+        it("passes arguments to sinon.useFakeTimers", function () {
+            var useFakeTimersStub = sinonStub(sinonClock, "useFakeTimers").returns({});
 
             this.sandbox.useFakeTimers("Date", "setTimeout");
             this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
 
-            assert(sinon.useFakeTimers.calledWith("Date", "setTimeout"));
-            assert(sinon.useFakeTimers.calledWith("setTimeout", "clearTimeout", "setInterval"));
+            assert(useFakeTimersStub.calledWith("Date", "setTimeout"));
+            assert(useFakeTimersStub.calledWith("setTimeout", "clearTimeout", "setInterval"));
 
-            useFakeTimersSpy.restore();
-            */
+            useFakeTimersStub.restore();
         });
 
-        // This test is unrelated to sandbox and is testing the internals of useFakeTimers.
-        it.skip("adds clock to fake collection", function () {
-            /*
+        it("restores the fakeTimer clock created by the sandbox when the sandbox is restored", function () {
+            var originalSetTimeout = setTimeout;
+
             this.sandbox.useFakeTimers();
+            refute.same(setTimeout, originalSetTimeout, "fakeTimers installed");
+
             this.sandbox.restore();
 
-            assert.same(setTimeout, sinon.timers.setTimeout);
-            */
+            assert.same(setTimeout, originalSetTimeout, "fakeTimers restored");
         });
     });
 
     // These were not run in browsers before, as we were only testing in node
     if (typeof window !== "undefined") {
         describe("fake XHR/server", function () {
-            // Causes problems in Chrome/Firefox
-            // TODO: Figure out why
-            // requiresSupportFor: {
-            //     "XHR/ActiveXObject": globalXHR || globalAXO
-            // },
-
-            describe(".useFakeXMLHttpRequest", function () {
-                beforeEach(function () {
-                    this.sandbox = sinonSandbox.create();
-                });
-
-                afterEach(function () {
-                    this.sandbox.restore();
-                });
-
-                it("calls sinon.useFakeXMLHttpRequest", function () {
-                    this.sandbox.stub(sinon, "useFakeXMLHttpRequest").returns({ restore: function () {} });
-                    this.sandbox.useFakeXMLHttpRequest();
-
-                    assert(sinon.useFakeXMLHttpRequest.called);
-                });
-
-                it("adds fake xhr to fake collection", function () {
-                    this.sandbox.useFakeXMLHttpRequest();
-                    this.sandbox.restore();
-
-                    assert.same(global.XMLHttpRequest, globalXHR);
-                    assert.same(global.ActiveXObject, globalAXO);
-                });
-            });
-
             describe(".useFakeServer", function () {
                 beforeEach(function () {
                     this.sandbox = createInstance(sinonSandbox);
@@ -171,14 +137,14 @@ describe("sinonSandbox", function () {
                 it("creates server", function () {
                     var server = this.sandbox.useFakeServer();
 
-                    assert(sinon.fakeServer.isPrototypeOf(server));
+                    assert(fakeServer.isPrototypeOf(server));
                 });
 
                 it("creates server with cock", function () {
-                    this.sandbox.serverPrototype = sinon.fakeServerWithClock;
+                    this.sandbox.serverPrototype = fakeServerWithClock;
                     var server = this.sandbox.useFakeServer();
 
-                    assert(sinon.fakeServerWithClock.isPrototypeOf(server));
+                    assert(fakeServerWithClock.isPrototypeOf(server));
                 });
 
                 it("adds server to fake collection", function () {
@@ -283,18 +249,12 @@ describe("sinonSandbox", function () {
             this.fakeServer = { requests: this.requests };
 
             this.useFakeTimersSpy = sinonSpy(sinonClock, "useFakeTimers");
-
-            if (sinon.fakeServer) {
-                sinonStub(sinon.fakeServer, "create").returns(this.fakeServer);
-            }
+            sinonStub(fakeServer, "create").returns(this.fakeServer);
         });
 
         afterEach(function () {
             this.useFakeTimersSpy.restore();
-
-            if (sinon.fakeServer) {
-                sinon.fakeServer.create.restore();
-            }
+            fakeServer.create.restore();
         });
 
         it("yields stub, mock as arguments", function () {
@@ -375,7 +335,7 @@ describe("sinonSandbox", function () {
                     var sandbox = sinonSandbox.create(sinonConfig({
                         injectIntoThis: false,
                         properties: ["server"],
-                        useFakeServer: sinon.fakeServerWithClock
+                        useFakeServer: fakeServerWithClock
                     }));
 
                     assert.fakeServerWithClock(sandbox.args[0], this.fakeServer);
