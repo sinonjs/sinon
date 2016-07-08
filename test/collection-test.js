@@ -1,12 +1,15 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../lib/sinon");
+var sinonCollection = require("../lib/sinon/collection");
+var createInstance = require("../lib/sinon/util/core/create");
+var sinonSpy = require("../lib/sinon/spy");
+var sinonStub = require("../lib/sinon/stub");
 var assert = referee.assert;
 
-describe("sinon.collection", function () {
+describe("collection", function () {
     it("creates fake collection", function () {
-        var collection = sinon.create(sinon.collection);
+        var collection = createInstance(sinonCollection);
 
         assert.isFunction(collection.verify);
         assert.isFunction(collection.restore);
@@ -17,12 +20,7 @@ describe("sinon.collection", function () {
 
     describe(".stub", function () {
         beforeEach(function () {
-            this.stub = sinon.stub;
-            this.collection = sinon.create(sinon.collection);
-        });
-
-        afterEach(function () {
-            sinon.stub = this.stub;
+            this.collection = createInstance(sinonCollection);
         });
 
         it("fails if stubbing property on null", function () {
@@ -50,43 +48,27 @@ describe("sinon.collection", function () {
             }
         });
 
-        it("calls stub", function () {
+        it("creates a stub", function () {
             var object = { method: function () {} };
-            var args;
-
-            sinon.stub = function () {
-                args = Array.prototype.slice.call(arguments);
-            };
 
             this.collection.stub(object, "method");
 
-            assert.equals(args, [object, "method"]);
+            assert.equals(typeof object.method.restore, "function");
         });
 
         it("adds stub to fake array", function () {
             var object = { method: function () {} };
 
-            sinon.stub = function () {
-                return object;
-            };
-
             this.collection.stub(object, "method");
 
-            assert.equals(this.collection.fakes, [object]);
+            assert.equals(this.collection.fakes, [object.method]);
         });
 
         it("appends stubs to fake array", function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
-
-            sinon.stub = function () {
-                return objects[i++];
-            };
-
             this.collection.stub({ method: function () {} }, "method");
             this.collection.stub({ method: function () {} }, "method");
 
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes.length, 2);
         });
 
         it("adds all object methods to fake array", function () {
@@ -100,10 +82,6 @@ describe("sinon.collection", function () {
                 enumerable: false
             });
 
-            sinon.stub = function () {
-                return object;
-            };
-
             this.collection.stub(object);
 
             assert.contains(this.collection.fakes, object.method);
@@ -114,21 +92,11 @@ describe("sinon.collection", function () {
 
         it("returns a stubbed object", function () {
             var object = { method: function () {} };
-
-            sinon.stub = function () {
-                return object;
-            };
-
             assert.equals(this.collection.stub(object), object);
         });
 
         it("returns a stubbed method", function () {
             var object = { method: function () {} };
-
-            sinon.stub = function () {
-                return object.method;
-            };
-
             assert.equals(this.collection.stub(object, "method"), object.method);
         });
 
@@ -149,7 +117,7 @@ describe("sinon.collection", function () {
     describe("stub anything", function () {
         beforeEach(function () {
             this.object = { property: 42 };
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
         });
 
         it("stubs number property", function () {
@@ -190,91 +158,58 @@ describe("sinon.collection", function () {
 
     describe(".mock", function () {
         beforeEach(function () {
-            this.mock = sinon.mock;
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
         });
 
-        afterEach(function () {
-            sinon.mock = this.mock;
-        });
+        it("returns a mock", function () {
+            var object = { method: function () { }};
 
-        it("calls mock", function () {
-            var object = { id: 42 };
-            var args;
+            var actual = this.collection.mock(object);
+            actual.expects("method");
 
-            sinon.mock = function () {
-                args = Array.prototype.slice.call(arguments);
-            };
-
-            this.collection.mock(object, "method");
-
-            assert.equals(args, [object, "method"]);
+            assert.equals(typeof actual.verify, "function");
+            assert.equals(typeof object.method.restore, "function");
         });
 
         it("adds mock to fake array", function () {
-            var object = { id: 42 };
+            var object = { method: function () { }};
 
-            sinon.mock = function () {
-                return object;
-            };
+            var expected = this.collection.mock(object);
 
-            this.collection.mock(object, "method");
-
-            assert.equals(this.collection.fakes, [object]);
+            assert.equals(this.collection.fakes, [expected]);
         });
 
         it("appends mocks to fake array", function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
+            this.collection.mock({});
+            this.collection.mock({});
 
-            sinon.mock = function () {
-                return objects[i++];
-            };
-
-            this.collection.mock({}, "method");
-            this.collection.mock({}, "method");
-
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes.length, 2);
         });
     });
 
     describe("stub and mock test", function () {
         beforeEach(function () {
-            this.mock = sinon.mock;
-            this.stub = sinon.stub;
-            this.collection = sinon.create(sinon.collection);
-        });
-
-        afterEach(function () {
-            sinon.mock = this.mock;
-            sinon.stub = this.stub;
+            this.collection = createInstance(sinonCollection);
         });
 
         it("appends mocks and stubs to fake array", function () {
-            var objects = [{ id: 42 }, { id: 17 }];
-            var i = 0;
-
-            sinon.stub = sinon.mock = function () {
-                return objects[i++];
-            };
-
             this.collection.mock({ method: function () {} }, "method");
             this.collection.stub({ method: function () {} }, "method");
 
-            assert.equals(this.collection.fakes, objects);
+            assert.equals(this.collection.fakes.length, 2);
         });
     });
 
     describe(".verify", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
         });
 
         it("calls verify on all fakes", function () {
             this.collection.fakes = [{
-                verify: sinon.spy.create()
+                verify: sinonSpy()
             }, {
-                verify: sinon.spy.create()
+                verify: sinonSpy()
             }];
 
             this.collection.verify();
@@ -286,11 +221,11 @@ describe("sinon.collection", function () {
 
     describe(".restore", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
             this.collection.fakes = [{
-                restore: sinon.spy.create()
+                restore: sinonSpy()
             }, {
-                restore: sinon.spy.create()
+                restore: sinonSpy()
             }];
         });
 
@@ -324,12 +259,12 @@ describe("sinon.collection", function () {
 
     describe("verify and restore", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
         });
 
         it("calls verify and restore", function () {
-            this.collection.verify = sinon.spy.create();
-            this.collection.restore = sinon.spy.create();
+            this.collection.verify = sinonSpy();
+            this.collection.restore = sinonSpy();
 
             this.collection.verifyAndRestore();
 
@@ -338,8 +273,8 @@ describe("sinon.collection", function () {
         });
 
         it("throws when restore throws", function () {
-            this.collection.verify = sinon.spy.create();
-            this.collection.restore = sinon.stub.create().throws();
+            this.collection.verify = sinonSpy();
+            this.collection.restore = sinonStub().throws();
 
             assert.exception(function () {
                 this.collection.verifyAndRestore();
@@ -347,8 +282,8 @@ describe("sinon.collection", function () {
         });
 
         it("calls restore when restore throws", function () {
-            this.collection.verify = sinon.spy.create();
-            this.collection.restore = sinon.stub.create().throws();
+            this.collection.verify = sinonSpy();
+            this.collection.restore = sinonStub().throws();
 
             try {
                 this.collection.verifyAndRestore();
@@ -361,11 +296,11 @@ describe("sinon.collection", function () {
 
     describe(".reset", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
             this.collection.fakes = [{
-                reset: sinon.spy.create()
+                reset: sinonSpy()
             }, {
-                reset: sinon.spy.create()
+                reset: sinonSpy()
             }];
         });
 
@@ -382,11 +317,11 @@ describe("sinon.collection", function () {
 
     describe(".resetBehavior", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
             this.collection.fakes = [{
-                resetBehavior: sinon.spy.create()
+                resetBehavior: sinonSpy()
             }, {
-                resetBehavior: sinon.spy.create()
+                resetBehavior: sinonSpy()
             }];
         });
 
@@ -403,11 +338,11 @@ describe("sinon.collection", function () {
 
     describe(".resetHistory", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
             this.collection.fakes = [{
-                resetHistory: sinon.spy.create()
+                resetHistory: sinonSpy()
             }, {
-                resetHistory: sinon.spy.create()
+                resetHistory: sinonSpy()
             }];
         });
 
@@ -424,7 +359,7 @@ describe("sinon.collection", function () {
 
     describe("inject test", function () {
         beforeEach(function () {
-            this.collection = sinon.create(sinon.collection);
+            this.collection = createInstance(sinonCollection);
         });
 
         it("injects fakes into object", function () {
@@ -445,9 +380,9 @@ describe("sinon.collection", function () {
         it("injects spy, stub, mock bound to collection", function () {
             var obj = {};
             this.collection.inject(obj);
-            sinon.stub(this.collection, "spy");
-            sinon.stub(this.collection, "stub");
-            sinon.stub(this.collection, "mock");
+            sinonStub(this.collection, "spy");
+            sinonStub(this.collection, "stub");
+            sinonStub(this.collection, "mock");
 
             obj.spy();
             var fn = obj.spy;
