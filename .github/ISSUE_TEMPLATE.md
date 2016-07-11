@@ -13,5 +13,14 @@
 > Describe *with code* how to reproduce the faulty behaviour,
 > or link to code on JSBin or similar
 
+<details>
+    <summary>Really long code sample or stacktrace</summary>
+
+    If you need to provide a dump of a stack trace or
+    other lengthy material, such as 80 lines of example code,
+    please stuff it in a `<details>` tag such as this
+    to make the issue more readable. Thanks.
+</details>
+
 [See this for an example](https://github.com/sinonjs/sinon/blob/master/CONTRIBUTING.md#bug-report-template)
 
