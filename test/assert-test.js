@@ -131,6 +131,15 @@ describe("assert", function () {
             assert(sinonAssert.fail.called);
         });
 
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            stub();
+
+            assert.exception(function () {
+                sinonAssert.called(stub, 1);
+            });
+        });
+
         it("does not fail when method was called", function () {
             var stub = this.stub;
             stub();
@@ -190,6 +199,14 @@ describe("assert", function () {
             assert(sinonAssert.fail.called);
         });
 
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinonAssert.notCalled(stub, 1);
+            });
+        });
+
         it("passes when method was not called", function () {
             var stub = this.stub;
 
@@ -243,6 +260,15 @@ describe("assert", function () {
             assert(sinonAssert.fail.called);
         });
 
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            stub();
+
+            assert.exception(function () {
+                sinonAssert.calledOnce(stub, 1);
+            });
+        });
+
         it("passes when method was called", function () {
             var stub = this.stub;
             stub();
@@ -293,6 +319,16 @@ describe("assert", function () {
             });
         });
 
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            this.stub();
+            this.stub();
+
+            assert.exception(function () {
+                sinonAssert.calledTwice(stub, 1);
+            });
+        });
+
         it("passes if called twice", function () {
             var stub = this.stub;
             this.stub();
@@ -328,6 +364,17 @@ describe("assert", function () {
 
             assert.exception(function () {
                 sinonAssert.calledThrice(stub);
+            });
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            this.stub();
+            this.stub();
+            this.stub();
+
+            assert.exception(function () {
+                sinonAssert.calledThrice(stub, 1);
             });
         });
 
