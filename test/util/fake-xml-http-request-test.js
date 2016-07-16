@@ -64,6 +64,58 @@
         assert.equals(event.lengthComputable, !!progress);
     };
 
+    var assertEventOrdering = function (event, progress, callback) {
+        return function (done) {
+            var expectedOrder = [
+                "upload:progress",
+                "upload:" + event,
+                "upload:loadend",
+                "xhr:progress",
+                "xhr:on" + event,
+                "xhr:" + event
+            ];
+            var eventOrder = [];
+
+            function observe(name) {
+                return function (e) {
+                    assertProgressEvent(e, progress);
+                    eventOrder.push(name);
+                };
+            }
+
+            this.xhr.open("GET", "/");
+            this.xhr.send();
+
+            this.xhr.upload.addEventListener("progress", observe("upload:progress"));
+            this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
+            this.xhr.addEventListener("progress", observe("xhr:progress"));
+            this.xhr.addEventListener("loadend", function (e) {
+                assertProgressEvent(e, progress);
+
+                // finish next tick to allow any events that might fire
+                // after loadend to trigger
+                setTimeout(function () {
+                    assert.equals(eventOrder, expectedOrder);
+
+                    done();
+                }, 1);
+            });
+
+            // listen for abort, error, and load events to make sure only
+            // the expected events fire
+            ["abort", "error", "load"].forEach(
+                function (name) {
+                    this.xhr.upload.addEventListener(name, observe("upload:" + name));
+                    this.xhr.addEventListener(name, observe("xhr:" + name));
+                    this.xhr["on" + name] = observe("xhr:on" + name);
+                },
+                this
+            );
+
+            callback(this.xhr);
+        };
+    };
+
     buster.testCase("sinon.FakeXMLHttpRequest", {
         requiresSupportFor: {
             "browser": typeof window !== "undefined"
@@ -1078,43 +1130,77 @@
                 assert.isFalse(this.xhr.onreadystatechange.called);
             },
 
-            // see: https://xhr.spec.whatwg.org/#request-error-steps
-            "should follow request error steps": function (done) {
-                var expectedOrder = [
-                    "upload:progress",
-                    "upload:abort",
-                    "upload:loadend",
-                    "xhr:progress",
-                    "xhr:onabort",
-                    "xhr:abort"
-                ];
-                var eventOrder = [];
+            "follows request abort event steps": assertEventOrdering("abort", 0, function (xhr) {
+                xhr.abort();
+            })
+        },
 
-                function observe(name) {
-                    return function (e) {
-                        assertProgressEvent(e, 0);
-                        eventOrder.push(name);
-                    };
-                }
+        ".error": {
+            setUp: function () {
+                this.xhr = new sinon.FakeXMLHttpRequest();
+            },
 
+            "sets response to empty string": function () {
+                this.xhr.response = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.response, "");
+            },
+
+            "sets responseText to empty string": function () {
+                this.xhr.responseText = "Partial data";
+
+                this.xhr.error();
+
+                assert.same(this.xhr.responseText, "");
+            },
+
+            "sets errorFlag to true": function () {
+                this.xhr.errorFlag = false;
+                this.xhr.error();
+
+                assert.isTrue(this.xhr.errorFlag);
+            },
+
+            "nulls request headers": function () {
+                this.xhr.open("GET", "/");
+                this.xhr.setRequestHeader("X-Test", "Sumptn");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.requestHeaders, {});
+            },
+
+            "nulls response headers": function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.responseHeaders, {});
+            },
+
+            "dispatches readystatechange event if sent before": function () {
                 this.xhr.open("GET", "/");
                 this.xhr.send();
+                this.xhr.onreadystatechange = sinon.stub();
 
-                this.xhr.upload.addEventListener("progress", observe("upload:progress"));
-                this.xhr.upload.addEventListener("abort", observe("upload:abort"));
-                this.xhr.upload.addEventListener("loadend", observe("upload:loadend"));
-                this.xhr.addEventListener("progress", observe("xhr:progress"));
-                this.xhr.addEventListener("abort", observe("xhr:abort"));
-                this.xhr.onabort = observe("xhr:onabort");
-                this.xhr.addEventListener("loadend", function (e) {
-                    assertProgressEvent(e, 0);
-                    assert.equals(eventOrder, expectedOrder);
+                this.xhr.error();
 
-                    done();
-                });
+                assert(this.xhr.onreadystatechange.called);
+            },
 
-                this.xhr.abort();
-            }
+            "sets readyState to DONE": function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.error();
+
+                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+            },
+
+            "follows request error event steps": assertEventOrdering("error", 0, function (xhr) {
+                xhr.error();
+            })
         },
 
         ".response": {
@@ -1708,6 +1794,10 @@
                 this.xhr.respond(200, {}, "");
             },
 
+            "triggers 'load' event on for non-200 events": assertEventOrdering("load", 100, function (xhr) {
+                xhr.respond(500, {}, "");
+            }),
+
             "triggers 'load' with event target set to the XHR object": function (done) {
                 var xhr = this.xhr;
 
@@ -1797,7 +1887,7 @@
 
             "triggers 'loadend' event at the end": function (done) {
                 this.xhr.addEventListener("loadend", function (e) {
-                    assertProgressEvent(e, 0);
+                    assertProgressEvent(e, 100);
 
                     done();
                 });
@@ -1821,7 +1911,7 @@
 
             "calls #onloadend at the end": function (done) {
                 this.xhr.onloadend = function (e) {
-                    assertProgressEvent(e, 0);
+                    assertProgressEvent(e, 100);
 
                     done();
                 };
@@ -1846,7 +1936,12 @@
                         loaded: 20
                     });
                 }
-            }
+            },
+
+
+            "follows request load event steps": assertEventOrdering("load", 100, function (xhr) {
+                xhr.respond(200, {}, "");
+            })
         },
 
         "xhr.upload": {
