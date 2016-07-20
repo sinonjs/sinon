@@ -1887,7 +1887,7 @@
 
             "triggers 'loadend' event at the end": function (done) {
                 this.xhr.addEventListener("loadend", function (e) {
-                    assertProgressEvent(e, 100);
+                    assertProgressEvent(e, 0);
 
                     done();
                 });
@@ -1911,7 +1911,7 @@
 
             "calls #onloadend at the end": function (done) {
                 this.xhr.onloadend = function (e) {
-                    assertProgressEvent(e, 100);
+                    assertProgressEvent(e, 0);
 
                     done();
                 };
