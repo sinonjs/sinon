@@ -1794,8 +1794,9 @@
                 this.xhr.respond(200, {}, "");
             },
 
-            "triggers 'load' event on for non-200 events": assertEventOrdering("load", 100, function (xhr) {
-                xhr.respond(500, {}, "");
+            "triggers 'load' event on for non-200 events": assertEventOrdering("load", 50, function (xhr) {
+                // error is 50 chars long
+                xhr.respond(500, {}, Array(51).join("x"));
             }),
 
             "triggers 'load' with event target set to the XHR object": function (done) {
@@ -1939,8 +1940,8 @@
             },
 
 
-            "follows request load event steps": assertEventOrdering("load", 100, function (xhr) {
-                xhr.respond(200, {}, "");
+            "follows request load event steps": assertEventOrdering("load", 27, function (xhr) {
+                xhr.respond(200, {}, "This line is 27 chars long.");
             })
         },
 
@@ -1995,7 +1996,8 @@
                     });
 
                     this.xhr.send();
-                    this.xhr.respond(200, {}, "");
+                    // 100 character string
+                    this.xhr.respond(200, {}, Array(101).join("x"));
                 }
             },
 
