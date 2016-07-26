@@ -1,16 +1,12 @@
 language: node_js
 node_js:
-  - "0.8"
-  - "0.10"
   - "0.12"
-  - "4.1"
+  - "4.4"
 
 sudo: false
 
 before_install:
   - npm config set strict-ssl false
-  # use a more modern npm than ships with 0.8
-  - 'if [ "x$TRAVIS_NODE_VERSION" = "x0.8" ]; then npm install -g npm@1.4; fi'
   # Workaround for intermittent build failures
   # install buster separately from `npm install`, as it uses the C compiler, which might cause the
   #   npm ERR! cb() never called!

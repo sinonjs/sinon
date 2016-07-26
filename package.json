@@ -14,10 +14,13 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
+    "build": "./build",
+    "check-clean-wd": "./scripts/is-clean-wd.sh",
+    "clean": "rimraf pkg",
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test": "./scripts/ci-test.sh",
-    "lint": "$(npm bin)/eslint .",
-    "prepublish": "./build",
+    "lint": "eslint .",
+    "prepublish": "npm-run-all check-clean-wd clean build",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [
@@ -36,7 +39,9 @@
     "eslint": "0.24.0",
     "eslint-config-defaults": "^2.1.0",
     "jscs": "1.13.1",
-    "pre-commit": "1.0.10"
+    "npm-run-all": "^2.3.0",
+    "pre-commit": "1.0.10",
+    "rimraf": "^2.5.4"
   },
   "files": [
     "lib",
