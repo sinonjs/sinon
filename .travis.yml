@@ -21,7 +21,8 @@ before_install:
 
 before_script:
   # these build targets only need to run once per build, so let's conserve a few resources
-  - if [ "x$TRAVIS_NODE_VERSION" = "x0.12" ]; then npm run lint; fi
+  # ESLint only supports Node >=4
+  - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run lint; fi
   # run these on node 6 to have npm 3 with flat dependencies
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-headless; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-webworker; fi
