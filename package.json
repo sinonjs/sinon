@@ -36,9 +36,9 @@
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "eslint": "^1.7.1",
-    "eslint-config-defaults": "^2.1.0",
-    "eslint-plugin-mocha": "^1.1.0",
+    "eslint": "^3.1.1",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-mocha": "^4.2.0",
     "mocaccino": "^1.8.2",
     "mocha": "^2.4.5",
     "mochify": "^2.17.0",
