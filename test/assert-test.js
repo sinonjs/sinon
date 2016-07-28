@@ -1156,6 +1156,7 @@ describe("assert", function () {
 
             sinonSpy(this.obj, "doSomething");
 
+            /*eslint consistent-return: "off"*/
             this.message = function (method) {
                 try {
                     sinonAssert[method].apply(sinonAssert, [].slice.call(arguments, 1));
