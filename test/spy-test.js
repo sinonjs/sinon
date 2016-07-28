@@ -1500,6 +1500,7 @@ describe("spy", function () {
         it("stacks up return values", function () {
             var calls = 0;
 
+            /*eslint consistent-return: "off"*/
             var spy = createSpy.create(function () {
                 calls += 1;
 
