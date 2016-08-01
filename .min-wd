@@ -8,6 +8,14 @@
   }, {
     "name": "internet explorer",
     "version": "11"
+  }, {
+    "name": "MicrosoftEdge"
+  }, {
+    "name": "chrome"
+  }, {
+    "name": "opera"
+  }, {
+    "name": "safari"
   }],
   "BUILD_VAR": "TRAVIS_BUILD_NUMBER"
 }
