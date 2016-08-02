@@ -12,7 +12,7 @@
     "name": "MicrosoftEdge"
   }, {
     "name": "chrome",
-    "platform": "OS X 10.11",
+    "platform": "OS X 10.11"
   }, {
     "name": "safari",
     "platform": "OS X 10.11",
