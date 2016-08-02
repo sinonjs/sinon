@@ -11,11 +11,12 @@
   }, {
     "name": "MicrosoftEdge"
   }, {
-    "name": "chrome"
+    "name": "chrome",
+    "platform": "OS X 10.11",
   }, {
-    "name": "opera"
-  }, {
-    "name": "safari"
+    "name": "safari",
+    "platform": "OS X 10.11",
+    "version": "9.0"
   }],
   "BUILD_VAR": "TRAVIS_BUILD_NUMBER"
 }
