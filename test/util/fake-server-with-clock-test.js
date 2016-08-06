@@ -1,16 +1,21 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../../lib/sinon");
+var sinonFakeServerWithClock = require("../../lib/sinon/util/fake_server_with_clock");
+var sinonFakeServer = require("../../lib/sinon/util/fake_server");
+var sinonSandbox = require("../../lib/sinon/sandbox");
+var fakeTimers = require("../../lib/sinon/util/fake_timers");
+var sinonSpy = require("../../lib/sinon/spy");
+var FakeXMLHttpRequest = require("../../lib/sinon/util/fake_xml_http_request").FakeXMLHttpRequest;
 var assert = referee.assert;
 var refute = referee.refute;
 
 if (typeof window !== "undefined") {
-    describe("sinon.fakeServerWithClock", function () {
+    describe("sinonFakeServerWithClock", function () {
 
         describe("without pre-existing fake clock", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServerWithClock.create();
+                this.server = sinonFakeServerWithClock.create();
             });
 
             afterEach(function () {
@@ -21,8 +26,8 @@ if (typeof window !== "undefined") {
             });
 
             it("calls 'super' when adding requests", function () {
-                var sandbox = sinon.sandbox.create();
-                var addRequest = sandbox.stub(sinon.fakeServer, "addRequest");
+                var sandbox = sinonSandbox.create();
+                var addRequest = sandbox.stub(sinonFakeServer, "addRequest");
                 var xhr = {};
                 this.server.addRequest(xhr);
 
@@ -64,24 +69,24 @@ if (typeof window !== "undefined") {
                 this.server.addRequest({ async: true });
 
                 this.server.respond("");
-                assert.same(setTimeout, sinon.timers.setTimeout);
+                assert.same(setTimeout, fakeTimers.timers.setTimeout);
             });
 
             it("does not reset clock second time", function () {
                 this.server.addRequest({ async: true });
                 this.server.respond("");
-                this.clock = sinon.useFakeTimers();
+                this.clock = fakeTimers.useFakeTimers();
                 this.server.addRequest({ async: true });
                 this.server.respond("");
 
-                refute.same(setTimeout, sinon.timers.setTimeout);
+                refute.same(setTimeout, fakeTimers.timers.setTimeout);
             });
         });
 
         describe("existing clock", function () {
             beforeEach(function () {
-                this.clock = sinon.useFakeTimers();
-                this.server = sinon.fakeServerWithClock.create();
+                this.clock = fakeTimers.useFakeTimers();
+                this.server = sinonFakeServerWithClock.create();
             });
 
             afterEach(function () {
@@ -128,7 +133,7 @@ if (typeof window !== "undefined") {
             var sandbox;
 
             beforeEach(function () {
-                this.server = sinon.fakeServerWithClock.create();
+                this.server = sinonFakeServerWithClock.create();
                 this.server.addRequest({ async: true });
             });
 
@@ -151,7 +156,7 @@ if (typeof window !== "undefined") {
             it("ticks the clock to fire the longest timeout when multiple responds", function () {
                 setInterval(function () {}, 13);
                 this.server.respond();
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 // please the linter, we can't have unused variables
                 // even when we're instantiating FakeXMLHttpRequest for it's side effects
                 assert(xhr);
@@ -170,9 +175,9 @@ if (typeof window !== "undefined") {
             });
 
             it("calls original respond", function () {
-                sandbox = sinon.sandbox.create();
+                sandbox = sinonSandbox.create();
                 var obj = {};
-                var respond = sandbox.stub(sinon.fakeServer, "respond").returns(obj);
+                var respond = sandbox.stub(sinonFakeServer, "respond").returns(obj);
 
                 var result = this.server.respond("GET", "/", "");
 
@@ -184,12 +189,12 @@ if (typeof window !== "undefined") {
 
         describe("jQuery compat mode", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServerWithClock.create();
+                this.server = sinonFakeServerWithClock.create();
 
-                this.request = new sinon.FakeXMLHttpRequest();
+                this.request = new FakeXMLHttpRequest();
                 this.request.open("get", "/", true);
                 this.request.send();
-                sinon.spy(this.request, "respond");
+                sinonSpy(this.request, "respond");
             });
 
             afterEach(function () {
@@ -198,23 +203,23 @@ if (typeof window !== "undefined") {
 
             it("handles clock automatically", function () {
                 this.server.respondWith("OK");
-                var spy = sinon.spy();
+                var spy = sinonSpy();
 
                 setTimeout(spy, 13);
                 this.server.respond();
                 this.server.restore();
 
                 assert(spy.called);
-                assert.same(setTimeout, sinon.timers.setTimeout);
+                assert.same(setTimeout, fakeTimers.timers.setTimeout);
             });
 
             it("finishes xhr from setInterval like jQuery 1.3.x does", function () {
                 this.server.respondWith("Hello World");
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
                 xhr.send();
 
-                var spy = sinon.spy();
+                var spy = sinonSpy();
 
                 setInterval(function () {
                     spy(xhr.responseText, xhr.statusText, xhr);
