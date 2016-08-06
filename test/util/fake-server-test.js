@@ -2,15 +2,24 @@
 
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
+var sinonFakeServer = require("../../lib/sinon/util/fake_server");
+var sinonStub = require("../../lib/sinon/stub");
+var sinonSpy = require("../../lib/sinon/spy");
+var sinonSandbox = require("../../lib/sinon/sandbox");
+var fakeTimers = require("../../lib/sinon/util/fake_timers");
+var fakeXhr = require("../../lib/sinon/util/fake_xml_http_request").xhr;
+var FakeXMLHttpRequest = require("../../lib/sinon/util/fake_xml_http_request").FakeXMLHttpRequest;
+var FakeXDomainRequest = require("../../lib/sinon/util/fake_xdomain_request").FakeXDomainRequest;
+
 var assert = referee.assert;
 var refute = referee.refute;
 
 // we need better ways to test both paths
 // but at least running tests in different environments will do that
-var FakeXHR = sinon.xhr.supportsCORS ? sinon.FakeXMLHttpRequest : sinon.FakeXDomainRequest;
+var FakeXHR = fakeXhr.supportsCORS ? FakeXMLHttpRequest : FakeXDomainRequest;
 
 if (typeof window !== "undefined") {
-    describe("sinon.fakeServer", function () {
+    describe("sinonFakeServer", function () {
 
         afterEach(function () {
             if (this.server) {
@@ -19,14 +28,14 @@ if (typeof window !== "undefined") {
         });
 
         it("provides restore method", function () {
-            this.server = sinon.fakeServer.create();
+            this.server = sinonFakeServer.create();
 
             assert.isFunction(this.server.restore);
         });
 
         describe(".create", function () {
             it("allows the 'autoRespond' setting", function () {
-                var server = sinon.fakeServer.create({
+                var server = sinonFakeServer.create({
                     autoRespond: true
                 });
                 assert(
@@ -35,7 +44,7 @@ if (typeof window !== "undefined") {
                 );
             });
             it("allows the 'autoRespondAfter' setting", function () {
-                var server = sinon.fakeServer.create({
+                var server = sinonFakeServer.create({
                     autoRespondAfter: 500
                 });
                 assert.equals(
@@ -45,7 +54,7 @@ if (typeof window !== "undefined") {
                 );
             });
             it("allows the 'respondImmediately' setting", function () {
-                var server = sinon.fakeServer.create({
+                var server = sinonFakeServer.create({
                     respondImmediately: true
                 });
                 assert(
@@ -54,7 +63,7 @@ if (typeof window !== "undefined") {
                 );
             });
             it("allows the 'fakeHTTPMethods' setting", function () {
-                var server = sinon.fakeServer.create({
+                var server = sinonFakeServer.create({
                     fakeHTTPMethods: true
                 });
                 assert(
@@ -63,7 +72,7 @@ if (typeof window !== "undefined") {
                 );
             });
             it("does not assign a non-whitelisted setting", function () {
-                var server = sinon.fakeServer.create({
+                var server = sinonFakeServer.create({
                     foo: true
                 });
                 refute(
@@ -74,21 +83,21 @@ if (typeof window !== "undefined") {
         });
 
         it("fakes XMLHttpRequest", function () {
-            var sandbox = sinon.sandbox.create();
+            var sandbox = sinonSandbox.create();
             sandbox.stub(sinon, "useFakeXMLHttpRequest").returns({
-                restore: sinon.stub()
+                restore: sinonStub()
             });
 
-            this.server = sinon.fakeServer.create();
+            this.server = sinonFakeServer.create();
 
             assert(sinon.useFakeXMLHttpRequest.called);
             sandbox.restore();
         });
 
         it("mirrors FakeXMLHttpRequest restore method", function () {
-            var sandbox = sinon.sandbox.create();
-            this.server = sinon.fakeServer.create();
-            var restore = sandbox.stub(sinon.FakeXMLHttpRequest, "restore");
+            var sandbox = sinonSandbox.create();
+            this.server = sinonFakeServer.create();
+            var restore = sandbox.stub(FakeXMLHttpRequest, "restore");
             this.server.restore();
 
             assert(restore.called);
@@ -97,7 +106,7 @@ if (typeof window !== "undefined") {
 
         describe(".requests", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
             });
 
             afterEach(function () {
@@ -111,7 +120,7 @@ if (typeof window !== "undefined") {
             });
 
             it("collects xhr objects through addRequest", function () {
-                this.server.addRequest = sinon.spy();
+                this.server.addRequest = sinonSpy();
                 var xhr = new FakeXHR();
 
                 assert(this.server.addRequest.calledWith(xhr));
@@ -127,7 +136,7 @@ if (typeof window !== "undefined") {
             it("onSend should call handleRequest with request object", function () {
                 var xhr = new FakeXHR();
                 xhr.open("GET", "/");
-                sinon.spy(this.server, "handleRequest");
+                sinonSpy(this.server, "handleRequest");
 
                 xhr.send();
 
@@ -138,7 +147,7 @@ if (typeof window !== "undefined") {
 
         describe(".handleRequest", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
             });
 
             afterEach(function () {
@@ -148,7 +157,7 @@ if (typeof window !== "undefined") {
             it("responds to synchronous requests", function () {
                 var xhr = new FakeXHR();
                 xhr.open("GET", "/", false);
-                sinon.spy(xhr, "respond");
+                sinonSpy(xhr, "respond");
 
                 xhr.send();
 
@@ -156,9 +165,9 @@ if (typeof window !== "undefined") {
             });
 
             it("does not respond to async requests", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/", true);
-                sinon.spy(xhr, "respond");
+                sinonSpy(xhr, "respond");
 
                 xhr.send();
 
@@ -168,35 +177,35 @@ if (typeof window !== "undefined") {
 
         describe(".respondWith", function () {
             beforeEach(function () {
-                this.sandbox = sinon.sandbox.create();
+                this.sandbox = sinonSandbox.create();
 
-                this.server = sinon.fakeServer.create({
+                this.server = sinonFakeServer.create({
                     setTimeout: this.sandbox.spy(),
                     useImmediateExceptions: false
                 });
 
-                this.getRootAsync = new sinon.FakeXMLHttpRequest();
+                this.getRootAsync = new FakeXMLHttpRequest();
                 this.getRootAsync.open("GET", "/", true);
                 this.getRootAsync.send();
-                sinon.spy(this.getRootAsync, "respond");
+                sinonSpy(this.getRootAsync, "respond");
 
-                this.postRootAsync = new sinon.FakeXMLHttpRequest();
+                this.postRootAsync = new FakeXMLHttpRequest();
                 this.postRootAsync.open("POST", "/", true);
                 this.postRootAsync.send();
-                sinon.spy(this.postRootAsync, "respond");
+                sinonSpy(this.postRootAsync, "respond");
 
-                this.getRootSync = new sinon.FakeXMLHttpRequest();
+                this.getRootSync = new FakeXMLHttpRequest();
                 this.getRootSync.open("GET", "/", false);
 
-                this.getPathAsync = new sinon.FakeXMLHttpRequest();
+                this.getPathAsync = new FakeXMLHttpRequest();
                 this.getPathAsync.open("GET", "/path", true);
                 this.getPathAsync.send();
-                sinon.spy(this.getPathAsync, "respond");
+                sinonSpy(this.getPathAsync, "respond");
 
-                this.postPathAsync = new sinon.FakeXMLHttpRequest();
+                this.postPathAsync = new FakeXMLHttpRequest();
                 this.postPathAsync.open("POST", "/path", true);
                 this.postPathAsync.send();
-                sinon.spy(this.postPathAsync, "respond");
+                sinonSpy(this.postPathAsync, "respond");
             });
 
             afterEach(function () {
@@ -225,10 +234,10 @@ if (typeof window !== "undefined") {
             it("does not respond to requests queued after respond() (eg from callbacks)", function () {
                 var xhr;
                 this.getRootAsync.addEventListener("load", function () {
-                    xhr = new sinon.FakeXMLHttpRequest();
+                    xhr = new FakeXMLHttpRequest();
                     xhr.open("GET", "/", true);
                     xhr.send();
-                    sinon.spy(xhr, "respond");
+                    sinonSpy(xhr, "respond");
                 });
 
                 this.server.respondWith("Oh yeah! Duffman!");
@@ -427,11 +436,11 @@ if (typeof window !== "undefined") {
 
             it("recognizes request with hostname", function () {
                 this.server.respondWith("/", [200, {}, "Yep"]);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 var loc = window.location;
                 xhr.open("GET", loc.protocol + "//" + loc.host + "/", true);
                 xhr.send();
-                sinon.spy(xhr, "respond");
+                sinonSpy(xhr, "respond");
 
                 this.server.respond();
 
@@ -486,7 +495,7 @@ if (typeof window !== "undefined") {
 
         describe(".respondWith (FunctionHandler)", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
             });
 
             afterEach(function () {
@@ -494,9 +503,9 @@ if (typeof window !== "undefined") {
             });
 
             it("yields response to request function handler", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("/hello", handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
 
@@ -511,7 +520,7 @@ if (typeof window !== "undefined") {
                     xhr.respond(200, { "Content-Type": "application/json" }, "{\"id\":42}");
                 });
 
-                var request = new sinon.FakeXMLHttpRequest();
+                var request = new FakeXMLHttpRequest();
                 request.open("GET", "/hello");
                 request.send();
 
@@ -523,9 +532,9 @@ if (typeof window !== "undefined") {
             });
 
             it("yields response to request function handler when method matches", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", "/hello", handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
 
@@ -535,9 +544,9 @@ if (typeof window !== "undefined") {
             });
 
             it("yields response to request function handler when url contains RegExp characters", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", "/hello?world", handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello?world");
                 xhr.send();
 
@@ -547,9 +556,9 @@ if (typeof window !== "undefined") {
             });
 
             it("does not yield response to request function handler when method does not match", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", "/hello", handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("POST", "/hello");
                 xhr.send();
 
@@ -559,9 +568,9 @@ if (typeof window !== "undefined") {
             });
 
             it("yields response to request function handler when regexp url matches", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", /\/.*/, handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
 
@@ -571,9 +580,9 @@ if (typeof window !== "undefined") {
             });
 
             it("does not yield response to request function handler when regexp url does not match", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", /\/a.*/, handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
 
@@ -587,7 +596,7 @@ if (typeof window !== "undefined") {
                     xhr.respond(200, { "Content-Type": "application/json" }, "{\"id\":42}");
                 });
 
-                var request = new sinon.FakeXMLHttpRequest();
+                var request = new FakeXMLHttpRequest();
                 request.open("GET", "/whatever");
                 request.send();
 
@@ -599,11 +608,11 @@ if (typeof window !== "undefined") {
             });
 
             it("does not process request further if processed by function", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", "/aloha", [200, {}, "Oh hi"]);
                 this.server.respondWith("GET", /\/a.*/, handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
-                xhr.respond = sinon.spy();
+                var xhr = new FakeXMLHttpRequest();
+                xhr.respond = sinonSpy();
                 xhr.open("GET", "/aloha");
                 xhr.send();
 
@@ -614,10 +623,10 @@ if (typeof window !== "undefined") {
             });
 
             it("yields URL capture groups to response handler", function () {
-                var handler = sinon.spy();
+                var handler = sinonSpy();
                 this.server.respondWith("GET", /\/people\/(\d+)/, handler);
-                var xhr = new sinon.FakeXMLHttpRequest();
-                xhr.respond = sinon.spy();
+                var xhr = new FakeXMLHttpRequest();
+                xhr.respond = sinonSpy();
                 xhr.open("GET", "/people/3");
                 xhr.send();
 
@@ -630,12 +639,12 @@ if (typeof window !== "undefined") {
 
         describe("respond with fake HTTP Verb", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
 
-                this.request = new sinon.FakeXMLHttpRequest();
+                this.request = new FakeXMLHttpRequest();
                 this.request.open("post", "/path", true);
                 this.request.send("_method=delete");
-                sinon.spy(this.request, "respond");
+                sinonSpy(this.request, "respond");
             });
 
             afterEach(function () {
@@ -672,10 +681,10 @@ if (typeof window !== "undefined") {
                 this.server.fakeHTTPMethods = true;
                 this.server.respondWith("DELETE", "", "OK");
 
-                var request = new sinon.FakeXMLHttpRequest();
+                var request = new FakeXMLHttpRequest();
                 request.open("GET", "/");
                 request.send();
-                request.respond = sinon.spy();
+                request.respond = sinonSpy();
                 this.server.respond();
 
                 assert.equals(request.respond.args[0], [404, {}, ""]);
@@ -704,15 +713,15 @@ if (typeof window !== "undefined") {
         describe(".autoResponse", function () {
             beforeEach(function () {
                 this.get = function get(url) {
-                    var request = new sinon.FakeXMLHttpRequest();
-                    sinon.spy(request, "respond");
+                    var request = new FakeXMLHttpRequest();
+                    sinonSpy(request, "respond");
                     request.open("get", url, true);
                     request.send();
                     return request;
                 };
 
-                this.server = sinon.fakeServer.create();
-                this.clock = sinon.useFakeTimers();
+                this.server = sinonFakeServer.create();
+                this.clock = fakeTimers.useFakeTimers();
             });
 
             afterEach(function () {
@@ -791,8 +800,8 @@ if (typeof window !== "undefined") {
             it("auto-responds if timeout elapses between creating XHR object and sending request with it", function () {
                 this.server.autoRespond = true;
 
-                var request = new sinon.FakeXMLHttpRequest();
-                sinon.spy(request, "respond");
+                var request = new FakeXMLHttpRequest();
+                sinonSpy(request, "respond");
 
                 this.clock.tick(100);
 
@@ -808,14 +817,14 @@ if (typeof window !== "undefined") {
         describe(".respondImmediately", function () {
             beforeEach(function () {
                 this.get = function get(url) {
-                    var request = new sinon.FakeXMLHttpRequest();
-                    sinon.spy(request, "respond");
+                    var request = new FakeXMLHttpRequest();
+                    sinonSpy(request, "respond");
                     request.open("get", url, true);
                     request.send();
                     return request;
                 };
 
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
                 this.server.respondImmediately = true;
             });
 
@@ -829,7 +838,7 @@ if (typeof window !== "undefined") {
             });
 
             it("doesn't rely on a clock", function () {
-                this.clock = sinon.useFakeTimers();
+                this.clock = fakeTimers.useFakeTimers();
 
                 var request = this.get("/path");
                 assert.isTrue(request.respond.calledOnce);
@@ -840,7 +849,7 @@ if (typeof window !== "undefined") {
 
         describe(".log", function () {
             beforeEach(function () {
-                this.server = sinon.fakeServer.create();
+                this.server = sinonFakeServer.create();
             });
 
             afterEach(function () {
@@ -848,8 +857,8 @@ if (typeof window !== "undefined") {
             });
 
             it("logs response and request", function () {
-                sinon.spy(this.server, "log");
-                var xhr = new sinon.FakeXMLHttpRequest();
+                sinonSpy(this.server, "log");
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
                 var response = [200, {}, "Hello!"];
@@ -859,8 +868,8 @@ if (typeof window !== "undefined") {
             });
 
             it("can be overridden", function () {
-                this.server.log = sinon.spy();
-                var xhr = new sinon.FakeXMLHttpRequest();
+                this.server.log = sinonSpy();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/hello");
                 xhr.send();
                 var response = [200, {}, "Hello!"];
