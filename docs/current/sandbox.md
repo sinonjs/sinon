@@ -175,6 +175,6 @@ The default configuration looks like:
 If you need the behavior of `sinon.test` for more than one test method in a test case, you can use `sinon.testCase`, which behaves exactly like wrapping each test in `sinon.test` with one exception: `setUp` and
 `tearDown` can share fakes.
 
-#### `var obj = sinon.testCase({});
+#### `var obj = sinon.testCase({});`
 
 
