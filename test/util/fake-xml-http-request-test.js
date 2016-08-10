@@ -1,8 +1,14 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../../lib/sinon");
+var sinonStub = require("../../lib/sinon/stub");
+var sinonSpy = require("../../lib/sinon/spy");
+var sinonExtend = require("../../lib/sinon/extend");
+var sinonSandbox = require("../../lib/sinon/sandbox");
+var sinonFakeXhr = require("../../lib/sinon/util/fake_xml_http_request");
+
 var TextDecoder = global.TextDecoder || require("text-encoding").TextDecoder;
+var FakeXMLHttpRequest = sinonFakeXhr.FakeXMLHttpRequest;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -21,7 +27,7 @@ var supportsBlob = (function () {
 })();
 
 var fakeXhrSetUp = function () {
-    this.fakeXhr = sinon.useFakeXMLHttpRequest();
+    this.fakeXhr = sinonFakeXhr.useFakeXMLHttpRequest();
 };
 
 var fakeXhrTearDown = function () {
@@ -32,11 +38,11 @@ var fakeXhrTearDown = function () {
 
 var runWithWorkingXHROveride = function (workingXHR, test) {
     try {
-        var original = sinon.xhr.workingXHR;
-        sinon.xhr.workingXHR = workingXHR;
+        var original = sinonFakeXhr.xhr.workingXHR;
+        sinonFakeXhr.xhr.workingXHR = workingXHR;
         test();
     } finally {
-        sinon.xhr.workingXHR = original;
+        sinonFakeXhr.xhr.workingXHR = original;
     }
 };
 
@@ -114,57 +120,57 @@ var assertEventOrdering = function (event, progress, callback) {
 };
 
 if (typeof window !== "undefined") {
-    describe("sinon.FakeXMLHttpRequest", function () {
+    describe("FakeXMLHttpRequest", function () {
 
         afterEach(function () {
-            delete sinon.FakeXMLHttpRequest.onCreate;
+            delete FakeXMLHttpRequest.onCreate;
         });
 
         it("is constructor", function () {
-            assert.isFunction(sinon.FakeXMLHttpRequest);
-            assert.same(sinon.FakeXMLHttpRequest.prototype.constructor, sinon.FakeXMLHttpRequest);
+            assert.isFunction(FakeXMLHttpRequest);
+            assert.same(FakeXMLHttpRequest.prototype.constructor, FakeXMLHttpRequest);
         });
 
         it("implements readyState constants", function () {
-            assert.same(sinon.FakeXMLHttpRequest.OPENED, 1);
-            assert.same(sinon.FakeXMLHttpRequest.HEADERS_RECEIVED, 2);
-            assert.same(sinon.FakeXMLHttpRequest.LOADING, 3);
-            assert.same(sinon.FakeXMLHttpRequest.DONE, 4);
+            assert.same(FakeXMLHttpRequest.OPENED, 1);
+            assert.same(FakeXMLHttpRequest.HEADERS_RECEIVED, 2);
+            assert.same(FakeXMLHttpRequest.LOADING, 3);
+            assert.same(FakeXMLHttpRequest.DONE, 4);
         });
 
         it("calls onCreate if listener is set", function () {
-            var onCreate = sinon.spy();
-            sinon.FakeXMLHttpRequest.onCreate = onCreate;
+            var onCreate = sinonSpy();
+            FakeXMLHttpRequest.onCreate = onCreate;
 
             // instantiating FakeXMLHttpRequest for it's onCreate side effect
-            var xhr = new sinon.FakeXMLHttpRequest(); // eslint-disable-line no-unused-vars
+            var xhr = new FakeXMLHttpRequest(); // eslint-disable-line no-unused-vars
 
             assert(onCreate.called);
         });
 
         it("passes new object to onCreate if set", function () {
-            var onCreate = sinon.spy();
-            sinon.FakeXMLHttpRequest.onCreate = onCreate;
+            var onCreate = sinonSpy();
+            FakeXMLHttpRequest.onCreate = onCreate;
 
-            var xhr = new sinon.FakeXMLHttpRequest();
+            var xhr = new FakeXMLHttpRequest();
 
             assert.same(onCreate.getCall(0).args[0], xhr);
         });
 
         describe(".withCredentials", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("property is set if we support standards CORS", function () {
-                assert.equals(sinon.xhr.supportsCORS, "withCredentials" in this.xhr);
+                assert.equals(sinonFakeXhr.xhr.supportsCORS, "withCredentials" in this.xhr);
             });
 
         });
 
         describe(".open", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("is method", function () {
@@ -221,7 +227,7 @@ if (typeof window !== "undefined") {
             it("sets readyState to OPENED", function () {
                 this.xhr.open("GET", "/my/url");
 
-                assert.same(this.xhr.readyState, sinon.FakeXMLHttpRequest.OPENED);
+                assert.same(this.xhr.readyState, FakeXMLHttpRequest.OPENED);
             });
 
             it("sets send flag to false", function () {
@@ -234,7 +240,7 @@ if (typeof window !== "undefined") {
                 var state = {};
 
                 this.xhr.onreadystatechange = function () {
-                    sinon.extend(state, this);
+                    sinonExtend(state, this);
                 };
 
                 this.xhr.open("GET", "/my/url");
@@ -248,19 +254,19 @@ if (typeof window !== "undefined") {
                 assert.same(state.responseText, "");
                 assert.isNull(state.responseXML);
                 refute.defined(state.responseHeaders);
-                assert.equals(state.readyState, sinon.FakeXMLHttpRequest.OPENED);
+                assert.equals(state.readyState, FakeXMLHttpRequest.OPENED);
                 assert.isFalse(state.sendFlag);
             });
         });
 
         describe(".setRequestHeader", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
                 this.xhr.open("GET", "/");
             });
 
             it("throws exception if readyState is not OPENED", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
 
                 assert.exception(function () {
                     xhr.setRequestHeader("X-EY", "No-no");
@@ -376,11 +382,11 @@ if (typeof window !== "undefined") {
 
         describe(".send", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("throws if request is not open", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
 
                 assert.exception(function () {
                     xhr.send();
@@ -491,13 +497,13 @@ if (typeof window !== "undefined") {
 
                 this.xhr.send("Data");
 
-                assert.equals(state, sinon.FakeXMLHttpRequest.OPENED);
+                assert.equals(state, FakeXMLHttpRequest.OPENED);
                 assert.equals(event.type, "readystatechange");
                 assert.defined(event.target);
             });
 
             it("dispatches event using DOM Event interface", function () {
-                var listener = sinon.spy();
+                var listener = sinonSpy();
                 this.xhr.open("POST", "/", false);
                 this.xhr.addEventListener("readystatechange", listener);
 
@@ -510,7 +516,7 @@ if (typeof window !== "undefined") {
 
             it("dispatches onSend callback if set", function () {
                 this.xhr.open("POST", "/", true);
-                var callback = sinon.spy();
+                var callback = sinonSpy();
                 this.xhr.onSend = callback;
 
                 this.xhr.send("Data");
@@ -520,7 +526,7 @@ if (typeof window !== "undefined") {
 
             it("dispatches onSend with request as argument", function () {
                 this.xhr.open("POST", "/", true);
-                var callback = sinon.spy();
+                var callback = sinonSpy();
                 this.xhr.onSend = callback;
 
                 this.xhr.send("Data");
@@ -530,7 +536,7 @@ if (typeof window !== "undefined") {
 
             it("dispatches onSend when async", function () {
                 this.xhr.open("POST", "/", false);
-                var callback = sinon.spy();
+                var callback = sinonSpy();
                 this.xhr.onSend = callback;
 
                 this.xhr.send("Data");
@@ -541,7 +547,7 @@ if (typeof window !== "undefined") {
 
         describe(".setResponseHeaders", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("sets request headers", function () {
@@ -557,18 +563,18 @@ if (typeof window !== "undefined") {
                 var object = { id: 42 };
                 this.xhr.open("GET", "/");
                 this.xhr.send();
-                var spy = this.xhr.readyStateChange = sinon.spy();
+                var spy = this.xhr.readyStateChange = sinonSpy();
 
                 this.xhr.setResponseHeaders(object);
 
-                assert(spy.calledWith(sinon.FakeXMLHttpRequest.HEADERS_RECEIVED));
+                assert(spy.calledWith(FakeXMLHttpRequest.HEADERS_RECEIVED));
             });
 
             it("does not call readyStateChange if sync", function () {
                 var object = { id: 42 };
                 this.xhr.open("GET", "/", false);
                 this.xhr.send();
-                var spy = this.xhr.readyStateChange = sinon.spy();
+                var spy = this.xhr.readyStateChange = sinonSpy();
 
                 this.xhr.setResponseHeaders(object);
 
@@ -582,7 +588,7 @@ if (typeof window !== "undefined") {
 
                 this.xhr.setResponseHeaders(object);
 
-                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.HEADERS_RECEIVED);
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.HEADERS_RECEIVED);
             });
 
             it("throws if headers were already set", function () {
@@ -600,23 +606,23 @@ if (typeof window !== "undefined") {
 
         describe(".setResponseBodyAsync", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
                 this.xhr.open("GET", "/");
                 this.xhr.send();
                 this.xhr.setResponseHeaders({});
             });
 
             it("invokes onreadystatechange handler with LOADING state", function () {
-                var spy = sinon.spy();
+                var spy = sinonSpy();
                 this.xhr.readyStateChange = spy;
 
                 this.xhr.setResponseBody("Some text goes in here ok?");
 
-                assert(spy.calledWith(sinon.FakeXMLHttpRequest.LOADING));
+                assert(spy.calledWith(FakeXMLHttpRequest.LOADING));
             });
 
             it("invokes onreadystatechange handler for each 10 byte chunk", function () {
-                var spy = sinon.spy();
+                var spy = sinonSpy();
                 this.xhr.readyStateChange = spy;
                 this.xhr.chunkSize = 10;
 
@@ -626,7 +632,7 @@ if (typeof window !== "undefined") {
             });
 
             it("invokes onreadystatechange handler for each x byte chunk", function () {
-                var spy = sinon.spy();
+                var spy = sinonSpy();
                 this.xhr.readyStateChange = spy;
                 this.xhr.chunkSize = 20;
 
@@ -654,16 +660,16 @@ if (typeof window !== "undefined") {
             });
 
             it("calls onreadystatechange with DONE state", function () {
-                var spy = sinon.spy();
+                var spy = sinonSpy();
                 this.xhr.readyStateChange = spy;
 
                 this.xhr.setResponseBody("Some text goes in here ok?");
 
-                assert(spy.calledWith(sinon.FakeXMLHttpRequest.DONE));
+                assert(spy.calledWith(FakeXMLHttpRequest.DONE));
             });
 
             it("throws if not open", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
 
                 assert.exception(function () {
                     xhr.setResponseBody("");
@@ -671,7 +677,7 @@ if (typeof window !== "undefined") {
             });
 
             it("throws if no headers received", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
                 xhr.send();
 
@@ -681,7 +687,7 @@ if (typeof window !== "undefined") {
             });
 
             it("throws if body was already sent", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
                 xhr.send();
                 xhr.setResponseHeaders({});
@@ -693,7 +699,7 @@ if (typeof window !== "undefined") {
             });
 
             it("throws if body is not a string", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
                 xhr.send();
                 xhr.setResponseHeaders({});
@@ -706,7 +712,7 @@ if (typeof window !== "undefined") {
             if (supportsArrayBuffer) {
                 describe("with ArrayBuffer support", function () {
                     it("invokes onreadystatechange for each chunk when responseType='arraybuffer'", function () {
-                        var spy = sinon.spy();
+                        var spy = sinonSpy();
                         this.xhr.readyStateChange = spy;
                         this.xhr.chunkSize = 10;
 
@@ -723,7 +729,7 @@ if (typeof window !== "undefined") {
                 describe("with Blob support", function () {
                     it("invokes onreadystatechange handler for each 10 byte chunk when responseType='blob'",
                         function () {
-                            var spy = sinon.spy();
+                            var spy = sinonSpy();
                             this.xhr.readyStateChange = spy;
                             this.xhr.chunkSize = 10;
 
@@ -739,7 +745,7 @@ if (typeof window !== "undefined") {
 
         describe(".setResponseBodySync", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
                 this.xhr.open("GET", "/", false);
                 this.xhr.send();
                 this.xhr.setResponseHeaders({});
@@ -756,7 +762,7 @@ if (typeof window !== "undefined") {
             it("sets readyState to DONE", function () {
                 this.xhr.setResponseBody("");
 
-                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.DONE);
             });
 
             it("throws if responding to request twice", function () {
@@ -769,16 +775,16 @@ if (typeof window !== "undefined") {
             });
 
             it("calls onreadystatechange for sync request with DONE state", function () {
-                var spy = sinon.spy();
+                var spy = sinonSpy();
                 this.xhr.readyStateChange = spy;
 
                 this.xhr.setResponseBody("Some text goes in here ok?");
 
-                assert(spy.calledWith(sinon.FakeXMLHttpRequest.DONE));
+                assert(spy.calledWith(FakeXMLHttpRequest.DONE));
             });
 
             it("simulates synchronous request", function () {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
 
                 xhr.onSend = function () {
                     this.setResponseHeaders({});
@@ -794,13 +800,13 @@ if (typeof window !== "undefined") {
 
         describe(".respond", function () {
             beforeEach(function () {
-                this.sandbox = sinon.sandbox.create();
-                this.xhr = new sinon.FakeXMLHttpRequest({
+                this.sandbox = sinonSandbox.create();
+                this.xhr = new FakeXMLHttpRequest({
                     setTimeout: this.sandbox.spy(),
                     useImmediateExceptions: false
                 });
                 this.xhr.open("GET", "/");
-                var spy = this.spy = sinon.spy();
+                var spy = this.spy = sinonSpy();
 
                 this.xhr.onreadystatechange = function () {
                     if (this.readyState === 4) {
@@ -822,7 +828,7 @@ if (typeof window !== "undefined") {
             });
 
             it("fire onload event with this set to the XHR object", function (done) {
-                var xhr = new sinon.FakeXMLHttpRequest();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
 
                 xhr.onload = function () {
@@ -862,7 +868,7 @@ if (typeof window !== "undefined") {
             });
 
             it("sets headers", function () {
-                sinon.spy(this.xhr, "setResponseHeaders");
+                sinonSpy(this.xhr, "setResponseHeaders");
                 var responseHeaders = { some: "header", value: "over here" };
                 this.xhr.respond(200, responseHeaders);
 
@@ -876,7 +882,7 @@ if (typeof window !== "undefined") {
             });
 
             it("completes request when onreadystatechange fails", function () {
-                this.xhr.onreadystatechange = sinon.stub().throws();
+                this.xhr.onreadystatechange = sinonStub().throws();
                 this.xhr.respond(200, {}, "'tis some body text");
 
                 assert.equals(this.xhr.onreadystatechange.callCount, 4);
@@ -899,7 +905,7 @@ if (typeof window !== "undefined") {
 
         describe(".getResponseHeader", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("returns null if request is not finished", function () {
@@ -955,7 +961,7 @@ if (typeof window !== "undefined") {
 
         describe(".getAllResponseHeaders", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("returns empty string if request is not finished", function () {
@@ -1001,7 +1007,7 @@ if (typeof window !== "undefined") {
 
         describe(".abort", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("sets aborted flag to true", function () {
@@ -1068,7 +1074,7 @@ if (typeof window !== "undefined") {
 
                 this.xhr.abort();
 
-                assert.equals(readyState, sinon.FakeXMLHttpRequest.DONE);
+                assert.equals(readyState, FakeXMLHttpRequest.DONE);
             });
 
             it("sets send flag to false if sent before", function () {
@@ -1083,7 +1089,7 @@ if (typeof window !== "undefined") {
             it("dispatches readystatechange event if sent before", function () {
                 this.xhr.open("GET", "/");
                 this.xhr.send();
-                this.xhr.onreadystatechange = sinon.stub();
+                this.xhr.onreadystatechange = sinonStub();
 
                 this.xhr.abort();
 
@@ -1096,11 +1102,11 @@ if (typeof window !== "undefined") {
 
                 this.xhr.abort();
 
-                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
             });
 
             it("does not dispatch readystatechange event if readyState is unsent", function () {
-                this.xhr.onreadystatechange = sinon.stub();
+                this.xhr.onreadystatechange = sinonStub();
 
                 this.xhr.abort();
 
@@ -1109,7 +1115,7 @@ if (typeof window !== "undefined") {
 
             it("does not dispatch readystatechange event if readyState is opened but not sent", function () {
                 this.xhr.open("GET", "/");
-                this.xhr.onreadystatechange = sinon.stub();
+                this.xhr.onreadystatechange = sinonStub();
 
                 this.xhr.abort();
 
@@ -1123,7 +1129,7 @@ if (typeof window !== "undefined") {
 
         describe(".error", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("sets response to empty string", function () {
@@ -1169,7 +1175,7 @@ if (typeof window !== "undefined") {
             it("dispatches readystatechange event if sent before", function () {
                 this.xhr.open("GET", "/");
                 this.xhr.send();
-                this.xhr.onreadystatechange = sinon.stub();
+                this.xhr.onreadystatechange = sinonStub();
 
                 this.xhr.error();
 
@@ -1181,7 +1187,7 @@ if (typeof window !== "undefined") {
 
                 this.xhr.error();
 
-                assert.equals(this.xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.DONE);
             });
 
             assertEventOrdering("error", 0, function (xhr) {
@@ -1191,7 +1197,7 @@ if (typeof window !== "undefined") {
 
         describe(".response", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("is initially the empty string if responseType === ''", function () {
@@ -1349,7 +1355,7 @@ if (typeof window !== "undefined") {
 
         describe(".responseXML", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
             });
 
             it("is initially null", function () {
@@ -1435,7 +1441,7 @@ if (typeof window !== "undefined") {
             afterEach(fakeXhrTearDown);
 
             it("returns FakeXMLHttpRequest constructor", function () {
-                assert.same(this.fakeXhr, sinon.FakeXMLHttpRequest);
+                assert.same(this.fakeXhr, FakeXMLHttpRequest);
             });
 
             it("temporarily blesses FakeXMLHttpRequest with restore method", function () {
@@ -1449,66 +1455,66 @@ if (typeof window !== "undefined") {
             });
 
             it("removes XMLHttpRequest onCreate listener", function () {
-                sinon.FakeXMLHttpRequest.onCreate = function () {};
+                FakeXMLHttpRequest.onCreate = function () {};
 
                 this.fakeXhr.restore();
 
-                refute.defined(sinon.FakeXMLHttpRequest.onCreate);
+                refute.defined(FakeXMLHttpRequest.onCreate);
             });
 
             it("optionally keeps XMLHttpRequest onCreate listener", function () {
                 var onCreate = function () {};
-                sinon.FakeXMLHttpRequest.onCreate = onCreate;
+                FakeXMLHttpRequest.onCreate = onCreate;
 
                 this.fakeXhr.restore(true);
 
-                assert.same(sinon.FakeXMLHttpRequest.onCreate, onCreate);
+                assert.same(FakeXMLHttpRequest.onCreate, onCreate);
             });
         });
 
         if (typeof XMLHttpRequest !== "undefined") {
             describe(".filtering", function () {
                 beforeEach(function () {
-                    sinon.FakeXMLHttpRequest.useFilters = true;
-                    sinon.FakeXMLHttpRequest.filters = [];
-                    sinon.useFakeXMLHttpRequest();
+                    FakeXMLHttpRequest.useFilters = true;
+                    FakeXMLHttpRequest.filters = [];
+                    sinonFakeXhr.useFakeXMLHttpRequest();
                 });
 
                 afterEach(function () {
-                    sinon.FakeXMLHttpRequest.useFilters = false;
-                    sinon.FakeXMLHttpRequest.restore();
-                    if (sinon.FakeXMLHttpRequest.defake.restore) {
-                        sinon.FakeXMLHttpRequest.defake.restore();
+                    FakeXMLHttpRequest.useFilters = false;
+                    FakeXMLHttpRequest.restore();
+                    if (FakeXMLHttpRequest.defake.restore) {
+                        FakeXMLHttpRequest.defake.restore();
                     }
                 });
 
                 it("does not defake XHR requests that don't match a filter", function () {
-                    sinon.stub(sinon.FakeXMLHttpRequest, "defake");
+                    sinonStub(FakeXMLHttpRequest, "defake");
 
-                    sinon.FakeXMLHttpRequest.addFilter(function () {
+                    FakeXMLHttpRequest.addFilter(function () {
                         return false;
                     });
                     new XMLHttpRequest().open("GET", "http://example.com");
 
-                    refute(sinon.FakeXMLHttpRequest.defake.called);
+                    refute(FakeXMLHttpRequest.defake.called);
                 });
 
                 it("defakes XHR requests that match a filter", function () {
-                    sinon.stub(sinon.FakeXMLHttpRequest, "defake");
+                    sinonStub(FakeXMLHttpRequest, "defake");
 
-                    sinon.FakeXMLHttpRequest.addFilter(function () {
+                    FakeXMLHttpRequest.addFilter(function () {
                         return true;
                     });
                     new XMLHttpRequest().open("GET", "http://example.com");
 
-                    assert(sinon.FakeXMLHttpRequest.defake.calledOnce);
+                    assert(FakeXMLHttpRequest.defake.calledOnce);
                 });
             });
         }
 
         describe("defaked XHR", function () {
             beforeEach(function () {
-                this.fakeXhr = new sinon.FakeXMLHttpRequest();
+                this.fakeXhr = new FakeXMLHttpRequest();
             });
 
             it("updates attributes from working XHR object when ready state changes", function () {
@@ -1523,7 +1529,7 @@ if (typeof window !== "undefined") {
                 };
                 var fakeXhr = this.fakeXhr;
                 runWithWorkingXHROveride(workingXHROverride, function () {
-                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
+                    FakeXMLHttpRequest.defake(fakeXhr, []);
                     workingXHRInstance.statusText = "This is the status text of the real XHR";
                     workingXHRInstance.readyState = 4;
                     readyStateCb();
@@ -1540,8 +1546,8 @@ if (typeof window !== "undefined") {
                 };
                 var fakeXhr = this.fakeXhr;
                 runWithWorkingXHROveride(workingXHROverride, function () {
-                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
-                    workingXHRInstance.getResponseHeader = spy = sinon.spy();
+                    FakeXMLHttpRequest.defake(fakeXhr, []);
+                    workingXHRInstance.getResponseHeader = spy = sinonSpy();
                     fakeXhr.getResponseHeader();
                     assert(spy.calledOnce);
                 });
@@ -1559,8 +1565,8 @@ if (typeof window !== "undefined") {
                 var fakeXhr = this.fakeXhr;
 
                 runWithWorkingXHROveride(workingXHROverride, function () {
-                    sinon.FakeXMLHttpRequest.defake(fakeXhr, []);
-                    fakeXhr.onreadystatechange = spy = sinon.spy();
+                    FakeXMLHttpRequest.defake(fakeXhr, []);
+                    fakeXhr.onreadystatechange = spy = sinonSpy();
                     readyStateCb();
                     assert(spy.calledOnce);
 
@@ -1573,31 +1579,31 @@ if (typeof window !== "undefined") {
             it("performs initial readystatechange on opening when filters are being used, but don't match",
                 function () {
                     try {
-                        sinon.FakeXMLHttpRequest.useFilters = true;
-                        var spy = sinon.spy();
+                        FakeXMLHttpRequest.useFilters = true;
+                        var spy = sinonSpy();
                         this.fakeXhr.addEventListener("readystatechange", spy);
                         this.fakeXhr.open("GET", "http://example.com", true);
                         assert(spy.calledOnce);
                     } finally {
-                        sinon.FakeXMLHttpRequest.useFilters = false;
+                        FakeXMLHttpRequest.useFilters = false;
                     }
                 });
         });
 
         describe("defaked XHR filters", function () {
             beforeEach(function () {
-                sinon.FakeXMLHttpRequest.useFilters = true;
-                sinon.FakeXMLHttpRequest.filters = [];
-                sinon.useFakeXMLHttpRequest();
-                sinon.FakeXMLHttpRequest.addFilter(function () {
+                FakeXMLHttpRequest.useFilters = true;
+                FakeXMLHttpRequest.filters = [];
+                sinonFakeXhr.useFakeXMLHttpRequest();
+                FakeXMLHttpRequest.addFilter(function () {
                     return true;
                 });
             });
 
             afterEach(function () {
-                sinon.FakeXMLHttpRequest.useFilters = false;
-                sinon.FakeXMLHttpRequest.filters = [];
-                sinon.FakeXMLHttpRequest.restore();
+                FakeXMLHttpRequest.useFilters = false;
+                FakeXMLHttpRequest.filters = [];
+                FakeXMLHttpRequest.restore();
             });
 
             it.skip("loads resource asynchronously", function (done) {
@@ -1662,25 +1668,25 @@ if (typeof window !== "undefined") {
                 it("creates FakeXHR object with ActiveX Microsoft.XMLHTTP", function () {
                     var xhr = new ActiveXObject("Microsoft.XMLHTTP"); // eslint-disable-line no-undef
 
-                    assert(xhr instanceof sinon.FakeXMLHttpRequest);
+                    assert(xhr instanceof FakeXMLHttpRequest);
                 });
 
                 it("creates FakeXHR object with ActiveX Msxml2.XMLHTTP", function () {
                     var xhr = new ActiveXObject("Msxml2.XMLHTTP"); // eslint-disable-line no-undef
 
-                    assert(xhr instanceof sinon.FakeXMLHttpRequest);
+                    assert(xhr instanceof FakeXMLHttpRequest);
                 });
 
                 it("creates FakeXHR object with ActiveX Msxml2.XMLHTTP.3.0", function () {
                     var xhr = new ActiveXObject("Msxml2.XMLHTTP.3.0"); // eslint-disable-line no-undef
 
-                    assert(xhr instanceof sinon.FakeXMLHttpRequest);
+                    assert(xhr instanceof FakeXMLHttpRequest);
                 });
 
                 it("creates FakeXHR object with ActiveX Msxml2.XMLHTTP.6.0", function () {
                     var xhr = new ActiveXObject("Msxml2.XMLHTTP.6.0"); // eslint-disable-line no-undef
 
-                    assert(xhr instanceof sinon.FakeXMLHttpRequest);
+                    assert(xhr instanceof FakeXMLHttpRequest);
                 });
             });
         }
@@ -1707,7 +1713,7 @@ if (typeof window !== "undefined") {
 
                 it("replaces global XMLHttpRequest", function () {
                     refute.same(XMLHttpRequest, globalXMLHttpRequest);
-                    assert.same(XMLHttpRequest, sinon.FakeXMLHttpRequest);
+                    assert.same(XMLHttpRequest, FakeXMLHttpRequest);
                 });
 
                 it("restores global XMLHttpRequest", function () {
@@ -1719,7 +1725,7 @@ if (typeof window !== "undefined") {
 
         describe("progress events", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
                 this.xhr.open("GET", "/some/url");
             });
 
@@ -1759,7 +1765,7 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.addEventListener("load", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     refute.equals(xhr.status, 0);
 
                     done();
@@ -1773,7 +1779,7 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.addEventListener("load", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 500);
 
                     done();
@@ -1800,7 +1806,7 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.onload = function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     refute.equals(xhr.status, 0);
 
                     done();
@@ -1814,7 +1820,7 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.onload = function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 500);
 
                     done();
@@ -1844,11 +1850,11 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.addEventListener("abort", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
                     setTimeout(function () {
-                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        assert.equals(xhr.readyState, FakeXMLHttpRequest.UNSENT);
                         done();
                     }, 0);
                 });
@@ -1874,11 +1880,11 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.onabort = function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
                     setTimeout(function () {
-                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        assert.equals(xhr.readyState, FakeXMLHttpRequest.UNSENT);
                         done();
                     }, 0);
                 };
@@ -1947,7 +1953,7 @@ if (typeof window !== "undefined") {
 
         describe("xhr.upload", function () {
             beforeEach(function () {
-                this.xhr = new sinon.FakeXMLHttpRequest();
+                this.xhr = new FakeXMLHttpRequest();
                 this.xhr.open("POST", "/some/url", true);
             });
 
@@ -1970,7 +1976,7 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.upload.addEventListener("load", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     refute.equals(xhr.status, 0);
                     done();
                 });
@@ -2021,11 +2027,11 @@ if (typeof window !== "undefined") {
                 var xhr = this.xhr;
 
                 this.xhr.upload.addEventListener("abort", function () {
-                    assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.DONE);
+                    assert.equals(xhr.readyState, FakeXMLHttpRequest.DONE);
                     assert.equals(xhr.status, 0);
 
                     setTimeout(function () {
-                        assert.equals(xhr.readyState, sinon.FakeXMLHttpRequest.UNSENT);
+                        assert.equals(xhr.readyState, FakeXMLHttpRequest.UNSENT);
                         done();
                     }, 0);
                 });
