@@ -309,6 +309,57 @@
             assert.same(testCase.someTest(), testCase);
         },
 
+        "supports thenables (#1119)": function () {
+            var thenCalled = false;
+            var method = function () {};
+            var object = { method: method };
+            sinon.test(function () {
+                this.mock(object).expects("method").once();
+                object.method();
+
+                return {
+                    then: function (successCb) {
+                        thenCalled = true;
+                        assert(object.method !== method);
+                        successCb(); // will call verifyAndRestore
+                        assert(object.method === method);
+                    }
+                };
+            }).call({});
+            assert(thenCalled);
+        },
+
+        "supports thenables failure callback": function () {
+            var thenCalled = false;
+            var thrown = false;
+            var method = function () {};
+            var object = { method: method };
+            sinon.test(function () {
+                this.mock(object).expects("method").never();
+                var err = null;
+                try {
+                    object.method();
+                } catch(e) {
+                    err = e;
+                    thrown = true;
+                }
+
+                return {
+                    then: function (successCb, failCb) {
+                        thenCalled = true;
+                        assert(thrown);
+                        assert(object.method !== method);
+                        try {
+                            failCb(err); // will call restore, not verify, then throw
+                            assert(false);
+                        } catch (e) { /* nothing */ }
+                        assert(object.method === method);
+                    }
+                };
+            }).call({});
+            assert(thenCalled);
+        },
+
         "configurable test with sandbox": {
             tearDown: function () {
                 sinon.config = {};
