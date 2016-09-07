@@ -16,6 +16,6 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
-; Needed if doing doing `git add --patch` to edit patches
+; Needed if doing `git add --patch` to edit patches
 [*.diff]
 trim_trailing_whitespace = false
