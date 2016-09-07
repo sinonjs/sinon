@@ -878,5 +878,233 @@ if (typeof window !== "undefined") {
                 assert(this.server.log.calledWithExactly(response, xhr));
             });
         });
+
+        describe(".reset", function () {
+            beforeEach(function () {
+                this.server = sinonFakeServer.create();
+
+                this.resetBehaviorStub = sinonStub(this.server, "resetBehavior");
+                this.resetHistoryStub = sinonStub(this.server, "resetHistory");
+            });
+
+            afterEach(function () {
+                this.server.restore();
+                this.resetBehaviorStub.restore();
+                this.resetHistoryStub.restore();
+            });
+
+            it("should call resetBehavior and resetHistory", function () {
+                assert(this.resetBehaviorStub.notCalled);
+                assert(this.resetHistoryStub.notCalled);
+
+                this.server.reset();
+
+                assert(this.resetBehaviorStub.calledOnce);
+                assert(this.resetBehaviorStub.calledWithExactly());
+
+                assert(this.resetHistoryStub.calledOnce);
+                assert(this.resetHistoryStub.calledWithExactly());
+
+                assert(this.resetBehaviorStub.calledBefore(this.resetHistoryStub));
+            });
+        });
+
+        describe(".resetBehavior", function () {
+            before(function () {
+                // capture default response
+                var self = this;
+
+                sinonFakeServer.processRequest.call(
+                  {log: function (response) { self.defaultResponse = response; }},
+                  {respond: function () {}}
+                );
+            });
+
+            function makeRequest(context) {
+                context.request = new FakeXMLHttpRequest();
+                context.request.open("get", "url", true);
+                context.request.send(null);
+
+                sinonSpy(context.request, "respond");
+            }
+
+            beforeEach(function () {
+                this.server = sinonFakeServer.create();
+
+                this.testResponse = [200, {}, "OK"];
+
+                this.server.respondWith("GET", "url", this.testResponse);
+
+                makeRequest(this);
+            });
+
+            it("should reset behavior", function () {
+                this.server.resetBehavior();
+
+                assert.equals(this.server.queue.length, 0);
+                assert.equals(this.server.responses.length, 0);
+            });
+
+            it("should work as expected", function () {
+                this.server.respond();
+
+                assert.equals(this.request.respond.args[0], this.testResponse);
+
+                this.server.resetBehavior();
+
+                makeRequest(this);
+
+                this.server.respond();
+
+                assert.equals(this.request.respond.args[0], this.defaultResponse);
+            });
+
+            it("should be idempotent", function () {
+                this.server.respond();
+
+                assert.equals(this.request.respond.args[0], this.testResponse);
+
+                // calling N times should have the same effect as calling once
+                this.server.resetBehavior();
+                this.server.resetBehavior();
+                this.server.resetBehavior();
+
+                makeRequest(this);
+
+                this.server.respond();
+
+                assert.equals(this.request.respond.args[0], this.defaultResponse);
+            });
+        });
+
+        describe("history", function () {
+            function assertDefaultServerState(server) {
+                refute(server.requestedOnce);
+                refute(server.requestedTwice);
+                refute(server.requestedThrice);
+                refute(server.requested);
+
+                refute(server.firstRequest);
+                refute(server.secondRequest);
+                refute(server.thirdRequest);
+                refute(server.lastRequest);
+            }
+
+            function makeRequest() {
+                var request = new FakeXMLHttpRequest();
+                request.open("get", "url", true);
+                request.send(null);
+            }
+
+            beforeEach(function () {
+                this.server = sinonFakeServer.create();
+            });
+
+            describe(".getRequest", function () {
+                it("should handle invalid indexes", function () {
+                    assert.isNull(this.server.getRequest(1e3));
+                    assert.isNull(this.server.getRequest(0));
+                    assert.isNull(this.server.getRequest(-2));
+                    assert.isNull(this.server.getRequest("catpants"));
+                });
+
+                it("should return expected requests", function () {
+                    makeRequest();
+
+                    assert.equals(this.server.getRequest(0), this.server.requests[0]);
+                    assert.isNull(this.server.getRequest(1));
+
+                    makeRequest();
+
+                    assert.equals(this.server.getRequest(1), this.server.requests[1]);
+                });
+            });
+
+            describe(".resetHistory", function () {
+                it("should reset history", function () {
+                    makeRequest();
+                    makeRequest();
+
+                    assert.isTrue(this.server.requested);
+                    assert.isTrue(this.server.requestedTwice);
+
+                    this.server.resetHistory();
+
+                    assertDefaultServerState(this.server);
+                });
+
+                it("should be idempotent", function () {
+                    makeRequest();
+                    makeRequest();
+
+                    assert.isTrue(this.server.requested);
+                    assert.isTrue(this.server.requestedTwice);
+
+                    this.server.resetHistory();
+                    this.server.resetHistory();
+                    this.server.resetHistory();
+
+                    assertDefaultServerState(this.server);
+                });
+            });
+
+            it("should start in a known default state", function () {
+                assertDefaultServerState(this.server);
+            });
+
+            it("should record requests", function () {
+                makeRequest();
+
+                assert.isTrue(this.server.requested);
+                assert.isTrue(this.server.requestedOnce);
+                assert.isFalse(this.server.requestedTwice);
+                assert.isFalse(this.server.requestedThrice);
+                assert.equals(this.server.requestCount, 1);
+
+                assert.equals(this.server.firstRequest, this.server.requests[0]);
+                assert.equals(this.server.lastRequest, this.server.requests[0]);
+
+                // #2
+                makeRequest();
+
+                assert.isTrue(this.server.requested);
+                assert.isFalse(this.server.requestedOnce);
+                assert.isTrue(this.server.requestedTwice);
+                assert.isFalse(this.server.requestedThrice);
+                assert.equals(this.server.requestCount, 2);
+
+                assert.equals(this.server.firstRequest, this.server.requests[0]);
+                assert.equals(this.server.secondRequest, this.server.requests[1]);
+                assert.equals(this.server.lastRequest, this.server.requests[1]);
+
+                // #3
+                makeRequest();
+
+                assert.isTrue(this.server.requested);
+                assert.isFalse(this.server.requestedOnce);
+                assert.isFalse(this.server.requestedTwice);
+                assert.isTrue(this.server.requestedThrice);
+                assert.equals(this.server.requestCount, 3);
+
+                assert.equals(this.server.firstRequest, this.server.requests[0]);
+                assert.equals(this.server.secondRequest, this.server.requests[1]);
+                assert.equals(this.server.thirdRequest, this.server.requests[2]);
+                assert.equals(this.server.lastRequest, this.server.requests[2]);
+
+                // #4
+                makeRequest();
+
+                assert.isTrue(this.server.requested);
+                assert.isFalse(this.server.requestedOnce);
+                assert.isFalse(this.server.requestedTwice);
+                assert.isFalse(this.server.requestedThrice);
+                assert.equals(this.server.requestCount, 4);
+
+                assert.equals(this.server.firstRequest, this.server.requests[0]);
+                assert.equals(this.server.secondRequest, this.server.requests[1]);
+                assert.equals(this.server.thirdRequest, this.server.requests[2]);
+                assert.equals(this.server.lastRequest, this.server.requests[3]);
+            });
+        });
     });
 }
