@@ -18,6 +18,7 @@ env:
 
 before_install:
   - npm config set strict-ssl false
+  - npm install coveralls
 
 before_script:
   # these build targets only need to run once per build, so let's conserve a few resources
@@ -30,6 +31,10 @@ before_script:
 
 script:
   - npm run test-node
+
+after_success:
+  - npm run test-coverage
+  - cat ./coverage/lcov.info | coveralls
 
 git:
   depth: 10
