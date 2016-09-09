@@ -34,7 +34,7 @@ script:
 
 after_success:
   - npm run test-coverage
-  - cat ./coverage/lcov.info | coveralls
+  - cat ./coverage/lcov.info | coveralls lib
 
 git:
   depth: 10
