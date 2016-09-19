@@ -243,6 +243,18 @@ describe("sinonSandbox", function () {
         }
     });
 
+    describe(".restore", function () {
+        it("throws when passed arguments", function () {
+            var sandbox = sinonSandbox.create();
+
+            assert.exception(function () {
+                sandbox.restore("args");
+            }, {
+                message: "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()"
+            });
+        });
+    });
+
     describe("configurable sandbox", function () {
         beforeEach(function () {
             this.requests = [];
