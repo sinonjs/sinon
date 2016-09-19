@@ -1,3 +1,10 @@
+
+v1.17.6 / 2016-09-19
+==================
+
+  * Throw when sandbox.restore is given arguments (Fixes #1149) (#1151)
+  * Fix a regression introduced in #692 (#1098)
+
 v1.17.5 / 2016-07-26
 ==================
 
