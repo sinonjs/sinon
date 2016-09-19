@@ -261,7 +261,7 @@
                 assert.exception(function () {
                     sandbox.restore("args");
                 }, {
-                    message: "sandbox.restore() doess not take any parameters. Perhaps you meant stub.restore()"
+                    message: "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()"
                 });
             }
         },
