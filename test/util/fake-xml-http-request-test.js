@@ -276,7 +276,7 @@ if (typeof window !== "undefined") {
                 });
             });
 
-            it("disallows unsafe headers", function () {
+            it("disallows unsafe headers by default", function () {
                 var xhr = this.xhr;
 
                 assert.exception(function () {
@@ -358,6 +358,97 @@ if (typeof window !== "undefined") {
                 assert.exception(function () {
                     xhr.setRequestHeader("Sec-Oops", "");
                 });
+            });
+
+            it("allows unsafe headers when fake server unsafeHeadersEnabled option is turned off", function () {
+                var server = sinon.fakeServer.create({
+                    unsafeHeadersEnabled: false
+                });
+
+                var xhr = new sinon.FakeXMLHttpRequest();
+                xhr.open("GET", "/");
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Accept-Charset", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Accept-Encoding", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Connection", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Content-Length", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Cookie", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Cookie2", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Content-Transfer-Encoding", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Date", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Expect", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Host", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Keep-Alive", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Referer", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("TE", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Trailer", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Transfer-Encoding", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Upgrade", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("User-Agent", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Via", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Proxy-Oops", "");
+                });
+
+                refute.exception(function () {
+                    xhr.setRequestHeader("Sec-Oops", "");
+                });
+
+                server.restore();
             });
 
             it("sets header and value", function () {
