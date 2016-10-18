@@ -16,7 +16,7 @@ describe("issues", function () {
         this.sandbox.restore();
     });
 
-    it.skip("#283", function () {
+    it("#283", function () {
         function testSinonFakeTimersWith(interval, ticks) {
             var clock = sinon.useFakeTimers();
 
@@ -24,28 +24,17 @@ describe("issues", function () {
             var id = setInterval(spy, interval);
             assert(!spy.calledOnce);
             clock.tick(ticks);
-            assert(spy.calledOnce);
+            assert(spy.callCount === Math.floor(ticks / interval));
 
             clearInterval(id);
             clock.restore();
         }
 
-        // FAILS
         testSinonFakeTimersWith(10, 101);
-
-        // PASS
         testSinonFakeTimersWith(99, 101);
-
-        // FAILS
         testSinonFakeTimersWith(100, 200);
-
-        // PASS
         testSinonFakeTimersWith(199, 200);
-
-        // FAILS
         testSinonFakeTimersWith(500, 1001);
-
-        // PASS
         testSinonFakeTimersWith(1000, 1001);
     });
 

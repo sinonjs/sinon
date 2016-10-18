@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "2.0.0-pre",
+  "version": "2.0.0-pre.3",
   "homepage": "http://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -17,12 +17,12 @@
     "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test-node": "mocha --recursive -R dot test/",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
-    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text ] test/",
+    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage ] test/",
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "lint": "eslint .",
-    "prepublish": "./build",
+    "prepublish": "rimraf pkg && ./build",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
   },
   "pre-commit": [
@@ -36,16 +36,17 @@
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "eslint": "^1.7.1",
-    "eslint-config-defaults": "^2.1.0",
-    "eslint-plugin-mocha": "^1.1.0",
+    "eslint": "^3.1.1",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-mocha": "^4.2.0",
     "mocaccino": "^1.8.2",
     "mocha": "^2.4.5",
     "mochify": "^2.17.0",
     "mochify-istanbul": "^2.4.1",
     "phantomic": "^1.4.0",
     "pre-commit": "^1.1.2",
-    "referee": "^1.2.0"
+    "referee": "^1.2.0",
+    "rimraf": "^2.5.3"
   },
   "files": [
     "lib",

@@ -1,6 +1,8 @@
 {
   "sauceLabs": true,
   "browsers": [{
+    "name": "chrome"
+  }, {
     "name": "firefox"
   }, {
     "name": "internet explorer",
@@ -8,5 +10,12 @@
   }, {
     "name": "internet explorer",
     "version": "11"
-  }]
+  }, {
+    "name": "MicrosoftEdge"
+  }, {
+    "name": "safari",
+    "platform": "OS X 10.11",
+    "version": "9.0"
+  }],
+  "BUILD_VAR": "TRAVIS_BUILD_NUMBER"
 }

@@ -1,38 +1,41 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../lib/sinon");
+var sinonStub = require("../lib/sinon/stub");
+var sinonSpy = require("../lib/sinon/spy");
+var sinonAssert = require("../lib/sinon/assert");
+var sinonMatch = require("../lib/sinon/match");
 var assert = referee.assert;
 var refute = referee.refute;
 
-describe("sinon.assert", function () {
+describe("assert", function () {
     beforeEach(function () {
         this.global = typeof window !== "undefined" ? window : global;
 
         this.setUpStubs = function () {
-            this.stub = sinon.stub.create();
-            sinon.stub(sinon.assert, "fail").throws();
-            sinon.stub(sinon.assert, "pass");
+            this.stub = sinonStub.create();
+            sinonStub(sinonAssert, "fail").throws();
+            sinonStub(sinonAssert, "pass");
         };
 
         this.tearDownStubs = function () {
-            sinon.assert.fail.restore();
-            sinon.assert.pass.restore();
+            sinonAssert.fail.restore();
+            sinonAssert.pass.restore();
         };
     });
 
     it("is object", function () {
-        assert.isObject(sinon.assert);
+        assert.isObject(sinonAssert);
     });
 
     it("supports proxy property", function () {
         var failed = false;
         var api = { method: function () {} };
         api.method.proxy = function () {};
-        sinon.spy(api, "method");
+        sinonSpy(api, "method");
         api.method();
         try {
-            sinon.assert.calledOnce(api.method);
+            sinonAssert.calledOnce(api.method);
         } catch (e) {
             failed = true;
         }
@@ -41,11 +44,11 @@ describe("sinon.assert", function () {
 
     describe(".fail", function () {
         beforeEach(function () {
-            this.exceptionName = sinon.assert.failException;
+            this.exceptionName = sinonAssert.failException;
         });
 
         afterEach(function () {
-            sinon.assert.failException = this.exceptionName;
+            sinonAssert.failException = this.exceptionName;
         });
 
         it("throws exception", function () {
@@ -53,7 +56,7 @@ describe("sinon.assert", function () {
             var exception;
 
             try {
-                sinon.assert.fail("Some message");
+                sinonAssert.fail("Some message");
                 failed = true;
             } catch (e) {
                 exception = e;
@@ -64,10 +67,10 @@ describe("sinon.assert", function () {
         });
 
         it("throws configured exception type", function () {
-            sinon.assert.failException = "RetardError";
+            sinonAssert.failException = "RetardError";
 
             assert.exception(function () {
-                sinon.assert.fail("Some message");
+                sinonAssert.fail("Some message");
             }, "RetardError");
         });
     });
@@ -82,15 +85,15 @@ describe("sinon.assert", function () {
 
         it("fails when arguments to not match", function () {
             assert.exception(function () {
-                sinon.assert.match("foo", "bar");
+                sinonAssert.match("foo", "bar");
             });
 
-            assert(sinon.assert.fail.calledOnce);
+            assert(sinonAssert.fail.calledOnce);
         });
 
         it("passes when argumens match", function () {
-            sinon.assert.match("foo", "foo");
-            assert(sinon.assert.pass.calledOnce);
+            sinonAssert.match("foo", "foo");
+            assert(sinonAssert.pass.calledOnce);
         });
     });
 
@@ -104,28 +107,37 @@ describe("sinon.assert", function () {
 
         it("fails when method does not exist", function () {
             assert.exception(function () {
-                sinon.assert.called();
+                sinonAssert.called();
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
             assert.exception(function () {
-                sinon.assert.called(function () {});
+                sinonAssert.called(function () {});
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method was not called", function () {
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.called(stub);
+                sinonAssert.called(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            stub();
+
+            assert.exception(function () {
+                sinonAssert.called(stub, 1);
+            });
         });
 
         it("does not fail when method was called", function () {
@@ -133,10 +145,10 @@ describe("sinon.assert", function () {
             stub();
 
             refute.exception(function () {
-                sinon.assert.called(stub);
+                sinonAssert.called(stub);
             });
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
@@ -144,11 +156,11 @@ describe("sinon.assert", function () {
             stub();
 
             refute.exception(function () {
-                sinon.assert.called(stub);
+                sinonAssert.called(stub);
             });
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("called"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("called"));
         });
     });
 
@@ -162,18 +174,18 @@ describe("sinon.assert", function () {
 
         it("fails when method does not exist", function () {
             assert.exception(function () {
-                sinon.assert.notCalled();
+                sinonAssert.notCalled();
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
             assert.exception(function () {
-                sinon.assert.notCalled(function () {});
+                sinonAssert.notCalled(function () {});
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method was called", function () {
@@ -181,28 +193,36 @@ describe("sinon.assert", function () {
             stub();
 
             assert.exception(function () {
-                sinon.assert.notCalled(stub);
+                sinonAssert.notCalled(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+
+            assert.exception(function () {
+                sinonAssert.notCalled(stub, 1);
+            });
         });
 
         it("passes when method was not called", function () {
             var stub = this.stub;
 
             refute.exception(function () {
-                sinon.assert.notCalled(stub);
+                sinonAssert.notCalled(stub);
             });
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("should call pass callback", function () {
             var stub = this.stub;
-            sinon.assert.notCalled(stub);
+            sinonAssert.notCalled(stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("notCalled"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("notCalled"));
         });
     });
 
@@ -216,28 +236,37 @@ describe("sinon.assert", function () {
 
         it("fails when method does not exist", function () {
             assert.exception(function () {
-                sinon.assert.calledOnce();
+                sinonAssert.calledOnce();
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
             assert.exception(function () {
-                sinon.assert.calledOnce(function () {});
+                sinonAssert.calledOnce(function () {});
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method was not called", function () {
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.calledOnce(stub);
+                sinonAssert.calledOnce(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            stub();
+
+            assert.exception(function () {
+                sinonAssert.calledOnce(stub, 1);
+            });
         });
 
         it("passes when method was called", function () {
@@ -245,10 +274,10 @@ describe("sinon.assert", function () {
             stub();
 
             refute.exception(function () {
-                sinon.assert.calledOnce(stub);
+                sinonAssert.calledOnce(stub);
             });
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("fails when method was called more than once", function () {
@@ -257,19 +286,19 @@ describe("sinon.assert", function () {
             stub();
 
             assert.exception(function () {
-                sinon.assert.calledOnce(stub);
+                sinonAssert.calledOnce(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             var stub = this.stub;
             stub();
-            sinon.assert.calledOnce(stub);
+            sinonAssert.calledOnce(stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledOnce"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledOnce"));
         });
     });
 
@@ -286,7 +315,17 @@ describe("sinon.assert", function () {
             this.stub();
 
             assert.exception(function () {
-                sinon.assert.calledTwice(stub);
+                sinonAssert.calledTwice(stub);
+            });
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            this.stub();
+            this.stub();
+
+            assert.exception(function () {
+                sinonAssert.calledTwice(stub, 1);
             });
         });
 
@@ -296,7 +335,7 @@ describe("sinon.assert", function () {
             this.stub();
 
             refute.exception(function () {
-                sinon.assert.calledTwice(stub);
+                sinonAssert.calledTwice(stub);
             });
         });
 
@@ -304,10 +343,10 @@ describe("sinon.assert", function () {
             var stub = this.stub;
             stub();
             stub();
-            sinon.assert.calledTwice(stub);
+            sinonAssert.calledTwice(stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledTwice"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledTwice"));
         });
     });
 
@@ -324,7 +363,18 @@ describe("sinon.assert", function () {
             this.stub();
 
             assert.exception(function () {
-                sinon.assert.calledThrice(stub);
+                sinonAssert.calledThrice(stub);
+            });
+        });
+
+        it("fails when called with more than one argument", function () {
+            var stub = this.stub;
+            this.stub();
+            this.stub();
+            this.stub();
+
+            assert.exception(function () {
+                sinonAssert.calledThrice(stub, 1);
             });
         });
 
@@ -335,7 +385,7 @@ describe("sinon.assert", function () {
             this.stub();
 
             refute.exception(function () {
-                sinon.assert.calledThrice(stub);
+                sinonAssert.calledThrice(stub);
             });
         });
 
@@ -344,10 +394,10 @@ describe("sinon.assert", function () {
             stub();
             stub();
             stub();
-            sinon.assert.calledThrice(stub);
+            sinonAssert.calledThrice(stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledThrice"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledThrice"));
         });
     });
 
@@ -360,103 +410,103 @@ describe("sinon.assert", function () {
         });
 
         it("passes when calls where done in right order", function () {
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
+            var spy1 = sinonSpy();
+            var spy2 = sinonSpy();
             spy1();
             spy2();
 
             refute.exception(function () {
-                sinon.assert.callOrder(spy1, spy2);
+                sinonAssert.callOrder(spy1, spy2);
             });
         });
 
         it("fails when calls where done in wrong order", function () {
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
+            var spy1 = sinonSpy();
+            var spy2 = sinonSpy();
             spy2();
             spy1();
 
             assert.exception(function () {
-                sinon.assert.callOrder(spy1, spy2);
+                sinonAssert.callOrder(spy1, spy2);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when many calls where done in right order", function () {
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
-            var spy3 = sinon.spy();
-            var spy4 = sinon.spy();
+            var spy1 = sinonSpy();
+            var spy2 = sinonSpy();
+            var spy3 = sinonSpy();
+            var spy4 = sinonSpy();
             spy1();
             spy2();
             spy3();
             spy4();
 
             refute.exception(function () {
-                sinon.assert.callOrder(spy1, spy2, spy3, spy4);
+                sinonAssert.callOrder(spy1, spy2, spy3, spy4);
             });
         });
 
         it("fails when one of many calls where done in wrong order", function () {
-            var spy1 = sinon.spy();
-            var spy2 = sinon.spy();
-            var spy3 = sinon.spy();
-            var spy4 = sinon.spy();
+            var spy1 = sinonSpy();
+            var spy2 = sinonSpy();
+            var spy3 = sinonSpy();
+            var spy4 = sinonSpy();
             spy1();
             spy2();
             spy4();
             spy3();
 
             assert.exception(function () {
-                sinon.assert.callOrder(spy1, spy2, spy3, spy4);
+                sinonAssert.callOrder(spy1, spy2, spy3, spy4);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
-            var stubs = [sinon.spy(), sinon.spy()];
+            var stubs = [sinonSpy(), sinonSpy()];
             stubs[0]();
             stubs[1]();
-            sinon.assert.callOrder(stubs[0], stubs[1]);
+            sinonAssert.callOrder(stubs[0], stubs[1]);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("callOrder"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("callOrder"));
         });
 
         it("passes for multiple calls to same spy", function () {
-            var first = sinon.spy();
-            var second = sinon.spy();
+            var first = sinonSpy();
+            var second = sinonSpy();
 
             first();
             second();
             first();
 
             refute.exception(function () {
-                sinon.assert.callOrder(first, second, first);
+                sinonAssert.callOrder(first, second, first);
             });
         });
 
         it("fails if first spy was not called", function () {
-            var first = sinon.spy();
-            var second = sinon.spy();
+            var first = sinonSpy();
+            var second = sinonSpy();
 
             second();
 
             assert.exception(function () {
-                sinon.assert.callOrder(first, second);
+                sinonAssert.callOrder(first, second);
             });
         });
 
         it("fails if second spy was not called", function () {
-            var first = sinon.spy();
-            var second = sinon.spy();
+            var first = sinonSpy();
+            var second = sinonSpy();
 
             first();
 
             assert.exception(function () {
-                sinon.assert.callOrder(first, second);
+                sinonAssert.callOrder(first, second);
             });
         });
     });
@@ -471,57 +521,57 @@ describe("sinon.assert", function () {
 
         it("fails when method does not exist", function () {
             var object = {};
-            sinon.stub(this.stub, "calledOn");
+            sinonStub(this.stub, "calledOn");
 
             assert.exception(function () {
-                sinon.assert.calledOn(null, object);
+                sinonAssert.calledOn(null, object);
             });
 
             assert.isFalse(this.stub.calledOn.calledWith(object));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
             var object = {};
-            sinon.stub(this.stub, "calledOn");
+            sinonStub(this.stub, "calledOn");
 
             assert.exception(function () {
-                sinon.assert.calledOn(function () {}, object);
+                sinonAssert.calledOn(function () {}, object);
             });
 
             assert.isFalse(this.stub.calledOn.calledWith(object));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method fails", function () {
             var object = {};
-            sinon.stub(this.stub, "calledOn").returns(false);
+            sinonStub(this.stub, "calledOn").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.calledOn(stub, object);
+                sinonAssert.calledOn(stub, object);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
             var object = {};
-            sinon.stub(this.stub, "calledOn").returns(true);
+            sinonStub(this.stub, "calledOn").returns(true);
             var stub = this.stub;
 
-            sinon.assert.calledOn(stub, object);
+            sinonAssert.calledOn(stub, object);
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             var obj = {};
             this.stub.call(obj);
-            sinon.assert.calledOn(this.stub, obj);
+            sinonAssert.calledOn(this.stub, obj);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledOn"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledOn"));
         });
     });
 
@@ -534,53 +584,53 @@ describe("sinon.assert", function () {
         });
 
         it("fails when method does not exist", function () {
-            sinon.stub(this.stub, "calledWithNew");
+            sinonStub(this.stub, "calledWithNew");
 
             assert.exception(function () {
-                sinon.assert.calledWithNew(null);
+                sinonAssert.calledWithNew(null);
             });
 
             assert.isFalse(this.stub.calledWithNew.called);
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
-            sinon.stub(this.stub, "calledWithNew");
+            sinonStub(this.stub, "calledWithNew");
 
             assert.exception(function () {
-                sinon.assert.calledWithNew(function () {});
+                sinonAssert.calledWithNew(function () {});
             });
 
             assert.isFalse(this.stub.calledWithNew.called);
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method fails", function () {
-            sinon.stub(this.stub, "calledWithNew").returns(false);
+            sinonStub(this.stub, "calledWithNew").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.calledWithNew(stub);
+                sinonAssert.calledWithNew(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
-            sinon.stub(this.stub, "calledWithNew").returns(true);
+            sinonStub(this.stub, "calledWithNew").returns(true);
             var stub = this.stub;
 
-            sinon.assert.calledWithNew(stub);
+            sinonAssert.calledWithNew(stub);
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             new this.stub(); // eslint-disable-line no-new, new-cap
-            sinon.assert.calledWithNew(this.stub);
+            sinonAssert.calledWithNew(this.stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledWithNew"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledWithNew"));
         });
     });
 
@@ -593,53 +643,53 @@ describe("sinon.assert", function () {
         });
 
         it("fails when method does not exist", function () {
-            sinon.stub(this.stub, "alwaysCalledWithNew");
+            sinonStub(this.stub, "alwaysCalledWithNew");
 
             assert.exception(function () {
-                sinon.assert.alwaysCalledWithNew(null);
+                sinonAssert.alwaysCalledWithNew(null);
             });
 
             assert.isFalse(this.stub.alwaysCalledWithNew.called);
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method is not stub", function () {
-            sinon.stub(this.stub, "alwaysCalledWithNew");
+            sinonStub(this.stub, "alwaysCalledWithNew");
 
             assert.exception(function () {
-                sinon.assert.alwaysCalledWithNew(function () {});
+                sinonAssert.alwaysCalledWithNew(function () {});
             });
 
             assert.isFalse(this.stub.alwaysCalledWithNew.called);
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("fails when method fails", function () {
-            sinon.stub(this.stub, "alwaysCalledWithNew").returns(false);
+            sinonStub(this.stub, "alwaysCalledWithNew").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.alwaysCalledWithNew(stub);
+                sinonAssert.alwaysCalledWithNew(stub);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
-            sinon.stub(this.stub, "alwaysCalledWithNew").returns(true);
+            sinonStub(this.stub, "alwaysCalledWithNew").returns(true);
             var stub = this.stub;
 
-            sinon.assert.alwaysCalledWithNew(stub);
+            sinonAssert.alwaysCalledWithNew(stub);
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             new this.stub(); // eslint-disable-line no-new, new-cap
-            sinon.assert.alwaysCalledWithNew(this.stub);
+            sinonAssert.alwaysCalledWithNew(this.stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("alwaysCalledWithNew"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("alwaysCalledWithNew"));
         });
     });
 
@@ -653,60 +703,60 @@ describe("sinon.assert", function () {
 
         it("fails when method fails", function () {
             var object = {};
-            sinon.stub(this.stub, "calledWith").returns(false);
+            sinonStub(this.stub, "calledWith").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.calledWith(stub, object, 1);
+                sinonAssert.calledWith(stub, object, 1);
             });
 
             assert(this.stub.calledWith.calledWith(object, 1));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
             var object = {};
-            sinon.stub(this.stub, "calledWith").returns(true);
+            sinonStub(this.stub, "calledWith").returns(true);
             var stub = this.stub;
 
             refute.exception(function () {
-                sinon.assert.calledWith(stub, object, 1);
+                sinonAssert.calledWith(stub, object, 1);
             });
 
             assert(this.stub.calledWith.calledWith(object, 1));
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             this.stub("yeah");
-            sinon.assert.calledWith(this.stub, "yeah");
+            sinonAssert.calledWith(this.stub, "yeah");
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledWith"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledWith"));
         });
 
         it("works with spyCall", function () {
-            var spy = sinon.spy();
+            var spy = sinonSpy();
             var object = {};
             spy();
             spy(object);
 
-            sinon.assert.calledWith(spy.lastCall, object);
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledWith"));
+            sinonAssert.calledWith(spy.lastCall, object);
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledWith"));
         });
 
         it("fails when spyCall failed", function () {
-            var spy = sinon.spy();
+            var spy = sinonSpy();
             var object = {};
             spy();
             spy(object);
 
             assert.exception(function () {
-                sinon.assert.calledWith(spy.lastCall, 1);
+                sinonAssert.calledWith(spy.lastCall, 1);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
     });
 
@@ -720,36 +770,36 @@ describe("sinon.assert", function () {
 
         it("fails when method fails", function () {
             var object = {};
-            sinon.stub(this.stub, "calledWithExactly").returns(false);
+            sinonStub(this.stub, "calledWithExactly").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.calledWithExactly(stub, object, 1);
+                sinonAssert.calledWithExactly(stub, object, 1);
             });
 
             assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
             var object = {};
-            sinon.stub(this.stub, "calledWithExactly").returns(true);
+            sinonStub(this.stub, "calledWithExactly").returns(true);
             var stub = this.stub;
 
             refute.exception(function () {
-                sinon.assert.calledWithExactly(stub, object, 1);
+                sinonAssert.calledWithExactly(stub, object, 1);
             });
 
             assert(this.stub.calledWithExactly.calledWithExactly(object, 1));
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             this.stub("yeah");
-            sinon.assert.calledWithExactly(this.stub, "yeah");
+            sinonAssert.calledWithExactly(this.stub, "yeah");
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("calledWithExactly"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledWithExactly"));
         });
     });
 
@@ -763,36 +813,36 @@ describe("sinon.assert", function () {
 
         it("fails when method fails", function () {
             var object = {};
-            sinon.stub(this.stub, "neverCalledWith").returns(false);
+            sinonStub(this.stub, "neverCalledWith").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.neverCalledWith(stub, object, 1);
+                sinonAssert.neverCalledWith(stub, object, 1);
             });
 
             assert(this.stub.neverCalledWith.calledWith(object, 1));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
             var object = {};
-            sinon.stub(this.stub, "neverCalledWith").returns(true);
+            sinonStub(this.stub, "neverCalledWith").returns(true);
             var stub = this.stub;
 
             refute.exception(function () {
-                sinon.assert.neverCalledWith(stub, object, 1);
+                sinonAssert.neverCalledWith(stub, object, 1);
             });
 
             assert(this.stub.neverCalledWith.calledWith(object, 1));
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             this.stub("yeah");
-            sinon.assert.neverCalledWith(this.stub, "nah!");
+            sinonAssert.neverCalledWith(this.stub, "nah!");
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("neverCalledWith"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("neverCalledWith"));
         });
     });
 
@@ -805,36 +855,36 @@ describe("sinon.assert", function () {
         });
 
         it("fails when method fails", function () {
-            sinon.stub(this.stub, "threw").returns(false);
+            sinonStub(this.stub, "threw").returns(false);
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.threw(stub, 1, 2);
+                sinonAssert.threw(stub, 1, 2);
             });
 
             assert(this.stub.threw.calledWithExactly(1, 2));
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
-            sinon.stub(this.stub, "threw").returns(true);
+            sinonStub(this.stub, "threw").returns(true);
             var stub = this.stub;
 
             refute.exception(function () {
-                sinon.assert.threw(stub, 1, 2);
+                sinonAssert.threw(stub, 1, 2);
             });
 
             assert(this.stub.threw.calledWithExactly(1, 2));
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
-            sinon.stub(this.stub, "threw").returns(true);
+            sinonStub(this.stub, "threw").returns(true);
             this.stub();
-            sinon.assert.threw(this.stub);
+            sinonAssert.threw(this.stub);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("threw"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("threw"));
         });
     });
 
@@ -852,10 +902,10 @@ describe("sinon.assert", function () {
             var stub = this.stub;
 
             assert.exception(function () {
-                sinon.assert.callCount(stub, 3);
+                sinonAssert.callCount(stub, 3);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes when method doesn't fail", function () {
@@ -863,18 +913,18 @@ describe("sinon.assert", function () {
             this.stub.callCount = 3;
 
             refute.exception(function () {
-                sinon.assert.callCount(stub, 3);
+                sinonAssert.callCount(stub, 3);
             });
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             this.stub();
-            sinon.assert.callCount(this.stub, 1);
+            sinonAssert.callCount(this.stub, 1);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("callCount"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("callCount"));
         });
     });
 
@@ -888,141 +938,141 @@ describe("sinon.assert", function () {
 
         it("fails if method is missing", function () {
             assert.exception(function () {
-                sinon.assert.alwaysCalledOn();
+                sinonAssert.alwaysCalledOn();
             });
         });
 
         it("fails if method is not fake", function () {
             assert.exception(function () {
-                sinon.assert.alwaysCalledOn(function () {}, {});
+                sinonAssert.alwaysCalledOn(function () {}, {});
             });
         });
 
         it("fails if stub returns false", function () {
-            var stub = sinon.stub();
-            sinon.stub(stub, "alwaysCalledOn").returns(false);
+            var stub = sinonStub();
+            sinonStub(stub, "alwaysCalledOn").returns(false);
 
             assert.exception(function () {
-                sinon.assert.alwaysCalledOn(stub, {});
+                sinonAssert.alwaysCalledOn(stub, {});
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes if stub returns true", function () {
-            var stub = sinon.stub.create();
-            sinon.stub(stub, "alwaysCalledOn").returns(true);
+            var stub = sinonStub.create();
+            sinonStub(stub, "alwaysCalledOn").returns(true);
 
-            sinon.assert.alwaysCalledOn(stub, {});
+            sinonAssert.alwaysCalledOn(stub, {});
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
             this.stub();
-            sinon.assert.alwaysCalledOn(this.stub, this);
+            sinonAssert.alwaysCalledOn(this.stub, this);
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("alwaysCalledOn"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("alwaysCalledOn"));
         });
     });
 
     describe(".alwaysCalledWith", function () {
         beforeEach(function () {
-            sinon.stub(sinon.assert, "fail").throws();
-            sinon.stub(sinon.assert, "pass");
+            sinonStub(sinonAssert, "fail").throws();
+            sinonStub(sinonAssert, "pass");
         });
 
         afterEach(function () {
-            sinon.assert.fail.restore();
-            sinon.assert.pass.restore();
+            sinonAssert.fail.restore();
+            sinonAssert.pass.restore();
         });
 
         it("fails if method is missing", function () {
             assert.exception(function () {
-                sinon.assert.alwaysCalledWith();
+                sinonAssert.alwaysCalledWith();
             });
         });
 
         it("fails if method is not fake", function () {
             assert.exception(function () {
-                sinon.assert.alwaysCalledWith(function () {});
+                sinonAssert.alwaysCalledWith(function () {});
             });
         });
 
         it("fails if stub returns false", function () {
-            var stub = sinon.stub.create();
-            sinon.stub(stub, "alwaysCalledWith").returns(false);
+            var stub = sinonStub.create();
+            sinonStub(stub, "alwaysCalledWith").returns(false);
 
             assert.exception(function () {
-                sinon.assert.alwaysCalledWith(stub, {}, []);
+                sinonAssert.alwaysCalledWith(stub, {}, []);
             });
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes if stub returns true", function () {
-            var stub = sinon.stub.create();
-            sinon.stub(stub, "alwaysCalledWith").returns(true);
+            var stub = sinonStub.create();
+            sinonStub(stub, "alwaysCalledWith").returns(true);
 
-            sinon.assert.alwaysCalledWith(stub, {}, []);
+            sinonAssert.alwaysCalledWith(stub, {}, []);
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
-            var spy = sinon.spy();
+            var spy = sinonSpy();
             spy("Hello");
-            sinon.assert.alwaysCalledWith(spy, "Hello");
+            sinonAssert.alwaysCalledWith(spy, "Hello");
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("alwaysCalledWith"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("alwaysCalledWith"));
         });
     });
 
     describe(".alwaysCalledWithExactly", function () {
         beforeEach(function () {
-            sinon.stub(sinon.assert, "fail");
-            sinon.stub(sinon.assert, "pass");
+            sinonStub(sinonAssert, "fail");
+            sinonStub(sinonAssert, "pass");
         });
 
         afterEach(function () {
-            sinon.assert.fail.restore();
-            sinon.assert.pass.restore();
+            sinonAssert.fail.restore();
+            sinonAssert.pass.restore();
         });
 
         it("fails if stub returns false", function () {
-            var stub = sinon.stub.create();
-            sinon.stub(stub, "alwaysCalledWithExactly").returns(false);
+            var stub = sinonStub.create();
+            sinonStub(stub, "alwaysCalledWithExactly").returns(false);
 
-            sinon.assert.alwaysCalledWithExactly(stub, {}, []);
+            sinonAssert.alwaysCalledWithExactly(stub, {}, []);
 
-            assert(sinon.assert.fail.called);
+            assert(sinonAssert.fail.called);
         });
 
         it("passes if stub returns true", function () {
-            var stub = sinon.stub.create();
-            sinon.stub(stub, "alwaysCalledWithExactly").returns(true);
+            var stub = sinonStub.create();
+            sinonStub(stub, "alwaysCalledWithExactly").returns(true);
 
-            sinon.assert.alwaysCalledWithExactly(stub, {}, []);
+            sinonAssert.alwaysCalledWithExactly(stub, {}, []);
 
-            assert.isFalse(sinon.assert.fail.called);
+            assert.isFalse(sinonAssert.fail.called);
         });
 
         it("calls pass callback", function () {
-            var spy = sinon.spy();
+            var spy = sinonSpy();
             spy("Hello");
-            sinon.assert.alwaysCalledWithExactly(spy, "Hello");
+            sinonAssert.alwaysCalledWithExactly(spy, "Hello");
 
-            assert(sinon.assert.pass.calledOnce);
-            assert(sinon.assert.pass.calledWith("alwaysCalledWithExactly"));
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("alwaysCalledWithExactly"));
         });
     });
 
     describe(".expose", function () {
         it("exposes asserts into object", function () {
             var test = {};
-            sinon.assert.expose(test);
+            sinonAssert.expose(test);
 
             assert.isFunction(test.fail);
             assert.isString(test.failException);
@@ -1035,7 +1085,7 @@ describe("sinon.assert", function () {
         });
 
         it("exposes asserts into global", function () {
-            sinon.assert.expose(this.global, {
+            sinonAssert.expose(this.global, {
                 includeFail: false
             });
 
@@ -1051,12 +1101,12 @@ describe("sinon.assert", function () {
         });
 
         it("fails exposed asserts without errors", function () {
-            sinon.assert.expose(this.global, {
+            sinonAssert.expose(this.global, {
                 includeFail: false
             });
 
             try {
-                assertCalled(sinon.spy()); // eslint-disable-line no-undef
+                assertCalled(sinonSpy()); // eslint-disable-line no-undef
             } catch (e) {
                 assert.equals(e.message, "expected spy to have been called at least once but was never called");
             }
@@ -1065,7 +1115,7 @@ describe("sinon.assert", function () {
         it("exposes asserts into object without prefixes", function () {
             var test = {};
 
-            sinon.assert.expose(test, { prefix: "" });
+            sinonAssert.expose(test, { prefix: "" });
 
             assert.isFunction(test.fail);
             assert.isString(test.failException);
@@ -1080,20 +1130,20 @@ describe("sinon.assert", function () {
         it("does not expose 'expose'", function () {
             var test = {};
 
-            sinon.assert.expose(test, { prefix: "" });
+            sinonAssert.expose(test, { prefix: "" });
 
             refute(test.expose, "Expose should not be exposed");
         });
 
         it("throws if target is undefined", function () {
             assert.exception(function () {
-                sinon.assert.expose();
+                sinonAssert.expose();
             }, "TypeError");
         });
 
         it("throws if target is null", function () {
             assert.exception(function () {
-                sinon.assert.expose(null);
+                sinonAssert.expose(null);
             }, "TypeError");
         });
     });
@@ -1104,11 +1154,12 @@ describe("sinon.assert", function () {
                 doSomething: function () {}
             };
 
-            sinon.spy(this.obj, "doSomething");
+            sinonSpy(this.obj, "doSomething");
 
+            /*eslint consistent-return: "off"*/
             this.message = function (method) {
                 try {
-                    sinon.assert[method].apply(sinon.assert, [].slice.call(arguments, 1));
+                    sinonAssert[method].apply(sinonAssert, [].slice.call(arguments, 1));
                 } catch (e) {
                     return e.message;
                 }
@@ -1155,8 +1206,8 @@ describe("sinon.assert", function () {
 
         it("assert.callOrder exception message", function () {
             var obj = { doop: function () {}, foo: function () {} };
-            sinon.spy(obj, "doop");
-            sinon.spy(obj, "foo");
+            sinonSpy(obj, "doop");
+            sinonSpy(obj, "foo");
 
             obj.doop();
             this.obj.doSomething();
@@ -1171,8 +1222,8 @@ describe("sinon.assert", function () {
 
         it("assert.callOrder with missing first call exception message", function () {
             var obj = { doop: function () {}, foo: function () {} };
-            sinon.spy(obj, "doop");
-            sinon.spy(obj, "foo");
+            sinonSpy(obj, "doop");
+            sinonSpy(obj, "foo");
 
             obj.foo();
 
@@ -1185,8 +1236,8 @@ describe("sinon.assert", function () {
 
         it("assert.callOrder with missing last call exception message", function () {
             var obj = { doop: function () {}, foo: function () {} };
-            sinon.spy(obj, "doop");
-            sinon.spy(obj, "foo");
+            sinonSpy(obj, "doop");
+            sinonSpy(obj, "foo");
 
             obj.doop();
 
@@ -1320,7 +1371,7 @@ describe("sinon.assert", function () {
             this.obj.doSomething(true, true);
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinon.match.any, false).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, sinonMatch.any, false).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments any, false\n    doSomething(true, true)"
             );
         });
@@ -1329,7 +1380,7 @@ describe("sinon.assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinon.match.defined).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, sinonMatch.defined).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments defined\n    doSomething()"
             );
         });
@@ -1338,7 +1389,7 @@ describe("sinon.assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinon.match.truthy).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, sinonMatch.truthy).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments truthy\n    doSomething()"
             );
         });
@@ -1346,7 +1397,7 @@ describe("sinon.assert", function () {
         it("assert.calledWith match.falsy exception message", function () {
             this.obj.doSomething(true);
 
-            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match.falsy).replace(/ at.*/g, ""),
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch.falsy).replace(/ at.*/g, ""),
                           "expected doSomething to be called with arguments " +
                           "falsy\n    doSomething(true)");
         });
@@ -1355,14 +1406,14 @@ describe("sinon.assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinon.match.same(1)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, sinonMatch.same(1)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments same(1)\n    doSomething()"
             );
         });
 
         it("assert.calledWith match.typeOf exception message", function () {
             this.obj.doSomething();
-            var matcher = sinon.match.typeOf("string");
+            var matcher = sinonMatch.typeOf("string");
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1372,7 +1423,7 @@ describe("sinon.assert", function () {
 
         it("assert.calledWith match.instanceOf exception message", function () {
             this.obj.doSomething();
-            var matcher = sinon.match.instanceOf(function CustomType() {});
+            var matcher = sinonMatch.instanceOf(function CustomType() {});
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1382,7 +1433,7 @@ describe("sinon.assert", function () {
 
         it("assert.calledWith match object exception message", function () {
             this.obj.doSomething();
-            var matcher = sinon.match({ some: "value", and: 123 });
+            var matcher = sinonMatch({ some: "value", and: 123 });
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1393,7 +1444,7 @@ describe("sinon.assert", function () {
         it("assert.calledWith match boolean exception message", function () {
             this.obj.doSomething();
 
-            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match(true)).replace(/ at.*/g, ""),
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch(true)).replace(/ at.*/g, ""),
                           "expected doSomething to be called with arguments " +
                           "match(true)\n    doSomething()");
         });
@@ -1401,14 +1452,14 @@ describe("sinon.assert", function () {
         it("assert.calledWith match number exception message", function () {
             this.obj.doSomething();
 
-            assert.equals(this.message("calledWith", this.obj.doSomething, sinon.match(123)).replace(/ at.*/g, ""),
+            assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch(123)).replace(/ at.*/g, ""),
                           "expected doSomething to be called with arguments " +
                           "match(123)\n    doSomething()");
         });
 
         it("assert.calledWith match string exception message", function () {
             this.obj.doSomething();
-            var matcher = sinon.match("Sinon");
+            var matcher = sinonMatch("Sinon");
 
             assert.equals(this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
                           "expected doSomething to be called with arguments " +
@@ -1419,14 +1470,14 @@ describe("sinon.assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinon.match(/[a-z]+/)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, sinonMatch(/[a-z]+/)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments match(/[a-z]+/)\n    doSomething()"
             );
         });
 
         it("assert.calledWith match test function exception message", function () {
             this.obj.doSomething();
-            var matcher = sinon.match({ test: function custom() {} });
+            var matcher = sinonMatch({ test: function custom() {} });
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
