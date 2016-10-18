@@ -160,7 +160,7 @@
         "semi": 2,
         "semi-spacing": [2, {"before": false, "after": true}],
         "sort-vars": 0,
-        "keyword-spacing": [2, { "after": true }],
+        "keyword-spacing": ["error", { "after": true }],
         "space-before-blocks": [2, "always"],
         "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
         "space-before-function-parentheses": [0, "always"],
