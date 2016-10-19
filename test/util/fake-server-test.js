@@ -71,6 +71,18 @@ if (typeof window !== "undefined") {
                     "fakeServer.create should accept 'fakeHTTPMethods' setting"
                 );
             });
+            it("allows the 'unsafeHeadersEnabled' setting", function () {
+                var server = sinon.fakeServer.create({
+                    unsafeHeadersEnabled: false
+                });
+                assert.defined(
+                    server.unsafeHeadersEnabled,
+                    "'unsafeHeadersEnabled' expected to be defined at server level");
+                assert(
+                    !server.unsafeHeadersEnabled,
+                    "fakeServer.create should accept 'unsafeHeadersEnabled' setting"
+                );
+            });
             it("does not assign a non-whitelisted setting", function () {
                 var server = sinonFakeServer.create({
                     foo: true
