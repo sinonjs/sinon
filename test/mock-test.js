@@ -889,6 +889,22 @@ describe("sinonMock", function () {
                           "(never called)");
         });
 
+        it("fails even if the original expectation exception was caught", function () {
+            var mock = this.mock;
+            mock.expects("method").once();
+
+            this.object.method();
+            try {
+                this.object.method();
+            } catch (e) {
+                // Silenced error
+            }
+
+            assert.exception(function () {
+                mock.verify();
+            }, "ExpectationError");
+        });
+
         it("does not call pass if no expectations", function () {
             var pass = sinonStub(sinonExpectation, "pass");
 
