@@ -132,11 +132,20 @@ if (typeof window !== "undefined") {
             assert.same(FakeXMLHttpRequest.prototype.constructor, FakeXMLHttpRequest);
         });
 
-        it("implements readyState constants", function () {
+        it("class implements readyState constants", function () {
             assert.same(FakeXMLHttpRequest.OPENED, 1);
             assert.same(FakeXMLHttpRequest.HEADERS_RECEIVED, 2);
             assert.same(FakeXMLHttpRequest.LOADING, 3);
             assert.same(FakeXMLHttpRequest.DONE, 4);
+        });
+
+        it("instance implements readyState constants", function () {
+            var xhr = new FakeXMLHttpRequest();
+
+            assert.same(xhr.OPENED, 1);
+            assert.same(xhr.HEADERS_RECEIVED, 2);
+            assert.same(xhr.LOADING, 3);
+            assert.same(xhr.DONE, 4);
         });
 
         it("calls onCreate if listener is set", function () {
