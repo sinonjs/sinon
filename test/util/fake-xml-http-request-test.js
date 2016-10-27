@@ -2115,6 +2115,24 @@ if (typeof window !== "undefined") {
                 this.xhr.respond(200, {}, "");
             });
 
+            it("calls .onprogess", function (done) {
+                var xhr = this.xhr;
+                this.onprogressCalled = false;
+
+                this.xhr.onprogress = function () {
+                    this.onprogressCalled = true;
+                };
+                this.xhr.addEventListener("readystatechange", function () {
+                    if (xhr.readyState === 4) {
+                        assert.isTrue(this.onprogressCalled);
+                        done();
+                    }
+                });
+
+                this.xhr.send();
+                this.xhr.respond(200, {}, "");
+            });
+
             it("calls 'abort' on cancel", function (done) {
                 var xhr = this.xhr;
 
