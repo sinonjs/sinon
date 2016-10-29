@@ -1528,6 +1528,36 @@ if (typeof window !== "undefined") {
             });
         });
 
+        describe(".overrideMimeType", function () {
+            beforeEach(function () {
+                this.xhr = new FakeXMLHttpRequest();
+            });
+
+            if (supportsBlob) {
+                it("overrides provided MIME-Type", function () {
+                    this.xhr.responseType = "blob";
+                    this.xhr.open("GET", "/");
+                    this.xhr.overrideMimeType("text/plain");
+                    this.xhr.send();
+
+                    this.xhr.respond(200, { "Content-Type": "text/html" }, "");
+
+                    assert.equals(this.xhr.response.type, "text/plain");
+                });
+            }
+
+            it("throws when executed too late", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.respond(200, {}, "");
+
+                assert.exception(function () {
+                    this.xhr.overrideMimeType("text/plain");
+                });
+            });
+        });
+
         describe("stub XHR", function () {
             beforeEach(fakeXhrSetUp);
             afterEach(fakeXhrTearDown);
