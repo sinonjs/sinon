@@ -399,7 +399,7 @@ Returns the passed format string with the following replacements performed:
     <dt><code>%t</code></dt>
     <dd>a comma-delimited list of <code>this</code> values the spy was called on</dd>
 
-    <dt><code>%</code><var>n</var></dt>
+    <dt><code>%</code><var><code>n</code></var></dt>
     <dd>the formatted value of the <var>n</var>th argument passed to <code>printf</code> <br/>FIXME: needs example</dd>
 
     <dt><code>%*</code></dt>
