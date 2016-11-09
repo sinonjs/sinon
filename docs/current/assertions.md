@@ -143,6 +143,22 @@ If only one argument is provided, the assertion passes if `spy` ever threw any e
 
 Like above, only required for all calls to the spy.
 
+#### `sinon.assert.match(actual, expectation);`
+
+Uses [`sinon.match`](./matchers.md) to test if the arguments can be considered a match.
+
+```javascript
+var sinon = require('sinon');
+
+describe('example', function(){
+    it('should match on `x` property, and ignore `y` property', function() {
+        var expected = {x: 1},
+            actual = {x: 1, y: 2};
+
+        sinon.assert.match(actual, expected);
+    });
+});
+```
 
 #### `sinon.assert.expose(object, options);`
 
