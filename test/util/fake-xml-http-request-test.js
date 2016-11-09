@@ -1164,7 +1164,50 @@ if (typeof window !== "undefined") {
                 assert.equals(this.xhr.responseHeaders, {});
             });
 
-            it("sets state to DONE if sent before", function () {
+            it("keeps readyState unsent if called in unsent state", function () {
+                this.xhr.abort();
+
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
+            });
+
+            it("resets readyState to unsent if it was opened", function () {
+                this.xhr.open("GET", "/");
+
+                this.xhr.abort();
+
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
+            });
+
+            it("resets readyState to unsent if it was opened with send() flag sent", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+
+                this.xhr.abort();
+
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
+            });
+
+            it("resets readyState to unsent if it headers were received", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.setResponseHeaders({});
+
+                this.xhr.abort();
+
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
+            });
+
+            it("resets readyState to unsent if it was done", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.respond();
+
+                this.xhr.abort();
+
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
+            });
+
+            it("signals onreadystatechange with state set to DONE if sent before", function () {
                 var readyState;
                 this.xhr.open("GET", "/");
                 this.xhr.send();
