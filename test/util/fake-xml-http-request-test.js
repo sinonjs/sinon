@@ -1266,6 +1266,17 @@ if (typeof window !== "undefined") {
                 assert.isFalse(this.xhr.onreadystatechange.called);
             });
 
+            it("does not dispatch readystatechange event if readyState is done", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.respond();
+
+                this.xhr.onreadystatechange = sinonStub();
+                this.xhr.abort();
+
+                assert.isFalse(this.xhr.onreadystatechange.called);
+            });
+
             assertEventOrdering("abort", 0, function (xhr) {
                 xhr.abort();
             });
