@@ -143,15 +143,22 @@
 
         "does not walk the same property twice": function () {
             var parent = {
-                func: function () {}
+                func: function parentFunc() {}
             };
             var child = sinon.create(parent);
-            child.func = function () {};
+            child.func = function childFunc() {};
             var iterator = sinon.spy();
 
             sinon.walk(child, iterator);
 
-            assert.equals(iterator.callCount, 1);
+            var propertyNames = iterator.args.map(function (call) {
+                return call[1];
+            });
+
+            // make sure that each property name only exists once
+            propertyNames.forEach(function (name, index) {
+                assert.equals(index, propertyNames.lastIndexOf(name));
+            });
         }
     });
 }(this));
