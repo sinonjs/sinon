@@ -78,6 +78,27 @@ all calls. The following is a slightly contrived example:
     <code>object.method.restore()</code>. The returned spy is the function
     object which replaced the original method. <code>spy === object.method</code>.
   </dd>
+  <dt>
+    <code>var spy = sinon.spy(object, "property", ["get", "set"]);</code>
+  </dt>
+  <dd>
+    Used for spying on getters and setters.<br/>
+    Returns a [propertyDescriptor][getOwnPropertyDescriptor] with spies for the passed accessors.
+
+```javascript
+var sinon = require('sinon');
+var object = {
+    get myProperty() {
+        return 'fb41a645-24fb-4580-b4c0-17d71ecc1c74';
+    }
+};
+
+var descriptor = sinon.spy(object, 'myProperty', ['get']);
+var value = object.myProperty;
+
+console.log('callCount:', descriptor.get.callCount); // callCount: 1
+```
+  </dd>
 </dl>
 
 
@@ -489,3 +510,4 @@ Exception thrown, if any.
 
 Return value.]}]}
 
+[getOwnPropertyDescriptor]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor

@@ -79,6 +79,41 @@ Replaces `object.method` with a `func`, wrapped in a `spy`.
 
 As usual, `object.method.restore();` can be used to restore the original method.
 
+#### `var stub = sinon.stub(object, \"property\", fakeDescriptor);`
+
+Replaces the getter/setter of `property` on `object` with stubs created from the fake methods passed in `fakeDescriptor` argument.
+
+Returns a [propertyDescriptor][getOwnPropertyDescriptor] with spies for the passed accessors.
+
+**Unstable: the getter and setter methods will be activated when the stub is created and restored, which might cause unexpected behaviour. There are better strategies for testing interactions than stubbing out partial objects and expecting their behaviour to remain unchanged.**
+
+See:
+
+* https://github.com/sinonjs/sinon/issues/1177
+* https://github.com/sinonjs/sinon/issues/1124
+
+
+```javascript
+var sinon = require('sinon');
+var object = {
+    get myProperty() {
+        return '4fb82903-6222-45e4-bfeb-a536bfc9734a';
+    }
+};
+
+function fakeGet() {
+    return 'faked myProperty';
+}
+
+var descriptor = sinon.stub(object, 'myProperty', {
+    get: fakeGet
+});
+
+
+console.log(object.myProperty); // => faked myProperty
+console.log(descriptor.get.callCount); // => 1
+```
+
 #### `name "var stub = sinon.stub(obj);`
 
 Stubs all the object's methods.
@@ -330,3 +365,5 @@ FIXME: link to some article explaining asynchronous JavaScript
 #### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
 
 Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
+
+[getOwnPropertyDescriptor]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor
