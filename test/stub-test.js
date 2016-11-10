@@ -31,6 +31,22 @@ describe("stub", function () {
         assert.equals(error.message, "Trying to stub property 'prop' of null");
     });
 
+    it("fails if called with an empty property descriptor", function () {
+        var error;
+        var propertyKey = "ea762c6d-16ab-4ded-8bc2-3bc6f2de2925";
+        var object = {};
+
+        object[propertyKey] = "257b38d8-3c02-4353-82ab-b1b588be6990";
+
+        try {
+            createStub(object, propertyKey, {});
+        } catch (e) {
+            error = e;
+        }
+
+        assert.equals(error.message, "Expected property descriptor to have at least one key");
+    });
+
     it("throws a readable error if stubbing Symbol on null", function () {
         if (typeof Symbol === "function") {
             try {
