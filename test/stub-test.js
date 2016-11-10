@@ -1345,6 +1345,35 @@ describe("stub", function () {
             assert.equals(stub(), 23);
             assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
         });
+
+        it("ensure stub uses last matching arguments", function () {
+            var unmatchedValue = "d3ada6a0-8dac-4136-956d-033b5f23eadf";
+            var firstMatchedValue = "68128619-a639-4b32-a4a0-6519165bf301";
+            var secondMatchedValue = "4ac2dc8f-3f3f-4648-9838-a2825fd94c9a";
+            var expectedArgument = "3e1ed1ec-c377-4432-a33e-3c937f1406d1";
+
+            var stub = createStub().returns(unmatchedValue);
+
+            stub.withArgs(expectedArgument).returns(firstMatchedValue);
+            stub.withArgs(expectedArgument).returns(secondMatchedValue);
+
+            assert.equals(stub(), unmatchedValue);
+            assert.equals(stub(expectedArgument), secondMatchedValue);
+        });
+
+        it("ensure stub uses last matching sinonMatch arguments", function () {
+            var unmatchedValue = "0aa66a7d-3c50-49ef-8365-bdcab637b2dd";
+            var firstMatchedValue = "1ab2c601-7602-4658-9377-3346f6814caa";
+            var secondMatchedValue = "e2e31518-c4c4-4012-a61f-31942f603ffa";
+            var expectedArgument = "90dc4a22-ef53-4c62-8e05-4cf4b4bf42fa";
+
+            var stub = createStub().returns(unmatchedValue);
+            stub.withArgs(expectedArgument).returns(firstMatchedValue);
+            stub.withArgs(sinonMatch(expectedArgument)).returns(secondMatchedValue);
+
+            assert.equals(stub(), unmatchedValue);
+            assert.equals(stub(expectedArgument), secondMatchedValue);
+        });
     });
 
     describe(".callsArgAsync", function () {
