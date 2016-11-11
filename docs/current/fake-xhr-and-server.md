@@ -156,6 +156,12 @@ The filter will be called when `xhr.open` is called, with the exact same argumen
 
 ### Simulating server responses
 
+#### `request.setStatus(status);``
+
+Sets response status (`status` and `statusText` properties).
+
+Status should be a number, the status text is looked up from `sinon.FakeXMLHttpRequest.statusCodes`.
+
 #### `request.setResponseHeaders(object);``
 
 Sets response headers (e.g. `{ "Content-Type": "text/html", /* ... */ }`, updates the `readyState` property and fires `onreadystatechange`.
@@ -170,9 +176,7 @@ Additionally, populates `responseXML` with a parsed document if [response header
 
 #### `request.respond(status, headers, body);``
 
-Calls the above two methods and sets the `status` and `statusText` properties.
-
-Status should be a number, the status text is looked up from `sinon.FakeXMLHttpRequest.statusCodes`.
+Calls the above three methods.
 
 #### `request.error();`
 

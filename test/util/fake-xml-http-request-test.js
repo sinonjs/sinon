@@ -705,6 +705,58 @@ if (typeof window !== "undefined") {
             });
         });
 
+        describe(".setStatus", function () {
+            beforeEach(function () {
+                this.xhr = new FakeXMLHttpRequest();
+            });
+
+            it("cannot be set on closed request", function () {
+                assert.exception(function () {
+                    this.xhr.setStatus();
+                });
+            });
+
+            it("cannot be set on unsent request", function () {
+                this.xhr.open("GET", "/");
+
+                assert.exception(function () {
+                    this.xhr.setStatus();
+                });
+            });
+
+            it("by default sets status to 200", function () {
+                this.xhr.open("GET", "/");
+                this.xhr.send();
+                this.xhr.setStatus();
+
+                assert.equals(this.xhr.status, 200);
+                assert.equals(this.xhr.statusText, "OK");
+            });
+
+            it("sets status", function () {
+                var expectedStatus = 206;
+                var xhr = this.xhr;
+
+                xhr.open("GET", "/");
+                xhr.send();
+                xhr.setStatus(expectedStatus);
+
+                assert.equals(xhr.status, expectedStatus);
+            });
+
+            it("sets status text to the value from FakeXMLHttpRequest.statusCodes", function () {
+                var status = 206;
+                var expectedStatusText = FakeXMLHttpRequest.statusCodes[status];
+                var xhr = this.xhr;
+
+                xhr.open("GET", "/");
+                xhr.send();
+                xhr.setStatus(status);
+
+                assert.equals(xhr.statusText, expectedStatusText);
+            });
+        });
+
         describe(".setResponseBodyAsync", function () {
             beforeEach(function () {
                 this.xhr = new FakeXMLHttpRequest();
