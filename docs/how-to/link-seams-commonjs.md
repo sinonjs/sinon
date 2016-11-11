@@ -12,7 +12,7 @@ Great! Let's continue.
 
 ## Example
 
-The folder structur in our example looks like this
+The folder structure in our example looks like this
 
 ```
 .
