@@ -1289,13 +1289,4 @@ describe("sinonSpy.call", function () {
         spy();
         assert.isString(spy.getCall(0).stack);
     });
-
-    describe("getStackFrames", function () {
-        it("makes the non-Sinon stack frames available as an array", function () {
-            var spy = sinonSpy();
-            spy();
-
-            assert.isString(spy.getCall(0).getStackFrames()[0]);
-        });
-    });
 });
