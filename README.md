@@ -38,3 +38,7 @@ This has been resolved in Sinon v2.x; Please don't report this as a bug.
 ## Contribute?
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute to Sinon.JS
+
+##Licence
+
+Sinon.js was released under [BSD-3](LICENSE)
