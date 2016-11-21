@@ -193,6 +193,38 @@
                 sinon.stub(object, "method");
 
                 assert.isFalse(object.method.called);
+            },
+
+            "does not invoke getter on restore": function () {
+                var object = {};
+                var getterCount = 0;
+                var getter = function () {
+                    getterCount++;
+                };
+                Object.defineProperty(object, "g", {
+                    configurable: true,
+                    get: getter
+                });
+
+                sinon.stub(object, "g", { get: function () {} }).restore();
+
+                assert.equals(getterCount, 0);
+            },
+
+            "does not invoke setter on restore": function () {
+                var object = {};
+                var setterCount = 0;
+                var setter = function () {
+                    setterCount++;
+                };
+                Object.defineProperty(object, "g", { // eslint-disable-line accessor-pairs
+                    configurable: true,
+                    set: setter
+                });
+
+                sinon.stub(object, "g", { set: function () {} }).restore(); // eslint-disable-line accessor-pairs
+
+                assert.equals(setterCount, 0);
             }
         },
 
