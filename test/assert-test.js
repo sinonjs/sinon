@@ -1359,16 +1359,30 @@ describe("assert", function () {
                           "expected doSomething to always be called with new");
         });
 
-        // test multiple calls, test matchers
-
         it("assert.calledWith exception message", function () {
             this.obj.doSomething(4, 3, "hey");
 
             assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
                         "expected doSomething to be called with arguments \n" +
                         "4".red + " " + "1".green + " \n" +
-                        "3 \n" +
-                        "hey ");
+                        "3\n" +
+                        "hey");
+        });
+
+        it("assert.calledWith exception message with multiple calls", function () {
+            this.obj.doSomething(4, 3, "hey");
+            this.obj.doSomething(1, 3, "not");
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments " +
+                        "Call 0:\n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3\n" +
+                        "hey\n" +
+                        "Call 1:\n" +
+                        "1\n" +
+                        "3\n" +
+                        "not".red + " " + "hey".green + " ");
         });
 
         it("assert.calledWith exception message with large object arguments", function () {
@@ -1405,7 +1419,7 @@ describe("assert", function () {
                         "  second: { nest: true },\n" +
                         "  third: [{ fourth: { nest: true } }]\n".red +
                         "  third: [{ fourth: { nest: false } }]\n".green +
-                        "}, \"fifth\"] ");
+                        "}, \"fifth\"]");
         });
 
         it("assert.calledWith exception message with a missing argument", function () {
@@ -1414,7 +1428,7 @@ describe("assert", function () {
             assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
                         "expected doSomething to be called with arguments \n" +
                         "4".red + " " + "1".green + " \n" +
-                        "3".green + " ");
+                        "3".green);
         });
 
         it("assert.calledWith exception message with an excess argument", function () {
@@ -1423,7 +1437,7 @@ describe("assert", function () {
             assert.equals(this.message("calledWith", this.obj.doSomething, 1).replace(/ at.*/g, ""),
                         "expected doSomething to be called with arguments \n" +
                         "4".red + " " + "1".green + " \n" +
-                        "3".red + " ");
+                        "3".red);
         });
 
         it("assert.calledWith match.any exception message", function () {
