@@ -1359,12 +1359,71 @@ describe("assert", function () {
                           "expected doSomething to always be called with new");
         });
 
-        it("assert.calledWith exception message", function () {
-            this.obj.doSomething(1, 3, "hey");
+        // test multiple calls, test matchers
 
-            assert.equals(this.message("calledWith", this.obj.doSomething, 4, 3, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments 4, 3, " +
-                          "hey\n    doSomething(1, 3, hey)");
+        it("assert.calledWith exception message", function () {
+            this.obj.doSomething(4, 3, "hey");
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3 \n" +
+                        "hey ");
+        });
+
+        it("assert.calledWith exception message with large object arguments", function () {
+            var calledArg = [
+                {
+                    first: "a",
+                    second: {nest: true},
+                    third: [
+                        {fourth: {nest: true}}
+                    ],
+                    mismatchKey: true
+                },
+                "fifth"
+            ];
+            this.obj.doSomething(calledArg);
+
+            var expectedArg = [
+                {
+                    first: "a",
+                    second: {nest: true},
+                    third: [
+                        {fourth: {nest: false}}
+                    ],
+                    mismatchKeyX: true
+                },
+                "fifth"
+            ];
+            assert.equals(this.message("calledWith", this.obj.doSomething, expectedArg).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "[{\n" +
+                        "  first: \"a\",\n" +
+                        "  mismatchKey: true,\n".red +
+                        "  mismatchKeyX: true,\n".green +
+                        "  second: { nest: true },\n" +
+                        "  third: [{ fourth: { nest: true } }]\n".red +
+                        "  third: [{ fourth: { nest: false } }]\n".green +
+                        "}, \"fifth\"] ");
+        });
+
+        it("assert.calledWith exception message with a missing argument", function () {
+            this.obj.doSomething(4);
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3".green + " ");
+        });
+
+        it("assert.calledWith exception message with an excess argument", function () {
+            this.obj.doSomething(4, 3);
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3".red + " ");
         });
 
         it("assert.calledWith match.any exception message", function () {
