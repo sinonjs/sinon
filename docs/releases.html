@@ -1,0 +1,16 @@
+---
+layout: default
+permalink: /releases/index.html
+---
+
+<h1>Releases</h1>
+
+<ul>
+{% assign sorted_releases = site.releases | sort | reverse  %}
+{% for release in sorted_releases %}
+    {% assign url_parts = release.url | split: "/" %}
+    {% if url_parts.size == 3 %}
+        <li><a href="{{ release.url }}">{{ release.release_id }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>

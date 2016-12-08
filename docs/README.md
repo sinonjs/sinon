@@ -1,37 +1,25 @@
+---
+published: false
+---
+
 # Docs
 
-This folder structure contains the markdown files that become the Sinon.JS documentation site available at http://sinonjs.org.
+This folder structure contains the markdown files that becomes the Sinon.JS documentation site published to GitHub Pages. Eventually this will replace the current site at http://sinonjs.org.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing documentation to Sinon.JS.
 
-## Source files
+## Documentation release process
 
-There are two folder structures
+Whenever a new release is created using `npm version`, the tree from `release-source/release/` is copied into it's own folder under `releases/` with an appropriate name.
 
-<dl>
-    <dt><code>current</code></dt>
-    <dd>documentation for <code>master</code> branch</dd>
+Likewise, the `_releases/release.md` file is copied into a file matching the release name.
 
-    <dt><code>releases</code></dt>
-    <dd>each new release will have it's own folder</dd>
-</dl>
+### Example
 
-## Release process
+Let's say that we're making a new `v2.0.3` release.
 
-Whenever a new release is created, the tree from `current` (or an existing release) is copied into it's own folder with an appropriate name under the `releases` folder.
+* `release-source/release/` is copied into a new folder `_releases/v2.0.3/`
+* `release-source/release.md` is copied into a new file `_releases/v2.0.3.md`
 
-### Example - new release from `master`
+The release is packaged, tagged and pushed to GitHub. GitHub Pages will build a new site in a few minutes, and replace the old one.
 
-Let's say that we're making a new `v2.0.3` release from `master`.
-
-We copy `docs/current/` into a new folder `docs/releases/v2.0.3`.
-
-The release is packaged, tagged and pushed to GitHub. The documentation build process will be notified and will compile a new version of the website and deploy it.
-
-FIXME: We still need to build all this automation.
-
-
-## Contribruting documentation
-
-If you're contributing changes to the `master` branch, then documentation in `current` should be updated.
-
-If you're contributing documentation to existing releases, then your documentation changes should go into the documentation for that release, and probably many of the following releases.
