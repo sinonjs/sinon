@@ -280,6 +280,17 @@ describe("spy", function () {
         assert(spy.get.calledOnce);
     });
 
+    it("creates a spy for Error", function () {
+        var originalError = global.Error;
+        try {
+            assert(createSpy(global, "Error"));
+        } catch (e) {
+            // so test failure doesn't trickle down
+            global.Error = originalError;
+            referee.fail("Expected spy to be created");
+        }
+    });
+
     describe(".named", function () {
         it("sets displayName", function () {
             var spy = createSpy();
