@@ -533,6 +533,35 @@ describe("stub", function () {
         });
     });
 
+    describe(".callsFake", function () {
+        beforeEach(function () {
+            this.method = function () { throw new Error("Should be stubbed"); };
+            this.object = {method: this.method};
+        });
+
+        it("uses provided function as stub", function () {
+            var fakeFn = createStub.create();
+            this.stub = createStub(this.object, "method");
+
+            this.stub.callsFake(fakeFn);
+            this.object.method(1, 2);
+
+            assert(fakeFn.calledWith(1, 2));
+            assert(fakeFn.calledOn(this.object));
+        });
+
+        it("is overwritten by subsequent stub behavior", function () {
+            var fakeFn = createStub.create();
+            this.stub = createStub(this.object, "method");
+
+            this.stub.callsFake(fakeFn).returns(3);
+            var returned = this.object.method(1, 2);
+
+            refute(fakeFn.called);
+            assert(returned === 3);
+        });
+    });
+
     describe(".objectMethod", function () {
         beforeEach(function () {
             this.method = function () {};
@@ -569,26 +598,14 @@ describe("stub", function () {
             */
         });
 
-        it("uses provided function as stub", function () {
-            var called = false;
-            var stub = createStub(this.object, "method", function () {
-                called = true;
-            });
-
-            stub();
-
-            assert(called);
+        it("throws provided function as stub, recommending callsFake instead", function () {
+            var object = this.object;
+            assert.exception(function () {
+                createStub(object, "method", function () {});
+            }, /callsFake/);
         });
 
-        it("wraps provided function", function () {
-            var customStub = function () {};
-            var stub = createStub(this.object, "method", customStub);
-
-            refute.same(stub, customStub);
-            assert.isFunction(stub.restore);
-        });
-
-        it("throws if third argument is provided but not a function or proprety descriptor", function () {
+        it("throws if third argument is provided but not a proprety descriptor", function () {
             var object = this.object;
 
             assert.exception(function () {
@@ -603,23 +620,8 @@ describe("stub", function () {
             assert.isFunction(stub.throws);
         });
 
-        it("custom stubbed method should not be proper stub", function () {
-            var stub = createStub(this.object, "method", function () {});
-
-            refute.defined(stub.returns);
-            refute.defined(stub.throws);
-        });
-
         it("stub should be spy", function () {
             var stub = createStub(this.object, "method");
-            this.object.method();
-
-            assert(stub.called);
-            assert(stub.calledOn(this.object));
-        });
-
-        it("custom stubbed method should be spy", function () {
-            var stub = createStub(this.object, "method", function () {});
             this.object.method();
 
             assert(stub.called);
@@ -658,7 +660,7 @@ describe("stub", function () {
         it("successfully stubs falsey properties", function () {
             var obj = { 0: function () { } };
 
-            createStub(obj, 0, function () {
+            createStub(obj, 0).callsFake(function () {
                 return "stubbed value";
             });
 
