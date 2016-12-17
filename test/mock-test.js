@@ -906,6 +906,31 @@
             }
         },
 
+        "mock object with hasOwnProperty": {
+            setUp: function () {
+                this.method = function () {};
+                this.hasOwn = function () {
+                    throw Error("overridden method hasOwnProperty invoked");
+                };
+                this.object = { method: this.method, hasOwnProperty: this.hasOwn };
+                this.mock = sinon.mock.create(this.object);
+            },
+
+            "mocks object method": function () {
+                this.mock.expects("method");
+
+                assert.isFunction(this.object.method);
+                refute.same(this.object.method, this.method);
+            },
+
+            "reverts mocked method": function () {
+                this.mock.expects("method");
+                this.object.method.restore();
+
+                assert.same(this.object.method, this.method);
+            }
+        },
+
         "mock method multiple times": {
             setUp: function () {
                 this.thisValue = {};
