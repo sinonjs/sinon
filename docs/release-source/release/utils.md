@@ -16,9 +16,7 @@ The given constructor function is not invoked. See also the [stub API](#stubs).
 
 #### `sinon.format(object);`
 
-Formats an object for pretty printing in error messages. Sinon < 1.3.0
-defaulted to coercing objects to strings. As of 1.3.0, Sinon uses [buster-format](https://busterjs.org/docs/buster-format/) by default, or Node's
-[util](http://nodejs.org/docs/v0.6.6/api/util.html) module. Feel free to
+Formats an object for pretty printing in error messages using [formatio](https://github.com/busterjs/formatio). Feel free to
 override this method with your own implementation if you prefer different
 visualization of e.g. objects. The method should return a string.
 
