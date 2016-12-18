@@ -2226,6 +2226,34 @@
 
                 assert.equals(spy.length, 3);
             }
+        },
+
+        "getters and setters": {
+            "it is possible to spy getters": function () {
+                var object = {
+                    get myProperty() {
+                        return "fb41a645-24fb-4580-b4c0-17d71ecc1c74";
+                    }
+                };
+
+                var descriptor = sinon.spy(object, "myProperty", ["get"]);
+                var value = object.myProperty; // eslint-disable-line no-unused-vars
+
+                assert.equals(descriptor.get.callCount, 1);
+            }
+        },
+
+        "it is possible to spy setters": function () {
+            var object = { // eslint-disable-line accessor-pairs
+                set myProperty(val) {
+                    this.otherProperty = val * 2;
+                }
+            };
+
+            var descriptor = sinon.spy(object, "myProperty", ["set"]);
+            object.myProperty = 10; // eslint-disable-line no-unused-vars
+
+            assert.equals(descriptor.set.callCount, 1);
         }
     });
 }(this));
