@@ -623,6 +623,70 @@ describe("sinonMatch", function () {
             assert(sinonMatch.isMatcher(array));
             assert.equals(array.toString(), "typeOf(\"array\")");
         });
+
+        describe("array.deepEquals", function () {
+            it("has a .deepEquals matcher", function () {
+                var deepEquals = sinonMatch.array.deepEquals([1, 2, 3]);
+
+                assert(sinonMatch.isMatcher(deepEquals));
+                assert.equals(deepEquals.toString(), "deepEquals([1,2,3])");
+            });
+
+            it("matches arrays with the same elements", function () {
+                var deepEquals = sinonMatch.array.deepEquals([1, 2, 3]);
+                assert(deepEquals.test([1, 2, 3]));
+                assert(!deepEquals.test([1, 2]));
+                assert(!deepEquals.test([3]));
+            });
+        });
+
+        describe("array.startsWith", function () {
+            it("has a .startsWith matcher", function () {
+                var startsWith = sinonMatch.array.startsWith([1, 2]);
+
+                assert(sinonMatch.isMatcher(startsWith));
+                assert.equals(startsWith.toString(), "startsWith([1,2])");
+            });
+
+            it("matches arrays starting with the same elements", function () {
+                assert(sinonMatch.array.startsWith([1]).test([1, 2]));
+                assert(sinonMatch.array.startsWith([1, 2]).test([1, 2]));
+                assert(!sinonMatch.array.startsWith([1, 2, 3]).test([1, 2]));
+                assert(!sinonMatch.array.startsWith([2]).test([1, 2]));
+            });
+        });
+
+        describe("array.endsWith", function () {
+            it("has an .endsWith matcher", function () {
+                var endsWith = sinonMatch.array.endsWith([2, 3]);
+
+                assert(sinonMatch.isMatcher(endsWith));
+                assert.equals(endsWith.toString(), "endsWith([2,3])");
+            });
+
+            it("matches arrays ending with the same elements", function () {
+                assert(sinonMatch.array.endsWith([2]).test([1, 2]));
+                assert(sinonMatch.array.endsWith([1, 2]).test([1, 2]));
+                assert(!sinonMatch.array.endsWith([1, 2, 3]).test([1, 2]));
+                assert(!sinonMatch.array.endsWith([3]).test([1, 2]));
+            });
+        });
+
+        describe("array.contains", function () {
+            it("has a .contains matcher", function () {
+                var contains = sinonMatch.array.contains([2, 3]);
+
+                assert(sinonMatch.isMatcher(contains));
+                assert.equals(contains.toString(), "contains([2,3])");
+            });
+
+            it("matches arrays ending with the same elements", function () {
+                assert(sinonMatch.array.contains([2]).test([1, 2, 3]));
+                assert(sinonMatch.array.contains([1, 2]).test([1, 2]));
+                assert(!sinonMatch.array.contains([1, 2, 3]).test([1, 2]));
+                assert(!sinonMatch.array.contains([3]).test([1, 2]));
+            });
+        });
     });
 
     describe(".regexp", function () {
