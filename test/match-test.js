@@ -655,6 +655,22 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.startsWith([2]).test([1, 2]));
             });
         });
+
+        describe("array.endsWith", function () {
+            it("has an .endsWith matcher", function () {
+                var endsWith = sinonMatch.array.endsWith([2, 3]);
+
+                assert(sinonMatch.isMatcher(endsWith));
+                assert.equals(endsWith.toString(), "endsWith([2,3])");
+            });
+
+            it("matches arrays ending with the same elements", function () {
+                assert(sinonMatch.array.endsWith([2]).test([1, 2]));
+                assert(sinonMatch.array.endsWith([1, 2]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.endsWith([1, 2, 3]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.endsWith([3]).test([1, 2]));
+            });
+        });
     });
 
     describe(".regexp", function () {
