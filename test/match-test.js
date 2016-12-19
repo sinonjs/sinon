@@ -632,11 +632,11 @@ describe("sinonMatch", function () {
                 assert.equals(deepEquals.toString(), "deepEquals([1,2,3])");
             });
 
-            it("matches arrays with the same elements", function () {
+            it("matches arrays with the exact same elements", function () {
                 var deepEquals = sinonMatch.array.deepEquals([1, 2, 3]);
                 assert(deepEquals.test([1, 2, 3]));
-                assert(!deepEquals.test([1, 2]));
-                assert(!deepEquals.test([3]));
+                assert.isFalse(deepEquals.test([1, 2]));
+                assert.isFalse(deepEquals.test([3]));
             });
         });
 
@@ -687,6 +687,8 @@ describe("sinonMatch", function () {
                 assert(!sinonMatch.array.contains([3]).test([1, 2]));
             });
         });
+=======
+>>>>>>> Add deepEquals array matcher
     });
 
     describe(".regexp", function () {
