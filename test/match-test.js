@@ -671,6 +671,22 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.endsWith([3]).test([1, 2]));
             });
         });
+
+        describe("array.contains", function () {
+            it("has a .contains matcher", function () {
+                var contains = sinonMatch.array.contains([2, 3]);
+
+                assert(sinonMatch.isMatcher(contains));
+                assert.equals(contains.toString(), "contains([2,3])");
+            });
+
+            it("matches arrays containing all the expected elements", function () {
+                assert(sinonMatch.array.contains([2]).test([1, 2, 3]));
+                assert(sinonMatch.array.contains([1, 2]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.contains([1, 2, 3]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.contains([3]).test([1, 2]));
+            });
+        });
     });
 
     describe(".regexp", function () {
