@@ -598,11 +598,17 @@ describe("stub", function () {
             */
         });
 
-        it("throws provided function as stub, recommending callsFake instead", function () {
-            var object = this.object;
-            assert.exception(function () {
-                createStub(object, "method", function () {});
-            }, /callsFake/);
+        it("warns provided function as stub, recommending callsFake instead", function () {
+            var called = false;
+            var infoStub = createStub(console, "info");
+            var stub = createStub(this.object, "method", function () {
+                called = true;
+            });
+
+            stub();
+
+            assert(called);
+            assert(infoStub.called);
         });
 
         it("throws if third argument is provided but not a proprety descriptor", function () {
