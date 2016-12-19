@@ -651,44 +651,10 @@ describe("sinonMatch", function () {
             it("matches arrays starting with the same elements", function () {
                 assert(sinonMatch.array.startsWith([1]).test([1, 2]));
                 assert(sinonMatch.array.startsWith([1, 2]).test([1, 2]));
-                assert(!sinonMatch.array.startsWith([1, 2, 3]).test([1, 2]));
-                assert(!sinonMatch.array.startsWith([2]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.startsWith([1, 2, 3]).test([1, 2]));
+                assert.isFalse(sinonMatch.array.startsWith([2]).test([1, 2]));
             });
         });
-
-        describe("array.endsWith", function () {
-            it("has an .endsWith matcher", function () {
-                var endsWith = sinonMatch.array.endsWith([2, 3]);
-
-                assert(sinonMatch.isMatcher(endsWith));
-                assert.equals(endsWith.toString(), "endsWith([2,3])");
-            });
-
-            it("matches arrays ending with the same elements", function () {
-                assert(sinonMatch.array.endsWith([2]).test([1, 2]));
-                assert(sinonMatch.array.endsWith([1, 2]).test([1, 2]));
-                assert(!sinonMatch.array.endsWith([1, 2, 3]).test([1, 2]));
-                assert(!sinonMatch.array.endsWith([3]).test([1, 2]));
-            });
-        });
-
-        describe("array.contains", function () {
-            it("has a .contains matcher", function () {
-                var contains = sinonMatch.array.contains([2, 3]);
-
-                assert(sinonMatch.isMatcher(contains));
-                assert.equals(contains.toString(), "contains([2,3])");
-            });
-
-            it("matches arrays ending with the same elements", function () {
-                assert(sinonMatch.array.contains([2]).test([1, 2, 3]));
-                assert(sinonMatch.array.contains([1, 2]).test([1, 2]));
-                assert(!sinonMatch.array.contains([1, 2, 3]).test([1, 2]));
-                assert(!sinonMatch.array.contains([3]).test([1, 2]));
-            });
-        });
-=======
->>>>>>> Add deepEquals array matcher
     });
 
     describe(".regexp", function () {
