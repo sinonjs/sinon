@@ -1375,11 +1375,11 @@ describe("assert", function () {
 
             assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
                         "expected doSomething to be called with arguments " +
-                        "Call 0:\n" +
+                        "Call 1:\n" +
                         "4".red + " " + "1".green + " \n" +
                         "3\n" +
                         "hey\n" +
-                        "Call 1:\n" +
+                        "Call 2:\n" +
                         "1\n" +
                         "3\n" +
                         "not".red + " " + "hey".green + " ");
@@ -1552,8 +1552,10 @@ describe("assert", function () {
             this.obj.doSomething(1, 3, "hey");
 
             assert.equals(this.message("calledWithMatch", this.obj.doSomething, 4, 3, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to be called with match 4, 3, " +
-                          "hey\n    doSomething(1, 3, hey)");
+                          "expected doSomething to be called with match \n" +
+                          "1".red + " " + "4".green + " \n" +
+                          "3\n" +
+                          "hey");
         });
 
         it("assert.alwaysCalledWith exception message", function () {
@@ -1561,8 +1563,13 @@ describe("assert", function () {
             this.obj.doSomething(1, "hey");
 
             assert.equals(this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to always be called with arguments 1" +
-                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)");
+                         "expected doSomething to always be called with arguments Call 1:\n" +
+                          "1\n" +
+                          "3".red + " " + "hey".green + " \n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "hey");
         });
 
         it("assert.alwaysCalledWithMatch exception message", function () {
@@ -1571,17 +1578,23 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                "expected doSomething to always be called with match 1" +
-                    ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)"
-            );
+                "expected doSomething to always be called with match Call 1:\n" +
+                          "1\n" +
+                          "3".red + " " + "hey".green + " \n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "hey");
         });
 
         it("assert.calledWithExactly exception message", function () {
             this.obj.doSomething(1, 3, "hey");
 
             assert.equals(this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with exact arguments 1" +
-                          ", 3\n    doSomething(1, 3, hey)");
+                          "expected doSomething to be called with exact arguments \n" +
+                          "1\n" +
+                          "3\n" +
+                          "hey".red);
         });
 
         it("assert.alwaysCalledWithExactly exception message", function () {
@@ -1589,9 +1602,13 @@ describe("assert", function () {
             this.obj.doSomething(1, 3);
 
             assert.equals(this.message("alwaysCalledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                          "expected doSomething to always be called with exact " +
-                          "arguments 1, 3\n    doSomething(1, 3, hey)\n    " +
-                          "doSomething(1, 3)");
+                          "expected doSomething to always be called with exact arguments Call 1:\n" +
+                          "1\n" +
+                          "3\n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "3");
         });
 
         it("assert.neverCalledWith exception message", function () {
