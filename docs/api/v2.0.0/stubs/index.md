@@ -75,12 +75,6 @@ Replaces `object.method` with a stub function. An exception is thrown if the pro
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
-#### `var stub = sinon.stub(object, \"method\", func);`
-
-Replaces `object.method` with a `func`, wrapped in a `spy`.
-
-As usual, `object.method.restore();` can be used to restore the original method.
-
 #### `var stub = sinon.stub(object, \"property\", fakeDescriptor);`
 
 Replaces the getter/setter of `property` on `object` with stubs created from the fake methods passed in `fakeDescriptor` argument.
@@ -230,6 +224,9 @@ Causes the stub to throw an exception of the provided type.
 
 Causes the stub to throw the provided exception object.
 
+#### `stub.callsFake(fn);`
+
+Causes stub to call `fn` passing through orignal args and `this` value.
 
 #### `stub.callsArg(index);`
 
