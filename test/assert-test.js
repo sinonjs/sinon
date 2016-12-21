@@ -1360,11 +1360,84 @@ describe("assert", function () {
         });
 
         it("assert.calledWith exception message", function () {
-            this.obj.doSomething(1, 3, "hey");
+            this.obj.doSomething(4, 3, "hey");
 
-            assert.equals(this.message("calledWith", this.obj.doSomething, 4, 3, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments 4, 3, " +
-                          "hey\n    doSomething(1, 3, hey)");
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3\n" +
+                        "hey");
+        });
+
+        it("assert.calledWith exception message with multiple calls", function () {
+            this.obj.doSomething(4, 3, "hey");
+            this.obj.doSomething(1, 3, "not");
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments " +
+                        "Call 1:\n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3\n" +
+                        "hey\n" +
+                        "Call 2:\n" +
+                        "1\n" +
+                        "3\n" +
+                        "not".red + " " + "hey".green + " ");
+        });
+
+        it("assert.calledWith exception message with large object arguments", function () {
+            var calledArg = [
+                {
+                    first: "a",
+                    second: {nest: true},
+                    third: [
+                        {fourth: {nest: true}}
+                    ],
+                    mismatchKey: true
+                },
+                "fifth"
+            ];
+            this.obj.doSomething(calledArg);
+
+            var expectedArg = [
+                {
+                    first: "a",
+                    second: {nest: true},
+                    third: [
+                        {fourth: {nest: false}}
+                    ],
+                    mismatchKeyX: true
+                },
+                "fifth"
+            ];
+            assert.equals(this.message("calledWith", this.obj.doSomething, expectedArg).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "[{\n" +
+                        "  first: \"a\",\n" +
+                        "  mismatchKey: true,\n".red +
+                        "  mismatchKeyX: true,\n".green +
+                        "  second: { nest: true },\n" +
+                        "  third: [{ fourth: { nest: true } }]\n".red +
+                        "  third: [{ fourth: { nest: false } }]\n".green +
+                        "}, \"fifth\"]");
+        });
+
+        it("assert.calledWith exception message with a missing argument", function () {
+            this.obj.doSomething(4);
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3".green);
+        });
+
+        it("assert.calledWith exception message with an excess argument", function () {
+            this.obj.doSomething(4, 3);
+
+            assert.equals(this.message("calledWith", this.obj.doSomething, 1).replace(/ at.*/g, ""),
+                        "expected doSomething to be called with arguments \n" +
+                        "4".red + " " + "1".green + " \n" +
+                        "3".red);
         });
 
         it("assert.calledWith match.any exception message", function () {
@@ -1372,8 +1445,9 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, sinonMatch.any, false).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments any, false\n    doSomething(true, true)"
-            );
+                "expected doSomething to be called with arguments \n" +
+                "true any\n" +
+                "true".red + " " + "false".green + " ");
         });
 
         it("assert.calledWith match.defined exception message", function () {
@@ -1381,8 +1455,7 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, sinonMatch.defined).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments defined\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "defined".red);
         });
 
         it("assert.calledWith match.truthy exception message", function () {
@@ -1390,16 +1463,15 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, sinonMatch.truthy).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments truthy\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "truthy".red);
         });
 
         it("assert.calledWith match.falsy exception message", function () {
             this.obj.doSomething(true);
 
             assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch.falsy).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments " +
-                          "falsy\n    doSomething(true)");
+                          "expected doSomething to be called with arguments \n" +
+                          "true".green + " " + "falsy".red);
         });
 
         it("assert.calledWith match.same exception message", function () {
@@ -1407,8 +1479,7 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, sinonMatch.same(1)).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments same(1)\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "same(1)".red);
         });
 
         it("assert.calledWith match.typeOf exception message", function () {
@@ -1417,8 +1488,7 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments typeOf(\"string\")\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "typeOf(\"string\")".red);
         });
 
         it("assert.calledWith match.instanceOf exception message", function () {
@@ -1427,8 +1497,7 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments instanceOf(CustomType)\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "instanceOf(CustomType)".red);
         });
 
         it("assert.calledWith match object exception message", function () {
@@ -1437,24 +1506,21 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments match(some: value, and: 123)\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "match(some: value, and: 123)".red);
         });
 
         it("assert.calledWith match boolean exception message", function () {
             this.obj.doSomething();
 
             assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch(true)).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments " +
-                          "match(true)\n    doSomething()");
+                          "expected doSomething to be called with arguments \n " + "match(true)".red);
         });
 
         it("assert.calledWith match number exception message", function () {
             this.obj.doSomething();
 
             assert.equals(this.message("calledWith", this.obj.doSomething, sinonMatch(123)).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments " +
-                          "match(123)\n    doSomething()");
+                          "expected doSomething to be called with arguments \n " + "match(123)".red);
         });
 
         it("assert.calledWith match string exception message", function () {
@@ -1462,8 +1528,7 @@ describe("assert", function () {
             var matcher = sinonMatch("Sinon");
 
             assert.equals(this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with arguments " +
-                          "match(\"Sinon\")\n    doSomething()");
+                          "expected doSomething to be called with arguments \n " + "match(\"Sinon\")".red);
         });
 
         it("assert.calledWith match regexp exception message", function () {
@@ -1471,8 +1536,7 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, sinonMatch(/[a-z]+/)).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments match(/[a-z]+/)\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "match(/[a-z]+/)".red);
         });
 
         it("assert.calledWith match test function exception message", function () {
@@ -1481,16 +1545,17 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments match(custom)\n    doSomething()"
-            );
+                "expected doSomething to be called with arguments \n " + "match(custom)".red);
         });
 
         it("assert.calledWithMatch exception message", function () {
             this.obj.doSomething(1, 3, "hey");
 
             assert.equals(this.message("calledWithMatch", this.obj.doSomething, 4, 3, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to be called with match 4, 3, " +
-                          "hey\n    doSomething(1, 3, hey)");
+                          "expected doSomething to be called with match \n" +
+                          "1".red + " " + "4".green + " \n" +
+                          "3\n" +
+                          "hey");
         });
 
         it("assert.alwaysCalledWith exception message", function () {
@@ -1498,8 +1563,13 @@ describe("assert", function () {
             this.obj.doSomething(1, "hey");
 
             assert.equals(this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                          "expected doSomething to always be called with arguments 1" +
-                          ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)");
+                         "expected doSomething to always be called with arguments Call 1:\n" +
+                          "1\n" +
+                          "3".red + " " + "hey".green + " \n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "hey");
         });
 
         it("assert.alwaysCalledWithMatch exception message", function () {
@@ -1508,17 +1578,23 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                "expected doSomething to always be called with match 1" +
-                    ", hey\n    doSomething(1, 3, hey)\n    doSomething(1, hey)"
-            );
+                "expected doSomething to always be called with match Call 1:\n" +
+                          "1\n" +
+                          "3".red + " " + "hey".green + " \n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "hey");
         });
 
         it("assert.calledWithExactly exception message", function () {
             this.obj.doSomething(1, 3, "hey");
 
             assert.equals(this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                          "expected doSomething to be called with exact arguments 1" +
-                          ", 3\n    doSomething(1, 3, hey)");
+                          "expected doSomething to be called with exact arguments \n" +
+                          "1\n" +
+                          "3\n" +
+                          "hey".red);
         });
 
         it("assert.alwaysCalledWithExactly exception message", function () {
@@ -1526,9 +1602,13 @@ describe("assert", function () {
             this.obj.doSomething(1, 3);
 
             assert.equals(this.message("alwaysCalledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                          "expected doSomething to always be called with exact " +
-                          "arguments 1, 3\n    doSomething(1, 3, hey)\n    " +
-                          "doSomething(1, 3)");
+                          "expected doSomething to always be called with exact arguments Call 1:\n" +
+                          "1\n" +
+                          "3\n" +
+                          "hey".red + "\n" +
+                          "Call 2:\n" +
+                          "1\n" +
+                          "3");
         });
 
         it("assert.neverCalledWith exception message", function () {
