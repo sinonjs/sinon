@@ -459,6 +459,34 @@ if (typeof window !== "undefined") {
                 assert.equals(xhr.respond.args[0], [200, {}, "Yep"]);
             });
 
+            it("accepts URLS which are common route DSLs", function () {
+                this.server.respondWith("/foo/*", [200, {}, "Yep"]);
+
+                var xhr = new FakeXMLHttpRequest();
+                xhr.respond = sinonSpy();
+                xhr.open("GET", "/foo/bla/boo", true);
+                xhr.send();
+
+                this.server.respond();
+
+                assert.equals(xhr.respond.args[0], [200, {}, "Yep"]);
+            });
+
+            it("yields URL capture groups to response handler when using DSLs", function () {
+                var handler = sinonSpy();
+                this.server.respondWith("GET", "/thing/:id", handler);
+
+                var xhr = new FakeXMLHttpRequest();
+                xhr.respond = sinonSpy();
+                xhr.open("GET", "/thing/1337", true);
+                xhr.send();
+
+                this.server.respond();
+
+                assert(handler.called);
+                assert.equals(handler.args[0], [xhr, "1337"]);
+            });
+
             it("throws understandable error if response is not a string", function () {
                 var error;
 
