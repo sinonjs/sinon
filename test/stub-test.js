@@ -119,6 +119,94 @@ describe("stub", function () {
         });
     });
 
+    describe(".resolves", function () {
+        it("returns a promise to the specified value", function () {
+            var stub = createStub.create();
+            var object = {};
+            stub.resolves(object);
+
+            return stub().then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("should return the same stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.resolves(""), stub);
+        });
+
+        it("supersedes previous throws", function () {
+            var stub = createStub.create();
+            stub.throws().resolves(1);
+
+            refute.exception(function () {
+                stub();
+            });
+        });
+
+        it("supersedes previous rejects", function () {
+            var stub = createStub.create();
+            stub.rejects(Error("should be superseeded")).resolves(1);
+
+            return stub().then();
+        });
+    });
+
+    describe(".rejects", function () {
+        it("returns a promise which rejects for the specified reason", function () {
+            var stub = createStub.create();
+            var reason = new Error();
+            stub.rejects(reason);
+
+            return stub().then(function () {
+                referee.fail("this should not resolve");
+            }).catch(function (actual) {
+                assert.same(actual, reason);
+            });
+        });
+
+        it("should return the same stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.rejects({}), stub);
+        });
+
+        it("specifies exception message", function () {
+            var stub = createStub.create();
+            var message = "Oh no!";
+            stub.rejects("Error", message);
+
+            return stub().then(function () {
+                referee.fail("Expected stub to reject");
+            }).catch(function (reason) {
+                assert.equals(reason.message, message);
+            });
+        });
+
+        it("does not specify exception message if not provided", function () {
+            var stub = createStub.create();
+            stub.rejects("Error");
+
+            return stub().then(function () {
+                referee.fail("Expected stub to reject");
+            }).catch(function (reason) {
+                assert.equals(reason.message, "");
+            });
+        });
+
+        it("rejects for a generic reason", function () {
+            var stub = createStub.create();
+            stub.rejects();
+
+            return stub().then(function () {
+                referee.fail("Expected stub to reject");
+            }).catch(function (reason) {
+                assert.equals(reason.name, "Error");
+            });
+        });
+    });
+
     describe(".returnsArg", function () {
         it("returns argument at specified index", function () {
             var stub = createStub.create();
