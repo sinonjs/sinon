@@ -1,3 +1,11 @@
+2.0.0-pre.4 / 2016-11-10
+==================
+  * Use last matching withArgs declaration when using matchers (#1183)
+  * Implement XHR.overrideMimeType
+  * Fire .onprogress event handler in fake XHR
+  * Expose readyState constants on XHR instances
+  * add configurable unsafe header checks (#1061)
+
 2.0.0-pre.3 / 2016-09-19
 ==================
   * Add assertion check for too many args with calledOnce/Twice/Thrice
