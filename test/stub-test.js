@@ -130,7 +130,7 @@ describe("stub", function () {
             });
         });
 
-        it("should return stub", function () {
+        it("should return the same stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.resolves(""), stub);
@@ -166,7 +166,7 @@ describe("stub", function () {
             });
         });
 
-        it("returns stub", function () {
+        it("should return the same stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.rejects({}), stub);
