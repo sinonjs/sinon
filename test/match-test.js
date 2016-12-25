@@ -659,6 +659,11 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.startsWith([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.startsWith([2]).test([1, 2]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var startsWith = sinonMatch.array.startsWith(["one", "two"]);
+                assert.isFalse(startsWith.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
 
         describe("array.endsWith", function () {
