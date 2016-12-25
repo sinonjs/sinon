@@ -718,6 +718,69 @@ describe("sinonMatch", function () {
             assert(sinonMatch.isMatcher(map));
             assert.equals(map.toString(), "typeOf(\"map\")");
         });
+
+        describe("map.deepEquals", function () {
+            if (typeof Map === "function") {
+                it("has a .deepEquals matcher", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var deepEquals = sinonMatch.map.deepEquals(mapOne);
+                    assert(sinonMatch.isMatcher(deepEquals));
+                    assert.equals(deepEquals.toString(), "deepEquals(Map[['one',1],['two',2],['three',3]])");
+                });
+
+                it("matches maps with the exact same elements", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var mapTwo = new Map();
+                    mapTwo.set("one", 1);
+                    mapTwo.set("two", 2);
+                    mapTwo.set("three", 3);
+
+                    var mapThree = new Map();
+                    mapThree.set("one", 1);
+                    mapThree.set("two", 2);
+
+                    var deepEquals = sinonMatch.map.deepEquals(mapOne);
+                    assert(deepEquals.test(mapTwo));
+                    assert.isFalse(deepEquals.test(mapThree));
+                    assert.isFalse(deepEquals.test(new Map()));
+                });
+
+                it("fails when maps have the same keys but different values", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var mapTwo = new Map();
+                    mapTwo.set("one", 2);
+                    mapTwo.set("two", 4);
+                    mapTwo.set("three", 8);
+
+                    var mapThree = new Map();
+                    mapTwo.set("one", 1);
+                    mapTwo.set("two", 2);
+                    mapTwo.set("three", 4);
+
+                    var deepEquals = sinonMatch.map.deepEquals(mapOne);
+                    assert.isFalse(deepEquals.test(mapTwo));
+                    assert.isFalse(deepEquals.test(mapThree));
+                });
+
+                it("fails when passed a non-map object", function () {
+                    var deepEquals = sinonMatch.array.deepEquals(new Map());
+                    assert.isFalse(deepEquals.test({}));
+                    assert.isFalse(deepEquals.test([]));
+                });
+            }
+        });
     });
 
     describe(".regexp", function () {
