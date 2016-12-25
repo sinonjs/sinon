@@ -638,6 +638,11 @@ describe("sinonMatch", function () {
                 assert.isFalse(deepEquals.test([1, 2]));
                 assert.isFalse(deepEquals.test([3]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var deepEquals = sinonMatch.array.deepEquals(["one", "two", "three"]);
+                assert.isFalse(deepEquals.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
 
         describe("array.startsWith", function () {
