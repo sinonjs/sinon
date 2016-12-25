@@ -680,6 +680,12 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.endsWith([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.endsWith([3]).test([1, 2]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var endsWith = sinonMatch.array.endsWith(["two", "three"]);
+
+                assert.isFalse(endsWith.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
 
         describe("array.contains", function () {
