@@ -702,6 +702,12 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.contains([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.contains([3]).test([1, 2]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var contains = sinonMatch.array.contains(["one", "three"]);
+
+                assert.isFalse(contains.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
     });
 
