@@ -711,6 +711,15 @@ describe("sinonMatch", function () {
         });
     });
 
+    describe(".map", function () {
+        it("is typeOf map matcher", function () {
+            var map = sinonMatch.map;
+
+            assert(sinonMatch.isMatcher(map));
+            assert.equals(map.toString(), "typeOf(\"map\")");
+        });
+    });
+
     describe(".regexp", function () {
         it("is typeOf regexp matcher", function () {
             var regexp = sinonMatch.regexp;
