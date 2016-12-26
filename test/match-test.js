@@ -638,6 +638,11 @@ describe("sinonMatch", function () {
                 assert.isFalse(deepEquals.test([1, 2]));
                 assert.isFalse(deepEquals.test([3]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var deepEquals = sinonMatch.array.deepEquals(["one", "two", "three"]);
+                assert.isFalse(deepEquals.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
 
         describe("array.startsWith", function () {
@@ -653,6 +658,11 @@ describe("sinonMatch", function () {
                 assert(sinonMatch.array.startsWith([1, 2]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.startsWith([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.startsWith([2]).test([1, 2]));
+            });
+
+            it("fails when passed a non-array object", function () {
+                var startsWith = sinonMatch.array.startsWith(["one", "two"]);
+                assert.isFalse(startsWith.test({0: "one", 1: "two", 2: "three", length: 3}));
             });
         });
 
@@ -670,6 +680,12 @@ describe("sinonMatch", function () {
                 assert.isFalse(sinonMatch.array.endsWith([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.endsWith([3]).test([1, 2]));
             });
+
+            it("fails when passed a non-array object", function () {
+                var endsWith = sinonMatch.array.endsWith(["two", "three"]);
+
+                assert.isFalse(endsWith.test({0: "one", 1: "two", 2: "three", length: 3}));
+            });
         });
 
         describe("array.contains", function () {
@@ -685,6 +701,12 @@ describe("sinonMatch", function () {
                 assert(sinonMatch.array.contains([1, 2]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.contains([1, 2, 3]).test([1, 2]));
                 assert.isFalse(sinonMatch.array.contains([3]).test([1, 2]));
+            });
+
+            it("fails when passed a non-array object", function () {
+                var contains = sinonMatch.array.contains(["one", "three"]);
+
+                assert.isFalse(contains.test({0: "one", 1: "two", 2: "three", length: 3}));
             });
         });
     });
