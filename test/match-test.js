@@ -781,6 +781,71 @@ describe("sinonMatch", function () {
                 });
             }
         });
+
+        describe("map.contains", function () {
+            if (typeof Map === "function") {
+                it("has a .contains matcher", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var contains = sinonMatch.map.contains(mapOne);
+                    assert(sinonMatch.isMatcher(contains));
+                    assert.equals(contains.toString(), "contains(Map[['one',1],['two',2],['three',3]])");
+                });
+
+                it("matches maps containing the given elements", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var mapTwo = new Map();
+                    mapTwo.set("one", 1);
+                    mapTwo.set("two", 2);
+                    mapTwo.set("three", 3);
+
+                    var mapThree = new Map();
+                    mapThree.set("one", 1);
+                    mapThree.set("two", 2);
+
+                    var mapFour = new Map();
+                    mapFour.set("one", 1);
+                    mapFour.set("four", 4);
+
+                    assert(sinonMatch.map.contains(mapTwo).test(mapOne));
+                    assert(sinonMatch.map.contains(mapThree).test(mapOne));
+                    assert.isFalse(sinonMatch.map.contains(mapFour).test(mapOne));
+                });
+
+                it("fails when maps contain the same keys but different values", function () {
+                    var mapOne = new Map();
+                    mapOne.set("one", 1);
+                    mapOne.set("two", 2);
+                    mapOne.set("three", 3);
+
+                    var mapTwo = new Map();
+                    mapTwo.set("one", 2);
+                    mapTwo.set("two", 4);
+                    mapTwo.set("three", 8);
+
+                    var mapThree = new Map();
+                    mapThree.set("one", 1);
+                    mapThree.set("two", 2);
+                    mapThree.set("three", 4);
+
+                    assert.isFalse(sinonMatch.map.contains(mapTwo).test(mapOne));
+                    assert.isFalse(sinonMatch.map.contains(mapThree).test(mapOne));
+                });
+
+                it("fails when passed a non-map object", function () {
+                    var contains = sinonMatch.map.contains(new Map());
+                    assert.isFalse(contains.test({}));
+                    assert.isFalse(contains.test([]));
+                });
+            }
+        });
     });
 
     describe(".regexp", function () {
