@@ -135,4 +135,38 @@ describe("issues", function () {
             });
         });
     });
+
+    describe("#1026", function () {
+        it("should stub `watch` method on any Object", function () {
+            // makes sure that Object.prototype.watch is set back to its old value
+            function restore(oldWatch) {
+                if (oldWatch) {
+                    Object.prototype.watch = oldWatch;  // eslint-disable-line no-extend-native
+                } else {
+                    delete Object.prototype.watch;
+                }
+            }
+
+            try {
+                var oldWatch = Object.prototype.watch;
+
+                if (typeof Object.prototype.watch !== "function") {
+                    Object.prototype.watch = function rolex() {}; // eslint-disable-line no-extend-native
+                }
+
+                var stubbedObject = sinon.stub({
+                    watch: function () {}
+                });
+
+                stubbedObject.watch();
+
+                assert.isArray(stubbedObject.watch.args);
+            } catch (error) {
+                restore(oldWatch);
+                throw error;
+            }
+
+            restore(oldWatch);
+        });
+    });
 });
