@@ -132,6 +132,21 @@ Requires an `Array` to end with the same values as another one.
 Requires an `Array` to contain each one of the values the given array has.
 
 
+#### `sinon.match.map"
+
+Requires the value to be a `Map`.
+
+
+#### `sinon.match.map.deepEquals(map)`
+
+Requires a `Map` to be deep equal another one.
+
+
+#### `sinon.match.map.contains(map)`
+
+Requires a `Map` to contain each one of the items the given map has.
+
+
 #### `sinon.match.regexp"
 
 Requires the value to be a regular expression.
