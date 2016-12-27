@@ -151,7 +151,7 @@ describe("util/core/walk", function () {
         walk(child, iterator);
 
         var propertyNames = iterator.args.map(function (call) {
-            return call[1];
+            return call[0];
         });
 
         // make sure that each property name only exists once
