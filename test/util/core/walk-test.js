@@ -142,14 +142,21 @@ describe("util/core/walk", function () {
 
     it("does not walk the same property twice", function () {
         var parent = {
-            func: function () {}
+            func: function parentFunc() {}
         };
         var child = createInstance(parent);
-        child.func = function () {};
+        child.func = function childFunc() {};
         var iterator = createSpy();
 
         walk(child, iterator);
 
-        assert.equals(iterator.callCount, 1);
+        var propertyNames = iterator.args.map(function (call) {
+            return call[0];
+        });
+
+        // make sure that each property name only exists once
+        propertyNames.forEach(function (name, index) {
+            assert.equals(index, propertyNames.lastIndexOf(name));
+        });
     });
 });
