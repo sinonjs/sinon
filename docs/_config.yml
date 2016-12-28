@@ -10,8 +10,12 @@ title: Sinon.JS
 description: > # this means to ignore newlines until "baseurl:"
   Standalone test spies, stubs and mocks for JavaScript.
     Works with any unit testing framework.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://sinonjs.org" # the base hostname & protocol for your site
+
+# the subpath of the site, e.g. /sinon when not served
+# from the root of the hostname
+# should be empty when published to sinonjs.org
+baseurl: "/sinon"
+url: "https://sinonjs.org" # the base hostname & protocol for your site
 github_username: sinonjs
 
 # Release settings
