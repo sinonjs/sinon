@@ -122,6 +122,8 @@ Verifies all mocks and restores all fakes created through the sandbox.
 
 ## Test methods
 
+**Note:** In `sinon@2.0.0` this has been extracted into a [separate sinon-test module](https://www.npmjs.com/package/sinon-test).
+
 Wrapping test methods in `sinon.test` allows Sinon.JS to automatically create
 and manage sandboxes for you. The function's behavior can be configured through
 `sinon.config`.
