@@ -22,7 +22,7 @@ GEM
     ffi (1.9.14)
     forwardable-extended (2.6.0)
     gemoji (2.1.0)
-    github-pages (112)
+    github-pages (111)
       activesupport (= 4.2.7)
       github-pages-health-check (= 1.3.0)
       jekyll (= 3.3.1)
@@ -194,7 +194,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  github-pages
+  github-pages (= 111)
   jekyll-feed (~> 0.6)
   minima (~> 2.0)
 
