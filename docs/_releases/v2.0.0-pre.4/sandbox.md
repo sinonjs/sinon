@@ -110,8 +110,27 @@ Restores all fakes created through sandbox.
 
 #### `sandbox.reset();`
 
-Resets the internal state of all spies created through sandbox.
+Resets the internal state of all fakes created through sandbox.
 
+#### `sandbox.resetBehavior();`
+
+Resets the behaviour of all stubs created through the sandbox.
+
+*Since `sinon@2.0.0`*
+
+#### `sandbox.resetHistory();`
+
+Resets the history of all stubs created through the sandbox.
+
+*Since `sinon@2.0.0`*
+
+#### `sandbox.verify();`
+
+Verifies all mocks created through the sandbox.
+
+#### `sandbox.verifyAndRestore();`
+
+Verifies all mocks and restores all fakes created through the sandbox.
 
 ## Test methods
 

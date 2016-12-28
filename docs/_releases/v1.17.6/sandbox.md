@@ -108,6 +108,17 @@ Access requests through `sandbox.requests` and server through `sandbox.server`
 
 Restores all fakes created through sandbox.
 
+#### `sandbox.reset();`
+
+Resets the internal state of all fakes created through sandbox.
+
+#### `sandbox.verify();`
+
+Verifies all mocks created through the sandbox.
+
+#### `sandbox.verifyAndRestore();`
+
+Verifies all mocks and restores all fakes created through the sandbox.
 
 ## Test methods
 
@@ -175,4 +186,5 @@ The default configuration looks like:
 If you need the behavior of `sinon.test` for more than one test method in a test case, you can use `sinon.testCase`, which behaves exactly like wrapping each test in `sinon.test` with one exception: `setUp` and
 `tearDown` can share fakes.
 
-#### `var obj = sinon.testCase({});
+#### `var obj = sinon.testCase({});`
+
