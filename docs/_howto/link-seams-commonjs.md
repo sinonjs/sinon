@@ -1,7 +1,6 @@
 ---
 layout: page
 title: How to use Link Seams with CommonJS
-release_id: v2.0.0-pre.4
 ---
 
 This page describes how to isolate your system under test, by stubbing out dependencies with [link seams][seams].
