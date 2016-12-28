@@ -63,17 +63,17 @@ sinon.defaultConfig = {
 ```
 
 <dl>
-  <dt>injectInto</dt>
+  <dt><code>injectInto</code></dt>
   <dd>The sandbox's methods can be injected into another object for convenience. The <code>injectInto</code> configuration option can name an object to add properties to.</dd>
 
-  <dt>properties</dt>
+  <dt><code>properties</code></dt>
   <dd>What properties to inject. Note that simply naming "server" here is not sufficient to have a <code>server</code> property show up in the target object, you also have to set <code>useFakeServer</code> to <code>true</code>.
   </dd>
 
-  <dt>useFakeTimers</dt>
+  <dt><code>useFakeTimers</code></dt>
   <dd>If <code>true</code>, the sandbox will have a <code>clock</code> property. Can also be an <code>Array</code> of timer properties to fake.</dd>
 
-  <dt>useFakeServer</dt>
+  <dt><code>useFakeServer</code></dt>
   <dd>If <code>true</code>, <code>server</code> and <code>requests</code> properties are added to the sandbox. Can also be an object to use for fake server. The default one is <code>sinon.fakeServer</code>, but if you're using jQuery 1.3.x or some other library that does not set the XHR's <code>onreadystatechange</code> handler, you might want to do:
 
 <pre class=\"code-snippet\" data-lang=\"javascript\"><code>sinon.config = {
