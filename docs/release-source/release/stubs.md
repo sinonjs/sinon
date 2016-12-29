@@ -165,9 +165,54 @@ Alias for `stub.onCall(1);`
 #### `stub.onThirdCall();`
 Alias for `stub.onCall(2);`
 
+
+#### `stub.reset();`
+
+Resets both behaviour and history of the stub.
+
+This is equivalent to calling both `stub.resetBehaviour()` and `stub.resetHistory()`
+
+*Updated in `sinon@2.0.0`*
+
+#### `stub.resetBehaviour();`
+
+Resets the stub's behaviour to the default behaviour
+
+```javascript
+var stub = sinon.stub();
+
+stub.returns(54)
+
+stub(); // 54
+
+stub.resetBehavior();
+
+stub(); // undefined
+```
+
+
+#### `stub.resetHistory();`
+
+Resets the stub's history
+
+```javascript
+var stub = sinon.stub();
+
+stub.called // false
+
+stub();
+
+stub.called // true
+
+stub.resetHistory();
+
+stub.called // false
+```
+
+*Since `sinon@2.0.0`*
+
 #### `stub.returns(obj);`
 Makes the stub return the provided value.
-
 
 #### `stub.returnsArg(index);`
 

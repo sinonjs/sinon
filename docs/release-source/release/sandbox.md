@@ -4,22 +4,37 @@ title: Sandboxes
 breadcrumb: sandbox
 ---
 
-Sandboxes simplify working with fakes that need to be restored and/or verified.
-
-If you're using fake timers, fake XHR, or you are stubbing/spying on globally
-accessible properties you should use a sandbox to ease cleanup. By default the
-spy, stub and mock properties of the sandbox is bound to whatever object the
-function is run on, so if you don't want to manually `restore()`, you have to
-use `this.spy()` instead of `sinon.spy()` (and stub, mock).
+Sandboxes removes the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
-"test using sinon.test sandbox": sinon.test(function () {
-    var myAPI = { method: function () {} };
-    this.mock(myAPI).expects("method").once();
+var sinon = require('sinon');
 
-    PubSub.subscribe("message", myAPI.method);
-    PubSub.publishSync("message", undefined);
-})
+var myAPI = { myMethod: function () {} };
+var sandbox = sinon.sandbox.create();
+
+describe('myAPI.hello method', function () {
+
+    beforeEach(function () {
+        // stub out the `hello` method
+        sandbox.stub(myApi, 'hello');
+    });
+
+    afterEach(function () {
+        // completely restore all fakes created through the sandbox
+        sandbox.restore();
+    });
+
+    it('should be called once', function () {
+        myAPI.hello();
+        sinon.assert.calledOnce(myAPI.hello);
+    });
+
+    it('should be called twice', function () {
+        myAPI.hello();
+        myAPI.hello();
+        sinon.assert.calledTwice(myAPI.hello);
+    });
+});
 ```
 
 ## Sandbox API
@@ -48,17 +63,17 @@ sinon.defaultConfig = {
 ```
 
 <dl>
-  <dt>injectInto</dt>
-  <dd>The sandbox's methods can be injected into another object for convenience. The <code>injectInto</code> configuration option can name an object to add properties to. Usually, this is set by <code>sinon.test</code> such that it is the <code>this</code> value in a given test function.</dd>
+  <dt><code>injectInto</code></dt>
+  <dd>The sandbox's methods can be injected into another object for convenience. The <code>injectInto</code> configuration option can name an object to add properties to.</dd>
 
-  <dt>properties</dt>
+  <dt><code>properties</code></dt>
   <dd>What properties to inject. Note that simply naming "server" here is not sufficient to have a <code>server</code> property show up in the target object, you also have to set <code>useFakeServer</code> to <code>true</code>.
   </dd>
 
-  <dt>useFakeTimers</dt>
+  <dt><code>useFakeTimers</code></dt>
   <dd>If <code>true</code>, the sandbox will have a <code>clock</code> property. Can also be an <code>Array</code> of timer properties to fake.</dd>
 
-  <dt>useFakeServer</dt>
+  <dt><code>useFakeServer</code></dt>
   <dd>If <code>true</code>, <code>server</code> and <code>requests</code> properties are added to the sandbox. Can also be an object to use for fake server. The default one is <code>sinon.fakeServer</code>, but if you're using jQuery 1.3.x or some other library that does not set the XHR's <code>onreadystatechange</code> handler, you might want to do:
 
 <pre class=\"code-snippet\" data-lang=\"javascript\"><code>sinon.config = {
@@ -110,74 +125,24 @@ Restores all fakes created through sandbox.
 
 #### `sandbox.reset();`
 
-Resets the internal state of all spies created through sandbox.
+Resets the internal state of all fakes created through sandbox.
 
+#### `sandbox.resetBehavior();`
 
-## Test methods
+Resets the behaviour of all stubs created through the sandbox.
 
-Wrapping test methods in `sinon.test` allows Sinon.JS to automatically create
-and manage sandboxes for you. The function's behavior can be configured through
-`sinon.config`.
+*Since `sinon@2.0.0`*
 
+#### `sandbox.resetHistory();`
 
-#### `var wrappedFn = sinon.test(fn);``
+Resets the history of all stubs created through the sandbox.
 
-The `wrappedFn` function works exactly like the original one in all respects - in addition a sandbox object is created and automatically restored when the function finishes a call.
+*Since `sinon@2.0.0`*
 
-By default the spy, stub and mock properties of the sandbox is bound to whatever object the function is run on, so you can do `this.spy()` (and stub, mock) and it works exactly like `sandbox.spy()` (and stub, mock), except you don't need to manually `restore()`.
+#### `sandbox.verify();`
 
+Verifies all mocks created through the sandbox.
 
-```javascript
-{
-    injectIntoThis: true,
-    injectInto: null,
-    properties: ["spy", "stub", "mock", "clock", "server", "requests"],
-    useFakeTimers: true,
-    useFakeServer: true
-}
-```
+#### `sandbox.verifyAndRestore();`
 
-Simply set `sinon.config` to override any or all of these, e.g.:
-
-```javascript
-sinon.config = {
-    useFakeTimers: false,
-    useFakeServer: false
-}
-```
-
-In this case, defaults are used for the non-existent properties. Additionally,
-sandboxes and tests will not have automatic access to the fake timers and fake
-server when using this configuration.
-
-## sinon.config
-
-The configuration controls how Sinon binds properties when using `sinon.test`.
-
-The default configuration looks like:
-
-<dl>
-    <dt><code>Boolean injectIntoThis</code></dt>
-    <dd>Causes properties to be injected into the `this` object of the test
-    function. Default <code>true</code>.</dd>
-
-    <dt><code>Object injectInto</code></dt>
-    <dd>Object to bind properties to. If this is <code>null</code> (default) and <code>injectIntoThis</code> is <code>false</code> (not default), the properties are passed as arguments to the test function instead.</dd>
-
-    <dt><code>Array properties</code></dt>
-    <dd>Properties to expose. Default is all: <code>["spy", "stub", "mock", "clock", "server", "requests"]</code>. However, the last three properties are only bound if the following two configuration options are <code>true</code> (which is the default).</dd>
-
-    <dt><code>Boolean useFakeTimers</code></dt>
-    <dd>Causes timers to be faked and allows <code>clock</code> property to be exposed. Default is <code>true</code>.</dd>
-
-    <dt><code>Boolean useFakeServer</code></dt>
-    <dd>Causes fake XHR and server to be created and allows <code>server</code> and <code>requests</code> properties to be exposed. Default is <code>true</code>.</dd>
-</dl>
-
-## Test cases
-
-If you need the behavior of `sinon.test` for more than one test method in a test case, you can use `sinon.testCase`, which behaves exactly like wrapping each test in `sinon.test` with one exception: `setUp` and
-`tearDown` can share fakes.
-
-#### `var obj = sinon.testCase({});`
-
+Verifies all mocks and restores all fakes created through the sandbox.
