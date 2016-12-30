@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if git status -uno --porcelain | wc -l | egrep ' +0' > /dev/null; then
+    echo "No files to commit. Aborting pre-commit check"
+    exit 1
+fi
+
 git stash -q --keep-index
 
 # Test prospective commit
