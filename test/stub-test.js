@@ -9,6 +9,7 @@ var createInstance = require("../lib/sinon/util/core/create");
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
+var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
 
 describe("stub", function () {
     it("is spy", function () {
