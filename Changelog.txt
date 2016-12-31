@@ -1,3 +1,24 @@
+
+2.0.0-pre.5/ 2016-12-31
+==================
+
+  * Upgrade text-encoding to the latest version
+  * Remove sinon.test from sandbox documentation
+  * Fix #1026: stub watch method on object
+  * Add .resolves and .rejects to stub (#1211)
+  * Accept routing DSLs on fake server
+  * Color diffs for sinon matchers
+  * Add new spy output formatter for handling diffs
+  * Add various array matchers
+  * Convert 3 arg stub to callsFake
+  * Fix being able to spy Error
+  * Prepare documentation using site in GitHub Pages
+  * Various documentation additions and fixes
+  * Previous expectation failures are checked and re-thrown again in mock.verify()
+  * Expose XHR.setStatus to simplify asynchronous answers
+  * XHR: test for readystatechange not dispatching after .abort() in DONE state
+  * XHR: fix readystatechange event after .abort() in DONE state
+
 2.0.0-pre.4 / 2016-11-10
 ==================
   * Use last matching withArgs declaration when using matchers (#1183)
