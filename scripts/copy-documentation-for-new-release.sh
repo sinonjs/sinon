@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $# != 1 ]]; then
+    echo "Usage: $0 <commitish>"
+    exit 1
+fi
+
 RELEASE_VERSION="v$1"
 DIRECTORY_PATH="docs/_releases/$RELEASE_VERSION"
 FILE_PATH="$DIRECTORY_PATH.md"
