@@ -21,7 +21,7 @@
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "lint": "eslint .",
-    "prepublish": "rimraf pkg && ./scripts/build.sh",
+    "prepublish": "rimraf pkg && ./build",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
