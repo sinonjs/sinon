@@ -14,7 +14,6 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
-    "ci-test": "npm run lint && ./scripts/ci-test.sh",
     "test-node": "mocha --recursive -R dot test/",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
     "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage ] test/",
