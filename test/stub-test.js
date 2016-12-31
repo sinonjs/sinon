@@ -152,6 +152,21 @@ describe("stub", function () {
 
             return stub().then();
         });
+
+        it("can be superseded by returns", function () {
+            var stub = createStub.create();
+            stub.resolves(2).returns(1);
+
+            assert.equals(stub(), 1);
+        });
+
+        it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
+            var resolveSpy = createSpy(Promise, "resolve");
+            var stub = createStub.create();
+            stub.resolves(2);
+
+            assert.equals(resolveSpy.callCount, 0);
+        });
     });
 
     describe(".rejects", function () {
@@ -205,6 +220,21 @@ describe("stub", function () {
             }).catch(function (reason) {
                 assert.equals(reason.name, "Error");
             });
+        });
+
+        it("can be superseded by returns", function () {
+            var stub = createStub.create();
+            stub.rejects(2).returns(1);
+
+            assert.equals(stub(), 1);
+        });
+
+        it("does not invoke Promise.reject when the behavior is added to the stub", function () {
+            var rejectSpy = createSpy(Promise, "reject");
+            var stub = createStub.create();
+            stub.rejects(2);
+
+            assert.equals(rejectSpy.callCount, 0);
         });
     });
 
