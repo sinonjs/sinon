@@ -1,37 +1,19 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
-
-# Site settings
 title: Sinon.JS
-description: > # this means to ignore newlines until "baseurl:"
+description: |
   Standalone test spies, stubs and mocks for JavaScript.
     Works with any unit testing framework.
-
-# the subpath of the site, e.g. /sinon when not served
-# from the root of the hostname
-# should be empty when published to sinonjs.org
-baseurl: "/sinon"
-url: "https://sinonjs.org" # the base hostname & protocol for your site
+baseurl: /sinon
+url: 'https://sinonjs.org'
 github_username: sinonjs
-
-# Release settings
 sinon:
-    current_release: v1.17.6
-    next_release: v2.0.0-pre.4
-
-# Build settings
+  current_release: v1.17.6
+  next_release: v2.0.0-pre.5
 markdown: kramdown
 kramdown:
   input: GFM
   syntax_highlighter: none
   syntax_highlighter_opts:
-    disable : true
-
-# theme: minima
+    disable: true
 gems:
   - jekyll-feed
 exclude:
@@ -41,7 +23,7 @@ exclude:
 collections:
   howto:
     output: true
-    permalink: /how-to/:path/
+    permalink: '/how-to/:path/'
   releases:
     output: true
-    permalink: /:collection/:path/
+    permalink: '/:collection/:path/'
