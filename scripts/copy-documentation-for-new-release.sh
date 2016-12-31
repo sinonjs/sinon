@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $# != 1 ]]; then
+    echo "Usage: $0 <commitish>"
+    exit 1
+fi
+
 RELEASE_VERSION="v$1"
 DIRECTORY_PATH="docs/_releases/$RELEASE_VERSION"
 FILE_PATH="$DIRECTORY_PATH.md"
@@ -25,7 +30,8 @@ cp docs/release-source/release.md $FILE_PATH
 
 # replace `release_id: master` with `release_id: $RELEASE_VERSION` in
 # $FILE_PATH
-sed -i "s/release_id: master/release_id: $RELEASE_VERSION/g" $FILE_PATH
+sed -i.bak "s/release_id: master/release_id: $RELEASE_VERSION/g" $FILE_PATH
+rm $FILE_PATH.bak
 
 git add $DIRECTORY_PATH
 git add $FILE_PATH
