@@ -284,6 +284,7 @@ describe("spy", function () {
         var originalError = global.Error;
         try {
             assert(createSpy(global, "Error"));
+            global.Error = originalError;
         } catch (e) {
             // so test failure doesn't trickle down
             global.Error = originalError;

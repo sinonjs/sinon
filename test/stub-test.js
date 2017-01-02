@@ -121,6 +121,12 @@ describe("stub", function () {
     });
 
     describe(".resolves", function () {
+        afterEach(function () {
+            if (Promise.resolve.restore) {
+                Promise.resolve.restore();
+            }
+        });
+
         it("returns a promise to the specified value", function () {
             var stub = createStub.create();
             var object = {};
@@ -170,6 +176,12 @@ describe("stub", function () {
     });
 
     describe(".rejects", function () {
+        afterEach(function () {
+            if (Promise.reject.restore) {
+                Promise.reject.restore();
+            }
+        });
+
         it("returns a promise which rejects for the specified reason", function () {
             var stub = createStub.create();
             var reason = new Error();
@@ -685,6 +697,12 @@ describe("stub", function () {
         beforeEach(function () {
             this.method = function () {};
             this.object = { method: this.method };
+        });
+
+        afterEach(function () {
+            if (global.console.info.restore) {
+                global.console.info.restore();
+            }
         });
 
         it.skip("returns function from wrapMethod", function () {
