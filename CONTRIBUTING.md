@@ -79,34 +79,25 @@ To ensure consistent reporting of lint warnings, you should use the same version
 
 ### Run the tests
 
-This runs linting as well as unit tests in both PhantomJS and node
+Following command runs unit tests in PhantomJS, Node and WebWorker
 
     $ npm test
 
 ##### Testing in development
 
-Sinon.JS uses [Buster.JS](http://busterjs.org), please read those docs if you're unfamiliar with it.
+Sinon.JS uses [Mocha](https://mochajs.org/), please read those docs if you're unfamiliar with it.
 
-If you just want to run tests a few times
+If you're doing more than a one line edit, you'll want to have finer control and less restarting of the Mocha
 
-    $ npm run ci-test
+To start tests in dev mode run 
 
-If you're doing more than a one line edit, you'll want to have finer control and less restarting of the Buster server and PhantomJS process
+    $ npm run test-dev
 
-    # start a server
-    $ $(npm bin)/buster-server
+Dev mode features:
+ * [watching related files](https://mochajs.org/#w---watch) to restart tests once changes are made 
+ * using [Min reporter](https://mochajs.org/#min), which cleans the console each time tests run, so test results are always on top
 
-    # capture a browser by pointing it to http://localhost:1111/capture
-    # run tests (in both browser and node)
-    $ $(npm bin)/buster-test
-
-    # run tests only in browser
-    $ $(npm bin)/buster-test --config-group browser
-
-    # run tests only in node
-    $ $(npm bin)/buster-test --config-group node
-
-If you install `Buster.JS` as a global, you can remove `$(npm-bin)/` from the lines above.
+Note that in dev mode tests run only in Node. Before creating your PR please ensure tests are passing in Phantom and WebWorker as well. To check this please use [Run the tests](#run-the-tests) instructions.
 
 ##### Testing a built version
 
