@@ -15,6 +15,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "test-node": "mocha --recursive -R dot test/",
+    "test-dev": "npm run test-node -- --watch -R min",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
     "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage ] test/",
     "test-cloud": "npm run test-headless -- --wd",
