@@ -108,21 +108,10 @@ If you're doing more than a one line edit, you'll want to have finer control and
 
 If you install `Buster.JS` as a global, you can remove `$(npm-bin)/` from the lines above.
 
-##### Testing a built version
+### Compiling a built version
 
-To test against a built distribution, first
-make sure you have a build (requires [Ruby][ruby] and [Juicer][juicer]):
+Build requires [Ruby](https://www.ruby-lang.org/en/). Under the hood [Browserify](http://browserify.org/) is used.
+
+To build simply run
 
     $ ./build
-
-[ruby]: https://www.ruby-lang.org/en/
-[juicer]: http://rubygems.org/gems/juicer
-
-If the build script is unable to find Juicer, try
-
-    $ ruby -rubygems build
-
-Once built, you can run the tests against the packaged version as part of the `ci-test.sh` script.
-
-    ./scripts/ci-test.sh
-
