@@ -32,7 +32,13 @@ describe("util/core/iterable-to-string", function () {
 
     if (typeof Set === "function") {
         it("returns an String representation of Set objects", function () {
-            var set = new Set([1, "one", true, undefined, null]);
+            var set = new Set();
+            set.add(1);
+            set.add("one");
+            set.add(true);
+            set.add(undefined);
+            set.add(null);
+
             var expected = "1,'one',true,undefined,null";
 
             assert.equals(iterableToString(set), expected);
