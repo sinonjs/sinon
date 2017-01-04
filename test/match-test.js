@@ -855,6 +855,48 @@ describe("sinonMatch", function () {
             assert(sinonMatch.isMatcher(set));
             assert.equals(set.toString(), "typeOf(\"set\")");
         });
+
+        describe("set.deepEquals", function () {
+            if (typeof Set === "function") {
+                it("has a .deepEquals matcher", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var deepEquals = sinonMatch.set.deepEquals(setOne);
+                    assert(sinonMatch.isMatcher(deepEquals));
+                    assert.equals(deepEquals.toString(), "deepEquals(Set['one','two','three'])");
+                });
+
+                it("matches sets with the exact same elements", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var setTwo = new Set();
+                    setTwo.add("one");
+                    setTwo.add("two");
+                    setTwo.add("three");
+
+                    var setThree = new Set();
+                    setThree.add("one");
+                    setThree.add("two");
+
+                    var deepEquals = sinonMatch.set.deepEquals(setOne);
+                    assert(deepEquals.test(setTwo));
+                    assert.isFalse(deepEquals.test(setThree));
+                    assert.isFalse(deepEquals.test(new Set()));
+                });
+
+                it("fails when passed a non-set object", function () {
+                    var deepEquals = sinonMatch.array.deepEquals(new Set());
+                    assert.isFalse(deepEquals.test({}));
+                    assert.isFalse(deepEquals.test([]));
+                });
+            }
+        });
     });
 
     describe(".regexp", function () {
