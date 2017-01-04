@@ -848,6 +848,15 @@ describe("sinonMatch", function () {
         });
     });
 
+    describe(".set", function () {
+        it("is typeOf set matcher", function () {
+            var set = sinonMatch.set;
+
+            assert(sinonMatch.isMatcher(set));
+            assert.equals(set.toString(), "typeOf(\"set\")");
+        });
+    });
+
     describe(".regexp", function () {
         it("is typeOf regexp matcher", function () {
             var regexp = sinonMatch.regexp;
