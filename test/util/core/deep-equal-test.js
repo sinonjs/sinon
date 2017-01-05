@@ -2,6 +2,8 @@
 
 var referee = require("referee");
 var deepEqual = require("../../../lib/sinon/util/core/deep-equal");
+var match = require("../../../lib/sinon/match");
+var createSpy = require("../../../lib/sinon/spy").create;
 var assert = referee.assert;
 
 describe("util/core/deepEqual", function () {
@@ -306,4 +308,35 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(obj1, obj2));
     });
 
+    it("does not run matchers against each other when using a matcher library", function () {
+        var matchDeepEqual = deepEqual.use(match);
+
+        var spyA = createSpy();
+        var matchA = match(spyA);
+
+        var spyB = createSpy();
+        var matchB = match(spyB);
+
+        matchDeepEqual(matchA, matchB);
+
+        assert.equals(spyA.callCount, 0);
+        assert.equals(spyB.callCount, 0);
+    });
+
+    it("strictly compares instances when passed two matchers and using a matcher library", function () {
+        var matchDeepEqual = deepEqual.use(match);
+
+        var matchA = match(function a() {
+            return "a";
+        });
+
+        var matchB = match(function b() {
+            return "b";
+        });
+
+        var duplicateA = matchA;
+
+        assert(matchDeepEqual(matchA, duplicateA));
+        assert.isFalse(matchDeepEqual(matchA, matchB));
+    });
 });
