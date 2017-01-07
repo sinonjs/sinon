@@ -848,6 +848,102 @@ describe("sinonMatch", function () {
         });
     });
 
+    describe(".set", function () {
+        it("is typeOf set matcher", function () {
+            var set = sinonMatch.set;
+
+            assert(sinonMatch.isMatcher(set));
+            assert.equals(set.toString(), "typeOf(\"set\")");
+        });
+
+        describe("set.deepEquals", function () {
+            if (typeof Set === "function") {
+                it("has a .deepEquals matcher", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var deepEquals = sinonMatch.set.deepEquals(setOne);
+                    assert(sinonMatch.isMatcher(deepEquals));
+                    assert.equals(deepEquals.toString(), "deepEquals(Set['one','two','three'])");
+                });
+
+                it("matches sets with the exact same elements", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var setTwo = new Set();
+                    setTwo.add("one");
+                    setTwo.add("two");
+                    setTwo.add("three");
+
+                    var setThree = new Set();
+                    setThree.add("one");
+                    setThree.add("two");
+
+                    var deepEquals = sinonMatch.set.deepEquals(setOne);
+                    assert(deepEquals.test(setTwo));
+                    assert.isFalse(deepEquals.test(setThree));
+                    assert.isFalse(deepEquals.test(new Set()));
+                });
+
+                it("fails when passed a non-set object", function () {
+                    var deepEquals = sinonMatch.array.deepEquals(new Set());
+                    assert.isFalse(deepEquals.test({}));
+                    assert.isFalse(deepEquals.test([]));
+                });
+            }
+        });
+
+        describe("set.contains", function () {
+            if (typeof Set === "function") {
+                it("has a .contains matcher", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var contains = sinonMatch.set.contains(setOne);
+                    assert(sinonMatch.isMatcher(contains));
+                    assert.equals(contains.toString(), "contains(Set['one','two','three'])");
+                });
+
+                it("matches sets containing the given elements", function () {
+                    var setOne = new Set();
+                    setOne.add("one");
+                    setOne.add("two");
+                    setOne.add("three");
+
+                    var setTwo = new Set();
+                    setTwo.add("one");
+                    setTwo.add("two");
+                    setTwo.add("three");
+
+                    var setThree = new Set();
+                    setThree.add("one");
+                    setThree.add("two");
+
+                    var setFour = new Set();
+                    setFour.add("one");
+                    setFour.add("four");
+
+                    assert(sinonMatch.set.contains(setTwo).test(setOne));
+                    assert(sinonMatch.set.contains(setThree).test(setOne));
+                    assert.isFalse(sinonMatch.set.contains(setFour).test(setOne));
+                });
+
+                it("fails when passed a non-set object", function () {
+                    var contains = sinonMatch.set.contains(new Set());
+                    assert.isFalse(contains.test({}));
+                    assert.isFalse(contains.test([]));
+                });
+            }
+        });
+    });
+
     describe(".regexp", function () {
         it("is typeOf regexp matcher", function () {
             var regexp = sinonMatch.regexp;
