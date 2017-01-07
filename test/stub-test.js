@@ -2198,4 +2198,92 @@ describe("stub", function () {
         });
     });
 
+    describe(".callThrough", function () {
+        it("does not call original function when arguments match conditional stub", function () {
+            // We need a function here because we can't wrap properties that are already stubs
+            var callCount = 0;
+            var originalFunc = function increaseCallCount() {
+                callCount++;
+            };
+
+            var myObj = {
+                prop: originalFunc
+            };
+
+            var propStub = createStub(myObj, "prop");
+            propStub.withArgs("foo").returns("bar");
+            propStub.callThrough();
+
+            var result = myObj.prop("foo");
+
+            assert.equals(result, "bar");
+            assert.equals(callCount, 0);
+        });
+
+        it("calls original function when arguments do not match conditional stub", function () {
+            // We need a function here because we can't wrap properties that are already stubs
+            var callCount = 0;
+
+            var originalFunc = function increaseCallCount() {
+                callCount++;
+                return 1337;
+            };
+
+            var myObj = {
+                prop: originalFunc
+            };
+
+            var propStub = createStub(myObj, "prop");
+            propStub.withArgs("foo").returns("bar");
+            propStub.callThrough(propStub);
+
+            var result = myObj.prop("not foo");
+
+            assert.equals(result, 1337);
+            assert.equals(callCount, 1);
+        });
+
+        it("calls original function with same arguments when call does not match conditional stub", function () {
+            // We need a function here because we can't wrap properties that are already stubs
+            var callArgs = [];
+
+            var originalFunc = function increaseCallCount() {
+                callArgs = arguments;
+            };
+
+            var myObj = {
+                prop: originalFunc
+            };
+
+            var propStub = createStub(myObj, "prop");
+            propStub.withArgs("foo").returns("bar");
+            propStub.callThrough();
+
+            myObj.prop("not foo");
+
+            assert.equals(callArgs.length, 1);
+            assert.equals(callArgs[0], "not foo");
+        });
+
+        it("calls original function with same `this` reference when call does not match conditional stub", function () {
+            // We need a function here because we can't wrap properties that are already stubs
+            var reference = {};
+
+            var originalFunc = function increaseCallCount() {
+                reference = this;
+            };
+
+            var myObj = {
+                prop: originalFunc
+            };
+
+            var propStub = createStub(myObj, "prop");
+            propStub.withArgs("foo").returns("bar");
+            propStub.callThrough();
+
+            myObj.prop("not foo");
+
+            assert.equals(reference, myObj);
+        });
+    });
 });
