@@ -169,4 +169,35 @@ describe("issues", function () {
             restore(oldWatch);
         });
     });
+
+    describe("#1154", function () {
+        it("Ensures different matchers will not be tested against each other", function () {
+            var match = sinon.match;
+            var stub = sinon.stub;
+            var readFile = stub();
+
+            function endsWith(str, suffix) {
+                return str.indexOf(suffix) + suffix.length === str.length;
+            }
+
+            function suffixA(fileName) {
+                return endsWith(fileName, "suffixa");
+            }
+
+            function suffixB(fileName) {
+                return endsWith(fileName, "suffixb");
+            }
+
+            var argsA = match(suffixA);
+            var argsB = match(suffixB);
+
+            var firstFake = readFile
+              .withArgs(argsA);
+
+            var secondFake = readFile
+              .withArgs(argsB);
+
+            assert(firstFake !== secondFake);
+        });
+    });
 });
