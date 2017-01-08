@@ -4,7 +4,7 @@ var referee = require("referee");
 var assert = referee.assert;
 
 var sinonEvent = require("../../lib/sinon/util/event");
-var sinonExtend = require("../../lib/sinon/extend");
+var sinonExtend = require("../../lib/sinon/util/core/extend");
 var sinonSpy = require("../../lib/sinon/spy");
 
 describe("sinon.EventTarget", function () {
