@@ -224,6 +224,8 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
         this.server.respond();
 
         sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
+        
+        assert(server.requests.length > 0)
     }
 }
 ```
@@ -328,6 +330,11 @@ If set, the server will respond to every request immediately and synchronously.
 This is ideal for faking the server from within a test without having to call `server.respond()` after each request made in that test.
 
 As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
+
+#### array `server.requests`
+
+You can inspect the `server.requests` to verify request ordering, find unmatched requests or check that no requests has been done.
+`server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.
 
 #### `Boolean server.fakeHTTPMethods`
 
