@@ -10,6 +10,7 @@ var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
 var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
+var deprecated = require("../lib/sinon/util/core/deprecated");
 
 describe("stub", function () {
     it("is spy", function () {
@@ -33,11 +34,14 @@ describe("stub", function () {
     });
 
     it("fails if called with an empty property descriptor", function () {
+        var originalPrintWarning = deprecated.printWarning;
         var error;
         var propertyKey = "ea762c6d-16ab-4ded-8bc2-3bc6f2de2925";
         var object = {};
 
         object[propertyKey] = "257b38d8-3c02-4353-82ab-b1b588be6990";
+
+        deprecated.printWarning = function () {};
 
         try {
             createStub(object, propertyKey, {});
@@ -46,6 +50,8 @@ describe("stub", function () {
         }
 
         assert.equals(error.message, "Expected property descriptor to have at least one key");
+
+        deprecated.printWarning = originalPrintWarning;
     });
 
     it("throws a readable error if stubbing Symbol on null", function () {
@@ -749,11 +755,16 @@ describe("stub", function () {
         });
 
         it("throws if third argument is provided but not a proprety descriptor", function () {
+            var originalPrintWarning = deprecated.printWarning;
             var object = this.object;
+
+            deprecated.printWarning = function () {};
 
             assert.exception(function () {
                 createStub(object, "method", 1);
             }, "TypeError");
+
+            deprecated.printWarning = originalPrintWarning;
         });
 
         it("stubbed method should be proper stub", function () {
@@ -912,6 +923,10 @@ describe("stub", function () {
         });
 
         it("does not call getter during restore", function () {
+            var originalPrintWarning = deprecated.printWarning;
+
+            deprecated.printWarning = function () {};
+
             var obj = {
                 get prop() {
                     fail("should not call getter");
@@ -924,6 +939,7 @@ describe("stub", function () {
             assert.equals(obj.prop, 43);
 
             stub.restore();
+            deprecated.printWarning = originalPrintWarning;
         });
     });
 
