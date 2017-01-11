@@ -226,6 +226,15 @@ Causes the stub to return its <code>this</code> value.
 
 Useful for stubbing jQuery-style fluent APIs.
 
+#### `stub.resolves(value);`
+
+Causes the stub to return a Promise which resolves to the provided value.
+
+When constructing the Promise, sinon uses the `Promise.resolve` method. You are
+responsible for providing a polyfill in environments which do not provide `Promise`.
+
+*Since `sinon@2.0.0`*
+
 
 #### `stub.throws();`
 
@@ -240,6 +249,30 @@ Causes the stub to throw an exception of the provided type.
 #### `stub.throws(obj);`
 
 Causes the stub to throw the provided exception object.
+
+
+#### `stub.rejects();`
+
+Causes the stub to return a Promise which rejects with an exception (`Error`).
+
+When constructing the Promise, sinon uses the `Promise.reject` method. You are
+responsible for providing a polyfill in environments which do not provide `Promise`.
+
+*Since `sinon@2.0.0`*
+
+
+#### `stub.rejects("TypeError");`
+
+Causes the stub to return a Promise which rejects with an exception of the provided type.
+
+*Since `sinon@2.0.0`*
+
+
+#### `stub.rejects(value);`
+
+Causes the stub to return a Promise which rejects with the provided exception object.
+
+*Since `sinon@2.0.0`*
 
 
 #### `stub.callsArg(index);`
