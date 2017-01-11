@@ -753,7 +753,8 @@ describe("spy", function () {
                     var log = { info: console.log }; // eslint-disable-line no-console
                     createSpy(log, "info");
 
-                    log.info("test");
+                    // by logging an empty string, we're not polluting the test console output
+                    log.info("");
 
                     assert.isFalse(log.info.calledWithNew());
                 });
