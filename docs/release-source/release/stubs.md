@@ -226,7 +226,7 @@ Causes the stub to return its <code>this</code> value.
 
 Useful for stubbing jQuery-style fluent APIs.
 
-#### `stub.resolves(obj);`
+#### `stub.resolves(value);`
 
 Causes the stub to return a Promise which resolves to the provided value.
 
@@ -268,7 +268,7 @@ Causes the stub to return a Promise which rejects with an exception of the provi
 *Since `sinon@2.0.0`*
 
 
-#### `stub.rejects(obj);`
+#### `stub.rejects(value);`
 
 Causes the stub to return a Promise which rejects with the provided exception object.
 
