@@ -63,6 +63,12 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(regexp, regexp));
     });
 
+    it("passes same error", function () {
+        var error = new Error();
+
+        assert(deepEqual(error, error));
+    });
+
     it("passes equal arrays", function () {
         var arr1 = [1, 2, 3, "hey", "there"];
         var arr2 = [1, 2, 3, "hey", "there"];
@@ -163,6 +169,13 @@ describe("util/core/deepEqual", function () {
         var regexp2 = /bar/ig;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
+    });
+
+    it("fails unequal errors", function () {
+        var error1 = new Error();
+        var error2 = new Error();
+
+        assert.isFalse(deepEqual(error1, error2));
     });
 
     it("passes NaN and NaN", function () {
