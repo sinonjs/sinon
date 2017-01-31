@@ -69,6 +69,29 @@ function spyCalledTests(method) {
 
             assert(this.spy[method]({ some: sinonMatch.typeOf("string") }));
         });
+
+        // https://github.com/sinonjs/sinon/issues/1245
+        // Using the `calledWithMatch` should work with objects that don't have
+        // a hasOwnProperty function.
+        describe("when called with an Object without a prototype", function () {
+            it("must not throw", function () {
+                var spy = this.spy;
+                var objectWithoutPrototype = Object.create(null);
+
+                objectWithoutPrototype.something = 2;
+
+                spy[method]({
+                    foo: 1,
+                    objectWithoutPrototype: objectWithoutPrototype
+                });
+
+                refute.exception(function () {
+                    spy.calledWithMatch({
+                        objectWithoutPrototype: objectWithoutPrototype
+                    });
+                });
+            });
+        });
     };
 }
 
