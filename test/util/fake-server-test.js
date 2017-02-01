@@ -7,16 +7,10 @@ var sinonStub = require("../../lib/sinon/stub");
 var sinonSpy = require("../../lib/sinon/spy");
 var sinonSandbox = require("../../lib/sinon/sandbox");
 var fakeTimers = require("../../lib/sinon/util/fake_timers");
-var fakeXhr = require("../../lib/sinon/util/fake_xml_http_request").xhr;
 var FakeXMLHttpRequest = require("../../lib/sinon/util/fake_xml_http_request").FakeXMLHttpRequest;
-var FakeXDomainRequest = require("../../lib/sinon/util/fake_xdomain_request").FakeXDomainRequest;
 
 var assert = referee.assert;
 var refute = referee.refute;
-
-// we need better ways to test both paths
-// but at least running tests in different environments will do that
-var FakeXHR = fakeXhr.supportsCORS ? FakeXMLHttpRequest : FakeXDomainRequest;
 
 if (typeof window !== "undefined") {
     describe("sinonFakeServer", function () {
@@ -126,27 +120,27 @@ if (typeof window !== "undefined") {
             });
 
             it("collects objects created with fake XHR", function () {
-                var xhrs = [new FakeXHR(), new FakeXHR()];
+                var xhrs = [new FakeXMLHttpRequest(), new FakeXMLHttpRequest()];
 
                 assert.equals(this.server.requests, xhrs);
             });
 
             it("collects xhr objects through addRequest", function () {
                 this.server.addRequest = sinonSpy();
-                var xhr = new FakeXHR();
+                var xhr = new FakeXMLHttpRequest();
 
                 assert(this.server.addRequest.calledWith(xhr));
             });
 
             it("observes onSend on requests", function () {
-                var xhrs = [new FakeXHR(), new FakeXHR()];
+                var xhrs = [new FakeXMLHttpRequest(), new FakeXMLHttpRequest()];
 
                 assert.isFunction(xhrs[0].onSend);
                 assert.isFunction(xhrs[1].onSend);
             });
 
             it("onSend should call handleRequest with request object", function () {
-                var xhr = new FakeXHR();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/");
                 sinonSpy(this.server, "handleRequest");
 
@@ -167,7 +161,7 @@ if (typeof window !== "undefined") {
             });
 
             it("responds to synchronous requests", function () {
-                var xhr = new FakeXHR();
+                var xhr = new FakeXMLHttpRequest();
                 xhr.open("GET", "/", false);
                 sinonSpy(xhr, "respond");
 
