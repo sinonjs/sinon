@@ -11,9 +11,6 @@ test code using them.
 Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects created through either `new Date();`
 or `Date.now();` (if supported by the browser).
 
-When faking timers with IE you also need `sinon-ie.js`, which
-should be loaded after `sinon.js`.
-
 For standalone usage of fake timers it is recommended to use [lolex](https://github.com/sinonjs/lolex) package instead. It provides the same
 set of features and was previously extracted from Sinon.JS.
 

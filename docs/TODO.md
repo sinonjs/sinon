@@ -11,6 +11,5 @@ published: false
 * Build changelong for each release
 * Updating CONTRIBUTING.md
 * Use consistent quoting in examples
-* Specify which versions of IE are supported, and where you need to load `sinon-ie.js`
 * Register a twitter account for sinonjs and automatically tweet when a new release is deployed
 * Add link verification
