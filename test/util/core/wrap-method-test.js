@@ -201,14 +201,9 @@ describe("util/core/wrapMethod", function () {
         describe("in browser", function () {
             it("does not throw if object is window object", function () {
                 window.sinonTestMethod = function () {};
-                try {
-                    refute.exception(function () {
-                        wrapMethod(window, "sinonTestMethod", function () {});
-                    });
-                } finally {
-                    // IE 8 does not support delete on global properties.
-                    window.sinonTestMethod = undefined;
-                }
+                refute.exception(function () {
+                    wrapMethod(window, "sinonTestMethod", function () {});
+                });
             });
         });
     }
