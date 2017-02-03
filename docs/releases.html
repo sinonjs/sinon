@@ -10,7 +10,11 @@ permalink: /releases/index.html
 {% for release in sorted_releases %}
     {% assign url_parts = release.url | split: "/" %}
     {% if url_parts.size == 3 %}
-        <li><a href="{{site.baseurl}}{{ release.url }}">{{ release.release_id }}</a></li>
+        <li>
+            {{ release.release_id }} -
+            <a href="{{site.baseurl}}{{ release.url }}">docs</a> -
+            <a href="{{site.baseurl}}/releases/sinon-{{ release.release_id | remove_first: 'v' }}.js">download</a>
+        </li>
     {% endif %}
 {% endfor %}
 </ul>
