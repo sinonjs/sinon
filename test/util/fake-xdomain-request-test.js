@@ -272,6 +272,11 @@ if (typeof window !== "undefined") {
                 xdr.send();
                 xdr.respond(200, {}, "");
             });
+            it("fire onload event on a non-2xx HTTP status", function () {
+                this.xdr.onload = sinon.spy();
+                this.xdr.respond(500, {}, "");
+                assert.equals(this.xdr.onload.callCount, 1);
+            });
             it("calls readystate handler with readyState DONE once", function () {
                 this.xdr.respond(200, {}, "");
 
