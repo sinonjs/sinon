@@ -11,13 +11,7 @@ several interfaces for manipulating objects created by it.
 
 Also fakes native `XMLHttpRequest` and `ActiveXObject` (when available, and only for `XMLHTTP` progids). Helps with testing requests made with `XHR`.
 
-When faking `XHR` with IE you also need `sinon-ie.js`, which
-should be loaded after `sinon.js`.
-
 The fake server and XHR can be used completely stand-alone by downloading `sinon-server.js`.
-
-When using the fake server in IE you also need `sinon-ie.js`. Load it
-after the first file.
 
 ```javascript
 {
@@ -224,7 +218,7 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
         this.server.respond();
 
         sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
-        
+
         assert(server.requests.length > 0)
     }
 }
