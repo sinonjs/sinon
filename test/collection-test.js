@@ -2,14 +2,13 @@
 
 var referee = require("referee");
 var sinonCollection = require("../lib/sinon/collection");
-var createInstance = require("../lib/sinon/util/core/create");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var assert = referee.assert;
 
 describe("collection", function () {
     it("creates fake collection", function () {
-        var collection = createInstance(sinonCollection);
+        var collection = Object.create(sinonCollection);
 
         assert.isFunction(collection.verify);
         assert.isFunction(collection.restore);
@@ -20,7 +19,7 @@ describe("collection", function () {
 
     describe(".stub", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("fails if stubbing property on null", function () {
@@ -117,7 +116,7 @@ describe("collection", function () {
     describe("stub anything", function () {
         beforeEach(function () {
             this.object = { property: 42 };
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("stubs number property", function () {
@@ -158,7 +157,7 @@ describe("collection", function () {
 
     describe(".mock", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("returns a mock", function () {
@@ -189,7 +188,7 @@ describe("collection", function () {
 
     describe("stub and mock test", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("appends mocks and stubs to fake array", function () {
@@ -202,7 +201,7 @@ describe("collection", function () {
 
     describe(".verify", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("calls verify on all fakes", function () {
@@ -221,7 +220,7 @@ describe("collection", function () {
 
     describe(".restore", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
             this.collection.fakes = [{
                 restore: sinonSpy()
             }, {
@@ -259,7 +258,7 @@ describe("collection", function () {
 
     describe("verify and restore", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("calls verify and restore", function () {
@@ -296,7 +295,7 @@ describe("collection", function () {
 
     describe(".reset", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
             this.collection.fakes = [{
                 reset: sinonSpy()
             }, {
@@ -317,7 +316,7 @@ describe("collection", function () {
 
     describe(".resetBehavior", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
             this.collection.fakes = [{
                 resetBehavior: sinonSpy()
             }, {
@@ -338,7 +337,7 @@ describe("collection", function () {
 
     describe(".resetHistory", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
             this.collection.fakes = [{
                 resetHistory: sinonSpy()
             }, {
@@ -359,7 +358,7 @@ describe("collection", function () {
 
     describe("inject test", function () {
         beforeEach(function () {
-            this.collection = createInstance(sinonCollection);
+            this.collection = Object.create(sinonCollection);
         });
 
         it("injects fakes into object", function () {

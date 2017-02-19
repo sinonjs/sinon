@@ -5,7 +5,6 @@ var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
 var sinonMatch = require("../lib/sinon/match");
-var createInstance = require("../lib/sinon/util/core/create");
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
@@ -914,7 +913,7 @@ describe("stub", function () {
             var parent = {
                 func: function () {}
             };
-            var child = createInstance(parent);
+            var child = Object.create(parent);
             child.func = function () {};
 
             refute.exception(function () {

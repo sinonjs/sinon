@@ -8,7 +8,6 @@ var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
 var fakeServer = require("../lib/sinon/util/fake_server");
 var sinonSandbox = require("../lib/sinon/sandbox");
 var sinonCollection = require("../lib/sinon/collection");
-var createInstance = require("../lib/sinon/util/core/create");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
@@ -58,7 +57,7 @@ describe("sinonSandbox", function () {
 
     describe(".useFakeTimers", function () {
         beforeEach(function () {
-            this.sandbox = createInstance(sinonSandbox);
+            this.sandbox = Object.create(sinonSandbox);
         });
 
         afterEach(function () {
@@ -114,7 +113,7 @@ describe("sinonSandbox", function () {
         describe("fake XHR/server", function () {
             describe(".useFakeServer", function () {
                 beforeEach(function () {
-                    this.sandbox = createInstance(sinonSandbox);
+                    this.sandbox = Object.create(sinonSandbox);
                 });
 
                 afterEach(function () {
