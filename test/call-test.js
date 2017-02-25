@@ -794,7 +794,7 @@ describe("sinonSpy.call", function () {
             var object = { doIt: sinonStub().returns("") };
             object.doIt(42, "Hey");
 
-            assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42, Hey) => ");
+            assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt(42, Hey) => (empty string)");
         });
 
         it("includes exception", function () {
