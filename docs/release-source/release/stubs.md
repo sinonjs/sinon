@@ -280,6 +280,32 @@ Causes the stub to return a Promise which rejects with the provided exception ob
 Causes the stub to call the argument at the provided index as a callback function. `stub.callsArg(0);` causes the stub to call the first argument as a callback.
 
 
+#### `stub.callThrough();`
+
+Causes the original method wrapped into the stub to be called when none of the conditional stubs are matched.
+
+```javascript
+var stub = sinon.stub();
+
+var obj = {};
+
+obj.sum = function sum(a, b) {
+    return a + b;
+};
+
+stub(obj, 'sum');
+
+obj.sum.withArgs(2, 2).callsFake(function foo() {
+    return 'bar';
+});
+
+obj.sum.callThrough();
+
+obj.sum(2, 2); // 'bar'
+obj.sum(1, 2); // 3
+```
+
+
 #### `stub.callsArgOn(index, context);`
 
 Like `stub.callsArg(index);` but with an additional parameter to pass the `this` context.
