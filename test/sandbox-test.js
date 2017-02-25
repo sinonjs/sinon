@@ -4,6 +4,7 @@ var referee = require("referee");
 var samsam = require("samsam");
 var assert = referee.assert;
 var refute = referee.refute;
+var fakeXhr = require("../lib/sinon/util/fake_xml_http_request");
 var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
 var fakeServer = require("../lib/sinon/util/fake_server");
 var sinonSandbox = require("../lib/sinon/sandbox");
@@ -111,6 +112,38 @@ describe("sinonSandbox", function () {
     // These were not run in browsers before, as we were only testing in node
     if (typeof window !== "undefined") {
         describe("fake XHR/server", function () {
+            describe(".useFakeXMLHttpRequest", function () {
+                beforeEach(function () {
+                    this.sandbox = sinonSandbox.create();
+                });
+
+                afterEach(function () {
+                    this.sandbox.restore();
+                });
+
+                it("calls sinon.useFakeXMLHttpRequest", function () {
+                    this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns({ restore: function () {} });
+                    this.sandbox.useFakeXMLHttpRequest();
+
+                    assert(fakeXhr.useFakeXMLHttpRequest.called);
+                });
+
+                it("doesn't secretly use useFakeServer", function () {
+                    this.sandbox.stub(fakeServer, "create").returns({ restore: function () {} });
+                    this.sandbox.useFakeXMLHttpRequest();
+
+                    assert(fakeServer.create.notCalled);
+                });
+
+                it("adds fake xhr to fake collection", function () {
+                    this.sandbox.useFakeXMLHttpRequest();
+                    this.sandbox.restore();
+
+                    assert.same(global.XMLHttpRequest, globalXHR);
+                    assert.same(global.ActiveXObject, globalAXO);
+                });
+            });
+
             describe(".useFakeServer", function () {
                 beforeEach(function () {
                     this.sandbox = Object.create(sinonSandbox);
