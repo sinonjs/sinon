@@ -1072,11 +1072,5 @@ describe("fakeTimers.clock", function () {
             assert.same(setInterval, fakeTimers.timers.setInterval);
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
         });
-
-        it("does not be able to use date object for now", function () {
-            assert.exception(function () {
-                fakeTimers.useFakeTimers(new Date(2011, 9, 1));
-            });
-        });
     });
 });

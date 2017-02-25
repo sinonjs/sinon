@@ -12,7 +12,7 @@ Fake timers provide a `clock` object to pass time, which can also be used to con
 or `Date.now();` (if supported by the browser).
 
 For standalone usage of fake timers it is recommended to use [lolex](https://github.com/sinonjs/lolex) package instead. It provides the same
-set of features and was previously extracted from Sinon.JS.
+set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
 
 ```javascript
 {
@@ -52,6 +52,9 @@ Starts the clock at the UNIX epoch (timestamp of 0).
 
 As above, but rather than starting the clock with a timestamp of 0, start at the provided timestamp.
 
+*Since `sinon@2.0.0`*
+
+You can also pass in a Date object, and it's `getTime()` will be used for the starting timestamp.
 
 #### `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...);`
 
