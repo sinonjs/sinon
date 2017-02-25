@@ -9,7 +9,7 @@ Standalone and test framework agnostic JavaScript test spies, stubs and mocks (p
 
 ## Installation
 
-via [npm (node package manager)](https://github.com/npm/npm)
+via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
