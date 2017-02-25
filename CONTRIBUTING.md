@@ -129,4 +129,4 @@ To build simply run
 
 
 [ES5]: http://www.ecma-international.org/ecma-262/5.1/
-[ES6][ES6]: http://www.ecma-international.org/ecma-262/6.0/
+[ES6]: http://www.ecma-international.org/ecma-262/6.0/
