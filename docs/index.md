@@ -34,7 +34,7 @@ npm install sinon@next
 If you (for some reason) really want the old version of Sinon, head over to the [legacy docs](http://legacy.sinonjs.org/) and do:
 
 ```shell
-npm install sinon@1.17.7
+npm install sinon@1
 ```
 
 ## Getting started
