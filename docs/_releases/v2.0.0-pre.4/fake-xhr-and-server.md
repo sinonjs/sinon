@@ -333,7 +333,7 @@ As this is synchronous and immediate, this is not suitable for simulating actual
 
 If set to `true`, server will find `_method` parameter in POST body and recognize that as the actual method.
 
-Supports a pattern common to Ruby on Rails applications (FIXME: which pattern? Links?). For custom HTTP method faking, override `server.getHTTPMethod(request)`.
+Supports a pattern common to Ruby on Rails applications. For custom HTTP method faking, override `server.getHTTPMethod(request)`.
 
 
 #### `server.getHTTPMethod(request)`
@@ -389,6 +389,6 @@ As this is synchronous and immediate, this is not suitable for simulating actual
 
 If set to `true`, server will find `_method` parameter in `POST` body and recognize that as the actual method.
 
-Supports a pattern common to Ruby on Rails applications (FIXME: which pattern? Links?).
+Supports a pattern common to Ruby on Rails applications.
 
 For custom HTTP method faking, override `server.getHTTPMethod(request)`
