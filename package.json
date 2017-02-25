@@ -43,7 +43,7 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "eslint": "^3.1.1",
-    "eslint-config-defaults": "^9.0.0",
+    "eslint-config-sinon": "^1.0.0",
     "eslint-plugin-mocha": "^4.2.0",
     "mocaccino": "^2.0.0",
     "mocha": "^3.1.2",
@@ -54,6 +54,9 @@
     "pre-commit": "^1.1.2",
     "referee": "^1.2.0",
     "rimraf": "^2.5.3"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-sinon"
   },
   "files": [
     "lib",
