@@ -270,13 +270,6 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 ## Sinon.JS elsewhere
 
 * [Testing Backbone applications with Jasmine and Sinon](http://tinnedfruit.com/2011/03/03/testing-backbone-apps-with-jasmine-sinon.html)
-* [Using Sinon.JS with QUnit](http://cjohansen.no/en/javascript/using_sinon_js_with_qunit)
-* [Faking XMLHttpRequests with Sinon.JS 0.6.0](http://cjohansen.no/en/javascript/sinon_js_0_6_0_fake_xmlhttprequest_and_improved_test_framework_integration)
-* [Sinon.JS 0.5.0 announcement](http://cjohansen.no/en/javascript/sinon_js_0_5_0_released)
-* [Faking timers and dates with Sinon.JS](http://cjohansen.no/en/javascript/faking_timers_and_dates_with_sinon)
-* [Sinon.JS test framework integration tools](http://cjohansen.no/en/javascript/higer_level_stubbing_and_mocking_tools_in_sinon)
-* [More spies, stubs and mocks with Sinon.JS](http://cjohansen.no/en/javascript/test_spies_stubs_and_mocks_part_1_5)
-* [Original Sinon.JS announcement](http://cjohansen.no/en/javascript/javascript_test_spies_stubs_and_mocks)
 * [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
 
 Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
