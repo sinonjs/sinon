@@ -50,7 +50,7 @@
     "mochify": "^3.0.0",
     "mochify-istanbul": "^2.4.1",
     "phantomic": "^1.4.0",
-    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.14",
     "pre-commit": "^1.1.2",
     "referee": "^1.2.0",
     "rimraf": "^2.5.3"
