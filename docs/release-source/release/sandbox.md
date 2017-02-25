@@ -82,6 +82,12 @@ sinon.defaultConfig = {
 </dl>
 
 
+#### `sandbox.assert();`
+
+A convenience reference for [`sinon.assert`](./assertions)
+
+*Since `sinon@2.0.0`*
+
 #### `sandbox.spy();`
 
 Works exactly like `sinon.spy`, only also adds the returned spy to the internal collection of fakes for easy restoring through `sandbox.restore()`
