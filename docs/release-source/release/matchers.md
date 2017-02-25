@@ -176,6 +176,7 @@ Requires the value to be a `Date object.
 
 Requires the value to be a `Symbol.
 
+*Since `sinon@2.0.0`*
 
 #### `sinon.match.same(ref)"
 
