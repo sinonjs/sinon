@@ -19,13 +19,7 @@ var globalActiveXObject = global.ActiveXObject;
 var supportsProgressEvents = typeof ProgressEvent !== "undefined";
 var supportsFormData = typeof FormData !== "undefined";
 var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-var supportsBlob = (function () {
-    try {
-        return !!new Blob();
-    } catch (e) {
-        return false;
-    }
-})();
+var supportsBlob = require("../../lib/sinon/blob").isSupported;
 
 var fakeXhrSetUp = function () {
     this.fakeXhr = sinonFakeXhr.useFakeXMLHttpRequest();
