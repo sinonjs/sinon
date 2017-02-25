@@ -13,7 +13,7 @@ via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
-or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/download/).
+or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/).
 
 ## Usage
 
