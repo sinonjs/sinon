@@ -19,7 +19,7 @@ Then we would need to change the documentation for `v1.17.1`, `v1.17.2` and `v1.
 
 ## Running the documentation site locally
 
-For casual improvements to the documentation, this shouldn't really necessary, as all the content documents are just plain markdown files.
+For casual improvements to the documentation, this shouldn't really be necessary, as all the content documents are just plain markdown files.
 
 However, if you're going to contribute changes that alter the overall structure or design of the site, then this section is for you.
 
