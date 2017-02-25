@@ -358,9 +358,6 @@ Like `callArg`, but with arguments.
 
 Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
 
-FIXME: call stack?
-FIXME: link to some article explaining asynchronous JavaScript
-
 #### `stub.callsArgAsync(index);`
 
 #### `stub.callsArgOnAsync(index, context);`
