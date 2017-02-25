@@ -115,7 +115,7 @@ Access through `sandbox.clock`.
 
 Fakes XHR and binds the resulting object to the sandbox such that it too is restored when calling `sandbox.restore()`.
 
-Access requests through `sandbox.requests`.
+Since 2.x, you can no longer access requests through `sandbox.requests` - use `sandbox.useFakeServer` to do this. This function maps to `sinon.useFakeXMLHttpRequest`, only with sandboxing.
 
 
 #### `sandbox.useFakeServer();`
