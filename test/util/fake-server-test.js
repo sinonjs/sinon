@@ -3,11 +3,12 @@
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
 var sinonFakeServer = require("../../lib/sinon/util/fake_server");
+var fakeXhr = require("../../lib/sinon/util/fake_xml_http_request");
 var sinonStub = require("../../lib/sinon/stub");
 var sinonSpy = require("../../lib/sinon/spy");
 var sinonSandbox = require("../../lib/sinon/sandbox");
 var fakeTimers = require("../../lib/sinon/util/fake_timers");
-var FakeXMLHttpRequest = require("../../lib/sinon/util/fake_xml_http_request").FakeXMLHttpRequest;
+var FakeXMLHttpRequest = fakeXhr.FakeXMLHttpRequest;
 
 var assert = referee.assert;
 var refute = referee.refute;
@@ -90,13 +91,13 @@ if (typeof window !== "undefined") {
 
         it("fakes XMLHttpRequest", function () {
             var sandbox = sinonSandbox.create();
-            sandbox.stub(sinon, "useFakeXMLHttpRequest").returns({
+            sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns({
                 restore: sinonStub()
             });
 
             this.server = sinonFakeServer.create();
 
-            assert(sinon.useFakeXMLHttpRequest.called);
+            assert(fakeXhr.useFakeXMLHttpRequest.called);
             sandbox.restore();
         });
 
