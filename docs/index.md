@@ -15,7 +15,7 @@ Works with any unit testing framework.
 
 ### Download
 
-FIXME: create a download link for each packaged release
+[Download a packaged release](./releases)
 
 ### Install using `npm`
 
