@@ -10,7 +10,7 @@ There are several ways of contributing to Sinon.JS
 
 ## Reporting an issue
 
-To save everyone time and make it much more likely for your issue to be understood, worked on and resolved quickly, it would help if you're mindful of [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) when pressing the "Submit new issue" button. 
+To save everyone time and make it much more likely for your issue to be understood, worked on and resolved quickly, it would help if you're mindful of [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/~sgtatham/bugs.html) when pressing the "Submit new issue" button.
 
 As a minimum, please report the following:
 
@@ -109,12 +109,12 @@ Sinon.JS uses [Mocha](https://mochajs.org/), please read those docs if you're un
 
 If you're doing more than a one line edit, you'll want to have finer control and less restarting of the Mocha
 
-To start tests in dev mode run 
+To start tests in dev mode run
 
     $ npm run test-dev
 
 Dev mode features:
- * [watching related files](https://mochajs.org/#w---watch) to restart tests once changes are made 
+ * [watching related files](https://mochajs.org/#w---watch) to restart tests once changes are made
  * using [Min reporter](https://mochajs.org/#min), which cleans the console each time tests run, so test results are always on top
 
 Note that in dev mode tests run only in Node. Before creating your PR please ensure tests are passing in Phantom and WebWorker as well. To check this please use [Run the tests](#run-the-tests) instructions.
