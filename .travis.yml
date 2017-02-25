@@ -1,8 +1,7 @@
 language: node_js
 node_js:
-  - "0.12"
   # LTS release per February 2016
-  - "4.3"
+  - "4"
   - "6"
 
 sudo: false
