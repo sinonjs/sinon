@@ -437,16 +437,14 @@ Same as their corresponding non-Async counterparts, but with callback being defe
 
 #### `sinon.addBehavior(name, fn);`
 
-Add a custom behavior. The name will be available as a function on stubs, and the chaining mechanism will be set up for you. Inside the `fn`, `this` is bound to the fake.
+Add a custom behavior. The name will be available as a function on stubs, and the chaining mechanism will be set up for you (e.g. no need to return anything from your function, it's return value will be ignored). The `fn` will be passed the fake instance as its first argument, and then the user's arguments.
 
 ```javascript
 const sinon = require('sinon');
 
-sinon.addBehavior('returns42', function () {
-    this.returns(42);
-});
+sinon.addBehavior('returnsNum', (fake, n) => fake.returns(n));
 
-var stub = sinon.stub().returns42();
+var stub = sinon.stub().returnsNum(42);
 
 assert.equals(stub(), 42);
 ```

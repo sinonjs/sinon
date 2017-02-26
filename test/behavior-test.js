@@ -6,11 +6,11 @@ var assert = require("referee").assert;
 
 describe("behaviors", function () {
     it("adds and uses a custom behavior", function () {
-        addBehavior("returns42", function () {
-            this.returns(42);
+        addBehavior("returnsNum", function (fake, n) {
+            fake.returns(n);
         });
 
-        var stub = createStub().returns42();
+        var stub = createStub().returnsNum(42);
 
         assert.equals(stub(), 42);
     });
