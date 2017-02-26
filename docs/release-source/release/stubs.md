@@ -434,3 +434,19 @@ Same as their corresponding non-Async counterparts, but with callback being defe
 #### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
 
 Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
+
+#### `sinon.addBehavior(name, fn);`
+
+Add a custom behavior. The name will be available as a function on stubs, and the chaining mechanism will be set up for you. Inside the `fn`, `this` is bound to the fake.
+
+```javascript
+const sinon = require('sinon');
+
+sinon.addBehavior('returns42', function () {
+    this.returns(42);
+});
+
+var stub = sinon.stub().returns42();
+
+assert.equals(stub(), 42);
+```
