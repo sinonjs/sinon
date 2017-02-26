@@ -51,13 +51,13 @@ before one of the other callbacks.
 
 Calling behavior defining methods like `returns` or `throws` multiple times
 overrides the behavior of the stub. As of Sinon version 1.8, you can use the
-[`onCall`]("#stub-onCall) method to make a stub respond differently on
+[`onCall`](#stub-onCall) method to make a stub respond differently on
 consecutive calls.
 
 Note that in Sinon version 1.5 to version 1.7, multiple calls to the `yields*`
 and `callsArg*` family of methods define a sequence of behaviors for consecutive
-calls. As of 1.8, this functionality has been removed in favor of the <a
-href="#stub-onCall"><code>onCall</code></a> API.
+calls. As of 1.8, this functionality has been removed in favor of the
+[`onCall`](#stub-onCall) API.
 
 [pubsubjs]: https://github.com/mroderick/pubsubjs
 
@@ -82,7 +82,7 @@ Replaces `object.method` with a `func`, wrapped in a `spy`.
 
 As usual, `object.method.restore();` can be used to restore the original method.
 
-#### `name "var stub = sinon.stub(obj);`
+#### `var stub = sinon.stub(obj);`
 
 Stubs all the object's methods.
 
@@ -96,7 +96,7 @@ If you want to create a stub object of `MyConstructor`, but don't want the const
 var stub = sinon.createStubInstance(MyConstructor)
 ```
 
-#### `name "stub.withArgs(arg1[, arg2, ...]);`
+#### `stub.withArgs(arg1[, arg2, ...]);`
 
 Stubs the method only for the provided arguments.
 
@@ -114,7 +114,7 @@ This is useful to be more expressive in your assertions, where you can access th
 }
 ```
 
-#### `name "stub.onCall(n);` *Added in v1.8*
+#### <a name="stub-onCall"></a>`"stub.onCall(n);` *Added in v1.8*
 
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
 
