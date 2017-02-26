@@ -800,16 +800,6 @@ describe("stub", function () {
             assert.isFalse(stub.called);
         });
 
-        it("throws if property is not a function", function () {
-            var obj = { someProp: 42 };
-
-            assert.exception(function () {
-                createStub(obj, "someProp");
-            });
-
-            assert.equals(obj.someProp, 42);
-        });
-
         it("successfully stubs falsey properties", function () {
             var obj = { 0: function () { } };
 
@@ -943,16 +933,6 @@ describe("stub", function () {
     });
 
     describe("stubbed function", function () {
-        it("throws if stubbing non-existent property", function () {
-            var myObj = {};
-
-            assert.exception(function () {
-                createStub(myObj, "ouch");
-            });
-
-            refute.defined(myObj.ouch);
-        });
-
         it("has toString method", function () {
             var obj = { meth: function () {} };
             createStub(obj, "meth");
@@ -2299,6 +2279,88 @@ describe("stub", function () {
             myObj.prop("not foo");
 
             assert.equals(reference, myObj);
+        });
+    });
+
+    describe(".get", function () {
+        it("allows users to stub getter functions for properties", function () {
+            var myObj = {
+                prop: "foo"
+            };
+
+            createStub(myObj, "prop").get(function () {
+                return "bar";
+            });
+
+            assert.equals(myObj.prop, "bar");
+        });
+
+        it("replaces old getters", function () {
+            var myObj = {
+                get prop() {
+                    fail("should not call the old getter");
+                }
+            };
+
+            createStub(myObj, "prop").get(function () {
+                return "bar";
+            });
+
+            assert.equals(myObj.prop, "bar");
+        });
+
+        it("can set getters for non-existing properties", function () {
+            var myObj = {};
+
+            createStub(myObj, "prop").get(function () {
+                return "bar";
+            });
+
+            assert.equals(myObj.prop, "bar");
+        });
+    });
+
+    describe(".set", function () {
+        it("allows users to stub setter functions for properties", function () {
+            var myObj = {
+                prop: "foo"
+            };
+
+            createStub(myObj, "prop").set(function () {
+                myObj.example = "bar";
+            });
+
+            myObj.prop = "baz";
+
+            assert.equals(myObj.example, "bar");
+        });
+
+        it("replaces old setters", function () {
+            var myObj = { // eslint-disable-line accessor-pairs
+                set prop(val) {
+                    fail("should not call the old setter");
+                }
+            };
+
+            createStub(myObj, "prop").set(function () {
+                myObj.example = "bar";
+            });
+
+            myObj.prop = "foo";
+
+            assert.equals(myObj.example, "bar");
+        });
+
+        it("can set setters for non-existing properties", function () {
+            var myObj = {};
+
+            createStub(myObj, "prop").set(function () {
+                myObj.example = "bar";
+            });
+
+            myObj.prop = "foo";
+
+            assert.equals(myObj.example, "bar");
         });
     });
 });
