@@ -63,7 +63,7 @@ Creates a mock for the provided object.
 Does not change the object, but returns a mock object to set expectations on the object's methods.
 
 
-#### `var expectation = mock.expects(\"method\");`
+#### `var expectation = mock.expects("method");`
 
 Overrides `obj.method` with a mock function and returns it.
 

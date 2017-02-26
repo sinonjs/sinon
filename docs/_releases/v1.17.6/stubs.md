@@ -70,13 +70,13 @@ href="#stub-onCall"><code>onCall</code></a> API.
 Creates an anonymous stub function
 
 
-#### `var stub = sinon.stub(object, \"method\");`
+#### `var stub = sinon.stub(object, "method");`
 
 Replaces `object.method` with a stub function. An exception is thrown if the property is not already a function.
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
-#### `var stub = sinon.stub(object, \"method\", func);`
+#### `var stub = sinon.stub(object, "method", func);`
 
 Replaces `object.method` with a `func`, wrapped in a `spy`.
 
@@ -103,7 +103,7 @@ Stubs the method only for the provided arguments.
 This is useful to be more expressive in your assertions, where you can access the spy with the same call. It is also useful to create a stub that can act differently in response to different arguments.
 
 ```javascript
-"test should stub method differently based on arguments\": function () {
+"test should stub method differently based on arguments": function () {
     var callback = sinon.stub();
     callback.withArgs(42).returns(1);
     callback.withArgs(1).throws("TypeError");
@@ -119,7 +119,7 @@ This is useful to be more expressive in your assertions, where you can access th
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
 
 ```javascript
-"test should stub method differently on consecutive calls\": function () {
+"test should stub method differently on consecutive calls": function () {
     var callback = sinon.stub();
     callback.onCall(0).returns(1);
     callback.onCall(1).returns(2);
@@ -136,7 +136,7 @@ There are methods `onFirstCall`, `onSecondCall`,`onThirdCall` to make stub defin
 `onCall` can be combined with all of the behavior defining methods in this section.  In particular, it can be used together with `withArgs`.
 
 ```javascript
-"test should stub method differently on consecutive calls with certain argument\": function () {
+"test should stub method differently on consecutive calls with certain argument": function () {
     var callback = sinon.stub();
     callback.withArgs(42)
         .onFirstCall().returns(1)
@@ -264,7 +264,7 @@ Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback 
 Like above but with an additional parameter to pass the `this` context."
 
 ```javascript
-"test should fake successful ajax request\": function () {
+"test should fake successful ajax request": function () {
     sinon.stub(jQuery, "ajax").yieldsTo("success", [1, 2, 3]);
 
     jQuery.ajax({
