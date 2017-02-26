@@ -32,7 +32,7 @@ Restores supplied method
 
 Creates a new object with the given function as the protoype and stubs all implemented functions.
 
-The given constructor function is not invoked. See also the [stub API](#stubs).
+The given constructor function is not invoked. See also the [stub API](../stubs).
 
 #### `sinon.format(object);`
 

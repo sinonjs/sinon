@@ -8,7 +8,7 @@ breadcrumb: stubs
 
 Test stubs are functions (spies) with pre-programmed behavior.
 
-They support the full <a href="#spies">test spy API</a> in addition to methods which can be used to alter the stub's behavior.
+They support the full <a href="../spies">test spy API</a> in addition to methods which can be used to alter the stub's behavior.
 
 As spies, stubs can be either anonymous, or wrap existing functions. When
 wrapping an existing function with a stub, the original function is not called.

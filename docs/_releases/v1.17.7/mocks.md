@@ -28,7 +28,7 @@ Thus, they enforce implementation details. The rule of thumb is: if you wouldn't
 
 In general you should have **no more than one** mock (possibly with several expectations) in a single test.
 
-[Expectations](#expectations) implement both the [spies](#spies) and [stubs](#stubs) APIs.
+[Expectations](#expectations) implement both the [spies](../spies) and [stubs](../stubs) APIs.
 
 To see what mocks look like in Sinon.JS, here is one of the [PubSubJS][pubsubjs] tests again, this time using a method as callback and using mocks to verify its behavior
 
