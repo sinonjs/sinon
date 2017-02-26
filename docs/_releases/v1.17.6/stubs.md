@@ -261,7 +261,7 @@ Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback 
 
 #### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
 
-Like above but with an additional parameter to pass the `this` context."
+Like above but with an additional parameter to pass the `this` context.
 
 ```javascript
 "test should fake successful ajax request": function () {
@@ -285,7 +285,7 @@ If the stub was never called with a function argument, `yield` throws an error.
 Also aliased as `invokeCallback`.
 
 
-#### `stub.yieldTo(callback, [arg1, arg2, ...])``
+#### `stub.yieldTo(callback, [arg1, arg2, ...])`
 
 Invokes callbacks passed as a property of an object to the stub.
 
