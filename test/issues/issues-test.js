@@ -270,4 +270,49 @@ describe("issues", function () {
             });
         });
     }
+
+    describe("#1274 - spy.withArgs(args...).callCount is incorrect", function () {
+        it("case1: should count accurately", function () {
+            var obj = {
+                f: function () {}
+            };
+
+            // case1: withArgs(1) => withArgs(1, 1)
+            var spy = sinon.spy(obj, "f");
+            assert.equals(spy.callCount, 0);
+            assert.equals(spy.withArgs(1).callCount, 0);
+            assert.equals(spy.withArgs(1, 1).callCount, 0);
+
+            obj.f();
+            obj.f(1);
+            obj.f(1, 1);
+            obj.f(1, 2);
+
+            assert.equals(spy.callCount, 4);
+            assert.equals(spy.withArgs(1).callCount, 3);
+            assert.equals(spy.withArgs(1, 1).callCount, 1);
+            assert.equals(spy.withArgs(1, 2).callCount, 1);
+        });
+        it("case2: should count accurately", function () {
+            var obj = {
+                f: function () {}
+            };
+
+            // case2: withArgs(1, 1) => withArgs(1)
+            var spy = sinon.spy(obj, "f");
+            assert.equals(spy.callCount, 0);
+            assert.equals(spy.withArgs(1, 1).callCount, 0);
+            assert.equals(spy.withArgs(1).callCount, 0);
+
+            obj.f();
+            obj.f(1);
+            obj.f(1, 1);
+            obj.f(1, 2);
+
+            assert.equals(spy.callCount, 4);
+            assert.equals(spy.withArgs(1).callCount, 3);
+            assert.equals(spy.withArgs(1, 1).callCount, 1);
+            assert.equals(spy.withArgs(1, 2).callCount, 1);
+        });
+    });
 });
