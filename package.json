@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "2.0.0-pre.5",
+  "version": "2.0.0-pre.6",
   "homepage": "http://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
