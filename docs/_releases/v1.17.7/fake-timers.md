@@ -70,7 +70,7 @@ Tick the clock ahead `ms` milliseconds.
 Causes all timers scheduled within the affected time range to be called.
 
 
-#### `clock.restore();"
+#### `clock.restore();`
 
 Restore the faked methods.
 
