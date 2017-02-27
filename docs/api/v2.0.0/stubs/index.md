@@ -7,7 +7,7 @@ title: Stubs
 
 Test stubs are functions (spies) with pre-programmed behavior.
 
-They support the full <a href="#spies">test spy API</a> in addition to methods which can be used to alter the stub's behavior.
+They support the full <a href="../spies">test spy API</a> in addition to methods which can be used to alter the stub's behavior.
 
 As spies, stubs can be either anonymous, or wrap existing functions. When
 wrapping an existing function with a stub, the original function is not called.
@@ -19,7 +19,7 @@ Use a stub when you want to:
 
 1. Control a method's behavior from a test to force the code down a specific path. Examples include forcing a method to throw an error in order to test error handling.
 
-2. When you want to prevent a specific method from being called directly (possibly because it triggers undesired behavior, such as a `XMLHttpRequest or similar).
+2. When you want to prevent a specific method from being called directly (possibly because it triggers undesired behavior, such as a `XMLHttpRequest` or similar).
 
 The following example is yet another test from [PubSubJS][pubsubjs] which shows how to create an anonymous stub that throws an exception when called.
 
@@ -50,13 +50,13 @@ before one of the other callbacks.
 
 Calling behavior defining methods like `returns` or `throws` multiple times
 overrides the behavior of the stub. As of Sinon version 1.8, you can use the
-[`onCall`]("#stub-onCall) method to make a stub respond differently on
+[`onCall`](#stub-onCall) method to make a stub respond differently on
 consecutive calls.
 
 Note that in Sinon version 1.5 to version 1.7, multiple calls to the `yields*`
 and `callsArg*` family of methods define a sequence of behaviors for consecutive
-calls. As of 1.8, this functionality has been removed in favor of the <a
-href="#stub-onCall"><code>onCall</code></a> API.
+calls. As of 1.8, this functionality has been removed in favor of the
+[`onCall`](#stub-onCall) API.
 
 [pubsubjs]: https://github.com/mroderick/pubsubjs
 
@@ -69,13 +69,13 @@ href="#stub-onCall"><code>onCall</code></a> API.
 Creates an anonymous stub function
 
 
-#### `var stub = sinon.stub(object, \"method\");`
+#### `var stub = sinon.stub(object, "method");`
 
 Replaces `object.method` with a stub function. An exception is thrown if the property is not already a function.
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
-#### `var stub = sinon.stub(object, \"property\", fakeDescriptor);`
+#### `var stub = sinon.stub(object, "property", fakeDescriptor);`
 
 Replaces the getter/setter of `property` on `object` with stubs created from the fake methods passed in `fakeDescriptor` argument.
 
@@ -110,7 +110,7 @@ console.log(object.myProperty); // => faked myProperty
 console.log(descriptor.get.callCount); // => 1
 ```
 
-#### `name "var stub = sinon.stub(obj);`
+#### `var stub = sinon.stub(obj);`
 
 Stubs all the object's methods.
 
@@ -124,14 +124,14 @@ If you want to create a stub object of `MyConstructor`, but don't want the const
 var stub = sinon.createStubInstance(MyConstructor)
 ```
 
-#### `name "stub.withArgs(arg1[, arg2, ...]);`
+#### `stub.withArgs(arg1[, arg2, ...]);`
 
 Stubs the method only for the provided arguments.
 
 This is useful to be more expressive in your assertions, where you can access the spy with the same call. It is also useful to create a stub that can act differently in response to different arguments.
 
 ```javascript
-"test should stub method differently based on arguments\": function () {
+"test should stub method differently based on arguments": function () {
     var callback = sinon.stub();
     callback.withArgs(42).returns(1);
     callback.withArgs(1).throws("TypeError");
@@ -142,12 +142,12 @@ This is useful to be more expressive in your assertions, where you can access th
 }
 ```
 
-#### `name "stub.onCall(n);` *Added in v1.8*
+#### <a name="stub-onCall"></a>`stub.onCall(n);` *Added in v1.8*
 
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
 
 ```javascript
-"test should stub method differently on consecutive calls\": function () {
+"test should stub method differently on consecutive calls": function () {
     var callback = sinon.stub();
     callback.onCall(0).returns(1);
     callback.onCall(1).returns(2);
@@ -164,7 +164,7 @@ There are methods `onFirstCall`, `onSecondCall`,`onThirdCall` to make stub defin
 `onCall` can be combined with all of the behavior defining methods in this section.  In particular, it can be used together with `withArgs`.
 
 ```javascript
-"test should stub method differently on consecutive calls with certain argument\": function () {
+"test should stub method differently on consecutive calls with certain argument": function () {
     var callback = sinon.stub();
     callback.withArgs(42)
         .onFirstCall().returns(1)
@@ -269,10 +269,10 @@ Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback 
 
 #### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
 
-Like above but with an additional parameter to pass the `this` context."
+Like above but with an additional parameter to pass the `this` context.
 
 ```javascript
-"test should fake successful ajax request\": function () {
+"test should fake successful ajax request": function () {
     sinon.stub(jQuery, "ajax").yieldsTo("success", [1, 2, 3]);
 
     jQuery.ajax({
@@ -293,7 +293,7 @@ If the stub was never called with a function argument, `yield` throws an error.
 Also aliased as `invokeCallback`.
 
 
-#### `stub.yieldTo(callback, [arg1, arg2, ...])``
+#### `stub.yieldTo(callback, [arg1, arg2, ...])`
 
 Invokes callbacks passed as a property of an object to the stub.
 

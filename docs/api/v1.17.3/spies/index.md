@@ -319,7 +319,7 @@ This behaves the same as `spy.neverCalledWith(sinon.match(arg1), sinon.match(arg
 Returns `true` if spy threw an exception at least once.
 
 
-#### `spy.threw(\"TypeError\");`
+#### `spy.threw("TypeError");`
 
 Returns `true` if spy threw an exception of the provided type at least once.
 
@@ -334,7 +334,7 @@ Returns `true` if spy threw the provided exception object at least once.
 Returns `true` if spy always threw an exception.
 
 
-#### `spy.alwaysThrew(\"TypeError\");`
+#### `spy.alwaysThrew("TypeError");`
 
 Returns `true` if spy always threw an exception of the provided type.
 
@@ -405,7 +405,7 @@ Resets the state of a spy.
 Replaces the spy with the original method. Only available if the spy replaced an existing method.
 
 
-#### `spy.printf(format string\", [arg1, arg2, ...])`
+#### `spy.printf("format string", [arg1, arg2, ...])`
 
 Returns the passed format string with the following replacements performed:
 
@@ -482,7 +482,7 @@ This behaves the same as `spyCall.notCalledWith(sinon.match(arg1), sinon.match(a
 Returns `true` if call threw an exception.
 
 
-#### `spyCall.threw(TypeError\");`
+#### `spyCall.threw("TypeError");`
 
 Returns `true` if call threw exception of provided type.
 
