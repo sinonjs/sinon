@@ -1,5 +1,5 @@
 /**
- * Sinon.JS 1.17.7, 2017/02/15
+ * Sinon.JS 1.16.0, 2015/08/19
  *
  * @author Christian Johansen (christian@cjohansen.no)
  * @author Contributors: https://github.com/cjohansen/Sinon.JS/blob/master/AUTHORS
@@ -179,33 +179,6 @@
         }
     }
 
-    function isSet(val) {
-        if (typeof Set !== 'undefined' && val instanceof Set) {
-            return true;
-        }
-    }
-
-    function isSubset(s1, s2, compare) {
-        var values1 = Array.from(s1);
-        var values2 = Array.from(s2);
-
-        for (var i = 0; i < values1.length; i++) {
-            var includes = false;
-
-            for (var j = 0; j < values2.length; j++) {
-                if (compare(values2[j], values1[i])) {
-                    includes = true;
-                    break;
-                }
-            }
-
-            if (!includes) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     /**
      * @name samsam.deepEqual
@@ -316,14 +289,6 @@
                 }
             }
 
-            if (isSet(obj1) || isSet(obj2)) {
-                if (!isSet(obj1) || !isSet(obj2) || obj1.size !== obj2.size) {
-                    return false;
-                }
-
-                return isSubset(obj1, obj2, deepEqual);
-            }
-
             var key, i, l,
                 // following vars are used for the cyclic logic
                 value1, value2,
@@ -396,14 +361,15 @@
         }(obj1, obj2, '$1', '$2'));
     }
 
-    function arrayContains(array, subset, compare) {
+    var match;
+
+    function arrayContains(array, subset) {
         if (subset.length === 0) { return true; }
         var i, l, j, k;
         for (i = 0, l = array.length; i < l; ++i) {
-            if (compare(array[i], subset[0])) {
+            if (match(array[i], subset[0])) {
                 for (j = 0, k = subset.length; j < k; ++j) {
-                    if ((i + j) >= l) { return false; }
-                    if (!compare(array[i + j], subset[j])) { return false; }
+                    if (!match(array[i + j], subset[j])) { return false; }
                 }
                 return true;
             }
@@ -418,7 +384,7 @@
      *
      * Compare arbitrary value ``object`` with matcher.
      */
-    function match(object, matcher) {
+    match = function match(object, matcher) {
         if (matcher && typeof matcher.test === "function") {
             return matcher.test(object);
         }
@@ -450,12 +416,8 @@
             return object === null;
         }
 
-        if (isSet(object)) {
-            return isSubset(matcher, object, match);
-        }
-
         if (getClass(object) === "Array" && getClass(matcher) === "Array") {
-            return arrayContains(object, matcher, match);
+            return arrayContains(object, matcher);
         }
 
         if (matcher && typeof matcher === "object") {
@@ -482,7 +444,7 @@
 
         throw new Error("Matcher was not a string, a number, a " +
                         "function, a boolean or an object");
-    }
+    };
 
     return {
         isArguments: isArguments,
@@ -707,29 +669,30 @@
 
     return Formatio.prototype;
 });
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.lolex = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.lolex=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
+/*global global, window*/
+/**
+ * @author Christian Johansen (christian@cjohansen.no) and contributors
+ * @license BSD
+ *
+ * Copyright (c) 2010-2014 Christian Johansen
+ */
+
 (function (global) {
     
-    var userAgent = global.navigator && global.navigator.userAgent;
-    var isRunningInIE = userAgent && userAgent.indexOf("MSIE ") > -1;
-
     // Make properties writable in IE, as per
     // http://www.adequatelygood.com/Replacing-setTimeout-Globally.html
-    if (isRunningInIE) {
-        global.setTimeout = global.setTimeout;
-        global.clearTimeout = global.clearTimeout;
-        global.setInterval = global.setInterval;
-        global.clearInterval = global.clearInterval;
-        global.Date = global.Date;
-    }
+    // JSLint being anal
+    var glbl = global;
 
-    // setImmediate is not a standard function
-    // avoid adding the prop to the window object if not present
-    if (global.setImmediate !== undefined) {
-        global.setImmediate = global.setImmediate;
-        global.clearImmediate = global.clearImmediate;
-    }
+    global.setTimeout = glbl.setTimeout;
+    global.clearTimeout = glbl.clearTimeout;
+    global.setImmediate = glbl.setImmediate;
+    global.clearImmediate = glbl.clearImmediate;
+    global.setInterval = glbl.setInterval;
+    global.clearInterval = glbl.clearInterval;
+    global.Date = glbl.Date;
 
     // node expects setTimeout/setInterval to return a fn object w/ .ref()/.unref()
     // browsers, a number.
@@ -738,7 +701,6 @@
     var NOOP = function () { return undefined; };
     var timeoutResult = setTimeout(NOOP, 0);
     var addTimerReturnsObject = typeof timeoutResult === "object";
-    var hrtimePresent = (global.process && typeof global.process.hrtime === "function");
     clearTimeout(timeoutResult);
 
     var NativeDate = Date;
@@ -759,7 +721,7 @@
         var ms = 0, parsed;
 
         if (l > 3 || !/^(\d\d:){0,2}\d\d?$/.test(str)) {
-            throw new Error("tick only understands numbers, 'm:s' and 'h:m:s'. Each part must be two digits");
+            throw new Error("tick only understands numbers and 'h:m:s'");
         }
 
         while (i--) {
@@ -773,20 +735,6 @@
         }
 
         return ms * 1000;
-    }
-
-    /**
-     * Floor function that also works for negative numbers
-     */
-    function fixedFloor(n) {
-        return (n >= 0 ? Math.floor(n) : Math.ceil(n));
-    }
-
-    /**
-     * % operator that also works for negative numbers
-     */
-    function fixedModulo(n, m) {
-        return ((n % m) + m) % m;
     }
 
     /**
@@ -847,22 +795,22 @@
             // Defensive and verbose to avoid potential harm in passing
             // explicit undefined when user does not pass argument
             switch (arguments.length) {
-                case 0:
-                    return new NativeDate(ClockDate.clock.now);
-                case 1:
-                    return new NativeDate(year);
-                case 2:
-                    return new NativeDate(year, month);
-                case 3:
-                    return new NativeDate(year, month, date);
-                case 4:
-                    return new NativeDate(year, month, date, hour);
-                case 5:
-                    return new NativeDate(year, month, date, hour, minute);
-                case 6:
-                    return new NativeDate(year, month, date, hour, minute, second);
-                default:
-                    return new NativeDate(year, month, date, hour, minute, second, ms);
+            case 0:
+                return new NativeDate(ClockDate.clock.now);
+            case 1:
+                return new NativeDate(year);
+            case 2:
+                return new NativeDate(year, month);
+            case 3:
+                return new NativeDate(year, month, date);
+            case 4:
+                return new NativeDate(year, month, date, hour);
+            case 5:
+                return new NativeDate(year, month, date, hour, minute);
+            case 6:
+                return new NativeDate(year, month, date, hour, minute, second);
+            default:
+                return new NativeDate(year, month, date, hour, minute, second, ms);
             }
         }
 
@@ -880,7 +828,7 @@
 
         timer.id = uniqueTimerId++;
         timer.createdAt = clock.now;
-        timer.callAt = clock.now + (parseInt(timer.delay) || (clock.duringTick ? 1 : 0));
+        timer.callAt = clock.now + (timer.delay || (clock.duringTick ? 1 : 0));
 
         clock.timers[timer.id] = timer;
 
@@ -896,7 +844,6 @@
     }
 
 
-    /* eslint consistent-return: "off" */
     function compareTimers(a, b) {
         // Sort first by absolute timing
         if (a.callAt < b.callAt) {
@@ -952,38 +899,6 @@
         return timer;
     }
 
-    function firstTimer(clock) {
-        var timers = clock.timers,
-            timer = null,
-            id;
-
-        for (id in timers) {
-            if (timers.hasOwnProperty(id)) {
-                if (!timer || compareTimers(timer, timers[id]) === 1) {
-                    timer = timers[id];
-                }
-            }
-        }
-
-        return timer;
-    }
-
-    function lastTimer(clock) {
-        var timers = clock.timers,
-            timer = null,
-            id;
-
-        for (id in timers) {
-            if (timers.hasOwnProperty(id)) {
-                if (!timer || compareTimers(timer, timers[id]) === -1) {
-                    timer = timers[id];
-                }
-            }
-        }
-
-        return timer;
-    }
-
     function callTimer(clock, timer) {
         var exception;
 
@@ -997,7 +912,6 @@
             if (typeof timer.func === "function") {
                 timer.func.apply(null, timer.args);
             } else {
-                /* eslint no-eval: "off" */
                 eval(timer.func);
             }
         } catch (e) {
@@ -1016,63 +930,20 @@
         }
     }
 
-    function timerType(timer) {
-        if (timer.immediate) {
-            return "Immediate";
-        }
-        if (timer.interval !== undefined) {
-            return "Interval";
-        }
-        return "Timeout";
-    }
-
-    function clearTimer(clock, timerId, ttype) {
-        if (!timerId) {
-            // null appears to be allowed in most browsers, and appears to be
-            // relied upon by some libraries, like Bootstrap carousel
-            return;
-        }
-
-        if (!clock.timers) {
-            clock.timers = [];
-        }
-
-        // in Node, timerId is an object with .ref()/.unref(), and
-        // its .id field is the actual timer id.
-        if (typeof timerId === "object") {
-            timerId = timerId.id;
-        }
-
-        if (clock.timers.hasOwnProperty(timerId)) {
-            // check that the ID matches a timer of the correct type
-            var timer = clock.timers[timerId];
-            if (timerType(timer) === ttype) {
-                delete clock.timers[timerId];
-            } else {
-                throw new Error("Cannot clear timer: timer created with set" + timerType(timer)
-                                + "() but cleared with clear" + ttype + "()");
-            }
-        }
-    }
-
     function uninstall(clock, target) {
         var method,
             i,
             l;
-        var installedHrTime = "_hrtime";
 
         for (i = 0, l = clock.methods.length; i < l; i++) {
             method = clock.methods[i];
-            if (method === "hrtime" && target.process) {
-                target.process.hrtime = clock[installedHrTime];
+
+            if (target[method].hadOwnProperty) {
+                target[method] = clock["_" + method];
             } else {
-                if (target[method] && target[method].hadOwnProperty) {
-                    target[method] = clock["_" + method];
-                } else {
-                    try {
-                        delete target[method];
-                    } catch (ignore) { /* eslint empty-block: "off" */ }
-                }
+                try {
+                    delete target[method];
+                } catch (ignore) {}
             }
         }
 
@@ -1114,10 +985,6 @@
         Date: Date
     };
 
-    if (hrtimePresent) {
-        timers.hrtime = global.process.hrtime;
-    }
-
     var keys = Object.keys || function (obj) {
         var ks = [],
             key;
@@ -1133,15 +1000,11 @@
 
     exports.timers = timers;
 
-    function createClock(now, loopLimit) {
-        loopLimit = loopLimit || 1000;
-
+    function createClock(now) {
         var clock = {
             now: getEpoch(now),
-            hrNow: 0,
             timeouts: {},
-            Date: createDate(),
-            loopLimit: loopLimit
+            Date: createDate()
         };
 
         clock.Date.clock = clock;
@@ -1155,7 +1018,25 @@
         };
 
         clock.clearTimeout = function clearTimeout(timerId) {
-            return clearTimer(clock, timerId, "Timeout");
+            if (!timerId) {
+                // null appears to be allowed in most browsers, and appears to be
+                // relied upon by some libraries, like Bootstrap carousel
+                return;
+            }
+
+            if (!clock.timers) {
+                clock.timers = [];
+            }
+
+            // in Node, timerId is an object with .ref()/.unref(), and
+            // its .id field is the actual timer id.
+            if (typeof timerId === "object") {
+                timerId = timerId.id;
+            }
+
+            if (clock.timers.hasOwnProperty(timerId)) {
+                delete clock.timers[timerId];
+            }
         };
 
         clock.setInterval = function setInterval(func, timeout) {
@@ -1168,7 +1049,7 @@
         };
 
         clock.clearInterval = function clearInterval(timerId) {
-            return clearTimer(clock, timerId, "Interval");
+            clock.clearTimeout(timerId);
         };
 
         clock.setImmediate = function setImmediate(func) {
@@ -1180,36 +1061,22 @@
         };
 
         clock.clearImmediate = function clearImmediate(timerId) {
-            return clearTimer(clock, timerId, "Immediate");
+            clock.clearTimeout(timerId);
         };
 
         clock.tick = function tick(ms) {
             ms = typeof ms === "number" ? ms : parseTime(ms);
             var tickFrom = clock.now, tickTo = clock.now + ms, previous = clock.now;
             var timer = firstTimerInRange(clock, tickFrom, tickTo);
-            var oldNow;
 
             clock.duringTick = true;
-
-            function updateHrTime(newNow) {
-                clock.hrNow += (newNow - clock.now);
-            }
 
             var firstException;
             while (timer && tickFrom <= tickTo) {
                 if (clock.timers[timer.id]) {
-                    updateHrTime(timer.callAt);
-                    tickFrom = timer.callAt;
-                    clock.now = timer.callAt;
+                    tickFrom = clock.now = timer.callAt;
                     try {
-                        oldNow = clock.now;
                         callTimer(clock, timer);
-                        // compensate for any setSystemTime() call during timer callback
-                        if (oldNow !== clock.now) {
-                            tickFrom += clock.now - oldNow;
-                            tickTo += clock.now - oldNow;
-                            previous += clock.now - oldNow;
-                        }
                     } catch (e) {
                         firstException = firstException || e;
                     }
@@ -1220,7 +1087,6 @@
             }
 
             clock.duringTick = false;
-            updateHrTime(tickTo);
             clock.now = tickTo;
 
             if (firstException) {
@@ -1230,97 +1096,27 @@
             return clock.now;
         };
 
-        clock.next = function next() {
-            var timer = firstTimer(clock);
-            if (!timer) {
-                return clock.now;
-            }
-
-            clock.duringTick = true;
-            try {
-                clock.now = timer.callAt;
-                callTimer(clock, timer);
-                return clock.now;
-            } finally {
-                clock.duringTick = false;
-            }
-        };
-
-        clock.runAll = function runAll() {
-            var numTimers, i;
-            for (i = 0; i < clock.loopLimit; i++) {
-                if (!clock.timers) {
-                    return clock.now;
-                }
-
-                numTimers = Object.keys(clock.timers).length;
-                if (numTimers === 0) {
-                    return clock.now;
-                }
-
-                clock.next();
-            }
-
-            throw new Error("Aborting after running " + clock.loopLimit + "timers, assuming an infinite loop!");
-        };
-
-        clock.runToLast = function runToLast() {
-            var timer = lastTimer(clock);
-            if (!timer) {
-                return clock.now;
-            }
-
-            return clock.tick(timer.callAt);
-        };
-
         clock.reset = function reset() {
             clock.timers = {};
         };
-
-        clock.setSystemTime = function setSystemTime(now) {
-            // determine time difference
-            var newNow = getEpoch(now);
-            var difference = newNow - clock.now;
-            var id, timer;
-
-            // update 'system clock'
-            clock.now = newNow;
-
-            // update timers and intervals to keep them stable
-            for (id in clock.timers) {
-                if (clock.timers.hasOwnProperty(id)) {
-                    timer = clock.timers[id];
-                    timer.createdAt += difference;
-                    timer.callAt += difference;
-                }
-            }
-        };
-
-        if (hrtimePresent) {
-            clock.hrtime = function (prev) {
-                if (Array.isArray(prev)) {
-                    var oldSecs = (prev[0] + prev[1] / 1e9);
-                    var newSecs = (clock.hrNow / 1000);
-                    var difference = (newSecs - oldSecs);
-                    var secs = fixedFloor(difference);
-                    var nanosecs = fixedModulo(difference * 1e9, 1e9);
-                    return [
-                        secs,
-                        nanosecs
-                    ];
-                }
-                return [
-                    fixedFloor(clock.hrNow / 1000),
-                    fixedModulo(clock.hrNow * 1e6, 1e9)
-                ];
-            };
-        }
 
         return clock;
     }
     exports.createClock = createClock;
 
-    exports.install = function install(target, now, toFake, loopLimit) {
+    function detectKnownFailSituation(methods) {
+        if (methods.indexOf("Date") < 0) { return; }
+
+        if (methods.indexOf("setTimeout") < 0) {
+            throw new Error("Native setTimeout will not work when Date is faked");
+        }
+
+        if (methods.indexOf("setImmediate") < 0) {
+            throw new Error("Native setImmediate will not work when Date is faked");
+        }
+    }
+
+    exports.install = function install(target, now, toFake) {
         var i,
             l;
 
@@ -1334,7 +1130,7 @@
             target = global;
         }
 
-        var clock = createClock(now, loopLimit);
+        var clock = createClock(now);
 
         clock.uninstall = function () {
             uninstall(clock, target);
@@ -1346,14 +1142,10 @@
             clock.methods = keys(timers);
         }
 
+        detectKnownFailSituation(clock.methods);
+
         for (i = 0, l = clock.methods.length; i < l; i++) {
-            if (clock.methods[i] === "hrtime") {
-                if (target.process && typeof target.process.hrtime === "function") {
-                    hijackMethod(target.process, clock.methods[i], clock);
-                }
-            } else {
-                hijackMethod(target, clock.methods[i], clock);
-            }
+            hijackMethod(target, clock.methods[i], clock);
         }
 
         return clock;
@@ -1385,7 +1177,6 @@ var sinon = (function () {
     function loadDependencies(require, exports, module) {
         sinonModule = module.exports = require("./sinon/util/core");
         require("./sinon/extend");
-        require("./sinon/walk");
         require("./sinon/typeOf");
         require("./sinon/times_in_words");
         require("./sinon/spy");
@@ -1510,17 +1301,9 @@ var sinon = (function () {
 
             var error, wrappedMethod, i;
 
-            function simplePropertyAssignment() {
-                wrappedMethod = object[property];
-                checkWrappedMethod(wrappedMethod);
-                object[property] = method;
-                method.displayName = property;
-            }
-
             // IE 8 does not support hasOwnProperty on the window object and Firefox has a problem
             // when using hasOwn.call on objects from other frames.
-            var owned = (object.hasOwnProperty && object.hasOwnProperty === hasOwn) ?
-                object.hasOwnProperty(property) : hasOwn.call(object, property);
+            var owned = object.hasOwnProperty ? object.hasOwnProperty(property) : hasOwn.call(object, property);
 
             if (hasES5Support) {
                 var methodDesc = (typeof method === "function") ? {value: method} : method;
@@ -1550,17 +1333,11 @@ var sinon = (function () {
                     mirrorProperties(methodDesc[types[i]], wrappedMethodDesc[types[i]]);
                 }
                 Object.defineProperty(object, property, methodDesc);
-
-                // catch failing assignment
-                // this is the converse of the check in `.restore` below
-                if ( typeof method === "function" && object[property] !== method ) {
-                    // correct any wrongdoings caused by the defineProperty call above,
-                    // such as adding new items (if object was a Storage object)
-                    delete object[property];
-                    simplePropertyAssignment();
-                }
             } else {
-                simplePropertyAssignment();
+                wrappedMethod = object[property];
+                checkWrappedMethod(wrappedMethod);
+                object[property] = method;
+                method.displayName = property;
             }
 
             method.displayName = property;
@@ -1584,17 +1361,9 @@ var sinon = (function () {
                     Object.defineProperty(object, property, wrappedMethodDesc);
                 }
 
-                // this only supports ES5 getter/setter, for ES3.1 and lower
-                // __lookupSetter__ / __lookupGetter__ should be integrated
-                if (hasES5Support) {
-                    var checkDesc = sinon.getPropertyDescriptor(object, property);
-                    if (checkDesc.value === method) {
-                        object[property] = wrappedMethod;
-                    }
-
                 // Use strict equality comparison to check failures then force a reset
                 // via direct assignment.
-                } else if (object[property] === method) {
+                if (object[property] === method) {
                     object[property] = wrappedMethod;
                 }
             };
@@ -1658,7 +1427,7 @@ var sinon = (function () {
             }
 
             for (prop in a) {
-                if (hasOwn.call(a, prop)) {
+                if (a.hasOwnProperty(prop)) {
                     aLength += 1;
 
                     if (!(prop in b)) {
@@ -1672,7 +1441,7 @@ var sinon = (function () {
             }
 
             for (prop in b) {
-                if (hasOwn.call(b, prop)) {
+                if (b.hasOwnProperty(prop)) {
                     bLength += 1;
                 }
             }
@@ -2562,12 +2331,8 @@ var sinon = (function () {
             },
 
             toString: function () {
-                var callStr = this.proxy ? this.proxy.toString() + "(" : "";
+                var callStr = this.proxy.toString() + "(";
                 var args = [];
-
-                if (!this.args) {
-                    return ":(";
-                }
 
                 for (var i = 0, l = this.args.length; i < l; ++i) {
                     args.push(sinon.format(this.args[i]));
@@ -2677,15 +2442,11 @@ var sinon = (function () {
             }
 
             if (types) {
-                // A new descriptor is needed here because we can only wrap functions
-                // By passing the original descriptor we would end up trying to spy non-function properties
-                var descriptor = {};
                 var methodDesc = sinon.getPropertyDescriptor(object, property);
-
                 for (var i = 0; i < types.length; i++) {
-                    descriptor[types[i]] = spy.create(methodDesc[types[i]]);
+                    methodDesc[types[i]] = spy.create(methodDesc[types[i]]);
                 }
-                return sinon.wrapMethod(object, property, descriptor);
+                return sinon.wrapMethod(object, property, methodDesc);
             }
 
             return sinon.wrapMethod(object, property, spy.create(object[property]));
@@ -3485,89 +3246,9 @@ var sinon = (function () {
 
 /**
  * @depend util/core.js
- */
-(function (sinonGlobal) {
-    
-    function makeApi(sinon) {
-        function walkInternal(obj, iterator, context, originalObj, seen) {
-            var proto, prop;
-
-            if (typeof Object.getOwnPropertyNames !== "function") {
-                // We explicitly want to enumerate through all of the prototype's properties
-                // in this case, therefore we deliberately leave out an own property check.
-                /* eslint-disable guard-for-in */
-                for (prop in obj) {
-                    iterator.call(context, obj[prop], prop, obj);
-                }
-                /* eslint-enable guard-for-in */
-
-                return;
-            }
-
-            Object.getOwnPropertyNames(obj).forEach(function (k) {
-                if (seen[k] !== true) {
-                    seen[k] = true;
-                    var target = typeof Object.getOwnPropertyDescriptor(obj, k).get === "function" ?
-                        originalObj : obj;
-                    iterator.call(context, target[k], k, target);
-                }
-            });
-
-            proto = Object.getPrototypeOf(obj);
-            if (proto) {
-                walkInternal(proto, iterator, context, originalObj, seen);
-            }
-        }
-
-        /* Public: walks the prototype chain of an object and iterates over every own property
-         * name encountered. The iterator is called in the same fashion that Array.prototype.forEach
-         * works, where it is passed the value, key, and own object as the 1st, 2nd, and 3rd positional
-         * argument, respectively. In cases where Object.getOwnPropertyNames is not available, walk will
-         * default to using a simple for..in loop.
-         *
-         * obj - The object to walk the prototype chain for.
-         * iterator - The function to be called on each pass of the walk.
-         * context - (Optional) When given, the iterator will be called with this object as the receiver.
-         */
-        function walk(obj, iterator, context) {
-            return walkInternal(obj, iterator, context, obj, {});
-        }
-
-        sinon.walk = walk;
-        return sinon.walk;
-    }
-
-    function loadDependencies(require, exports, module) {
-        var sinon = require("./util/core");
-        module.exports = makeApi(sinon);
-    }
-
-    var isNode = typeof module !== "undefined" && module.exports && typeof require === "function";
-    var isAMD = typeof define === "function" && typeof define.amd === "object" && define.amd;
-
-    if (isAMD) {
-        define(loadDependencies);
-        return;
-    }
-
-    if (isNode) {
-        loadDependencies(require, module.exports, module);
-        return;
-    }
-
-    if (sinonGlobal) {
-        makeApi(sinonGlobal);
-    }
-}(
-    typeof sinon === "object" && sinon // eslint-disable-line no-undef
-));
-
-/**
- * @depend util/core.js
  * @depend extend.js
  * @depend spy.js
  * @depend behavior.js
- * @depend walk.js
  */
 /**
  * Stub functions
@@ -3585,7 +3266,8 @@ var sinon = (function () {
                 throw new TypeError("Custom stub should be a function or a property descriptor");
             }
 
-            var wrapper;
+            var wrapper,
+                prop;
 
             if (func) {
                 if (typeof func === "function") {
@@ -3612,17 +3294,11 @@ var sinon = (function () {
             }
 
             if (typeof property === "undefined" && typeof object === "object") {
-                sinon.walk(object || {}, function (value, prop, propOwner) {
-                    // we don't want to stub things like toString(), valueOf(), etc. so we only stub if the object
-                    // is not Object.prototype
-                    if (
-                        propOwner !== Object.prototype &&
-                        prop !== "constructor" &&
-                        typeof sinon.getPropertyDescriptor(propOwner, prop).value === "function"
-                    ) {
+                for (prop in object) {
+                    if (typeof sinon.getPropertyDescriptor(object, prop).value === "function") {
                         stub(object, prop);
                     }
-                });
+                }
 
                 return object;
             }
@@ -4541,8 +4217,8 @@ if (typeof sinon === "undefined") {
 
         sinon.ProgressEvent = function ProgressEvent(type, progressEventRaw, target) {
             this.initEvent(type, false, false, target);
-            this.loaded = typeof progressEventRaw.loaded === "number" ? progressEventRaw.loaded : null;
-            this.total = typeof progressEventRaw.total === "number" ? progressEventRaw.total : null;
+            this.loaded = progressEventRaw.loaded || null;
+            this.total = progressEventRaw.total || null;
             this.lengthComputable = !!progressEventRaw.total;
         };
 
@@ -4635,27 +4311,17 @@ if (typeof sinon === "undefined") {
         function logError(label, err) {
             var msg = label + " threw exception: ";
 
-            function throwLoggedError() {
-                err.message = msg + err.message;
-                throw err;
-            }
-
             sinon.log(msg + "[" + err.name + "] " + err.message);
 
             if (err.stack) {
                 sinon.log(err.stack);
             }
 
-            if (logError.useImmediateExceptions) {
-                throwLoggedError();
-            } else {
-                logError.setTimeout(throwLoggedError, 0);
-            }
+            logError.setTimeout(function () {
+                err.message = msg + err.message;
+                throw err;
+            }, 0);
         }
-
-        // When set to true, any errors logged will be thrown immediately;
-        // If set to false, the errors will be thrown in separate execution frame.
-        logError.useImmediateExceptions = false;
 
         // wrap realSetTimeout with something we can stub in tests
         logError.setTimeout = function (func, timeout) {
@@ -4703,23 +4369,8 @@ if (typeof sinon === "undefined") {
 /**
  * Fake XDomainRequest object
  */
-
-/**
- * Returns the global to prevent assigning values to 'this' when this is undefined.
- * This can occur when files are interpreted by node in strict mode.
- * @private
- */
-function getGlobal() {
-    
-    return typeof window !== "undefined" ? window : global;
-}
-
 if (typeof sinon === "undefined") {
-    if (typeof this === "undefined") {
-        getGlobal().sinon = {};
-    } else {
-        this.sinon = {};
-    }
+    this.sinon = {};
 }
 
 // wrapper for global
@@ -4967,14 +4618,6 @@ if (typeof sinon === "undefined") {
     var supportsProgress = typeof ProgressEvent !== "undefined";
     var supportsCustomEvent = typeof CustomEvent !== "undefined";
     var supportsFormData = typeof FormData !== "undefined";
-    var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-    var supportsBlob = (function () {
-        try {
-            return !!new Blob();
-        } catch (e) {
-            return false;
-        }
-    })();
     var sinonXhr = { XMLHttpRequest: global.XMLHttpRequest };
     sinonXhr.GlobalXMLHttpRequest = global.XMLHttpRequest;
     sinonXhr.GlobalActiveXObject = global.ActiveXObject;
@@ -5010,11 +4653,10 @@ if (typeof sinon === "undefined") {
     // and uploadError.
     function UploadProgress() {
         this.eventListeners = {
-            abort: [],
-            error: [],
+            progress: [],
             load: [],
-            loadend: [],
-            progress: []
+            abort: [],
+            error: []
         };
     }
 
@@ -5058,7 +4700,7 @@ if (typeof sinon === "undefined") {
         }
 
         var xhr = this;
-        var events = ["loadstart", "load", "abort", "error", "loadend"];
+        var events = ["loadstart", "load", "abort", "loadend"];
 
         function addEventListener(eventName) {
             xhr.addEventListener(eventName, function (event) {
@@ -5230,78 +4872,19 @@ if (typeof sinon === "undefined") {
         }
     }
 
-    function convertToArrayBuffer(body) {
-        var buffer = new ArrayBuffer(body.length);
-        var view = new Uint8Array(buffer);
-        for (var i = 0; i < body.length; i++) {
-            var charCode = body.charCodeAt(i);
-            if (charCode >= 256) {
-                throw new TypeError("arraybuffer or blob responseTypes require binary string, " +
-                                    "invalid character " + body[i] + " found.");
-            }
-            view[i] = charCode;
-        }
-        return buffer;
-    }
-
-    function isXmlContentType(contentType) {
-        return !contentType || /(text\/xml)|(application\/xml)|(\+xml)/.test(contentType);
-    }
-
-    function convertResponseBody(responseType, contentType, body) {
-        if (responseType === "" || responseType === "text") {
-            return body;
-        } else if (supportsArrayBuffer && responseType === "arraybuffer") {
-            return convertToArrayBuffer(body);
-        } else if (responseType === "json") {
-            try {
-                return JSON.parse(body);
-            } catch (e) {
-                // Return parsing failure as null
-                return null;
-            }
-        } else if (supportsBlob && responseType === "blob") {
-            var blobOptions = {};
-            if (contentType) {
-                blobOptions.type = contentType;
-            }
-            return new Blob([convertToArrayBuffer(body)], blobOptions);
-        } else if (responseType === "document") {
-            if (isXmlContentType(contentType)) {
-                return FakeXMLHttpRequest.parseXML(body);
-            }
-            return null;
-        }
-        throw new Error("Invalid responseType " + responseType);
-    }
-
-    function clearResponse(xhr) {
-        if (xhr.responseType === "" || xhr.responseType === "text") {
-            xhr.response = xhr.responseText = "";
-        } else {
-            xhr.response = xhr.responseText = null;
-        }
-        xhr.responseXML = null;
-    }
-
     FakeXMLHttpRequest.parseXML = function parseXML(text) {
-        // Treat empty string as parsing failure
-        if (text !== "") {
-            try {
-                if (typeof DOMParser !== "undefined") {
-                    var parser = new DOMParser();
-                    return parser.parseFromString(text, "text/xml");
-                }
-                var xmlDoc = new window.ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async = "false";
-                xmlDoc.loadXML(text);
-                return xmlDoc;
-            } catch (e) {
-                // Unable to parse XML - no biggie
-            }
+        var xmlDoc;
+
+        if (typeof DOMParser !== "undefined") {
+            var parser = new DOMParser();
+            xmlDoc = parser.parseFromString(text, "text/xml");
+        } else {
+            xmlDoc = new window.ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async = "false";
+            xmlDoc.loadXML(text);
         }
 
-        return null;
+        return xmlDoc;
     };
 
     FakeXMLHttpRequest.statusCodes = {
@@ -5361,7 +4944,9 @@ if (typeof sinon === "undefined") {
                 this.async = typeof async === "boolean" ? async : true;
                 this.username = username;
                 this.password = password;
-                clearResponse(this);
+                this.responseText = null;
+                this.response = this.responseType === "json" ? null : "";
+                this.responseXML = null;
                 this.requestHeaders = {};
                 this.sendFlag = false;
 
@@ -5381,7 +4966,6 @@ if (typeof sinon === "undefined") {
                 this.readyState = state;
 
                 var readyStateChangeEvent = new sinon.Event("readystatechange", false, false, this);
-                var event, progress;
 
                 if (typeof this.onreadystatechange === "function") {
                     try {
@@ -5391,29 +4975,16 @@ if (typeof sinon === "undefined") {
                     }
                 }
 
-                if (this.readyState === FakeXMLHttpRequest.DONE) {
-                    // ensure loaded and total are numbers
-                    progress = {
-                      loaded: this.progress || 0,
-                      total: this.progress || 0
-                    };
-
-                    if (this.status === 0) {
-                        event = this.aborted ? "abort" : "error";
-                    }
-                    else {
-                        event = "load";
-                    }
-
-                    if (supportsProgress) {
-                        this.upload.dispatchEvent(new sinon.ProgressEvent("progress", progress, this));
-                        this.upload.dispatchEvent(new sinon.ProgressEvent(event, progress, this));
-                        this.upload.dispatchEvent(new sinon.ProgressEvent("loadend", progress, this));
-                    }
-
-                    this.dispatchEvent(new sinon.ProgressEvent("progress", progress, this));
-                    this.dispatchEvent(new sinon.ProgressEvent(event, progress, this));
-                    this.dispatchEvent(new sinon.ProgressEvent("loadend", progress, this));
+                switch (this.readyState) {
+                    case FakeXMLHttpRequest.DONE:
+                        if (supportsProgress) {
+                            this.upload.dispatchEvent(new sinon.ProgressEvent("progress", {loaded: 100, total: 100}));
+                            this.dispatchEvent(new sinon.ProgressEvent("progress", {loaded: 100, total: 100}));
+                        }
+                        this.upload.dispatchEvent(new sinon.Event("load", false, false, this));
+                        this.dispatchEvent(new sinon.Event("load", false, false, this));
+                        this.dispatchEvent(new sinon.Event("loadend", false, false, this));
+                        break;
                 }
 
                 this.dispatchEvent(readyStateChangeEvent);
@@ -5469,7 +5040,7 @@ if (typeof sinon === "undefined") {
 
                 this.errorFlag = false;
                 this.sendFlag = this.async;
-                clearResponse(this);
+                this.response = this.responseType === "json" ? null : "";
                 this.readyStateChange(FakeXMLHttpRequest.OPENED);
 
                 if (typeof this.onSend === "function") {
@@ -5481,7 +5052,8 @@ if (typeof sinon === "undefined") {
 
             abort: function abort() {
                 this.aborted = true;
-                clearResponse(this);
+                this.responseText = null;
+                this.response = this.responseType === "json" ? null : "";
                 this.errorFlag = true;
                 this.requestHeaders = {};
                 this.responseHeaders = {};
@@ -5492,15 +5064,14 @@ if (typeof sinon === "undefined") {
                 }
 
                 this.readyState = FakeXMLHttpRequest.UNSENT;
-            },
 
-            error: function error() {
-                clearResponse(this);
-                this.errorFlag = true;
-                this.requestHeaders = {};
-                this.responseHeaders = {};
+                this.dispatchEvent(new sinon.Event("abort", false, false, this));
 
-                this.readyStateChange(FakeXMLHttpRequest.DONE);
+                this.upload.dispatchEvent(new sinon.Event("abort", false, false, this));
+
+                if (typeof this.onerror === "function") {
+                    this.onerror();
+                }
             },
 
             getResponseHeader: function getResponseHeader(header) {
@@ -5538,35 +5109,32 @@ if (typeof sinon === "undefined") {
                 verifyRequestSent(this);
                 verifyHeadersReceived(this);
                 verifyResponseBodyType(body);
-                var contentType = this.getResponseHeader("Content-Type");
 
-                var isTextResponse = this.responseType === "" || this.responseType === "text";
-                clearResponse(this);
-                if (this.async) {
-                    var chunkSize = this.chunkSize || 10;
-                    var index = 0;
+                var chunkSize = this.chunkSize || 10;
+                var index = 0;
+                this.responseText = "";
 
-                    do {
+                do {
+                    if (this.async) {
                         this.readyStateChange(FakeXMLHttpRequest.LOADING);
+                    }
 
-                        if (isTextResponse) {
-                            this.responseText = this.response += body.substring(index, index + chunkSize);
-                        }
-                        index += chunkSize;
-                    } while (index < body.length);
+                    this.responseText += body.substring(index, index + chunkSize);
+                    index += chunkSize;
+                } while (index < body.length);
+
+                var type = this.getResponseHeader("Content-Type");
+
+                if (this.responseText &&
+                    (!type || /(text\/xml)|(application\/xml)|(\+xml)/.test(type))) {
+                    try {
+                        this.responseXML = FakeXMLHttpRequest.parseXML(this.responseText);
+                    } catch (e) {
+                        // Unable to parse XML - no biggie
+                    }
                 }
 
-                this.response = convertResponseBody(this.responseType, contentType, body);
-                if (isTextResponse) {
-                    this.responseText = this.response;
-                }
-
-                if (this.responseType === "document") {
-                    this.responseXML = this.response;
-                } else if (this.responseType === "" && isXmlContentType(contentType)) {
-                    this.responseXML = FakeXMLHttpRequest.parseXML(this.responseText);
-                }
-                this.progress = body.length;
+                this.response = this.responseType === "json" ? JSON.parse(this.responseText) : this.responseText;
                 this.readyStateChange(FakeXMLHttpRequest.DONE);
             },
 
@@ -6113,10 +5681,6 @@ if (typeof sinon === "undefined") {
             },
 
             restore: function () {
-                if (arguments.length) {
-                    throw new Error("sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()");
-                }
-
                 sinon.collection.restore.apply(this, arguments);
                 this.restoreContext();
             },
@@ -6229,6 +5793,7 @@ if (typeof sinon === "undefined") {
                     args[args.length - 1] = function sinonDone(res) {
                         if (res) {
                             sandbox.restore();
+                            throw exception;
                         } else {
                             sandbox.verifyAndRestore();
                         }
@@ -6242,11 +5807,13 @@ if (typeof sinon === "undefined") {
                     exception = e;
                 }
 
-                if (typeof exception !== "undefined") {
-                    sandbox.restore();
-                    throw exception;
-                } else if (typeof oldDone !== "function") {
-                    sandbox.verifyAndRestore();
+                if (typeof oldDone !== "function") {
+                    if (typeof exception !== "undefined") {
+                        sandbox.restore();
+                        throw exception;
+                    } else {
+                        sandbox.verifyAndRestore();
+                    }
                 }
 
                 return result;
@@ -6443,24 +6010,6 @@ if (typeof sinon === "undefined") {
             }
         }
 
-        function verifyIsValidAssertion(assertionMethod, assertionArgs) {
-            switch (assertionMethod) {
-                case "notCalled":
-                case "called":
-                case "calledOnce":
-                case "calledTwice":
-                case "calledThrice":
-                    if (assertionArgs.length !== 0) {
-                        assert.fail(assertionMethod +
-                                    " takes 1 argument but was called with " +
-                                    (assertionArgs.length + 1) + " arguments");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
         function failAssertion(object, msg) {
             object = object || global;
             var failMethod = object.fail || assert.fail;
@@ -6477,8 +6026,6 @@ if (typeof sinon === "undefined") {
                 verifyIsStub(fake);
 
                 var args = slice.call(arguments, 1);
-                verifyIsValidAssertion(name, args);
-
                 var failed = false;
 
                 if (typeof method === "function") {
