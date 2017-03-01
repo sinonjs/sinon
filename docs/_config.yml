@@ -2,7 +2,7 @@ title: Sinon.JS
 description: |
   Standalone test spies, stubs and mocks for JavaScript.
     Works with any unit testing framework.
-url: 'https://sinonjs.org'
+url: 'http://sinonjs.org'
 github_username: sinonjs
 sinon:
   current_release: v1.17.7
