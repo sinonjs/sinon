@@ -314,5 +314,17 @@ describe("issues", function () {
             assert.equals(spy.withArgs(1, 1).callCount, 1);
             assert.equals(spy.withArgs(1, 2).callCount, 1);
         });
+        it("case3: should work on stub", function () {
+            var stub = sinon.stub();
+            stub.returns(0);
+            stub.withArgs(1, 1).returns(2);
+            stub.withArgs(1).returns(1);
+
+            assert.equals(stub(), 0);
+            assert.equals(stub(1), 1);
+            assert.equals(stub(1, 1), 2);
+            assert.equals(stub(1, 1, 1), 2);
+            assert.equals(stub(2), 0);
+        });
     });
 });
