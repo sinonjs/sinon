@@ -2201,6 +2201,19 @@ if (typeof window !== "undefined") {
                         loaded: 20
                     });
                 });
+
+                it("calls .onprogress", function (done) {
+                    this.xhr.upload.onprogress = function (e) {
+                        assert.equals(e.total, 100);
+                        assert.equals(e.loaded, 20);
+                        assert.isTrue(e.lengthComputable);
+                        done();
+                    };
+                    this.xhr.uploadProgress({
+                        total: 100,
+                        loaded: 20
+                    });
+                });
             }
 
             it("triggers 'load' event on success", function (done) {
@@ -2302,12 +2315,6 @@ if (typeof window !== "undefined") {
                 });
             }
 
-            it("event listeners can be removed", function () {
-                var callback = function () {};
-                this.xhr.upload.addEventListener("load", callback);
-                this.xhr.upload.removeEventListener("load", callback);
-                assert.equals(this.xhr.upload.eventListeners.load.length, 0);
-            });
         });
     });
 }
