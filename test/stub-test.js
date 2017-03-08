@@ -279,6 +279,34 @@ describe("stub", function () {
         });
     });
 
+    describe(".throwsArg", function () {
+        it("throws argument at specified index", function () {
+            var stub = createStub.create();
+            stub.throwsArg(0);
+            var expectedError = new Error("The expected error message");
+
+            assert.exception(function () {
+                stub(expectedError);
+            }, function (err) {
+                return err.message === expectedError.message;
+            });
+        });
+
+        it("returns stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.throwsArg(0), stub);
+        });
+
+        it("throws TypeError if no index is specified", function () {
+            var stub = createStub.create();
+
+            assert.exception(function () {
+                stub.throwsArg();
+            }, "TypeError");
+        });
+    });
+
     describe(".returnsThis", function () {
         it("stub returns this", function () {
             var instance = {};
