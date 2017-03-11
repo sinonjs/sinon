@@ -2288,7 +2288,7 @@ describe("stub", function () {
                 prop: "foo"
             };
 
-            createStub(myObj, "prop").get(function () {
+            createStub(myObj, "prop").get(function getterFn() {
                 return "bar";
             });
 
@@ -2302,7 +2302,7 @@ describe("stub", function () {
                 }
             };
 
-            createStub(myObj, "prop").get(function () {
+            createStub(myObj, "prop").get(function getterFn() {
                 return "bar";
             });
 
@@ -2316,7 +2316,7 @@ describe("stub", function () {
                 }
             };
 
-            createStub(myObj, "prop").get(function () {
+            createStub(myObj, "prop").get(function getterFn() {
                 return "bar";
             });
 
@@ -2326,7 +2326,7 @@ describe("stub", function () {
         it("can set getters for non-existing properties", function () {
             var myObj = {};
 
-            createStub(myObj, "prop").get(function () {
+            createStub(myObj, "prop").get(function getterFn() {
                 return "bar";
             });
 
@@ -2334,7 +2334,7 @@ describe("stub", function () {
         });
 
         it("can restore stubbed setters for functions", function () {
-            var propFn = function () {
+            var propFn = function propFn() {
                 return "bar";
             };
 
@@ -2344,7 +2344,7 @@ describe("stub", function () {
 
             var stub = createStub(myObj, "prop");
 
-            stub.get(function () {
+            stub.get(function getterFn() {
                 return "baz";
             });
 
@@ -2362,7 +2362,7 @@ describe("stub", function () {
 
             var stub = createStub(myObj, "prop");
 
-            stub.get(function () {
+            stub.get(function getterFn() {
                 return "baz";
             });
 
@@ -2378,7 +2378,7 @@ describe("stub", function () {
                 prop: "foo"
             };
 
-            createStub(myObj, "prop").set(function () {
+            createStub(myObj, "prop").set(function setterFn() {
                 myObj.example = "bar";
             });
 
@@ -2394,7 +2394,7 @@ describe("stub", function () {
                 }
             };
 
-            createStub(myObj, "prop").set(function () {
+            createStub(myObj, "prop").set(function setterFn() {
                 myObj.example = "bar";
             });
 
@@ -2410,7 +2410,7 @@ describe("stub", function () {
                 }
             };
 
-            createStub(myObj, "prop").set(function () {
+            createStub(myObj, "prop").set(function setterFn() {
                 myObj.example = "bar";
             });
 
@@ -2422,7 +2422,7 @@ describe("stub", function () {
         it("can set setters for non-existing properties", function () {
             var myObj = {};
 
-            createStub(myObj, "prop").set(function () {
+            createStub(myObj, "prop").set(function setterFn() {
                 myObj.example = "bar";
             });
 
@@ -2432,7 +2432,7 @@ describe("stub", function () {
         });
 
         it("can restore stubbed setters for functions", function () {
-            var propFn = function () {
+            var propFn = function propFn() {
                 return "bar";
             };
 
@@ -2442,7 +2442,7 @@ describe("stub", function () {
 
             var stub = createStub(myObj, "prop");
 
-            stub.set(function () {
+            stub.set(function setterFn() {
                 myObj.otherProp = "baz";
             });
 
@@ -2461,7 +2461,7 @@ describe("stub", function () {
 
             var stub = createStub(myObj, "prop");
 
-            stub.set(function () {
+            stub.set(function setterFn() {
                 myObj.otherProp = "baz";
             });
 
