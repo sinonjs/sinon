@@ -2332,6 +2332,44 @@ describe("stub", function () {
 
             assert.equals(myObj.prop, "bar");
         });
+
+        it("can restore stubbed setters for functions", function () {
+            var propFn = function () {
+                return "bar";
+            };
+
+            var myObj = {
+                prop: propFn
+            };
+
+            var stub = createStub(myObj, "prop");
+
+            stub.get(function () {
+                return "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(myObj.prop, propFn);
+        });
+
+        it("can restore stubbed getters for properties", function () {
+            var myObj = {
+                get prop() {
+                    return "bar";
+                }
+            };
+
+            var stub = createStub(myObj, "prop");
+
+            stub.get(function () {
+                return "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(myObj.prop, "bar");
+        });
     });
 
     describe(".set", function () {
@@ -2391,6 +2429,46 @@ describe("stub", function () {
             myObj.prop = "foo";
 
             assert.equals(myObj.example, "bar");
+        });
+
+        it("can restore stubbed setters for functions", function () {
+            var propFn = function () {
+                return "bar";
+            };
+
+            var myObj = {
+                prop: propFn
+            };
+
+            var stub = createStub(myObj, "prop");
+
+            stub.set(function () {
+                myObj.otherProp = "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(myObj.prop, propFn);
+        });
+
+        it("can restore stubbed setters for properties", function () {
+            var myObj = { // eslint-disable-line accessor-pairs
+                set prop(val) {
+                    this.otherProp = "bar";
+                    return "bar";
+                }
+            };
+
+            var stub = createStub(myObj, "prop");
+
+            stub.set(function () {
+                myObj.otherProp = "baz";
+            });
+
+            stub.restore();
+
+            myObj.prop = "foo";
+            assert.equals(myObj.otherProp, "bar");
         });
     });
 });
