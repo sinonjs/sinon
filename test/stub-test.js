@@ -2295,6 +2295,20 @@ describe("stub", function () {
             assert.equals(myObj.prop, "bar");
         });
 
+        it("allows users to stub getter functions for functions", function () {
+            var myObj = {
+                prop: function propGetter() {
+                    return "foo";
+                }
+            };
+
+            createStub(myObj, "prop").get(function () {
+                return "bar";
+            });
+
+            assert.equals(myObj.prop, "bar");
+        });
+
         it("replaces old getters", function () {
             var myObj = {
                 get prop() {
@@ -2324,6 +2338,22 @@ describe("stub", function () {
         it("allows users to stub setter functions for properties", function () {
             var myObj = {
                 prop: "foo"
+            };
+
+            createStub(myObj, "prop").set(function () {
+                myObj.example = "bar";
+            });
+
+            myObj.prop = "baz";
+
+            assert.equals(myObj.example, "bar");
+        });
+
+        it("allows users to stub setter functions for functions", function () {
+            var myObj = {
+                prop: function propSetter() {
+                    return "foo";
+                }
             };
 
             createStub(myObj, "prop").set(function () {
