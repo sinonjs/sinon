@@ -448,3 +448,38 @@ var stub = sinon.stub().returnsNum(42);
 
 assert.equals(stub(), 42);
 ```
+
+#### `stub.get(getterFn)`
+
+Replaces a new getter for this stub.
+
+```javascript
+var myObj = {
+    prop: 'foo'
+};
+
+createStub(myObj, 'prop').get(function getterFn() {
+    return 'bar';
+});
+
+myObj.example; // 'bar'
+```
+
+#### `stub.set(setterFn)`
+
+Defines a new setter for this stub.
+
+```javascript
+var myObj = {
+    example: 'oldValue',
+    prop: 'foo'
+};
+
+createStub(myObj, 'prop').set(function setterFn(val) {
+    myObj.example = val;
+});
+
+myObj.prop = 'baz';
+
+myObj.example; // 'baz'
+```
