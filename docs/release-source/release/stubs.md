@@ -211,6 +211,22 @@ stub.called // false
 
 *Since `sinon@2.0.0`*
 
+#### `stub.callsFake(fakeFunction);`
+Makes the stub call the provided `fakeFunction` when invoked.
+
+```javascript
+var myObj = {};
+myObj.prop = function propFn() {
+    return "foo";
+};
+
+sinon.stub(myObj, prop).callsFake(function fakeFn() {
+    return 'bar';
+});
+
+myObj.prop(); // 'bar'
+```
+
 #### `stub.returns(obj);`
 Makes the stub return the provided value.
 
