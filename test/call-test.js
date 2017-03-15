@@ -1282,6 +1282,16 @@ describe("sinonSpy.call", function () {
 
             assert.equals(spy.printf("%λ"), "%λ");
         });
+
+        it("*", function () {
+            var spy = sinonSpy();
+
+            assert.equals(
+                spy.printf("%*", 1.4567, "a", true, {}, [], undefined, null),
+                "1.4567, a, true, {  }, [], undefined, null"
+            );
+            assert.equals(spy.printf("%*", "a", "b", "c"), "a, b, c");
+        });
     });
 
     it("captures a stack trace", function () {
