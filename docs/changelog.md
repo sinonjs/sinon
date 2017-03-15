@@ -4,6 +4,15 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
+2.0.0 / 2017-03-15
+==================
+
+  * Add restore method for stubbed property descriptors
+  * Allow stubbing getters and setters for function properties
+  * Add getters/setters stub behaviors
+  * Refactor xhr and xhr.upload to use the same EventTargetHandler
+  * Remove SSL part of base url
+
 v2.0.0-pre.6 / 2017-02-27
 =========================
 
