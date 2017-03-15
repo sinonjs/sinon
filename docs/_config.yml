@@ -6,7 +6,6 @@ url: 'http://sinonjs.org'
 github_username: sinonjs
 sinon:
   current_release: v2.0.0
-  next_release: v2.0.0-pre.6
 markdown: kramdown
 kramdown:
   input: GFM
