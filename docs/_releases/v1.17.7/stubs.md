@@ -172,7 +172,7 @@ Resets the history of the stub,  like calling `spy.reset();`
 
 **Note:** Updated in `sinon@2.0.0`
 
-#### `stub.resetBehaviour();`
+#### `stub.resetBehavior();`
 
 Resets the stub's behaviour to the default behaviour
 

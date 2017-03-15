@@ -170,11 +170,11 @@ Alias for `stub.onCall(2);`
 
 Resets both behaviour and history of the stub.
 
-This is equivalent to calling both `stub.resetBehaviour()` and `stub.resetHistory()`
+This is equivalent to calling both `stub.resetBehavior()` and `stub.resetHistory()`
 
 *Updated in `sinon@2.0.0`*
 
-#### `stub.resetBehaviour();`
+#### `stub.resetBehavior();`
 
 Resets the stub's behaviour to the default behaviour
 
