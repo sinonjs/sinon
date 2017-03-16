@@ -4,7 +4,6 @@ title: Sinon.JS
 ---
 
 {% assign current_release = site.sinon.current_release %}
-{% assign next_release = site.sinon.next_release %}
 
 # Sinon.JS
 
@@ -23,12 +22,6 @@ To install the current release (`{{current_release}}`) of Sinon:
 
 ```shell
 npm install sinon
-```
-
-If you're interested in evaluating the next release of Sinon (`{{next_release}}`)
-
-```shell
-npm install sinon@next
 ```
 
 If you (for some reason) really want the old version of Sinon, head over to the [legacy docs](http://legacy.sinonjs.org/) and do:
