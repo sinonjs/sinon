@@ -1650,6 +1650,114 @@ describe("spy", function () {
         });
     });
 
+    describe(".calledImmediatelyAfter", function () {
+        beforeEach(function () {
+            this.spy1 = createSpy();
+            this.spy2 = createSpy();
+            this.spy3 = createSpy();
+        });
+
+        it("is function", function () {
+            assert.isFunction(this.spy1.calledImmediatelyAfter);
+        });
+
+        it("returns true if first call to A was immediately after first to B", function () {
+            this.spy2();
+            this.spy1();
+
+            assert(this.spy1.calledImmediatelyAfter(this.spy2));
+        });
+
+        it("compares calls directly", function () {
+            this.spy2();
+            this.spy1();
+
+            assert(this.spy1.getCall(0).calledImmediatelyAfter(this.spy2.getCall(0)));
+        });
+
+        it("returns false if not called", function () {
+            this.spy2();
+
+            assert.isFalse(this.spy1.calledImmediatelyAfter(this.spy2));
+        });
+
+        it("returns false if other not called", function () {
+            this.spy1();
+
+            assert.isFalse(this.spy1.calledImmediatelyAfter(this.spy2));
+        });
+
+        it("returns false if other called last", function () {
+            this.spy2();
+            this.spy1();
+            this.spy2();
+
+            assert.isFalse(this.spy1.calledImmediatelyAfter(this.spy2));
+        });
+
+        it("returns false if another spy called between", function () {
+            this.spy1();
+            this.spy3();
+            this.spy2();
+
+            assert.isFalse(this.spy2.calledImmediatelyAfter(this.spy1));
+        });
+    });
+
+    describe(".calledImmediatelyBefore", function () {
+        beforeEach(function () {
+            this.spy1 = createSpy();
+            this.spy2 = createSpy();
+            this.spy3 = createSpy();
+        });
+
+        it("is function", function () {
+            assert.isFunction(this.spy1.calledImmediatelyBefore);
+        });
+
+        it("returns true if first call to A was immediately after first to B", function () {
+            this.spy2();
+            this.spy1();
+
+            assert(this.spy2.calledImmediatelyBefore(this.spy1));
+        });
+
+        it("compares calls directly", function () {
+            this.spy2();
+            this.spy1();
+
+            assert(this.spy2.getCall(0).calledImmediatelyBefore(this.spy1.getCall(0)));
+        });
+
+        it("returns false if not called", function () {
+            this.spy2();
+
+            assert.isFalse(this.spy1.calledImmediatelyBefore(this.spy2));
+        });
+
+        it("returns false if other not called", function () {
+            this.spy1();
+
+            assert.isFalse(this.spy1.calledImmediatelyBefore(this.spy2));
+        });
+
+        it("returns false if other called last", function () {
+            this.spy2();
+            this.spy1();
+            this.spy2();
+
+            assert.isFalse(this.spy2.calledImmediatelyBefore(this.spy1));
+        });
+
+        it("returns false if another spy called between", function () {
+            this.spy1();
+            this.spy3();
+            this.spy2();
+
+            assert.isFalse(this.spy1.calledImmediatelyBefore(this.spy2));
+        });
+    });
+
     describe(".firstCall", function () {
         it("is undefined by default", function () {
             var spy = createSpy();
