@@ -4,7 +4,7 @@ title: Stubs
 breadcrumb: stubs
 ---
 
-## What are stubs?
+### What are stubs?
 
 Test stubs are functions (spies) with pre-programmed behavior.
 
@@ -14,7 +14,7 @@ As spies, stubs can be either anonymous, or wrap existing functions. When
 wrapping an existing function with a stub, the original function is not called.
 
 
-## When to use stubs?
+### When to use stubs?
 
 Use a stub when you want to:
 
@@ -61,7 +61,7 @@ calls. As of 1.8, this functionality has been removed in favor of the
 
 [pubsubjs]: https://github.com/mroderick/pubsubjs
 
-## Stub API
+### Stub API
 
 ### Properties
 

@@ -1,11 +1,17 @@
-<header class="site-header">
-    <div class="wrapper">
-        <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
-        <nav class="site-nav">
-            <a class="page-link" href="{{ site.baseurl }}/">Home</a>
-            <a class="page-link" href="{{ site.baseurl }}/releases/{{site.sinon.current_release}}">API Documentation</a>
-            <a class="page-link" href="{{ site.baseurl }}/releases">Releases</a>
-            <a class="page-link" href="{{ site.baseurl }}/how-to">How To</a>
-        </nav>
-    </div>
-</header>
+<div class="navigation">
+  <div class="container">
+    <nav class="navbar header">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ site.baseurl }}/">
+          {{ site.title }}
+        </a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ site.baseurl }}/releases/{{site.sinon.current_release}}">Documentation</a></li>
+        <li><a href="{{ site.baseurl }}/releases/">Releases</a></li>
+        <li><a href="{{ site.baseurl }}/how-to/">How To</a></li>
+        <li><a href="https://github.com/sinonjs/" target="blank" class="github-nav"><img src="{{ "/assets/images/Github.png" | prepend: site.baseurl }}" alt="Github"></a></li>
+      </ul>
+    </nav>
+  </div>
+</div>

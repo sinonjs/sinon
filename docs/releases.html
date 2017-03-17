@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Sinon.JS - Releases
 permalink: /releases/index.html
 redirect_from:
     - /docs
@@ -8,18 +9,26 @@ redirect_from:
     - /download/
 ---
 
-<h1>Releases</h1>
+<div class="head-page">
+  <h1>Releases</h1>
+</div>
 
-<ul>
-{% assign sorted_releases = site.releases | sort | reverse  %}
-{% for release in sorted_releases %}
-    {% assign url_parts = release.url | split: "/" %}
-    {% if url_parts.size == 3 %}
-        <li>
-            {{ release.release_id }} -
-            <a href="{{site.baseurl}}{{ release.url }}">docs</a> -
-            <a href="{{site.baseurl}}/releases/sinon-{{ release.release_id | remove_first: 'v' }}.js">download</a>
-        </li>
-    {% endif %}
-{% endfor %}
-</ul>
+<div class="in-content releases">
+  <ul>
+    {% assign sorted_releases = site.releases | sort | reverse  %}
+    {% for release in sorted_releases %}
+      {% assign url_parts = release.url | split: "/" %}
+        {% if url_parts.size == 3 %}
+          <li>
+            <p>
+              <span class="ver">{{ release.release_id }}</span>
+              <span class="pull-right">
+                <a class="btn btn-primary" href="{{site.baseurl}}/releases/sinon-{{ release.release_id | remove_first: 'v' }}.js">Download</a>
+                <a class="btn btn-default" href="{{site.baseurl}}{{ release.url }}">Docs</a>
+              </span>
+            </p>
+          </li>
+        {% endif %}
+  {% endfor %}
+  </ul>
+</div>

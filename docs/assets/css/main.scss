@@ -1,0 +1,245 @@
+---
+---
+
+$baseurl: "{{ site.baseurl }}";
+
+@import "variable";
+@import "bootstrap";
+@import "mixins";
+@import "base";
+@import "prism";
+
+body {
+  background: #FFFAF4;
+}
+
+// Navigation
+.navigation {
+  background: #fff;
+}
+
+.navbar {
+  background: #fff;
+  margin-top: 10px;
+  a.navbar-brand {
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: 800;
+    font-size: 17px;
+    color: #4B352A;
+    letter-spacing: 2.7px;
+    text-transform: uppercase;
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: color 0 ease-in-out;
+    transition: none;
+    &:hover {
+      -moz-transition: none;
+      -webkit-transition: none;
+      -o-transition: color 0 ease-in-out;
+      transition: none;
+    }
+  }
+
+  .navbar-nav {
+    padding: 15px 0;
+		> li {
+      margin-right: 40px;
+			> a {
+        opacity: 0.69;
+        font-weight: 800;
+        color: #4B352A;
+        background: none;
+        padding: 0;
+			}
+      > a:hover {
+        opacity: 1;
+      }
+		}
+    .github-nav {
+      img {
+        width: 23.14px;
+      }
+    }
+	}
+}
+
+// Homepage
+.top {
+  width: 100%;
+  background-image: linear-gradient(-180deg, #FFFFFF 0%, #FFF9F4 100%);
+}
+.grow {
+  transition: all .2s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+.home-header {
+  padding: 50px 0px 20px 0px;
+  text-align: center;
+  .btn-top {
+    margin-top: 35px;
+  }
+  .btn-primary {
+    background: $primary;
+    color: #FFFFFF;
+    letter-spacing: 1.08px;
+    text-transform: uppercase;
+    padding: 15px 18px;
+    margin-right: 20px;
+    &:hover {
+      background: darken($primary, 5%);
+    }
+    &:focus {
+      background: darken($primary, 15%);
+    }
+  }
+
+  .btn-default {
+    background: none;
+    opacity: .7;
+    font-weight: 800;
+    font-size: 14px;
+    color: #4B352A;
+
+    img {
+      width: 15.43px;
+      margin-top: -2px;
+      margin-right: 5px;
+    }
+    &:hover {
+      opacity: 1;
+    }
+    &:focus {
+      background: none;
+      box-shadow: none;
+    }
+  }
+
+  img.logo {
+    width: 127px;
+    margin: 0 auto;
+  }
+
+  // Backed by
+  .backed {
+    .wrap {
+      height: 100px;
+      position: relative;
+      margin-top: 50px;
+    }
+    p.centre-line {
+      text-align: center;
+      border-bottom: 1px solid #DCCCBE;
+      line-height: 0.1em;
+      width: 40%;
+      display: inline-block;
+      span {
+        background:#FFF9F4;
+        font-size: 14px;
+        padding: 5px 20px;
+        color: #4B352A;
+      }
+    }
+
+    .people {
+      display: block;
+      img {
+        margin-top: 20px;
+        width: 42px;
+        display: inline-block;
+      }
+      span {
+        position: relative;
+        top: 10px;
+        margin-left: 10px;
+        font-size: 13px;
+        color: #656565;
+        a {
+          color: #000;
+          &:hover {
+            color: #469A4C;
+          }
+        }
+      }
+    }
+
+    .backer {
+      span {
+        font-size: 13px;
+        color: #281D18;
+        margin-right: 25px;
+      }
+      .btn-primary {
+        border: 1px solid #EADCD5;
+        font-size: 14px;
+        color: #281D18;
+        background: none;
+        font-weight: 800;
+        &:hover {
+          color: #469A4C;
+          border: 1px solid #469A4C;
+        }
+      }
+    }
+  }
+}
+
+// Content
+.content {
+  padding: 30px 0px 60px 0px;
+}
+
+// Pages
+.head-page, h1.post-title{
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.in-content {
+  &.releases {
+    ul {
+      list-style-type: none;
+      padding: 0;
+      li {
+        background: #fff;
+        padding: 20px 30px 25px 30px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      p {
+        font-size: 20px;
+      }
+      .ver {
+        top: 5px;
+        position: relative;
+      }
+      .btn-primary {
+        background: #469A4C;
+        color: #FFFFFF;
+        letter-spacing: 1.08px;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        &:hover {
+          background: darken(#469A4C, 5%);
+        }
+        &:focus {
+          background: darken(#469A4C, 15%);
+        }
+      }
+      .btn-default {
+        border: 1px solid #EADCD5;
+        font-size: 14px;
+        color: #281D18;
+        padding: 10px 20px;
+        background: none;
+        font-weight: 800;
+        &:hover {
+          color: #469A4C;
+          border: 1px solid #469A4C;
+        }
+      }
+    }
+  }
+}

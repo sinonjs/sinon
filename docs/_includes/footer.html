@@ -1,24 +1,9 @@
-<footer class="site-footer">
-    <div class="wrapper">
-        <div class="footer-col-wrapper">
-            <div class="footer-col footer-col-1">
-                <ul class="contact-list">
-                    <li>{{ site.title }}</li>
-                    <li><a href="http://groups.google.com/group/sinonjs">http://groups.google.com/group/sinonjs</a></li>
-                </ul>
-            </div>
-            <div class="footer-col footer-col-2">
-                <ul class="social-media-list">
-                    {% if site.github_username %}
-                        <li>{% include icon-github.html username=site.github_username %}</li>
-                    {% endif %}
-                </ul>
-            </div>
-            <div class="footer-col footer-col-3">
-                Sinon uses <a href="http://semver.org/">Semantic versioning</a><br>
-                Copyright 2010 - 2017, the Sinon.JS committers. Released under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD license</a>.
-            </div>
-        </div>
-    </div>
-    <script src="{{ "/js/prism.js" | prepend: site.baseurl }}"></script>
-</footer>
+<script src="{{ "/assets/js/prism.js" | prepend: site.baseurl }}"></script>
+
+<div class="footer">
+  <div class="container text-center">
+    <a href="http://sinonjs.org/" target="blank"><img class="grow" src="{{ "/assets/images/small-logo.png" | prepend: site.baseurl }}" alt="Sinon.JS"></a>
+    <p>Copyright 2010 - 2017, the Sinon.JS committers.</p>
+    <p>Released under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD license</a>.</p>
+  </div>
+</div>

@@ -5,7 +5,6 @@ permalink: /releases/changelog
 ---
 # Changelog
 2.0.0 / 2017-03-15
-==================
 
   * Add restore method for stubbed property descriptors
   * Allow stubbing getters and setters for function properties
