@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include head.html %}
+<body>
+  {% include header.html %}
+  <div class="top">
+    <div class="container home-header">
+      <img class="logo grow img-responsive" src="{{ "/assets/images/logo.png" | prepend: site.baseurl }}" alt="">
+      <h1>
+          Standalone test spies, stubs and mocks for JavaScript. <br>
+          Works with any unit testing framework.
+      </h1>
+
+      <p class="btn-top text-center">
+        <a class="btn btn-primary" href="#get-started">Get Started</a>
+        <a class="btn btn-default" target="blank" href="https://github.com/sinonjs/sinon"><img src="{{ "/assets/images/github.png" | prepend: site.baseurl }}" alt="">Star Sinon.JS on Github</a>
+      </p>
+
+      <div class="backed">
+        <div class="wrap">
+          <p class="centre-line"><span>Proudly Backed By</span></p>
+          <div class="people">
+            <a href="https://opencollective.com/sinon/"><img src="https://opencollective.com/sinon/backer/0/avatar.svg"></a>
+            <a href="https://opencollective.com/sinon/"><img src="https://opencollective.com/sinon/backer/1/avatar.svg"></a>
+          </div>
+        </div>
+        <div class="backer">
+            <span>Become a backer and support Sinon.JS with a monthly donation.</span>
+            <a class="btn btn-primary" target="blank" href="https://opencollective.com/sinon/">Become a backer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container container-2">
+      {{ content }}
+    </div>
+  </div>
+
+  {% include footer.html %}
+</body>
+</html>
