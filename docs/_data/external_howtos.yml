@@ -1,0 +1,15 @@
+- title: How to test an Ajax request using Sinon's fake XMLHttpRequest
+  url: https://codeutopia.net/blog/2015/03/21/unit-testing-ajax-requests-with-mocha/
+
+- title: How to stub or mock complex objects, such as DOM objects
+  url: https://codeutopia.net/blog/2016/05/23/sinon-js-quick-tip-how-to-stubmock-complex-objects-such-as-dom-objects/
+
+- title: Using Sinon.js with Promises
+  url: https://www.sitepoint.com/promises-in-javascript-unit-tests-the-definitive-guide/
+
+- title: Best practices for spies, stubs and mocks
+  url: https://semaphoreci.com/community/tutorials/best-practices-for-spies-stubs-and-mocks-in-sinon-js
+
+- title: Using Sinon.js to help test Mongoose models
+  url: https://codeutopia.net/blog/2016/06/10/mongoose-models-and-unit-tests-the-definitive-guide/
+

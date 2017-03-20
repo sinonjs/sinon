@@ -15,3 +15,11 @@ permalink: /how-to/
         <li><a href="{{site.baseurl}}{{ article.url }}">{{ article.title }}</a></li>
 {% endfor %}
 </ul>
+
+<h2>Articles elsewhere on the web</h2>
+
+<ul>
+{% for article in site.data.external_howtos %}
+        <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+{% endfor %}
+</ul>
