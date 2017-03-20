@@ -10,6 +10,9 @@ node ./scripts/set-release-id-in-config-yml.js
 echo 'update changelog'
 ./scripts/update-changelog-page.sh
 
+echo 'build new package'
+node ./build.js
+
 echo 'copy new version'
 cp "./pkg/sinon-$PACKAGE_VERSION.js" ./docs/releases
 
