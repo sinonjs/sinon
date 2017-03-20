@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Fake timers
+title: Fake timers - Sinon.JS
 breadcrumb: fake timers
 ---
 

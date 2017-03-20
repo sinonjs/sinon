@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Sandboxes
+title: Sandboxes - Sinon.JS
 breadcrumb: sandbox
 ---
 
@@ -189,4 +189,3 @@ If you need the behavior of `sinon.test` for more than one test method in a test
 `tearDown` can share fakes.
 
 #### `var obj = sinon.testCase({});`
-

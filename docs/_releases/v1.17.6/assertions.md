@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Assertions
+title: Assertions - Sinon.JS
 breadcrumb: assertions
 ---
 

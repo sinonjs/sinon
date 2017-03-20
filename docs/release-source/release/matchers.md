@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Matchers
+title: Matchers - Sinon.JS
 breadcrumb: matchers
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Mocks
+title: Mocks - Sinon.JS
 breadcrumb: mocks
 ---
 

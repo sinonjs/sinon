@@ -96,6 +96,21 @@ a {
   background: #5F5954;
   color: #fff;
   padding: 36px 0px;
+  .join-btn {
+    color: #fff;
+    border-radius: 100px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    border: 1px solid lighten($primary, 20%);
+    &:hover{
+      color: #5F5954;
+      border: 1px solid #fff;
+      background: #fff;
+      @include transition(all, .1s, ease-in-out);
+    }
+  }
   a {
     color: #fff;
   }

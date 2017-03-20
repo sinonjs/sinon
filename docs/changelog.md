@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Changelog
+title: Changelog - Sinon.JS
 permalink: /releases/changelog
 ---
 # Changelog
@@ -12,6 +12,7 @@ permalink: /releases/changelog
   * Fix issue #1332: little bug correction in spy.printf "%*" formatter.
 
 2.0.0 / 2017-03-15
+==================
 
   * Add restore method for stubbed property descriptors
   * Allow stubbing getters and setters for function properties
