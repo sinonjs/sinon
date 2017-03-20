@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Sinon.JS utilities
+title: Utilities - Sinon.JS
 breadcrumb: utilities
 ---
 

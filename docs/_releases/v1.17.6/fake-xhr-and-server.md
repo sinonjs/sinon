@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Fake XHR and server
+title: Fake XHR and server - Sinon.JS
 breadcrumb: fake XHR and server
 ---
 

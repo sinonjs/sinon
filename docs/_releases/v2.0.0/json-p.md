@@ -1,6 +1,6 @@
 ---
 layout: page
-title: JSON-P
+title: JSON-P - Sinon.JS
 breadcrumb: JSON-P
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Assertions
+title: Assertions - Sinon.JS
 ---
 
 Sinon.JS ships with a set of assertions that mirror most behavior verification methods and properties on spies and stubs. The advantage of using the assertions is that failed expectations on stubs and spies can be expressed directly as assertion failures with detailed and helpful error messages.

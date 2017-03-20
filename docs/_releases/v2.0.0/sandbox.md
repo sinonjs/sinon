@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Sandboxes
+title: Sandboxes - Sinon.JS
 breadcrumb: sandbox
 ---
 

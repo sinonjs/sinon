@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Migrating to v2.0
+title: Migrating to v2.0 - Sinon.JS
 breadcrumb: matchers
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Changelog
+title: Changelog - Sinon.JS
 permalink: /releases/changelog
 ---
 # Changelog

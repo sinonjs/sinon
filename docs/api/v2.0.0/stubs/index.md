@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Stubs
+title: Stubs - Sinon.JS
 ---
 
 ## What are stubs?

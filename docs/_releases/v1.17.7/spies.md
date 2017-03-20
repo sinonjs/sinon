@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Spies
+title: Spies - Sinon.JS
 breadcrumb: spies
 ---
 
