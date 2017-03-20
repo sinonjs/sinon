@@ -1,9 +1,9 @@
 title: Sinon.JS
-description: Standalone test spies, stubs and mocks for JavaScript. Works with any unit testing framework.
+description: 'Standalone test spies, stubs and mocks for JavaScript. Works with any unit testing framework.'
 url: 'http://sinonjs.org'
 github_username: sinonjs
 sinon:
-  current_release: v2.0.0
+  current_release: v2.1.0
 markdown: kramdown
 kramdown:
   input: GFM

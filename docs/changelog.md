@@ -4,7 +4,15 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
+2.1.0 / 2017-03-20
+==================
+
+  * Redesign the template (#1339)
+  * [feature] adds spy.calledImmediatelyBefore and spy.calledImmediatelyAfter
+  * Fix issue #1332: little bug correction in spy.printf "%*" formatter.
+
 2.0.0 / 2017-03-15
+==================
 
   * Add restore method for stubbed property descriptors
   * Allow stubbing getters and setters for function properties
