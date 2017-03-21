@@ -35,7 +35,7 @@ a {
   }
 }
 
-// Base Styling
+// Base styling for the content
 .content {
   h2 {
     text-align: center;
@@ -92,6 +92,7 @@ a {
   }
 }
 
+// Footer
 .footer {
   background: #5F5954;
   color: #fff;
@@ -116,6 +117,7 @@ a {
   }
   img {
     margin-bottom: 20px;
+    width: 50px;
   }
   p {
     opacity: 0.7;
@@ -159,19 +161,62 @@ a {
       }
   }
   .home-header {
-    padding: 20px 0px 20px 0px!important;
+    padding: 20px 10px!important;
     h1 {
       font-size: 28px;
+
+    }
+  }
+}
+
+@media only screen and (max-width : 480px) {
+  .navbar-nav {
+      padding: 0px!important;
+      li {
+        float: none!important;
+        display: block;
+        margin-bottom: 10px;
+      }
+  }
+
+  .home-header {
+    .btn-top {
+      a {
+        margin-bottom: 20px;
+      }
+    }
+    .backed {
+      .wrap {
+        margin: 0px!important;
+      }
+      p.centre-line {
+        display: block;
+        width: 100%!important;
+      }
+    }
+    .backer {
+      span {
+        margin-right: 0px!important;
+        display: block;
+        line-height: 24px;
+        margin-bottom: 20px;
+      }
+      .btn-primary {
+        text-align: center;
+        margin-right: 0px;
+      }
     }
   }
 }
 
 @media (min-width: 1100px) {
+    // Main container
     .container{
         max-width: 1000px;
     }
 }
 @media (min-width: 737px) {
+    // The small container
     .container.container-2{
         max-width: 737px;
     }
