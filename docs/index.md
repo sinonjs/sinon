@@ -4,11 +4,11 @@
 ---
 {% assign current_release = site.sinon.current_release %}
 
-## Get Started  
+## Get Started
 
 ### Install using `npm`
 
-To install the current release (`v2.0.0`) of Sinon:
+To install the current release (`{{current_release}}`) of Sinon:
 
 ```shell
 npm install sinon
