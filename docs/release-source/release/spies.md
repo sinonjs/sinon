@@ -229,6 +229,18 @@ Returns `true` if the spy was called before `anotherSpy`
 Returns `true` if the spy was called after `anotherSpy`
 
 
+#### `spy.calledImmediatelyBefore(anotherSpy);`
+
+Returns `true` if `spy` was called before `anotherSpy`, and no spy calls
+occurred between `spy` and `anotherSpy`.
+
+
+#### `spy.calledImmediatelyAfter(anotherSpy);`
+
+Returns `true` if `spy` was called after `anotherSpy`, and no spy calls
+occurred between `anotherSpy` and `spy`.
+
+
 #### `spy.calledOn(obj);`
 
 Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](#matchers)).
