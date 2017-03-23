@@ -835,6 +835,23 @@ describe("sinonSpy.call", function () {
 
             assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() => 42");
         });
+
+        // https://github.com/sinonjs/sinon/issues/1066
+        it("does not throw when the call stack is empty", function (done) {
+            var stub1 = sinonStub().resolves(1);
+            var stub2 = sinonStub().returns(1);
+
+            function run() {
+                return stub1().then(stub2);
+            }
+
+            run()
+            .then(function () {
+                assert.equals(stub2.getCall(0).toString().replace(/ at.*/g, ""), "stub(1) => 1");
+                done();
+            })
+            .catch( done );
+        });
     });
 
     describe("constructor", function () {
