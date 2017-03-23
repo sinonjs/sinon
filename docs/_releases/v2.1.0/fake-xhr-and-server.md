@@ -305,7 +305,7 @@ If called with arguments, `respondWith` will be called with those arguments befo
 
 
 #### `server.autoRespond = true;`
-`
+
 If set, will automatically respond to every request after a timeout.
 
 The default timeout is 10ms but you can control it through the `autoRespondAfter` property.
@@ -325,7 +325,7 @@ This is ideal for faking the server from within a test without having to call `s
 
 As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
 
-#### array `server.requests`
+#### `array server.requests`
 
 You can inspect the `server.requests` to verify request ordering, find unmatched requests or check that no requests has been done.
 `server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.

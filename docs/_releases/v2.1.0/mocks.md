@@ -154,7 +154,7 @@ Expect the method to be called with the provided arguments and no others.
 
 #### `expectation.on(obj);`
 
-Expect the method to be called with `obj` as `this`."}
+Expect the method to be called with `obj` as `this`.
 
 
 #### `expectation.verify();`
