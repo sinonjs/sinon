@@ -43,7 +43,7 @@ The fake server and XHR can be used completely stand-alone by downloading `sinon
 
 ### `sinon.useFakeXMLHttpRequest`
 
-#### var xhr = sinon.useFakeXMLHttpRequest();"
+#### var xhr = sinon.useFakeXMLHttpRequest();
 
 Causes Sinon to replace the native `XMLHttpRequest` object in browsers that support it with a custom implementation which does not send actual requests.
 
@@ -154,13 +154,13 @@ The filter will be called when `xhr.open` is called, with the exact same argumen
 
 ### Simulating server responses
 
-#### `request.setStatus(status);``
+#### `request.setStatus(status);`
 
 Sets response status (`status` and `statusText` properties).
 
 Status should be a number, the status text is looked up from `sinon.FakeXMLHttpRequest.statusCodes`.
 
-#### `request.setResponseHeaders(object);``
+#### `request.setResponseHeaders(object);`
 
 Sets response headers (e.g. `{ "Content-Type": "text/html", /* ... */ }`, updates the `readyState` property and fires `onreadystatechange`.
 
@@ -172,7 +172,7 @@ Sets the respond body, updates the `readyState` property and fires `onreadystate
 Additionally, populates `responseXML` with a parsed document if [response headers indicate as much](http://www.w3.org/TR/XMLHttpRequest/).
 
 
-#### `request.respond(status, headers, body);``
+#### `request.respond(status, headers, body);`
 
 Calls the above three methods.
 
@@ -219,13 +219,13 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 
         sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
 
-        assert(server.requests.length > 0)
+        assert(server.requests.length > 0);
     }
 }
 ```
 
 
-#### `var server = sinon.fakeServer.create([config]);``
+#### `var server = sinon.fakeServer.create([config]);`
 
 Creates a new server.
 
@@ -325,7 +325,7 @@ This is ideal for faking the server from within a test without having to call `s
 
 As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
 
-#### `array server.requests`
+#### `Array server.requests`
 
 You can inspect the `server.requests` to verify request ordering, find unmatched requests or check that no requests has been done.
 `server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.
@@ -337,7 +337,7 @@ If set to `true`, server will find `_method` parameter in POST body and recogniz
 Supports a pattern common to Ruby on Rails applications. For custom HTTP method faking, override `server.getHTTPMethod(request)`.
 
 
-#### `server.getHTTPMethod(request)`
+#### `server.getHTTPMethod(request);`
 
 Used internally to determine the HTTP method used with the provided request.
 
@@ -357,7 +357,7 @@ These options are properties on the server object and can be set directly
 
 
 ```javascript
-server.autoRespond = true
+server.autoRespond = true;
 ```
 
 You can also pass options with an object literal to `fakeServer.create` and `.configure`.
@@ -373,7 +373,7 @@ Note that this feature is intended to help during mockup development, and is not
 For synchronous immediate responses, use `respondImmediately` instead.
 
 
-#### `Number autoRespondAfter (ms)`
+#### `Number autoRespondAfter(ms)`
 
 Causes the server to automatically respond to incoming requests after a timeout.
 
@@ -386,7 +386,7 @@ This is ideal for faking the server from within a test without having to call `s
 As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
 
 
-#### `boolean fakeHTTPMethods`
+#### `Boolean fakeHTTPMethods`
 
 If set to `true`, server will find `_method` parameter in `POST` body and recognize that as the actual method.
 
