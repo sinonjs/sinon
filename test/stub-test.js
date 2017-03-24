@@ -317,6 +317,59 @@ describe("stub", function () {
         });
     });
 
+    describe(".usingPromise", function () {
+        it("should exist and be a function", function () {
+            var stub = createStub.create();
+
+            assert(stub.usingPromise);
+            assert.isTrue(typeof stub.usingPromise === "function");
+        });
+
+        it("should return the current stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.usingPromise(Promise), stub);
+        });
+
+        it("should set the promise used by resolve", function () {
+            var stub = createStub.create();
+            var promise = {
+                resolve: createStub.create().callsFake(function (value) {
+                    return Promise.resolve(value);
+                })
+            };
+            var object = {};
+
+            stub.usingPromise(promise).resolves(object);
+
+            return stub().then(function (actual) {
+                assert.same(actual, object, "Same object resolved");
+                assert.isTrue(promise.resolve.calledOnce, "Custom promise resolve called once");
+                assert.isTrue(promise.resolve.calledWith(object), "Custom promise resolve called once with expected");
+            });
+        });
+
+        it("should set the promise used by reject", function () {
+            var stub = createStub.create();
+            var promise = {
+                reject: createStub.create().callsFake(function (err) {
+                    return Promise.reject(err);
+                })
+            };
+            var reason = new Error();
+
+            stub.usingPromise(promise).rejects(reason);
+
+            return stub().then(function () {
+                referee.fail("this should not resolve");
+            }).catch(function (actual) {
+                assert.same(actual, reason, "Same object resolved");
+                assert.isTrue(promise.reject.calledOnce, "Custom promise reject called once");
+                assert.isTrue(promise.reject.calledWith(reason), "Custom promise reject called once with expected");
+            });
+        });
+    });
+
     describe(".throws", function () {
         it("throws specified exception", function () {
             var stub = createStub.create();
