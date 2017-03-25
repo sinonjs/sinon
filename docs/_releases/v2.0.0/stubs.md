@@ -474,11 +474,11 @@ var myObj = {
     prop: 'foo'
 };
 
-createStub(myObj, 'prop').get(function getterFn() {
+sinon.stub(myObj, 'prop').get(function getterFn() {
     return 'bar';
 });
 
-myObj.example; // 'bar'
+myObj.prop; // 'bar'
 ```
 
 #### `stub.set(setterFn)`
@@ -491,7 +491,7 @@ var myObj = {
     prop: 'foo'
 };
 
-createStub(myObj, 'prop').set(function setterFn(val) {
+sinon.stub(myObj, 'prop').set(function setterFn(val) {
     myObj.example = val;
 });
 
