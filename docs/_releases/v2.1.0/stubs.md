@@ -76,7 +76,7 @@ Replaces `object.method` with a stub function. An exception is thrown if the pro
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
-#### `var stub = sinon.stub(object, "method", func);`
+#### `var stub = sinon.stub(object, "method").callsFake(func);`
 
 Replaces `object.method` with a `func`, wrapped in a `spy`.
 
