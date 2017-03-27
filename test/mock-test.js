@@ -475,6 +475,17 @@ describe("sinonMock", function () {
         });
 
         describe(".withArgs", function () {
+            var expectedException = function (name) {
+                return {
+                    test: function (actual) {
+                        return actual.name === name;
+                    },
+                    toString: function () {
+                        return name;
+                    }
+                };
+            };
+
             it("returns expectation for chaining", function () {
                 assert.same(this.expectation.withArgs(1), this.expectation);
             });
@@ -510,7 +521,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(2, 2, 3);
-                }, "ExpectationError");
+                }, expectedException("ExpectationError"));
             });
 
             it("allows excessive args", function () {
