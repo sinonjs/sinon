@@ -163,8 +163,8 @@ Alias for `stub.onCall(0);`
 Alias for `stub.onCall(1);`
 
 #### `stub.onThirdCall();`
-Alias for `stub.onCall(2);`
 
+Alias for `stub.onCall(2);`
 
 #### `stub.reset();`
 
@@ -189,7 +189,6 @@ stub.resetBehavior();
 
 stub(); // undefined
 ```
-
 
 #### `stub.resetHistory();`
 
@@ -236,7 +235,6 @@ Causes the stub to return the argument at the provided index.
 
 `stub.returnsArg(0);` causes the stub to return the first argument.
 
-
 #### `stub.returnsThis();`
 Causes the stub to return its <code>this</code> value.
 
@@ -251,21 +249,17 @@ responsible for providing a polyfill in environments which do not provide `Promi
 
 *Since `sinon@2.0.0`*
 
-
 #### `stub.throws();`
 
 Causes the stub to throw an exception (`Error`).
-
 
 #### `stub.throws("TypeError");`
 
 Causes the stub to throw an exception of the provided type.
 
-
 #### `stub.throws(obj);`
 
 Causes the stub to throw the provided exception object.
-
 
 #### `stub.rejects();`
 
@@ -276,13 +270,11 @@ responsible for providing a polyfill in environments which do not provide `Promi
 
 *Since `sinon@2.0.0`*
 
-
 #### `stub.rejects("TypeError");`
 
 Causes the stub to return a Promise which rejects with an exception of the provided type.
 
 *Since `sinon@2.0.0`*
-
 
 #### `stub.rejects(value);`
 
@@ -290,11 +282,9 @@ Causes the stub to return a Promise which rejects with the provided exception ob
 
 *Since `sinon@2.0.0`*
 
-
 #### `stub.callsArg(index);`
 
 Causes the stub to call the argument at the provided index as a callback function. `stub.callsArg(0);` causes the stub to call the first argument as a callback.
-
 
 #### `stub.callThrough();`
 
@@ -321,21 +311,18 @@ obj.sum(2, 2); // 'bar'
 obj.sum(1, 2); // 3
 ```
 
-
 #### `stub.callsArgOn(index, context);`
 
 Like `stub.callsArg(index);` but with an additional parameter to pass the `this` context.
-
 
 #### `stub.callsArgWith(index, arg1, arg2, ...);`
 
 Like `callsArg`, but with arguments to pass to the callback.
 
-
 #### `stub.callsArgOnWith(index, context, arg1, arg2, ...);`
 Like above but with an additional parameter to pass the `this` context.
 
-#### `stub.yields([arg1, arg2, ...])`
+#### `stub.yields([arg1, arg2, ...]);`
 
 Similar to `callsArg`.
 
@@ -343,20 +330,19 @@ Causes the stub to call the first callback it receives with the provided argumen
 
 If a method accepts more than one callback, you need to use `callsArg` to have the stub invoke other callbacks than the first one.
 
-
-#### `stub.yieldsOn(context, [arg1, arg2, ...])`
+#### `stub.yieldsOn(context, [arg1, arg2, ...]);`
 
 Like above but with an additional parameter to pass the `this` context.
 
 
-#### `stub.yieldsTo(property, [arg1, arg2, ...])`
+#### `stub.yieldsTo(property, [arg1, arg2, ...]);`
 
 Causes the spy to invoke a callback passed as a property of an object to the spy.
 
 Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback and calls it with the (optional) arguments.
 
 
-#### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
+#### `stub.yieldsToOn(property, context, [arg1, arg2, ...]);`
 
 Like above but with an additional parameter to pass the `this` context.
 
@@ -372,8 +358,7 @@ Like above but with an additional parameter to pass the `this` context.
 }
 ```
 
-
-#### `stub.yield([arg1, arg2, ...])`
+#### `stub.yield([arg1, arg2, ...]);`
 
 Invoke callbacks passed to the `stub` with the given arguments.
 
@@ -381,8 +366,7 @@ If the stub was never called with a function argument, `yield` throws an error.
 
 Also aliased as `invokeCallback`.
 
-
-#### `stub.yieldTo(callback, [arg1, arg2, ...])`
+#### `stub.yieldTo(callback, [arg1, arg2, ...]);`
 
 Invokes callbacks passed as a property of an object to the stub.
 
@@ -404,8 +388,7 @@ Like `yield`, `yieldTo` grabs the first matching argument, finds the callback an
 }
 ```
 
-
-#### `stub.callArg(argNum)`
+#### `stub.callArg(argNum);`
 
 Like `yield`, but with an explicit argument number specifying which callback to call.
 
@@ -424,7 +407,7 @@ Useful if a function is called with more than one callback, and simply calling t
 }
 ```
 
-#### `stub.callArgWith(argNum, [arg1, arg2, ...])`
+#### `stub.callArgWith(argNum, [arg1, arg2, ...]);`
 
 Like `callArg`, but with arguments.
 
@@ -447,7 +430,7 @@ Same as their corresponding non-Async counterparts, but with callback being defe
 
 #### `stub.yieldsToAsync(property, [arg1, arg2, ...]);`
 
-#### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
+#### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...]);`
 
 Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
 
@@ -465,7 +448,7 @@ var stub = sinon.stub().returnsNum(42);
 assert.equals(stub(), 42);
 ```
 
-#### `stub.get(getterFn)`
+#### `stub.get(getterFn);`
 
 Replaces a new getter for this stub.
 
@@ -481,7 +464,7 @@ createStub(myObj, 'prop').get(function getterFn() {
 myObj.example; // 'bar'
 ```
 
-#### `stub.set(setterFn)`
+#### `stub.set(setterFn);`
 
 Defines a new setter for this stub.
 

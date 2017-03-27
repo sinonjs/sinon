@@ -65,25 +65,25 @@ Passes if `spy` was called once and only once.
 Passes if `spy` was called exactly twice.
 
 
-#### `sinon.assert.calledThrice(spy)`
+#### `sinon.assert.calledThrice(spy);`
 
 Passes if `spy` was called exactly three times.
 
 
-#### `sinon.assert.callCount(spy, num)`
+#### `sinon.assert.callCount(spy, num);`
 Passes if `spy` was called exactly `num` times.
 
 
-#### `sinon.assert.callOrder(spy1, spy2, ...)`
+#### `sinon.assert.callOrder(spy1, spy2, ...);`
 Passes if provided spies were called in the specified order.
 
 
-#### `sinon.assert.calledOn(spy, obj)`
+#### `sinon.assert.calledOn(spy, obj);`
 
 Passes if `spy` was ever called with `obj` as its `this` value.
 
 
-#### `sinon.assert.alwaysCalledOn(spy, obj)`
+#### `sinon.assert.alwaysCalledOn(spy, obj);`
 
 Passes if `spy` was always called with `obj` as its `this` value.
 
@@ -113,21 +113,21 @@ Passes if `spy` was called with the provided arguments and no others.
 Passes if `spy` was always called with the provided arguments and no others.
 
 
-#### `sinon.assert.calledWithMatch(spy, arg1, arg2, ...)`
+#### `sinon.assert.calledWithMatch(spy, arg1, arg2, ...);`
 
 Passes if `spy` was called with matching arguments.
 
 This behaves the same way as `sinon.assert.calledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
 
-#### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...)`
+#### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...);`
 
 Passes if `spy` was always called with matching arguments.
 
 This behaves the same way as `sinon.assert.alwaysCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
 
-#### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...)`
+#### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...);`
 
 Passes if `spy` was never called with matching arguments.
 
