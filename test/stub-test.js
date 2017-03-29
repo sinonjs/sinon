@@ -1991,6 +1991,15 @@ describe("stub", function () {
             assert(stub.calledOnce);
             assert.equals(stub.getCall(0).args[0], 2);
         });
+
+        it("doesn't reset behavior defined using withArgs", function () {
+            var stub = createStub();
+            stub.withArgs("test").returns(10);
+
+            stub.resetHistory();
+
+            assert.equals(stub("test"), 10);
+        });
     });
 
     describe(".resetBehavior", function () {
