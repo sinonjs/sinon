@@ -62,19 +62,28 @@ sinon.defaultConfig = {
 }
 ```
 
-<dl>
-  <dt><code>injectInto</code></dt>
-  <dd>The sandbox's methods can be injected into another object for convenience. The <code>injectInto</code> configuration option can name an object to add properties to.</dd>
+##### injectInto
 
-  <dt><code>properties</code></dt>
-  <dd>What properties to inject. Note that simply naming "server" here is not sufficient to have a <code>server</code> property show up in the target object, you also have to set <code>useFakeServer</code> to <code>true</code>.
-  </dd>
+The sandbox's methods can be injected into another object for convenience. The
+`injectInto` configuration option can name an object to add properties to.
 
-  <dt><code>useFakeTimers</code></dt>
-  <dd>If <code>true</code>, the sandbox will have a <code>clock</code> property. Can also be an <code>Array</code> of timer properties to fake.</dd>
+##### properties
 
-  <dt><code>useFakeServer</code></dt>
-  <dd>If <code>true</code>, <code>server</code> and <code>requests</code> properties are added to the sandbox. Can also be an object to use for fake server. The default one is <code>sinon.fakeServer</code>, but if you're using jQuery 1.3.x or some other library that does not set the XHR's <code>onreadystatechange</code> handler, you might want to do:
+What properties to inject. Note that simply naming "server" here is not
+sufficient to have a `server` property show up in the target object, you also
+have to set `useFakeServer` to `true`.
+
+##### useFakeTimers
+
+If `true`, the sandbox will have a `clock` property. Can also be an `Array` of
+timer properties to fake.
+
+##### useFakeServer
+
+If `true`, `server` and `requests` properties are added to the sandbox. Can
+also be an object to use for fake server. The default one is `sinon.fakeServer`,
+but if you're using jQuery 1.3.x or some other library that does not set the XHR's
+`onreadystatechange` handler, you might want to do:
 
 ```javascript
 sinon.config = {
@@ -124,6 +133,13 @@ Fakes XHR and binds a server object to the sandbox such that it too is restored 
 
 Access requests through `sandbox.requests` and server through `sandbox.server`
 
+#### `sandbox.usingPromise(promiseLibrary);`
+
+Causes all stubs created from the sandbox to return promises using a specific
+Promise library instead of the global one when using `stub.rejects` or
+`stub.resolves`. Returns the stub to allow chaining.
+
+*Since `sinon@2.0.0`*
 
 #### `sandbox.restore();`
 
