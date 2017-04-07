@@ -322,7 +322,7 @@ describe("stub", function () {
             var stub = createStub.create();
 
             assert(stub.usingPromise);
-            assert.isTrue(typeof stub.usingPromise === "function");
+            assert.isFunction(stub.usingPromise);
         });
 
         it("should return the current stub", function () {
