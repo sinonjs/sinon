@@ -248,9 +248,9 @@ Causes the stub to return a Promise which resolves to the provided value.
 
 When constructing the Promise, sinon uses the `Promise.resolve` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
+The Promise library can be overwritten using the `usingPromise` method.
 
 *Since `sinon@2.0.0`*
-
 
 #### `stub.throws();`
 
@@ -273,6 +273,7 @@ Causes the stub to return a Promise which rejects with an exception (`Error`).
 
 When constructing the Promise, sinon uses the `Promise.reject` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
+The Promise library can be overwritten using the `usingPromise` method.
 
 *Since `sinon@2.0.0`*
 
@@ -333,7 +334,27 @@ Like `callsArg`, but with arguments to pass to the callback.
 
 
 #### `stub.callsArgOnWith(index, context, arg1, arg2, ...);`
+
 Like above but with an additional parameter to pass the `this` context.
+
+#### `stub.usingPromise(promiseLibrary);`
+
+Causes the stub to return promises using a specific Promise library instead of
+the global one when using `stub.rejects` or `stub.resolves`. Returns the stub
+to allow chaining.
+
+```javascript
+var myObj = {
+    saveSomething: sinon.stub().usingPromise(bluebird.Promise).resolves("baz");
+}
+
+myObj.saveSomething()
+    .tap(function(actual) {
+        console.log(actual); // baz
+    });
+```
+
+*Since `sinon@2.0.0`*
 
 #### `stub.yields([arg1, arg2, ...])`
 

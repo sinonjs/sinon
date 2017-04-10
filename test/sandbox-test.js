@@ -109,6 +109,71 @@ describe("sinonSandbox", function () {
         });
     });
 
+    describe(".usingPromise", function () {
+        beforeEach(function () {
+            this.sandbox = Object.create(sinonSandbox);
+        });
+
+        afterEach(function () {
+            this.sandbox.restore();
+        });
+
+        it("must be a function", function () {
+
+            assert.isFunction(this.sandbox.usingPromise);
+        });
+
+        it("must return the sandbox", function () {
+            var mockPromise = {};
+
+            var actual = this.sandbox.usingPromise(mockPromise);
+
+            assert.same(actual, this.sandbox);
+        });
+
+        it("must set all stubs created from sandbox with mockPromise", function () {
+
+            var resolveValue = {};
+            var mockPromise = {
+                resolve: sinonStub.create().resolves(resolveValue)
+            };
+
+            this.sandbox.usingPromise(mockPromise);
+            var stub = this.sandbox.stub().resolves();
+
+            return stub()
+                .then(function (action) {
+
+                    assert.same(resolveValue, action);
+                    assert(mockPromise.resolve.calledOnce);
+                });
+        });
+
+        it("must set all stubs created from sandbox with mockPromise", function () {
+
+            var resolveValue = {};
+            var mockPromise = {
+                resolve: sinonStub.create().resolves(resolveValue)
+            };
+            var stubbedObject = {
+                stubbedMethod: function () {
+                    return;
+                }
+            };
+
+            this.sandbox.usingPromise(mockPromise);
+            this.sandbox.stub(stubbedObject);
+            stubbedObject.stubbedMethod.resolves({});
+
+            return stubbedObject.stubbedMethod()
+                .then(function (action) {
+
+                    assert.same(resolveValue, action);
+                    assert(mockPromise.resolve.calledOnce);
+                });
+        });
+    });
+
     // These were not run in browsers before, as we were only testing in node
     if (typeof window !== "undefined") {
         describe("fake XHR/server", function () {
