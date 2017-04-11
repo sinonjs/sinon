@@ -4,7 +4,7 @@ title: Matchers - Sinon.JS
 breadcrumb: matchers
 ---
 
-Matchers can be passed as arguments to `spy.calledOn`, spy.calledWith`, `spy.returned` and the
+Matchers can be passed as arguments to `spy.calledOn`, `spy.calledWith`, `spy.returned` and the
 corresponding `sinon.assert` functions as well as `spy.withArgs`. Matchers allow to be either more fuzzy or more specific about the expected value.
 
 ```javascript
