@@ -1787,9 +1787,9 @@ describe("stub", function () {
 
         it("supports chained declaration of behavior", function () {
             var stub = createStub()
-                    .onCall(0).returns(1)
-                    .onCall(1).returns(2)
-                    .onCall(2).returns(3);
+                .onCall(0).returns(1)
+                .onCall(1).returns(2)
+                .onCall(2).returns(3);
 
             assert.same(stub(), 1);
             assert.same(stub(), 2);

@@ -192,10 +192,10 @@ describe("issues", function () {
             var argsB = match(suffixB);
 
             var firstFake = readFile
-              .withArgs(argsA);
+                .withArgs(argsA);
 
             var secondFake = readFile
-              .withArgs(argsB);
+                .withArgs(argsB);
 
             assert(firstFake !== secondFake);
         });
