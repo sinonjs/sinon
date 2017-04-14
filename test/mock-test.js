@@ -1,11 +1,11 @@
 "use strict";
 
 var referee = require("referee");
-var sinonMock = require("../lib/sinon/mock");
-var sinonExpectation = require("../lib/sinon/mock-expectation");
-var sinonMatch = require("../lib/sinon/match");
-var sinonStub = require("../lib/sinon/stub");
-var sinonSpy = require("../lib/sinon/spy");
+var sinonMock = require("../src/sinon/mock");
+var sinonExpectation = require("../src/sinon/mock-expectation");
+var sinonMatch = require("../src/sinon/match");
+var sinonStub = require("../src/sinon/stub");
+var sinonSpy = require("../src/sinon/spy");
 var assert = referee.assert;
 var refute = referee.refute;
 

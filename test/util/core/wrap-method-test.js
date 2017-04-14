@@ -1,9 +1,9 @@
 "use strict";
 
 var referee = require("referee");
-var wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
-var createSpy = require("../../../lib/sinon/spy");
-var createStub = require("../../../lib/sinon/stub");
+var wrapMethod = require("../../../src/sinon/util/core/wrap-method");
+var createSpy = require("../../../src/sinon/spy");
+var createStub = require("../../../src/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
 

@@ -1,11 +1,11 @@
 "use strict";
 
-var color = require("../lib/sinon/color");
+var color = require("../src/sinon/color");
 var referee = require("referee");
-var sinonStub = require("../lib/sinon/stub");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonAssert = require("../lib/sinon/assert");
-var sinonMatch = require("../lib/sinon/match");
+var sinonStub = require("../src/sinon/stub");
+var sinonSpy = require("../src/sinon/spy");
+var sinonAssert = require("../src/sinon/assert");
+var sinonMatch = require("../src/sinon/match");
 var assert = referee.assert;
 var refute = referee.refute;
 

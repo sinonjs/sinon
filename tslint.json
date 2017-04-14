@@ -1,0 +1,19 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "one-variable-per-declaration": false,
+        "only-arrow-functions": false,
+        "space-before-function-paren": [true, {
+            "anonymous": "always",
+            "asyncArrow": "always",
+            "named": "never",
+            "constructor": "never",
+            "method": "never"
+        }]
+    },
+    "rulesDirectory": []
+}

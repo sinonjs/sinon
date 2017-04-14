@@ -2,7 +2,7 @@
 
 var spyInvoke = require("./spy").invoke;
 var spyCallToString = require("./call").toString;
-var timesInWords = require("./util/core/times-in-words");
+var timesInWords = require("./util/core/times-in-words").default;
 var extend = require("./util/core/extend");
 var match = require("./match");
 var stub = require("./stub");

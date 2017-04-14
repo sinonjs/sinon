@@ -1,9 +1,9 @@
 "use strict";
 
 var referee = require("referee");
-var sinonSpyCall = require("../lib/sinon/call");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
+var sinonSpyCall = require("../src/sinon/call");
+var sinonSpy = require("../src/sinon/spy");
+var sinonStub = require("../src/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -846,11 +846,11 @@ describe("sinonSpy.call", function () {
             }
 
             run()
-            .then(function () {
-                assert.equals(stub2.getCall(0).toString().replace(/ at.*/g, ""), "stub(1) => 1");
-                done();
-            })
-            .catch( done );
+                .then(function () {
+                    assert.equals(stub2.getCall(0).toString().replace(/ at.*/g, ""), "stub(1) => 1");
+                    done();
+                })
+                .catch( done );
         });
     });
 

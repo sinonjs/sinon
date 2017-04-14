@@ -1,8 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var getConfig = require("../../../lib/sinon/util/core/get-config");
-var defaultConfig = require("../../../lib/sinon/util/core/default-config");
+var getConfig = require("../../../src/sinon/util/core/get-config");
+var defaultConfig = require("../../../src/sinon/util/core/default-config");
 var assert = referee.assert;
 var refute = referee.refute;
 

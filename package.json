@@ -14,15 +14,15 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
-    "test-node": "mocha --recursive -R dot test/",
+    "test-node": "tsc && mocha --recursive -R dot build/test/",
     "test-dev": "npm run test-node -- --watch -R min",
-    "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
-    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage ] test/",
+    "test-headless": "tsc && mochify --recursive -R dot --grep WebWorker --invert build/test/",
+    "test-coverage": "tsc && mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --report text --report lcovonly --dir ./coverage ] test/",
     "test-cloud": "npm run test-headless -- --wd",
-    "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
+    "test-webworker": "tsc && browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
-    "lint": "eslint .",
-    "prepublish": "rimraf pkg && ./build.js",
+    "lint": "eslint . && tslint {src,test}/**/*.ts",
+    "prepublish": "rimraf build lib pkg && ./build.js",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
@@ -41,7 +41,9 @@
     "type-detect": "^4.0.0"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.40",
     "browserify": "^14.0.0",
+    "cpr": "^2.0.2",
     "eslint": "^3.1.1",
     "eslint-config-sinon": "^1.0.0",
     "eslint-plugin-mocha": "^4.2.0",
@@ -53,7 +55,9 @@
     "phantomjs-prebuilt": "^2.1.14",
     "pre-commit": "^1.1.2",
     "referee": "^1.2.0",
-    "rimraf": "^2.5.3"
+    "rimraf": "^2.5.3",
+    "tslint": "^5.1.0",
+    "typescript": "^2.2.2"
   },
   "eslintConfig": {
     "extends": "eslint-config-sinon"

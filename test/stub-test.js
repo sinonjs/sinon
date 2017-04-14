@@ -1,15 +1,15 @@
 "use strict";
 
 var referee = require("referee");
-var createStub = require("../lib/sinon/stub");
-var createStubInstance = require("../lib/sinon/stub").createStubInstance;
-var createSpy = require("../lib/sinon/spy");
-var sinonMatch = require("../lib/sinon/match");
+var createStub = require("../src/sinon/stub");
+var createStubInstance = require("../src/sinon/stub").createStubInstance;
+var createSpy = require("../src/sinon/spy");
+var sinonMatch = require("../src/sinon/match");
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
 var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
-var deprecated = require("../lib/sinon/util/core/deprecated");
+var deprecated = require("../src/sinon/util/core/deprecated");
 
 describe("stub", function () {
     it("is spy", function () {
@@ -1787,9 +1787,9 @@ describe("stub", function () {
 
         it("supports chained declaration of behavior", function () {
             var stub = createStub()
-                    .onCall(0).returns(1)
-                    .onCall(1).returns(2)
-                    .onCall(2).returns(3);
+                .onCall(0).returns(1)
+                .onCall(1).returns(2)
+                .onCall(2).returns(3);
 
             assert.same(stub(), 1);
             assert.same(stub(), 2);

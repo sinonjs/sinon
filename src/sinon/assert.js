@@ -2,7 +2,7 @@
 
 var calledInOrder = require("./util/core/called-in-order");
 var orderByFirstCall = require("./util/core/order-by-first-call");
-var timesInWords = require("./util/core/times-in-words");
+var timesInWords = require("./util/core/times-in-words").default;
 var format = require("./util/core/format");
 var sinonMatch = require("./match");
 
