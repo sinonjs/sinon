@@ -1,13 +1,13 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../../lib/sinon");
-var sinonFakeServer = require("../../lib/sinon/util/fake_server");
-var fakeXhr = require("../../lib/sinon/util/fake_xml_http_request");
-var sinonStub = require("../../lib/sinon/stub");
-var sinonSpy = require("../../lib/sinon/spy");
-var sinonSandbox = require("../../lib/sinon/sandbox");
-var fakeTimers = require("../../lib/sinon/util/fake_timers");
+var sinon = require("../../src/sinon");
+var sinonFakeServer = require("../../src/sinon/util/fake_server");
+var fakeXhr = require("../../src/sinon/util/fake_xml_http_request");
+var sinonStub = require("../../src/sinon/stub");
+var sinonSpy = require("../../src/sinon/spy");
+var sinonSandbox = require("../../src/sinon/sandbox");
+var fakeTimers = require("../../src/sinon/util/fake_timers");
 var FakeXMLHttpRequest = fakeXhr.FakeXMLHttpRequest;
 
 var assert = referee.assert;

@@ -1,5 +1,7 @@
 pkg
 tmp/
+build/
+lib/
 node_modules
 coverage/
 .idea

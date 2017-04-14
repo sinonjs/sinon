@@ -1,5 +1,7 @@
 coverage/
 pkg/
+lib/
+build/
 tmp/
 docs/js/
 docs/releases/

@@ -1,8 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var sinon = require("../../lib/sinon");
-var configureLogError = require("../../lib/sinon/util/core/log_error.js");
+var sinon = require("../../src/sinon");
+var configureLogError = require("../../src/sinon/util/core/log_error.js");
 var assert = referee.assert;
 var refute = referee.refute;
 

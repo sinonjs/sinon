@@ -1,7 +1,7 @@
 "use strict";
 
 var assert = require("referee").assert;
-var sinonMatch = require("../lib/sinon/match");
+var sinonMatch = require("../src/sinon/match");
 
 function propertyMatcherTests(matcher) {
     return function () {

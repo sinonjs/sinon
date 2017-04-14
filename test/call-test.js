@@ -1,9 +1,9 @@
 "use strict";
 
 var referee = require("referee");
-var sinonSpyCall = require("../lib/sinon/call");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
+var sinonSpyCall = require("../src/sinon/call");
+var sinonSpy = require("../src/sinon/spy");
+var sinonStub = require("../src/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
 

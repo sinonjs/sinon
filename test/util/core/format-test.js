@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("referee");
-var format = require("../../../lib/sinon/util/core/format");
+var format = require("../../../src/sinon/util/core/format");
 var assert = referee.assert;
 
 describe("util/core/format", function () {

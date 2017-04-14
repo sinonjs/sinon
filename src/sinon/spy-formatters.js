@@ -1,7 +1,7 @@
 "use strict";
 
 var color = require("./color");
-var timesInWords = require("./util/core/times-in-words");
+var timesInWords = require("./util/core/times-in-words").default;
 var sinonFormat = require("./util/core/format");
 var sinonMatch = require("./match");
 var jsDiff = require("diff");

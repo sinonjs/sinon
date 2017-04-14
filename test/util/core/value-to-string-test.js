@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("referee");
-var valueToString = require("../../../lib/sinon/util/core/value-to-string");
+var valueToString = require("../../../src/sinon/util/core/value-to-string");
 var assert = referee.assert;
 
 describe("util/core/valueToString", function () {

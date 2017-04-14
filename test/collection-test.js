@@ -1,9 +1,9 @@
 "use strict";
 
 var referee = require("referee");
-var sinonCollection = require("../lib/sinon/collection");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
+var sinonCollection = require("../src/sinon/collection");
+var sinonSpy = require("../src/sinon/spy");
+var sinonStub = require("../src/sinon/stub");
 var assert = referee.assert;
 
 describe("collection", function () {

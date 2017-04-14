@@ -1,8 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var createSpy = require("../../../lib/sinon/spy");
-var every = require("../../../lib/sinon/util/core/every");
+var createSpy = require("../../../src/sinon/spy");
+var every = require("../../../src/sinon/util/core/every");
 var assert = referee.assert;
 
 describe("util/core/every", function () {

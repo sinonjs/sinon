@@ -2,6 +2,8 @@
 "use strict";
 
 var fs = require("fs");
+var execSync = require("child_process").execSync;
+var cpr = require("cpr");
 var browserify = require("browserify");
 var pkg = require("./package.json");
 
@@ -33,9 +35,18 @@ function makeBundle(name, config) {
     });
 }
 
-makeBundle("sinon", {
-    // Add inline source maps to the default bundle
-    debug: true
-});
+execSync("./node_modules/.bin/tsc");
 
-makeBundle("sinon-no-sourcemaps", {});
+var cprOpts = { overwrite: true };
+cpr("./build/src", "./lib", cprOpts, function (err) {
+    if (err) {
+        throw err;
+    }
+
+    makeBundle("sinon", {
+        // Add inline source maps to the default bundle
+        debug: true
+    });
+
+    makeBundle("sinon-no-sourcemaps", {});
+});

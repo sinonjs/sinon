@@ -1,12 +1,12 @@
 "use strict";
 
 var referee = require("referee");
-var sinonStub = require("../../lib/sinon/stub");
-var sinonSpy = require("../../lib/sinon/spy");
-var sinonExtend = require("../../lib/sinon/util/core/extend");
-var sinonSandbox = require("../../lib/sinon/sandbox");
-var sinonFakeXhr = require("../../lib/sinon/util/fake_xml_http_request");
-var sinon = require("../../lib/sinon");
+var sinonStub = require("../../src/sinon/stub");
+var sinonSpy = require("../../src/sinon/spy");
+var sinonExtend = require("../../src/sinon/util/core/extend");
+var sinonSandbox = require("../../src/sinon/sandbox");
+var sinonFakeXhr = require("../../src/sinon/util/fake_xml_http_request");
+var sinon = require("../../src/sinon");
 
 var TextDecoder = global.TextDecoder || require("text-encoding").TextDecoder;
 var FakeXMLHttpRequest = sinonFakeXhr.FakeXMLHttpRequest;
@@ -19,7 +19,7 @@ var globalActiveXObject = global.ActiveXObject;
 var supportsProgressEvents = typeof ProgressEvent !== "undefined";
 var supportsFormData = typeof FormData !== "undefined";
 var supportsArrayBuffer = typeof ArrayBuffer !== "undefined";
-var supportsBlob = require("../../lib/sinon/blob").isSupported;
+var supportsBlob = require("../../src/sinon/blob").isSupported;
 
 var fakeXhrSetUp = function () {
     this.fakeXhr = sinonFakeXhr.useFakeXMLHttpRequest();

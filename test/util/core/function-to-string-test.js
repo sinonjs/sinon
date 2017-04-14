@@ -1,8 +1,8 @@
 "use strict";
 
 var referee = require("referee");
-var createSpy = require("../../../lib/sinon/spy");
-var functionToString = require("../../../lib/sinon/util/core/function-to-string");
+var createSpy = require("../../../src/sinon/spy");
+var functionToString = require("../../../src/sinon/util/core/function-to-string");
 var assert = referee.assert;
 
 describe("util/core/functionToString", function () {

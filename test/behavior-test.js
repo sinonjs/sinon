@@ -1,7 +1,7 @@
 "use strict";
 
-var createStub = require("../lib/sinon/stub");
-var addBehavior = require("../lib/sinon").addBehavior;
+var createStub = require("../src/sinon/stub");
+var addBehavior = require("../src/sinon").addBehavior;
 var assert = require("referee").assert;
 
 describe("behaviors", function () {
