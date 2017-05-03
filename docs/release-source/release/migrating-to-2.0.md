@@ -39,6 +39,7 @@ The following utility functions are being marked as deprecated and are planned f
 * `sinon.getPropertyDescriptor`
 * `sinon.objectKeys`
 * `sinon.orderByFirstCall`
+* `sinon.restore`
 * `sinon.timesInWorlds`
 * `sinon.valueToString`
 * `sinon.walk`
