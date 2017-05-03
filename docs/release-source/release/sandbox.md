@@ -9,14 +9,14 @@ Sandboxes removes the need to keep track of every fake created, which greatly si
 ```javascript
 var sinon = require('sinon');
 
-var myAPI = { myMethod: function () {} };
+var myAPI = { hello: function () {} };
 var sandbox = sinon.sandbox.create();
 
 describe('myAPI.hello method', function () {
 
     beforeEach(function () {
         // stub out the `hello` method
-        sandbox.stub(myApi, 'hello');
+        sandbox.stub(myAPI, 'hello');
     });
 
     afterEach(function () {
