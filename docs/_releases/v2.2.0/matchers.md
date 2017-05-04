@@ -4,7 +4,7 @@ title: Matchers - Sinon.JS
 breadcrumb: matchers
 ---
 
-Matchers can be passed as arguments to `spy.calledOn`, spy.calledWith`, `spy.returned` and the
+Matchers can be passed as arguments to `spy.calledOn`, `spy.calledWith`, `spy.returned` and the
 corresponding `sinon.assert` functions as well as `spy.withArgs`. Matchers allow to be either more fuzzy or more specific about the expected value.
 
 ```javascript
@@ -97,17 +97,17 @@ Requires the value to be a `Number`.
 Requires the value to be a `String`.
 
 
-#### `sinon.match.object"
+#### `sinon.match.object`
 
 Requires the value to be an `Object`.
 
 
-#### `sinon.match.func"
+#### `sinon.match.func`
 
 Requires the value to be a `Function`.
 
 
-#### `sinon.match.array"
+#### `sinon.match.array`
 
 Requires the value to be an `Array`.
 
@@ -132,7 +132,7 @@ Requires an `Array` to end with the same values as another one.
 Requires an `Array` to contain each one of the values the given array has.
 
 
-#### `sinon.match.map"
+#### `sinon.match.map`
 
 Requires the value to be a `Map`.
 
@@ -147,7 +147,7 @@ Requires a `Map` to be deep equal another one.
 Requires a `Map` to contain each one of the items the given map has.
 
 
-#### `sinon.match.set"
+#### `sinon.match.set`
 
 Requires the value to be a `Set`.
 
@@ -162,28 +162,28 @@ Requires a `Set` to be deep equal another one.
 Requires a `Set` to contain each one of the items the given set has.
 
 
-#### `sinon.match.regexp"
+#### `sinon.match.regexp`
 
 Requires the value to be a regular expression.
 
 
-#### `sinon.match.date"
+#### `sinon.match.date`
 
-Requires the value to be a `Date object.
+Requires the value to be a `Date` object.
 
 
-#### `sinon.match.symbol"
+#### `sinon.match.symbol`
 
-Requires the value to be a `Symbol.
+Requires the value to be a `Symbol`.
 
 *Since `sinon@2.0.0`*
 
-#### `sinon.match.same(ref)"
+#### `sinon.match.same(ref)`
 
 Requires the value to strictly equal `ref`.
 
 
-#### `sinon.match.typeOf(type)"
+#### `sinon.match.typeOf(type)`
 
 Requires the value to be of the given type, where `type` can be one of
     `"undefined"`,
@@ -199,18 +199,18 @@ Requires the value to be of the given type, where `type` can be one of
     `"symbol"`.
 
 
-#### `sinon.match.instanceOf(type)"
+#### `sinon.match.instanceOf(type)`
 
 Requires the value to be an instance of the given `type`.
 
 
-#### `sinon.match.has(property[, expectation])"
+#### `sinon.match.has(property[, expectation])`
 
 Requires the value to define the given `property`.
 
 The property might be inherited via the prototype chain. If the optional expectation is given, the value of the property is deeply compared with the expectation. The expectation can be another matcher.
 
-#### `sinon.match.hasOwn(property[, expectation])"
+#### `sinon.match.hasOwn(property[, expectation])`
 
 Same as `sinon.match.has` but the property must be defined by the value itself. Inherited properties are ignored.
 
