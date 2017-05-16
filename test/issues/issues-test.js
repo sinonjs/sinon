@@ -200,4 +200,19 @@ describe("issues", function () {
             assert(firstFake !== secondFake);
         });
     });
+
+    describe("#1398", function () {
+        it("Call order takes into account both calledBefore and callCount", function () {
+            var s1 = sinon.spy();
+            var s2 = sinon.spy();
+
+            s1();
+            s2();
+            s1();
+
+            assert.exception(function () {
+                sinon.assert.callOrder(s2, s1, s2);
+            });
+        });
+    });
 });
