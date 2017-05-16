@@ -37,8 +37,8 @@ describe("util/core/calledInOrder", function () {
         });
 
         it("returns false, if stubs were called in wrong order", function () {
-            assert( !calledInOrder([testObject2.otherFunction, testObject1.someFunction]));
-            assert( !calledInOrder([testObject2.otherFunction, testObject1.someFunction,
+            assert(!calledInOrder([testObject2.otherFunction, testObject1.someFunction]));
+            assert(!calledInOrder([testObject2.otherFunction, testObject1.someFunction,
                 testObject3.thirdFunction]));
         });
     });
@@ -52,8 +52,8 @@ describe("util/core/calledInOrder", function () {
         });
 
         it("returns false, if stubs were called in wrong order", function () {
-            assert( !calledInOrder(testObject2.otherFunction, testObject1.someFunction));
-            assert( !calledInOrder(testObject2.otherFunction, testObject1.someFunction,
+            assert(!calledInOrder(testObject2.otherFunction, testObject1.someFunction));
+            assert(!calledInOrder(testObject2.otherFunction, testObject1.someFunction,
                 testObject3.thirdFunction));
         });
     });
