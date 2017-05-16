@@ -1641,12 +1641,12 @@ describe("spy", function () {
             assert.isFalse(this.spyA.calledAfter(this.spyB));
         });
 
-        it("returns false if other called last", function () {
+        it("returns true if called anytime after other", function () {
             this.spyB();
             this.spyA();
             this.spyB();
 
-            assert.isFalse(this.spyA.calledAfter(this.spyB));
+            assert.isTrue(this.spyA.calledAfter(this.spyB));
         });
     });
 
