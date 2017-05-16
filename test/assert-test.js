@@ -410,7 +410,7 @@ describe("assert", function () {
             this.tearDownStubs();
         });
 
-        it("passes when calls where done in right order", function () {
+        it("passes when calls were done in right order", function () {
             var spy1 = sinonSpy();
             var spy2 = sinonSpy();
             spy1();
@@ -421,7 +421,7 @@ describe("assert", function () {
             });
         });
 
-        it("fails when calls where done in wrong order", function () {
+        it("fails when calls were done in wrong order", function () {
             var spy1 = sinonSpy();
             var spy2 = sinonSpy();
             spy2();
@@ -434,7 +434,7 @@ describe("assert", function () {
             assert(sinonAssert.fail.called);
         });
 
-        it("passes when many calls where done in right order", function () {
+        it("passes when many calls were done in right order", function () {
             var spy1 = sinonSpy();
             var spy2 = sinonSpy();
             var spy3 = sinonSpy();
@@ -449,7 +449,7 @@ describe("assert", function () {
             });
         });
 
-        it("fails when one of many calls where done in wrong order", function () {
+        it("fails when one of many calls were done in wrong order", function () {
             var spy1 = sinonSpy();
             var spy2 = sinonSpy();
             var spy3 = sinonSpy();
