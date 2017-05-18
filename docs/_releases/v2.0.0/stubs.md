@@ -220,7 +220,7 @@ myObj.prop = function propFn() {
     return 'foo';
 };
 
-sinon.stub(myObj, prop).callsFake(function fakeFn() {
+sinon.stub(myObj, 'prop').callsFake(function fakeFn() {
     return 'bar';
 });
 
