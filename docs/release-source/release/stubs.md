@@ -217,7 +217,7 @@ Makes the stub call the provided `fakeFunction` when invoked.
 ```javascript
 var myObj = {};
 myObj.prop = function propFn() {
-    return "foo";
+    return 'foo';
 };
 
 sinon.stub(myObj, prop).callsFake(function fakeFn() {
