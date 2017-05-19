@@ -305,6 +305,38 @@ describe("stub", function () {
                 stub.throwsArg();
             }, "TypeError");
         });
+
+        it("should work with call-based behavior", function () {
+            var stub = createStub.create();
+            var expectedError = new Error("catpants");
+
+            stub.returns(1);
+            stub.onSecondCall().throwsArg(1);
+
+            refute.exception(function () {
+                assert.equals(1, stub(null, expectedError));
+            });
+
+            assert.exception(
+                function () {
+                    stub(null, expectedError);
+                },
+                function (error) {
+                    return error.message === expectedError.message;
+                }
+            );
+        });
+
+        it("should be reset by .resetBeahvior", function () {
+            var stub = createStub.create();
+
+            stub.throwsArg(0);
+            stub.resetBehavior();
+
+            refute.exception(function () {
+                stub(new Error("catpants"));
+            });
+        });
     });
 
     describe(".returnsThis", function () {
