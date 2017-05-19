@@ -306,6 +306,24 @@ describe("stub", function () {
             }, "TypeError");
         });
 
+        it("should throw without enough arguments", function () {
+            var stub = createStub.create();
+            stub.throwsArg(3);
+
+            assert.exception(
+                function () {
+                    stub("only", "two arguments");
+                },
+                function (error) {
+                    return error instanceof TypeError
+                        && error.message ===
+                        "throwArgs failed: 3 arguments required but only 2 present"
+                    ;
+                }
+            );
+
+        });
+
         it("should work with call-based behavior", function () {
             var stub = createStub.create();
             var expectedError = new Error("catpants");
