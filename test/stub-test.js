@@ -279,6 +279,84 @@ describe("stub", function () {
         });
     });
 
+    describe(".throwsArg", function () {
+        it("throws argument at specified index", function () {
+            var stub = createStub.create();
+            stub.throwsArg(0);
+            var expectedError = new Error("The expected error message");
+
+            assert.exception(function () {
+                stub(expectedError);
+            }, function (err) {
+                return err.message === expectedError.message;
+            });
+        });
+
+        it("returns stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.throwsArg(0), stub);
+        });
+
+        it("throws TypeError if no index is specified", function () {
+            var stub = createStub.create();
+
+            assert.exception(function () {
+                stub.throwsArg();
+            }, "TypeError");
+        });
+
+        it("should throw without enough arguments", function () {
+            var stub = createStub.create();
+            stub.throwsArg(3);
+
+            assert.exception(
+                function () {
+                    stub("only", "two arguments");
+                },
+                function (error) {
+                    return error instanceof TypeError
+                        && error.message ===
+                        "throwArgs failed: 3 arguments required but only 2 present"
+                    ;
+                }
+            );
+
+        });
+
+        it("should work with call-based behavior", function () {
+            var stub = createStub.create();
+            var expectedError = new Error("catpants");
+
+            stub.returns(1);
+            stub.onSecondCall().throwsArg(1);
+
+            refute.exception(function () {
+                assert.equals(1, stub(null, expectedError));
+            });
+
+            assert.exception(
+                function () {
+                    stub(null, expectedError);
+                },
+                function (error) {
+                    return error.message === expectedError.message;
+                }
+            );
+        });
+
+        it("should be reset by .resetBeahvior", function () {
+            var stub = createStub.create();
+
+            stub.throwsArg(0);
+            stub.resetBehavior();
+
+            refute.exception(function () {
+                stub(new Error("catpants"));
+            });
+        });
+    });
+
     describe(".returnsThis", function () {
         it("stub returns this", function () {
             var instance = {};

@@ -219,6 +219,12 @@ Causes the stub to throw an exception of the provided type.
 
 Causes the stub to throw the provided exception object.
 
+#### `stub.throwsArg(index);`
+
+Causes the stub to throw the argument exception at the provided index. Throws a `TypeError` if called with fewer than `index` arguments.
+
+`stub.throwsArg(0);` causes the stub to throw the first argument exception.
+
 
 #### `stub.callsArg(index);`
 
