@@ -2294,6 +2294,59 @@ describe("spy", function () {
         });
     });
 
+    describe(".throwArg", function () {
+        it("should be a function", function () {
+            var spy = createSpy();
+
+            assert.isFunction(spy.throwArg);
+        });
+
+        it("should throw if spy hasn't been called", function () {
+            var spy = createSpy();
+
+            assert.exception(
+                function () {
+                    spy.throwArg(0);
+                },
+                function (error) {
+                    return error.message === "spy cannot throw arg since it was not yet invoked.";
+                }
+            );
+        });
+
+        it("should throw if there aren't enough arguments in the previous spy call", function () {
+            var spy = createSpy();
+
+            spy("only", "four", "arguments", "here");
+
+            assert.exception(
+                function () {
+                    spy.throwArg(7);
+                },
+                function (error) {
+                    return error.message === "Not enough arguments: 7 required but only 4 present";
+                }
+            );
+        });
+
+        it("should throw specified argument", function () {
+            var spy = createSpy();
+            var expectedError = new TypeError("catpants");
+
+            spy(true, false, null, expectedError, "meh");
+            assert.exception(
+                function () {
+                    spy.throwArg(3);
+                },
+                function (error) {
+                    return error instanceof TypeError
+                        && error.message === expectedError.message
+                    ;
+                }
+            );
+        });
+    });
+
     describe(".reset", function () {
         it("return same object", function () {
             var spy = createSpy();
@@ -2328,3 +2381,4 @@ describe("spy", function () {
         });
     });
 });
+
