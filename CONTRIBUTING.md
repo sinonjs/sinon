@@ -121,11 +121,11 @@ Note that in dev mode tests run only in Node. Before creating your PR please ens
 
 ### Compiling a built version
 
-Build requires [Ruby](https://www.ruby-lang.org/en/). Under the hood [Browserify](http://browserify.org/) is used.
+Build requires Node. Under the hood [Browserify](http://browserify.org/) is used.
 
 To build simply run
 
-    $ ./build
+    $ node build.js
 
 
 [ES5]: http://www.ecma-international.org/ecma-262/5.1/
