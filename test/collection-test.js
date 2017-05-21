@@ -5,6 +5,7 @@ var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var assert = referee.assert;
+var deprecated = require("../lib/sinon/util/core/deprecated");
 
 describe("collection", function () {
     it("creates fake collection", function () {
@@ -106,8 +107,13 @@ describe("collection", function () {
                 });
 
                 it("stubs environment property", function () {
+                    var originalPrintWarning = deprecated.printWarning;
+                    deprecated.printWarning = function () {};
+
                     this.collection.stub(process.env, "HELL", "froze over");
                     assert.equals(process.env.HELL, "froze over");
+
+                    deprecated.printWarning = originalPrintWarning;
                 });
             });
         }
@@ -120,25 +126,40 @@ describe("collection", function () {
         });
 
         it("stubs number property", function () {
+            var originalPrintWarning = deprecated.printWarning;
+            deprecated.printWarning = function () {};
+
             this.collection.stub(this.object, "property", 1);
 
             assert.equals(this.object.property, 1);
+
+            deprecated.printWarning = originalPrintWarning;
         });
 
         it("restores number property", function () {
+            var originalPrintWarning = deprecated.printWarning;
+            deprecated.printWarning = function () {};
+
             this.collection.stub(this.object, "property", 1);
             this.collection.restore();
 
             assert.equals(this.object.property, 42);
+
+            deprecated.printWarning = originalPrintWarning;
         });
 
         it("fails if property does not exist", function () {
+            var originalPrintWarning = deprecated.printWarning;
+            deprecated.printWarning = function () {};
+
             var collection = this.collection;
             var object = {};
 
             assert.exception(function () {
                 collection.stub(object, "prop", 1);
             });
+
+            deprecated.printWarning = originalPrintWarning;
         });
 
         it("fails if Symbol does not exist", function () {
@@ -146,11 +167,16 @@ describe("collection", function () {
                 var collection = this.collection;
                 var object = {};
 
+                var originalPrintWarning = deprecated.printWarning;
+                deprecated.printWarning = function () {};
+
                 assert.exception(function () {
                     collection.stub(object, Symbol(), 1);
                 }, function (err) {
                     return err.message === "Cannot stub non-existent own property Symbol()";
                 });
+
+                deprecated.printWarning = originalPrintWarning;
             }
         });
     });
