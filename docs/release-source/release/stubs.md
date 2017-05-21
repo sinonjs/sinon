@@ -520,3 +520,31 @@ myObj.prop = 'baz';
 
 myObj.example; // 'baz'
 ```
+
+#### `stub.value(newVal)`
+
+Defines a new value for this stub.
+
+```javascript
+var myObj = {
+    example: 'oldValue',
+};
+
+sinon.stub(myObj, 'example').value('newValue');
+
+myObj.example; // 'newValue'
+```
+
+You can restore values by calling the `restore` method:
+
+```javascript
+var myObj = {
+    example: 'oldValue',
+};
+
+var stub = sinon.stub(myObj, 'example').value('newValue');
+stub.restore()
+
+myObj.example; // 'oldValue'
+```
+
