@@ -64,6 +64,13 @@ a {
     margin-bottom: 20px;
     color: #281D18;
   }
+
+  h4 {
+    font-size: 18px;
+    margin-top: 32px;
+    color: #281D18;
+  }
+
   p {
     color: #4B382F;
   }
@@ -220,4 +227,8 @@ a {
     .container.container-2{
         max-width: 737px;
     }
+}
+
+pre code {
+    font-size: 90%;
 }
