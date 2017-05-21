@@ -548,4 +548,66 @@ describe("sinonSandbox", function () {
             sandbox.restore();
         });
     });
+
+    describe("getters and setters", function () {
+        it("allows stubbing getters", function () {
+            var object = {
+                foo: "bar"
+            };
+
+            var sandbox = sinonSandbox.create();
+            sandbox.stub(object, "foo").get(function () {
+                return "baz";
+            });
+
+            assert.equals(object.foo, "baz");
+        });
+
+        it("allows restoring getters", function () {
+            var object = {
+                foo: "bar"
+            };
+
+            var sandbox = sinonSandbox.create();
+            sandbox.stub(object, "foo").get(function () {
+                return "baz";
+            });
+
+            sandbox.restore();
+
+            assert.equals(object.foo, "bar");
+        });
+
+        it("allows stubbing setters", function () {
+            var object = {
+                prop: "bar"
+            };
+
+            var sandbox = sinonSandbox.create();
+            sandbox.stub(object, "foo").set(function (val) {
+                object.prop = val + "bla";
+            });
+
+            object.foo = "bla";
+
+            assert.equals(object.prop, "blabla");
+        });
+
+        it("allows restoring setters", function () {
+            var object = {
+                prop: "bar"
+            };
+
+            var sandbox = sinonSandbox.create();
+            sandbox.stub(object, "prop").set(function setterFn(val) {
+                object.prop = val + "bla";
+            });
+
+            sandbox.restore();
+
+            object.prop = "bla";
+
+            assert.equals(object.prop, "bla");
+        });
+    });
 });
