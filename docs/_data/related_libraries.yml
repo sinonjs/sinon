@@ -1,0 +1,17 @@
+- title: proxyquire — Proxies nodejs require in order to allow overriding dependencies during testing
+  url: https://github.com/thlorenz/proxyquire
+
+- title: sisyphos — utility to stub modules imported with the System.js module loader
+  url: https://github.com/codazzo/sisyphos
+
+- title: bogus — utility for mocking dependencies when testing RequireJS based projects
+  url: https://github.com/mroderick/bogus
+
+- title: Mock Socket — mocking library for websockets and socket.io
+  url: https://github.com/thoov/mock-socket
+
+- title: wrapple — generic wrapper for browser natives (or other globals) to allow stubbing in unit tests
+  url: https://github.com/mroderick/wrapple
+
+- title: test double — minimal test double library for TDD with JavaScript
+  url: https://github.com/testdouble/testdouble.js

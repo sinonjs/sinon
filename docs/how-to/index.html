@@ -17,6 +17,13 @@ permalink: /how-to/
 {% endfor %}
 </ul>
 
+<h2>Related libraries</h2>
+<ul>
+{% for library in site.data.related_libraries %}
+        <li><a href="{{ library.url }}">{{ library.title }}</a></li>
+{% endfor %}
+</ul>
+
 <h2>Articles elsewhere on the web</h2>
 
 <ul>
