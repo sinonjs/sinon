@@ -2620,4 +2620,26 @@ describe("stub", function () {
             assert.equals(myObj.otherProp, "bar");
         });
     });
+
+    describe(".value", function () {
+        it("allows stubbing property descriptor values", function () {
+            var myObj = {
+                prop: "rawString"
+            };
+
+            createStub(myObj, "prop").value("newString");
+            assert.equals(myObj.prop, "newString");
+        });
+
+        it("allows restoring stubbed property descriptor values", function () {
+            var myObj = {
+                prop: "rawString"
+            };
+
+            var stub = createStub(myObj, "prop").value("newString");
+            stub.restore();
+
+            assert.equals(myObj.prop, "rawString");
+        });
+    });
 });

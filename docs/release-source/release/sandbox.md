@@ -106,7 +106,7 @@ Works exactly like `sinon.spy`, only also adds the returned spy to the internal 
 
 Works almost exactly like `sinon.stub`, only also adds the returned stub to the internal collection of fakes for easy restoring through `sandbox.restore()`.
 
-The sandbox `stub` method can also be used to stub any kind of property. This is useful if you need to override an object's property for the duration of a test, and have it restored when the test completes
+The sandbox `stub` method can also be used to stub any kind of property. This is useful if you need to override an object's property for the duration of a test, and have it restored when the test completes.
 
 #### `sandbox.mock();`
 
