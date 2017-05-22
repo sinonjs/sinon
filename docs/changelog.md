@@ -5,6 +5,14 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.0 / 2017-05-22
+==================
+
+  * Allow stubbing of accessors with and without sandbox (#1416)
+  * add throwsArg(index) to stubs (#1319)
+  * Fix: forEach() requires 'this' argument (#1356)
+  * Only reset history when calling resetHistory()
+
 2.2.0 / 2017-05-02
 ==================
 
