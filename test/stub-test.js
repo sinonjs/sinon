@@ -2670,5 +2670,14 @@ describe("stub", function () {
 
             assert.equals(myObj.prop, "rawString");
         });
+
+        it("allows restoring previously undefined properties", function () {
+            var obj = {};
+            var stub = createStub(obj, "nonExisting").value(2);
+
+            stub.restore();
+
+            assert.equals(getPropertyDescriptor(obj, "nonExisting"), undefined);
+        });
     });
 });
