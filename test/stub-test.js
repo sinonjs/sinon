@@ -2634,6 +2634,20 @@ describe("stub", function () {
             myObj.prop = "foo";
             assert.equals(myObj.otherProp, "bar");
         });
+
+        it("can restore stubbed setters for previously undefined properties", function () {
+            var myObj = {};
+
+            var stub = createStub(myObj, "nonExisting");
+
+            stub.set(function setterFn() {
+                myObj.otherProp = "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(getPropertyDescriptor(myObj, "nonExisting"), undefined);
+        });
     });
 
     describe(".value", function () {
