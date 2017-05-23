@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.1 / 2017-05-23
+==================
+
+  * Make calledAfter symetric with calledBefore (#1407)
+
 2.3.0 / 2017-05-22
 ==================
 
