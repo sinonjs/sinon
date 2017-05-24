@@ -5,11 +5,12 @@ var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
 var sinonMatch = require("../lib/sinon/match");
+var getPropertyDescriptor = require("../lib/sinon/util/core/get-property-descriptor");
+var deprecated = require("../lib/sinon/util/core/deprecated");
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
 var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
-var deprecated = require("../lib/sinon/util/core/deprecated");
 
 describe("stub", function () {
     it("is spy", function () {
@@ -2519,6 +2520,20 @@ describe("stub", function () {
 
             assert.equals(myObj.prop, "bar");
         });
+
+        it("can restore stubbed getters for previously undefined properties", function () {
+            var myObj = {};
+
+            var stub = createStub(myObj, "nonExisting");
+
+            stub.get(function getterFn() {
+                return "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(getPropertyDescriptor(myObj, "nonExisting"), undefined);
+        });
     });
 
     describe(".set", function () {
@@ -2619,6 +2634,20 @@ describe("stub", function () {
             myObj.prop = "foo";
             assert.equals(myObj.otherProp, "bar");
         });
+
+        it("can restore stubbed setters for previously undefined properties", function () {
+            var myObj = {};
+
+            var stub = createStub(myObj, "nonExisting");
+
+            stub.set(function setterFn() {
+                myObj.otherProp = "baz";
+            });
+
+            stub.restore();
+
+            assert.equals(getPropertyDescriptor(myObj, "nonExisting"), undefined);
+        });
     });
 
     describe(".value", function () {
@@ -2640,6 +2669,15 @@ describe("stub", function () {
             stub.restore();
 
             assert.equals(myObj.prop, "rawString");
+        });
+
+        it("allows restoring previously undefined properties", function () {
+            var obj = {};
+            var stub = createStub(obj, "nonExisting").value(2);
+
+            stub.restore();
+
+            assert.equals(getPropertyDescriptor(obj, "nonExisting"), undefined);
         });
     });
 });
