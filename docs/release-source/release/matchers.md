@@ -12,6 +12,10 @@ corresponding `sinon.assert` functions as well as `spy.withArgs`. Matchers allow
     var book = {
         pages: 42,
         author: "cjno"
+        id: {
+          isbn10: "0596517742",
+          isbn13: "978-0596517748"
+        }
     };
     var spy = sinon.spy();
 
@@ -19,6 +23,7 @@ corresponding `sinon.assert` functions as well as `spy.withArgs`. Matchers allow
 
     sinon.assert.calledWith(spy, sinon.match({ author: "cjno" }));
     sinon.assert.calledWith(spy, sinon.match.has("pages", 42));
+    sinon.assert.calledWith(spy, sinon.match.has("id", sinon.match.has("isbn13", "978-0596517748")));
 }
 ```
 
