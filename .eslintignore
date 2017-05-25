@@ -1,6 +1,7 @@
 coverage/
 pkg/
 tmp/
+docs/_site/
 docs/js/
 docs/releases/
 docs/assets/js/
