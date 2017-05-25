@@ -555,6 +555,16 @@ describe("sinonMatch", function () {
                 assert(has.test({ prop: symbol }));
             }
         });
+
+        it("returns true if embedded object has Symbol", function () {
+            if (typeof Symbol === "function") {
+                var symbol = Symbol();
+
+                var has = sinonMatch.has("prop", sinonMatch.has("embedded", symbol));
+
+                assert(has.test({ prop: { embedded: symbol }, ignored: 42 }));
+            }
+        });
     });
 
     describe(".hasOwnSpecial", function () {
