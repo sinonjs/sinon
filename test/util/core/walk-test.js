@@ -124,7 +124,7 @@ describe("util/core/walk", function () {
         }
         /* eslint-enable guard-for-in */
 
-        try {
+        try { // eslint-disable-line no-restricted-syntax
             walk(target, iterator, rcvr);
             assert.equals(iterator.callCount, numCalls);
             assert(iterator.alwaysCalledOn(rcvr));

@@ -60,13 +60,14 @@ describe("util/core/wrapMethod", function () {
             wrapMethod(object, "prop", function () {});
         });
 
-        try {
-            wrapMethod(object, "prop", function () {});
-            throw new Error("Didn't throw");
-        } catch (e) {
-            assert.match(e.message,
-                /Attempted to wrap .* property .* as function/);
-        }
+        assert.exception(
+            function () {
+                wrapMethod(object, "prop", function () {});
+            },
+            {
+                message: /Attempted to wrap .* property .* as function/
+            }
+        );
     });
 
     it("throws if third argument is missing", function () {
@@ -188,11 +189,14 @@ describe("util/core/wrapMethod", function () {
                     return "original";
                 });
 
-                try {
-                    wrapMethod(object, "method", function () {});
-                } catch (e) {
-                    assert.equals(e.stack, ":STACK2:\n--------------\n:STACK1:");
-                }
+                assert.exception(
+                    function () {
+                        wrapMethod(object, "method", function () {});
+                    },
+                    {
+                        stack: ":STACK2:\n--------------\n:STACK1:"
+                    }
+                );
             });
         });
     }

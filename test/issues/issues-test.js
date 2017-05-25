@@ -77,18 +77,24 @@ describe("issues", function () {
 
             // passes
             var err = { name: "TestError", message: "this is a proper exception" };
-            try {
-                logError("#835 test", err);
-            } catch (ex) {
-                assert.equals(ex.name, err.name);
-            }
+            assert.exception(
+                function () {
+                    logError("#835 test", err);
+                },
+                {
+                    name: err.name
+                }
+            );
 
             // fails until this issue is fixed
-            try {
-                logError("#835 test", "this literal string is not a proper exception");
-            } catch (ex) {
-                assert.equals(ex.name, "#835 test");
-            }
+            assert.exception(
+                function () {
+                    logError("#835 test", "this literal string is not a proper exception");
+                },
+                {
+                    name: "#835 test"
+                }
+            );
         });
     });
 
@@ -127,7 +133,7 @@ describe("issues", function () {
                 }
             }
 
-            try {
+            try { // eslint-disable-line no-restricted-syntax
                 var oldWatch = Object.prototype.watch;
 
                 if (typeof Object.prototype.watch !== "function") {

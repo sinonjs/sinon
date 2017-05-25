@@ -483,29 +483,29 @@ if (typeof window !== "undefined") {
             });
 
             it("throws understandable error if response is not a string", function () {
-                var error;
+                var server = this.server;
 
-                try {
-                    this.server.respondWith("/", {});
-                } catch (e) {
-                    error = e;
-                }
-
-                assert.isObject(error);
-                assert.equals(error.message, "Fake server response body should be string, but was object");
+                assert.exception(
+                    function () {
+                        server.respondWith("/", {});
+                    },
+                    {
+                        message: "Fake server response body should be string, but was object"
+                    }
+                );
             });
 
             it("throws understandable error if response in array is not a string", function () {
-                var error;
+                var server = this.server;
 
-                try {
-                    this.server.respondWith("/", [200, {}]);
-                } catch (e) {
-                    error = e;
-                }
-
-                assert.isObject(error);
-                assert.equals(error.message, "Fake server response body should be string, but was undefined");
+                assert.exception(
+                    function () {
+                        server.respondWith("/", [200, {}]);
+                    },
+                    {
+                        message: "Fake server response body should be string, but was undefined"
+                    }
+                );
             });
 
             it("is able to pass the same args to respond directly", function () {

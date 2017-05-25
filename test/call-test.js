@@ -390,12 +390,14 @@ describe("sinonSpy.call", function () {
         it("throws understandable error if no callback is passed", function () {
             var call = this.call;
 
-            try {
-                call.yield();
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield since no callback was passed.");
-            }
+            assert.exception(
+                function () {
+                    call.yield();
+                },
+                {
+                    message: "spy cannot yield since no callback was passed."
+                }
+            );
         });
 
         it("includes stub name and actual arguments in error", function () {
@@ -403,13 +405,15 @@ describe("sinonSpy.call", function () {
             this.args.push(23, 42);
             var call = this.call;
 
-            try {
-                call.yield();
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "somethingAwesome cannot yield since no callback was passed. " +
-                              "Received [23, 42]");
-            }
+            assert.exception(
+                function () {
+                    call.yield();
+                },
+                {
+                    message: "somethingAwesome cannot yield since no callback was passed. "
+                             + "Received [23, 42]"
+                }
+            );
         });
 
         it("invokes last argument as callback", function () {
@@ -484,12 +488,14 @@ describe("sinonSpy.call", function () {
             var call = this.call;
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                call.yieldOn(thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield since no callback was passed.");
-            }
+            assert.exception(
+                function () {
+                    call.yieldOn(thisObj);
+                },
+                {
+                    message: "spy cannot yield since no callback was passed."
+                }
+            );
         });
 
         it("includes stub name and actual arguments in error", function () {
@@ -498,13 +504,15 @@ describe("sinonSpy.call", function () {
             var call = this.call;
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                call.yieldOn(thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "somethingAwesome cannot yield since no callback was passed. " +
-                              "Received [23, 42]");
-            }
+            assert.exception(
+                function () {
+                    call.yieldOn(thisObj);
+                },
+                {
+                    message: "somethingAwesome cannot yield since no callback was passed. " +
+                             "Received [23, 42]"
+                }
+            );
         });
 
         it("invokes last argument as callback", function () {
@@ -575,12 +583,14 @@ describe("sinonSpy.call", function () {
         it("throws understandable error if no callback is passed", function () {
             var call = this.call;
 
-            try {
-                call.yieldTo("success");
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield to 'success' since no callback was passed.");
-            }
+            assert.exception(
+                function () {
+                    call.yieldTo("success");
+                },
+                {
+                    message: "spy cannot yield to 'success' since no callback was passed."
+                }
+            );
         });
 
         it("includes stub name and actual arguments in error", function () {
@@ -588,15 +598,15 @@ describe("sinonSpy.call", function () {
             this.args.push(23, 42);
             var call = this.call;
 
-            try {
-                call.yieldTo("success");
-                throw new Error();
-            } catch (e) {
-                assert.equals(
-                    e.message,
-                    "somethingAwesome cannot yield to 'success' since no callback was passed. Received [23, 42]"
-                );
-            }
+            assert.exception(
+                function () {
+                    call.yieldTo("success");
+                },
+                {
+                    message: "somethingAwesome cannot yield to 'success' since no callback was passed. "
+                             + "Received [23, 42]"
+                }
+            );
         });
 
         it("invokes property on last argument as callback", function () {
@@ -665,12 +675,14 @@ describe("sinonSpy.call", function () {
             var call = this.call;
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                call.yieldToOn("success", thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield to 'success' since no callback was passed.");
-            }
+            assert.exception(
+                function () {
+                    call.yieldToOn("success", thisObj);
+                },
+                {
+                    message: "spy cannot yield to 'success' since no callback was passed."
+                }
+            );
         });
 
         it("throws understandable error if symbol prop is not found", function () {
@@ -678,11 +690,14 @@ describe("sinonSpy.call", function () {
                 var call = this.call;
                 var symbol = Symbol();
 
-                assert.exception(function () {
-                    call.yieldToOn(symbol, {});
-                }, function (err) {
-                    return err.message === "spy cannot yield to 'Symbol()' since no callback was passed.";
-                });
+                assert.exception(
+                    function () {
+                        call.yieldToOn(symbol, {});
+                    },
+                    {
+                        message: "spy cannot yield to 'Symbol()' since no callback was passed."
+                    }
+                );
             }
         });
 
@@ -692,15 +707,15 @@ describe("sinonSpy.call", function () {
             var call = this.call;
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                call.yieldToOn("success", thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(
-                    e.message,
-                    "somethingAwesome cannot yield to 'success' since no callback was passed. Received [23, 42]"
-                );
-            }
+            assert.exception(
+                function () {
+                    call.yieldToOn("success", thisObj);
+                },
+                {
+                    message: "somethingAwesome cannot yield to 'success' since no callback was passed. "
+                             + "Received [23, 42]"
+                }
+            );
         });
 
         it("invokes property on last argument as callback", function () {
@@ -800,10 +815,9 @@ describe("sinonSpy.call", function () {
         it("includes exception", function () {
             var object = { doIt: sinonStub().throws("TypeError") };
 
-            try {
+            assert.exception(function () {
                 object.doIt();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            });
 
             assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError");
         });
@@ -811,10 +825,9 @@ describe("sinonSpy.call", function () {
         it("includes exception message if any", function () {
             var object = { doIt: sinonStub().throws("TypeError", "Oh noes!") };
 
-            try {
+            assert.exception(function () {
                 object.doIt();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            });
 
             assert.equals(object.doIt.getCall(0).toString().replace(/ at.*/g, ""), "doIt() !TypeError(Oh noes!)");
         });
@@ -1182,17 +1195,16 @@ describe("sinonSpy.call", function () {
                 error.name = y;
                 throw error;
             });
-            /*eslint-disable no-empty*/
-            try {
+
+            assert.exception(function () {
                 spy("a", "1");
-            } catch (ignored) {}
-            try {
+            });
+            assert.exception(function () {
                 spy("b", "2");
-            } catch (ignored) {}
-            try {
+            });
+            assert.exception(function () {
                 spy("b", "3");
-            } catch (ignored) {}
-            /*eslint-enable no-empty*/
+            });
 
             var argSpy1 = spy.withArgs("a");
             var argSpy2 = spy.withArgs("b");
@@ -1222,10 +1234,9 @@ describe("sinonSpy.call", function () {
             // Throwing just to make sure it has no effect.
             var spy = sinonSpy(sinonStub().throws());
             function call() {
-                try {
+                assert.exception(function () {
                     spy();
-                }
-                catch (e) {} // eslint-disable-line no-empty
+                });
             }
 
             call();
