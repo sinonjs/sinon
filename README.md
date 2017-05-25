@@ -1,7 +1,7 @@
 # Sinon.JS
 
 [![npm version](https://img.shields.io/npm/v/sinon.svg?style=flat)](https://www.npmjs.com/package/sinon) [![Join the chat at https://gitter.im/sinonjs/sinon](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sinonjs/sinon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build status](https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master)](http://travis-ci.org/sinonjs/sinon) [![bitHound Score](https://www.bithound.io/github/sinonjs/sinon/badges/score.svg)](https://www.bithound.io/github/sinonjs/sinon) [![Sauce Test Status](https://saucelabs.com/buildstatus/sinonjs)](https://saucelabs.com/u/sinonjs) [![Coverage Status](https://coveralls.io/repos/github/sinonjs/sinon/badge.svg)](https://coveralls.io/github/sinonjs/sinon) [![OpenCollective](https://opencollective.com/sinon/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/sinon/sponsors/badge.svg)](#sponsors)
+[![OpenCollective](https://opencollective.com/sinon/sponsors/badge.svg)](#sponsors) ![npm downloads per month](https://img.shields.io/npm/dm/sinon.svg)
 
 Standalone and test framework agnostic JavaScript test spies, stubs and mocks (pronounced "sigh-non", named after [Sinon, the warrior](https://en.wikipedia.org/wiki/Sinon)).
 
