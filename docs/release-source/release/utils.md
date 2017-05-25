@@ -30,7 +30,7 @@ Restores supplied method
 
 #### `sinon.createStubInstance(constructor);`
 
-Creates a new object with the given class or function as the protoype and stubs all implemented functions.
+Creates a new object with the given function as the protoype and stubs all implemented functions.
 
 ```javascript
     class Container {
