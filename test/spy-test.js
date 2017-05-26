@@ -208,9 +208,7 @@ describe("spy", function () {
     it("does not throw when calling anonymous spy", function () {
         var spy = createSpy.create();
 
-        refute.exception(function () {
-            spy();
-        });
+        refute.exception(spy);
 
         assert(spy.called);
     });
@@ -303,16 +301,20 @@ describe("spy", function () {
         assert(spy.get.calledOnce);
     });
 
-    it("creates a spy for Error", function () {
-        var originalError = global.Error;
-        try {
-            assert(createSpy(global, "Error"));
-            global.Error = originalError;
-        } catch (e) {
-            // so test failure doesn't trickle down
-            global.Error = originalError;
-            referee.fail("Expected spy to be created");
-        }
+    describe("global.Error", function () {
+        beforeEach(function () {
+            this.originalError = global.Error;
+        });
+
+        afterEach(function () {
+            global.Error = this.originalError;
+        });
+
+        it("creates a spy for Error", function () {
+            refute.exception(function () {
+                createSpy(global, "Error");
+            });
+        });
     });
 
     describe(".named", function () {
@@ -384,12 +386,7 @@ describe("spy", function () {
                 throw err;
             });
 
-            try {
-                spy();
-                referee.fail("Expected spy to throw exception");
-            } catch (e) {
-                assert.same(e, err);
-            }
+            assert.exception(spy, err);
         });
 
         it("retains function length 0", function () {
@@ -763,7 +760,7 @@ describe("spy", function () {
         });
 
         var applyableNatives = (function () {
-            try {
+            try { // eslint-disable-line no-restricted-syntax
                 console.log.apply({}, []); // eslint-disable-line no-console
                 return true;
             } catch (e) {
@@ -1156,10 +1153,7 @@ describe("spy", function () {
                 throw err;
             });
 
-            try {
-                spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             assert(spy.threw(err));
         });
@@ -1171,28 +1165,19 @@ describe("spy", function () {
         });
 
         it("returns true if spy threw", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.threw());
         });
 
         it("returns true if string type matches", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.threw("TypeError"));
         });
 
         it("returns false if string did not match", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert.isFalse(this.spyWithTypeError.threw("Error"));
         });
@@ -1204,19 +1189,13 @@ describe("spy", function () {
         });
 
         it("returns true if string matches", function () {
-            try {
-                this.spyWithStringError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithStringError);
 
             assert(this.spyWithStringError.threw("error"));
         });
 
         it("returns false if strings do not match", function () {
-            try {
-                this.spyWithStringError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithStringError);
 
             assert.isFalse(this.spyWithStringError.threw("not the error"));
         });
@@ -1238,10 +1217,7 @@ describe("spy", function () {
                 throw err;
             });
 
-            try {
-                spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             assert(spy.alwaysThrew(err));
         });
@@ -1253,28 +1229,19 @@ describe("spy", function () {
         });
 
         it("returns true if spy threw", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.alwaysThrew());
         });
 
         it("returns true if string type matches", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.alwaysThrew("TypeError"));
         });
 
         it("returns false if string did not match", function () {
-            try {
-                this.spyWithTypeError();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert.isFalse(this.spyWithTypeError.alwaysThrew("Error"));
         });
@@ -1295,9 +1262,7 @@ describe("spy", function () {
                 }
             });
 
-            try {
-                this.spy();
-            } catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spy);
 
             this.spy();
 
@@ -1305,25 +1270,17 @@ describe("spy", function () {
         });
 
         it("returns true if all calls threw", function () {
-            try {
-                this.spyWithTypeError();
-            } catch (e1) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
-            try {
-                this.spyWithTypeError();
-            } catch (e2) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.alwaysThrew());
         });
 
         it("returns true if all calls threw same type", function () {
-            try {
-                this.spyWithTypeError();
-            } catch (e1) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
-            try {
-                this.spyWithTypeError();
-            } catch (e2) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert(this.spyWithTypeError.alwaysThrew("TypeError"));
         });
@@ -1340,9 +1297,7 @@ describe("spy", function () {
         });
 
         it("contains exception thrown by function", function () {
-            try {
-                this.spyWithTypeError();
-            } catch (e) {} // eslint-disable-line no-empty
+            assert.exception(this.spyWithTypeError);
 
             assert.equals(this.spyWithTypeError.exceptions, [this.error]);
         });
@@ -1368,15 +1323,11 @@ describe("spy", function () {
 
             spy();
 
-            try {
-                spy();
-            } catch (e1) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             spy();
 
-            try {
-                spy();
-            } catch (e2) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             spy();
 
@@ -1495,9 +1446,7 @@ describe("spy", function () {
                 throw new Error();
             });
 
-            try {
-                spy();
-            } catch (e) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             assert.equals(spy.returnValues.length, 1);
             refute.defined(spy.returnValues[0]);
@@ -1794,10 +1743,7 @@ describe("spy", function () {
                 throw "an exception";
             });
 
-            try {
-                spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             refute.isNull(spy.firstCall);
         });
@@ -1819,10 +1765,7 @@ describe("spy", function () {
                 throw err;
             });
 
-            try {
-                spy();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            assert.exception(spy);
 
             assert.same(spy.firstCall.exception, err);
             assert(spy.firstCall.threw(err));
@@ -1998,24 +1941,28 @@ describe("spy", function () {
         it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
-            try {
-                spy.callArg(0);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot call arg since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.callArg(0);
+                },
+                {
+                    message: "spy cannot call arg since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
-            try {
-                spy.callArg(0);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot call arg since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.callArg(0);
+                },
+                {
+                    message: "someMethod cannot call arg since it was not yet invoked."
+                }
+            );
         });
 
         it("throws if index is not a number", function () {
@@ -2075,12 +2022,14 @@ describe("spy", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.callArgOn(0, thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot call arg since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.callArgOn(0, thisObj);
+                },
+                {
+                    message: "spy cannot call arg since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
@@ -2088,12 +2037,14 @@ describe("spy", function () {
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.callArgOn(0, thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot call arg since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.callArgOn(0, thisObj);
+                },
+                {
+                    message: "someMethod cannot call arg since it was not yet invoked."
+                }
+            );
         });
 
         it("throws if index is not a number", function () {
@@ -2159,24 +2110,28 @@ describe("spy", function () {
         it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
-            try {
-                spy.yield();
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yield();
+                },
+                {
+                    message: "spy cannot yield since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
-            try {
-                spy.yield();
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot yield since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yield();
+                },
+                {
+                    message: "someMethod cannot yield since it was not yet invoked."
+                }
+            );
         });
 
         it("passs additional arguments", function () {
@@ -2225,12 +2180,14 @@ describe("spy", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.yieldOn(thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldOn(thisObj);
+                },
+                {
+                    message: "spy cannot yield since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
@@ -2238,12 +2195,14 @@ describe("spy", function () {
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.yieldOn(thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot yield since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldOn(thisObj);
+                },
+                {
+                    message: "someMethod cannot yield since it was not yet invoked."
+                }
+            );
         });
 
         it("pass additional arguments", function () {
@@ -2283,35 +2242,42 @@ describe("spy", function () {
         it("throws if spy was not yet invoked", function () {
             var spy = createSpy();
 
-            try {
-                spy.yieldTo("success");
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield to 'success' since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldTo("success");
+                },
+                {
+                    message: "spy cannot yield to 'success' since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
             var api = { someMethod: function () {} };
             var spy = createSpy(api, "someMethod");
 
-            try {
-                spy.yieldTo("success");
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot yield to 'success' since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldTo("success");
+                },
+                {
+                    message: "someMethod cannot yield to 'success' since it was not yet invoked."
+                }
+            );
         });
 
         it("throws readable message for symbol when spy was not yet invoked", function () {
             if (typeof Symbol === "function") {
                 var spy = createSpy();
 
-                try {
-                    spy.yieldTo(Symbol());
-                } catch (e) {
-                    assert.equals(e.message, "spy cannot yield to 'Symbol()' since it was not yet invoked.");
-                }
+                assert.exception(
+                    function () {
+                        spy.yieldTo(Symbol());
+                    },
+                    {
+                        message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
+                    }
+                );
             }
         });
 
@@ -2353,12 +2319,14 @@ describe("spy", function () {
             var spy = createSpy();
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.yieldToOn("success", thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "spy cannot yield to 'success' since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldToOn("success", thisObj);
+                },
+                {
+                    message: "spy cannot yield to 'success' since it was not yet invoked."
+                }
+            );
         });
 
         it("includes spy name in error message", function () {
@@ -2366,12 +2334,14 @@ describe("spy", function () {
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
-            try {
-                spy.yieldToOn("success", thisObj);
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "someMethod cannot yield to 'success' since it was not yet invoked.");
-            }
+            assert.exception(
+                function () {
+                    spy.yieldToOn("success", thisObj);
+                },
+                {
+                    message: "someMethod cannot yield to 'success' since it was not yet invoked."
+                }
+            );
         });
 
         it("throws readable message for symbol when spy was not yet invoked", function () {
@@ -2379,11 +2349,14 @@ describe("spy", function () {
                 var spy = createSpy();
                 var thisObj = { name1: "value1", name2: "value2" };
 
-                try {
-                    spy.yieldToOn(Symbol(), thisObj);
-                } catch (e) {
-                    assert.equals(e.message, "spy cannot yield to 'Symbol()' since it was not yet invoked.");
-                }
+                assert.exception(
+                    function () {
+                        spy.yieldToOn(Symbol(), thisObj);
+                    },
+                    {
+                        message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
+                    }
+                );
             }
         });
 
@@ -2468,9 +2441,7 @@ describe("spy", function () {
                 spy.reset();
             });
 
-            assert.exception(function () {
-                spy();
-            }, "InvalidResetException");
+            assert.exception(spy, "InvalidResetException");
         });
     });
 

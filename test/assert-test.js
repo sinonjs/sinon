@@ -30,17 +30,14 @@ describe("assert", function () {
     });
 
     it("supports proxy property", function () {
-        var failed = false;
         var api = { method: function () {} };
         api.method.proxy = function () {};
         sinonSpy(api, "method");
         api.method();
-        try {
+
+        refute.exception(function () {
             sinonAssert.calledOnce(api.method);
-        } catch (e) {
-            failed = true;
-        }
-        assert.isFalse(failed);
+        });
     });
 
     describe(".fail", function () {
@@ -53,18 +50,14 @@ describe("assert", function () {
         });
 
         it("throws exception", function () {
-            var failed = false;
-            var exception;
-
-            try {
-                sinonAssert.fail("Some message");
-                failed = true;
-            } catch (e) {
-                exception = e;
-            }
-
-            assert.isFalse(failed);
-            assert.equals(exception.name, "AssertError");
+            assert.exception(
+                function () {
+                    sinonAssert.fail("Some message");
+                },
+                {
+                    name: "AssertError"
+                }
+            );
         });
 
         it("throws configured exception type", function () {
@@ -1106,11 +1099,14 @@ describe("assert", function () {
                 includeFail: false
             });
 
-            try {
-                assertCalled(sinonSpy()); // eslint-disable-line no-undef
-            } catch (e) {
-                assert.equals(e.message, "expected spy to have been called at least once but was never called");
-            }
+            assert.exception(
+                function () {
+                    assertCalled(sinonSpy()); // eslint-disable-line no-undef
+                },
+                {
+                    message: "expected spy to have been called at least once but was never called"
+                }
+            );
         });
 
         it("exposes asserts into object without prefixes", function () {
@@ -1159,7 +1155,7 @@ describe("assert", function () {
 
             /*eslint consistent-return: "off"*/
             this.message = function (method) {
-                try {
+                try { // eslint-disable-line no-restricted-syntax
                     sinonAssert[method].apply(sinonAssert, [].slice.call(arguments, 1));
                 } catch (e) {
                     return e.message;

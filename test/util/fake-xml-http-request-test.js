@@ -32,7 +32,7 @@ var fakeXhrTearDown = function () {
 };
 
 var runWithWorkingXHROveride = function (workingXHR, test) {
-    try {
+    try { // eslint-disable-line no-restricted-syntax
         var original = sinonFakeXhr.xhr.workingXHR;
         sinonFakeXhr.xhr.workingXHR = workingXHR;
         test();
@@ -1809,7 +1809,7 @@ if (typeof window !== "undefined") {
 
             it("performs initial readystatechange on opening when filters are being used, but don't match",
                 function () {
-                    try {
+                    try { // eslint-disable-line no-restricted-syntax
                         FakeXMLHttpRequest.useFilters = true;
                         var spy = sinonSpy();
                         this.fakeXhr.addEventListener("readystatechange", spy);

@@ -70,11 +70,14 @@ describe("sinonMock", function () {
             var anonMock = sinonExpectation.create();
             anonMock.once();
 
-            try {
-                anonMock.verify();
-            } catch (e) {
-                assert.match(e.message, "anonymous mock expectation");
-            }
+            assert.exception(
+                function () {
+                    anonMock.verify();
+                },
+                {
+                    message: "anonymous mock expectation"
+                }
+            );
         });
 
         it("call expectation", function () {
@@ -124,12 +127,9 @@ describe("sinonMock", function () {
                 var expectation = this.expectation;
                 expectation();
 
-                try {
-                    expectation();
-                    referee.fail("Expected to throw");
-                } catch (e) {
-                    assert.equals(e.message, "myMeth already called once");
-                }
+                assert.exception(expectation, {
+                    message: "myMeth already called once"
+                });
             });
         });
 
@@ -465,10 +465,7 @@ describe("sinonMock", function () {
             it("should not be met when called too many times", function () {
                 this.expectation();
 
-                try {
-                    this.expectation();
-                }
-                catch (e) {} // eslint-disable-line no-empty
+                assert.exception(this.expectation);
 
                 assert.isFalse(this.expectation.met());
             });
@@ -689,13 +686,14 @@ describe("sinonMock", function () {
             it("throws readable error", function () {
                 var expectation = this.expectation;
 
-                try {
-                    expectation.verify();
-                    referee.fail("Expected to throw");
-                } catch (e) {
-                    assert.equals(e.message,
-                                  "Expected myMeth([...]) once (never called)");
-                }
+                assert.exception(
+                    function () {
+                        expectation.verify();
+                    },
+                    {
+                        message: "Expected myMeth([...]) once (never called)"
+                    }
+                );
             });
         });
     });
@@ -741,175 +739,181 @@ describe("sinonMock", function () {
             var mock = this.mock;
             mock.expects("method").thrice();
             mock.expects("method").once().withArgs(42);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(
-                message,
-                "Expected method([...]) thrice (never called)\nExpected method(42[, ...]) once (never called)"
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method([...]) thrice (never called)\n" +
+                             "Expected method(42[, ...]) once (never called)"
+                }
             );
         });
 
         it("includes exact expected arguments in error message", function () {
             var mock = this.mock;
             mock.expects("method").once().withExactArgs(42);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Expected method(42) once (never called)");
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method(42) once (never called)"
+                }
+            );
         });
 
         it("includes received call count in error message", function () {
             var mock = this.mock;
             mock.expects("method").thrice().withExactArgs(42);
             this.object.method(42);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Expected method(42) thrice (called once)");
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method(42) thrice (called once)"
+                }
+            );
         });
 
         it("includes unexpected calls in error message", function () {
             var mock = this.mock;
+            var object = this.object;
+
             mock.expects("method").thrice().withExactArgs(42);
-            var message;
 
-            try {
-                this.object.method();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message,
-                          "Unexpected call: method()\n" +
-                          "    Expected method(42) thrice (never called)");
+            assert.exception(
+                function () {
+                    object.method();
+                },
+                {
+                    message: "Unexpected call: method()\n" +
+                             "    Expected method(42) thrice (never called)"
+                }
+            );
         });
 
         it("includes met expectations in error message", function () {
             var mock = this.mock;
+            var object = this.object;
+
             mock.expects("method").once().withArgs(1);
             mock.expects("method").thrice().withExactArgs(42);
-            this.object.method(1);
-            var message;
+            object.method(1);
 
-            try {
-                this.object.method();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Unexpected call: method()\n" +
-                          "    Expectation met: method(1[, ...]) once\n" +
-                          "    Expected method(42) thrice (never called)");
+            assert.exception(
+                function () {
+                    object.method();
+                },
+                {
+                    message: "Unexpected call: method()\n" +
+                             "    Expectation met: method(1[, ...]) once\n" +
+                             "    Expected method(42) thrice (never called)"
+                }
+            );
         });
 
         it("includes met expectations in error message from verify", function () {
             var mock = this.mock;
+
             mock.expects("method").once().withArgs(1);
             mock.expects("method").thrice().withExactArgs(42);
             this.object.method(1);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Expected method(42) thrice (never called)\n" +
-                          "Expectation met: method(1[, ...]) once");
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method(42) thrice (never called)\n" +
+                             "Expectation met: method(1[, ...]) once"
+                }
+            );
         });
 
         it("reports min calls in error message", function () {
             var mock = this.mock;
             mock.expects("method").atLeast(1);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Expected method([...]) at least once (never called)");
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method([...]) at least once (never called)"
+                }
+            );
         });
 
         it("reports max calls in error message", function () {
             var mock = this.mock;
+            var object = this.object;
+
             mock.expects("method").atMost(2);
-            var message;
 
-            try {
-                this.object.method();
-                this.object.method();
-                this.object.method();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Unexpected call: method()\n" +
-                          "    Expectation met: method([...]) at most twice");
+            assert.exception(
+                function () {
+                    object.method();
+                    object.method();
+                    object.method();
+                },
+                {
+                    message: "Unexpected call: method()\n" +
+                             "    Expectation met: method([...]) at most twice"
+                }
+            );
         });
 
         it("reports min calls in met expectation", function () {
             var mock = this.mock;
+            var object = this.object;
+
             mock.expects("method").atLeast(1);
             mock.expects("method").withArgs(2).once();
-            var message;
 
-            try {
-                this.object.method();
-                this.object.method(2);
-                this.object.method(2);
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Unexpected call: method(2)\n" +
-                          "    Expectation met: method([...]) at least once\n" +
-                          "    Expectation met: method(2[, ...]) once");
+            assert.exception(
+                function () {
+                    object.method();
+                    object.method(2);
+                    object.method(2);
+                },
+                {
+                    message: "Unexpected call: method(2)\n" +
+                             "    Expectation met: method([...]) at least once\n" +
+                             "    Expectation met: method(2[, ...]) once"
+                }
+            );
         });
 
         it("reports max and min calls in error messages", function () {
             var mock = this.mock;
             mock.expects("method").atLeast(1).atMost(2);
-            var message;
 
-            try {
-                mock.verify();
-            } catch (e) {
-                message = e.message;
-            }
-
-            assert.equals(message, "Expected method([...]) at least once and at most twice " +
-                          "(never called)");
+            assert.exception(
+                function () {
+                    mock.verify();
+                },
+                {
+                    message: "Expected method([...]) at least once and at most twice (never called)"
+                }
+            );
         });
 
         it("fails even if the original expectation exception was caught", function () {
             var mock = this.mock;
+            var object = this.object;
+
             mock.expects("method").once();
 
-            this.object.method();
-            try {
-                this.object.method();
-            } catch (e) {
-                // Silenced error
-            }
+            object.method();
+
+            assert.exception(function () {
+                object.method();
+            });
 
             assert.exception(function () {
                 mock.verify();
@@ -1082,12 +1086,9 @@ describe("sinonMock", function () {
         it("throws understandable error if no callback is passed", function () {
             var mock = sinonMock().yields();
 
-            try {
-                mock();
-                throw new Error();
-            } catch (e) {
-                assert.equals(e.message, "stub expected to yield, but no callback was passed.");
-            }
+            assert.exception(mock, {
+                message: "stub expected to yield, but no callback was passed."
+            });
         });
     });
 });

@@ -24,27 +24,30 @@ describe("collection", function () {
         });
 
         it("fails if stubbing property on null", function () {
-            var error;
+            var collection = this.collection;
 
-            try {
-                this.collection.stub(null, "prop");
-            } catch (e) {
-                error = e;
-            }
-
-            assert.equals(error.message, "Trying to stub property 'prop' of null");
+            assert.exception(
+                function () {
+                    collection.stub(null, "prop");
+                },
+                {
+                    message: "Trying to stub property 'prop' of null"
+                }
+            );
         });
 
         it("fails if stubbing symbol on null", function () {
             if (typeof Symbol === "function") {
-                var error;
+                var collection = this.collection;
 
-                try {
-                    this.collection.stub(null, Symbol());
-                } catch (e) {
-                    error = e;
-                }
-                assert.equals(error.message, "Trying to stub property 'Symbol()' of null");
+                assert.exception(
+                    function () {
+                        collection.stub(null, Symbol());
+                    },
+                    {
+                        message: "Trying to stub property 'Symbol()' of null"
+                    }
+                );
             }
         });
 
@@ -307,15 +310,16 @@ describe("collection", function () {
         });
 
         it("calls restore when restore throws", function () {
-            this.collection.verify = sinonSpy();
-            this.collection.restore = sinonStub().throws();
+            var collection = this.collection;
 
-            try {
-                this.collection.verifyAndRestore();
-            }
-            catch (e) {} // eslint-disable-line no-empty
+            collection.verify = sinonSpy();
+            collection.restore = sinonStub().throws();
 
-            assert(this.collection.restore.called);
+            assert.exception(function () {
+                collection.verifyAndRestore();
+            });
+
+            assert(collection.restore.called);
         });
     });
 

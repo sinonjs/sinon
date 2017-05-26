@@ -11,7 +11,7 @@ if (typeof Worker !== "undefined") {
             var worker = new Worker("file://" + __dirname + "/webworker-script.js");
 
             worker.onmessage = function (msg) {
-                try {
+                try { // eslint-disable-line no-restricted-syntax
                     assert.same(msg.data, "worker response");
                     done();
                 } catch (err) {
