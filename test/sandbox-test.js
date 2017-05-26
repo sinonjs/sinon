@@ -56,6 +56,22 @@ describe("sinonSandbox", function () {
         assert.same(sandbox.assert, sinonAssert);
     });
 
+    it("can be reset without failing when pre-configured to use a fake server", function () {
+        var sandbox = sinonSandbox.create({useFakeServer: true});
+        refute.exception(function () {
+            sandbox.reset();
+        });
+    });
+
+    it("can be reset without failing when configured to use a fake server", function () {
+        var sandbox = sinonSandbox.create();
+        sandbox.useFakeServer();
+        refute.exception(function () {
+            sandbox.reset();
+        });
+    });
+
+
     describe(".useFakeTimers", function () {
         beforeEach(function () {
             this.sandbox = Object.create(sinonSandbox);
