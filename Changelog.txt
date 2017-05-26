@@ -1,4 +1,11 @@
 
+2.3.2 / 2017-05-26
+==================
+
+  * Fix failing sandbox.resetBehavior() (#1428)
+  * Fix restoring getters/setters/values for previously unexisting props (#1419)
+  * Called in order takes callCount into account. Closes #1398.
+
 2.3.1 / 2017-05-23
 ==================
 
