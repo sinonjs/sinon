@@ -67,7 +67,7 @@ Does not change the object, but returns a mock object to set expectations on the
 
 Overrides `obj.method` with a mock function and returns it.
 
-See [expectations](#expectations-api) below.
+See [expectations](#expectations) below.
 
 
 #### `mock.restore();`
