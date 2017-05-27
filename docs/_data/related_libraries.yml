@@ -10,6 +10,9 @@
 - title: fetch-mock — Mock http requests made using fetch
   url: http://www.wheresrhys.co.uk/fetch-mock/
 
+- title: fake-fetch — fake window.fetch for tests
+  url: https://github.com/msn0/fake-fetch
+
 - title: Mock Socket — mocking library for websockets and socket.io
   url: https://github.com/thoov/mock-socket
 
