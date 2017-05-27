@@ -7,6 +7,9 @@
 - title: bogus — utility for mocking dependencies when testing RequireJS based projects
   url: https://github.com/mroderick/bogus
 
+- title: fetch-mock — Mock http requests made using fetch
+  url: http://www.wheresrhys.co.uk/fetch-mock/
+
 - title: Mock Socket — mocking library for websockets and socket.io
   url: https://github.com/thoov/mock-socket
 
