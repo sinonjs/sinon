@@ -26,6 +26,18 @@ var myFakeServer = sinon.fakeServer.create({
 ## sinon.test, sinon.testCase and sinon.config Removed
 `sinon.test` and `sinon.testCase` have been extracted from the Sinon API and moved into their own node module, [sinon-test](https://www.npmjs.com/package/sinon-test). Please refer to the [sinon-test README](https://github.com/sinonjs/sinon-test/blob/master/README.md) for migration examples.
 
+## stub.callsFake replaces stub(obj, 'meth', fn)
+`sinon.stub(obj, 'meth', fn)` return a spy, not a full stub. Behavior could not be redefined. `stub.callsFake`
+now returns a full stub. Here's a [codemod script](https://github.com/hurrymaplelad/sinon-codemod) to help you migrate.
+See [discussion](https://github.com/sinonjs/sinon/pull/823).
+
+```js
+// Old
+sinon.stub(obj, 'meth', fn);
+// New
+sinon.stub(obj, 'meth').callsFake(fn);
+```
+
 ## Deprecation of internal helpers
 The following utility functions are being marked as deprecated and are planned for removal in Sinon v3.0; please check your codebase for usage to ease future migrations:
 
