@@ -122,6 +122,33 @@ describe("issues", function () {
         });
     });
 
+    describe("#950 - first execution of a spy as a method renames that spy", function () {
+        it("should not rename spies", function () {
+            var expectedName = "proxy";
+
+            function bob() {}
+            var spy = sinon.spy(bob);
+
+            assert.equals(spy.name, expectedName);
+
+            var obj = { methodName: spy };
+            assert.equals(spy.name, expectedName);
+
+            spy();
+            assert.equals(spy.name, expectedName);
+
+            obj.methodName.call(null);
+            assert.equals(spy.name, expectedName);
+
+            obj.methodName();
+            assert.equals(spy.name, expectedName);
+
+            obj.otherProp = spy;
+            obj.otherProp();
+            assert.equals(spy.name, expectedName);
+        });
+    });
+
     describe("#1026", function () {
         it("should stub `watch` method on any Object", function () {
             // makes sure that Object.prototype.watch is set back to its old value
