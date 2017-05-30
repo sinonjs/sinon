@@ -157,8 +157,6 @@ Creates a spy that only records calls when the received arguments match those pa
 "should call method once with each argument": function () {
     var object = { method: function () {} };
     var spy = sinon.spy(object, "method");
-    spy.withArgs(42);
-    spy.withArgs(1);
 
     object.method(42);
     object.method(1);
