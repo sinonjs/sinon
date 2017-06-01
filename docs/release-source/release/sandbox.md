@@ -41,16 +41,32 @@ describe('myAPI.hello method', function () {
 
 #### `var sandbox = sinon.sandbox.create();`
 
-Creates a sandbox object
+Creates a sandbox object with spies, stubs, and mocks.
 
 
 #### `var sandbox = sinon.sandbox.create(config);`
 
-The `sinon.sandbox.create(config)` method is mostly an integration feature, and as an end-user of Sinon.JS you will probably not need it.
+The `sinon.sandbox.create(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
 
-Creates a pre-configured sandbox object. The configuration can instruct the sandbox to include fake timers, fake server, and how to interact with these.
+Sandboxes are partially configured by default such that calling:
 
-The default configuration looks like:
+```javascript
+var sandbox = sinon.sandbox.create({});
+```
+
+will merge in extra defaults analogous to:
+
+```javascript
+var sandbox = sinon.sandbox.create({
+    // ...
+    injectInto: null,
+    properties: ["spy", "stub", "mock"],
+    useFakeTimers: false,
+    useFakeServer: false
+});
+```
+
+The `useFakeTimers` and `useFakeServers` are **false** as opposed to the defaults in `sinon.defaultConfig`:
 
 ```javascript
 sinon.defaultConfig = {
@@ -60,6 +76,19 @@ sinon.defaultConfig = {
     useFakeTimers: true,
     useFakeServer: true
 }
+```
+
+To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, you can call:
+
+```javascript
+// Inject the sinon defaults explicitly.
+var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+
+// (OR) Add the extra properties that differ from the sinon defaults.
+var sandbox = sinon.sandbox.create({
+    useFakeTimers: true
+    useFakeServer: true
+});
 ```
 
 ##### injectInto
