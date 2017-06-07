@@ -2654,5 +2654,23 @@ describe("stub", function () {
 
             assert.equals(getPropertyDescriptor(obj, "nonExisting"), undefined);
         });
+
+        it("allows stubbing function static properties", function () {
+            var myFunc = function () {};
+            myFunc.prop = "rawString";
+
+            createStub(myFunc, "prop").value("newString");
+            assert.equals(myFunc.prop, "newString");
+        });
+
+        it("allows restoring function static properties", function () {
+            var myFunc = function () {};
+            myFunc.prop = "rawString";
+
+            var stub = createStub(myFunc, "prop").value("newString");
+            stub.restore();
+
+            assert.equals(myFunc.prop, "rawString");
+        });
     });
 });
