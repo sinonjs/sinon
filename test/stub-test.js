@@ -102,6 +102,15 @@ describe("stub", function () {
         assert(callback.called);
     });
 
+    it("should allow restoring previously undefined properties", function () {
+        var obj = {};
+        var stub = createStub(obj, "nonExisting").value(2);
+
+        stub.restore();
+
+        assert.isFalse(Object.hasOwnProperty(obj, "nonExisting"));
+    });
+
     describe(".returns", function () {
         it("returns specified value", function () {
             var stub = createStub.create();
