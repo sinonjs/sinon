@@ -369,20 +369,28 @@ describe("collection", function () {
         beforeEach(function () {
             this.collection = Object.create(sinonCollection);
             this.collection.fakes = [{
+                // this fake has a resetHistory method
                 resetHistory: sinonSpy()
             }, {
+                // this fake has a resetHistory method
                 resetHistory: sinonSpy()
+            }, {
+                // this fake pretends to be a spy, which does not have resetHistory method
+                // but has a reset method
+                reset: sinonSpy()
             }];
         });
 
-        it("calls resetHistory on all fakes", function () {
+        it("resets the history on all fakes", function () {
             var fake0 = this.collection.fakes[0];
             var fake1 = this.collection.fakes[1];
+            var fake2 = this.collection.fakes[2];
 
             this.collection.resetHistory();
 
             assert(fake0.resetHistory.called);
             assert(fake1.resetHistory.called);
+            assert(fake2.reset.called);
         });
     });
 

@@ -217,6 +217,23 @@ describe("issues", function () {
         });
     });
 
+    describe("#1372 - sandbox.resetHistory", function () {
+        it("should reset spies", function () {
+            var spy = this.sandbox.spy();
+
+            spy();
+            assert.equals(spy.callCount, 1);
+
+            spy();
+            assert.equals(spy.callCount, 2);
+
+            this.sandbox.resetHistory();
+
+            spy();
+            assert.equals(spy.callCount, 1);  // should not fail but fails
+        });
+    });
+
     describe("#1398", function () {
         it("Call order takes into account both calledBefore and callCount", function () {
             var s1 = sinon.spy();
