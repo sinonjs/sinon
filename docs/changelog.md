@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.4 / 2017-06-10
+==================
+
+  * Fix #1372: make sandbox.resetHistory also reset spies (#1424)
+
 2.3.3 / 2017-06-10
 ==================
 
