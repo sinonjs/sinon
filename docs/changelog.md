@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.3 / 2017-06-10
+==================
+
+  * Fix #1445: make stubbing of static function properties possible
+
 2.3.2 / 2017-05-26
 ==================
 
