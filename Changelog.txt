@@ -939,7 +939,7 @@ v2.0.0-pre.5 / 2016-12-31
 * Switched indentation from 2 to 4 spaces :)
 * Node.js compatibility improvements
 * Remove magic booleans from sinon.assert.expose, replace with option object
-* Put QUnit adapter in it's own repository
+* Put QUnit adapter in its own repository
 * Update build script to build standalone timers and server files
 * Breaking change: thisObj -> thisValue
   Change brings consistency to the code-base, always use thisValue

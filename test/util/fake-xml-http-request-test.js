@@ -146,7 +146,7 @@ if (typeof window !== "undefined") {
             var onCreate = sinonSpy();
             FakeXMLHttpRequest.onCreate = onCreate;
 
-            // instantiating FakeXMLHttpRequest for it's onCreate side effect
+            // instantiating FakeXMLHttpRequest for its onCreate side effect
             var xhr = new FakeXMLHttpRequest(); // eslint-disable-line no-unused-vars
 
             assert(onCreate.called);

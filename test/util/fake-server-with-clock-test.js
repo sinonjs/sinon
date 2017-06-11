@@ -158,7 +158,7 @@ if (typeof window !== "undefined") {
                 this.server.respond();
                 var xhr = new FakeXMLHttpRequest();
                 // please the linter, we can't have unused variables
-                // even when we're instantiating FakeXMLHttpRequest for it's side effects
+                // even when we're instantiating FakeXMLHttpRequest for its side effects
                 assert(xhr);
                 setInterval(function () {}, 17);
                 this.server.respond();

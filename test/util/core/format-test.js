@@ -11,7 +11,7 @@ describe("util/core/format", function () {
 
     it.skip("should configure formatio to use maximum 250 entries", function () {
         // not sure how we can verify this integration with the current setup
-        // where sinon.js calls formatio as part of it's loading
+        // where sinon.js calls formatio as part of its loading
         // extracting sinon.format into a separate module would make this a lot
         // easier
     });

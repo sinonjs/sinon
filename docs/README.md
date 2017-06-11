@@ -10,7 +10,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing documentation
 
 ## Documentation release process
 
-Whenever a new release is created using `npm version`, the tree from `release-source/release/` is copied into it's own folder under `releases/` with an appropriate name.
+Whenever a new release is created using `npm version`, the tree from `release-source/release/` is copied into its own folder under `releases/` with an appropriate name.
 
 Likewise, the `_releases/release.md` file is copied into a file matching the release name.
 

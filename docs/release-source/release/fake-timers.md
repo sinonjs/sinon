@@ -54,7 +54,7 @@ As above, but rather than starting the clock with a timestamp of 0, start at the
 
 *Since `sinon@2.0.0`*
 
-You can also pass in a Date object, and it's `getTime()` will be used for the starting timestamp.
+You can also pass in a Date object, and its `getTime()` will be used for the starting timestamp.
 
 #### `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...);`
 
