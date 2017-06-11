@@ -64,7 +64,7 @@ The following utility functions are being marked as deprecated and are planned f
 
 ## `sandbox.useFakeXMLHttpRequest` no longer returns a "server"
 
-In Sinon 1.x, the sandbox' `useFakeXMLHttpRequest` was the same as it's `useFakeServer`. In 2.x, it maps directly to `sinon.useFakeXMLHttpRequest` (but with sandboxing). If you use `sandbox.useFakeXMLHttpRequest`, just replace it with `sandbox.useFakeServer`, and your tests should behave as they always did.
+In Sinon 1.x, the sandbox' `useFakeXMLHttpRequest` was the same as its `useFakeServer`. In 2.x, it maps directly to `sinon.useFakeXMLHttpRequest` (but with sandboxing). If you use `sandbox.useFakeXMLHttpRequest`, just replace it with `sandbox.useFakeServer`, and your tests should behave as they always did.
 
 ## `sinon.behavior` is gone
 

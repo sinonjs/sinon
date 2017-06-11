@@ -154,7 +154,7 @@ first call. There are two ways of achieving this:
 ```
 
 The first example uses the two-dimensional `args` array directly on the spy,
-while the second example fetches the first call object and then accesses it's
+while the second example fetches the first call object and then accesses its
 `args` array. Which one to use is a matter of preference, but the recommended
 approach is going with `spy.calledWith(arg1, arg2, ...)` unless there's a need
 to make the tests highly specific.

@@ -2445,7 +2445,7 @@ var spyApi = {
         push.call(this.exceptions, exception);
         push.call(this.returnValues, returnValue);
         var err = new ErrorConstructor();
-        // 1. Please do not get stack at this point. It's may be so very slow, and not actually used
+        // 1. Please do not get stack at this point. It may be so very slow, and not actually used
         // 2. PhantomJS does not serialize the stack trace until the error has been thrown:
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Stack
         try {
