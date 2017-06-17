@@ -626,4 +626,24 @@ describe("sinonSandbox", function () {
             assert.equals(object.prop, "bla");
         });
     });
+
+    if (typeof window !== "undefined") {
+        describe("window properties", function () {
+            var sandbox;
+
+            beforeEach(function () {
+                sandbox = sinonSandbox.create();
+            });
+
+            afterEach(function () {
+                sandbox.restore();
+            });
+
+            it("stub window innerHeight", function () {
+                sandbox.stub(window, "innerHeight").value(111);
+
+                assert.equals(window.innerHeight, 111);
+            });
+        });
+    }
 });
