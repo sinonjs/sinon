@@ -419,7 +419,7 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 
-### Individual spy calls"
+### Individual spy calls
 
 
 ##### `var spyCall = spy.getCall(n)`
@@ -499,4 +499,4 @@ Exception thrown, if any.
 
 #### `spyCall.returnValue`
 
-Return value.]}]}
+Return value.
