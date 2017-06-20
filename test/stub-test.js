@@ -2672,5 +2672,18 @@ describe("stub", function () {
 
             assert.equals(myFunc.prop, "rawString");
         });
+
+        it("allows stubbing object props with configurable false", function () {
+            var myObj = {};
+            Object.defineProperty(myObj, "prop", {
+                configurable: false,
+                enumerable: true,
+                writable: true,
+                value: "static"
+            });
+
+            createStub(myObj, "prop").value("newString");
+            assert.equals(myObj.prop, "newString");
+        });
     });
 });
