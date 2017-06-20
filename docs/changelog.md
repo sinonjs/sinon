@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.5 / 2017-06-20
+==================
+
+  * Check configurable on a prop before creating (fixes #1456) (#1462)
+
 2.3.4 / 2017-06-10
 ==================
 
