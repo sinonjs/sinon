@@ -2,6 +2,7 @@
 
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
+var sinonSandbox = require("../../lib/sinon/sandbox");
 var configureLogError = require("../../lib/sinon/util/core/log_error.js");
 var assert = referee.assert;
 var refute = referee.refute;
@@ -248,4 +249,24 @@ describe("issues", function () {
             });
         });
     });
+
+    if (typeof window !== "undefined") {
+        describe("#1456", function () {
+            var sandbox;
+
+            beforeEach(function () {
+                sandbox = sinonSandbox.create();
+            });
+
+            afterEach(function () {
+                sandbox.restore();
+            });
+
+            it("stub window innerHeight", function () {
+                sandbox.stub(window, "innerHeight").value(111);
+
+                assert.equals(window.innerHeight, 111);
+            });
+        });
+    }
 });
