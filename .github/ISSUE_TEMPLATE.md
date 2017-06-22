@@ -13,6 +13,7 @@
 > Describe *with code* how to reproduce the faulty behaviour,
 > or link to code on JSBin or similar
 
+<!-- Delete the section below if it is irrelevant to your issue -->
 <details>
     <summary>Really long code sample or stacktrace</summary>
 
@@ -21,6 +22,3 @@
     please stuff it in a `<details>` tag such as this
     to make the issue more readable. Thanks.
 </details>
-
-[See this for an example](https://github.com/sinonjs/sinon/blob/master/CONTRIBUTING.md#bug-report-template)
-
