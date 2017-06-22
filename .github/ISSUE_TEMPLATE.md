@@ -1,4 +1,17 @@
+<!--
+Are you wondering how to do something with Sinon, or something else that is purely
+usage related? Please post it to
+- the Sinon.JS mailinglist: http://groups.google.com/group/sinonjs), or on
+- StackOverflow using the `sinon` label
+This makes it possible for the bigger community to help answer your questions.
+
+The issue tracker is solely meant for posting bugs, feature requests and non-usage related issues.
+
+You might also be interested in our How To-articles: http://sinonjs.org/how-to/
+-->
+
 > We understand you have a problem and are in a hurry, but please provide us with some info to make it much more likely for your issue to be understood, worked on and resolved quickly.
+
 
 * Sinon version : _please verify that the bug exists in the latest Sinon release_
 * Environment   :
