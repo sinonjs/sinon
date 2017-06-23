@@ -2507,5 +2507,44 @@ describe("spy", function () {
             assert.equals(spy.length, 3);
         });
     });
+
+    describe(".matchingFakes", function () {
+        beforeEach(function () {
+            this.spy = createSpy();
+        });
+
+        it("is function", function () {
+            assert.isFunction(this.spy.matchingFakes);
+        });
+
+        it("returns an empty array by default", function () {
+            assert.equals(this.spy.matchingFakes([]), []);
+            assert.equals(this.spy.matchingFakes([1]), []);
+            assert.equals(this.spy.matchingFakes([1, 1]), []);
+        });
+
+        it("returns one matched fake", function () {
+            this.spy.withArgs(1);
+            this.spy.withArgs(2);
+
+            assert.equals(this.spy.matchingFakes([1]), [this.spy.withArgs(1)]);
+            assert.equals(this.spy.matchingFakes([2]), [this.spy.withArgs(2)]);
+        });
+
+        it("return some matched fake", function () {
+            this.spy.withArgs(1);
+            this.spy.withArgs(1, 1);
+            this.spy.withArgs(2);
+
+            assert.equals(this.spy.matchingFakes([]), []);
+            assert.equals(this.spy.matchingFakes([1]), [
+                this.spy.withArgs(1)
+            ]);
+            assert.equals(this.spy.matchingFakes([1, 1]), [
+                this.spy.withArgs(1),
+                this.spy.withArgs(1, 1)
+            ]);
+        });
+    });
 });
 
