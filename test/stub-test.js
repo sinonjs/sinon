@@ -834,36 +834,6 @@ describe("stub", function () {
             }
         });
 
-        it.skip("returns function from wrapMethod", function () {
-            /*
-            var wrapper = function () {};
-            sinon.wrapMethod = function () {
-                return wrapper;
-            };
-
-            var result = createStub(this.object, "method");
-
-            assert.same(result, wrapper);
-            */
-        });
-
-        it.skip("passes object and method to wrapMethod", function () {
-            /*
-            var wrapper = function () {};
-            var args;
-
-            sinon.wrapMethod = function () {
-                args = arguments;
-                return wrapper;
-            };
-
-            createStub(this.object, "method");
-
-            assert.same(args[0], this.object);
-            assert.same(args[1], "method");
-            */
-        });
-
         it("warns provided function as stub, recommending callsFake instead", function () {
             deprecated.printWarning.restore();
 
