@@ -165,6 +165,7 @@ describe("sinonSandbox", function () {
                 });
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("must set all stubs created from sandbox with mockPromise", function () {
 
             var resolveValue = {};
