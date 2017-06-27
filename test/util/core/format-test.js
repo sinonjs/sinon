@@ -9,6 +9,7 @@ describe("util/core/format", function () {
         assert.equals(format({ id: 42 }), "{ id: 42 }");
     });
 
+    // eslint-disable-next-line mocha/no-skipped-tests
     it.skip("should configure formatio to use maximum 250 entries", function () {
         // not sure how we can verify this integration with the current setup
         // where sinon.js calls formatio as part of its loading

@@ -55,6 +55,7 @@ describe("issues", function () {
     });
 
     describe("#624", function () {
+        // eslint-disable-next-line mocha/no-skipped-tests
         it.skip("useFakeTimers should be idempotent", function () {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now

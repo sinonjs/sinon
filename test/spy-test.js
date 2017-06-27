@@ -8,6 +8,7 @@ var refute = referee.refute;
 
 function spyCalledTests(method) {
     return function () {
+        // eslint-disable-next-line mocha/no-top-level-hooks
         beforeEach(function () {
             this.spy = createSpy.create();
         });
@@ -97,14 +98,17 @@ function spyCalledTests(method) {
 
 function spyAlwaysCalledTests(method) {
     return function () {
+        // eslint-disable-next-line mocha/no-top-level-hooks, mocha/no-sibling-hooks
         beforeEach(function () {
             this.spy = createSpy.create();
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("returns false if spy was not called", function () {
             assert.isFalse(this.spy[method](1, 2, 3));
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("returns true if spy was called with args", function () {
             this.spy(1, 2, 3);
 
@@ -119,6 +123,7 @@ function spyAlwaysCalledTests(method) {
             assert.isFalse(this.spy[method](1, 2, 3));
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("returns false if not called with args", function () {
             this.spy(1, 3, 3);
             this.spy(2);
@@ -127,6 +132,7 @@ function spyAlwaysCalledTests(method) {
             assert.isFalse(this.spy[method](1, 2, 3));
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("returns true for partial match", function () {
             this.spy(1, 3, 3);
 
@@ -142,6 +148,7 @@ function spyAlwaysCalledTests(method) {
             assert(this.spy[method](1, 3));
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("matchs all arguments individually, not as array", function () {
             this.spy([1, 2, 3]);
 
@@ -152,6 +159,7 @@ function spyAlwaysCalledTests(method) {
 
 function spyNeverCalledTests(method) {
     return function () {
+        // eslint-disable-next-line mocha/no-top-level-hooks, mocha/no-sibling-hooks
         beforeEach(function () {
             this.spy = createSpy.create();
         });
@@ -190,6 +198,7 @@ function spyNeverCalledTests(method) {
             assert.isFalse(this.spy[method](1, 3));
         });
 
+        // eslint-disable-next-line mocha/no-identical-title
         it("matchs all arguments individually, not as array", function () {
             this.spy([1, 2, 3]);
 

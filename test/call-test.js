@@ -23,6 +23,7 @@ function spyCallCallSetup() {
 
 function spyCallCalledTests(method) {
     return function () {
+        // eslint-disable-next-line mocha/no-top-level-hooks
         beforeEach(spyCallSetUp);
 
         it("returns true if all args match", function () {
@@ -63,6 +64,7 @@ function spyCallCalledTests(method) {
 
 function spyCallNotCalledTests(method) {
     return function () {
+        // eslint-disable-next-line mocha/no-top-level-hooks, mocha/no-sibling-hooks
         beforeEach(spyCallSetUp);
 
         it("returns false if all args match", function () {
@@ -1251,22 +1253,22 @@ describe("sinonSpy.call", function () {
 
         describe("calls", function () {
             it("oneLine", function () {
-                function test(arg, expected) {
+                function verify(arg, expected) {
                     var spy = sinonSpy();
                     spy(arg);
                     assert.equals(spy.printf("%C").replace(/ at.*/g, ""), "\n    " + expected);
                 }
 
-                test(true, "spy(true)");
-                test(false, "spy(false)");
-                test(undefined, "spy(undefined)");
-                test(1, "spy(1)");
-                test(0, "spy(0)");
-                test(-1, "spy(-1)");
-                test(-1.1, "spy(-1.1)");
-                test(Infinity, "spy(Infinity)");
-                test(["a"], "spy([\"a\"])");
-                test({ a: "a" }, "spy({ a: \"a\" })");
+                verify(true, "spy(true)");
+                verify(false, "spy(false)");
+                verify(undefined, "spy(undefined)");
+                verify(1, "spy(1)");
+                verify(0, "spy(0)");
+                verify(-1, "spy(-1)");
+                verify(-1.1, "spy(-1.1)");
+                verify(Infinity, "spy(Infinity)");
+                verify(["a"], "spy([\"a\"])");
+                verify({ a: "a" }, "spy({ a: \"a\" })");
             });
 
             it("multiline", function () {

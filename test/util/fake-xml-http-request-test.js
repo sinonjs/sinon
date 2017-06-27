@@ -1837,6 +1837,7 @@ if (typeof window !== "undefined") {
                 FakeXMLHttpRequest.restore();
             });
 
+            // eslint-disable-next-line mocha/no-skipped-tests
             it.skip("loads resource asynchronously", function (done) {
                 var req = new XMLHttpRequest();
 
@@ -1852,6 +1853,7 @@ if (typeof window !== "undefined") {
                 req.send();
             });
 
+            // eslint-disable-next-line mocha/no-skipped-tests
             it.skip("loads resource synchronously", function () {
                 var req = new XMLHttpRequest();
                 req.open("GET", "/test/resources/xhr_target.txt", false);
