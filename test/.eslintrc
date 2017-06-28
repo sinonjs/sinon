@@ -1,0 +1,22 @@
+env:
+  mocha: true
+
+plugins:
+  - mocha
+
+rules:
+  max-nested-callbacks: off
+  no-restricted-syntax: [error, 'TryStatement']
+
+  # Mocha Plugin - https://github.com/lo1tuma/eslint-plugin-mocha
+  mocha/handle-done-callback: error
+  mocha/no-exclusive-tests: error
+  mocha/no-global-tests: error
+  mocha/no-hooks-for-single-case: off
+  mocha/no-identical-title: error
+  mocha/no-mocha-arrows: error
+  mocha/no-nested-tests: error
+  mocha/no-return-and-callback: error
+  mocha/no-sibling-hooks: error
+  mocha/no-skipped-tests: warn
+  mocha/no-top-level-hooks: error
