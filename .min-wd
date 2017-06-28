@@ -11,8 +11,8 @@
     "name": "MicrosoftEdge"
   }, {
     "name": "safari",
-    "platform": "OS X 10.11",
-    "version": "9.0"
+    "platform": "OS X 10.12",
+    "version": "10.0"
   }],
   "BUILD_VAR": "TRAVIS_BUILD_NUMBER"
 }
