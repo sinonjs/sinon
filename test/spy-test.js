@@ -326,6 +326,45 @@ describe("spy", function () {
         });
     });
 
+    it("counts with combination of withArgs arguments and order of calling withArgs", function () {
+        var object = {
+            f1: function () {},
+            f2: function () {}
+        };
+
+        // f1: the order of withArgs(1), withArgs(1, 1)
+        var spy1 = createSpy(object, "f1");
+        assert.equals(spy1.callCount, 0);
+        assert.equals(spy1.withArgs(1).callCount, 0);
+        assert.equals(spy1.withArgs(1, 1).callCount, 0);
+
+        object.f1();
+        object.f1(1);
+        object.f1(1, 1);
+        object.f1(1, 2);
+
+        assert.equals(spy1.callCount, 4);
+        assert.equals(spy1.withArgs(1).callCount, 3);
+        assert.equals(spy1.withArgs(1, 1).callCount, 1);
+        assert.equals(spy1.withArgs(1, 2).callCount, 1);
+
+        // f2: the order of withArgs(1, 1), withArgs(1)
+        var spy2 = createSpy(object, "f2");
+        assert.equals(spy2.callCount, 0);
+        assert.equals(spy2.withArgs(1, 1).callCount, 0);
+        assert.equals(spy2.withArgs(1).callCount, 0);
+
+        object.f2();
+        object.f2(1);
+        object.f2(1, 1);
+        object.f2(1, 2);
+
+        assert.equals(spy2.callCount, 4);
+        assert.equals(spy2.withArgs(1).callCount, 3);
+        assert.equals(spy2.withArgs(1, 1).callCount, 1);
+        assert.equals(spy2.withArgs(1, 2).callCount, 1);
+    });
+
     describe(".named", function () {
         it("sets displayName", function () {
             var spy = createSpy();
@@ -2466,6 +2505,45 @@ describe("spy", function () {
             var spy = createSpy(api, "someMethod");
 
             assert.equals(spy.length, 3);
+        });
+    });
+
+    describe(".matchingFakes", function () {
+        beforeEach(function () {
+            this.spy = createSpy();
+        });
+
+        it("is function", function () {
+            assert.isFunction(this.spy.matchingFakes);
+        });
+
+        it("returns an empty array by default", function () {
+            assert.equals(this.spy.matchingFakes([]), []);
+            assert.equals(this.spy.matchingFakes([1]), []);
+            assert.equals(this.spy.matchingFakes([1, 1]), []);
+        });
+
+        it("returns one matched fake", function () {
+            this.spy.withArgs(1);
+            this.spy.withArgs(2);
+
+            assert.equals(this.spy.matchingFakes([1]), [this.spy.withArgs(1)]);
+            assert.equals(this.spy.matchingFakes([2]), [this.spy.withArgs(2)]);
+        });
+
+        it("return some matched fake", function () {
+            this.spy.withArgs(1);
+            this.spy.withArgs(1, 1);
+            this.spy.withArgs(2);
+
+            assert.equals(this.spy.matchingFakes([]), []);
+            assert.equals(this.spy.matchingFakes([1]), [
+                this.spy.withArgs(1)
+            ]);
+            assert.equals(this.spy.matchingFakes([1, 1]), [
+                this.spy.withArgs(1),
+                this.spy.withArgs(1, 1)
+            ]);
         });
     });
 });
