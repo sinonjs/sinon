@@ -18,5 +18,5 @@ rules:
   mocha/no-nested-tests: error
   mocha/no-return-and-callback: error
   mocha/no-sibling-hooks: error
-  mocha/no-skipped-tests: WARN
+  mocha/no-skipped-tests: warn
   mocha/no-top-level-hooks: error
