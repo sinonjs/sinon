@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.6 / 2017-06-28
+==================
+
+  * Fix #1274: spy.withArgs(args...).callCount is incorrect
+
 2.3.5 / 2017-06-20
 ==================
 
