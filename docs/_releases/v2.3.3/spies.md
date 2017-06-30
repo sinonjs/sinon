@@ -361,6 +361,11 @@ assertEquals("/stuffs", spyCall.args[0]);
 ```
 
 
+#### `var spyCalls = spy.getCalls();`
+
+Returns an `Array` of all [calls](#spycall) recorded by the spy.
+
+
 #### `spy.thisValues`
 
 Array of `this` objects, `spy.thisValues[0]` is the `this` object for the first call.
