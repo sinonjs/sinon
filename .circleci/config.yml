@@ -20,6 +20,15 @@ jobs:
               npm config set strict-ssl false
               npm install
       - run:
+          name: Pre-Test
+          # ESLint only supports Node >=4
+          command: |
+              if [[ ! "$(node --version)" =~ ^v4 ]]; then
+                npm run lint;
+                npm run test-headless;
+                npm run test-webworker;
+              fi
+      - run:
           name: Test
           command: npm run test-node
       - save_cache:
