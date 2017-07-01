@@ -1,26 +1,6 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: node
-    working_directory: ~/wd
-    steps:
-      - checkout
-      - run:
-          name: Trigger Jobs
-          command: |
-            function trigger_job() {
-              curl \
-                --user ${CIRCLE_API_TOKEN}: \
-                --data build_parameters[CIRCLE_JOB]=$1 \
-                --data revision=$CIRCLE_SHA1 \
-                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-            }
-            trigger_job build-node4
-            trigger_job build-node6
-            trigger_job build-node8
-
-  build-node-common: &common-build
+  build-common: &common-build
     docker:
       - image: node
     working_directory: ~/wd
@@ -59,3 +39,11 @@ jobs:
     <<: *common-build
     docker:
       - image: node:8
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-node4
+      - build-node6
+      - build-node8
