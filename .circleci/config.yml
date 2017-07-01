@@ -3,7 +3,7 @@ jobs:
   build-common: &common-build
     docker:
       - image: node
-    working_directory: ~/wd
+    working_directory: /tmp
     steps:
       - run:
           name: Versions
