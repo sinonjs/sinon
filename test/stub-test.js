@@ -115,6 +115,15 @@ describe("stub", function () {
         assert.equals(stub(2), 0);
     });
 
+    it("should work with combination of withArgs arguments", function () {
+        var stub = createStub();
+
+        stub.withArgs(1).returns(42);
+        stub(1);
+
+        refute.isNull(stub.withArgs(1).firstCall);
+    });
+
     describe(".returns", function () {
         it("returns specified value", function () {
             var stub = createStub.create();
