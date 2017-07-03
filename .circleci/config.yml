@@ -44,7 +44,7 @@ jobs:
   build-node6:
     <<: *common-build
     docker:
-      - image: node:6
+      - image: node:6-alpine
 
   build-node8:
     <<: *common-build
