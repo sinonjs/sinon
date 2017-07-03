@@ -327,7 +327,7 @@ describe("spy", function () {
     });
 
     it("should work with combination of withArgs arguments and order of calling withArgs", function () {
-        var assertSpy = function (spy) {
+        function assertSpy(spy) {
             // assert callCount
             assert.equals(spy.callCount, 4);
             assert.equals(spy.withArgs(1).callCount, 3);
@@ -335,15 +335,15 @@ describe("spy", function () {
             assert.equals(spy.withArgs(1, 2).callCount, 1);
 
             // assert call
-            assert.equals(spy.getCall(0).args[0], undefined);
+            refute.defined(spy.getCall(0).args[0]);
             assert.equals(spy.getCall(1).args[0], 1);
-            assert.equals(spy.getCall(1).args[1], undefined);
+            refute.defined(spy.getCall(1).args[1]);
             assert.equals(spy.getCall(2).args[0], 1);
             assert.equals(spy.getCall(2).args[1], 1);
-            assert.equals(spy.getCall(2).args[2], undefined);
+            refute.defined(spy.getCall(2).args[2]);
             assert.equals(spy.getCall(3).args[0], 1);
             assert.equals(spy.getCall(3).args[1], 2);
-            assert.equals(spy.getCall(3).args[2], undefined);
+            refute.defined(spy.getCall(3).args[2]);
             ["args", "callCount", "callId"].forEach(function (propName) {
                 assert.equals(spy.withArgs(1).getCall(0)[propName],
                               spy.getCall(1)[propName]);
@@ -351,16 +351,13 @@ describe("spy", function () {
                               spy.getCall(2)[propName]);
                 assert.equals(spy.withArgs(1).getCall(2)[propName],
                               spy.getCall(3)[propName]);
-                assert.equals(spy.withArgs(1).getCall(3),
-                              null);
+                assert.isNull(spy.withArgs(1).getCall(3));
                 assert.equals(spy.withArgs(1, 1).getCall(0)[propName],
                               spy.getCall(2)[propName]);
-                assert.equals(spy.withArgs(1, 1).getCall(1),
-                              null);
+                assert.isNull(spy.withArgs(1, 1).getCall(1));
                 assert.equals(spy.withArgs(1, 2).getCall(0)[propName],
                               spy.getCall(3)[propName]);
-                assert.equals(spy.withArgs(1, 2).getCall(1),
-                              null);
+                assert.isNull(spy.withArgs(1, 2).getCall(1));
             });
 
             // assert firstCall, secondCall, thirdCall, and lastCall
@@ -373,14 +370,14 @@ describe("spy", function () {
             assert.equals(spy.withArgs(1).thirdCall.callId, spy.withArgs(1).getCall(2).callId);
             assert.equals(spy.withArgs(1).lastCall.callId, spy.withArgs(1).getCall(2).callId);
             assert.equals(spy.withArgs(1, 1).firstCall.callId, spy.withArgs(1, 1).getCall(0).callId);
-            assert.equals(spy.withArgs(1, 1).secondCall, null);
-            assert.equals(spy.withArgs(1, 1).thirdCall, null);
+            assert.isNull(spy.withArgs(1, 1).secondCall);
+            assert.isNull(spy.withArgs(1, 1).thirdCall);
             assert.equals(spy.withArgs(1, 1).lastCall.callId, spy.withArgs(1, 1).getCall(0).callId);
             assert.equals(spy.withArgs(1, 2).firstCall.callId, spy.withArgs(1, 2).getCall(0).callId);
-            assert.equals(spy.withArgs(1, 2).secondCall, null);
-            assert.equals(spy.withArgs(1, 2).thirdCall, null);
+            assert.isNull(spy.withArgs(1, 2).secondCall);
+            assert.isNull(spy.withArgs(1, 2).thirdCall);
             assert.equals(spy.withArgs(1, 2).lastCall.callId, spy.withArgs(1, 2).getCall(0).callId);
-        };
+        }
 
         var object = {
             f1: function () {},

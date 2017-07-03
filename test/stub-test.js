@@ -121,7 +121,7 @@ describe("stub", function () {
         stub.withArgs(1).returns(42);
         stub(1);
 
-        assert.isObject(stub.withArgs(1).firstCall);
+        refute.isNull(stub.withArgs(1).firstCall);
     });
 
     describe(".returns", function () {
