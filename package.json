@@ -34,8 +34,6 @@
   "dependencies": {
     "diff": "^3.1.0",
     "formatio": "1.2.0",
-    "husky": "^0.14.2",
-    "lint-staged": "^4.0.0",
     "lolex": "^1.6.0",
     "native-promise-only": "^0.8.1",
     "path-to-regexp": "^1.7.0",
@@ -48,6 +46,8 @@
     "eslint": "^3.1.1",
     "eslint-config-sinon": "^1.0.0",
     "eslint-plugin-mocha": "^4.2.0",
+    "husky": "^0.14.2",
+    "lint-staged": "^4.0.0",
     "mocaccino": "^2.0.0",
     "mocha": "^3.1.2",
     "mochify": "^3.0.0",
