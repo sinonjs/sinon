@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.7 / 2017-07-10
+==================
+
+  * Fix #1476: spy.withArgs(args...).firstCall is broken
+
 2.3.6 / 2017-06-28
 ==================
 
