@@ -2,8 +2,6 @@
 
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
-var sinonSandbox = require("../../lib/sinon/sandbox");
-var configureLogError = require("../../lib/sinon/util/core/log_error.js");
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -69,33 +67,6 @@ describe("issues", function () {
 
             clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
             assert.equals(clock.now, Date.now());
-        });
-    });
-
-    describe("#835", function () {
-        it("logError() throws an exception if the passed err is read-only", function () {
-            var logError = configureLogError({useImmediateExceptions: true});
-
-            // passes
-            var err = { name: "TestError", message: "this is a proper exception" };
-            assert.exception(
-                function () {
-                    logError("#835 test", err);
-                },
-                {
-                    name: err.name
-                }
-            );
-
-            // fails until this issue is fixed
-            assert.exception(
-                function () {
-                    logError("#835 test", "this literal string is not a proper exception");
-                },
-                {
-                    name: "#835 test"
-                }
-            );
         });
     });
 
@@ -301,7 +272,7 @@ describe("issues", function () {
         beforeEach(function () {
             if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) { this.skip(); }
 
-            sandbox = sinonSandbox.create();
+            sandbox = sinon.sandbox.create();
         });
 
         afterEach(function () {
