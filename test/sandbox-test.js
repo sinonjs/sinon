@@ -597,6 +597,7 @@ describe("sinonSandbox", function () {
 
         it("allows stubbing setters", function () {
             var object = {
+                foo: undefined,
                 prop: "bar"
             };
 

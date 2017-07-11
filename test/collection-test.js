@@ -113,7 +113,7 @@ describe("collection", function () {
                     var originalPrintWarning = deprecated.printWarning;
                     deprecated.printWarning = function () {};
 
-                    this.collection.stub(process.env, "HELL", "froze over");
+                    this.collection.stub(process.env, "HELL").value("froze over");
                     assert.equals(process.env.HELL, "froze over");
 
                     deprecated.printWarning = originalPrintWarning;
@@ -132,7 +132,7 @@ describe("collection", function () {
             var originalPrintWarning = deprecated.printWarning;
             deprecated.printWarning = function () {};
 
-            this.collection.stub(this.object, "property", 1);
+            this.collection.stub(this.object, "property").value(1);
 
             assert.equals(this.object.property, 1);
 
@@ -143,7 +143,7 @@ describe("collection", function () {
             var originalPrintWarning = deprecated.printWarning;
             deprecated.printWarning = function () {};
 
-            this.collection.stub(this.object, "property", 1);
+            this.collection.stub(this.object, "property").value(1);
             this.collection.restore();
 
             assert.equals(this.object.property, 42);
@@ -174,10 +174,8 @@ describe("collection", function () {
                 deprecated.printWarning = function () {};
 
                 assert.exception(function () {
-                    collection.stub(object, Symbol(), 1);
-                }, function (err) {
-                    return err.message === "Cannot stub non-existent own property Symbol()";
-                });
+                    collection.stub(object, Symbol());
+                }, {message: "Cannot stub non-existent own property Symbol()"}, TypeError);
 
                 deprecated.printWarning = originalPrintWarning;
             }
