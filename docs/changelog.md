@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.3.8 / 2017-07-13
+==================
+
+  * Fix 1474: propagates promiseLibrary to new stub behaviors (#1484)
+
 2.3.7 / 2017-07-10
 ==================
 
