@@ -251,6 +251,37 @@ describe("issues", function () {
         });
     });
 
+    describe("#1474 - stub.onCall", function () {
+        it("should preserve promise library", function () {
+            var promiseLib = {
+                resolve: function (value) {
+                    var promise = Promise.resolve(value);
+                    promise.tap = function () {
+                        return "tap " + value;
+                    };
+
+                    return promise;
+                }
+            };
+            var stub = sinon.stub().usingPromise(promiseLib);
+
+            stub.resolves("resolved");
+            stub.onSecondCall().resolves("resolved again");
+
+            var first = stub();
+            var second = stub();
+
+            assert.isFunction(first.then);
+            assert.isFunction(first.tap);
+
+            assert.isFunction(second.then);
+            assert.isFunction(second.tap);
+
+            assert.equals(first.tap(), "tap resolved");
+            assert.equals(second.tap(), "tap resolved again");
+        });
+    });
+
     if (typeof window !== "undefined") {
         describe("#1456", function () {
             var sandbox;
