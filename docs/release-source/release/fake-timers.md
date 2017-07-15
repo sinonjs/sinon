@@ -58,9 +58,11 @@ You can also pass in a Date object, and its `getTime()` will be used for the sta
 
 #### `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...);`
 
-Sets the clock start timestamp and names functions to fake.
+Sets the clock start timestamp and names functions to fake. If the first argument is not numeric, it sets the clock to 0 and treats all arguments as names of functions to fake.
 
-Possible functions are `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate` and `Date`. Can also be called without the timestamp.
+Possible functions are `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate` and `Date`.  Any functions not listed continue to use the original version of the function, including the actual time for the timestamp. This can have surprising results and should be done with care.
+
+Note that if no functions are listed, the default behavior is to replace all eligible functions.
 
 
 #### `clock.tick(ms);`
