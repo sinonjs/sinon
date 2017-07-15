@@ -103,7 +103,7 @@ Creates an expectation without a mock object, basically an anonymous mock functi
 Method name is optional and is used in exception messages to make them more readable.
 
 
-#### `var expectation = sinon.mock();`
+#### `var expectation = sinon.mock([methodName]);`
 
 The same as the above.
 
