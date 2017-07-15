@@ -7,7 +7,6 @@ var configureLogError = require("../../lib/sinon/util/core/log_error.js");
 var assert = referee.assert;
 var refute = referee.refute;
 
-
 describe("issues", function () {
     beforeEach(function () {
         this.sandbox = sinon.sandbox.create();
@@ -210,10 +209,10 @@ describe("issues", function () {
             var argsB = match(suffixB);
 
             var firstFake = readFile
-              .withArgs(argsA);
+                .withArgs(argsA);
 
             var secondFake = readFile
-              .withArgs(argsB);
+                .withArgs(argsB);
 
             assert(firstFake !== secondFake);
         });
@@ -282,23 +281,37 @@ describe("issues", function () {
         });
     });
 
-    if (typeof window !== "undefined") {
-        describe("#1456", function () {
-            var sandbox;
 
-            beforeEach(function () {
-                sandbox = sinonSandbox.create();
-            });
+    describe("#1456", function () {
+        var sandbox;
 
-            afterEach(function () {
-                sandbox.restore();
-            });
+        function throwsOnUnconfigurableProperty() {
+            /* eslint-disable no-restricted-syntax */
+            try {
+                var preDescriptor = Object.getOwnPropertyDescriptor(window, "innerHeight"); //backup val
+                Object.defineProperty(window, "innerHeight", { value: 10, configureable: true, writeable: true });
+                Object.defineProperty(window, "innerHeight", preDescriptor); //restore
+                return false;
+            } catch (err) {
+                return true;
+            }
+            /* eslint-enable no-restricted-syntax */
+        }
 
-            it("stub window innerHeight", function () {
-                sandbox.stub(window, "innerHeight").value(111);
+        beforeEach(function () {
+            if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) { this.skip(); }
 
-                assert.equals(window.innerHeight, 111);
-            });
+            sandbox = sinonSandbox.create();
         });
-    }
+
+        afterEach(function () {
+            sandbox.restore();
+        });
+
+        it("stub window innerHeight", function () {
+            sandbox.stub(window, "innerHeight").value(111);
+
+            assert.equals(window.innerHeight, 111);
+        });
+    });
 });
