@@ -111,7 +111,6 @@ describe("stub", function () {
     describe("should work firstCall and lastCall", function () {
         var testComponentA = function () { return { render: function () { return "test a"; } }; };
         var testComponentB = function () { return { render: function () { return "test b"; } }; };
-        var stub;
 
         beforeEach(function () {
             var fakeComponent = function (variant) {
@@ -119,26 +118,26 @@ describe("stub", function () {
                     render: createStub().returns("fake component " + variant)
                 });
             };
-            stub = createStub().throws("Nothing set");
-            stub.withArgs(testComponentA).returns(fakeComponent("a"));
-            stub.withArgs(testComponentB).returns(fakeComponent("b"));
+            this.stub = createStub().throws("Nothing set");
+            this.stub.withArgs(testComponentA).returns(fakeComponent("a"));
+            this.stub.withArgs(testComponentB).returns(fakeComponent("b"));
         });
 
         it("returnValues", function () {
             var config = { option: "a" };
-            var component = stub(testComponentA)(config);
+            var component = this.stub(testComponentA)(config);
 
-            assert.isTrue(stub.calledWith(testComponentA));
-            assert.isFalse(stub.calledWith(testComponentB));
+            assert.isTrue(this.stub.calledWith(testComponentA));
+            assert.isFalse(this.stub.calledWith(testComponentB));
 
             assert.isFunction(component.render);
             assert.equals(component.render(), "fake component a");
 
-            assert.isTrue(stub.withArgs(testComponentA).returnValues[0].calledWith(config));
-            assert.isTrue(stub.withArgs(testComponentA).getCall(0).returnValue.calledWith(config));
+            assert.isTrue(this.stub.withArgs(testComponentA).returnValues[0].calledWith(config));
+            assert.isTrue(this.stub.withArgs(testComponentA).getCall(0).returnValue.calledWith(config));
 
-            assert.isTrue(stub.withArgs(testComponentA).firstCall.returnValue.calledWith(config));
-            assert.isTrue(stub.withArgs(testComponentA).lastCall.returnValue.calledWith(config));
+            assert.isTrue(this.stub.withArgs(testComponentA).firstCall.returnValue.calledWith(config));
+            assert.isTrue(this.stub.withArgs(testComponentA).lastCall.returnValue.calledWith(config));
         });
     });
 
