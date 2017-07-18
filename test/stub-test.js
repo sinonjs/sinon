@@ -108,6 +108,40 @@ describe("stub", function () {
         refute.isNull(stub.withArgs(1).firstCall);
     });
 
+    describe("should work firstCall and lastCall", function () {
+        var testComponentA = function () { return { render: function () { return "test a"; } }; };
+        var testComponentB = function () { return { render: function () { return "test b"; } }; };
+        var inject;
+
+        beforeEach(function () {
+            var fakeComponent = function (variant) {
+                return createStub().returns({
+                    render: createStub().returns("fake component " + variant)
+                });
+            };
+            inject = createStub().throws("Nothing set");
+            inject.withArgs(testComponentA).returns(fakeComponent("a"));
+            inject.withArgs(testComponentB).returns(fakeComponent("b"));
+        });
+
+        it("returnValues", function () {
+            var config = { option: "a" };
+            var component = inject(testComponentA)(config);
+
+            assert.isTrue(inject.calledWith(testComponentA));
+            assert.isFalse(inject.calledWith(testComponentB));
+
+            assert.isFunction(component.render);
+            assert.equals(component.render(), "fake component a");
+
+            assert.isTrue(inject.withArgs(testComponentA).returnValues[0].calledWith(config));
+            assert.isTrue(inject.withArgs(testComponentA).getCall(0).returnValue.calledWith(config));
+
+            assert.isTrue(inject.withArgs(testComponentA).firstCall.returnValue.calledWith(config));
+            assert.isTrue(inject.withArgs(testComponentA).lastCall.returnValue.calledWith(config));
+        });
+    });
+
     describe(".returns", function () {
         it("returns specified value", function () {
             var stub = createStub.create();
