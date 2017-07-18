@@ -34,7 +34,7 @@
   "dependencies": {
     "diff": "^3.1.0",
     "formatio": "1.2.0",
-    "lolex": "^1.6.0",
+    "lolex": "^2.1.2",
     "native-promise-only": "^0.8.1",
     "path-to-regexp": "^1.7.0",
     "samsam": "^1.1.3",
