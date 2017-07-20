@@ -219,7 +219,7 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 
         sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
 
-        assert(server.requests.length > 0)
+        assert(this.server.requests.length > 0)
     }
 }
 ```
