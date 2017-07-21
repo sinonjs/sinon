@@ -101,7 +101,7 @@ var assertEventOrdering = function (event, progress, callback) {
 
         // listen for abort, error, and load events to make sure only
         // the expected events fire
-        ["abort", "error", "load"].forEach(
+        ["abort", "timeout", "error", "load"].forEach(
             function (name) {
                 this.xhr.upload.addEventListener(name, observe("upload:" + name));
                 this.xhr.addEventListener(name, observe("xhr:" + name));
@@ -111,6 +111,116 @@ var assertEventOrdering = function (event, progress, callback) {
         );
 
         callback(this.xhr);
+    });
+};
+
+var assertRequestErrorSteps = function (callback) {
+    it("sets response to empty string", function () {
+        this.xhr.response = "Partial data";
+
+        callback(this.xhr);
+
+        assert.same(this.xhr.response, "");
+    });
+
+    it("sets responseText to empty string", function () {
+        this.xhr.responseText = "Partial data";
+
+        callback(this.xhr);
+
+        assert.same(this.xhr.responseText, "");
+    });
+
+    it("sets errorFlag to true", function () {
+        callback(this.xhr);
+
+        assert.isTrue(this.xhr.errorFlag);
+    });
+
+    it("nulls request headers", function () {
+        this.xhr.open("GET", "/");
+        this.xhr.setRequestHeader("X-Test", "Sumptn");
+
+        callback(this.xhr);
+
+        assert.equals(this.xhr.requestHeaders, {});
+    });
+
+    it("does not have undefined response headers", function () {
+        this.xhr.open("GET", "/");
+
+        callback(this.xhr);
+
+        assert.defined(this.xhr.responseHeaders);
+    });
+
+    it("nulls response headers", function () {
+        this.xhr.open("GET", "/");
+
+        callback(this.xhr);
+
+        assert.equals(this.xhr.responseHeaders, {});
+    });
+
+    it("signals onreadystatechange with state set to DONE if sent before", function () {
+        var readyState;
+        this.xhr.open("GET", "/");
+        this.xhr.send();
+
+        this.xhr.onreadystatechange = function () {
+            readyState = this.readyState;
+        };
+
+        callback(this.xhr);
+
+        assert.equals(readyState, FakeXMLHttpRequest.DONE);
+    });
+
+    it("sets send flag to false if sent before", function () {
+        this.xhr.open("GET", "/");
+        this.xhr.send();
+
+        callback(this.xhr);
+
+        assert.isFalse(this.xhr.sendFlag);
+    });
+
+    it("dispatches readystatechange event if sent before", function () {
+        this.xhr.open("GET", "/");
+        this.xhr.send();
+        this.xhr.onreadystatechange = sinonStub();
+
+        callback(this.xhr);
+
+        assert(this.xhr.onreadystatechange.called);
+    });
+
+    it("does not dispatch readystatechange event if readyState is unsent", function () {
+        this.xhr.onreadystatechange = sinonStub();
+
+        callback(this.xhr);
+
+        assert.isFalse(this.xhr.onreadystatechange.called);
+    });
+
+    it("does not dispatch readystatechange event if readyState is opened but not sent", function () {
+        this.xhr.open("GET", "/");
+        this.xhr.onreadystatechange = sinonStub();
+
+        callback(this.xhr);
+
+        assert.isFalse(this.xhr.onreadystatechange.called);
+    });
+
+    it("does not dispatch readystatechange event if readyState is done", function () {
+        this.xhr.open("GET", "/");
+        this.xhr.send();
+        this.xhr.respond();
+
+        this.xhr.onreadystatechange = sinonStub();
+        callback(this.xhr);
+
+        assert.isFalse(this.xhr.onreadystatechange.called);
     });
 };
 
@@ -1163,51 +1273,13 @@ if (typeof window !== "undefined") {
                 assert.isTrue(this.xhr.aborted);
             });
 
-            it("sets response to empty string", function () {
-                this.xhr.response = "Partial data";
-
-                this.xhr.abort();
-
-                assert.same(this.xhr.response, "");
-            });
-
-            it("sets responseText to empty string", function () {
-                this.xhr.responseText = "Partial data";
-
-                this.xhr.abort();
-
-                assert.same(this.xhr.responseText, "");
-            });
-
-            it("sets errorFlag to true", function () {
-                this.xhr.abort();
-
-                assert.isTrue(this.xhr.errorFlag);
-            });
-
-            it("nulls request headers", function () {
+            it("sets readyState to unsent if sent before", function () {
                 this.xhr.open("GET", "/");
-                this.xhr.setRequestHeader("X-Test", "Sumptn");
+                this.xhr.send();
 
                 this.xhr.abort();
 
-                assert.equals(this.xhr.requestHeaders, {});
-            });
-
-            it("does not have undefined response headers", function () {
-                this.xhr.open("GET", "/");
-
-                this.xhr.abort();
-
-                assert.defined(this.xhr.responseHeaders);
-            });
-
-            it("nulls response headers", function () {
-                this.xhr.open("GET", "/");
-
-                this.xhr.abort();
-
-                assert.equals(this.xhr.responseHeaders, {});
+                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
             });
 
             it("keeps readyState unsent if called in unsent state", function () {
@@ -1253,74 +1325,8 @@ if (typeof window !== "undefined") {
                 assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
             });
 
-            it("signals onreadystatechange with state set to DONE if sent before", function () {
-                var readyState;
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-
-                this.xhr.onreadystatechange = function () {
-                    readyState = this.readyState;
-                };
-
-                this.xhr.abort();
-
-                assert.equals(readyState, FakeXMLHttpRequest.DONE);
-            });
-
-            it("sets send flag to false if sent before", function () {
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-
-                this.xhr.abort();
-
-                assert.isFalse(this.xhr.sendFlag);
-            });
-
-            it("dispatches readystatechange event if sent before", function () {
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-                this.xhr.onreadystatechange = sinonStub();
-
-                this.xhr.abort();
-
-                assert(this.xhr.onreadystatechange.called);
-            });
-
-            it("sets readyState to unsent if sent before", function () {
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-
-                this.xhr.abort();
-
-                assert.equals(this.xhr.readyState, FakeXMLHttpRequest.UNSENT);
-            });
-
-            it("does not dispatch readystatechange event if readyState is unsent", function () {
-                this.xhr.onreadystatechange = sinonStub();
-
-                this.xhr.abort();
-
-                assert.isFalse(this.xhr.onreadystatechange.called);
-            });
-
-            it("does not dispatch readystatechange event if readyState is opened but not sent", function () {
-                this.xhr.open("GET", "/");
-                this.xhr.onreadystatechange = sinonStub();
-
-                this.xhr.abort();
-
-                assert.isFalse(this.xhr.onreadystatechange.called);
-            });
-
-            it("does not dispatch readystatechange event if readyState is done", function () {
-                this.xhr.open("GET", "/");
-                this.xhr.send();
-                this.xhr.respond();
-
-                this.xhr.onreadystatechange = sinonStub();
-                this.xhr.abort();
-
-                assert.isFalse(this.xhr.onreadystatechange.called);
+            assertRequestErrorSteps(function (xhr) {
+                xhr.abort();
             });
 
             assertEventOrdering("abort", 0, function (xhr) {
@@ -1393,6 +1399,20 @@ if (typeof window !== "undefined") {
 
             assertEventOrdering("error", 0, function (xhr) {
                 xhr.error();
+            });
+        });
+
+        describe(".triggerTimeout", function () {
+            beforeEach(function () {
+                this.xhr = new FakeXMLHttpRequest();
+            });
+
+            assertRequestErrorSteps(function (xhr) {
+                xhr.triggerTimeout();
+            });
+
+            assertEventOrdering("timeout", 0, function (xhr) {
+                xhr.triggerTimeout();
             });
         });
 
