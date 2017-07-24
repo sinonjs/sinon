@@ -1404,7 +1404,90 @@ if (typeof window !== "undefined") {
 
         describe(".triggerTimeout", function () {
             beforeEach(function () {
+                this.sandbox = sinonSandbox.create();
                 this.xhr = new FakeXMLHttpRequest();
+            });
+
+            afterEach(function () {
+                this.sandbox.restore();
+            });
+
+            it("does not get called without a fake timer", function (done) {
+                var xhr = this.xhr;
+
+                xhr.open("GET", "/");
+                xhr.timeout = 1;
+                xhr.triggerTimeout = sinonSpy();
+                xhr.send();
+
+                setTimeout(function () {
+                    assert.isFalse(xhr.triggerTimeout.called);
+                    done();
+                }, 2);
+            });
+
+            it("only gets called with fake timers", function () {
+                this.sandbox.useFakeTimers();
+                this.xhr.open("GET", "/");
+                this.xhr.timeout = 1;
+                this.xhr.triggerTimeout = sinonSpy();
+                this.xhr.send();
+
+                this.sandbox.clock.tick(1);
+                assert.isTrue(this.xhr.triggerTimeout.called);
+            });
+
+            it("only gets called once with fake timers", function () {
+                this.sandbox.useFakeTimers();
+                this.xhr.open("GET", "/");
+                this.xhr.timeout = 1;
+                this.xhr.triggerTimeout = sinonSpy();
+                this.xhr.send();
+
+                this.sandbox.clock.tick(2);
+                assert.isTrue(this.xhr.triggerTimeout.calledOnce);
+            });
+
+            it("does not get called after being aborted", function () {
+                this.sandbox.useFakeTimers();
+                this.xhr.open("GET", "/");
+                this.xhr.timeout = 1;
+                this.xhr.triggerTimeout = sinonSpy();
+                this.xhr.send();
+                this.xhr.abort();
+
+                this.sandbox.clock.tick(1);
+                assert.isFalse(this.xhr.triggerTimeout.called);
+            });
+
+            it("does not get called after erroring", function () {
+                this.sandbox.useFakeTimers();
+                this.xhr.open("GET", "/");
+                this.xhr.timeout = 1;
+                this.xhr.triggerTimeout = sinonSpy();
+                this.xhr.send();
+                this.xhr.error();
+
+                this.sandbox.clock.tick(1);
+                assert.isFalse(this.xhr.triggerTimeout.called);
+            });
+
+            it("allows timeout to be changed while fetching", function () {
+                this.sandbox.useFakeTimers();
+                this.xhr.open("GET", "/");
+                this.xhr.timeout = 2;
+                this.xhr.triggerTimeout = sinonSpy();
+                this.xhr.send();
+
+                this.sandbox.clock.tick(1);
+                assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+
+                this.xhr.timeout = 3;
+                this.sandbox.clock.tick(1);
+                assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+
+                this.sandbox.clock.tick(1);
+                assert.isTrue(this.xhr.triggerTimeout.calledOnce);
             });
 
             assertRequestErrorSteps(function (xhr) {

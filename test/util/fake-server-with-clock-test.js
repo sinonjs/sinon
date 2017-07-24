@@ -185,6 +185,18 @@ if (typeof window !== "undefined") {
                 assert(respond.calledWith("GET", "/", ""));
                 assert(respond.calledOn(this.server));
             });
+
+            it("does not trigger a timeout event", function () {
+                var xhr = new FakeXMLHttpRequest();
+                xhr.open("GET", "/");
+                xhr.timeout = 1;
+                xhr.triggerTimeout = sinonSpy();
+                xhr.send();
+
+                this.server.respond();
+
+                assert.isFalse(xhr.triggerTimeout.called);
+            });
         });
 
         describe("jQuery compat mode", function () {
