@@ -63,6 +63,8 @@ calls. As of 1.8, this functionality has been removed in favor of the
 
 ### Stub API
 
+If you need to stub getters/setters or non-function properties, then you should be using [`sandbox.stub`](../sandbox/#sandboxstub)
+
 ### Properties
 
 #### `var stub = sinon.stub();`
