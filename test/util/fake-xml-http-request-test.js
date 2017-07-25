@@ -279,7 +279,16 @@ if (typeof window !== "undefined") {
             it("property is set if we support standards CORS", function () {
                 assert.equals(sinonFakeXhr.xhr.supportsCORS, "withCredentials" in this.xhr);
             });
+        });
 
+        describe(".timeout", function () {
+            beforeEach(function () {
+                this.xhr = new FakeXMLHttpRequest();
+            });
+
+            it("property is set if we support timeout", function () {
+                assert.equals(sinonFakeXhr.xhr.supportsTimeout, "timeout" in this.xhr);
+            });
         });
 
         describe(".open", function () {
@@ -1426,28 +1435,6 @@ if (typeof window !== "undefined") {
                 }, 2);
             });
 
-            it("only gets called with fake timers", function () {
-                this.sandbox.useFakeTimers();
-                this.xhr.open("GET", "/");
-                this.xhr.timeout = 1;
-                this.xhr.triggerTimeout = sinonSpy();
-                this.xhr.send();
-
-                this.sandbox.clock.tick(1);
-                assert.isTrue(this.xhr.triggerTimeout.called);
-            });
-
-            it("only gets called once with fake timers", function () {
-                this.sandbox.useFakeTimers();
-                this.xhr.open("GET", "/");
-                this.xhr.timeout = 1;
-                this.xhr.triggerTimeout = sinonSpy();
-                this.xhr.send();
-
-                this.sandbox.clock.tick(2);
-                assert.isTrue(this.xhr.triggerTimeout.calledOnce);
-            });
-
             it("does not get called after being aborted", function () {
                 this.sandbox.useFakeTimers();
                 this.xhr.open("GET", "/");
@@ -1472,31 +1459,56 @@ if (typeof window !== "undefined") {
                 assert.isFalse(this.xhr.triggerTimeout.called);
             });
 
-            it("allows timeout to be changed while fetching", function () {
-                this.sandbox.useFakeTimers();
-                this.xhr.open("GET", "/");
-                this.xhr.timeout = 2;
-                this.xhr.triggerTimeout = sinonSpy();
-                this.xhr.send();
+            // These tests won't trigger unless supportsTimeout is true.
+            if (sinonFakeXhr.supportsTimeout) {
+                it("only gets called with fake timers", function () {
+                    this.sandbox.useFakeTimers();
+                    this.xhr.open("GET", "/");
+                    this.xhr.timeout = 1;
+                    this.xhr.triggerTimeout = sinonSpy();
+                    this.xhr.send();
 
-                this.sandbox.clock.tick(1);
-                assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+                    this.sandbox.clock.tick(1);
+                    assert.isTrue(this.xhr.triggerTimeout.called);
+                });
 
-                this.xhr.timeout = 3;
-                this.sandbox.clock.tick(1);
-                assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+                it("only gets called once with fake timers", function () {
+                    this.sandbox.useFakeTimers();
+                    this.xhr.open("GET", "/");
+                    this.xhr.timeout = 1;
+                    this.xhr.triggerTimeout = sinonSpy();
+                    this.xhr.send();
 
-                this.sandbox.clock.tick(1);
-                assert.isTrue(this.xhr.triggerTimeout.calledOnce);
-            });
+                    this.sandbox.clock.tick(2);
+                    assert.isTrue(this.xhr.triggerTimeout.calledOnce);
+                });
 
-            assertRequestErrorSteps(function (xhr) {
-                xhr.triggerTimeout();
-            });
+                it("allows timeout to be changed while fetching", function () {
+                    this.sandbox.useFakeTimers();
+                    this.xhr.open("GET", "/");
+                    this.xhr.timeout = 2;
+                    this.xhr.triggerTimeout = sinonSpy();
+                    this.xhr.send();
 
-            assertEventOrdering("timeout", 0, function (xhr) {
-                xhr.triggerTimeout();
-            });
+                    this.sandbox.clock.tick(1);
+                    assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+
+                    this.xhr.timeout = 3;
+                    this.sandbox.clock.tick(1);
+                    assert.isFalse(this.xhr.triggerTimeout.calledOnce);
+
+                    this.sandbox.clock.tick(1);
+                    assert.isTrue(this.xhr.triggerTimeout.calledOnce);
+                });
+
+                assertRequestErrorSteps(function (xhr) {
+                    xhr.triggerTimeout();
+                });
+
+                assertEventOrdering("timeout", 0, function (xhr) {
+                    xhr.triggerTimeout();
+                });
+            }
         });
 
         describe(".response", function () {
