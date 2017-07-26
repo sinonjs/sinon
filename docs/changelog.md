@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.4.1 / 2017-07-26
+==================
+
+  * stub#withArgs: set promiseLibrary correctly (#1497)
+
 2.4.0 / 2017-07-26
 ==================
 
