@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.4.0 / 2017-07-26
+==================
+
+  * Allow anonymous mock functions to be named
+
 2.3.8 / 2017-07-13
 ==================
 
