@@ -104,11 +104,11 @@ describe("sinonSandbox", function () {
         it("passes arguments to sinon.useFakeTimers", function () {
             var useFakeTimersStub = sinonStub(sinonClock, "useFakeTimers").returns({});
 
-            this.sandbox.useFakeTimers("Date", "setTimeout");
-            this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
+            this.sandbox.useFakeTimers({toFake: ["Date", "setTimeout"]});
+            this.sandbox.useFakeTimers({toFake: ["setTimeout", "clearTimeout", "setInterval"]});
 
-            assert(useFakeTimersStub.calledWith("Date", "setTimeout"));
-            assert(useFakeTimersStub.calledWith("setTimeout", "clearTimeout", "setInterval"));
+            assert(useFakeTimersStub.calledWith({toFake: ["Date", "setTimeout"]}));
+            assert(useFakeTimersStub.calledWith({toFake: ["setTimeout", "clearTimeout", "setInterval"]}));
 
             useFakeTimersStub.restore();
         });
@@ -529,10 +529,10 @@ describe("sinonSandbox", function () {
             var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["clock"],
-                useFakeTimers: ["Date", "setTimeout"]
+                useFakeTimers: {toFake: ["Date", "setTimeout"]}
             }));
 
-            assert(this.useFakeTimersSpy.calledWith("Date", "setTimeout"));
+            assert(this.useFakeTimersSpy.calledWith({toFake: ["Date", "setTimeout"]}));
 
             sandbox.restore();
         });
