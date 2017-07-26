@@ -250,8 +250,17 @@ describe("issues", function () {
         });
     });
 
-    describe("#1474 - stub.onCall", function () {
-        it("should preserve promise library", function () {
+    describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
+        var stub;
+
+        function makeAssertions(fake, expected) {
+            assert.isFunction(fake.then);
+            assert.isFunction(fake.tap);
+
+            assert.equals(fake.tap(), expected);
+        }
+
+        beforeEach(function () {
             var promiseLib = {
                 resolve: function (value) {
                     var promise = Promise.resolve(value);
@@ -262,22 +271,26 @@ describe("issues", function () {
                     return promise;
                 }
             };
-            var stub = sinon.stub().usingPromise(promiseLib);
+
+            stub = sinon.stub().usingPromise(promiseLib);
 
             stub.resolves("resolved");
+        });
+
+        it("stub.onCall", function () {
             stub.onSecondCall().resolves("resolved again");
 
-            var first = stub();
-            var second = stub();
+            makeAssertions(stub(), "tap resolved");
+            makeAssertions(stub(), "tap resolved again");
+        });
 
-            assert.isFunction(first.then);
-            assert.isFunction(first.tap);
+        it("stub.withArgs", function () {
+            stub.withArgs(42).resolves("resolved again");
+            stub.withArgs(true).resolves("okay");
 
-            assert.isFunction(second.then);
-            assert.isFunction(second.tap);
-
-            assert.equals(first.tap(), "tap resolved");
-            assert.equals(second.tap(), "tap resolved again");
+            makeAssertions(stub(), "tap resolved");
+            makeAssertions(stub(42), "tap resolved again");
+            makeAssertions(stub(true), "tap okay");
         });
     });
 

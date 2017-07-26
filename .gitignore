@@ -5,3 +5,5 @@ coverage/
 .idea
 .sass_cache
 _site
+.vscode
+npm-debug.log*
