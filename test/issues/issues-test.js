@@ -2,6 +2,7 @@
 
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
+var createStub = require("../../lib/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -296,6 +297,22 @@ describe("issues", function () {
             sandbox.stub(window, "innerHeight").value(111);
 
             assert.equals(window.innerHeight, 111);
+        });
+    });
+
+    describe("#1487 - withArgs() returnValue", function () {
+        beforeEach(function () {
+            this.stub = createStub().throws("Nothing set");
+            this.stub.withArgs("arg").returns("return value");
+            this.stub("arg");
+        });
+
+        it("sets correct firstCall.returnValue", function () {
+            assert.equals(this.stub.withArgs("arg").firstCall.returnValue, "return value");
+        });
+
+        it("sets correct lastCall.returnValue", function () {
+            assert.equals(this.stub.withArgs("arg").lastCall.returnValue, "return value");
         });
     });
 });
