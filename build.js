@@ -23,7 +23,6 @@ function makeBundle(name, config) {
     config.standalone = "sinon";
 
     browserify("./lib/sinon.js", config)
-        .plugin("proxyquire-universal")
         .bundle(function (err, buffer) {
             if (err) {
                 throw err;
