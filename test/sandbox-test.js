@@ -4,9 +4,9 @@ var referee = require("referee");
 var samsam = require("samsam");
 var assert = referee.assert;
 var refute = referee.refute;
-var fakeXhr = require("../lib/sinon/util/fake_xml_http_request");
-var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
-var fakeServer = require("../lib/sinon/util/fake_server");
+var fakeXhr = require("nise").fakeXhr;
+var fakeServerWithClock = require("nise").fakeServerWithClock;
+var fakeServer = require("nise").fakeServer;
 var sinonSandbox = require("../lib/sinon/sandbox");
 var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
@@ -597,6 +597,7 @@ describe("sinonSandbox", function () {
 
         it("allows stubbing setters", function () {
             var object = {
+                foo: undefined,
                 prop: "bar"
             };
 
