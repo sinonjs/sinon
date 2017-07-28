@@ -146,10 +146,14 @@ Expect the method to be called exactly `number` times.
 
 Expect the method to be called with the provided arguments and possibly others.
 
+An `expectation` instance only holds onto a single set of arguments specified with `withArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
+
 
 #### `expectation.withExactArgs(arg1, arg2, ...);`
 
 Expect the method to be called with the provided arguments and no others.
+
+An `expectation` instance only holds onto a single set of arguments specified with `withExactArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
 
 
 #### `expectation.on(obj);`
