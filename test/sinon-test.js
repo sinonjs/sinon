@@ -3,7 +3,6 @@
 var proxyquire = require("proxyquire");
 var assert = require("referee").assert;
 var hasPromise = typeof Promise === "function";
-var proxyquire = require("proxyquire");
 
 if (!hasPromise) {
     return;

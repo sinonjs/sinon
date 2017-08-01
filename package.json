@@ -16,7 +16,7 @@
   "scripts": {
     "test-node": "mocha --recursive -R dot test/",
     "test-dev": "npm run test-node -- --watch -R min",
-    "test-headless": "mochify --recursive -R dot --grep WebWorker --invert test/",
+    "test-headless": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] test/",
     "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --exclude '**/+(test|node_modules)/**/*' --report text --report lcovonly --dir ./coverage ] test/",
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
@@ -56,6 +56,8 @@
     "phantomic": "^1.4.0",
     "phantomjs-prebuilt": "^2.1.14",
     "proxyquire": "^1.8.0",
+    "proxyquire-universal": "^1.0.8",
+    "proxyquireify": "^3.2.1",
     "referee": "^1.2.0",
     "rimraf": "^2.5.3"
   },
