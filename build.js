@@ -22,15 +22,16 @@ function makeBundle(name, config) {
     // Create a UMD wrapper and install the "sinon" global:
     config.standalone = "sinon";
 
-    browserify("./lib/sinon.js", config).bundle(function (err, buffer) {
-        if (err) {
-            throw err;
-        }
+    browserify("./lib/sinon.js", config)
+        .bundle(function (err, buffer) {
+            if (err) {
+                throw err;
+            }
 
-        var script = preamble + buffer.toString();
-        fs.writeFile("pkg/" + name + ".js", script);
-        fs.writeFile("pkg/" + name + "-" + pkg.version + ".js", script);
-    });
+            var script = preamble + buffer.toString();
+            fs.writeFile("pkg/" + name + ".js", script);
+            fs.writeFile("pkg/" + name + "-" + pkg.version + ".js", script);
+        });
 }
 
 makeBundle("sinon", {

@@ -4,9 +4,9 @@ var referee = require("referee");
 var samsam = require("samsam");
 var assert = referee.assert;
 var refute = referee.refute;
-var fakeXhr = require("../lib/sinon/util/fake_xml_http_request");
-var fakeServerWithClock = require("../lib/sinon/util/fake_server_with_clock");
-var fakeServer = require("../lib/sinon/util/fake_server");
+var fakeXhr = require("nise").fakeXhr;
+var fakeServerWithClock = require("nise").fakeServerWithClock;
+var fakeServer = require("nise").fakeServer;
 var sinonSandbox = require("../lib/sinon/sandbox");
 var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
@@ -17,6 +17,7 @@ var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake_timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
+var supportPromise = !!global.Promise;
 var globalXHR = global.XMLHttpRequest;
 var globalAXO = global.ActiveXObject;
 
@@ -104,11 +105,11 @@ describe("sinonSandbox", function () {
         it("passes arguments to sinon.useFakeTimers", function () {
             var useFakeTimersStub = sinonStub(sinonClock, "useFakeTimers").returns({});
 
-            this.sandbox.useFakeTimers("Date", "setTimeout");
-            this.sandbox.useFakeTimers("setTimeout", "clearTimeout", "setInterval");
+            this.sandbox.useFakeTimers({toFake: ["Date", "setTimeout"]});
+            this.sandbox.useFakeTimers({toFake: ["setTimeout", "clearTimeout", "setInterval"]});
 
-            assert(useFakeTimersStub.calledWith("Date", "setTimeout"));
-            assert(useFakeTimersStub.calledWith("setTimeout", "clearTimeout", "setInterval"));
+            assert(useFakeTimersStub.calledWith({toFake: ["Date", "setTimeout"]}));
+            assert(useFakeTimersStub.calledWith({toFake: ["setTimeout", "clearTimeout", "setInterval"]}));
 
             useFakeTimersStub.restore();
         });
@@ -148,6 +149,7 @@ describe("sinonSandbox", function () {
         });
 
         it("must set all stubs created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
 
             var resolveValue = {};
             var mockPromise = {
@@ -167,6 +169,7 @@ describe("sinonSandbox", function () {
 
         // eslint-disable-next-line mocha/no-identical-title
         it("must set all stubs created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
 
             var resolveValue = {};
             var mockPromise = {
@@ -529,10 +532,10 @@ describe("sinonSandbox", function () {
             var sandbox = sinonSandbox.create(sinonConfig({
                 injectIntoThis: false,
                 properties: ["clock"],
-                useFakeTimers: ["Date", "setTimeout"]
+                useFakeTimers: {toFake: ["Date", "setTimeout"]}
             }));
 
-            assert(this.useFakeTimersSpy.calledWith("Date", "setTimeout"));
+            assert(this.useFakeTimersSpy.calledWith({toFake: ["Date", "setTimeout"]}));
 
             sandbox.restore();
         });
@@ -597,6 +600,7 @@ describe("sinonSandbox", function () {
 
         it("allows stubbing setters", function () {
             var object = {
+                foo: undefined,
                 prop: "bar"
             };
 

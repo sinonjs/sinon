@@ -5,6 +5,26 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.4.1 / 2017-07-26
+==================
+
+  * stub#withArgs: set promiseLibrary correctly (#1497)
+
+2.4.0 / 2017-07-26
+==================
+
+  * Allow anonymous mock functions to be named
+
+2.3.8 / 2017-07-13
+==================
+
+  * Fix 1474: propagates promiseLibrary to new stub behaviors (#1484)
+
+2.3.7 / 2017-07-10
+==================
+
+  * Fix #1476: spy.withArgs(args...).firstCall is broken
+
 2.3.6 / 2017-06-28
 ==================
 

@@ -63,6 +63,8 @@ calls. As of 1.8, this functionality has been removed in favor of the
 
 ### Stub API
 
+If you need to stub getters/setters or non-function properties, then you should be using [`sandbox.stub`](../sandbox/#sandboxstub)
+
 ### Properties
 
 #### `var stub = sinon.stub();`
@@ -76,11 +78,13 @@ Replaces `object.method` with a stub function. An exception is thrown if the pro
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
-#### `var stub = sinon.stub(object, "method", func);`
+#### ~~`var stub = sinon.stub(object, "method", func);`~~
 
-Replaces `object.method` with a `func`, wrapped in a `spy`.
+This has been removed from `v3.0.0`. Instead you should use
 
-As usual, `object.method.restore();` can be used to restore the original method.
+`stub(obj, 'meth').callsFake(fn)`
+
+Codemod available at https://github.com/hurrymaplelad/sinon-codemod
 
 #### `var stub = sinon.stub(obj);`
 

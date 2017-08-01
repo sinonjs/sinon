@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-  # LTS release per February 2016
-  - "4"
-  - "6"
+  # https://github.com/nodejs/LTS
+  - "4" # ends April 2018
+  - "6" # ends April 2019
+  - "8" # ends December 2019
 
 sudo: false
 

@@ -2,11 +2,9 @@
 
 var referee = require("referee");
 var sinon = require("../../lib/sinon");
-var sinonSandbox = require("../../lib/sinon/sandbox");
-var configureLogError = require("../../lib/sinon/util/core/log_error.js");
+var createStub = require("../../lib/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
-
 
 describe("issues", function () {
     beforeEach(function () {
@@ -70,33 +68,6 @@ describe("issues", function () {
 
             clock = sinon.useFakeTimers(new Date("2015-1-5").getTime());
             assert.equals(clock.now, Date.now());
-        });
-    });
-
-    describe("#835", function () {
-        it("logError() throws an exception if the passed err is read-only", function () {
-            var logError = configureLogError({useImmediateExceptions: true});
-
-            // passes
-            var err = { name: "TestError", message: "this is a proper exception" };
-            assert.exception(
-                function () {
-                    logError("#835 test", err);
-                },
-                {
-                    name: err.name
-                }
-            );
-
-            // fails until this issue is fixed
-            assert.exception(
-                function () {
-                    logError("#835 test", "this literal string is not a proper exception");
-                },
-                {
-                    name: "#835 test"
-                }
-            );
         });
     });
 
@@ -210,10 +181,10 @@ describe("issues", function () {
             var argsB = match(suffixB);
 
             var firstFake = readFile
-              .withArgs(argsA);
+                .withArgs(argsA);
 
             var secondFake = readFile
-              .withArgs(argsB);
+                .withArgs(argsB);
 
             assert(firstFake !== secondFake);
         });
@@ -251,23 +222,102 @@ describe("issues", function () {
         });
     });
 
-    if (typeof window !== "undefined") {
-        describe("#1456", function () {
-            var sandbox;
+    describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
 
-            beforeEach(function () {
-                sandbox = sinonSandbox.create();
-            });
+        var stub;
 
-            afterEach(function () {
-                sandbox.restore();
-            });
+        function makeAssertions(fake, expected) {
+            assert.isFunction(fake.then);
+            assert.isFunction(fake.tap);
 
-            it("stub window innerHeight", function () {
-                sandbox.stub(window, "innerHeight").value(111);
+            assert.equals(fake.tap(), expected);
+        }
 
-                assert.equals(window.innerHeight, 111);
-            });
+        before(function () {
+            if (!global.Promise) { this.skip(); }
         });
-    }
+
+        beforeEach(function () {
+            var promiseLib = {
+                resolve: function (value) {
+                    var promise = Promise.resolve(value);
+                    promise.tap = function () {
+                        return "tap " + value;
+                    };
+
+                    return promise;
+                }
+            };
+
+            stub = sinon.stub().usingPromise(promiseLib);
+
+            stub.resolves("resolved");
+        });
+
+        it("stub.onCall", function () {
+            stub.onSecondCall().resolves("resolved again");
+
+            makeAssertions(stub(), "tap resolved");
+            makeAssertions(stub(), "tap resolved again");
+        });
+
+        it("stub.withArgs", function () {
+            stub.withArgs(42).resolves("resolved again");
+            stub.withArgs(true).resolves("okay");
+
+            makeAssertions(stub(), "tap resolved");
+            makeAssertions(stub(42), "tap resolved again");
+            makeAssertions(stub(true), "tap okay");
+        });
+    });
+
+
+    describe("#1456", function () {
+        var sandbox;
+
+        function throwsOnUnconfigurableProperty() {
+            /* eslint-disable no-restricted-syntax */
+            try {
+                var preDescriptor = Object.getOwnPropertyDescriptor(window, "innerHeight"); //backup val
+                Object.defineProperty(window, "innerHeight", { value: 10, configureable: true, writeable: true });
+                Object.defineProperty(window, "innerHeight", preDescriptor); //restore
+                return false;
+            } catch (err) {
+                return true;
+            }
+            /* eslint-enable no-restricted-syntax */
+        }
+
+        beforeEach(function () {
+            if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) { this.skip(); }
+
+            sandbox = sinon.sandbox.create();
+        });
+
+        afterEach(function () {
+            sandbox.restore();
+        });
+
+        it("stub window innerHeight", function () {
+            sandbox.stub(window, "innerHeight").value(111);
+
+            assert.equals(window.innerHeight, 111);
+        });
+    });
+
+    describe("#1487 - withArgs() returnValue", function () {
+        beforeEach(function () {
+            this.stub = createStub().throws("Nothing set");
+            this.stub.withArgs("arg").returns("return value");
+            this.stub("arg");
+        });
+
+        it("sets correct firstCall.returnValue", function () {
+            assert.equals(this.stub.withArgs("arg").firstCall.returnValue, "return value");
+        });
+
+        it("sets correct lastCall.returnValue", function () {
+            assert.equals(this.stub.withArgs("arg").lastCall.returnValue, "return value");
+        });
+    });
 });

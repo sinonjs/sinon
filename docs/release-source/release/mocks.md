@@ -103,7 +103,7 @@ Creates an expectation without a mock object, basically an anonymous mock functi
 Method name is optional and is used in exception messages to make them more readable.
 
 
-#### `var expectation = sinon.mock();`
+#### `var expectation = sinon.mock([methodName]);`
 
 The same as the above.
 
@@ -146,10 +146,14 @@ Expect the method to be called exactly `number` times.
 
 Expect the method to be called with the provided arguments and possibly others.
 
+An `expectation` instance only holds onto a single set of arguments specified with `withArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
+
 
 #### `expectation.withExactArgs(arg1, arg2, ...);`
 
 Expect the method to be called with the provided arguments and no others.
+
+An `expectation` instance only holds onto a single set of arguments specified with `withExactArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
 
 
 #### `expectation.on(obj);`

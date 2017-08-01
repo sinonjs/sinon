@@ -137,6 +137,22 @@ Works almost exactly like `sinon.stub`, only also adds the returned stub to the 
 
 The sandbox `stub` method can also be used to stub any kind of property. This is useful if you need to override an object's property for the duration of a test, and have it restored when the test completes.
 
+##### Stubbing a non-function property
+```javascript
+const myObject = {
+    'hello': 'world'
+};
+
+sandbox.stub(myObject, 'hello').value('Sinon');
+
+console.log(myObject.hello);
+// Sinon
+
+sandbox.restore();
+console.log(myObject.hello);
+// world
+```
+
 #### `sandbox.mock();`
 
 Works exactly like `sinon.mock`, only also adds the returned mock to the internal collection of fakes for easy restoring through `sandbox.restore()`

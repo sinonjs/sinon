@@ -42,22 +42,6 @@ describe("stub", function () {
         );
     });
 
-    it("fails if called with an empty property descriptor", function () {
-        var propertyKey = "ea762c6d-16ab-4ded-8bc2-3bc6f2de2925";
-        var object = {};
-
-        object[propertyKey] = "257b38d8-3c02-4353-82ab-b1b588be6990";
-
-        assert.exception(
-            function () {
-                createStub(object, propertyKey, {});
-            },
-            {
-                message: "Expected property descriptor to have at least one key"
-            }
-        );
-    });
-
     it("throws a readable error if stubbing Symbol on null", function () {
         if (typeof Symbol === "function") {
             assert.exception(
@@ -113,6 +97,15 @@ describe("stub", function () {
         assert.equals(stub(1, 1), 2);
         assert.equals(stub(1, 1, 1), 2);
         assert.equals(stub(2), 0);
+    });
+
+    it("should work with combination of withArgs arguments", function () {
+        var stub = createStub();
+
+        stub.withArgs(1).returns(42);
+        stub(1);
+
+        refute.isNull(stub.withArgs(1).firstCall);
     });
 
     describe(".returns", function () {
@@ -847,27 +840,12 @@ describe("stub", function () {
             }
         });
 
-        it("warns provided function as stub, recommending callsFake instead", function () {
-            deprecated.printWarning.restore();
-
-            var called = false;
-            var infoStub = createStub(console, "info");
-            var stub = createStub(this.object, "method", function () {
-                called = true;
-            });
-
-            stub();
-
-            assert(called);
-            assert(infoStub.called);
-        });
-
-        it("throws if third argument is provided but not a proprety descriptor", function () {
+        it("throws when third argument is provided", function () {
             var object = this.object;
 
             assert.exception(function () {
                 createStub(object, "method", 1);
-            }, "TypeError");
+            }, {message: "stub(obj, 'meth', fn) has been removed, see documentation"}, "TypeError");
         });
 
         it("stubbed method should be proper stub", function () {
@@ -1018,10 +996,10 @@ describe("stub", function () {
                     fail("should not call getter");
                 }
             };
-            var stub = createStub(obj, "prop", {get: function () {
-                return 43;
-            }});
 
+            var stub = createStub(obj, "prop").get(function () {
+                return 43;
+            });
             assert.equals(obj.prop, 43);
 
             stub.restore();

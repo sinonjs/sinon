@@ -978,7 +978,7 @@ describe("fakeTimers.clock", function () {
                 this.global.__proto__.tick = function () { };
 
                 if (!this.global.hasOwnProperty("tick")) {
-                    this.clock = fakeTimers.useFakeTimers("tick");
+                    this.clock = fakeTimers.useFakeTimers({toFake: ["tick"]});
                     assert.isTrue(this.global.hasOwnProperty("tick"));
                     this.clock.restore();
 
@@ -996,7 +996,7 @@ describe("fakeTimers.clock", function () {
             // Directly give the global object a tick method
             this.global.tick = function () { };
 
-            this.clock = fakeTimers.useFakeTimers("tick");
+            this.clock = fakeTimers.useFakeTimers({toFake: ["tick"]});
             assert.isTrue(this.global.hasOwnProperty("tick"));
             this.clock.restore();
 
@@ -1049,7 +1049,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("fakes provided methods", function () {
-            this.clock = fakeTimers.useFakeTimers("setTimeout", "Date", "setImmediate");
+            this.clock = fakeTimers.useFakeTimers({toFake: ["setTimeout", "Date", "setImmediate"]});
 
             refute.same(setTimeout, fakeTimers.timers.setTimeout);
             refute.same(Date, fakeTimers.timers.Date);
@@ -1057,7 +1057,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("resets faked methods", function () {
-            this.clock = fakeTimers.useFakeTimers("setTimeout", "Date", "setImmediate");
+            this.clock = fakeTimers.useFakeTimers({toFake: ["setTimeout", "Date", "setImmediate"]});
             this.clock.restore();
 
             assert.same(setTimeout, fakeTimers.timers.setTimeout);
@@ -1066,11 +1066,81 @@ describe("fakeTimers.clock", function () {
         });
 
         it("does not fake methods not provided", function () {
-            this.clock = fakeTimers.useFakeTimers("setTimeout", "Date", "setImmediate");
+            this.clock = fakeTimers.useFakeTimers({toFake: ["setTimeout", "Date", "setImmediate"]});
 
             assert.same(clearTimeout, fakeTimers.timers.clearTimeout);
             assert.same(setInterval, fakeTimers.timers.setInterval);
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
+        });
+
+        it("installs by default without nextTick", function () {
+            this.clock = fakeTimers.useFakeTimers();
+            var called = false;
+            process.nextTick(function () {
+                called = true;
+            });
+            this.clock.runAll();
+            assert(!called);
+            this.clock.restore();
+        });
+
+        it("installs with nextTick", function () {
+            this.clock = fakeTimers.useFakeTimers({toFake: ["nextTick"]});
+            var called = false;
+            process.nextTick(function () {
+                called = true;
+            });
+            this.clock.runAll();
+            assert(called);
+            this.clock.restore();
+        });
+
+        it("installs clock in advancing mode and triggers setTimeout", function (done) {
+            this.clock = fakeTimers.useFakeTimers({shouldAdvanceTime: true});
+            this.clock.setTimeout(function () {
+                this.clock.restore();
+                done();
+            }.bind(this), 10);
+        });
+
+        it("installs clock in advancing mode and triggers setInterval", function (done) {
+            this.clock = fakeTimers.useFakeTimers({shouldAdvanceTime: true});
+            var counter = 0;
+            var iterations = 3;
+            var id = this.clock.setInterval(function () {
+                if (counter++ < iterations) {return;}
+                this.clock.clearInterval(id);
+                this.clock.restore();
+                done();
+            }.bind(this), 10);
+        });
+
+        it("installs clock in advancing mode and triggers setImmediate", function (done) {
+            this.clock = fakeTimers.useFakeTimers({shouldAdvanceTime: true});
+            this.clock.setImmediate(function () {
+                this.clock.restore();
+                done();
+            }.bind(this));
+        });
+
+        it("throws on old useFakeTimers signatures", function () {
+            var expectedError = "useFakeTimers expected epoch or config object. See https://github.com/sinonjs/sinon";
+
+            assert.exception(function () {
+                fakeTimers.useFakeTimers("setImmediate");
+            }, { name: "TypeError", message: expectedError });
+
+            assert.exception(function () {
+                fakeTimers.useFakeTimers("setImmediate", "Date");
+            }, { name: "TypeError", message: expectedError });
+
+            assert.exception(function () {
+                fakeTimers.useFakeTimers(1000, "setImmediate", "Date");
+            }, { name: "TypeError", message: expectedError });
+
+            assert.exception(function () {
+                fakeTimers.useFakeTimers(new Date(10000000), "setImmediate", "Date");
+            }, { name: "TypeError", message: expectedError });
         });
     });
 });

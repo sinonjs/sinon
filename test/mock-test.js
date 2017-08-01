@@ -10,6 +10,16 @@ var assert = referee.assert;
 var refute = referee.refute;
 
 describe("sinonMock", function () {
+    it("creates anonymous mock functions", function () {
+        var expectation = sinonMock();
+        assert.equals(expectation.method, "Anonymous mock");
+    });
+
+    it("creates named anonymous mock functions", function () {
+        var expectation = sinonMock("functionName");
+        assert.equals(expectation.method, "functionName");
+    });
+
     describe(".create", function () {
         it("returns function with expects method", function () {
             var mock = sinonMock.create({});

@@ -326,7 +326,59 @@ describe("spy", function () {
         });
     });
 
-    it("counts with combination of withArgs arguments and order of calling withArgs", function () {
+    it("should work with combination of withArgs arguments and order of calling withArgs", function () {
+        function assertSpy(spy) {
+            // assert callCount
+            assert.equals(spy.callCount, 4);
+            assert.equals(spy.withArgs(1).callCount, 3);
+            assert.equals(spy.withArgs(1, 1).callCount, 1);
+            assert.equals(spy.withArgs(1, 2).callCount, 1);
+
+            // assert call
+            refute.defined(spy.getCall(0).args[0]);
+            assert.equals(spy.getCall(1).args[0], 1);
+            refute.defined(spy.getCall(1).args[1]);
+            assert.equals(spy.getCall(2).args[0], 1);
+            assert.equals(spy.getCall(2).args[1], 1);
+            refute.defined(spy.getCall(2).args[2]);
+            assert.equals(spy.getCall(3).args[0], 1);
+            assert.equals(spy.getCall(3).args[1], 2);
+            refute.defined(spy.getCall(3).args[2]);
+            ["args", "callCount", "callId"].forEach(function (propName) {
+                assert.equals(spy.withArgs(1).getCall(0)[propName],
+                              spy.getCall(1)[propName]);
+                assert.equals(spy.withArgs(1).getCall(1)[propName],
+                              spy.getCall(2)[propName]);
+                assert.equals(spy.withArgs(1).getCall(2)[propName],
+                              spy.getCall(3)[propName]);
+                assert.isNull(spy.withArgs(1).getCall(3));
+                assert.equals(spy.withArgs(1, 1).getCall(0)[propName],
+                              spy.getCall(2)[propName]);
+                assert.isNull(spy.withArgs(1, 1).getCall(1));
+                assert.equals(spy.withArgs(1, 2).getCall(0)[propName],
+                              spy.getCall(3)[propName]);
+                assert.isNull(spy.withArgs(1, 2).getCall(1));
+            });
+
+            // assert firstCall, secondCall, thirdCall, and lastCall
+            assert.equals(spy.firstCall.callId, spy.getCall(0).callId);
+            assert.equals(spy.secondCall.callId, spy.getCall(1).callId);
+            assert.equals(spy.thirdCall.callId, spy.getCall(2).callId);
+            assert.equals(spy.lastCall.callId, spy.getCall(3).callId);
+            assert.equals(spy.withArgs(1).firstCall.callId, spy.withArgs(1).getCall(0).callId);
+            assert.equals(spy.withArgs(1).secondCall.callId, spy.withArgs(1).getCall(1).callId);
+            assert.equals(spy.withArgs(1).thirdCall.callId, spy.withArgs(1).getCall(2).callId);
+            assert.equals(spy.withArgs(1).lastCall.callId, spy.withArgs(1).getCall(2).callId);
+            assert.equals(spy.withArgs(1, 1).firstCall.callId, spy.withArgs(1, 1).getCall(0).callId);
+            assert.isNull(spy.withArgs(1, 1).secondCall);
+            assert.isNull(spy.withArgs(1, 1).thirdCall);
+            assert.equals(spy.withArgs(1, 1).lastCall.callId, spy.withArgs(1, 1).getCall(0).callId);
+            assert.equals(spy.withArgs(1, 2).firstCall.callId, spy.withArgs(1, 2).getCall(0).callId);
+            assert.isNull(spy.withArgs(1, 2).secondCall);
+            assert.isNull(spy.withArgs(1, 2).thirdCall);
+            assert.equals(spy.withArgs(1, 2).lastCall.callId, spy.withArgs(1, 2).getCall(0).callId);
+        }
+
         var object = {
             f1: function () {},
             f2: function () {}
@@ -337,32 +389,32 @@ describe("spy", function () {
         assert.equals(spy1.callCount, 0);
         assert.equals(spy1.withArgs(1).callCount, 0);
         assert.equals(spy1.withArgs(1, 1).callCount, 0);
+        assert.isNull(spy1.getCall(0));
+        assert.isNull(spy1.getCall(1));
+        assert.isNull(spy1.getCall(2));
+        assert.isNull(spy1.getCall(3));
 
         object.f1();
         object.f1(1);
         object.f1(1, 1);
         object.f1(1, 2);
-
-        assert.equals(spy1.callCount, 4);
-        assert.equals(spy1.withArgs(1).callCount, 3);
-        assert.equals(spy1.withArgs(1, 1).callCount, 1);
-        assert.equals(spy1.withArgs(1, 2).callCount, 1);
+        assertSpy(spy1);
 
         // f2: the order of withArgs(1, 1), withArgs(1)
         var spy2 = createSpy(object, "f2");
         assert.equals(spy2.callCount, 0);
         assert.equals(spy2.withArgs(1, 1).callCount, 0);
         assert.equals(spy2.withArgs(1).callCount, 0);
+        assert.isNull(spy2.getCall(0));
+        assert.isNull(spy2.getCall(1));
+        assert.isNull(spy2.getCall(2));
+        assert.isNull(spy2.getCall(3));
 
         object.f2();
         object.f2(1);
         object.f2(1, 1);
         object.f2(1, 2);
-
-        assert.equals(spy2.callCount, 4);
-        assert.equals(spy2.withArgs(1).callCount, 3);
-        assert.equals(spy2.withArgs(1, 1).callCount, 1);
-        assert.equals(spy2.withArgs(1, 2).callCount, 1);
+        assertSpy(spy2);
     });
 
     describe(".named", function () {
