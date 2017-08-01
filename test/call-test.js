@@ -853,6 +853,8 @@ describe("sinonSpy.call", function () {
 
         // https://github.com/sinonjs/sinon/issues/1066
         it("does not throw when the call stack is empty", function (done) {
+            if (!global.Promise) { this.skip(); }
+
             var stub1 = sinonStub().resolves(1);
             var stub2 = sinonStub().returns(1);
 

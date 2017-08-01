@@ -17,6 +17,7 @@ var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake_timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
+var supportPromise = !!global.Promise;
 var globalXHR = global.XMLHttpRequest;
 var globalAXO = global.ActiveXObject;
 
@@ -148,6 +149,7 @@ describe("sinonSandbox", function () {
         });
 
         it("must set all stubs created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
 
             var resolveValue = {};
             var mockPromise = {
@@ -167,6 +169,7 @@ describe("sinonSandbox", function () {
 
         // eslint-disable-next-line mocha/no-identical-title
         it("must set all stubs created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
 
             var resolveValue = {};
             var mockPromise = {

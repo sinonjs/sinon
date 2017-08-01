@@ -1,5 +1,6 @@
 "use strict";
 
+var proxyquire = require("proxyquire");
 var assert = require("referee").assert;
 var hasPromise = typeof Promise === "function";
 

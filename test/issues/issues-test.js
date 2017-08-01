@@ -223,6 +223,7 @@ describe("issues", function () {
     });
 
     describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
+
         var stub;
 
         function makeAssertions(fake, expected) {
@@ -231,6 +232,10 @@ describe("issues", function () {
 
             assert.equals(fake.tap(), expected);
         }
+
+        before(function () {
+            if (!global.Promise) { this.skip(); }
+        });
 
         beforeEach(function () {
             var promiseLib = {
