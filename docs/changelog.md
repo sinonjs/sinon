@@ -5,6 +5,16 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+3.0.0 / 2017-08-03
+==================
+
+  * Remove deprecated exports (see migration guide)
+  * Fix #1432: add details around expectations.withArgs behavior to docs (#1501)
+  * Fix #1487: incorrect withArgs().returnValue
+  * add format.setFormatter
+  * Upgrade lolex to 2.1.2
+  * Extract fakeXhr, fakeServer and fakeServerWithClock into own module `nise` and re-import it to keep api the same
+
 2.4.1 / 2017-07-26
 ==================
 
