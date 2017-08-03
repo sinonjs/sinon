@@ -112,7 +112,7 @@ Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/l
 
 *Since `sinon@3.0.0`*
 
-`var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is deprecated. To define which methods to fake, please use `config.toFake`.
+`var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
 
 #### `clock.tick(time);`

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Migrating to v2.0 - Sinon.JS
-breadcrumb: matchers
+breadcrumb: migrating to 2.0
 ---
 
 Sinon v2.0 is the second major release, we have made several breaking changes in this release as a result of modernising the internals of Sinon.  This guide is intended to walk you through the changes.
