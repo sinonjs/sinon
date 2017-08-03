@@ -19,9 +19,9 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [Sandboxes](./sandbox)
 * [Utils](./utils)
 
-### Migrating from v1.x to v2.0
-
-Please see our [migration guide](./migrating-to-2.0) for details on migrating to Sinon.JS v2.0
+### Migration guides
+* Migrating from [v1.x to v2.0](./migrating-to-2.0)
+* Migrating from [v2.x to v3.0](./migrating-to-3.0)
 
 ### Compatibility
 
