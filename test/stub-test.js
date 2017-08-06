@@ -513,6 +513,80 @@ describe("stub", function () {
             assert.exception(stub, "Error");
         });
 
+        it("throws an exception created using a function", function () {
+            var stub = createStub.create();
+
+            stub.throws(function () {
+                return new Error("not implemented");
+            });
+
+            assert.exception(stub, {
+                message: "not implemented"
+            });
+            assert.same(stub.firstCall.exception.message, "not implemented");
+            assert.contains(stub.firstCall.toString(), "not implemented");
+        });
+
+        describe("lazy instantiation of exceptions", function () {
+            var errorSpy;
+            beforeEach(function () {
+                this.originalError = global.Error;
+                errorSpy = createSpy(global, "Error");
+                // errorSpy starts with a call already made, not sure why
+                errorSpy.reset();
+            });
+
+            afterEach(function () {
+                errorSpy.restore();
+                global.Error = this.originalError;
+            });
+
+            it("uses a lazily created exception for the generic error", function () {
+                var stub = createStub.create();
+                stub.throws();
+
+                assert.isFalse(errorSpy.called);
+                assert.exception(stub, "Error");
+                assert.isTrue(errorSpy.called);
+            });
+
+            it("uses a lazily created exception for the named error", function () {
+                var stub = createStub.create();
+                stub.throws("TypeError", "typeerror message");
+
+                assert.isFalse(errorSpy.called);
+                assert.exception(stub, {
+                    name: "TypeError",
+                    message: "typeerror message"
+                });
+                assert.isTrue(errorSpy.called);
+            });
+
+            it("uses a lazily created exception provided by a function", function () {
+                var stub = createStub.create();
+
+                stub.throws(function () {
+                    return new Error("not implemented");
+                });
+
+                assert.isFalse(errorSpy.called);
+                assert.exception(stub, {
+                    message: "not implemented"
+                });
+                assert.isTrue(errorSpy.called);
+            });
+
+            it("does not use a lazily created exception if the error object is provided", function () {
+                var stub = createStub.create();
+                var exception = new Error();
+                stub.throws(exception);
+
+                assert.same(errorSpy.callCount, 1);
+                assert.exception(stub, exception);
+                assert.same(errorSpy.callCount, 1);
+            });
+        });
+
         it("resets 'invoking' flag", function () {
             var stub = createStub.create();
             stub.throws();
@@ -866,6 +940,17 @@ describe("stub", function () {
         it("stub should affect spy", function () {
             var stub = createStub(this.object, "method");
             stub.throws("TypeError");
+
+            assert.exception(this.object.method);
+
+            assert(stub.threw("TypeError"));
+        });
+
+        it("handles threw properly for lazily instantiated Errors", function () {
+            var stub = createStub(this.object, "method");
+            stub.throws(function () {
+                return new TypeError();
+            });
 
             assert.exception(this.object.method);
 
