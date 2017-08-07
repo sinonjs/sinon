@@ -22,7 +22,7 @@ Codemod available at https://github.com/hurrymaplelad/sinon-codemod
 Calling `sinon.stub` with three arguments will throw an Error. This was deprecated with `sinon@2` and has been removed with `sinon@3`
 
 ## `sinon.useFakeTimers([now, ]prop1, prop2, ...)` - Removed
-`sinon.useFakeTimers()` signature has [changed](./fake-timers). To define which methods to fake, please use `config.toFake`. Other options are now available when configuring `useFakeTimers`. Please consult the [documentation](./fake-timers) for more information.
+`sinon.useFakeTimers()` signature has [changed](../fake-timers). To define which methods to fake, please use `config.toFake`. Other options are now available when configuring `useFakeTimers`. Please consult the [documentation](../fake-timers) for more information.
 
 ## Removal of internal helpers
 The following internal functions were deprecated as of `sinon@1.x` and have been removed in `sinon@3`:
