@@ -320,4 +320,25 @@ describe("issues", function () {
             assert.equals(this.stub.withArgs("arg").lastCall.returnValue, "return value");
         });
     });
+
+    describe("#1512", function () {
+        var sandbox;
+
+        beforeEach(function () {
+            sandbox = sinon.sandbox.create();
+        });
+
+        afterEach(function () {
+            sandbox.restore();
+        });
+
+        it("can stub methods on the prototype", function () {
+            var proto = { someFunction: function () {} };
+            var instance = Object.create(proto);
+
+            var stub = sandbox.stub(instance, "someFunction");
+            instance.someFunction();
+            assert(stub.called);
+        });
+    });
 });
