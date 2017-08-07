@@ -285,6 +285,65 @@ describe("stub", function () {
         });
     });
 
+    describe(".resolvesThis", function () {
+        afterEach(function () {
+            if (Promise.resolve.restore) {
+                Promise.resolve.restore();
+            }
+        });
+
+        it("returns a promise resolves with this", function () {
+            var instance = {};
+            instance.stub = createStub.create();
+            instance.stub.resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
+        });
+
+        var strictMode = (function () {
+            return this;
+        }()) === undefined;
+        if (strictMode) {
+            it("returns a promise resolves with undefined when detached", function () {
+                var stub = createStub.create();
+                stub.resolvesThis();
+
+                // Due to strict mode, would be `global` otherwise
+                return stub().then(function (actual) {
+                    assert.same(actual, undefined);
+                });
+            });
+        }
+
+        it("stub respects call", function () {
+            var stub = createStub.create();
+            stub.resolvesThis();
+            var object = {};
+
+            return stub.call(object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("stub respects apply", function () {
+            var stub = createStub.create();
+            stub.resolvesThis();
+            var object = {};
+
+            return stub.apply(object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("returns stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.resolvesThis(), stub);
+        });
+    });
+
     describe(".returnsArg", function () {
         it("returns argument at specified index", function () {
             var stub = createStub.create();
@@ -2165,6 +2224,16 @@ describe("stub", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.returnsThis();
+
+            instance.stub.resetBehavior();
+
+            refute.defined(instance.stub());
+        });
+
+        it("cleans 'resolvesThis' behavior", function () {
+            var instance = {};
+            instance.stub = createStub.create();
+            instance.stub.resolvesThis();
 
             instance.stub.resetBehavior();
 
