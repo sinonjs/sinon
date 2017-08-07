@@ -10,7 +10,7 @@ Sandboxes removes the need to keep track of every fake created, which greatly si
 var sinon = require('sinon');
 
 var myAPI = { hello: function () {} };
-var sandbox = sinon.sandbox.create();
+var sandbox = sinon.createSandbox();
 
 describe('myAPI.hello method', function () {
 
@@ -39,25 +39,25 @@ describe('myAPI.hello method', function () {
 
 ## Sandbox API
 
-#### `var sandbox = sinon.sandbox.create();`
+#### `var sandbox = sinon.createSandbox();`
 
 Creates a sandbox object with spies, stubs, and mocks.
 
 
-#### `var sandbox = sinon.sandbox.create(config);`
+#### `var sandbox = sinon.createSandbox(config);`
 
-The `sinon.sandbox.create(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
+The `sinon.createSandbox(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
 
 Sandboxes are partially configured by default such that calling:
 
 ```javascript
-var sandbox = sinon.sandbox.create({});
+var sandbox = sinon.createSandbox({});
 ```
 
 will merge in extra defaults analogous to:
 
 ```javascript
-var sandbox = sinon.sandbox.create({
+var sandbox = sinon.createSandbox({
     // ...
     injectInto: null,
     properties: ["spy", "stub", "mock"],
@@ -82,10 +82,10 @@ To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, y
 
 ```javascript
 // Inject the sinon defaults explicitly.
-var sandbox = sinon.sandbox.create(sinon.defaultConfig);
+var sandbox = sinon.createSandbox(sinon.defaultConfig);
 
 // (OR) Add the extra properties that differ from the sinon defaults.
-var sandbox = sinon.sandbox.create({
+var sandbox = sinon.createSandbox({
     useFakeTimers: true
     useFakeServer: true
 });
