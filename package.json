@@ -85,6 +85,8 @@
     "README.md"
   ],
   "main": "./lib/sinon.js",
+  "cdn": "./pkg/sinon.js",
+  "jsdelivr": "./pkg/sinon.js",
   "engines": {
     "node": ">=0.1.103"
   }
