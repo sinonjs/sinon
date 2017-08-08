@@ -104,8 +104,9 @@ have to set `useFakeServer` to `true`.
 
 ##### useFakeTimers
 
-If `true`, the sandbox will have a `clock` property. Can also be an `Array` of
-timer properties to fake.
+If set to `true`, the sandbox will have a `clock` property. You can optionally pass
+in a configuration object that follows the [specification for fake timers](../fake-timers),
+such as `{ toFake: ["setTimeout", "setInterval"] }`.
 
 ##### useFakeServer
 

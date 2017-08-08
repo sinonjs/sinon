@@ -10,7 +10,7 @@ Sandboxes removes the need to keep track of every fake created, which greatly si
 var sinon = require('sinon');
 
 var myAPI = { hello: function () {} };
-var sandbox = sinon.createSandbox();
+var sandbox = sinon.sandbox.create();
 
 describe('myAPI.hello method', function () {
 
@@ -39,25 +39,25 @@ describe('myAPI.hello method', function () {
 
 ## Sandbox API
 
-#### `var sandbox = sinon.createSandbox();`
+#### `var sandbox = sinon.sandbox.create();`
 
 Creates a sandbox object with spies, stubs, and mocks.
 
 
-#### `var sandbox = sinon.createSandbox(config);`
+#### `var sandbox = sinon.sandbox.create(config);`
 
-The `sinon.createSandbox(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
+The `sinon.sandbox.create(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
 
 Sandboxes are partially configured by default such that calling:
 
 ```javascript
-var sandbox = sinon.createSandbox({});
+var sandbox = sinon.sandbox.create({});
 ```
 
 will merge in extra defaults analogous to:
 
 ```javascript
-var sandbox = sinon.createSandbox({
+var sandbox = sinon.sandbox.create({
     // ...
     injectInto: null,
     properties: ["spy", "stub", "mock"],
@@ -82,10 +82,10 @@ To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, y
 
 ```javascript
 // Inject the sinon defaults explicitly.
-var sandbox = sinon.createSandbox(sinon.defaultConfig);
+var sandbox = sinon.sandbox.create(sinon.defaultConfig);
 
 // (OR) Add the extra properties that differ from the sinon defaults.
-var sandbox = sinon.createSandbox({
+var sandbox = sinon.sandbox.create({
     useFakeTimers: true
     useFakeServer: true
 });
@@ -104,8 +104,9 @@ have to set `useFakeServer` to `true`.
 
 ##### useFakeTimers
 
-If `true`, the sandbox will have a `clock` property. Can also be an `Array` of
-timer properties to fake.
+If set to `true`, the sandbox will have a `clock` property. You can optionally pass
+in a configuration object that follows the [specification for fake timers](../fake-timers),
+such as `{ toFake: ["setTimeout", "setInterval"] }`.
 
 ##### useFakeServer
 
