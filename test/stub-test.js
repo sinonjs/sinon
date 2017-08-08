@@ -292,7 +292,7 @@ describe("stub", function () {
             }
         });
 
-        it("returns a promise resolves with this", function () {
+        it("returns a promise resolved with this", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.resolvesThis();
@@ -302,22 +302,7 @@ describe("stub", function () {
             });
         });
 
-        var strictMode = (function () {
-            return this;
-        }()) === undefined;
-        if (strictMode) {
-            it("returns a promise resolves with undefined when detached", function () {
-                var stub = createStub.create();
-                stub.resolvesThis();
-
-                // Due to strict mode, would be `global` otherwise
-                return stub().then(function (actual) {
-                    assert.same(actual, undefined);
-                });
-            });
-        }
-
-        it("stub respects call", function () {
+        it("returns a promise resolved with the context bound with stub#call", function () {
             var stub = createStub.create();
             stub.resolvesThis();
             var object = {};
@@ -327,7 +312,7 @@ describe("stub", function () {
             });
         });
 
-        it("stub respects apply", function () {
+        it("returns a promise resolved with the context bound with stub#apply", function () {
             var stub = createStub.create();
             stub.resolvesThis();
             var object = {};
@@ -337,7 +322,7 @@ describe("stub", function () {
             });
         });
 
-        it("returns stub", function () {
+        it("returns the stub itself, allowing to chain function calls", function () {
             var stub = createStub.create();
 
             assert.same(stub.resolvesThis(), stub);
@@ -2230,7 +2215,7 @@ describe("stub", function () {
             refute.defined(instance.stub());
         });
 
-        it("cleans 'resolvesThis' behavior", function () {
+        it("cleans 'resolvesThis' behavior, so the stub does not resolve nor returns anything", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.resolvesThis();
