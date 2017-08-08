@@ -5,6 +5,14 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+3.1.0 / 2017-08-08
+==================
+
+  * Lots of documentation updates
+  * Fix regression on sandbox.stub(obj,protoMethod)
+  * Add factory functions for sandbox and fake server
+  * Add support for passing a function to stub.throws(...). (#1511)
+
 3.0.0 / 2017-08-03
 ==================
 
