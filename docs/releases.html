@@ -11,6 +11,7 @@ redirect_from:
 
 <div class="head-page">
   <h1>Releases</h1>
+  In addition to our download page, you can also <a href="#npm-cdns">use a NPM based CDN</a> for your convenience.
 </div>
 
 <div class="in-content releases">
@@ -31,4 +32,23 @@ redirect_from:
         {% endif %}
   {% endfor %}
   </ul>
+</div>
+
+
+<div>
+    <h2 id="npm-cdns">Using NPM based CDNs</h2>
+    <p>
+    There are now several CDNs that are backed by NPM,
+    which means that you can have auto-updated scripts.
+    Examples of such free providers are
+    <a href="http://jsdelivr.com">jsDelivr</a>,
+    <a href="https://unpkg.com">UNPKG</a> and
+    <a href="https://cdnjs.com">cdnjs</a>.
+    </p>
+    <p>
+    Their adressing schemes vary, but an example
+    url such as <a href="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js">https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js</a>
+    would download the latest browser bundle of Sinon 3.
+    </p>
+
 </div>
