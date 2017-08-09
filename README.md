@@ -32,7 +32,7 @@ via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
-or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/). There are also [NPM based CDNs]((http://sinonjs.org/releases#npm-cdns) one can use.
+or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/). There are also [npm based CDNs](http://sinonjs.org/releases#npm-cdns) one can use.
 
 ## Usage
 
