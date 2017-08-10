@@ -269,6 +269,50 @@ describe("stub", function () {
         });
     });
 
+    describe(".resolvesThis", function () {
+        afterEach(function () {
+            if (Promise.resolve.restore) {
+                Promise.resolve.restore();
+            }
+        });
+
+        it("returns a promise resolved with this", function () {
+            var instance = {};
+            instance.stub = createStub.create();
+            instance.stub.resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
+        });
+
+        it("returns a promise resolved with the context bound with stub#call", function () {
+            var stub = createStub.create();
+            stub.resolvesThis();
+            var object = {};
+
+            return stub.call(object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("returns a promise resolved with the context bound with stub#apply", function () {
+            var stub = createStub.create();
+            stub.resolvesThis();
+            var object = {};
+
+            return stub.apply(object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("returns the stub itself, allowing to chain function calls", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.resolvesThis(), stub);
+        });
+    });
+
     describe(".returnsArg", function () {
         it("returns argument at specified index", function () {
             var stub = createStub.create();
@@ -2219,6 +2263,16 @@ describe("stub", function () {
             var instance = {};
             instance.stub = createStub.create();
             instance.stub.returnsThis();
+
+            instance.stub.resetBehavior();
+
+            refute.defined(instance.stub());
+        });
+
+        it("cleans 'resolvesThis' behavior, so the stub does not resolve nor returns anything", function () {
+            var instance = {};
+            instance.stub = createStub.create();
+            instance.stub.resolvesThis();
 
             instance.stub.resetBehavior();
 
