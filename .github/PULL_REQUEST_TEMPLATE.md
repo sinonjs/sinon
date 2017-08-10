@@ -13,11 +13,16 @@
 #### Solution  - optional
 > When contributing code (and not just fixing typos, documentation and configuration), please describe why/how your solution works. This helps reviewers spot any mistakes in the implementation.
 >
-> Example: 
+> Example:
 > "This solution works by adding a `paintBlue()` method"
 > Then your reviewer might spot a mistake in the implementation, if `paintBlue()` uses the colour red.
 
 #### How to verify - mandatory
-1. Check out this branch (see github instructions below)
+1. Check out this branch
 2. `npm install`
 3. <your-steps-here>
+
+#### Checklist for author
+
+- [ ] `npm run lint` passes
+- [ ] References to standard library functions are [cached](https://github.com/sinonjs/sinon/pull/1523).
