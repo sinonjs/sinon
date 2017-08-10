@@ -19,7 +19,7 @@
 <a href="https://coveralls.io/github/sinonjs/sinon"><img src="https://coveralls.io/repos/github/sinonjs/sinon/badge.svg" alt="Coverage Status"></a>
 <a href="#backers"><img src="https://opencollective.com/sinon/backers/badge.svg" alt="OpenCollective"></a>
 <a href="#sponsors"><img src="https://opencollective.com/sinon/sponsors/badge.svg" alt="OpenCollective"></a>
-<a href="https://www.npmjs.com/package/sinon" target="_blank"><img src="https://img.shields.io/npm/dm/sinon.svg" alt="npm downloads per month"></a></p>
+<a href="https://www.npmjs.com/package/sinon" target="_blank"><img src="https://img.shields.io/npm/dm/sinon.svg" alt="npm downloads per month"></a>
 </p>
 
 <p align=center>
