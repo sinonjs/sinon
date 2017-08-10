@@ -1,4 +1,10 @@
 
+3.2.0 / 2017-08-10
+==================
+
+  * Fix #1521 by caching references to Array.prototype.filter (#1523)
+  * Fix #1368 by adding stub#resolvesThis (#1517)
+
 3.1.0 / 2017-08-08
 ==================
 
