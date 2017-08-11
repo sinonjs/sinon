@@ -320,4 +320,45 @@ describe("issues", function () {
             assert.equals(this.stub.withArgs("arg").lastCall.returnValue, "return value");
         });
     });
+
+    describe("#1512 - sandbox.stub(obj,protoMethod)", function () {
+        var sandbox;
+
+        beforeEach(function () {
+            sandbox = sinon.sandbox.create();
+        });
+
+        afterEach(function () {
+            sandbox.restore();
+        });
+
+        it("can stub methods on the prototype", function () {
+            var proto = { someFunction: function () {} };
+            var instance = Object.create(proto);
+
+            var stub = sandbox.stub(instance, "someFunction");
+            instance.someFunction();
+            assert(stub.called);
+        });
+    });
+
+    describe("#1521 - stubbing Array.prototype.filter", function () {
+        var orgFilter;
+
+        before(function () {
+            orgFilter = Array.prototype.filter;
+        });
+
+        afterEach(function () {
+            /* eslint-disable no-extend-native */
+            Array.prototype.filter = orgFilter;
+        });
+
+        it("should be possible stub filter", function () {
+            var stub = sinon.stub(Array.prototype, "filter");
+            [1, 2, 3].filter(function () { return false; });
+            assert(stub.calledOnce);
+        });
+
+    });
 });

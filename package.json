@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "2.4.1",
+  "version": "3.2.0",
   "homepage": "http://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -15,18 +15,18 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "test-node": "mocha --recursive -R dot test/",
-    "test-dev": "run-s test-node -- --watch -R min",
+    "test-dev": "npm run test-node -- --watch -R min",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] test/",
     "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ mochify-istanbul --exclude '**/+(test|node_modules)/**/*' --report text --report lcovonly --dir ./coverage ] test/",
-    "test-cloud": "run-s test-headless -- --wd",
+    "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "run-s test-node test-headless test-webworker",
     "build": "./build.js",
     "lint": "eslint .",
     "precommit": "lint-staged",
-    "pretest-webworker": "run-s build",
+    "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg",
-    "prepublishOnly": "run -s build",
+    "prepublishOnly": "npm run build",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh",
     "eslint-pre-commit": "./scripts/eslint-pre-commit"
@@ -85,6 +85,8 @@
     "README.md"
   ],
   "main": "./lib/sinon.js",
+  "cdn": "./pkg/sinon.js",
+  "jsdelivr": "./pkg/sinon.js",
   "engines": {
     "node": ">=0.1.103"
   }

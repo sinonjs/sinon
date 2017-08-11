@@ -1,11 +1,30 @@
-# Sinon.JS
+<h1 align=center>
+    <a href="http://sinonjs.org" title="Sinon.JS">
+        <img alt="Sinon.JS" src="http://sinonjs.org/assets/images/logo.png">
+    </a>
+    <br>
+    Sinon.JS
+</h1>
 
-[![npm version](https://img.shields.io/npm/v/sinon.svg?style=flat)](https://www.npmjs.com/package/sinon) [![Join the chat at https://gitter.im/sinonjs/sinon](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sinonjs/sinon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build status](https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master)](http://travis-ci.org/sinonjs/sinon) [![bitHound Score](https://www.bithound.io/github/sinonjs/sinon/badges/score.svg)](https://www.bithound.io/github/sinonjs/sinon) [![Sauce Test Status](https://saucelabs.com/buildstatus/sinonjs)](https://saucelabs.com/u/sinonjs) [![Coverage Status](https://coveralls.io/repos/github/sinonjs/sinon/badge.svg)](https://coveralls.io/github/sinonjs/sinon) [![OpenCollective](https://opencollective.com/sinon/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/sinon/sponsors/badge.svg)](#sponsors) ![npm downloads per month](https://img.shields.io/npm/dm/sinon.svg)
+<p align=center>
+    Standalone and test framework agnostic JavaScript test spies, stubs and mocks (pronounced "sigh-non", named after <a href="https://en.wikipedia.org/wiki/Sinon">Sinon, the warrior</a>).
+</p>
 
-Standalone and test framework agnostic JavaScript test spies, stubs and mocks (pronounced "sigh-non", named after [Sinon, the warrior](https://en.wikipedia.org/wiki/Sinon)).
+<p align=center>
+<a href="https://www.npmjs.com/package/sinon"><img src="https://img.shields.io/npm/v/sinon.svg?style=flat" alt="npm version"></a>
+<a href="https://gitter.im/sinonjs/sinon?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/sinonjs/sinon"></a>
+<a href="http://travis-ci.org/sinonjs/sinon"><img src="https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master" alt="Build status"></a>
+<a href="https://www.bithound.io/github/sinonjs/sinon"><img src="https://www.bithound.io/github/sinonjs/sinon/badges/score.svg" alt="bitHound Score"></a>
+<a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/buildstatus/sinonjs" alt="Sauce Test Status"</a>
+<a href="https://coveralls.io/github/sinonjs/sinon"><img src="https://coveralls.io/repos/github/sinonjs/sinon/badge.svg" alt="Coverage Status"></a>
+<a href="#backers"><img src="https://opencollective.com/sinon/backers/badge.svg" alt="OpenCollective"></a>
+<a href="#sponsors"><img src="https://opencollective.com/sinon/sponsors/badge.svg" alt="OpenCollective"></a>
+<a href="https://www.npmjs.com/package/sinon" target="_blank"><img src="https://img.shields.io/npm/dm/sinon.svg" alt="npm downloads per month"></a>
+</p>
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/sinonjs.svg)](https://saucelabs.com/u/sinonjs)
+<p align=center>
+<a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
+</p>
 
 ## Installation
 
@@ -13,7 +32,7 @@ via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
-or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/).
+or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/). There are also [npm based CDNs](http://sinonjs.org/releases#npm-cdns) one can use.
 
 ## Usage
 

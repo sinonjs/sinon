@@ -271,11 +271,6 @@ Causes the stub to throw an exception of the provided type.
 Causes the stub to throw the provided exception object.
 
 
-#### `stub.throws(function() { return new Error(); });`
-
-Causes the stub to throw the exception returned by the function.
-
-
 #### `stub.rejects();`
 
 Causes the stub to return a Promise which rejects with an exception (`Error`).

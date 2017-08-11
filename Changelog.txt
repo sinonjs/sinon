@@ -1,4 +1,28 @@
 
+3.2.0 / 2017-08-10
+==================
+
+  * Fix #1521 by caching references to Array.prototype.filter (#1523)
+  * Fix #1368 by adding stub#resolvesThis (#1517)
+
+3.1.0 / 2017-08-08
+==================
+
+  * Lots of documentation updates
+  * Fix regression on sandbox.stub(obj,protoMethod)
+  * Add factory functions for sandbox and fake server
+  * Add support for passing a function to stub.throws(...). (#1511)
+
+3.0.0 / 2017-08-03
+==================
+
+  * Remove deprecated exports (see migration guide)
+  * Fix #1432: add details around expectations.withArgs behavior to docs (#1501)
+  * Fix #1487: incorrect withArgs().returnValue
+  * add format.setFormatter
+  * Upgrade lolex to 2.1.2
+  * Extract fakeXhr, fakeServer and fakeServerWithClock into own module `nise` and re-import it to keep api the same
+
 2.4.1 / 2017-07-26
 ==================
 

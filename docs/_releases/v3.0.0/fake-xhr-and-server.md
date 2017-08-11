@@ -201,7 +201,7 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 ```javascript
 {
     setUp: function () {
-        this.server = sinon.createFakeServer();
+        this.server = sinon.fakeServer.create();
     },
 
     tearDown: function () {
@@ -225,16 +225,16 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 ```
 
 
-#### `var server = sinon.createFakeServer([config]);``
+#### `var server = sinon.fakeServer.create([config]);``
 
 Creates a new server.
 
 This function also calls `sinon.useFakeXMLHttpRequest()`.
 
-`createFakeServer` accepts optional properties to configure the fake server. See [options](#options) below for configuration parameters.
+`create` accepts optional properties to configure the fake server. See [options](#options) below for configuration parameters.
 
 
-#### `var server = sinon.createFakeServerWithClock();`
+#### `var server = sinon.fakeServerWithClock.create();`
 
 Creates a server that also manages fake timers.
 
@@ -360,7 +360,7 @@ These options are properties on the server object and can be set directly
 server.autoRespond = true
 ```
 
-You can also pass options with an object literal to `createFakeServer` and `.configure`.
+You can also pass options with an object literal to `fakeServer.create` and `.configure`.
 
 #### `Boolean autoRespond`
 
