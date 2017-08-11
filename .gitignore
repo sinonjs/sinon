@@ -5,3 +5,4 @@ coverage/
 .idea
 .sass_cache
 _site
+__tmp-all-tests.js
