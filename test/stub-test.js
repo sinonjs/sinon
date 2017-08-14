@@ -137,6 +137,19 @@ describe("stub", function () {
                 stub();
             });
         });
+
+        it("throws only on the first call", function () {
+            var stub = createStub.create();
+            stub.returns("no exception");
+            stub.onFirstCall().throws();
+
+            assert.exception(function () {
+                stub();
+            });
+
+            // on the second call there is no exception
+            assert.same(stub(), "no exception");
+        });
     });
 
     describe(".resolves", function () {
