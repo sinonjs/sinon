@@ -361,4 +361,18 @@ describe("issues", function () {
         });
 
     });
+
+    describe("#1531 - some copied functions on root sinon module throw", function () {
+        it("should create a fake server without throwing", function () {
+            refute.exception(function () {
+                sinon.createFakeServer();
+            });
+        });
+
+        it("should create a fake server with clock without throwing", function () {
+            refute.exception(function () {
+                sinon.createFakeServerWithClock();
+            });
+        });
+    });
 });
