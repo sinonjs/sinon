@@ -23,7 +23,7 @@ describe("sinon module", function () {
             },
             fakeServerWithClock: {
                 create: function () {
-                    "e69974f8-4568-48d1-a5e9-2b511a59c14b";
+                    return "e69974f8-4568-48d1-a5e9-2b511a59c14b";
                 }
             },
             fakeXhr: {
