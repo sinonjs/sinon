@@ -324,6 +324,24 @@ describe("stub", function () {
 
             assert.same(stub.resolvesThis(), stub);
         });
+
+        it("overrides throws behavior for error objects", function () {
+            var instance = {};
+            instance.stub = createStub.create().throws(new Error()).resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
+        });
+
+        it("overrides throws behavior for dynamically created errors", function () {
+            var instance = {};
+            instance.stub = createStub.create().throws().resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
+        });
     });
 
     describe(".returnsArg", function () {
