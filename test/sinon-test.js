@@ -17,10 +17,14 @@ describe("sinon module", function () {
 
         fakeNise = {
             fakeServer: {
-                create: "47c86a4c-6b48-4748-bb8c-d853f999720c"
+                create: function () {
+                    return "47c86a4c-6b48-4748-bb8c-d853f999720c";
+                }
             },
             fakeServerWithClock: {
-                create: "e69974f8-4568-48d1-a5e9-2b511a59c14b"
+                create: function () {
+                    return "e69974f8-4568-48d1-a5e9-2b511a59c14b";
+                }
             },
             fakeXhr: {
                 xhr: "958e8996-0cc3-4136-8a0e-6a120f5311bc",
@@ -52,7 +56,7 @@ describe("sinon module", function () {
 
         describe("createFakeServer", function () {
             it("should be fakeServer.create from nise", function () {
-                assert.equals(sinon.createFakeServer, fakeNise.fakeServer.create);
+                assert.equals(sinon.createFakeServer(), fakeNise.fakeServer.create());
             });
         });
 
@@ -64,7 +68,7 @@ describe("sinon module", function () {
 
         describe("createFakeServerWithClock", function () {
             it("should be fakeServerWithClock.create from nise", function () {
-                assert.equals(sinon.createFakeServerWithClock, fakeNise.fakeServerWithClock.create);
+                assert.equals(sinon.createFakeServerWithClock(), fakeNise.fakeServerWithClock.create());
             });
         });
 
