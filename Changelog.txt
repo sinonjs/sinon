@@ -1,4 +1,12 @@
 
+3.2.1 / 2017-08-17
+==================
+
+  * resolvesThis should override previous throws
+  * preserve context of functions from nise: fakeServer, fakeServerWithClock
+  * Fix regression for issue #1526 regarding onFirstCall().throws()
+  * Fix docs regression introduced by #1523
+
 3.2.0 / 2017-08-10
 ==================
 
