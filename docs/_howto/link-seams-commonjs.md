@@ -58,7 +58,7 @@ describe('example', function () {
         existsSyncStub = sinon.stub(); // create a stub for every test
 
         // import the module to test, using a fake dependency
-        doesFileExist = proxyquire('../lib/example', {
+        doesFileExist = proxyquire('../lib/does-file-exist', {
             fs: {
                 existsSync: existsSyncStub
             }
