@@ -11,6 +11,8 @@ var sinonSandbox = require("../lib/sinon/sandbox");
 var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
+var usePromise = require("../lib/sinon").usePromise;
+var defaultConfig = require("../lib/sinon/util/core/default-config");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
 var sinonMatch = require("../lib/sinon/match");
 var sinonAssert = require("../lib/sinon/assert");
@@ -123,6 +125,61 @@ describe("sinonSandbox", function () {
             this.sandbox.restore();
 
             assert.same(setTimeout, originalSetTimeout, "fakeTimers restored");
+        });
+    });
+
+    // sinon.usePromise
+    describe(".usePromise (global)", function () {
+        beforeEach(function () {
+            this.sandbox = Object.create(sinonSandbox);
+        });
+
+        afterEach(function () {
+            delete defaultConfig.promiseLibrary;
+        });
+
+        it("must set all stubs created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
+
+            var resolveValue = {};
+            var mockPromise = {
+                resolve: sinonStub.create().resolves(resolveValue)
+            };
+
+            usePromise(mockPromise);
+            var stub = this.sandbox.stub().resolves();
+
+            return stub()
+                .then(function (action) {
+
+                    assert.same(resolveValue, action);
+                    assert(mockPromise.resolve.calledOnce);
+                });
+        });
+
+        it("must set all stubs created from sandbox with mockPromise (object)", function () {
+            if (!supportPromise) { return this.skip(); }
+
+            var resolveValue = {};
+            var mockPromise = {
+                resolve: sinonStub.create().resolves(resolveValue)
+            };
+            var stubbedObject = {
+                stubbedMethod: function () {
+                    return;
+                }
+            };
+
+            usePromise(mockPromise);
+            this.sandbox.stub(stubbedObject);
+            stubbedObject.stubbedMethod.resolves({});
+
+            return stubbedObject.stubbedMethod()
+                .then(function (action) {
+
+                    assert.same(resolveValue, action);
+                    assert(mockPromise.resolve.calledOnce);
+                });
         });
     });
 
