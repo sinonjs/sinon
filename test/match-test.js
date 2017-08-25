@@ -493,7 +493,7 @@ describe("sinonMatch", function () {
             }, "TypeError");
         });
 
-        if (typeof Symbol !== "undefined") {
+        if (typeof Symbol !== "undefined" && typeof Symbol.hasInstance !== "undefined") {
             it("does not throw if given argument defines Symbol.hasInstance", function () {
                 var objectWithCustomTypeChecks = {};
                 objectWithCustomTypeChecks[Symbol.hasInstance] = function () {};
