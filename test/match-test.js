@@ -493,6 +493,14 @@ describe("sinonMatch", function () {
             }, "TypeError");
         });
 
+        if (typeof Symbol !== "undefined") {
+            it("does not throw if given argument defines Symbol.hasInstance", function () {
+                var objectWithCustomTypeChecks = {};
+                objectWithCustomTypeChecks[Symbol.hasInstance] = function () {};
+                sinonMatch.instanceOf(objectWithCustomTypeChecks);
+            });
+        }
+
         it("returns matcher", function () {
             var instanceOf = sinonMatch.instanceOf(function () {});
 
