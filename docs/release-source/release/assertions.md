@@ -127,6 +127,11 @@ Passes if `spy` was always called with matching arguments.
 This behaves the same way as `sinon.assert.alwaysCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
 
+#### `sinon.assert.calledWithNew(spy)`
+
+Passes if `spy` was called with the `new` operator.
+
+
 #### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was never called with matching arguments.
