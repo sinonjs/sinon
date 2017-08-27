@@ -4,6 +4,8 @@ var referee = require("referee");
 var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
+var usePromise = require("../lib/sinon").usePromise;
+var defaultConfig = require("../lib/sinon/util/core/default-config");
 var sinonMatch = require("../lib/sinon/match");
 var getPropertyDescriptor = require("../lib/sinon/util/core/get-property-descriptor");
 var deprecated = require("../lib/sinon/util/core/deprecated");
@@ -526,6 +528,61 @@ describe("stub", function () {
             var reason = new Error();
 
             stub.usingPromise(promise).rejects(reason);
+
+            return stub().then(function () {
+                referee.fail("this should not resolve");
+            }).catch(function (actual) {
+                assert.same(actual, reason, "Same object resolved");
+                assert.isTrue(promise.reject.calledOnce, "Custom promise reject called once");
+                assert.isTrue(promise.reject.calledWith(reason), "Custom promise reject called once with expected");
+            });
+        });
+    });
+
+    // sinon.usePromise
+    describe(".usePromise (global)", function () {
+
+        afterEach(function () {
+            delete defaultConfig.promiseLibrary;
+        });
+
+        it("should exist and be a function", function () {
+            assert(usePromise);
+            assert.isFunction(usePromise);
+        });
+
+        it("should set the promise used by resolve", function () {
+            var promise = {
+                resolve: createStub.create().callsFake(function (value) {
+                    return Promise.resolve(value);
+                })
+            };
+            usePromise(promise);
+
+            var stub = createStub.create();
+            var object = {};
+
+            stub.resolves(object);
+
+            return stub().then(function (actual) {
+                assert.same(actual, object, "Same object resolved");
+                assert.isTrue(promise.resolve.calledOnce, "Custom promise resolve called once");
+                assert.isTrue(promise.resolve.calledWith(object), "Custom promise resolve called once with expected");
+            });
+        });
+
+        it("should set the promise used by reject", function () {
+            var promise = {
+                reject: createStub.create().callsFake(function (err) {
+                    return Promise.reject(err);
+                })
+            };
+            usePromise(promise);
+
+            var stub = createStub.create();
+            var reason = new Error();
+
+            stub.rejects(reason);
 
             return stub().then(function () {
                 referee.fail("this should not resolve");

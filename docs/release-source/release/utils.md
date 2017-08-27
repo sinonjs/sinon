@@ -36,13 +36,13 @@ Creates a new object with the given function as the protoype and stubs all imple
     class Container {
         contains(item) { /* ... */ }
     }
-    
+
     var stubContainer = sinon.createStubInstance(Container);
     stubContainer.contains.returns(false);
     stubContainer.contains.withArgs("item").returns(true);
 ```
 
-The given constructor function is not invoked. See also the [stub API](../stubs).
+The given constructor function is not invoked. See also the [stub API](./stubs.md).
 
 #### `sinon.format(object);`
 
@@ -60,3 +60,22 @@ sinon.log = function (message) {
     jstestdriver.console.log(message);
 };
 ```
+
+#### `sinon.usePromise(promiseLibrary);`
+
+Ensures all future stubs will use the provided promise library instead of native
+promises. For per-stub promise overriding, see the [stub API.](./stubs.md#stubusingpromisepromiselibrary)
+
+```javascript
+sinon.usePromise(bluebird.Promise);
+var myObj = {
+    saveSomething: sinon.stub().resolves("baz")
+};
+
+myObj.saveSomething()
+    .tap(function(actual) {
+        console.log(actual); // baz
+    });
+```
+
+*Since `sinon@3.0.0`*
