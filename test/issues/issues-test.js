@@ -375,4 +375,19 @@ describe("issues", function () {
             });
         });
     });
+
+    describe("#1442 - callThrough with a mock expectation", function () {
+        it("should call original method", function () {
+            var foo = {
+                bar: function () { }
+            };
+
+            var mock = this.sandbox.mock(foo);
+            mock.expects("bar").callThrough();
+
+            foo.bar();
+
+            mock.verify();
+        });
+    });
 });
