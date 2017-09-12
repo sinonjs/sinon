@@ -7,6 +7,6 @@ var yaml = require("js-yaml");
 var releaseId = "v" + require("../package.json").version;
 var config = yaml.safeLoad(fs.readFileSync(configYmlPath, UTF8));
 
-config.sinon.current_release = releaseId;  // eslint-disable-line camelcase
+config.sinon.current_release = releaseId; // eslint-disable-line camelcase
 
 fs.writeFileSync(configYmlPath, yaml.safeDump(config), UTF8);

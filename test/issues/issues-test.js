@@ -130,7 +130,7 @@ describe("issues", function () {
             // makes sure that Object.prototype.watch is set back to its old value
             function restore(oldWatch) {
                 if (oldWatch) {
-                    Object.prototype.watch = oldWatch;  // eslint-disable-line no-extend-native
+                    Object.prototype.watch = oldWatch; // eslint-disable-line no-extend-native
                 } else {
                     delete Object.prototype.watch;
                 }
@@ -203,7 +203,7 @@ describe("issues", function () {
             this.sandbox.resetHistory();
 
             spy();
-            assert.equals(spy.callCount, 1);  // should not fail but fails
+            assert.equals(spy.callCount, 1); // should not fail but fails
         });
     });
 
