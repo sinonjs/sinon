@@ -346,8 +346,8 @@ describe("sinonSandbox", function () {
                     this.sandbox.clock.tick(10);
 
                     var xhr = window.XMLHttpRequest ?
-                                new XMLHttpRequest() :
-                                new ActiveXObject("Microsoft.XMLHTTP"); //eslint-disable-line no-undef
+                        new XMLHttpRequest() :
+                        new ActiveXObject("Microsoft.XMLHTTP"); //eslint-disable-line no-undef
 
                     assert.isFunction(this.obj.spy);
                     assert.isFunction(this.obj.stub);

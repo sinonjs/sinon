@@ -1001,7 +1001,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(numberOrString));
             assert.equals(numberOrString.toString(),
-                          "typeOf(\"number\").or(typeOf(\"string\"))");
+                "typeOf(\"number\").or(typeOf(\"string\"))");
         });
 
         it("requires matcher argument", function () {
@@ -1015,7 +1015,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(abcOrDef));
             assert.equals(abcOrDef.toString(),
-                          "match(\"abc\").or(match(\"def\"))");
+                "match(\"abc\").or(match(\"def\"))");
         });
 
         it("returns true if either matcher matches", function () {
@@ -1060,7 +1060,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(abcOrObj));
             assert.equals(abcOrObj.toString(),
-                          "match(\"abc\").or(match(a: 1))");
+                "match(\"abc\").or(match(a: 1))");
         });
 
         it("returns true if both matchers match", function () {

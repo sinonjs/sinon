@@ -864,11 +864,11 @@ describe("sinonSpy.call", function () {
             }
 
             run()
-            .then(function () {
-                assert.equals(stub2.getCall(0).toString().replace(/ at.*/g, ""), "stub(1) => 1");
-                done();
-            })
-            .catch( done );
+                .then(function () {
+                    assert.equals(stub2.getCall(0).toString().replace(/ at.*/g, ""), "stub(1) => 1");
+                    done();
+                })
+                .catch( done );
         });
         /* eslint-enable consistent-return */
     });

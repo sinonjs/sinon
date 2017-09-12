@@ -346,17 +346,17 @@ describe("spy", function () {
             refute.defined(spy.getCall(3).args[2]);
             ["args", "callCount", "callId"].forEach(function (propName) {
                 assert.equals(spy.withArgs(1).getCall(0)[propName],
-                              spy.getCall(1)[propName]);
+                    spy.getCall(1)[propName]);
                 assert.equals(spy.withArgs(1).getCall(1)[propName],
-                              spy.getCall(2)[propName]);
+                    spy.getCall(2)[propName]);
                 assert.equals(spy.withArgs(1).getCall(2)[propName],
-                              spy.getCall(3)[propName]);
+                    spy.getCall(3)[propName]);
                 assert.isNull(spy.withArgs(1).getCall(3));
                 assert.equals(spy.withArgs(1, 1).getCall(0)[propName],
-                              spy.getCall(2)[propName]);
+                    spy.getCall(2)[propName]);
                 assert.isNull(spy.withArgs(1, 1).getCall(1));
                 assert.equals(spy.withArgs(1, 2).getCall(0)[propName],
-                              spy.getCall(3)[propName]);
+                    spy.getCall(3)[propName]);
                 assert.isNull(spy.withArgs(1, 2).getCall(1));
             });
 
