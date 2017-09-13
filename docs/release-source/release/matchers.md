@@ -220,6 +220,22 @@ The property might be inherited via the prototype chain. If the optional expecta
 Same as `sinon.match.has` but the property must be defined by the value itself. Inherited properties are ignored.
 
 
+#### `sinon.match.hasNested(propertyPath[, expectation])`
+
+Requires the value to define the given `propertyPath`. Dot (`prop.prop`) and bracket (`prop[0]`) notations are supported as in (Lodash.get)[https://lodash.com/docs/4.4.2#get].
+
+The propertyPath might be inherited via the prototype chain. If the optional expectation is given, the value at the propertyPath is deeply compared with the expectation. The expectation can be another matcher.
+
+
+```javascript
+sinon.match.hasNested("a[0].b.c");
+sinon.match.hasNested("a.b.c");
+
+// Where actual is something like
+var actual = { "a": [{ "b": { "c": 3 } }] };
+```
+
+
 ## Combining matchers
 
 All matchers implement `and` and `or`. This allows to logically combine mutliple matchers. The result is a new matchers that requires both (and) or one of the matchers (or) to return `true`.

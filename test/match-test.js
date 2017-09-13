@@ -3,7 +3,7 @@
 var assert = require("referee").assert;
 var sinonMatch = require("../lib/sinon/match");
 
-function propertyMatcherTests(matcher) {
+function propertyMatcherTests(matcher, additionalTests) {
     return function () {
         it("returns matcher", function () {
             var has = matcher("foo");
@@ -69,6 +69,10 @@ function propertyMatcherTests(matcher) {
 
             assert(has.test({ callback: function () {} }));
         });
+
+        if (typeof additionalTests === "function") {
+            additionalTests();
+        }
     };
 }
 
@@ -522,6 +526,22 @@ describe("sinonMatch", function () {
 
     describe(".has", propertyMatcherTests(sinonMatch.has));
     describe(".hasOwn", propertyMatcherTests(sinonMatch.hasOwn));
+
+    describe(".hasNested", propertyMatcherTests(sinonMatch.hasNested, function () {
+
+        it("compares nested value", function () {
+            var hasNested = sinonMatch.hasNested("foo.bar", "doo");
+
+            assert(hasNested.test({ foo: { bar: "doo" } }));
+        });
+
+        it("compares nested array value", function () {
+            var hasNested = sinonMatch.hasNested("foo[0].bar", "doo");
+
+            assert(hasNested.test({ foo: [{ bar: "doo" }] }));
+        });
+
+    }));
 
     describe(".hasSpecial", function () {
         it("returns true if object has inherited property", function () {
