@@ -229,10 +229,14 @@ The propertyPath might be inherited via the prototype chain. If the optional exp
 
 ```javascript
 sinon.match.hasNested("a[0].b.c");
-sinon.match.hasNested("a.b.c");
 
 // Where actual is something like
 var actual = { "a": [{ "b": { "c": 3 } }] };
+
+sinon.match.hasNested("a.b.c");
+
+// Where actual is something like
+var actual = { "a": { "b": { "c": 3 } } };
 ```
 
 
