@@ -37,6 +37,7 @@
   "dependencies": {
     "diff": "^3.1.0",
     "formatio": "1.2.0",
+    "lodash.get": "^4.4.2",
     "lolex": "^2.1.2",
     "native-promise-only": "^0.8.1",
     "nise": "^1.0.1",
