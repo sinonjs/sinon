@@ -5,6 +5,14 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+3.3.0 / 2017-09-18
+==================
+
+  * Adds sinon.match.hasNested
+  * fix 'callThrough with a mock expectation' (#1442)
+  * Documentation updates
+  * Allow custom defined instance checks if supported
+
 3.2.1 / 2017-08-17
 ==================
 
