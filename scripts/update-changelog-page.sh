@@ -5,5 +5,5 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
-$(<Changelog.txt)
+$(<History.md)
 EOL

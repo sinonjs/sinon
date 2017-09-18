@@ -5,7 +5,7 @@ You will need a working installation of [git-extras](https://github.com/tj/git-e
 The release process is mostly automated, here is a brief overview of the steps
 
 1. `npm version [keyword]`
-    - Updates `Changelog.txt` - you will need to edit this
+    - Updates `History.md` - you will need to edit this
     - Updates `AUTHORS`
     - Updates `package.json` with new version
     - Creates a new git tag
@@ -29,7 +29,7 @@ If you absolutely **have** to, then you can also specify a specific version:
 npm version x.y.z
 ```
 
-After this, your default editor will show the updated `Changelog.txt`. Please make edits to this to remove service commits (like updating `devDependencies`) and commits that only change documentation.
+After this, your default editor will show the updated `History.md`. Please make edits to this to remove service commits (like updating `devDependencies`) and commits that only change documentation.
 
 ## 2. Publish to NPM
 
