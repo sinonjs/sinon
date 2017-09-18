@@ -35,7 +35,6 @@
     "*.js": "eslint"
   },
   "dependencies": {
-    "build": "^0.1.4",
     "diff": "^3.1.0",
     "formatio": "1.2.0",
     "lodash.get": "^4.4.2",
