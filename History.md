@@ -1,4 +1,11 @@
 
+4.0.0 / 2017-09-26
+==================
+
+  * Explicitly update fake xhr lib 'nise'
+  * Remove accidental dependency to "build"
+  * Remove support for stubbing undefined props (#1557)
+
 3.3.0 / 2017-09-18
 ==================
 
