@@ -28,6 +28,10 @@ Calling `sinon.stub` with three arguments will throw an Error. This was deprecat
 The [changes in configuration](../fake-timers) for fake timers implicitly affect sandbox creation. If your config used to look like `{ useFaketimers: ["setTimeout", "setInterval"]}`, you
 will now need to change it to `{ useFaketimers: { toFake: ["setTimeout", "setInterval"] }}`.
 
+## `sandbox.stub(obj, 'nonExistingProperty')` - Throws
+Trying to stub a non-existing property will now fail to ensure you are creating
+[less error-prone tests](https://github.com/sinonjs/sinon/issues/1537#issuecomment-323948482).
+
 ## Removal of internal helpers
 The following internal functions were deprecated as of `sinon@1.x` and have been removed in `sinon@3`:
 
