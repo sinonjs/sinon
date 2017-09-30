@@ -19,10 +19,7 @@ This page contains the entire Sinon.JS API documentation along with brief    int
 * [Sandboxes](./sandbox)
 * [Utils](./utils)
 
-### Migration guides
-* Migrating from [v1.x to v2.0](./migrating-to-2.0)
-* Migrating from [v2.x to v3.0](./migrating-to-3.0)
-* Migrating from [v3.x to v4.0](./migrating-to-4.0)
+{% include docs/migration-guides.md %}
 
 ### Compatibility
 
