@@ -29,8 +29,7 @@
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "prepublishOnly": "npm run build",
     "preversion": "./scripts/preversion.sh",
-    "postversion": "./scripts/postversion.sh",
-    "eslint-pre-commit": "./scripts/eslint-pre-commit"
+    "postversion": "./scripts/postversion.sh"
   },
   "lint-staged": {
     "*.js": "eslint"
