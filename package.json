@@ -52,7 +52,7 @@
     "husky": "^0.14.2",
     "lint-staged": "^4.0.0",
     "mocaccino": "^2.0.0",
-    "mocha": "^3.1.2",
+    "mocha": "^4.0.0",
     "mochify": "^3.0.0",
     "mochify-istanbul": "^2.4.1",
     "native-promise-only": "^0.8.1",
