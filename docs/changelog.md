@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.0.1 / 2017-10-04
+==================
+
+  * Upgrade nise and lolex versions
+  * Remove obsoleted lib/sinon/sandbox-stub.js
+
 4.0.0 / 2017-09-26
 ==================
 
