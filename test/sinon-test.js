@@ -1,6 +1,5 @@
 "use strict";
 
-var proxyquire = require("proxyquire");
 var assert = require("referee").assert;
 var hasPromise = typeof Promise === "function";
 
@@ -8,13 +7,14 @@ if (!hasPromise) {
     return;
 }
 
+var proxyquire = require("proxyquire");
+
 describe("sinon module", function () {
     var sinon,
         fakeSandbox,
         fakeNise;
 
     beforeEach(function () {
-
         fakeNise = {
             fakeServer: {
                 create: function () {
