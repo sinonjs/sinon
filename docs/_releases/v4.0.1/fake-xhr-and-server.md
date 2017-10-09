@@ -330,6 +330,55 @@ As this is synchronous and immediate, this is not suitable for simulating actual
 You can inspect the `server.requests` to verify request ordering, find unmatched requests or check that no requests has been done.
 `server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.
 
+#### Triggering progress events
+
+Remember that there are two types of progress events use `xhr.addListener(progress, callback, false)` for progress events on **downloads** and `xhr.uploads.addListener(progress, callback, false)` for **uploads**.
+
+To trigger progress events on uploads, you'll need to find the request in the `server.requests` array:
+```js
+
+function updateProgress(e) {
+    console.log("Update progress event:", e)
+}
+
+server = sinon.fakeServer.create()
+server.respondWith('POST', '/foo/bar', [200, 'ok'])
+
+const xhr = new XMLHttpRequest()
+const formData = new FormData()
+formData.append('files[]', file)
+xhr.upload.addEventListener('progress', this.updateProgress, false)
+... add other listeners here (load, error etc) ...
+
+xhr.open('POST', this.url, true)
+xhr.send(formData)        
+// this triggers the uploadProgress event:
+server.requests[0].uploadProgress({ loaded: 20, total: 100 })
+```
+
+To trigger a progress event on downloads, do:
+
+```js
+
+function updateProgress(e) {
+    console.log("Update progress event:", e)
+}
+
+server = sinon.fakeServer.create()
+server.respondWith('POST', '/foo/bar', [200, 'ok'])
+
+const xhr = new XMLHttpRequest()
+xhr.addEventListener('progress', updateProgress, false)
+... add other listeners here (load, error etc) ...
+
+xhr.open('GET', this.url, true)
+xhr.send()        
+// this triggers the download progress event:
+server.requests[0].downloadProgress({ loaded: 20, total: 100 })
+```
+
+
+
 #### `Boolean server.fakeHTTPMethods`
 
 If set to `true`, server will find `_method` parameter in POST body and recognize that as the actual method.
