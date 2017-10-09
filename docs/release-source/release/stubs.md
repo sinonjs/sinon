@@ -63,8 +63,6 @@ calls. As of 1.8, this functionality has been removed in favor of the
 
 ### Stub API
 
-If you need to stub getters/setters or non-function properties, then you should be using [`sandbox.stub`](../sandbox/#sandboxstub)
-
 ### Properties
 
 #### `var stub = sinon.stub();`
@@ -178,6 +176,10 @@ This is equivalent to calling both `stub.resetBehavior()` and `stub.resetHistory
 
 *Updated in `sinon@2.0.0`*
 
+*Since `sinon@5.0.0`*
+
+You can reset all stubs using `sinon.reset()`
+
 #### `stub.resetBehavior();`
 
 Resets the stub's behaviour to the default behaviour
@@ -194,8 +196,14 @@ stub.resetBehavior();
 stub(); // undefined
 ```
 
+*Since `sinon@5.0.0`*
+
+You can reset behaviour of all stubs using `sinon.resetBehavior()`
+
 
 #### `stub.resetHistory();`
+
+*Since `sinon@2.0.0`*
 
 Resets the stub's history
 
@@ -213,7 +221,11 @@ stub.resetHistory();
 stub.called // false
 ```
 
-*Since `sinon@2.0.0`*
+
+*Since `sinon@5.0.0`*
+
+You can reset behaviour of all stubs using `sinon.resetHistory()`
+
 
 #### `stub.callsFake(fakeFunction);`
 Makes the stub call the provided `fakeFunction` when invoked.

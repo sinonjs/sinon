@@ -2,6 +2,7 @@
 
 var assert = require("referee").assert;
 var hasPromise = typeof Promise === "function";
+var Sandbox = require("../lib/sinon/sandbox");
 
 if (!hasPromise) {
     return;
@@ -36,7 +37,28 @@ describe("sinon module", function () {
         });
     });
 
+    describe("deprecated methods", function () {
+        it(".sandbox.create", function () {
+            // eslint-disable-next-line max-len
+            var expectedMessage = "`sandbox.create()` is deprecated. Use default sandbox at `sinon.sandbox` or create new sandboxes with `sinon.createSandbox()` or `new sinon.Sandbox()`";
+            var infoStub = sinon.stub(console, "info");
+            var actual = sinon.sandbox.create();
+
+            sinon.assert.calledWith(infoStub, expectedMessage);
+
+            assert.hasPrototype(actual, Sandbox.prototype);
+
+            infoStub.restore();
+        });
+    });
+
     describe("exports", function () {
+        describe("default sandbox", function () {
+            it("should be an instance of Sandbox", function () {
+                assert.hasPrototype(sinon, Sandbox.prototype);
+            });
+        });
+
         describe("createSandbox", function () {
             it("should be a unary Function named 'createSandbox'", function () {
                 assert.isFunction(sinon.createSandbox);
