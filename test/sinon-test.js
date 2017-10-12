@@ -40,7 +40,7 @@ describe("sinon module", function () {
     describe("deprecated methods", function () {
         it(".sandbox.create", function () {
             // eslint-disable-next-line max-len
-            var expectedMessage = "`sandbox.create()` is deprecated. Use default sandbox at `sinon.sandbox` or create new sandboxes with `sinon.createSandbox()` or `new sinon.Sandbox()`";
+            var expectedMessage = "`sandbox.create()` is deprecated. Use default sandbox at `sinon.sandbox` or create new sandboxes with `sinon.createSandbox()`";
             var infoStub = sinon.stub(console, "info");
             var actual = sinon.sandbox.create();
 
