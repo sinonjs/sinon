@@ -43,9 +43,9 @@ sinon.stub(obj, 'meth').callsFake(fn);
 
 ```js
 // Old
-sinon.reset();
+stub.reset();
 // New
-sinon.resetHistory();
+stub.resetHistory();
 ```
 
 ## Deprecation of internal helpers
