@@ -39,7 +39,7 @@ sinon.stub(obj, 'meth').callsFake(fn);
 ```
 
 ## stub.resetHistory replaces stub.reset
-`sinon.reset()` now resets the history and the behaviour of the stub. Previously `stub.reset()` only reset the history of the stub. Stubs now have separate methods for resetting the history and the behaviour. To mimic the old behaviour replace all `stub.reset()` calls with `stub.resetHistory()`.
+`stub.reset()` now resets the history and the behaviour of the stub. Previously `stub.reset()` only reset the history of the stub. Stubs now have separate methods for resetting the history and the behaviour. To mimic the old behaviour replace all `stub.reset()` calls with `stub.resetHistory()`.
 
 ```js
 // Old
