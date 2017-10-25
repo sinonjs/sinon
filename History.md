@@ -1,4 +1,13 @@
 
+4.0.2 / 2017-10-25
+==================
+
+  * Update 'nise' to latest version (#1593)
+  * Use supports-color module to test if system supports colors
+  * Upgrade mocha to v4.0.0
+  * Make samsam a development dependency
+  * Make native-promise-only a development dependency
+
 4.0.1 / 2017-10-04
 ==================
 
