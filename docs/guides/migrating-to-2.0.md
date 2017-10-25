@@ -38,6 +38,16 @@ sinon.stub(obj, 'meth', fn);
 sinon.stub(obj, 'meth').callsFake(fn);
 ```
 
+## stub.resetHistory replaces stub.reset
+`stub.reset()` now resets the history and the behaviour of the stub. Previously `stub.reset()` only reset the history of the stub. Stubs now have separate methods for resetting the history and the behaviour. To mimic the old behaviour replace all `stub.reset()` calls with `stub.resetHistory()`.
+
+```js
+// Old
+stub.reset();
+// New
+stub.resetHistory();
+```
+
 ## Deprecation of internal helpers
 The following utility functions are being marked as deprecated and are planned for removal in Sinon v3.0; please check your codebase for usage to ease future migrations:
 
