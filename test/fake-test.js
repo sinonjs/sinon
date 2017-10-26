@@ -2,7 +2,32 @@
 
 var sinon = require("../lib/sinon.js");
 var fake = sinon.fake;
-var assert = require("referee").assert;
+var referee = require("referee");
+var assert = referee.assert;
+
+referee.add("isProxy", {
+    assert: function assertIsProxy(actual) {
+        if (typeof actual !== "function") {
+            throw new TypeError("isProxy expects 'actual' argument to be a Function");
+        }
+
+        this.isSinonProxy = actual.isSinonProxy;
+
+        return this.isSinonProxy === true;
+    },
+    assertMessage: "Expected ${name} to be a Sinon proxy (spy)",
+    refuteMessage: "Expected ${name} to not be a Sinon proxy (spy)",
+    expectation: "toBeAProxy"
+});
+
+function verifyProxy(func, argument) {
+    it("should return a Sinon proxy", function () {
+        var actual = func(argument);
+
+        assert.isProxy(actual);
+    });
+}
+
 
 describe("fake", function () {
     describe("module", function () {
@@ -10,6 +35,14 @@ describe("fake", function () {
             assert.equals(fake.length, 1);
             assert.equals(fake.name, "fake");
         });
+    });
+
+    describe("when passed a Function", function () {
+        verifyProxy(fake, function () {});
+    });
+
+    describe("when passed no value", function () {
+        verifyProxy(fake);
     });
 
     describe(".returns", function () {
@@ -21,12 +54,7 @@ describe("fake", function () {
             assert.equals(actual, expected);
         });
 
-        it("should return a sinon proxy", function () {
-            var actual = fake.returns("hello");
-
-            assert.isFunction(actual);
-            assert.equals(actual.isSinonProxy, true);
-        });
+        verifyProxy(fake.returns, "42");
     });
 
     describe(".throws", function () {
@@ -47,12 +75,7 @@ describe("fake", function () {
             /* eslint-disable no-restricted-syntax */
         });
 
-        it("should return a sinon proxy", function () {
-            var actual = fake.throws("hello");
-
-            assert.isFunction(actual);
-            assert.equals(actual.isSinonProxy, true);
-        });
+        verifyProxy(fake.throws, "42");
 
         it("should return the same error type as it is passed", function () {
             var expected = new TypeError("hello sailor");
@@ -93,12 +116,7 @@ describe("fake", function () {
             });
         });
 
-        it("should return a sinon proxy", function () {
-            var actual = fake.resolves("hello");
-
-            assert.isFunction(actual);
-            assert.equals(actual.isSinonProxy, true);
-        });
+        verifyProxy(fake.resolves, "42");
     });
 
     describe(".rejects", function () {
@@ -111,16 +129,7 @@ describe("fake", function () {
             });
         });
 
-        it("should return a sinon proxy", function () {
-            var myFake = fake.rejects("hello");
-
-            assert.isFunction(myFake);
-            assert.equals(myFake.isSinonProxy, true);
-
-            return myFake().catch(function (error) {
-                assert.isTrue(error instanceof Error);
-            });
-        });
+        verifyProxy(fake.rejects, "42");
 
         it("should return the same error type as it is passed", function () {
             var expected = new TypeError("hello world");
