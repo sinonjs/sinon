@@ -471,6 +471,11 @@ Returns `true` if call did not receive provided arguments.
 Returns `true` if call did not receive matching arguments.
 This behaves the same as `spyCall.notCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
 
+#### `spyCall.returned(value);`
+
+Returns `true` if spied function returned the provided `value` on this call.
+
+Uses deep comparison for objects and arrays. Use `spyCall.returned(sinon.match.same(obj))` for strict comparison (see [matchers](#matchers)).
 
 #### `spyCall.threw();`
 
