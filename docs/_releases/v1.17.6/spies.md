@@ -370,7 +370,7 @@ Array of arguments received, `spy.args[0]` is an array of arguments received in 
 
 Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown by the first call.
 
-If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined.
+If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined`.
 
 
 #### `spy.returnValues`
