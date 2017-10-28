@@ -67,7 +67,7 @@ Please visit the `lolex.install` [documentation](https://github.com/sinonjs/lole
 
 **Important note:** when faking `nextTick`, normal calls to `process.nextTick()` would not execute automatically as they would during normal event-loop phases. You would have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [lolex](https://github.com/sinonjs/lolex) documentation for more information.
 
-#### Examples:
+#### Examples
 
 Installs fake timers at January 1st 2017 and fakes `setTimeout` and `process.nextTick` only:
 
