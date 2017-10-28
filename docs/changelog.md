@@ -233,11 +233,6 @@ v2.0.0-pre.5 / 2016-12-31
   * Add tests for xhr.readyState after abort()
   * Test that demonstrates that a mock can be called more times than expected without failing (if the exception is silenced).
 
-n.n.n / 2017-02-27
-==================
-
-
-
 v2.0.0-pre.6 / 2017-02-27
 =========================
 

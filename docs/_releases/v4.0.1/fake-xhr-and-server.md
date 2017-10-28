@@ -378,7 +378,6 @@ server.requests[0].downloadProgress({ loaded: 20, total: 100 })
 ```
 
 
-
 #### `Boolean server.fakeHTTPMethods`
 
 If set to `true`, server will find `_method` parameter in POST body and recognize that as the actual method.
