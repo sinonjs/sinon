@@ -43,7 +43,7 @@ The fake server and XHR can be used completely stand-alone by downloading `sinon
 
 ### `sinon.useFakeXMLHttpRequest`
 
-#### var xhr = sinon.useFakeXMLHttpRequest();"
+#### `var xhr = sinon.useFakeXMLHttpRequest();`
 
 Causes Sinon to replace the native `XMLHttpRequest` object in browsers that support it with a custom implementation which does not send actual requests.
 
@@ -154,13 +154,13 @@ The filter will be called when `xhr.open` is called, with the exact same argumen
 
 ### Simulating server responses
 
-#### `request.setStatus(status);``
+#### `request.setStatus(status);`
 
 Sets response status (`status` and `statusText` properties).
 
 Status should be a number, the status text is looked up from `sinon.FakeXMLHttpRequest.statusCodes`.
 
-#### `request.setResponseHeaders(object);``
+#### `request.setResponseHeaders(object);`
 
 Sets response headers (e.g. `{ "Content-Type": "text/html", /* ... */ }`, updates the `readyState` property and fires `onreadystatechange`.
 
@@ -172,7 +172,7 @@ Sets the respond body, updates the `readyState` property and fires `onreadystate
 Additionally, populates `responseXML` with a parsed document if [response headers indicate as much](http://www.w3.org/TR/XMLHttpRequest/).
 
 
-#### `request.respond(status, headers, body);``
+#### `request.respond(status, headers, body);`
 
 Calls the above three methods.
 
@@ -225,7 +225,7 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 ```
 
 
-#### `var server = sinon.fakeServer.create([config]);``
+#### `var server = sinon.fakeServer.create([config]);`
 
 Creates a new server.
 
