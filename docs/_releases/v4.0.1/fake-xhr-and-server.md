@@ -43,7 +43,7 @@ The fake server and XHR can be used completely stand-alone by downloading `sinon
 
 ### `sinon.useFakeXMLHttpRequest`
 
-#### var xhr = sinon.useFakeXMLHttpRequest();"
+#### `var xhr = sinon.useFakeXMLHttpRequest();`
 
 Causes Sinon to replace the native `XMLHttpRequest` object in browsers that support it with a custom implementation which does not send actual requests.
 
