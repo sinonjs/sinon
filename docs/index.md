@@ -238,7 +238,7 @@ it('calls callback after 100ms', function () {
 
 As before, Sinon.JS provides utilities that help test frameworks reduce the boiler-plate. [Learn more about fake time][clock].
 
-### And all the rest...
+### And all the rest…
 
 You've seen the most common tasks people tackle with Sinon.JS, yet we've only scratched the surface. View more quick examples below, or dive into the [API docs][api-docs], which also provides useful pointers on how and when to use the various functionality.
 
