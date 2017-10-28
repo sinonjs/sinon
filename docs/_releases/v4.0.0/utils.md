@@ -36,7 +36,7 @@ Creates a new object with the given function as the protoype and stubs all imple
     class Container {
         contains(item) { /* ... */ }
     }
-    
+
     var stubContainer = sinon.createStubInstance(Container);
     stubContainer.contains.returns(false);
     stubContainer.contains.withArgs("item").returns(true);

@@ -351,7 +351,7 @@ xhr.upload.addEventListener('progress', this.updateProgress, false)
 ... add other listeners here (load, error etc) ...
 
 xhr.open('POST', this.url, true)
-xhr.send(formData)        
+xhr.send(formData)
 // this triggers the uploadProgress event:
 server.requests[0].uploadProgress({ loaded: 20, total: 100 })
 ```
@@ -372,7 +372,7 @@ xhr.addEventListener('progress', updateProgress, false)
 ... add other listeners here (load, error etc) ...
 
 xhr.open('GET', this.url, true)
-xhr.send()        
+xhr.send()
 // this triggers the download progress event:
 server.requests[0].downloadProgress({ loaded: 20, total: 100 })
 ```
