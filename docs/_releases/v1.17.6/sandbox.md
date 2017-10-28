@@ -61,9 +61,9 @@ sinon.defaultConfig = {
   <dt><code>useFakeServer</code></dt>
   <dd>If <code>true</code>, <code>server</code> and <code>requests</code> properties are added to the sandbox. Can also be an object to use for fake server. The default one is <code>sinon.fakeServer</code>, but if you're using jQuery 1.3.x or some other library that does not set the XHR's <code>onreadystatechange</code> handler, you might want to do:
 
-<pre class="code-snippet" data-lang="javascript"><code>sinon.config = {
+  <code>sinon.config = {
     useFakeServer: sinon.fakeServerWithClock
-};</code></pre></dd>
+};</code></dd>
 </dl>
 
 
