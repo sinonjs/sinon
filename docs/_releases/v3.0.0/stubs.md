@@ -84,7 +84,7 @@ This has been removed from `v3.0.0`. Instead you should use
 
 `stub(obj, 'meth').callsFake(fn)`
 
-Codemod available at https://github.com/hurrymaplelad/sinon-codemod
+A [codemod is available](https://github.com/hurrymaplelad/sinon-codemod) to upgrade your code
 
 #### `var stub = sinon.stub(obj);`
 
