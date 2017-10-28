@@ -16,7 +16,7 @@ var stub = sinon.stub(obj, "stubbedMethod").callsFake(function () {
 });
 ```
 
-Codemod available at https://github.com/hurrymaplelad/sinon-codemod
+A [codemod is available](https://github.com/hurrymaplelad/sinon-codemod) to upgrade your code
 
 ## `sinon.stub(object, property, value)` - Removed
 Calling `sinon.stub` with three arguments will throw an Error. This was deprecated with `sinon@2` and has been removed with `sinon@3`
