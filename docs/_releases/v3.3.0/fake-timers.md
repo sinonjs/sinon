@@ -73,9 +73,9 @@ Installs fake timers at January 1st 2017 and fakes `setTimeout` and `process.nex
 
 ```javascript
 var clock = sinon.useFakeTimers({
-                now: 1483228800000, 
-                toFake: ["setTimeout", "nextTick"] 
-            }); 
+                now: 1483228800000,
+                toFake: ["setTimeout", "nextTick"]
+            });
 
 var called = false;
 
@@ -91,8 +91,8 @@ Install at the same date, advancing the fake time automatically (default is ever
 
 ```js
 var clock = sinon.useFakeTimers({
-                now: 1483228800000, 
-                shouldAdvanceTime: true 
+                now: 1483228800000,
+                shouldAdvanceTime: true
             });
 
 setImmediate(function () {
