@@ -83,7 +83,7 @@ all calls. The following is a slightly contrived example:
     <code>var spy = sinon.spy(object, "property", ["get", "set"]);</code>
   </dt>
   <dd>
-    Used for spying on getters and setters.<br/>
+    Used for spying on getters and setters.
     Returns a [propertyDescriptor][getOwnPropertyDescriptor] with spies for the passed accessors.
 
 ```javascript
