@@ -30,7 +30,6 @@ function makeBundle(name, config) {
 
             var script = preamble + buffer.toString();
             fs.writeFile("pkg/" + name + ".js", script);
-            fs.writeFile("pkg/" + name + "-" + pkg.version + ".js", script);
         });
 }
 

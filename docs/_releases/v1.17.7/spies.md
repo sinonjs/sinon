@@ -370,7 +370,7 @@ Array of arguments received, `spy.args[0]` is an array of arguments received in 
 
 Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown by the first call.
 
-If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined.
+If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined`.
 
 
 #### `spy.returnValues`
@@ -461,6 +461,11 @@ Returns `true` if call did not receive provided arguments.
 Returns `true` if call did not receive matching arguments.
 This behaves the same as `spyCall.notCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
 
+#### `spyCall.returned(value);`
+
+Returns `true` if spied function returned the provided `value` on this call.
+
+Uses deep comparison for objects and arrays. Use `spyCall.returned(sinon.match.same(obj))` for strict comparison (see [matchers](#matchers)).
 
 #### `spyCall.threw();`
 
@@ -494,4 +499,4 @@ Exception thrown, if any.
 
 #### `spyCall.returnValue`
 
-Return value.]}]}
+Return value.

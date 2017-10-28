@@ -3,7 +3,7 @@
 var assert = require("referee").assert;
 var sinonMatch = require("../lib/sinon/match");
 
-function propertyMatcherTests(matcher) {
+function propertyMatcherTests(matcher, additionalTests) {
     return function () {
         it("returns matcher", function () {
             var has = matcher("foo");
@@ -69,6 +69,10 @@ function propertyMatcherTests(matcher) {
 
             assert(has.test({ callback: function () {} }));
         });
+
+        if (typeof additionalTests === "function") {
+            additionalTests();
+        }
     };
 }
 
@@ -493,6 +497,14 @@ describe("sinonMatch", function () {
             }, "TypeError");
         });
 
+        if (typeof Symbol !== "undefined" && typeof Symbol.hasInstance !== "undefined") {
+            it("does not throw if given argument defines Symbol.hasInstance", function () {
+                var objectWithCustomTypeChecks = {};
+                objectWithCustomTypeChecks[Symbol.hasInstance] = function () {};
+                sinonMatch.instanceOf(objectWithCustomTypeChecks);
+            });
+        }
+
         it("returns matcher", function () {
             var instanceOf = sinonMatch.instanceOf(function () {});
 
@@ -514,6 +526,22 @@ describe("sinonMatch", function () {
 
     describe(".has", propertyMatcherTests(sinonMatch.has));
     describe(".hasOwn", propertyMatcherTests(sinonMatch.hasOwn));
+
+    describe(".hasNested", propertyMatcherTests(sinonMatch.hasNested, function () {
+
+        it("compares nested value", function () {
+            var hasNested = sinonMatch.hasNested("foo.bar", "doo");
+
+            assert(hasNested.test({ foo: { bar: "doo" } }));
+        });
+
+        it("compares nested array value", function () {
+            var hasNested = sinonMatch.hasNested("foo[0].bar", "doo");
+
+            assert(hasNested.test({ foo: [{ bar: "doo" }] }));
+        });
+
+    }));
 
     describe(".hasSpecial", function () {
         it("returns true if object has inherited property", function () {
@@ -993,7 +1021,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(numberOrString));
             assert.equals(numberOrString.toString(),
-                          "typeOf(\"number\").or(typeOf(\"string\"))");
+                "typeOf(\"number\").or(typeOf(\"string\"))");
         });
 
         it("requires matcher argument", function () {
@@ -1007,7 +1035,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(abcOrDef));
             assert.equals(abcOrDef.toString(),
-                          "match(\"abc\").or(match(\"def\"))");
+                "match(\"abc\").or(match(\"def\"))");
         });
 
         it("returns true if either matcher matches", function () {
@@ -1052,7 +1080,7 @@ describe("sinonMatch", function () {
 
             assert(sinonMatch.isMatcher(abcOrObj));
             assert.equals(abcOrObj.toString(),
-                          "match(\"abc\").or(match(a: 1))");
+                "match(\"abc\").or(match(a: 1))");
         });
 
         it("returns true if both matchers match", function () {

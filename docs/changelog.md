@@ -5,6 +5,43 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.0.2 / 2017-10-25
+==================
+
+  * Update 'nise' to latest version (#1593)
+  * Use supports-color module to test if system supports colors
+  * Upgrade mocha to v4.0.0
+  * Make samsam a development dependency
+  * Make native-promise-only a development dependency
+
+4.0.1 / 2017-10-04
+==================
+
+  * Upgrade nise and lolex versions (#1579)
+
+4.0.0 / 2017-09-26
+==================
+
+  * Explicitly update fake xhr lib 'nise'
+  * Remove accidental dependency to "build"
+  * Remove support for stubbing undefined props (#1557)
+
+3.3.0 / 2017-09-18
+==================
+
+  * Adds sinon.match.hasNested
+  * fix 'callThrough with a mock expectation' (#1442)
+  * Documentation updates
+  * Allow custom defined instance checks if supported
+
+3.2.1 / 2017-08-17
+==================
+
+  * resolvesThis should override previous throws
+  * preserve context of functions from nise: fakeServer, fakeServerWithClock
+  * Fix regression for issue #1526 regarding onFirstCall().throws()
+  * Fix docs regression introduced by #1523
+
 3.2.0 / 2017-08-10
 ==================
 

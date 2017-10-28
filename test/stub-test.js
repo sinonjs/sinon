@@ -5,7 +5,6 @@ var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
 var sinonMatch = require("../lib/sinon/match");
-var getPropertyDescriptor = require("../lib/sinon/util/core/get-property-descriptor");
 var deprecated = require("../lib/sinon/util/core/deprecated");
 var assert = referee.assert;
 var refute = referee.refute;
@@ -136,6 +135,19 @@ describe("stub", function () {
             refute.exception(function () {
                 stub();
             });
+        });
+
+        it("throws only on the first call", function () {
+            var stub = createStub.create();
+            stub.returns("no exception");
+            stub.onFirstCall().throws();
+
+            assert.exception(function () {
+                stub();
+            });
+
+            // on the second call there is no exception
+            assert.same(stub(), "no exception");
         });
     });
 
@@ -310,6 +322,24 @@ describe("stub", function () {
             var stub = createStub.create();
 
             assert.same(stub.resolvesThis(), stub);
+        });
+
+        it("overrides throws behavior for error objects", function () {
+            var instance = {};
+            instance.stub = createStub.create().throws(new Error()).resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
+        });
+
+        it("overrides throws behavior for dynamically created errors", function () {
+            var instance = {};
+            instance.stub = createStub.create().throws().resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+            });
         });
     });
 
@@ -1133,6 +1163,16 @@ describe("stub", function () {
 
             stub.restore();
         });
+
+        it("throws if stubbing non-existent property", function () {
+            var myObj = {};
+
+            assert.exception(function () {
+                createStub(myObj, "ouch");
+            });
+
+            refute.defined(myObj.ouch);
+        });
     });
 
     describe("stubbed function", function () {
@@ -1928,9 +1968,9 @@ describe("stub", function () {
 
         it("supports chained declaration of behavior", function () {
             var stub = createStub()
-                    .onCall(0).returns(1)
-                    .onCall(1).returns(2)
-                    .onCall(2).returns(3);
+                .onCall(0).returns(1)
+                .onCall(1).returns(2)
+                .onCall(2).returns(3);
 
             assert.same(stub(), 1);
             assert.same(stub(), 2);
@@ -2548,16 +2588,6 @@ describe("stub", function () {
             assert.equals(myObj.prop, "bar");
         });
 
-        it("can set getters for non-existing properties", function () {
-            var myObj = {};
-
-            createStub(myObj, "prop").get(function getterFn() {
-                return "bar";
-            });
-
-            assert.equals(myObj.prop, "bar");
-        });
-
         it("can restore stubbed setters for functions", function () {
             var propFn = function propFn() {
                 return "bar";
@@ -2596,19 +2626,6 @@ describe("stub", function () {
             assert.equals(myObj.prop, "bar");
         });
 
-        it("can restore stubbed getters for previously undefined properties", function () {
-            var myObj = {};
-
-            var stub = createStub(myObj, "nonExisting");
-
-            stub.get(function getterFn() {
-                return "baz";
-            });
-
-            stub.restore();
-
-            assert.equals(getPropertyDescriptor(myObj, "nonExisting"), undefined);
-        });
     });
 
     describe(".set", function () {
@@ -2648,18 +2665,6 @@ describe("stub", function () {
                     fail("should not call the old setter");
                 }
             };
-
-            createStub(myObj, "prop").set(function setterFn() {
-                myObj.example = "bar";
-            });
-
-            myObj.prop = "foo";
-
-            assert.equals(myObj.example, "bar");
-        });
-
-        it("can set setters for non-existing properties", function () {
-            var myObj = {};
 
             createStub(myObj, "prop").set(function setterFn() {
                 myObj.example = "bar";
@@ -2710,19 +2715,6 @@ describe("stub", function () {
             assert.equals(myObj.otherProp, "bar");
         });
 
-        it("can restore stubbed setters for previously undefined properties", function () {
-            var myObj = {};
-
-            var stub = createStub(myObj, "nonExisting");
-
-            stub.set(function setterFn() {
-                myObj.otherProp = "baz";
-            });
-
-            stub.restore();
-
-            assert.equals(getPropertyDescriptor(myObj, "nonExisting"), undefined);
-        });
     });
 
     describe(".value", function () {
@@ -2744,15 +2736,6 @@ describe("stub", function () {
             stub.restore();
 
             assert.equals(myObj.prop, "rawString");
-        });
-
-        it("allows restoring previously undefined properties", function () {
-            var obj = {};
-            var stub = createStub(obj, "nonExisting").value(2);
-
-            stub.restore();
-
-            assert.equals(getPropertyDescriptor(obj, "nonExisting"), undefined);
         });
 
         it("allows stubbing function static properties", function () {

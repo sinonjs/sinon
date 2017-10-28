@@ -302,7 +302,7 @@ If called with arguments, `respondWith` will be called with those arguments befo
 
 
 #### `server.autoRespond = true;`
-`
+
 If set, will automatically respond to every request after a timeout.
 
 The default timeout is 10ms but you can control it through the `autoRespondAfter` property.

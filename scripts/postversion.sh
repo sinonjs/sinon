@@ -14,7 +14,7 @@ echo 'build new package'
 node ./build.js
 
 echo 'copy new version'
-cp "./pkg/sinon-$PACKAGE_VERSION.js" ./docs/releases
+cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
 
 git add "docs/releases/sinon-$PACKAGE_VERSION.js"
 git add docs/changelog.md

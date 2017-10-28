@@ -24,7 +24,7 @@ For casual improvements to the documentation, this shouldn't really be necessary
 However, if you're going to contribute changes that alter the overall structure or design of the site, then this section is for you.
 
 ```shell
-# navitate to docs/
+# navigate to docs/
 cd docs
 
 # ensure you have bundler
