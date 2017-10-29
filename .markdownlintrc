@@ -1,0 +1,18 @@
+{
+  "default": false,
+  "MD003": { "style": "atx" },
+  "MD007": { "indent": 4 },
+  "MD012": {
+    "maximum": 2
+  },
+  "MD013": false,
+  "no-trailing-punctuation": {
+    "punctuation": ".,;:!"
+  },
+  "MD033": {
+    "allowed_elements": ["dl", "dt", "dd", "code"]
+  },
+  "first-line-h1": false,
+  "no-hard-tabs": true,
+  "no-trailing-spaces": true
+}
