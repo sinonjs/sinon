@@ -8,7 +8,7 @@ breadcrumb: stubs
 
 Test stubs are functions (spies) with pre-programmed behavior.
 
-They support the full <a href="../spies">test spy API</a> in addition to methods which can be used to alter the stub's behavior.
+They support the full [test spy API](../spies) in addition to methods which can be used to alter the stub's behavior.
 
 As spies, stubs can be either anonymous, or wrap existing functions. When
 wrapping an existing function with a stub, the original function is not called.
@@ -51,13 +51,13 @@ before one of the other callbacks.
 
 Calling behavior defining methods like `returns` or `throws` multiple times
 overrides the behavior of the stub. As of Sinon version 1.8, you can use the
-[`onCall`](#stub-onCall) method to make a stub respond differently on
+[`onCall`](#stuboncalln-added-in-v18) method to make a stub respond differently on
 consecutive calls.
 
 Note that in Sinon version 1.5 to version 1.7, multiple calls to the `yields*`
 and `callsArg*` family of methods define a sequence of behaviors for consecutive
 calls. As of 1.8, this functionality has been removed in favor of the
-[`onCall`](#stub-onCall) API.
+[`onCall`](#stuboncalln-added-in-v18) API.
 
 [pubsubjs]: https://github.com/mroderick/pubsubjs
 
@@ -114,7 +114,7 @@ This is useful to be more expressive in your assertions, where you can access th
 }
 ```
 
-#### <a name="stub-onCall"></a>`stub.onCall(n);` *Added in v1.8*
+#### `stub.onCall(n);` *Added in v1.8*
 
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
 

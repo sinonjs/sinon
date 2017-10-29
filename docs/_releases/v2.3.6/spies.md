@@ -73,7 +73,7 @@ all calls. The following is a slightly contrived example:
   <dd>Spies on the provided function</dd>
   <dt><code>var spy = sinon.spy(object, "method");</code></dt>
   <dd>
-    Creates a <a href="#spyprops">spy</a> for <code>object.method</code> and
+    Creates a spy for <code>object.method</code> and
     replaces the original method with the spy. An exception is thrown if the property
     is not already a function. The spy acts exactly like the original method in
     all cases. The original method can be restored by calling
