@@ -25,6 +25,7 @@ before_script:
   # ESLint only supports Node >=4
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run lint; fi
   # run these on node 6 to have npm 3 with flat dependencies
+  - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run lint-markdown; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-headless; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ]; then npm run test-webworker; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x6" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi

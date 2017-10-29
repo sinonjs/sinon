@@ -39,3 +39,8 @@ bundle exec jekyll serve
 
 After that you can access the site at http://localhost:4000/
 
+## Linting of Markdown
+
+To help keep the documentation syntactically consistent and free of syntax violations, a pre-commit hook using [markdownlint](https://github.com/DavidAnson/markdownlint) verifies Markdown documents.
+
+The CI server uses [markdownlint](https://github.com/DavidAnson/markdownlint) with the same configuration to verify the pull request.
