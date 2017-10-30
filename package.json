@@ -22,7 +22,7 @@
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "run-s test-node test-headless test-webworker",
     "check-dependencies": "dependency-check package.json --unused --no-dev",
-    "build": "./build.js",
+    "build": "node ./build.js",
     "lint": "eslint .",
     "precommit": "lint-staged",
     "pretest-webworker": "npm run build",
