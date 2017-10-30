@@ -5,6 +5,7 @@ var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var assert = referee.assert;
+var refute = referee.refute;
 var deprecated = require("../lib/sinon/util/core/deprecated");
 
 describe("collection", function () {
@@ -16,6 +17,96 @@ describe("collection", function () {
         assert.isFunction(collection.verifyAndRestore);
         assert.isFunction(collection.stub);
         assert.isFunction(collection.mock);
+    });
+
+    describe(".createStubInstance", function () {
+        beforeEach(function () {
+            this.collection = Object.create(sinonCollection);
+        });
+
+        it("stubs existing methods", function () {
+            var Class = function () {};
+            Class.prototype.method = function () {};
+
+            var stub = this.collection.createStubInstance(Class);
+            stub.method.returns(3);
+            assert.equals(3, stub.method());
+        });
+
+        it("resets all stub methods on reset()", function () {
+            var Class = function () {};
+            Class.prototype.method1 = function () {};
+            Class.prototype.method2 = function () {};
+            Class.prototype.method3 = function () {};
+
+            var stub = this.collection.createStubInstance(Class);
+            stub.method1.returns(1);
+            stub.method2.returns(2);
+            stub.method3.returns(3);
+
+            assert.equals(3, stub.method3());
+
+            this.collection.reset();
+            assert.equals(undefined, stub.method1());
+            assert.equals(undefined, stub.method2());
+            assert.equals(undefined, stub.method3());
+        });
+
+        it("doesn't stub fake methods", function () {
+            var Class = function () {};
+
+            var stub = this.collection.createStubInstance(Class);
+            assert.exception(function () {
+                stub.method.returns(3);
+            });
+        });
+
+        it("doesn't call the constructor", function () {
+            var Class = function (a, b) {
+                var c = a + b;
+                throw c;
+            };
+            Class.prototype.method = function () {};
+
+            var stub = this.collection.createStubInstance(Class);
+            refute.exception(function () {
+                stub.method(3);
+            });
+        });
+
+        it("retains non function values", function () {
+            var TYPE = "some-value";
+            var Class = function () {};
+            Class.prototype.type = TYPE;
+
+            var stub = this.collection.createStubInstance(Class);
+            assert.equals(TYPE, stub.type);
+        });
+
+        it("has no side effects on the prototype", function () {
+            var proto = {
+                method: function () {
+                    throw "error";
+                }
+            };
+            var Class = function () {};
+            Class.prototype = proto;
+
+            var stub = this.collection.createStubInstance(Class);
+            refute.exception(stub.method);
+            assert.exception(proto.method);
+        });
+
+        it("throws exception for non function params", function () {
+            var types = [{}, 3, "hi!"];
+
+            for (var i = 0; i < types.length; i++) {
+                // yes, it's silly to create functions in a loop, it's also a test
+                assert.exception(function () { // eslint-disable-line no-loop-func
+                    this.collection.createStubInstance(types[i]);
+                });
+            }
+        });
     });
 
     describe(".stub", function () {

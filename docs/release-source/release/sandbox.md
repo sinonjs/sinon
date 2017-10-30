@@ -131,6 +131,9 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 Works exactly like `sinon.spy`, only also adds the returned spy to the internal collection of fakes for easy restoring through `sandbox.restore()`
 
+#### `sandbox.createStubInstance();`
+
+Works almost exactly like `sinon.createStubInstance`, only also adds the returned stubs to the internal collection of fakes for easy restoring through `sandbox.restore()`.
 
 #### `sandbox.stub();`
 
