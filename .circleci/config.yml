@@ -36,17 +36,17 @@ jobs:
           paths:
             - node_modules
 
-  build-node4:
+  node-4:
     <<: *common-build
     docker:
       - image: node:4
 
-  build-node6:
+  node-6:
     <<: *common-build
     docker:
       - image: node:6-alpine
 
-  build-node8:
+  node-8:
     <<: *common-build
     docker:
       - image: node:8
@@ -55,6 +55,6 @@ workflows:
   version: 2
   build:
     jobs:
-      - build-node4
-      - build-node6
-      - build-node8
+      - node-4
+      - node-6
+      - node-8
