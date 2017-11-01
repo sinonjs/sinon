@@ -412,7 +412,7 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 
-### Individual spy calls"
+### Individual spy calls
 
 
 ##### `var spyCall = spy.getCall(n);`
