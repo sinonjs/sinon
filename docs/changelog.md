@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.1.0 / 2017-11-02
+==================
+
+  * Add sandbox.createStubInstance (#1598)
+
 4.0.2 / 2017-10-25
 ==================
 
@@ -232,6 +237,11 @@ v2.0.0-pre.5 / 2016-12-31
   * XHR: fix readystatechange event after .abort() in DONE state
   * Add tests for xhr.readyState after abort()
   * Test that demonstrates that a mock can be called more times than expected without failing (if the exception is silenced).
+
+n.n.n / 2017-02-27
+==================
+
+
 
 v2.0.0-pre.6 / 2017-02-27
 =========================
