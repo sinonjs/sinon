@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.1.1 / 2017-11-03
+==================
+
+  * Remove "engines" from package.json
+
 4.1.0 / 2017-11-02
 ==================
 
