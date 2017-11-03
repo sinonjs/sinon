@@ -21,7 +21,7 @@
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "browserify --no-commondir --full-paths -p [ mocaccino -R spec --color ] test/webworker/webworker-support-assessment.js | phantomic --web-security false",
     "test": "run-s test-node test-headless test-webworker",
-    "check-dependencies": "dependency-check package.json --unused --no-dev",
+    "check-dependencies": "dependency-check package.json --unused --no-dev --ignore-module coveralls",
     "build": "node ./build.js",
     "lint": "eslint .",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
