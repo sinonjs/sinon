@@ -41,7 +41,6 @@
     "formatio": "1.2.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
-    "markdownlint": "^0.6.1",
     "nise": "^1.2.0",
     "supports-color": "^4.4.0",
     "type-detect": "^4.0.0"
@@ -54,7 +53,7 @@
     "eslint-plugin-mocha": "^4.2.0",
     "husky": "^0.14.2",
     "lint-staged": "^4.0.0",
-    "markdownlint-cli": "file:markdownlint-cli-0.3.1-custom.tgz",
+    "markdownlint-cli": "^0.4.0",
     "mocaccino": "^2.0.0",
     "mocha": "^4.0.0",
     "mochify": "^3.0.0",
