@@ -41,6 +41,7 @@
     "formatio": "1.2.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
+    "markdownlint": "^0.6.1",
     "nise": "^1.2.0",
     "supports-color": "^4.4.0",
     "type-detect": "^4.0.0"
