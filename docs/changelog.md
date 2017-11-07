@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.2.0 / 2017-11-07
+==================
+
+  * Update Lolex to include fix for #872
+  * Remove deprecated methods from documentation (#1613)
+
 4.1.1 / 2017-11-03
 ==================
 
