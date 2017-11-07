@@ -39,14 +39,3 @@ The given constructor function is not invoked. See also the [stub API](../stubs)
 Formats an object for pretty printing in error messages using [formatio](https://github.com/busterjs/formatio). Feel free to
 override this method with your own implementation if you prefer different
 visualization of e.g. objects. The method should return a string.
-
-#### `sinon.log(string);`
-
-Logs internal errors, helpful for debugging. By default this property is a noop function, set it to something that prints warnings in your
-environment for more help, e.g. (if you are using JsTestDriver):
-
-```javascript
-sinon.log = function (message) {
-    jstestdriver.console.log(message);
-};
-```
