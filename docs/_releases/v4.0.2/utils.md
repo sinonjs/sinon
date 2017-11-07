@@ -8,26 +8,6 @@ Sinon.JS has a few utilities used internally in `lib/sinon.js`. Unless the metho
 
 ## Utils API
 
-#### `sinon.restore(object);`
-
-Restores all fake methods of supplied object
-
-```javascript
-    sinon.stub(obj);
-
-    // run tests...
-
-    sinon.restore(obj);
-```
-
-#### `sinon.restore(method);`
-
-Restores supplied method
-
-```javascript
-    sinon.restore(obj.someMethod);
-```
-
 #### `sinon.createStubInstance(constructor);`
 
 Creates a new object with the given function as the protoype and stubs all implemented functions.
