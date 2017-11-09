@@ -473,13 +473,13 @@ Same as their corresponding non-Async counterparts, but with callback being defe
 
 #### `stub.yieldsAsync([arg1, arg2, ...]);`
 
+Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
+
 #### `stub.yieldsOnAsync(context, [arg1, arg2, ...]);`
 
 #### `stub.yieldsToAsync(property, [arg1, arg2, ...]);`
 
 #### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
-
-Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
 
 #### `sinon.addBehavior(name, fn);`
 
