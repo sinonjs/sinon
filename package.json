@@ -43,7 +43,7 @@
     "lolex": "^2.2.0",
     "nise": "^1.2.0",
     "supports-color": "^4.4.0",
-    "type-detect": "^4.0.0"
+    "type-detect": "^4.0.5"
   },
   "devDependencies": {
     "browserify": "^14.0.0",
