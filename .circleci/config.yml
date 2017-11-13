@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  build-common: &common-build
+    docker:
+      - image: node
+    working_directory: ~/sinon
+    steps:
+      - run:
+          name: Versions
+          command: |
+            npm version
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-npm-master-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: |
+              npm config set strict-ssl false
+              npm install
+      - run:
+          name: Pre-Test
+          # ESLint only supports Node >=4
+          command: |
+              if [[ ! "$(node --version)" =~ ^v4 ]]; then
+                npm run lint;
+                npm run test-headless;
+                npm run test-webworker;
+              fi
+      - run:
+          name: Test
+          command: npm run test-node
+      - save_cache:
+          key: v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+  node-4:
+    <<: *common-build
+    docker:
+      - image: node:4
+
+  node-6:
+    <<: *common-build
+    docker:
+      - image: node:6-alpine
+
+  node-8:
+    <<: *common-build
+    docker:
+      - image: node:8
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - node-4
+      - node-6
+      - node-8
