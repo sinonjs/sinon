@@ -13,3 +13,6 @@
 - title: Using Sinon.js to help test Mongoose models
   url: https://codeutopia.net/blog/2016/06/10/mongoose-models-and-unit-tests-the-definitive-guide/
 
+- title: Stubbing HTTP Requests With Sinon
+  url: http://mherman.org/blog/2017/11/06/stubbing-http-requests-with-sinon/
+
