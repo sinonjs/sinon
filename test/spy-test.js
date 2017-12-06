@@ -438,14 +438,13 @@ describe("spy", function () {
 
             assert(called);
         });
-        
-        it("passes 'new' to underlying function", function () {
-            var called = false;
-            var TestClass = function(){};
 
-            var spy = createSpy.create(TestClass);
-            
-            var instance = new spy();
+        it("passes 'new' to underlying function", function () {
+            var TestClass = function () {};
+
+            var SpyClass = createSpy.create(TestClass);
+
+            var instance = new SpyClass();
 
             assert(instance instanceof TestClass);
         });
