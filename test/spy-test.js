@@ -440,7 +440,7 @@ describe("spy", function () {
         });
 
         it("passes 'new' to underlying function", function () {
-            var TestClass = function () {};
+            function TestClass() {}
 
             var SpyClass = createSpy.create(TestClass);
 
