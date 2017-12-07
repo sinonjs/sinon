@@ -1,5 +1,10 @@
 
-4.2.0 / 2017-11-07
+4.1.3 / 2017-12-07
+==================
+
+  * Spy passes through calling with `new` (#1626)
+
+4.1.2 / 2017-11-07
 ==================
 
   * Update Lolex to include fix for #872
