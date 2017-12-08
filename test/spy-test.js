@@ -2539,16 +2539,24 @@ describe("spy", function () {
     });
 
     describe(".reset", function () {
+        it("is alias for resetHistory", function () {
+            var spy = createSpy();
+
+            assert.same(spy.reset, spy.resetHistory);
+        });
+    });
+
+    describe(".resetHistory", function () {
         it("return same object", function () {
             var spy = createSpy();
-            var reset = spy.reset();
+            var reset = spy.resetHistory();
 
             assert(reset === spy);
         });
 
         it("throws if called during spy invocation", function () {
             var spy = createSpy(function () {
-                spy.reset();
+                spy.resetHistory();
             });
 
             assert.exception(spy, "InvalidResetException");
