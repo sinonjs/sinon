@@ -8,7 +8,7 @@ if (typeof Worker !== "undefined") {
 
     describe("WebWorker support", function () {
         it("should not crash", function (done) {
-            var worker = new Worker("file://" + __dirname + "/webworker-script.js");
+            var worker = new Worker("https://localhost:8080/test/webworker/webworker-script.js");
 
             worker.onmessage = function (msg) {
                 try { // eslint-disable-line no-restricted-syntax
