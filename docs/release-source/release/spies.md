@@ -390,7 +390,7 @@ Array of return values, `spy.returnValues[0]` is the return value of the first c
 If the call did not explicitly return a value, the value at the call's location in `.returnValues` will be `undefined`.
 
 
-#### `spy.reset()`
+#### `spy.resetHistory()`
 
 Resets the state of a spy.
 

@@ -34,7 +34,7 @@ describe("util/core/every", function () {
         every(iterableOne, callback);
         assert.equals(callback.callCount, 4);
 
-        callback.reset();
+        callback.resetHistory();
 
         every(iterableTwo, callback);
         assert.equals(callback.callCount, 3);
