@@ -971,7 +971,7 @@ describe("sinonSpy.call", function () {
             var spy = sinonSpy();
             spy();
 
-            spy.reset();
+            spy.resetHistory();
 
             assertReset(spy);
         });
@@ -981,7 +981,7 @@ describe("sinonSpy.call", function () {
             spies[0]();
             spies[1]();
 
-            spies[0].reset();
+            spies[0].resetHistory();
 
             assert(!spies[0].calledBefore(spies[1]));
         });
@@ -995,7 +995,7 @@ describe("sinonSpy.call", function () {
             spy("c");
             var fakeC = spy.withArgs("c");
 
-            spy.reset();
+            spy.resetHistory();
 
             assertReset(fakeA);
             assertReset(fakeB);
@@ -1288,7 +1288,7 @@ describe("sinonSpy.call", function () {
                     "\n\n    spy(" + str + ")" +
                     "\n\n    spy(" + str + ")");
 
-                spy.reset();
+                spy.resetHistory();
 
                 spy("test");
                 spy("spy\ntest");
@@ -1306,7 +1306,7 @@ describe("sinonSpy.call", function () {
             spy();
             assert.equals(spy.printf("%t"), "undefined");
 
-            spy.reset();
+            spy.resetHistory();
             spy.call(true);
             assert.equals(spy.printf("%t"), "true");
         });

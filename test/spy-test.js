@@ -2538,14 +2538,6 @@ describe("spy", function () {
         });
     });
 
-    describe(".reset", function () {
-        it("is alias for resetHistory", function () {
-            var spy = createSpy();
-
-            assert.same(spy.reset, spy.resetHistory);
-        });
-    });
-
     describe(".resetHistory", function () {
         it("return same object", function () {
             var spy = createSpy();
