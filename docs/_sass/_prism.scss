@@ -9,7 +9,6 @@ code[class*="language-"] {
   color: white;
   background: none;
   text-align: left;
-  text-shadow: 0 -.1em .2em black;
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
@@ -28,7 +27,6 @@ pre[class*="language-"] {
   color: white;
   background: none;
   text-align: left;
-  text-shadow: 0 -.1em .2em black;
   white-space: pre;
   word-spacing: normal;
   word-break: normal;
@@ -70,7 +68,6 @@ pre[class*="language-"] {
     /* #282A2B */
   }
   &::-moz-selection, ::-moz-selection {
-    text-shadow: none;
     background: hsla(0, 0%, 93%, 0.15);
     /* #EDEDED */
   }
@@ -80,7 +77,6 @@ pre[class*="language-"] {
 
 code[class*="language-"] {
   &::-moz-selection, ::-moz-selection {
-    text-shadow: none;
     background: hsla(0, 0%, 93%, 0.15);
     /* #EDEDED */
   }
@@ -88,7 +84,6 @@ code[class*="language-"] {
 
 pre[class*="language-"] {
   &::selection, ::selection {
-    text-shadow: none;
     background: hsla(0, 0%, 93%, 0.15);
     /* #EDEDED */
   }
@@ -96,7 +91,6 @@ pre[class*="language-"] {
 
 code[class*="language-"] {
   &::selection, ::selection {
-    text-shadow: none;
     background: hsla(0, 0%, 93%, 0.15);
     /* #EDEDED */
   }
