@@ -395,11 +395,6 @@ If the call did not explicitly return a value, the value at the call's location 
 Resets the state of a spy.
 
 
-#### `spy.reset()`
-
-Alias for `spy.reset();`
-
-
 #### `spy.restore()`
 
 Replaces the spy with the original method. Only available if the spy replaced an existing method.
