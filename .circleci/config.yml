@@ -18,22 +18,17 @@ jobs:
           name: Install dependencies
           command: |
               npm config set strict-ssl false
-              NODE_VERSION=$(node --version)
-              if [[ ${NODE_VERSION:0:3} != "v6." ]]; then
-                # Avoid downloading chromium unnecessarily
-                npm config set ignore-scripts true
-              fi
+              # Avoid downloading chromium unnecessarily
+              npm config set ignore-scripts true
               npm install
               npm config set ignore-scripts false
       - run:
           name: Pre-Test
-          # ESLint only supports Node >=4 and Mochify requires Node >= 6
+          # ESLint only supports Node >=4
           command: |
               NODE_VERSION=$(node --version)
               if [[ ${NODE_VERSION:0:3} == "v6." ]]; then
                 npm run lint;
-                npm run test-headless;
-                npm run test-webworker;
               fi
       - run:
           name: Test
