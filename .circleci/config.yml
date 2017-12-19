@@ -18,12 +18,14 @@ jobs:
           name: Install dependencies
           command: |
               npm config set strict-ssl false
-              if ! node --version | grep -q '^v6'; then
-                # Avoid downloading chromium unnecessarily
-                npm config set ignore-scripts true
-              fi
               npm install
-              npm config set ignore-scripts false
+
+              if node --version | grep -q '^v6'; then
+                wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+                echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+                apt-get update
+                apt-get install -y --no-install-recommends google-chrome-unstable
+              fi
       - run:
           name: Pre-Test
           # ESLint only supports Node >=4
@@ -45,6 +47,8 @@ jobs:
     <<: *common-build
     docker:
       - image: node:4
+    environment:
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
   node-6:
     <<: *common-build
@@ -55,6 +59,8 @@ jobs:
     <<: *common-build
     docker:
       - image: node:8
+    environment:
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
 workflows:
   version: 2
