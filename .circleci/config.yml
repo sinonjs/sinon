@@ -32,7 +32,7 @@ jobs:
           command: |
               if node --version | grep -q '^v6'; then
                 npm run lint;
-                npm run test-headless;
+                npm run test-headless -- --chrome $(which google-chrome-unstable);
                 npm run test-webworker;
               fi
       - run:
