@@ -27,22 +27,14 @@ jobs:
               else
                 npm install
               fi
-
-              # install latest chrome unstable version
-              if node --version | grep -q '^v6'; then
-                wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-                echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-                apt-get update
-                apt-get install -y --no-install-recommends google-chrome-unstable
-              fi
       - run:
           name: Pre-Test
           # ESLint only supports Node >=4
           command: |
               if node --version | grep -q '^v6'; then
                 npm run lint;
-                npm run test-headless -- --chrome $(which google-chrome-unstable) --allow-chrome-as-root;
-                npm run test-webworker -- --chrome $(which google-chrome-unstable) --allow-chrome-as-root;
+                npm run test-headless -- --allow-chrome-as-root;
+                npm run test-webworker -- --allow-chrome-as-root;
               fi
       - run:
           name: Test
