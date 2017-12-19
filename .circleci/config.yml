@@ -12,8 +12,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
-            - v1-npm-master-{{ checksum "package.json" }}
+            - v2-npm-{{ .Branch }}-{{ checksum "package.json" }}
+            - v2-npm-master-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
           command: |
@@ -40,7 +40,7 @@ jobs:
           name: Test
           command: npm run test-node
       - save_cache:
-          key: v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
+          key: v2-npm-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - node_modules
 
