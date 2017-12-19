@@ -425,6 +425,106 @@ describe("Sandbox", function () {
         });
     });
 
+    describe.only(".replace", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        it("should replace a function property", function () {
+            var replacement = function replacement() {};
+            var existing = function existing() {};
+            var object = {
+                property: existing
+            };
+
+            this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(object.property, replacement);
+
+            this.sandbox.restore();
+
+            assert.equals(object.property, existing);
+        });
+
+        it("should replace a non-function property", function () {
+            var replacement = "replacement";
+            var existing = "existing";
+            var object = {
+                property: existing
+            };
+
+            this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(object.property, replacement);
+
+            this.sandbox.restore();
+
+            assert.equals(object.property, existing);
+        });
+
+        describe("getters and setters", function () {
+            it("allows stubbing getters", function () {
+                var object = {
+                    foo: "bar"
+                };
+                var stub = sinonStub(object,);
+                stub.get(function () {
+                    return "baz";
+                });
+
+                this.sandbox.replace(object, "foo", stub);
+
+                assert.equals(object.foo, "baz");
+            });
+
+            it("allows restoring getters", function () {
+                var object = {
+                    foo: "bar"
+                };
+
+                var sandbox = new Sandbox();
+                this.sandbox.replace(object, "foo", sinonStub().get(function () {
+                    return "baz";
+                }));
+
+                sandbox.restore();
+
+                assert.equals(object.foo, "bar");
+            });
+
+            it("allows stubbing setters", function () {
+                var object = {
+                    foo: undefined,
+                    prop: "bar"
+                };
+
+                this.sandbox.replace(object, "foo", sinonStub().set(function (val) {
+                    object.prop = val + "bla";
+                }));
+
+                object.foo = "bla";
+
+                assert.equals(object.prop, "blabla");
+            });
+
+            it("allows restoring setters", function () {
+                var object = {
+                    prop: "bar"
+                };
+
+                this.sandbox.replace(object, "prop", sinonStub().set(function setterFn(val) {
+                    object.prop = val + "bla";
+                }));
+
+                this.sandbox.restore();
+
+                object.prop = "bla";
+
+                assert.equals(object.prop, "bla");
+            });
+        });
+    });
+
     describe(".reset", function () {
         beforeEach(function () {
             var sandbox = this.sandbox = createSandbox();
