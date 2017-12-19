@@ -41,12 +41,8 @@ jobs:
           command: |
               if node --version | grep -q '^v6'; then
                 npm run lint;
-                # HACK: modify mochify to pass args to chrome to allow it to run as root
-                #   --no-sandbox --disable-setuid-sandbox
-                # See https://github.com/mantoni/mochify.js/issues/162
-                sed -i "s#'--allow-insecure-localhost'#'--allow-insecure-localhost', '--no-sandbox', '--disable-setuid-sandbox'#" node_modules/mochify/lib/chromium.js && echo "modified mochify/lib/chromium.js";
-                npm run test-headless -- --chrome $(which google-chrome-unstable);
-                npm run test-webworker -- --chrome $(which google-chrome-unstable);
+                npm run test-headless -- --chrome $(which google-chrome-unstable) --allow-chrome-as-root;
+                npm run test-webworker -- --chrome $(which google-chrome-unstable) --allow-chrome-as-root;
               fi
       - run:
           name: Test

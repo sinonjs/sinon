@@ -55,7 +55,7 @@
     "lint-staged": "^4.0.0",
     "markdownlint-cli": "^0.4.0",
     "mocha": "^4.0.0",
-    "mochify": "^5.0.0",
+    "mochify": "mantoni/mochify.js#2cdbc02a4db887bfe3604f8d18f593c980f7897e",
     "mochify-istanbul": "^2.4.1",
     "native-promise-only": "^0.8.1",
     "npm-run-all": "^4.0.2",
