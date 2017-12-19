@@ -18,17 +18,20 @@ jobs:
           name: Install dependencies
           command: |
               npm config set strict-ssl false
-              # Avoid downloading chromium unnecessarily
-              npm config set ignore-scripts true
+              if ! node --version | grep -q '^v6'; then
+                # Avoid downloading chromium unnecessarily
+                npm config set ignore-scripts true
+              fi
               npm install
               npm config set ignore-scripts false
       - run:
           name: Pre-Test
           # ESLint only supports Node >=4
           command: |
-              NODE_VERSION=$(node --version)
-              if [[ ${NODE_VERSION:0:3} == "v6." ]]; then
+              if node --version | grep -q '^v6'; then
                 npm run lint;
+                npm run test-headless;
+                npm run test-webworker;
               fi
       - run:
           name: Test
