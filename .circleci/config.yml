@@ -18,7 +18,15 @@ jobs:
           name: Install dependencies
           command: |
               npm config set strict-ssl false
-              npm install
+              # puppeteer install script throws syntax errors for Node v4
+              # https://github.com/GoogleChrome/puppeteer/blob/f19e2ade0d4859435422131905e932abe3db199c/install.js#L66
+              if node --version | grep -q '^v4'; then
+                npm config set ignore-scripts true
+                npm install
+                npm config set ignore-scripts false
+              else
+                npm install
+              fi
 
               if node --version | grep -q '^v6'; then
                 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
