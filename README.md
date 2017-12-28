@@ -39,7 +39,9 @@ or via sinon's browser builds available for download on the [homepage](http://si
 
 See the [sinon project homepage](http://sinonjs.org/) for documentation on usage.
 
-If you have questions that are not covered by the documentation, please post them to the [Sinon.JS mailing list](http://groups.google.com/group/sinonjs) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a> or the [Gitter channel](https://gitter.im/sinonjs/sinon).
+If you have questions that are not covered by the documentation, you can [check out the `sinon` tag on Stack Overflow](https://stackoverflow.com/questions/tagged/sinon) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a>.
+
+You can also search through the [Sinon.JS mailing list archives](http://groups.google.com/group/sinonjs).
 
 ## Goals
 
