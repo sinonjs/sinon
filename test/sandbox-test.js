@@ -10,6 +10,7 @@ var fakeServerWithClock = require("nise").fakeServerWithClock;
 var fakeServer = require("nise").fakeServer;
 var Sandbox = require("../lib/sinon/sandbox");
 var createSandbox = require("../lib/sinon/create-sandbox");
+var fake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
@@ -425,7 +426,7 @@ describe("Sandbox", function () {
         });
     });
 
-    describe.only(".replace", function () {
+    describe(".replace", function () {
         beforeEach(function () {
             this.sandbox = createSandbox();
         });
@@ -462,66 +463,113 @@ describe("Sandbox", function () {
             assert.equals(object.property, existing);
         });
 
-        describe("getters and setters", function () {
-            it("allows stubbing getters", function () {
+        describe("when asked to replace a getter", function () {
+            it("should throw an Error", function () {
+                var sandbox = this.sandbox;
                 var object = {
-                    foo: "bar"
-                };
-                var stub = sinonStub(object,);
-                stub.get(function () {
-                    return "baz";
-                });
-
-                this.sandbox.replace(object, "foo", stub);
-
-                assert.equals(object.foo, "baz");
-            });
-
-            it("allows restoring getters", function () {
-                var object = {
-                    foo: "bar"
+                    get foo() {
+                        return "bar";
+                    }
                 };
 
-                var sandbox = new Sandbox();
-                this.sandbox.replace(object, "foo", sinonStub().get(function () {
-                    return "baz";
-                }));
-
-                sandbox.restore();
-
-                assert.equals(object.foo, "bar");
+                assert.exception(function () {
+                    sandbox.replace(object, "foo", fake());
+                }, {message: "Use sandbox.replaceGetter for replacing getters"});
             });
+        });
 
-            it("allows stubbing setters", function () {
+        describe("when asked to replace a setter", function () {
+            it("should throw an Error", function () {
+                var sandbox = this.sandbox;
+                // eslint-disable-next-line accessor-pairs
                 var object = {
-                    foo: undefined,
-                    prop: "bar"
+                    set foo(value) {
+                        this.prop = value;
+                    }
                 };
 
-                this.sandbox.replace(object, "foo", sinonStub().set(function (val) {
-                    object.prop = val + "bla";
-                }));
+                assert.exception(function () {
+                    sandbox.replace(object, "foo", fake());
+                }, {message: "Use sandbox.replaceSetter for replacing setters"});
+            });
+        });
+    });
 
-                object.foo = "bla";
+    describe(".replaceGetter", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
 
-                assert.equals(object.prop, "blabla");
+        it("should replace getters", function () {
+            var expected = "baz";
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+
+            assert.equals(object.foo, expected);
+        });
+
+        it("allows restoring getters", function () {
+            var expected = "baz";
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+
+            this.sandbox.restore();
+
+            assert.equals(object.foo, "bar");
+        });
+    });
+
+    describe(".replaceSetter", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        it("should replace setter", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            };
+
+            this.sandbox.replaceSetter(object, "foo", function (val) {
+                this.prop = val + "bla";
             });
 
-            it("allows restoring setters", function () {
-                var object = {
-                    prop: "bar"
-                };
+            object.foo = "bla";
 
-                this.sandbox.replace(object, "prop", sinonStub().set(function setterFn(val) {
-                    object.prop = val + "bla";
-                }));
+            assert.equals(object.prop, "blabla");
+        });
 
-                this.sandbox.restore();
+        it("allows restoring setters", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            };
 
-                object.prop = "bla";
-
-                assert.equals(object.prop, "bla");
+            this.sandbox.replaceSetter(object, "foo", function (val) {
+                this.prop = val + "bla";
             });
+
+            this.sandbox.restore();
+
+            object.prop = "bla";
+
+            assert.equals(object.prop, "bla");
         });
     });
 
@@ -901,8 +949,8 @@ describe("Sandbox", function () {
 
             sandbox.verify();
 
-            fakes.forEach(function (fake) {
-                assert(fake.verify.calledOnce);
+            fakes.forEach(function (f) {
+                assert(f.verify.calledOnce);
             });
         });
     });
