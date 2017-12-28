@@ -463,6 +463,33 @@ describe("Sandbox", function () {
             assert.equals(object.property, existing);
         });
 
+        it("should refuse to replace a non-function with a function", function () {
+            var sandbox = this.sandbox;
+            var replacement = function () { return "replacement"; };
+            var existing = "existing";
+            var object = {
+                property: existing
+            };
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", replacement);
+            }, {message: "Cannot replace string with function"});
+        });
+
+        it("should refuse to replace a function with a non-function", function () {
+            var sandbox = this.sandbox;
+            var replacement = "replacement";
+            var object = {
+                property: function () {
+                    return "apple pie";
+                }
+            };
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", replacement);
+            }, {message: "Cannot replace function with string"});
+        });
+
         describe("when asked to replace a getter", function () {
             it("should throw an Error", function () {
                 var sandbox = this.sandbox;
@@ -513,6 +540,22 @@ describe("Sandbox", function () {
             assert.equals(object.foo, expected);
         });
 
+        describe("when called with a non-function replacement argument", function () {
+            it("should throw a TypeError", function () {
+                var sandbox = this.sandbox;
+                var expected = "baz";
+                var object = {
+                    get foo() {
+                        return "bar";
+                    }
+                };
+
+                assert.exception(function () {
+                    sandbox.replaceGetter(object, "foo", expected);
+                }, {message: "Expected replacement argument to be a function"});
+            });
+        });
+
         it("allows restoring getters", function () {
             var expected = "baz";
             var object = {
@@ -550,6 +593,23 @@ describe("Sandbox", function () {
             object.foo = "bla";
 
             assert.equals(object.prop, "blabla");
+        });
+
+        describe("when called with a non-function replacement argument", function () {
+            it("should throw a TypeError", function () {
+                var sandbox = this.sandbox;
+                // eslint-disable-next-line accessor-pairs
+                var object = {
+                    set foo(value) {
+                        this.prop = value;
+                    },
+                    prop: "bar"
+                };
+
+                assert.exception(function () {
+                    sandbox.replaceSetter(object, "foo", "bla");
+                }, {message: "Expected replacement argument to be a function"});
+            });
         });
 
         it("allows restoring setters", function () {
