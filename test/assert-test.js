@@ -1649,4 +1649,42 @@ describe("assert", function () {
                           "    actual = { foo: 1 }");
         });
     });
+
+    if (typeof Symbol === "function") {
+        describe("with symbol method names", function () {
+            var obj = {};
+
+            function setupSymbol(symbol) {
+                obj[symbol] = function () {};
+                sinonSpy(obj, symbol);
+            }
+
+            function createExceptionMessage(method, arg) {
+                try { // eslint-disable-line no-restricted-syntax
+                    sinonAssert[method](arg);
+                } catch (e) {
+                    return e.message;
+                }
+            }
+
+            it("should use the symbol's description in exception messages", function () {
+                var symbol = Symbol("Something Symbolic");
+                setupSymbol(symbol);
+
+                assert.equals(createExceptionMessage("called", obj[symbol]),
+                    "expected Symbol(Something Symbolic) to have been " +
+                    "called at least once but was never called");
+            });
+
+            it("should indicate that an assertion failure with a symbol method name " +
+               "occured in exception messages, even if the symbol has no description", function () {
+                var symbol = Symbol();
+                setupSymbol(symbol);
+
+                assert.equals(createExceptionMessage("called", obj[symbol]),
+                    "expected Symbol() to have been " +
+                    "called at least once but was never called");
+            });
+        });
+    }
 });
