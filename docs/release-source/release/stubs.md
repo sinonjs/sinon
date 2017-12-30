@@ -224,7 +224,7 @@ stub.called // false
 
 *Since `sinon@5.0.0`*
 
-You can reset behaviour of all stubs using `sinon.resetHistory()`
+You can reset history of all stubs using `sinon.resetHistory()`
 
 
 #### `stub.callsFake(fakeFunction);`
