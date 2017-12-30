@@ -178,7 +178,7 @@ This is equivalent to calling both `stub.resetBehavior()` and `stub.resetHistory
 
 *Since `sinon@5.0.0`*
 
-You can reset all stubs using `sinon.reset()`
+As a convenience, you can apply `stub.reset()` to all stubs using `sinon.reset()`
 
 #### `stub.resetBehavior();`
 
