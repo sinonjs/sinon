@@ -68,6 +68,29 @@ Creates a fake that returns a rejected `Promise` for the passed value.
 
 If an `Error` is passed as the `value` argument, then that will be the value of the promise. If any other value is passed, then that will be used for the `message` property of the `Error` returned by the promise.
 
+#### `sinon.fake.yields(callback[, value1, ..., valueN]);`
+
+Creates a fake that calls the provided callback with the provided values.
+
+```js
+var fake = sinon.fake.yields(console.log, 'hello world');
+
+fake();
+// hello world
+```
+
+#### `sinon.fake.yieldsAsync(callback[, value1, ..., valueN]);`
+
+Creates a fake that calls the provided callback asynchronously with the provided values.
+
+```js
+var fake = sinon.fake.yieldsAsync(console.log, 'hello world');
+
+fake();
+// hello world
+```
+
+
 ### `sinon.fake(func);`
 
 Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behaviour.

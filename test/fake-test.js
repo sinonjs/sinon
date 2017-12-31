@@ -28,6 +28,7 @@ function verifyProxy(func, argument) {
     });
 }
 
+function noop() {}
 
 describe("fake", function () {
     describe("module", function () {
@@ -149,6 +150,40 @@ describe("fake", function () {
                     assert.isTrue(actual instanceof Error);
                 });
             });
+        });
+    });
+
+    describe(".yields", function () {
+        verifyProxy(fake.yields, noop, "42", "43");
+
+        it("should call the callback with the provided values", function () {
+            var callback = sinon.spy();
+            var myFake = fake.yields(callback, "one", "two", "three");
+
+            myFake();
+
+            sinon.assert.calledOnce(callback);
+            sinon.assert.calledWith(callback, "one", "two", "three");
+        });
+    });
+
+    describe(".yieldsAsync", function () {
+        verifyProxy(fake.yieldsAsync, noop, "42", "43");
+
+        it("should call the callback asynchronously with the provided values", function (done) {
+            var callback = sinon.spy();
+            var myFake = fake.yieldsAsync(callback, "one", "two", "three");
+
+            myFake();
+
+            sinon.assert.notCalled(callback);
+
+            setTimeout(function () {
+                sinon.assert.calledOnce(callback);
+                sinon.assert.calledWith(callback, "one", "two", "three");
+
+                done();
+            }, 0);
         });
     });
 });
