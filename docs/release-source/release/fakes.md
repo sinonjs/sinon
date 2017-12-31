@@ -95,11 +95,12 @@ fake();
 
 Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behaviour.
 
-This is useful when complex behaviour not covered by the `sinon.fake.*` methods or when wrapping an existing function or method.
+This is useful when complex behaviour not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
+
 
 ### Adding the fake to the system under test
 
-Unlike `spy` and `stub`, `fake` only knows about creating fakes, not about replacing properties in the system under test.
+Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fakes, not about replacing properties in the system under test.
 
 To replace a property, you can use the `sinon.replace` method.
 
@@ -111,3 +112,5 @@ sinon.replace(console, 'log', fake);
 console.log('apple pie');
 // 42
 ```
+
+When you want to restore the replaced properties, `sinon.restore` method.
