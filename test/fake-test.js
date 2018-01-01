@@ -30,11 +30,15 @@ function verifyProxy(func, argument) {
 
 function noop() {}
 
+var hasFunctionNameSupport = typeof noop.name !== "undefined";
+
 describe("fake", function () {
     describe("module", function () {
         it("should return a unary Function named 'fake'", function () {
             assert.equals(fake.length, 1);
-            assert.equals(fake.name, "fake");
+            if (hasFunctionNameSupport) {
+                assert.equals(fake.name, "fake");
+            }
         });
     });
 
