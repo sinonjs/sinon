@@ -30,7 +30,7 @@ function verifyProxy(func, argument) {
 
 function noop() {}
 
-var hasFunctionNameSupport = typeof noop.name !== "undefined";
+var hasFunctionNameSupport = noop.name === "noop";
 
 describe("fake", function () {
     describe("module", function () {
