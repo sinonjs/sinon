@@ -1,6 +1,6 @@
 ### Stuck?
 
-Please ask questions on [the mailing list](http://groups.google.com/group/sinonjs) if you're stuck.
+Please ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon) if you're stuck.
 
 ### Contribute
 

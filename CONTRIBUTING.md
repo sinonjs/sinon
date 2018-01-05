@@ -5,9 +5,9 @@ There are several ways of contributing to Sinon.JS
 * Look into [issues tagged `help-wanted`](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+wanted%22)
 * Help [improve the documentation](https://github.com/sinonjs/sinon/tree/master/docs) published
   at [the Sinon.JS website](http://sinonjs.org). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
-* Help someone understand and use Sinon.JS on [the mailing list](http://groups.google.com/group/sinonjs) or on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
+* Help someone understand and use Sinon.JS on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
 * Report an issue, please read instructions below
-* Help with triaging the [issues](http://github.com/cjohansen/Sinon.JS/issues). The clearer they are, the more likely they are to be fixed soon.
+* Help with triaging the [issues](https://github.com/sinonjs/sinon/issues). The clearer they are, the more likely they are to be fixed soon.
 * Contribute to the code base.
 
 ## Reporting an issue
@@ -28,10 +28,9 @@ See [our issue template](https://github.com/sinonjs/sinon/blob/master/.github/) 
 
 ## Contributing to the code base
 
-Pick [an issue](http://github.com/cjohansen/Sinon.JS/issues) to fix, or pitch
+Pick [an issue](https://github.com/sinonjs/sinon/issues) to fix, or pitch
 new features. To avoid wasting your time, please ask for feedback on feature
-suggestions either with [an issue](http://github.com/cjohansen/Sinon.JS/issues/new)
-or on [the mailing list](http://groups.google.com/group/sinonjs).
+suggestions with [an issue](https://github.com/sinonjs/sinon/issues/new).
 
 ### Making a pull request
 

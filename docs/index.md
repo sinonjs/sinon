@@ -244,7 +244,7 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 
 ### Get help
 
-* [Sinon.JS mailing list][sinon-group]
+* [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
 * IRC: #sinon.js on freenode
 
 ### Sinon.JS elsewhere
