@@ -1,4 +1,10 @@
 
+4.1.4 / 2018-01-08
+==================
+
+  * Fix: assertion error messages did not handle Symbol names (#1640)
+  * Deprecate spy.reset(), use spy.resetHistory() instead (#1446)
+
 4.1.3 / 2017-12-07
 ==================
 
