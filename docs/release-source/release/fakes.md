@@ -113,4 +113,9 @@ console.log('apple pie');
 // 42
 ```
 
-When you want to restore the replaced properties, `sinon.restore` method.
+When you want to restore the replaced properties, simply call the `sinon.restore` method.
+
+```js
+// restores all replaced properties set by sinon methods (restore, spy, stub)
+sinon.restore();
+```
