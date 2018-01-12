@@ -257,7 +257,13 @@ describe("sinonSandbox", function () {
                     assert(fakeServer.isPrototypeOf(server));
                 });
 
-                it("creates server with cock", function () {
+                it("creates server without clock by default", function () {
+                    var server = this.sandbox.useFakeServer();
+
+                    refute(fakeServerWithClock.isPrototypeOf(server));
+                });
+
+                it("creates server with clock", function () {
                     this.sandbox.serverPrototype = fakeServerWithClock;
                     var server = this.sandbox.useFakeServer();
 
@@ -470,6 +476,20 @@ describe("sinonSandbox", function () {
                     assert.fakeServerWithClock(sandbox.args[0], this.fakeServer);
 
                     sandbox.restore();
+                });
+
+                it("uses fakeServer as the serverPrototype by default", function () {
+                    var sandbox = sinonSandbox.create();
+
+                    assert.same(sandbox.serverPrototype, fakeServer);
+                });
+
+                it("uses configured implementation as the serverPrototype", function () {
+                    var sandbox = sinonSandbox.create({
+                        useFakeServer: fakeServerWithClock
+                    });
+
+                    assert.same(sandbox.serverPrototype, fakeServerWithClock);
                 });
 
                 it("yields clock when faking timers", function () {
