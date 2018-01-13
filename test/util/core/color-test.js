@@ -19,7 +19,9 @@ describe("color", function () {
 
         beforeEach(function () {
             color = proxyquire("../../../lib/sinon/color", {
-                "supports-color": {}
+                "supports-color": {
+                    stdout: true
+                }
             });
         });
 
@@ -40,13 +42,15 @@ describe("color", function () {
 
         beforeEach(function () {
             color = proxyquire("../../../lib/sinon/color", {
-                "supports-color": false
+                "supports-color": {
+                    stdout: false
+                }
             });
         });
 
         getColorMethods().forEach(function (method) {
             describe(method.name, function () {
-                it("should return a colored string", function () {
+                it("should return a regular string", function () {
                     var string = "lorem ipsum";
                     var actual = color[method.name](string);
 
