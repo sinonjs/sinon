@@ -390,4 +390,33 @@ describe("issues", function () {
             mock.verify();
         });
     });
+
+    describe("#1572 - stub.withArgs() with matchers breaks subsequent stubbing", function () {
+        it("example 1", function () {
+            var stub = sinon.stub();
+
+            stub.withArgs(sinon.match.any).returns("old");
+            stub.withArgs(1).returns("new");
+
+            var result1 = stub(1);
+            var result2 = stub(2);
+
+            assert.equals(result1, "new");
+            assert.equals(result2, "old");
+        });
+
+        it("example 2", function () {
+            var stub = sinon.stub();
+
+            stub.withArgs(sinon.match.any).returns("old");
+            stub.reset();
+            stub.withArgs(1).returns("new");
+
+            var result1 = stub(1);
+            var result2 = stub(2);
+
+            assert.equals(result1, "new");
+            assert.equals(result2, undefined);
+        });
+    });
 });
