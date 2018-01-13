@@ -306,7 +306,7 @@ Causes the stub to return a Promise which rejects with the provided exception ob
 Causes the stub to call the argument at the provided index as a callback function. `stub.callsArg(0);` causes the stub to call the first argument as a callback.
 
 
-#### `stub.callThrough();`
+#### `stub.callsThrough();`
 
 Causes the original method wrapped into the stub to be called when none of the conditional stubs are matched.
 
@@ -325,7 +325,7 @@ obj.sum.withArgs(2, 2).callsFake(function foo() {
     return 'bar';
 });
 
-obj.sum.callThrough();
+obj.sum.callsThrough();
 
 obj.sum(2, 2); // 'bar'
 obj.sum(1, 2); // 3
