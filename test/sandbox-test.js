@@ -1128,13 +1128,13 @@ describe("Sandbox", function () {
                 });
 
                 it("uses fakeServer as the serverPrototype by default", function () {
-                    var sandbox = sinonSandbox.create();
+                    var sandbox = createSandbox();
 
                     assert.same(sandbox.serverPrototype, fakeServer);
                 });
 
                 it("uses configured implementation as the serverPrototype", function () {
-                    var sandbox = sinonSandbox.create({
+                    var sandbox = createSandbox({
                         useFakeServer: fakeServerWithClock
                     });
 
