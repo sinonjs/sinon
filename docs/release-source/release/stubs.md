@@ -463,8 +463,6 @@ Like `callArg`, but with arguments.
 
 Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
 
-#### `stub.callsArgAsync(index);`
-
 #### `stub.callsArgOnAsync(index, context);`
 
 #### `stub.callsArgWithAsync(index, arg1, arg2, ...);`
