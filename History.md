@@ -1,4 +1,9 @@
 
+4.1.5 / 2018-01-13
+==================
+
+  * Use nise.fakeServer as the sandbox serverPrototype (#1534)
+
 4.1.4 / 2018-01-08
 ==================
 

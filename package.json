@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "homepage": "http://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -42,18 +42,18 @@
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
     "nise": "^1.2.0",
-    "supports-color": "^4.4.0",
+    "supports-color": "^5.1.0",
     "type-detect": "^4.0.5"
   },
   "devDependencies": {
-    "browserify": "^14.0.0",
+    "browserify": "^15.1.0",
     "dependency-check": "^2.9.1",
     "eslint": "^4.6.1",
     "eslint-config-sinon": "^1.0.0",
     "eslint-plugin-mocha": "^4.2.0",
     "husky": "^0.14.2",
-    "lint-staged": "^4.0.0",
-    "markdownlint-cli": "^0.4.0",
+    "lint-staged": "^6.0.0",
+    "markdownlint-cli": "^0.6.0",
     "mocha": "^4.0.0",
     "mochify": "^5.1.0",
     "mochify-istanbul": "^2.4.1",
