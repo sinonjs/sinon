@@ -462,14 +462,14 @@ Like `callArg`, but with arguments.
 
 Same as their corresponding non-Async counterparts, but with callback being deferred at called after all instructions in the current call stack are processed.
 
-    * In Node environment the callback is deferred with `process.nextTick`.
-    * In a browser the callback is deferred with `setTimeout(callback, 0)`.
+* In Node environment the callback is deferred with `process.nextTick`.
+* In a browser the callback is deferred with `setTimeout(callback, 0)`.
 
 More information:
 
-    * <https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick>,
-    * <https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>,
-    * <https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout>.
+* <https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick>,
+* <https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>,
+* <https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout>.
 
 ##### `stub.callsArgAsync(index);`
 
