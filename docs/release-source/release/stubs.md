@@ -458,28 +458,50 @@ Useful if a function is called with more than one callback, and simply calling t
 
 Like `callArg`, but with arguments.
 
+#### Asynchronous calls
 
-#### `stub.callsArgAsync(index);`
+Same as their corresponding non-Async counterparts, but with callback being deferred at called after all instructions in the current call stack are processed.
 
-Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
+* In Node environment the callback is deferred with `process.nextTick`.
+* In a browser the callback is deferred with `setTimeout(callback, 0)`.
 
-#### `stub.callsArgAsync(index);`
+More information:
 
-#### `stub.callsArgOnAsync(index, context);`
+* <https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick>,
+* <https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>,
+* <https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout>.
 
-#### `stub.callsArgWithAsync(index, arg1, arg2, ...);`
+##### `stub.callsArgAsync(index);`
 
-#### `stub.callsArgOnWithAsync(index, context, arg1, arg2, ...);`
+Async version of [stub.callsArg(index)](#stubcallsargindex). See also [Asynchronous calls](#asynchronous-calls).
 
-#### `stub.yieldsAsync([arg1, arg2, ...]);`
+##### `stub.callsArgOnAsync(index, context);`
 
-Same as their corresponding non-Async counterparts, but with callback being deferred (executed not immediately but after short timeout and in another "thread")
+Async version of [stub.callsArgOn(index, context)](#stubcallsargonindex-context). See also [Asynchronous calls](#asynchronous-calls).
 
-#### `stub.yieldsOnAsync(context, [arg1, arg2, ...]);`
+##### `stub.callsArgWithAsync(index, arg1, arg2, ...);`
 
-#### `stub.yieldsToAsync(property, [arg1, arg2, ...]);`
+Async version of [stub.callsArgWith(index, arg1, arg2, ...)](#stubcallsargwithindex-arg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
 
-#### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
+##### `stub.callsArgOnWithAsync(index, context, arg1, arg2, ...);`
+
+Async version of [stub.callsArgOnWith(index, context, arg1, arg2, ...)](#stubcallsargonwithindex-context-arg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
+
+##### `stub.yieldsAsync([arg1, arg2, ...]);`
+
+Async version of [stub.yields([arg1, arg2, ...])](#stubyieldsarg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
+
+##### `stub.yieldsOnAsync(context, [arg1, arg2, ...]);`
+
+Async version of [stub.yieldsOn(context, [arg1, arg2, ...])](#stubyieldsoncontext-arg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
+
+##### `stub.yieldsToAsync(property, [arg1, arg2, ...]);`
+
+Async version of [stub.yieldsTo(property, [arg1, arg2, ...])](#stubyieldstoproperty-arg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
+
+##### `stub.yieldsToOnAsync(property, context, [arg1, arg2, ...])`
+
+Async version of [stub.yieldsToOn(property, context, [arg1, arg2, ...])](#stubyieldstoonproperty-context-arg1-arg2-). See also [Asynchronous calls](#asynchronous-calls).
 
 #### `sinon.addBehavior(name, fn);`
 
