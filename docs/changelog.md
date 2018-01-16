@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.1.6 / 2018-01-16
+==================
+
+  * Fix bad build, missing nise@1.2.0 (#1656)
+  * Upgrade dependency supports-color
+
 4.1.5 / 2018-01-13
 ==================
 
