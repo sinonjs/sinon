@@ -615,6 +615,79 @@ describe("sinonMatch", function () {
         });
     });
 
+    describe(".every", function () {
+        it("throws if given argument is not a matcher", function () {
+            assert.exception(function () {
+                sinonMatch.every({});
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.every(123);
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.every("123");
+            }, "TypeError");
+        });
+
+        it("returns matcher", function () {
+            var every = sinonMatch.every(sinonMatch.any);
+
+            assert(sinonMatch.isMatcher(every));
+        });
+
+        it("wraps the given matcher message with an \"every()\"", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert.equals(every.toString(), "every(typeOf(\"number\"))");
+        });
+
+        it("fails to match anything that is not an object or an iterable", function () {
+            var every = sinonMatch.every(sinonMatch.any);
+
+            assert.isFalse(every.test(1));
+            assert.isFalse(every.test("a"));
+            assert.isFalse(every.test(null));
+            assert.isFalse(every.test(function () {}));
+        });
+
+        it("matches an object if the predicate is true for every property", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert(every.test({a: 1, b: 2}));
+        });
+
+        it("fails if the predicate is false for some of the object properties", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert.isFalse(every.test({a: 1, b: "b"}));
+        });
+
+        it("matches an array if the predicate is true for every element", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert(every.test([1, 2]));
+        });
+
+        it("fails if the predicate is false for some of the array elements", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert.isFalse(every.test([1, "b"]));
+        });
+
+        if (typeof Set === "function") {
+            it("matches an iterable if the predicate is true for every element", function () {
+                var every = sinonMatch.every(sinonMatch.number);
+
+                assert(every.test(new Set([1, 2])));
+            });
+
+            it("fails if the predicate is false for some of the iterable elements", function () {
+                var every = sinonMatch.every(sinonMatch.number);
+
+                assert.isFalse(every.test(new Set([1, "b"])));
+            });
+        }
+    });
+
     describe(".bool", function () {
         it("is typeOf boolean matcher", function () {
             var bool = sinonMatch.bool;
