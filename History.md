@@ -1,5 +1,5 @@
 
-5.0.0-next-2 / 2018-01-16
+5.0.0-next-3 / 2018-01-16
 ==================
 
 Publish next version including changes from 4.1.6
