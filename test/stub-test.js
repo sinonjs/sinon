@@ -1766,6 +1766,22 @@ describe("stub", function () {
             assert.equals(stub(), unmatchedValue);
             assert.equals(stub(expectedArgument), secondMatchedValue);
         });
+
+        it("ensure stub doesn't use sinonMatch.any argument if there are more matches", function () {
+            var unmatchedValue = "d3ada6a0-8dac-4136-956d-033b5f23eadf";
+            var matchedValue = "68128619-a639-4b32-a4a0-6519165bf301";
+            var anyMatcherValue = "555a8c4a-fae0-11e7-8c3f-9a214cf093ae";
+            var expectedArgument = "3e1ed1ec-c377-4432-a33e-3c937f1406d1";
+
+            var stub = createStub().returns(unmatchedValue);
+
+            stub.withArgs(expectedArgument).returns(matchedValue);
+            stub.withArgs(sinonMatch.any).returns(anyMatcherValue);
+
+            assert.equals(stub(), unmatchedValue);
+            assert.equals(stub(expectedArgument), matchedValue);
+            assert.equals(stub("any-value"), anyMatcherValue);
+        });
     });
 
     describe(".callsArgAsync", function () {
