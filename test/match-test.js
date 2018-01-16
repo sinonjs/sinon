@@ -688,6 +688,79 @@ describe("sinonMatch", function () {
         }
     });
 
+    describe(".some", function () {
+        it("throws if given argument is not a matcher", function () {
+            assert.exception(function () {
+                sinonMatch.some({});
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.some(123);
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.some("123");
+            }, "TypeError");
+        });
+
+        it("returns matcher", function () {
+            var some = sinonMatch.some(sinonMatch.any);
+
+            assert(sinonMatch.isMatcher(some));
+        });
+
+        it("wraps the given matcher message with an \"some()\"", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert.equals(some.toString(), "some(typeOf(\"number\"))");
+        });
+
+        it("fails to match anything that is not an object or an iterable", function () {
+            var some = sinonMatch.some(sinonMatch.any);
+
+            assert.isFalse(some.test(1));
+            assert.isFalse(some.test("a"));
+            assert.isFalse(some.test(null));
+            assert.isFalse(some.test(function () {}));
+        });
+
+        it("matches an object if the predicate is true for some of the properties", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert(some.test({a: 1, b: "b"}));
+        });
+
+        it("fails if the predicate is false for all of the object properties", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert.isFalse(some.test({a: "a", b: "b"}));
+        });
+
+        it("matches an array if the predicate is true for some element", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert(some.test([1, "b"]));
+        });
+
+        it("fails if the predicate is false for all of the array elements", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert.isFalse(some.test(["a", "b"]));
+        });
+
+        if (typeof Set === "function") {
+            it("matches an iterable if the predicate is true for some element", function () {
+                var some = sinonMatch.some(sinonMatch.number);
+
+                assert(some.test(new Set([1, "b"])));
+            });
+
+            it("fails if the predicate is false for all of the iterable elements", function () {
+                var some = sinonMatch.some(sinonMatch.number);
+
+                assert.isFalse(some.test(new Set(["a", "b"])));
+            });
+        }
+    });
+
     describe(".bool", function () {
         it("is typeOf boolean matcher", function () {
             var bool = sinonMatch.bool;
