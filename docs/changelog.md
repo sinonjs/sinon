@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.2.0 / 2018-01-21
+==================
+
+  * Add match.every and match.some (#1624) (#1661)
+
 4.1.6 / 2018-01-16
 ==================
 
