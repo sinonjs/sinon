@@ -454,9 +454,9 @@ Useful if a function is called with more than one callback, and simply calling t
 }
 ```
 
-#### `stub.callArgWith(argNum, [arg1, arg2, ...])`
+#### `stub.callsArgWith(argNum, [arg1, arg2, ...])`
 
-Like `callArg`, but with arguments.
+Like `callsArg`, but with arguments.
 
 #### Asynchronous calls
 
