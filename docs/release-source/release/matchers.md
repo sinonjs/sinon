@@ -239,6 +239,13 @@ sinon.match.hasNested("a.b.c");
 var actual = { "a": { "b": { "c": 3 } } };
 ```
 
+#### `sinon.match.every(matcher)`
+
+Requires **every** element of an `Array`, `Set` or `Map`, or alternatively **every** value of an `Object` to match the given `matcher`.
+
+#### `sinon.match.some(matcher)`
+
+Requires **any** element of an `Array`, `Set` or `Map`, or alternatively **any** value of an `Object` to match the given `matcher`.
 
 ## Combining matchers
 

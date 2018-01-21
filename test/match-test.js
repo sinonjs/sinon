@@ -1,6 +1,8 @@
 "use strict";
 
-var assert = require("referee").assert;
+var referee = require("referee");
+var assert = referee.assert;
+var refute = referee.refute;
 var sinonMatch = require("../lib/sinon/match");
 
 function propertyMatcherTests(matcher, additionalTests) {
@@ -613,6 +615,152 @@ describe("sinonMatch", function () {
 
             assert.equals(hasOwn.toString(), "hasOwn(\"test\", undefined)");
         });
+    });
+
+    describe(".every", function () {
+        it("throws if given argument is not a matcher", function () {
+            assert.exception(function () {
+                sinonMatch.every({});
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.every(123);
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.every("123");
+            }, "TypeError");
+        });
+
+        it("returns matcher", function () {
+            var every = sinonMatch.every(sinonMatch.any);
+
+            assert(sinonMatch.isMatcher(every));
+        });
+
+        it("wraps the given matcher message with an \"every()\"", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert.equals(every.toString(), "every(typeOf(\"number\"))");
+        });
+
+        it("fails to match anything that is not an object or an iterable", function () {
+            var every = sinonMatch.every(sinonMatch.any);
+
+            refute(every.test(1));
+            refute(every.test("a"));
+            refute(every.test(null));
+            refute(every.test(function () {}));
+        });
+
+        it("matches an object if the predicate is true for every property", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert(every.test({a: 1, b: 2}));
+        });
+
+        it("fails if the predicate is false for some of the object properties", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            refute(every.test({a: 1, b: "b"}));
+        });
+
+        it("matches an array if the predicate is true for every element", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            assert(every.test([1, 2]));
+        });
+
+        it("fails if the predicate is false for some of the array elements", function () {
+            var every = sinonMatch.every(sinonMatch.number);
+
+            refute(every.test([1, "b"]));
+        });
+
+        if (typeof Set === "function") {
+            it("matches an iterable if the predicate is true for every element", function () {
+                var every = sinonMatch.every(sinonMatch.number);
+
+                assert(every.test(new Set([1, 2])));
+            });
+
+            it("fails if the predicate is false for some of the iterable elements", function () {
+                var every = sinonMatch.every(sinonMatch.number);
+
+                refute(every.test(new Set([1, "b"])));
+            });
+        }
+    });
+
+    describe(".some", function () {
+        it("throws if given argument is not a matcher", function () {
+            assert.exception(function () {
+                sinonMatch.some({});
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.some(123);
+            }, "TypeError");
+            assert.exception(function () {
+                sinonMatch.some("123");
+            }, "TypeError");
+        });
+
+        it("returns matcher", function () {
+            var some = sinonMatch.some(sinonMatch.any);
+
+            assert(sinonMatch.isMatcher(some));
+        });
+
+        it("wraps the given matcher message with an \"some()\"", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert.equals(some.toString(), "some(typeOf(\"number\"))");
+        });
+
+        it("fails to match anything that is not an object or an iterable", function () {
+            var some = sinonMatch.some(sinonMatch.any);
+
+            refute(some.test(1));
+            refute(some.test("a"));
+            refute(some.test(null));
+            refute(some.test(function () {}));
+        });
+
+        it("matches an object if the predicate is true for some of the properties", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert(some.test({a: 1, b: "b"}));
+        });
+
+        it("fails if the predicate is false for all of the object properties", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            refute(some.test({a: "a", b: "b"}));
+        });
+
+        it("matches an array if the predicate is true for some element", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            assert(some.test([1, "b"]));
+        });
+
+        it("fails if the predicate is false for all of the array elements", function () {
+            var some = sinonMatch.some(sinonMatch.number);
+
+            refute(some.test(["a", "b"]));
+        });
+
+        if (typeof Set === "function") {
+            it("matches an iterable if the predicate is true for some element", function () {
+                var some = sinonMatch.some(sinonMatch.number);
+
+                assert(some.test(new Set([1, "b"])));
+            });
+
+            it("fails if the predicate is false for all of the iterable elements", function () {
+                var some = sinonMatch.some(sinonMatch.number);
+
+                refute(some.test(new Set(["a", "b"])));
+            });
+        }
     });
 
     describe(".bool", function () {
