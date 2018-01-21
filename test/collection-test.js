@@ -102,7 +102,8 @@ describe("collection", function () {
 
             for (var i = 0; i < types.length; i++) {
                 // yes, it's silly to create functions in a loop, it's also a test
-                assert.exception(function () { // eslint-disable-line no-loop-func
+                // eslint-disable-next-line no-loop-func ie11/no-loop-func
+                assert.exception(function () {
                     this.collection.createStubInstance(types[i]);
                 });
             }
