@@ -243,6 +243,44 @@ describe("sinonSpy.call", function () {
         });
     });
 
+    describe("call.callsArg", function () {
+        beforeEach(spyCallCallSetup);
+
+        it("calls argument at specified index", function () {
+            var callback = sinonSpy();
+            this.args.push(1, 2, callback);
+
+            this.call.callsArg(2);
+
+            assert(callback.called);
+        });
+
+        it("throws if argument at specified index is not callable", function () {
+            this.args.push(1);
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArg(0);
+            }, "TypeError");
+        });
+
+        it("throws if no index is specified", function () {
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArg();
+            }, "TypeError");
+        });
+
+        it("throws if index is not number", function () {
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArg({});
+            }, "TypeError");
+        });
+    });
+
     describe("call.callArgOn", function () {
         beforeEach(spyCallCallSetup);
 

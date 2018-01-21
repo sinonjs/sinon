@@ -435,7 +435,7 @@ Like `yield`, `yieldTo` grabs the first matching argument, finds the callback an
 ```
 
 
-#### `stub.callArg(argNum)`
+#### `stub.callsArg(argNum)`
 
 Like `yield`, but with an explicit argument number specifying which callback to call.
 
@@ -450,7 +450,7 @@ Useful if a function is called with more than one callback, and simply calling t
         console.log("Oh noes!");
     });
 
-    callback.callArg(1); // Logs "Oh noes!"
+    callback.callsArg(1); // Logs "Oh noes!"
 }
 ```
 
