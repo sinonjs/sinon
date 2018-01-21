@@ -678,14 +678,20 @@ describe("sinonMatch", function () {
         if (typeof Set === "function") {
             it("matches an iterable if the predicate is true for every element", function () {
                 var every = sinonMatch.every(sinonMatch.number);
+                var set = new Set();
+                set.add(1);
+                set.add(2);
 
-                assert(every.test(new Set([1, 2])));
+                assert(every.test(set));
             });
 
             it("fails if the predicate is false for some of the iterable elements", function () {
                 var every = sinonMatch.every(sinonMatch.number);
+                var set = new Set();
+                set.add(1);
+                set.add("b");
 
-                refute(every.test(new Set([1, "b"])));
+                refute(every.test(set));
             });
         }
     });
@@ -751,14 +757,21 @@ describe("sinonMatch", function () {
         if (typeof Set === "function") {
             it("matches an iterable if the predicate is true for some element", function () {
                 var some = sinonMatch.some(sinonMatch.number);
+                var set = new Set();
+                set.add(1);
+                set.add("b");
 
-                assert(some.test(new Set([1, "b"])));
+                assert(some.test(set));
             });
 
             it("fails if the predicate is false for all of the iterable elements", function () {
                 var some = sinonMatch.some(sinonMatch.number);
+                var set = new Set();
+                set.add("a");
+                set.add("b");
 
-                refute(some.test(new Set(["a", "b"])));
+
+                refute(some.test(set));
             });
         }
     });
