@@ -463,6 +463,55 @@ describe("sinonSpy.call", function () {
         });
     });
 
+    describe("call.callsArgOnWith", function () {
+        beforeEach(spyCallCallSetup);
+
+        it("calls argument at specified index with provided args", function () {
+            var object = {};
+            var thisObj = { name1: "value1", name2: "value2" };
+            var callback = sinonSpy();
+            this.args.push(1, callback);
+
+            this.call.callsArgOnWith(1, thisObj, object);
+
+            assert(callback.calledWith(object));
+            assert(callback.calledOn(thisObj));
+        });
+
+        it("calls callback without args", function () {
+            var callback = sinonSpy();
+            var thisObj = { name1: "value1", name2: "value2" };
+            this.args.push(1, callback);
+
+            this.call.callsArgOnWith(1, thisObj);
+
+            assert(callback.calledWith());
+            assert(callback.calledOn(thisObj));
+        });
+
+        it("calls callback with multiple args", function () {
+            var object = {};
+            var array = [];
+            var thisObj = { name1: "value1", name2: "value2" };
+            var callback = sinonSpy();
+            this.args.push(1, 2, callback);
+
+            this.call.callsArgOnWith(2, thisObj, object, array);
+
+            assert(callback.calledWith(object, array));
+            assert(callback.calledOn(thisObj));
+        });
+
+        it("throws if index is not number", function () {
+            var thisObj = { name1: "value1", name2: "value2" };
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArgOnWith({}, thisObj);
+            }, "TypeError");
+        });
+    });
+
     describe("call.yieldTest", function () {
         beforeEach(spyCallCallSetup);
 
