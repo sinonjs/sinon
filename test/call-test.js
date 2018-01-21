@@ -364,6 +364,55 @@ describe("sinonSpy.call", function () {
             }, "TypeError");
         });
     });
+    describe("call.callsArgWith", function () {
+        beforeEach(spyCallCallSetup);
+
+        it("calls argument at specified index with provided args", function () {
+            var object = {};
+            var callback = sinonSpy();
+            this.args.push(1, callback);
+
+            this.call.callsArgWith(1, object);
+
+            assert(callback.calledWith(object));
+        });
+
+        it("calls callback without args", function () {
+            var callback = sinonSpy();
+            this.args.push(1, callback);
+
+            this.call.callsArgWith(1);
+
+            assert(callback.calledWith());
+        });
+
+        it("calls callback wit multiple args", function () {
+            var object = {};
+            var array = [];
+            var callback = sinonSpy();
+            this.args.push(1, 2, callback);
+
+            this.call.callsArgWith(2, object, array);
+
+            assert(callback.calledWith(object, array));
+        });
+
+        it("throws if no index is specified", function () {
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArgWith();
+            }, "TypeError");
+        });
+
+        it("throws if index is not number", function () {
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callsArgWith({});
+            }, "TypeError");
+        });
+    });
 
     describe("call.callArgOnWith", function () {
         beforeEach(spyCallCallSetup);
