@@ -67,16 +67,6 @@
     "rimraf": "^2.5.3",
     "samsam": "^1.1.3"
   },
-  "eslintConfig": {
-    "extends": "eslint-config-sinon",
-    "globals": {
-      "ArrayBuffer": false,
-      "Map": false,
-      "Promise": false,
-      "Set": false,
-      "Symbol": false
-    }
-  },
   "files": [
     "lib",
     "pkg",
