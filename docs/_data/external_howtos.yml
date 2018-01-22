@@ -16,3 +16,5 @@
 - title: Stubbing HTTP Requests With Sinon
   url: http://mherman.org/blog/2017/11/06/stubbing-http-requests-with-sinon/
 
+- title: Stubbing Node Authentication Middleware with Sinon
+  url: http://mherman.org/blog/2018/01/22/stubbing-node-authentication-middleware-with-sinon
