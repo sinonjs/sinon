@@ -1,0 +1,9 @@
+extends: 'eslint-config-sinon'
+
+globals:
+  ArrayBuffer: false
+  Map: false
+  Promise: false
+  Set: false
+  Symbol: false
+
