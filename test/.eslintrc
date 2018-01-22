@@ -2,7 +2,6 @@ env:
   mocha: true
 
 plugins:
-  - ie11
   - mocha
 
 rules:
@@ -21,8 +20,3 @@ rules:
   mocha/no-sibling-hooks: error
   mocha/no-skipped-tests: warn
   mocha/no-top-level-hooks: error
-
-  ie11/no-collection-args: error
-  ie11/no-for-in-const: error
-  ie11/no-loop-func: warn
-  ie11/no-weak-collections: error
