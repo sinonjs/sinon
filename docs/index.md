@@ -196,10 +196,10 @@ Test framework integration can typically reduce boilerplate further. [Learn more
 
 _[Brian Cavalier, Cujo.JS](https://twitter.com/briancavalier/status/225617077346635776)_
 
-Testing time-sensitive logic without the wait is a breeze with Sinon.JS. The following function throttles another function - only when it has not been called for 100 milliseconds will it call the original function with the last set of arguments it received.
+Testing time-sensitive logic without the wait is a breeze with Sinon.JS. The following function debounces another function - only when it has not been called for 100 milliseconds will it call the original function with the last set of arguments it received.
 
 ```javascript
-function throttle(callback) {
+function debounce(callback) {
     var timer;
     return function () {
         clearTimeout(timer);
