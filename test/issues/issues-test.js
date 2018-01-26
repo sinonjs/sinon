@@ -390,4 +390,34 @@ describe("issues", function () {
             mock.verify();
         });
     });
+
+    describe("#1648 - resetHistory ", function () {
+        it("should reset property spies", function () {
+            var obj = {
+                func: function () {},
+                get prop() {
+                    return 1;
+                }
+            };
+
+            var sandbox = sinon.createSandbox();
+            var spyFunc = sandbox.spy(obj, "func");
+            var spyProp = sandbox.spy(obj, "prop", ["get"]);
+
+            refute.isTrue(spyFunc.called);
+            refute.isTrue(spyProp.get.called);
+
+            obj.func();
+            //eslint-disable-next-line no-unused-expressions
+            obj.prop;
+
+            assert.isTrue(spyFunc.called);
+            assert.isTrue(spyProp.get.called);
+
+            sandbox.resetHistory();
+
+            refute.isTrue(spyFunc.called);
+            refute.isTrue(spyProp.get.called);
+        });
+    });
 });
