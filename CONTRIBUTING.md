@@ -60,11 +60,6 @@ Node installed, and install Sinon's dependencies:
 
 This will also install a pre-commit hook, that runs style validation on staged files.
 
-#### PhantomJS
-
-In order to run the tests, you'll need a [PhantomJS](http://phantomjs.org) global.
-
-The test suite runs well with both `1.9.x` and `2.0.0`
 
 ### Compatibility
 
