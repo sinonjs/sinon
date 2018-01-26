@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.2.2 / 2018-01-26
+==================
+
+  * Fix #1638: Make resetHistory work for props
+
 4.2.1 / 2018-01-23
 ==================
 
