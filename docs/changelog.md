@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.2.3 / 2018-02-10
+==================
+
+  * Replace formatio with @sinonjs/formatio
+
 4.2.2 / 2018-01-26
 ==================
 
