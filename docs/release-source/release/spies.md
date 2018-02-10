@@ -255,6 +255,10 @@ Returns `true` if spy was called at least once with the provided arguments.
 
 Can be used for partial matching, Sinon only checks the provided arguments against actual arguments, so a call that received the provided arguments (in the same spots) and possibly others as well will return `true`.
 
+#### `spy.calledOnceWith(arg1, arg2, ...);`
+
+Returns `true` if spy was called at exactly once with the provided arguments.
+
 
 #### `spy.alwaysCalledWith(arg1, arg2, ...);`
 
@@ -264,6 +268,10 @@ Returns `true` if spy was always called with the provided arguments (and possibl
 #### `spy.calledWithExactly(arg1, arg2, ...);`
 
 Returns `true` if spy was called at least once with the provided arguments and no others.
+
+#### `spy.calledOnceWithExactly(arg1, arg2, ...);`
+
+Returns `true` if spy was called exactly once with the provided arguments and no others.
 
 
 #### `spy.alwaysCalledWithExactly(arg1, arg2, ...);`
