@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.3.0 / 2018-02-10
+==================
+
+  * add calledOnceWithExactly assertion (#1247)
+
 4.2.3 / 2018-02-10
 ==================
 
