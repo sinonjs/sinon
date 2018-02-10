@@ -37,8 +37,8 @@
     "docs/**/*.md": "markdownlint"
   },
   "dependencies": {
+    "@sinonjs/formatio": "^2.0.0",
     "diff": "^3.1.0",
-    "formatio": "1.2.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
     "nise": "^1.2.0",
