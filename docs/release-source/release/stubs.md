@@ -409,6 +409,8 @@ Invoke callbacks passed to the `stub` with the given arguments.
 
 If the stub was never called with a function argument, `yield` throws an error.
 
+Returns an Array with all callbacks return values in the order they were called, if no error is thrown.
+
 Also aliased as `invokeCallback`.
 
 

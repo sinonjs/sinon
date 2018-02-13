@@ -2159,6 +2159,24 @@ describe("spy", function () {
 
             assert(callback.calledWith("abc", 123, array, object));
         });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            var returnValues = spy.callArg(2);
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
+        });
     });
 
     describe(".callArgOn", function () {
@@ -2244,6 +2262,25 @@ describe("spy", function () {
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
         });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            var returnValues = spy.callArgOn(2, thisObj);
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
+        });
     });
 
     describe(".callArgWith", function () {
@@ -2319,6 +2356,24 @@ describe("spy", function () {
 
             assert(callback.calledWith("abc", 123, array, object));
         });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            var returnValues = spy.yield();
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
+        });
     });
 
     describe(".invokeCallback", function () {
@@ -2391,6 +2446,25 @@ describe("spy", function () {
 
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
+        });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            spy(1, 2, callback);
+            spy(3, 4, callback);
+
+            var returnValues = spy.yieldOn(thisObj);
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
         });
     });
 
@@ -2465,6 +2539,24 @@ describe("spy", function () {
             spy.yieldTo("test", "abc", 123, array, object);
 
             assert(callback.calledWith("abc", 123, array, object));
+        });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            spy(1, 2, { success: callback });
+            spy(3, 4, { success: callback });
+
+            var returnValues = spy.yieldTo("success");
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
         });
     });
 
@@ -2546,6 +2638,25 @@ describe("spy", function () {
 
             assert(callback.calledWith("abc", 123, array, object));
             assert(callback.calledOn(thisObj));
+        });
+
+        it("returns callbacks return values for all calls", function () {
+            var spy = createSpy();
+            var i = 0;
+            var callback = createSpy(function () {
+                i++;
+                return "useful value " + i;
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            spy(1, 2, { success: callback });
+            spy(3, 4, { success: callback });
+
+            var returnValues = spy.yieldToOn("success", thisObj);
+
+            assert.equals(returnValues, [
+                "useful value 1",
+                "useful value 2"
+            ]);
         });
     });
 
