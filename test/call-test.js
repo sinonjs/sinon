@@ -234,6 +234,17 @@ describe("sinonSpy.call", function () {
             }, "TypeError");
         });
 
+        it("returns callbacks return value", function () {
+            var callback = sinonSpy(function () {
+                return "useful value";
+            });
+            this.args.push(1, 2, callback);
+
+            var returnValue = this.call.callArg(2);
+
+            assert.equals(returnValue, "useful value");
+        });
+
         it("throws if index is not number", function () {
             var call = this.call;
 
@@ -265,6 +276,18 @@ describe("sinonSpy.call", function () {
             assert.exception(function () {
                 call.callArgOn(0, thisObj);
             }, "TypeError");
+        });
+
+        it("returns callbacks return value", function () {
+            var callback = sinonSpy(function () {
+                return "useful value";
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            this.args.push(1, 2, callback);
+
+            var returnValue = this.call.callArgOn(2, thisObj);
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if index is not number", function () {
@@ -308,6 +331,18 @@ describe("sinonSpy.call", function () {
             this.call.callArgWith(2, object, array);
 
             assert(callback.calledWith(object, array));
+        });
+
+        it("returns callbacks return value", function () {
+            var object = {};
+            var callback = sinonSpy(function () {
+                return "useful value";
+            });
+            this.args.push(1, callback);
+
+            var returnValue = this.call.callArgWith(1, object);
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if no index is specified", function () {
@@ -364,6 +399,19 @@ describe("sinonSpy.call", function () {
 
             assert(callback.calledWith(object, array));
             assert(callback.calledOn(thisObj));
+        });
+
+        it("returns callbacks return value", function () {
+            var object = {};
+            var thisObj = { name1: "value1", name2: "value2" };
+            var callback = sinonSpy(function () {
+                return "useful value";
+            });
+            this.args.push(1, callback);
+
+            var returnValue = this.call.callArgOnWith(1, thisObj, object);
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if index is not number", function () {
@@ -447,6 +495,17 @@ describe("sinonSpy.call", function () {
             this.call.yield(obj, "Crazy");
 
             assert(spy.calledWith(obj, "Crazy"));
+        });
+
+        it("returns callbacks return value", function () {
+            var spy = sinonSpy(function () {
+                return "useful value";
+            });
+            this.args.push(24, {}, spy);
+
+            var returnValue = this.call.yield();
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if callback throws", function () {
@@ -554,6 +613,18 @@ describe("sinonSpy.call", function () {
             assert(spy.calledOn(thisObj));
         });
 
+        it("returns callbacks return value", function () {
+            var spy = sinonSpy(function () {
+                return "useful value";
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            this.args.push(24, {}, spy);
+
+            var returnValue = this.call.yieldOn(thisObj);
+
+            assert.equals(returnValue, "useful value");
+        });
+
         it("throws if callback throws", function () {
             this.args.push(function () {
                 throw new Error("d'oh!");
@@ -640,6 +711,17 @@ describe("sinonSpy.call", function () {
             this.call.yieldTo("success", obj, "Crazy");
 
             assert(spy.calledWith(obj, "Crazy"));
+        });
+
+        it("returns callbacks return value", function () {
+            var spy = sinonSpy(function () {
+                return "useful value";
+            });
+            this.args.push(24, {}, { success: spy });
+
+            var returnValue = this.call.yieldTo("success");
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if callback throws", function () {
@@ -755,6 +837,18 @@ describe("sinonSpy.call", function () {
 
             assert(spy.calledWith(obj, "Crazy"));
             assert(spy.calledOn(thisObj));
+        });
+
+        it("returns callbacks return value", function () {
+            var spy = sinonSpy(function () {
+                return "useful value";
+            });
+            var thisObj = { name1: "value1", name2: "value2" };
+            this.args.push(24, {}, { success: spy });
+
+            var returnValue = this.call.yieldToOn("success", thisObj);
+
+            assert.equals(returnValue, "useful value");
         });
 
         it("throws if callback throws", function () {
