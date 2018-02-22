@@ -567,6 +567,30 @@ describe("assert", function () {
             assert(sinonAssert.pass.calledOnce);
             assert(sinonAssert.pass.calledWith("calledOn"));
         });
+
+        it("works with spyCall", function () {
+            var spy = sinonSpy();
+            var target = {};
+            spy();
+            spy.call(target);
+
+            sinonAssert.calledOn(spy.lastCall, target);
+            assert(sinonAssert.pass.calledOn);
+            assert(sinonAssert.pass.calledWith("calledOn"));
+        });
+
+        it("fails when spyCall failed", function () {
+            var spy = sinonSpy();
+            var target = {};
+            spy();
+            spy.call(target);
+
+            assert.exception(function () {
+                sinonAssert.calledOn(spy.lastCall, 1);
+            });
+
+            assert(sinonAssert.fail.called);
+        });
     });
 
     describe(".calledWithNew", function () {
@@ -625,6 +649,28 @@ describe("assert", function () {
 
             assert(sinonAssert.pass.calledOnce);
             assert(sinonAssert.pass.calledWith("calledWithNew"));
+        });
+
+        it("works with spyCall", function () {
+            var spy = sinonSpy();
+            spy();
+            new spy(); // eslint-disable-line no-new, new-cap
+
+            sinonAssert.calledWithNew(spy.lastCall);
+            assert(sinonAssert.pass.calledWithNew);
+            assert(sinonAssert.pass.calledWith("calledWithNew"));
+        });
+
+        it("fails when spyCall failed", function () {
+            var spy = sinonSpy();
+            spy();
+            new spy(); // eslint-disable-line no-new, new-cap
+
+            assert.exception(function () {
+                sinonAssert.calledWithNew(spy.firstCall);
+            });
+
+            assert(sinonAssert.fail.called);
         });
     });
 
@@ -795,6 +841,30 @@ describe("assert", function () {
             assert(sinonAssert.pass.calledOnce);
             assert(sinonAssert.pass.calledWith("calledWithExactly"));
         });
+
+        it("works with spyCall", function () {
+            var spy = sinonSpy();
+            var object = {};
+            spy();
+            spy(object);
+
+            sinonAssert.calledWithExactly(spy.lastCall, object);
+            assert(sinonAssert.pass.calledOnce);
+            assert(sinonAssert.pass.calledWith("calledWithExactly"));
+        });
+
+        it("fails when spyCall failed", function () {
+            var spy = sinonSpy();
+            var object = {};
+            spy();
+            spy(object);
+
+            assert.exception(function () {
+                sinonAssert.calledWithExactly(spy.lastCall, 1);
+            });
+
+            assert(sinonAssert.fail.called);
+        });
     });
 
     describe(".neverCalledWith", function () {
@@ -879,6 +949,28 @@ describe("assert", function () {
 
             assert(sinonAssert.pass.calledOnce);
             assert(sinonAssert.pass.calledWith("threw"));
+        });
+
+        it("works with spyCall", function () {
+            var stub = sinonStub().throws("Error");
+            assert.exception(function () {
+                stub();
+            });
+
+            sinonAssert.threw(stub.firstCall, "Error");
+            assert(sinonAssert.pass.threw);
+            assert(sinonAssert.pass.calledWith("threw"));
+        });
+
+        it("fails when spyCall failed", function () {
+            var stub = sinonStub().returns("Error");
+            stub();
+
+            assert.exception(function () {
+                sinonAssert.threw(stub.firstCall, "Error");
+            });
+
+            assert(sinonAssert.fail.called);
         });
     });
 
