@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.4.0 / 2018-02-23
+==================
+
+  * Change return value of yield and callArg
+
 4.3.0 / 2018-02-10
 ==================
 
