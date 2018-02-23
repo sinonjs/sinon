@@ -65,32 +65,36 @@ Passes if `spy` was called once and only once.
 Passes if `spy` was called exactly twice.
 
 
-#### `sinon.assert.calledThrice(spy);`
+#### `sinon.assert.calledThrice(spy)`
 
 Passes if `spy` was called exactly three times.
 
 
-#### `sinon.assert.callCount(spy, num);`
+#### `sinon.assert.callCount(spy, num)`
 Passes if `spy` was called exactly `num` times.
 
 
-#### `sinon.assert.callOrder(spy1, spy2, ...);`
+#### `sinon.assert.callOrder(spy1, spy2, ...)`
 Passes if provided spies were called in the specified order.
 
 
-#### `sinon.assert.calledOn(spy, obj);`
+#### `sinon.assert.calledOn(spyOrSpyCall, obj)`
 
 Passes if `spy` was ever called with `obj` as its `this` value.
 
+It's possible to assert on a dedicated spy call: `sinon.assert.calledOn(spy.firstCall, arg1, arg2, ...);`.
 
-#### `sinon.assert.alwaysCalledOn(spy, obj);`
+
+#### `sinon.assert.alwaysCalledOn(spy, obj)`
 
 Passes if `spy` was always called with `obj` as its `this` value.
 
 
-#### `sinon.assert.calledWith(spy, arg1, arg2, ...);`
+#### `sinon.assert.calledWith(spyOrSpyCall, arg1, arg2, ...);`
 
 Passes if `spy` was called with the provided arguments.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.calledWith(spy.firstCall, arg1, arg2, ...);`.
 
 
 #### `sinon.assert.alwaysCalledWith(spy, arg1, arg2, ...);`
@@ -103,9 +107,11 @@ Passes if `spy` was always called with the provided arguments.
 Passes if `spy` was never called with the provided arguments.
 
 
-#### `sinon.assert.calledWithExactly(spy, arg1, arg2, ...);`
+#### `sinon.assert.calledWithExactly(spyOrSpyCall, arg1, arg2, ...);`
 
 Passes if `spy` was called with the provided arguments and no others.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.calledWithExactly(spy.getCall(1), arg1, arg2, ...);`.
 
 
 #### `sinon.assert.alwaysCalledWithExactly(spy, arg1, arg2, ...);`
@@ -113,34 +119,38 @@ Passes if `spy` was called with the provided arguments and no others.
 Passes if `spy` was always called with the provided arguments and no others.
 
 
-#### `sinon.assert.calledWithMatch(spy, arg1, arg2, ...);`
+#### `sinon.assert.calledWithMatch(spyOrSpyCall, arg1, arg2, ...)`
 
 Passes if `spy` was called with matching arguments.
 
 This behaves the same way as `sinon.assert.calledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
+It's possible to assert on a dedicated spy call: `sinon.assert.calledWithMatch(spy.secondCall, arg1, arg2, ...);`.
 
-#### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...);`
+
+#### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was always called with matching arguments.
 
 This behaves the same way as `sinon.assert.alwaysCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
 
-#### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...);`
+#### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was never called with matching arguments.
 
 This behaves the same way as `sinon.assert.neverCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
 
 
-#### `sinon.assert.threw(spy, exception);`
+#### `sinon.assert.threw(spyOrSpyCall, exception);`
 
 Passes if `spy` threw the given exception.
 
 The exception can be a `String` denoting its type, or an actual object.
 
 If only one argument is provided, the assertion passes if `spy` ever threw any exception.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.threw(spy.thirdCall, exception);`.
 
 
 #### `sinon.assert.alwaysThrew(spy, exception);`
