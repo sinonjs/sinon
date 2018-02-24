@@ -1,4 +1,9 @@
 
+4.4.1 / 2018-02-24
+==================
+
+  * Docs: make it clear that it is possible to use assert with spy calls (#1688)
+
 4.4.0 / 2018-02-23
 ==================
 
