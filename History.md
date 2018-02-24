@@ -1,4 +1,42 @@
 
+5.0.0-next-3 / 2018-01-16
+==================
+
+Publish next version including changes from 4.1.6
+
+
+5.0.0-next / 2018-01-11
+==================
+
+  * Add postinstall banner pointing to Open Collective
+  * Docs: add migration guide for v5
+  * Docs: Added example for how to use `restore`
+  * Simplify hasFunctionNameSupport
+  * Fix broken test in IE11
+  * Improve language of fake documentation
+  * Add yields and yieldsTo to fake
+  * Extract nextTick to own file
+  * Fix typo in documentation
+  * Clarify documentation
+  * Fix failing tests in Chromium
+  * Add documentation for sinon.replace and sinon.fake*
+  * Improve input validation of sandbox.replace* methods
+  * Rename third argument to `replacement`
+  * Add replaceGetter and replaceSetter
+  * Extract isPropertyConfigurable to own file
+  * WIP
+  * Extract isRestorable to own file
+  * Extract isNonExistentOwnProperty to own function
+  * Fixup: bad merge
+  * Remove undesirable methods before returning fake
+  * Fixup: Improve tests of fake
+  * Add `fake`
+  * Review: reword deprecation message to not mention sinon.Sandbox
+  * Export enhanced sandbox as sinon api
+  * Refactor sandbox to assimilate collection and remove collection
+  * Update docs/changelog.md and set new release id in docs/_config.yml
+  * Add release documentation for v4.1.4
+
 4.4.1 / 2018-02-24
 ==================
 
