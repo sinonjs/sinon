@@ -223,7 +223,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArg(0);
-            }, "TypeError");
+            }, {message: "Expected argument at position 0 to be a Function, but was number"});
         });
 
         it("throws if no index is specified", function () {
@@ -275,7 +275,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArgOn(0, thisObj);
-            }, "TypeError");
+            }, {message: "Expected argument at position 0 to be a Function, but was number"});
         });
 
         it("returns callbacks return value", function () {
@@ -412,6 +412,16 @@ describe("sinonSpy.call", function () {
             var returnValue = this.call.callArgOnWith(1, thisObj, object);
 
             assert.equals(returnValue, "useful value");
+        });
+
+        it("throws if argument at specified index is not callable", function () {
+            var thisObj = { name1: "value1", name2: "value2" };
+            this.args.push(1, 2, 1);
+            var call = this.call;
+
+            assert.exception(function () {
+                call.callArgOnWith(2, thisObj);
+            }, {message: "Expected argument at position 2 to be a Function, but was number"});
         });
 
         it("throws if index is not number", function () {
