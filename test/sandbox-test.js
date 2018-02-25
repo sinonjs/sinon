@@ -10,6 +10,7 @@ var fakeServerWithClock = require("nise").fakeServerWithClock;
 var fakeServer = require("nise").fakeServer;
 var Sandbox = require("../lib/sinon/sandbox");
 var createSandbox = require("../lib/sinon/create-sandbox");
+var fake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
@@ -425,6 +426,213 @@ describe("Sandbox", function () {
         });
     });
 
+    describe(".replace", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        it("should replace a function property", function () {
+            var replacement = function replacement() {};
+            var existing = function existing() {};
+            var object = {
+                property: existing
+            };
+
+            this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(object.property, replacement);
+
+            this.sandbox.restore();
+
+            assert.equals(object.property, existing);
+        });
+
+        it("should replace a non-function property", function () {
+            var replacement = "replacement";
+            var existing = "existing";
+            var object = {
+                property: existing
+            };
+
+            this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(object.property, replacement);
+
+            this.sandbox.restore();
+
+            assert.equals(object.property, existing);
+        });
+
+        it("should refuse to replace a non-function with a function", function () {
+            var sandbox = this.sandbox;
+            var replacement = function () { return "replacement"; };
+            var existing = "existing";
+            var object = {
+                property: existing
+            };
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", replacement);
+            }, {message: "Cannot replace string with function"});
+        });
+
+        it("should refuse to replace a function with a non-function", function () {
+            var sandbox = this.sandbox;
+            var replacement = "replacement";
+            var object = {
+                property: function () {
+                    return "apple pie";
+                }
+            };
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", replacement);
+            }, {message: "Cannot replace function with string"});
+        });
+
+        describe("when asked to replace a getter", function () {
+            it("should throw an Error", function () {
+                var sandbox = this.sandbox;
+                var object = {
+                    get foo() {
+                        return "bar";
+                    }
+                };
+
+                assert.exception(function () {
+                    sandbox.replace(object, "foo", fake());
+                }, {message: "Use sandbox.replaceGetter for replacing getters"});
+            });
+        });
+
+        describe("when asked to replace a setter", function () {
+            it("should throw an Error", function () {
+                var sandbox = this.sandbox;
+                // eslint-disable-next-line accessor-pairs
+                var object = {
+                    set foo(value) {
+                        this.prop = value;
+                    }
+                };
+
+                assert.exception(function () {
+                    sandbox.replace(object, "foo", fake());
+                }, {message: "Use sandbox.replaceSetter for replacing setters"});
+            });
+        });
+    });
+
+    describe(".replaceGetter", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        it("should replace getters", function () {
+            var expected = "baz";
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+
+            assert.equals(object.foo, expected);
+        });
+
+        describe("when called with a non-function replacement argument", function () {
+            it("should throw a TypeError", function () {
+                var sandbox = this.sandbox;
+                var expected = "baz";
+                var object = {
+                    get foo() {
+                        return "bar";
+                    }
+                };
+
+                assert.exception(function () {
+                    sandbox.replaceGetter(object, "foo", expected);
+                }, {message: "Expected replacement argument to be a function"});
+            });
+        });
+
+        it("allows restoring getters", function () {
+            var expected = "baz";
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+
+            this.sandbox.restore();
+
+            assert.equals(object.foo, "bar");
+        });
+    });
+
+    describe(".replaceSetter", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        it("should replace setter", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            };
+
+            this.sandbox.replaceSetter(object, "foo", function (val) {
+                this.prop = val + "bla";
+            });
+
+            object.foo = "bla";
+
+            assert.equals(object.prop, "blabla");
+        });
+
+        describe("when called with a non-function replacement argument", function () {
+            it("should throw a TypeError", function () {
+                var sandbox = this.sandbox;
+                // eslint-disable-next-line accessor-pairs
+                var object = {
+                    set foo(value) {
+                        this.prop = value;
+                    },
+                    prop: "bar"
+                };
+
+                assert.exception(function () {
+                    sandbox.replaceSetter(object, "foo", "bla");
+                }, {message: "Expected replacement argument to be a function"});
+            });
+        });
+
+        it("allows restoring setters", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            };
+
+            this.sandbox.replaceSetter(object, "foo", function (val) {
+                this.prop = val + "bla";
+            });
+
+            this.sandbox.restore();
+
+            object.prop = "bla";
+
+            assert.equals(object.prop, "bla");
+        });
+    });
+
     describe(".reset", function () {
         beforeEach(function () {
             var sandbox = this.sandbox = createSandbox();
@@ -805,8 +1013,8 @@ describe("Sandbox", function () {
 
             sandbox.verify();
 
-            fakes.forEach(function (fake) {
-                assert(fake.verify.calledOnce);
+            fakes.forEach(function (f) {
+                assert(f.verify.calledOnce);
             });
         });
     });
