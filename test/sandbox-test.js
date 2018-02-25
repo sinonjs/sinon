@@ -490,6 +490,18 @@ describe("Sandbox", function () {
             }, {message: "Cannot replace function with string"});
         });
 
+        it("should return the replacement argument", function () {
+            var replacement = "replacement";
+            var existing = "existing";
+            var object = {
+                property: existing
+            };
+
+            var actual = this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(actual, replacement);
+        });
+
         describe("when asked to replace a getter", function () {
             it("should throw an Error", function () {
                 var sandbox = this.sandbox;
@@ -538,6 +550,19 @@ describe("Sandbox", function () {
             this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
 
             assert.equals(object.foo, expected);
+        });
+
+        it("should return replacement", function () {
+            var replacement = fake.returns("baz");
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            var actual = this.sandbox.replaceGetter(object, "foo", replacement);
+
+            assert.equals(actual, replacement);
         });
 
         describe("when called with a non-function replacement argument", function () {
@@ -593,6 +618,22 @@ describe("Sandbox", function () {
             object.foo = "bla";
 
             assert.equals(object.prop, "blabla");
+        });
+
+        it("should return replacement", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            };
+            var replacement = function (val) {
+                this.prop = val + "bla";
+            };
+            var actual = this.sandbox.replaceSetter(object, "foo", replacement);
+
+            assert.equals(actual, replacement);
         });
 
         describe("when called with a non-function replacement argument", function () {
