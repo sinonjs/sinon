@@ -160,14 +160,31 @@ describe("fake", function () {
     describe(".yields", function () {
         verifyProxy(fake.yields, noop, "42", "43");
 
-        it("should call the callback with the provided values", function () {
+        it("should call a callback with the provided values", function () {
             var callback = sinon.spy();
-            var myFake = fake.yields(callback, "one", "two", "three");
+            var myFake = fake.yields("one", "two", "three");
 
-            myFake();
+            myFake(callback);
 
             sinon.assert.calledOnce(callback);
             sinon.assert.calledWith(callback, "one", "two", "three");
+        });
+
+        it("should call the last function argument", function () {
+            var callback = sinon.spy();
+            var myFake = fake.yields();
+
+            myFake(function () {}, callback);
+
+            sinon.assert.calledOnce(callback);
+        });
+
+        it("should throw if the last argument is not a function", function () {
+            var myFake = fake.yields();
+
+            assert.exception(function () {
+                myFake(function () {}, "not a function");
+            }, /TypeError: Expected last argument to be a function/);
         });
     });
 
@@ -176,9 +193,9 @@ describe("fake", function () {
 
         it("should call the callback asynchronously with the provided values", function (done) {
             var callback = sinon.spy();
-            var myFake = fake.yieldsAsync(callback, "one", "two", "three");
+            var myFake = fake.yieldsAsync("one", "two", "three");
 
-            myFake();
+            myFake(callback);
 
             sinon.assert.notCalled(callback);
 
@@ -188,6 +205,29 @@ describe("fake", function () {
 
                 done();
             }, 0);
+        });
+
+        it("should call the last function argument", function (done) {
+            var callback = sinon.spy();
+            var myFake = fake.yieldsAsync();
+
+            myFake(function () {}, callback);
+
+            sinon.assert.notCalled(callback);
+
+            setTimeout(function () {
+                sinon.assert.calledOnce(callback);
+
+                done();
+            }, 0);
+        });
+
+        it("should throw if the last argument is not a function", function () {
+            var myFake = fake.yieldsAsync();
+
+            assert.exception(function () {
+                myFake(function () {}, "not a function");
+            }, /TypeError: Expected last argument to be a function/);
         });
     });
 });
