@@ -463,6 +463,22 @@ describe("Sandbox", function () {
             assert.equals(object.property, existing);
         });
 
+        it("should replace an inherited property", function () {
+            var replacement = "replacement";
+            var existing = "existing";
+            var object = Object.create({
+                property: existing
+            });
+
+            this.sandbox.replace(object, "property", replacement);
+
+            assert.equals(object.property, replacement);
+
+            this.sandbox.restore();
+
+            assert.equals(object.property, existing);
+        });
+
         it("should refuse to replace a non-function with a function", function () {
             var sandbox = this.sandbox;
             var replacement = function () { return "replacement"; };
