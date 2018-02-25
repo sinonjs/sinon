@@ -22,6 +22,10 @@ before_install:
   # Prevent mochify -> puppeteer install script to run unnecessarily
   - if [ "x$TRAVIS_NODE_VERSION" != "x8" ]; then npm config set ignore-scripts true; fi
 
+install:
+  - npm i -g npm@5.7.1 # this should be deleted once 5.7.X is out of "pre-release"
+  - npm ci
+
 before_script:
   # Make npm run work for the script phase:
   - if [ "x$TRAVIS_NODE_VERSION" != "x8" ]; then npm config set ignore-scripts false; fi
