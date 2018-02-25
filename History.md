@@ -1,4 +1,9 @@
 
+4.4.2 / 2018-02-25
+==================
+
+  * Add descriptive error message on attempt to call argument that is not a function (#1695)
+
 4.4.1 / 2018-02-24
 ==================
 
