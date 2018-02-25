@@ -7,10 +7,8 @@ breadcrumb: sandbox
 Sandboxes removes the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
-var sinon = require('sinon');
-
+var sandbox = require('sinon').sandbox;
 var myAPI = { hello: function () {} };
-var sandbox = sinon.createSandbox();
 
 describe('myAPI.hello method', function () {
 
@@ -26,23 +24,26 @@ describe('myAPI.hello method', function () {
 
     it('should be called once', function () {
         myAPI.hello();
-        sinon.assert.calledOnce(myAPI.hello);
+        sandbox.assert.calledOnce(myAPI.hello);
     });
 
     it('should be called twice', function () {
         myAPI.hello();
         myAPI.hello();
-        sinon.assert.calledTwice(myAPI.hello);
+        sandbox.assert.calledTwice(myAPI.hello);
     });
 });
 ```
 
 ## Sandbox API
 
+#### Default sandbox
+
+Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to just use that one.
+
 #### `var sandbox = sinon.createSandbox();`
 
-Creates a sandbox object with spies, stubs, and mocks.
-
+Creates a new sandbox object with spies, stubs, and mocks.
 
 #### `var sandbox = sinon.createSandbox(config);`
 
@@ -129,7 +130,7 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 #### `sandbox.spy();`
 
-Works exactly like `sinon.spy`, only also adds the returned spy to the internal collection of fakes for easy restoring through `sandbox.restore()`
+Works exactly like `sinon.spy`
 
 #### `sandbox.createStubInstance();`
 
@@ -137,9 +138,8 @@ Works almost exactly like `sinon.createStubInstance`, only also adds the returne
 
 #### `sandbox.stub();`
 
-Works almost exactly like `sinon.stub`, only also adds the returned stub to the internal collection of fakes for easy restoring through `sandbox.restore()`.
+Works exactly like `sinon.stub`.
 
-The sandbox `stub` method can also be used to stub any kind of property. This is useful if you need to override an object's property for the duration of a test, and have it restored when the test completes.
 
 ##### Stubbing a non-function property
 ```javascript
@@ -159,7 +159,7 @@ console.log(myObject.hello);
 
 #### `sandbox.mock();`
 
-Works exactly like `sinon.mock`, only also adds the returned mock to the internal collection of fakes for easy restoring through `sandbox.restore()`
+Works exactly like `sinon.mock`
 
 
 #### `sandbox.useFakeTimers();`
