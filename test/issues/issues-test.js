@@ -8,7 +8,7 @@ var refute = referee.refute;
 
 describe("issues", function () {
     beforeEach(function () {
-        this.sandbox = sinon.sandbox.create();
+        this.sandbox = sinon.createSandbox();
     });
 
     afterEach(function () {
@@ -291,7 +291,7 @@ describe("issues", function () {
         beforeEach(function () {
             if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) { this.skip(); }
 
-            sandbox = sinon.sandbox.create();
+            sandbox = sinon.createSandbox();
         });
 
         afterEach(function () {
@@ -325,7 +325,7 @@ describe("issues", function () {
         var sandbox;
 
         beforeEach(function () {
-            sandbox = sinon.sandbox.create();
+            sandbox = sinon.createSandbox();
         });
 
         afterEach(function () {
