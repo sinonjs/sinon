@@ -128,6 +128,74 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 *Since `sinon@2.0.0`*
 
+#### `sandbox.replace(object, property, replacement);`
+
+Replaces `property` on `object` with `replacement` argument.
+
+`replacement` can be any value, including `spies`, `stubs` and `fakes`.
+
+This method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
+
+
+```js
+var myObject = {
+    myMethod: function() {
+        return 'apple pie';
+    }
+};
+
+sandbox.replace(myObject, 'myMethod', function () {
+    return 'strawberry';
+});
+
+console.log(myObject.myMethod());
+// strawberry
+```
+
+#### `sandbox.replaceGetter();`
+
+Replaces getter for `property` on `object` with `replacement` argument.
+
+`replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
+
+```js
+var myObject = {
+    get myProperty: function() {
+        return 'apple pie';
+    }
+};
+
+sandbox.replaceGetter(myObject, 'myMethod', function () {
+    return 'strawberry';
+});
+
+console.log(myObject.myProperty);
+// strawberry
+```
+
+#### `sandbox.replaceSetter();`
+
+Replaces setter for `property` on `object` with `replacement` argument.
+
+`replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
+
+```js
+var object = {
+    set myProperty(value) {
+        this.prop = value;
+    }
+};
+
+sandbox.replaceSetter(object, 'myProperty', function (value) {
+    this.prop = 'strawberry ' + value;
+});
+
+object.myProperty = 'pie';
+
+console.log(object.prop);
+// strawberry pie
+```
+
 #### `sandbox.spy();`
 
 Works exactly like `sinon.spy`
