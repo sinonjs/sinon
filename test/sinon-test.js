@@ -11,7 +11,6 @@ var proxyquire = require("proxyquire");
 
 describe("sinon module", function () {
     var sinon,
-        fakeSandbox,
         fakeNise;
 
     beforeEach(function () {
@@ -32,19 +31,17 @@ describe("sinon module", function () {
                 useFakeXMLHttpRequest: "ba8bd609-c921-4a62-a1b9-49336bd426a4"
             }
         };
-        fakeSandbox = {
-            create: "dc61d622-407f-46eb-af24-7a83bb30b8bf"
-        };
         sinon = proxyquire("../lib/sinon", {
-            nise: fakeNise,
-            "./sinon/sandbox": fakeSandbox
+            nise: fakeNise
         });
     });
 
     describe("exports", function () {
         describe("createSandbox", function () {
-            it("should be sandbox.create", function () {
-                assert.equals(sinon.createSandbox, fakeSandbox.create);
+            it("should be a unary Function named 'createSandbox'", function () {
+                assert.isFunction(sinon.createSandbox);
+                assert.equals(sinon.createSandbox.length, 1);
+                assert.equals(sinon.createSandbox.name, "createSandbox");
             });
         });
 
