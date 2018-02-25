@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.0-next-3 / 2018-01-16
+==================
+
+Publish next version including changes from 4.1.6
+
+
 5.0.0-next / 2018-01-11
 ==================
 
