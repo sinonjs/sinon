@@ -231,7 +231,7 @@ Creates a new server.
 
 This function also calls `sinon.useFakeXMLHttpRequest()`.
 
-`createFakeServer` accepts optional properties to configure the fake server. See [options](#options) below for configuration parameters.
+`createFakeServer` accepts optional properties to configure the fake server. See [options](#fake-server-options) below for configuration parameters.
 
 
 #### `var server = sinon.createFakeServerWithClock();`
@@ -245,7 +245,7 @@ This is useful when testing `XHR` objects created with e.g. jQuery 1.3.x, which 
 
 Configures the fake server.
 
-See [options](#options) below for configuration parameters.
+See [options](#fake-server-options) below for configuration parameters.
 
 #### `server.respondWith(response);`
 
