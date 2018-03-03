@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var sinonTypeOf = require("../../../lib/sinon/util/core/typeOf");
 var assert = referee.assert;
 

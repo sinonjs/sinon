@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var deepEqual = require("../../../lib/sinon/util/core/deep-equal");
 var match = require("../../../lib/sinon/match");
 var createSpy = require("../../../lib/sinon/spy").create;

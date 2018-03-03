@@ -2,7 +2,7 @@
 
 var createStub = require("../lib/sinon/stub");
 var addBehavior = require("../lib/sinon").addBehavior;
-var assert = require("referee").assert;
+var assert = require("@sinonjs/referee").assert;
 
 describe("behaviors", function () {
     it("adds and uses a custom behavior", function () {

@@ -1,7 +1,7 @@
 "use strict";
 
 var color = require("../lib/sinon/color");
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var sinonStub = require("../lib/sinon/stub");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonAssert = require("../lib/sinon/assert");

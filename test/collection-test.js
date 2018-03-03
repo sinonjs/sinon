@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var sinonCollection = require("../lib/sinon/collection");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
