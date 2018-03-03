@@ -10,7 +10,7 @@
     "punctuation": ".,;:!"
   },
   "MD033": {
-    "allowed_elements": ["dl", "dt", "dd", "code"]
+    "allowed_elements": ["dl", "dt", "dd", "code", "var"]
   },
   "first-line-h1": false,
   "no-hard-tabs": true,
