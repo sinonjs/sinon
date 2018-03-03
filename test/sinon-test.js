@@ -1,6 +1,6 @@
 "use strict";
 
-var assert = require("referee").assert;
+var assert = require("@sinonjs/referee").assert;
 var hasPromise = typeof Promise === "function";
 
 if (!hasPromise) {

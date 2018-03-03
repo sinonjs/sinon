@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
 var createSpy = require("../../../lib/sinon/spy");
 var createStub = require("../../../lib/sinon/stub");

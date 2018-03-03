@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var valueToString = require("../../../lib/sinon/util/core/value-to-string");
 var assert = referee.assert;
 
