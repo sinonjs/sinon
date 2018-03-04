@@ -157,6 +157,19 @@ console.log(myObject.hello);
 // world
 ```
 
+##### "Cannot stub non-existent own property"
+
+By design, Sinon doesn't stub non-existing properties.
+
+```js
+var API = {};
+
+// both of these will throw a TypeError with the message
+// "Cannot stub non-existent own property"
+sinon.stub(API, 'non-existing');
+sandbox.stub(API, 'non-existing');
+```
+
 #### `sandbox.mock();`
 
 Works exactly like `sinon.mock`, only also adds the returned mock to the internal collection of fakes for easy restoring through `sandbox.restore()`

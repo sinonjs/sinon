@@ -20,7 +20,7 @@ Use a stub when you want to:
 
 1. Control a method's behavior from a test to force the code down a specific path. Examples include forcing a method to throw an error in order to test error handling.
 
-2. When you want to prevent a specific method from being called directly (possibly because it triggers undesired behavior, such as a `XMLHttpRequest` or similar).
+2. When you want to prevent an **existing** method from being called directly (possibly because it triggers undesired behavior, such as a `XMLHttpRequest` or similar).
 
 The following example is yet another test from [PubSubJS][pubsubjs] which shows how to create an anonymous stub that throws an exception when called.
 
@@ -65,6 +65,20 @@ calls. As of 1.8, this functionality has been removed in favor of the
 
 If you need to stub getters/setters or non-function properties, then you should be using [`sandbox.stub`](../sandbox/#sandboxstub)
 
+##### "Cannot stub non-existent own property"
+
+By design, Sinon doesn't stub non-existing properties.
+
+```js
+var API = {};
+
+// both of these will throw a TypeError with the message
+// "Cannot stub non-existent own property"
+sinon.stub(API, 'non-existing');
+sandbox.stub(API, 'non-existing');
+```
+
+
 ### Properties
 
 #### `var stub = sinon.stub();`
@@ -77,6 +91,8 @@ Creates an anonymous stub function
 Replaces `object.method` with a stub function. An exception is thrown if the property is not already a function.
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
+
+Throws `TypeError: Cannot stub non-existent own property <property>`, when `method` doesn't exist on `object`.
 
 #### ~~`var stub = sinon.stub(object, "method", func);`~~
 
