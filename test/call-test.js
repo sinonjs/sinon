@@ -1,5 +1,6 @@
 "use strict";
 
+var color = require("../lib/sinon/color");
 var referee = require("@sinonjs/referee");
 var sinonSpyCall = require("../lib/sinon/call");
 var sinonSpy = require("../lib/sinon/spy");
@@ -1429,6 +1430,73 @@ describe("sinonSpy.call", function () {
                 "1.4567, a, true, {  }, [], undefined, null"
             );
             assert.equals(spy.printf("%*", "a", "b", "c"), "a, b, c");
+        });
+
+        describe("arguments", function () {
+            it("no calls", function () {
+                var spy = sinonSpy();
+
+                assert.equals(spy.printf("%D"), "");
+            });
+
+            it("single call with arguments", function () {
+                var spy = sinonSpy();
+
+                spy(1, "a", true, false, [], {}, null, undefined);
+
+                assert.equals(
+                    spy.printf("%D"),
+                    "\n" + color.red("1") +
+                    "\n" + color.red("a") +
+                    "\n" + color.red("true") +
+                    "\n" + color.red("false") +
+                    "\n" + color.red("[]") +
+                    "\n" + color.red("{  }") +
+                    "\n" + color.red("null") +
+                    "\n" + color.red("undefined")
+                );
+            });
+
+            it("single call without arguments", function () {
+                var spy = sinonSpy();
+
+                spy();
+
+                assert.equals(spy.printf("%D"), "");
+            });
+
+            it("multiple calls with arguments", function () {
+                var spy = sinonSpy();
+
+                spy(1, "a", true);
+                spy(false, [], {});
+                spy(null, undefined);
+
+                assert.equals(
+                    spy.printf("%D"),
+                    "\nCall 1:" +
+                    "\n" + color.red("1") +
+                    "\n" + color.red("a") +
+                    "\n" + color.red("true") +
+                    "\nCall 2:" +
+                    "\n" + color.red("false") +
+                    "\n" + color.red("[]") +
+                    "\n" + color.red("{  }") +
+                    "\nCall 3:" +
+                    "\n" + color.red("null") +
+                    "\n" + color.red("undefined")
+                );
+            });
+
+            it("multiple calls without arguments", function () {
+                var spy = sinonSpy();
+
+                spy();
+                spy();
+                spy();
+
+                assert.equals(spy.printf("%D"), "\nCall 1:\nCall 2:\nCall 3:");
+            });
         });
     });
 
