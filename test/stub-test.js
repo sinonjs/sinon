@@ -1307,6 +1307,7 @@ describe("stub", function () {
         it("plays nice with throws", function () {
             var stub = createStub().throws().yields();
             var callback = createStub().returns("return value");
+
             assert.exception(function () {
                 stub(callback);
             });
@@ -1317,6 +1318,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returns(obj).yields();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
@@ -1324,6 +1326,7 @@ describe("stub", function () {
         it("plays nice with returnsArg", function () {
             var stub = createStub().returnsArg(0).yields();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
@@ -1332,6 +1335,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returnsThis().yields();
             var callback = createStub().returns("return value");
+
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
@@ -1339,6 +1343,7 @@ describe("stub", function () {
         it("returns the result of the yielded callback", function () {
             var stub = createStub().yields();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
@@ -1418,6 +1423,7 @@ describe("stub", function () {
         it("plays nice with throws", function () {
             var stub = createStub().yieldsRight().throws();
             var callback = createStub().returns("return value");
+
             assert.exception(function () {
                 stub(callback);
             });
@@ -1428,6 +1434,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returns(obj).yieldsRight();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
@@ -1435,6 +1442,7 @@ describe("stub", function () {
         it("plays nice with returnsArg", function () {
             var stub = createStub().returnsArg(0).yieldsRight();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
@@ -1443,6 +1451,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returnsThis().yieldsRight();
             var callback = createStub().returns("return value");
+
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
@@ -1450,6 +1459,7 @@ describe("stub", function () {
         it("returns the result of the yielded callback", function () {
             var stub = createStub().yields();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
@@ -1549,6 +1559,7 @@ describe("stub", function () {
         it("plays nice with throws", function () {
             var stub = this.stub.throws().yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.exception(function () {
                 stub(callback);
             });
@@ -1559,6 +1570,7 @@ describe("stub", function () {
             var obj = {};
             var stub = this.stub.returns(obj).yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
@@ -1566,6 +1578,7 @@ describe("stub", function () {
         it("plays nice with returnsArg", function () {
             var stub = this.stub.returnsArg(0).yieldsOn();
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
@@ -1574,6 +1587,7 @@ describe("stub", function () {
             var obj = {};
             var stub = this.stub.returnsThis().yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
@@ -1581,6 +1595,7 @@ describe("stub", function () {
         it("returns the result of the yielded callback", function () {
             var stub = this.stub.yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
@@ -1676,6 +1691,7 @@ describe("stub", function () {
         it("plays nice with throws", function () {
             var stub = createStub().throws().yieldsTo("success");
             var callback = createStub().returns("return value");
+
             assert.exception(function () {
                 stub({success: callback});
             });
@@ -1686,6 +1702,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returns(obj).yieldsTo("success");
             var callback = createStub().returns("return value");
+
             assert.same(stub({success: callback}), obj);
             assert(callback.calledOnce);
         });
@@ -1693,6 +1710,7 @@ describe("stub", function () {
         it("plays nice with returnsArg", function () {
             var stub = createStub().returnsArg(0).yieldsTo("success");
             var callback = createStub().returns("return value");
+
             assert.equals(stub({success: callback}), {success: callback});
             assert(callback.calledOnce);
         });
@@ -1701,6 +1719,7 @@ describe("stub", function () {
             var obj = {};
             var stub = createStub().returnsThis().yieldsTo("success");
             var callback = createStub().returns("return value");
+
             assert.same(stub.call(obj, {success: callback}), obj);
             assert(callback.calledOnce);
         });
@@ -1708,6 +1727,7 @@ describe("stub", function () {
         it("returns the result of the yielded callback", function () {
             var stub = createStub().yieldsTo("success");
             var callback = createStub().returns("return value");
+
             assert.same(stub({success: callback}), "return value");
             assert(callback.calledOnce);
         });
@@ -1825,6 +1845,7 @@ describe("stub", function () {
         it("plays nice with throws", function () {
             var stub = this.stub.throws().yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.exception(function () {
                 stub({success: callback});
             });
@@ -1835,6 +1856,7 @@ describe("stub", function () {
             var obj = {};
             var stub = this.stub.returns(obj).yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub({success: callback}), obj);
             assert(callback.calledOnce);
         });
@@ -1842,6 +1864,7 @@ describe("stub", function () {
         it("plays nice with returnsArg", function () {
             var stub = this.stub.returnsArg(0).yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.equals(stub({success: callback}), {success: callback});
             assert(callback.calledOnce);
         });
@@ -1850,6 +1873,7 @@ describe("stub", function () {
             var obj = {};
             var stub = this.stub.returnsThis().yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub.call(obj, {success: callback}), obj);
             assert(callback.calledOnce);
         });
@@ -1857,6 +1881,7 @@ describe("stub", function () {
         it("returns the result of the yielded callback", function () {
             var stub = this.stub.yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
+
             assert.same(stub({success: callback}), "return value");
             assert(callback.calledOnce);
         });
