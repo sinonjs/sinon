@@ -24,7 +24,9 @@
     "test": "run-s test-node test-headless test-webworker test-es-module",
     "check-dependencies": "dependency-check package.json --unused --no-dev --ignore-module coveralls --ignore-module @std/esm",
     "build": "node ./build.js",
-    "lint": "eslint .",
+    "lint": "run-p lint-js lint-mjs lint-markdown",
+    "lint-js": "eslint .",
+    "lint-mjs": "eslint --ext mjs --parser-options=sourceType:module test/es2015",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
     "precommit": "lint-staged",
     "pretest-webworker": "npm run build",
@@ -35,6 +37,7 @@
   },
   "lint-staged": {
     "*.js": "eslint",
+    "*.mjs": "eslint --ext mjs --parser-options=sourceType:module",
     "docs/**/*.md": "markdownlint"
   },
   "dependencies": {

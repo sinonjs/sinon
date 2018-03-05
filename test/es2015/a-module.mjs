@@ -1,1 +1,1 @@
-export function anExport(){ return 42; }
+export function anExport() { return 42; }

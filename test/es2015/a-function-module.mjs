@@ -1,1 +1,1 @@
-export default function (){ return 42; }
+export default function () { return 42; }
