@@ -5,13 +5,13 @@
  * @author Contributors: https://github.com/cjohansen/Sinon.JS/blob/master/AUTHORS
  *
  * (The BSD License)
- * 
+ *
  * Copyright (c) 2010-2014, Christian Johansen, christian@cjohansen.no
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -20,7 +20,7 @@
  *     * Neither the name of Christian Johansen nor the names of his contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -44,7 +44,7 @@
 var sinon = (function () {
 "use strict";
  // eslint-disable-line no-unused-vars
-    
+
     var sinonModule;
     var isNode = typeof module !== "undefined" && module.exports && typeof require === "function";
     var isAMD = typeof define === "function" && typeof define.amd === "object" && define.amd;
@@ -94,7 +94,7 @@ var sinon = (function () {
  * Copyright (c) 2010-2013 Christian Johansen
  */
 (function (sinonGlobal) {
-    
+
     var div = typeof document !== "undefined" && document.createElement("div");
     var hasOwn = Object.prototype.hasOwnProperty;
 
@@ -487,7 +487,7 @@ var sinon = (function () {
  * @depend util/core.js
  */
 (function (sinonGlobal) {
-    
+
     function makeApi(sinon) {
 
         // Adapted from https://developer.mozilla.org/en/docs/ECMAScript_DontEnum_attribute#JScript_DontEnum_Bug
@@ -611,7 +611,7 @@ if (typeof sinon === "undefined") {
 }
 
 (function () {
-    
+
     var push = [].push;
 
     function makeApi(sinon) {
@@ -717,7 +717,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2014 Christian Johansen
  */
 (function (sinonGlobal) {
-    
+
     // cache a reference to setTimeout, so that our reference won't be stubbed out
     // when using fake timers and errors will still get logged
     // https://github.com/cjohansen/Sinon.JS/issues/381
@@ -805,7 +805,7 @@ if (typeof sinon === "undefined") {
  * @private
  */
 function getGlobal() {
-    
+
     return typeof window !== "undefined" ? window : global;
 }
 
@@ -819,7 +819,7 @@ if (typeof sinon === "undefined") {
 
 // wrapper for global
 (function (global) {
-    
+
     var xdr = { XDomainRequest: global.XDomainRequest };
     xdr.GlobalXDomainRequest = global.XDomainRequest;
     xdr.supportsXDR = typeof xdr.GlobalXDomainRequest !== "undefined";
@@ -1042,7 +1042,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2013 Christian Johansen
  */
 (function (sinonGlobal, global) {
-    
+
     function getWorkingXHR(globalScope) {
         var supportsXHR = typeof globalScope.XMLHttpRequest !== "undefined";
         if (supportsXHR) {
@@ -1778,7 +1778,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2014 Christian Johansen
  */
 (function (sinonGlobal, formatio) {
-    
+
     function makeApi(sinon) {
         function valueFormatter(value) {
             return "" + value;
@@ -1878,7 +1878,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2013 Christian Johansen
  */
 (function () {
-    
+
     var push = [].push;
 
     function responseArray(handler) {
@@ -1948,10 +1948,10 @@ if (typeof sinon === "undefined") {
             },
             configure: function (config) {
                 var whitelist = {
-                    "autoRespond": true,
-                    "autoRespondAfter": true,
-                    "respondImmediately": true,
-                    "fakeHTTPMethods": true
+                    autoRespond: true,
+                    autoRespondAfter: true,
+                    respondImmediately: true,
+                    fakeHTTPMethods: true
                 };
                 var setting;
 
@@ -2125,7 +2125,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2013 Christian Johansen
  */
 (function () {
-    
+
     function makeApi(s, lol) {
         /*global lolex */
         var llx = typeof lolex !== "undefined" ? lolex : lol;
@@ -2199,7 +2199,7 @@ if (typeof sinon === "undefined") {
  * Copyright (c) 2010-2013 Christian Johansen
  */
 (function () {
-    
+
     function makeApi(sinon) {
         function Server() {}
         Server.prototype = sinon.fakeServer;

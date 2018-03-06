@@ -607,7 +607,7 @@ var callProto = {
         throw this.args[pos];
     },
 
-    "yield": function () {
+    yield: function () {
         this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
     },
 
@@ -1223,7 +1223,7 @@ function matchObject(expectation, actual) {
 }
 
 var TYPE_MAP = {
-    "function": function (m, expectation, message) {
+    function: function (m, expectation, message) {
         m.test = expectation;
         m.message = message || "match(" + functionName(expectation) + ")";
     },
@@ -3193,7 +3193,7 @@ format.setFormatter = function (aCustomFormatter) {
 
 module.exports = format;
 
-},{"formatio":36}],24:[function(require,module,exports){
+},{formatio:36}],24:[function(require,module,exports){
 "use strict";
 
 module.exports = function functionName(func) {
@@ -5498,7 +5498,7 @@ return /******/ (function(modules) { // webpackBootstrap
         processed.push(array);
         var pieces = [];
         var i, l;
-        l = (this.limitChildrenCount > 0) ? 
+        l = (this.limitChildrenCount > 0) ?
             Math.min(this.limitChildrenCount, array.length) : array.length;
 
         for (i = 0; i < l; ++i) {
@@ -5523,7 +5523,7 @@ return /******/ (function(modules) { // webpackBootstrap
         var pieces = [], properties = samsam.keys(object).sort();
         var length = 3;
         var prop, str, obj, i, k, l;
-        l = (this.limitChildrenCount > 0) ? 
+        l = (this.limitChildrenCount > 0) ?
             Math.min(this.limitChildrenCount, properties.length) : properties.length;
 
         for (i = 0; i < l; ++i) {
@@ -5610,7 +5610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"samsam":56}],37:[function(require,module,exports){
+},{samsam:56}],37:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
@@ -7551,7 +7551,7 @@ module.exports = function format() {
     return formatter.ascii.apply(formatter, arguments);
 };
 
-},{"formatio":36}],48:[function(require,module,exports){
+},{formatio:36}],48:[function(require,module,exports){
 "use strict";
 
 var fakeXhr = require("../fake-xhr");
@@ -7584,7 +7584,7 @@ function responseArray(handler) {
 }
 
 function getDefaultWindowLocation() {
-    return { "host": "localhost", "protocol": "http" };
+    return { host: "localhost", protocol: "http" };
 }
 
 function getWindowLocation() {
@@ -7679,12 +7679,12 @@ var fakeServer = {
     configure: function (config) {
         var self = this;
         var whitelist = {
-            "autoRespond": true,
-            "autoRespondAfter": true,
-            "respondImmediately": true,
-            "fakeHTTPMethods": true,
-            "logger": true,
-            "unsafeHeadersEnabled": true
+            autoRespond: true,
+            autoRespondAfter: true,
+            respondImmediately: true,
+            fakeHTTPMethods: true,
+            logger: true,
+            unsafeHeadersEnabled: true
         };
 
         config = config || {};
@@ -9734,7 +9734,7 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
 }
 
-},{"isarray":37}],55:[function(require,module,exports){
+},{isarray:37}],55:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

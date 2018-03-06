@@ -2525,7 +2525,7 @@ var sinon = (function () {
                 this.args[pos].apply(thisValue, args);
             },
 
-            "yield": function () {
+            yield: function () {
                 this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
             },
 
@@ -5759,10 +5759,10 @@ if (typeof sinon === "undefined") {
             },
             configure: function (config) {
                 var whitelist = {
-                    "autoRespond": true,
-                    "autoRespondAfter": true,
-                    "respondImmediately": true,
-                    "fakeHTTPMethods": true
+                    autoRespond: true,
+                    autoRespondAfter: true,
+                    respondImmediately: true,
+                    fakeHTTPMethods: true
                 };
                 var setting;
 

@@ -4,13 +4,13 @@
  * @author Christian Johansen (christian@cjohansen.no)
  *
  * (The BSD License)
- * 
+ *
  * Copyright (c) 2010-2011, Christian Johansen, christian@cjohansen.no
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -19,7 +19,7 @@
  *     * Neither the name of Christian Johansen nor the names of his contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -132,7 +132,7 @@ buster.format.excludeConstructors = ["Object", /^.$/];
 buster.format.quoteStrings = true;
 
 buster.format.ascii = (function () {
-    
+
     function keys(object) {
         var k = Object.keys && Object.keys(object) || [];
 
@@ -1037,7 +1037,7 @@ var sinon = (function (buster) {
                 this.args[pos].apply(null, args);
             },
 
-            "yield": function () {
+            yield: function () {
                 var args = this.args;
                 for (var i = 0, l = args.length; i < l; ++i) {
                     if (typeof args[i] === "function") {
@@ -1225,7 +1225,7 @@ var sinon = (function (buster) {
             } else {
                 this.exception = error;
             }
-            
+
             return this;
         }
 
@@ -1266,13 +1266,13 @@ var sinon = (function (buster) {
                 if (typeof pos != "number") {
                     throw new TypeError("argument index is not number");
                 }
-                
+
                 this.returnArgAt = pos;
 
                 return this;
             },
 
-            "throws": throwsException,
+            throws: throwsException,
             throwsException: throwsException,
 
             callsArg: function callsArg(pos) {

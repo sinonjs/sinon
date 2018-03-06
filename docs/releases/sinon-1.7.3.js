@@ -1169,7 +1169,7 @@ if (!this.sinon && commonJSModule) {
             this.args[pos].apply(thisValue, args);
         },
 
-        "yield": function () {
+        yield: function () {
             this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
         },
 
@@ -1868,7 +1868,7 @@ if (!this.sinon && commonJSModule) {
                 return this;
             },
 
-            "throws": throwsException,
+            throws: throwsException,
             throwsException: throwsException,
 
             callsArg: function callsArg(pos) {

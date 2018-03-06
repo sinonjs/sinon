@@ -1033,7 +1033,7 @@ var sinon = (function (buster) {
                 this.args[pos].apply(null, args);
             },
 
-            "yield": function () {
+            yield: function () {
                 var args = this.args;
                 for (var i = 0, l = args.length; i < l; ++i) {
                     if (typeof args[i] === "function") {
@@ -1268,7 +1268,7 @@ var sinon = (function (buster) {
                 return this;
             },
 
-            "throws": throwsException,
+            throws: throwsException,
             throwsException: throwsException,
 
             callsArg: function callsArg(pos) {
