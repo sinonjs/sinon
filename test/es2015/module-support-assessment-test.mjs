@@ -1,5 +1,4 @@
-
-import referee from "referee";
+import referee from "@sinonjs/referee";
 import sinon from "../../lib/sinon";
 import * as aModule from "./a-module";
 import aModuleWithDefaultExport from "./a-module-with-default";
