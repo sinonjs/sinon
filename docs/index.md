@@ -221,7 +221,7 @@ after(function () { clock.restore(); });
 
 it('calls callback after 100ms', function () {
     var callback = sinon.spy();
-    var throttled = throttle(callback);
+    var throttled = debounce(callback);
 
     throttled();
 
