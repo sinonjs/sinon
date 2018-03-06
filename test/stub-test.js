@@ -1304,7 +1304,7 @@ describe("stub", function () {
             });
         });
 
-        it("plays nice with throws", function () {
+        it("throws takes precident over yielded return value", function () {
             var stub = createStub().throws().yields();
             var callback = createStub().returns("return value");
 
@@ -1314,7 +1314,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returns", function () {
+        it("returns takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returns(obj).yields();
             var callback = createStub().returns("return value");
@@ -1323,7 +1323,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsArg", function () {
+        it("returnsArg takes precident over yielded return value", function () {
             var stub = createStub().returnsArg(0).yields();
             var callback = createStub().returns("return value");
 
@@ -1331,7 +1331,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsThis", function () {
+        it("returnsThis takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returnsThis().yields();
             var callback = createStub().returns("return value");
@@ -1420,7 +1420,7 @@ describe("stub", function () {
             });
         });
 
-        it("plays nice with throws", function () {
+        it("throws takes precident over yielded return value", function () {
             var stub = createStub().yieldsRight().throws();
             var callback = createStub().returns("return value");
 
@@ -1430,7 +1430,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returns", function () {
+        it("returns takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returns(obj).yieldsRight();
             var callback = createStub().returns("return value");
@@ -1439,7 +1439,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsArg", function () {
+        it("returnsArg takes precident over yielded return value", function () {
             var stub = createStub().returnsArg(0).yieldsRight();
             var callback = createStub().returns("return value");
 
@@ -1447,7 +1447,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsThis", function () {
+        it("returnsThis takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returnsThis().yieldsRight();
             var callback = createStub().returns("return value");
@@ -1556,7 +1556,7 @@ describe("stub", function () {
             });
         });
 
-        it("plays nice with throws", function () {
+        it("throws takes precident over yielded return value", function () {
             var stub = this.stub.throws().yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
 
@@ -1566,7 +1566,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returns", function () {
+        it("returns takes precident over yielded return value", function () {
             var obj = {};
             var stub = this.stub.returns(obj).yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
@@ -1575,7 +1575,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsArg", function () {
+        it("returnsArg takes precident over yielded return value", function () {
             var stub = this.stub.returnsArg(0).yieldsOn();
             var callback = createStub().returns("return value");
 
@@ -1583,7 +1583,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsThis", function () {
+        it("returnsThis takes precident over yielded return value", function () {
             var obj = {};
             var stub = this.stub.returnsThis().yieldsOn(this.fakeContext);
             var callback = createStub().returns("return value");
@@ -1688,7 +1688,7 @@ describe("stub", function () {
             });
         });
 
-        it("plays nice with throws", function () {
+        it("throws takes precident over yielded return value", function () {
             var stub = createStub().throws().yieldsTo("success");
             var callback = createStub().returns("return value");
 
@@ -1698,7 +1698,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returns", function () {
+        it("returns takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returns(obj).yieldsTo("success");
             var callback = createStub().returns("return value");
@@ -1707,7 +1707,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsArg", function () {
+        it("returnsArg takes precident over yielded return value", function () {
             var stub = createStub().returnsArg(0).yieldsTo("success");
             var callback = createStub().returns("return value");
 
@@ -1715,7 +1715,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsThis", function () {
+        it("returnsThis takes precident over yielded return value", function () {
             var obj = {};
             var stub = createStub().returnsThis().yieldsTo("success");
             var callback = createStub().returns("return value");
@@ -1842,7 +1842,7 @@ describe("stub", function () {
             });
         });
 
-        it("plays nice with throws", function () {
+        it("throws takes precident over yielded return value", function () {
             var stub = this.stub.throws().yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
 
@@ -1852,7 +1852,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returns", function () {
+        it("returns takes precident over yielded return value", function () {
             var obj = {};
             var stub = this.stub.returns(obj).yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
@@ -1861,7 +1861,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsArg", function () {
+        it("returnsArg takes precident over yielded return value", function () {
             var stub = this.stub.returnsArg(0).yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
 
@@ -1869,7 +1869,7 @@ describe("stub", function () {
             assert(callback.calledOnce);
         });
 
-        it("plays nice with returnsThis", function () {
+        it("returnsThis takes precident over yielded return value", function () {
             var obj = {};
             var stub = this.stub.returnsThis().yieldsToOn("success", this.fakeContext);
             var callback = createStub().returns("return value");
