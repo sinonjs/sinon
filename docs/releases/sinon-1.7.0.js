@@ -1169,7 +1169,7 @@ var sinon = (function (buster) {
             this.args[pos].apply(thisValue, args);
         },
 
-        "yield": function () {
+        yield: function () {
             this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
         },
 
@@ -1882,7 +1882,7 @@ var sinon = (function (buster) {
                 return this;
             },
 
-            "throws": throwsException,
+            throws: throwsException,
             throwsException: throwsException,
 
             callsArg: function callsArg(pos) {

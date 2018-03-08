@@ -5,13 +5,13 @@
  * @author Contributors: https://github.com/cjohansen/Sinon.JS/blob/master/AUTHORS
  *
  * (The BSD License)
- * 
+ *
  * Copyright (c) 2010-2014, Christian Johansen, christian@cjohansen.no
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -20,7 +20,7 @@
  *     * Neither the name of Christian Johansen nor the names of his contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -843,7 +843,7 @@ var callProto = {
         this.args[pos].apply(thisValue, args);
     },
 
-    "yield": function () {
+    yield: function () {
         this.yieldOn.apply(this, [null].concat(slice.call(arguments, 0)));
     },
 
@@ -1155,7 +1155,7 @@ function matchObject(expectation, actual) {
 }
 
 var TYPE_MAP = {
-    "function": function (m, expectation, message) {
+    function: function (m, expectation, message) {
         m.test = expectation;
         m.message = message || "match(" + functionName(expectation) + ")";
     },
@@ -3150,7 +3150,7 @@ module.exports = function format() {
     return formatter.ascii.apply(formatter, arguments);
 };
 
-},{"formatio":73}],25:[function(require,module,exports){
+},{formatio:73}],25:[function(require,module,exports){
 "use strict";
 
 module.exports = function functionName(func) {
@@ -3796,7 +3796,7 @@ function responseArray(handler) {
     return response;
 }
 
-var wloc = typeof window !== "undefined" ? window.location : { "host": "localhost", "protocol": "http"};
+var wloc = typeof window !== "undefined" ? window.location : { host: "localhost", protocol: "http"};
 var rCurrLoc = new RegExp("^" + wloc.protocol + "//" + wloc.host);
 
 function matchOne(response, reqMethod, reqUrl) {
@@ -3868,12 +3868,12 @@ var fakeServer = {
 
     configure: function (config) {
         var whitelist = {
-            "autoRespond": true,
-            "autoRespondAfter": true,
-            "respondImmediately": true,
-            "fakeHTTPMethods": true,
-            "logger": true,
-            "unsafeHeadersEnabled": true
+            autoRespond: true,
+            autoRespondAfter: true,
+            respondImmediately: true,
+            fakeHTTPMethods: true,
+            logger: true,
+            unsafeHeadersEnabled: true
         };
         var setting;
 
@@ -5109,7 +5109,7 @@ module.exports = {
 
 The MIT License (MIT)
 
-Original Library 
+Original Library
   - Copyright (c) Marak Squires
 
 Additional functionality
@@ -5395,7 +5395,7 @@ module['exports'] = function zalgo(text, options) {
     });
     return bool;
   }
-  
+
 
   function heComes(text, options) {
     var result = '', counts, l;
@@ -7120,7 +7120,7 @@ function generateOptions(options, defaults) {
         processed.push(array);
         var pieces = [];
         var i, l;
-        l = (this.limitChildrenCount > 0) ? 
+        l = (this.limitChildrenCount > 0) ?
             Math.min(this.limitChildrenCount, array.length) : array.length;
 
         for (i = 0; i < l; ++i) {
@@ -7140,7 +7140,7 @@ function generateOptions(options, defaults) {
         var pieces = [], properties = samsam.keys(object).sort();
         var length = 3;
         var prop, str, obj, i, k, l;
-        l = (this.limitChildrenCount > 0) ? 
+        l = (this.limitChildrenCount > 0) ?
             Math.min(this.limitChildrenCount, properties.length) : properties.length;
 
         for (i = 0; i < l; ++i) {
@@ -7225,7 +7225,7 @@ function generateOptions(options, defaults) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"samsam":74}],74:[function(require,module,exports){
+},{samsam:74}],74:[function(require,module,exports){
 ((typeof define === "function" && define.amd && function (m) { define("samsam", m); }) ||
  (typeof module === "object" &&
       function (m) { module.exports = m(); }) || // Node
@@ -8715,7 +8715,7 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
 }
 
-},{"isarray":75}],78:[function(require,module,exports){
+},{isarray:75}],78:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

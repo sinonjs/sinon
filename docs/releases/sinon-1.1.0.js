@@ -753,7 +753,7 @@ if (typeof module == "object" && typeof require == "function") {
                 return this;
             },
 
-            "throws": throwsException,
+            throws: throwsException,
             throwsException: throwsException,
 
             callsArg: function callsArg(pos) {

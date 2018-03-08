@@ -1925,10 +1925,10 @@ if (typeof sinon === "undefined") {
             },
             configure: function (config) {
                 var whitelist = {
-                    "autoRespond": true,
-                    "autoRespondAfter": true,
-                    "respondImmediately": true,
-                    "fakeHTTPMethods": true
+                    autoRespond: true,
+                    autoRespondAfter: true,
+                    respondImmediately: true,
+                    fakeHTTPMethods: true
                 };
                 var setting;
 
