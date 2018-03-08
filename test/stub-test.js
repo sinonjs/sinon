@@ -626,12 +626,12 @@ describe("stub", function () {
 
             it("uses a lazily created exception for the named error", function () {
                 var stub = createStub.create();
-                stub.throws("TypeError", "typeerror message");
+                stub.throws("Named Error", "error message");
 
                 assert.isFalse(errorSpy.called);
                 assert.exception(stub, {
-                    name: "TypeError",
-                    message: "typeerror message"
+                    name: "Named Error",
+                    message: "error message"
                 });
                 assert.isTrue(errorSpy.called);
             });
