@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "@sinonjs/formatio": "^2.0.0",
-    "@std/esm": "^0.23.3",
     "diff": "^3.1.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
@@ -51,6 +50,7 @@
   },
   "devDependencies": {
     "@sinonjs/referee": "^2.0.0",
+    "@std/esm": "0.25.2",
     "browserify": "^15.1.0",
     "dependency-check": "^2.9.1",
     "eslint": "^4.6.1",
