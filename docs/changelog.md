@@ -4,6 +4,12 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
+
+4.4.5 / 2018-03-13
+==================
+
+  * Add postinstall banner pointing to Open Collective
+
 4.4.4 / 2018-03-13
 ==================
 
