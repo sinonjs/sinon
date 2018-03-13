@@ -1,4 +1,9 @@
 
+4.4.3 / 2018-03-12
+==================
+
+  * Fix inconsistent newline usage for %D in spy.printf (#1717)
+
 4.4.2 / 2018-02-25
 ==================
 
