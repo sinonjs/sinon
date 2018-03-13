@@ -110,11 +110,11 @@ This is useful to be more expressive in your assertions, where you can access th
 "test should stub method differently based on arguments": function () {
     var callback = sinon.stub();
     callback.withArgs(42).returns(1);
-    callback.withArgs(1).throws("Error msg");
+    callback.withArgs(1).throws("TypeError");
 
     callback(); // No return value, no exception
     callback(42); // Returns 1
-    callback(1); // Throws Error("Error msg")
+    callback(1); // Throws TypeError
 }
 ```
 
@@ -261,18 +261,15 @@ The Promise library can be overwritten using the `usingPromise` method.
 Causes the stub to throw an exception (`Error`).
 
 
-#### `stub.throws("Error msg");`
+#### `stub.throws("TypeError");`
 
-Causes the stub to throw an exception with the provided message.
+Causes the stub to throw an exception of the provided type.
 
 
 #### `stub.throws(obj);`
 
 Causes the stub to throw the provided exception object.
 
-#### `stub.throws(new Error());`
-
-Causes the stub to throw the provided exception object.
 
 #### `stub.throws(function() { return new Error(); });`
 
