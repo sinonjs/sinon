@@ -4,7 +4,6 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
-
 4.4.4 / 2018-03-13
 ==================
 
