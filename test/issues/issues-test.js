@@ -425,16 +425,37 @@ describe("issues", function () {
         it("should return the correct value without onCall", function () {
             var stub = sinon.stub().yields("yield val").returns("return val");
             var cb = sinon.spy();
+
             var ret = stub(cb);
+
             assert.equals(ret, "return val");
             assert.equals(cb.args, [["yield val"]]);
         });
         it("should return the correct value with onCall", function () {
             var stub = sinon.stub().onCall(0).yields("yield val").returns("return val");
             var cb = sinon.spy();
+
             var ret = stub(cb);
+
             assert.equals(ret, "return val");
             assert.equals(cb.args, [["yield val"]]);
+        });
+        it("should return the correct value with multiple onCalls", function () {
+            var stub = sinon.stub()
+                .onCall(0).yields("yield val").returns("return val")
+                .onCall(1).yields("second yield val").returns("second return val");
+            var cb = sinon.spy();
+            var cb2 = sinon.spy();
+
+            var ret = stub(cb);
+            var ret2 = stub(cb2);
+
+
+            assert.equals(ret, "return val");
+            assert.equals(cb.args, [["yield val"]]);
+
+            assert.equals(ret2, "second return val");
+            assert.equals(cb2.args, [["second yield val"]]);
         });
     });
 });
