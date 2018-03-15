@@ -420,4 +420,21 @@ describe("issues", function () {
             refute.isTrue(spyProp.get.called);
         });
     });
+
+    describe("#1736 - onCall + yield + returns", function () {
+        it("should return the correct value without onCall", function () {
+            var stub = sinon.stub().yields("yield val").returns("return val");
+            var cb = sinon.spy();
+            var ret = stub(cb);
+            assert.equals(ret, "return val");
+            assert.equals(cb.args, [["yield val"]]);
+        });
+        it("should return the correct value with onCall", function () {
+            var stub = sinon.stub().onCall(0).yields("yield val").returns("return val");
+            var cb = sinon.spy();
+            var ret = stub(cb);
+            assert.equals(ret, "return val");
+            assert.equals(cb.args, [["yield val"]]);
+        });
+    });
 });
