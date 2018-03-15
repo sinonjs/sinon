@@ -1,4 +1,9 @@
 
+4.4.6 / 2018-03-15
+==================
+
+  * Return returned value of invokant when using yields* and callsArg* (#1724)
+
 4.4.5 / 2018-03-13
 ==================
 
