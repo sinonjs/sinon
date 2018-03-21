@@ -75,6 +75,7 @@
   "files": [
     "lib",
     "pkg",
+    "scripts",
     "AUTHORS",
     "CONTRIBUTING.md",
     "History.md",
