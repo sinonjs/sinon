@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.4.7 / 2018-03-21
+==================
+
+  * Improve the post-install script: remove noise, add :heart:
+
 4.4.6 / 2018-03-15
 ==================
 
