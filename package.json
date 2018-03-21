@@ -75,6 +75,7 @@
   "files": [
     "lib",
     "pkg",
+    "scripts/support-sinon.js",
     "AUTHORS",
     "CONTRIBUTING.md",
     "History.md",
