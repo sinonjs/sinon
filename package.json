@@ -33,7 +33,7 @@
     "prepublishOnly": "npm run build",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh",
-    "postinstall": "node -e \"console.log('\\u001b[32mLove sinon? You can now support the project via the open collective:\\u001b[22m\\u001b[39m\\n > \\u001b[96m\\u001b[1mhttps://opencollective.com/sinon/donate\\u001b[0m\\n')\" || exit 0"
+    "postinstall": "node scripts/support-sinon.js"
   },
   "lint-staged": {
     "*.js": "eslint",
