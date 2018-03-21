@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.4.8 / 2018-03-21
+==================
+
+  * Fix 1743: Add scripts/support-sinon.js to package
+
 4.4.7 / 2018-03-21
 ==================
 
