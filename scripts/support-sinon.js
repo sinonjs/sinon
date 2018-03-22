@@ -14,4 +14,7 @@ var output =
     boldCyan +
     "https://opencollective.com/sinon/donate\n" +
     reset;
-console.log(output);
+
+if (!("NO_SUPPORT_MESSAGE" in process.env)) {
+    console.log(output);
+}
