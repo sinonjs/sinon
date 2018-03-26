@@ -33,7 +33,7 @@
     "prepublishOnly": "npm run build",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh",
-    "postinstall": "node scripts/support-sinon.js"
+    "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
     "*.js": "eslint",
@@ -46,6 +46,7 @@
     "lodash.get": "^4.4.2",
     "lolex": "^2.2.0",
     "nise": "^1.2.0",
+    "opencollective": "1.0.3",
     "supports-color": "^5.1.0",
     "type-detect": "^4.0.5"
   },
@@ -75,7 +76,6 @@
   "files": [
     "lib",
     "pkg",
-    "scripts/support-sinon.js",
     "AUTHORS",
     "CONTRIBUTING.md",
     "History.md",
