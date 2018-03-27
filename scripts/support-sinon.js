@@ -8,7 +8,7 @@ var reset = "\u001b[0m";
 
 var output =
     green +
-    "Have some ❤️  for Sinon? You can support the project via Open Collective:" +
+    "Have some ❤️ for Sinon? You can support the project via Open Collective:" +
     white +
     "\n > " +
     boldCyan +
