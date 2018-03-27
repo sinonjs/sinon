@@ -1,4 +1,9 @@
 
+4.4.9 / 2018-03-27
+==================
+
+  * Fix #1746: Remove dependency on ES2015 code from post-install script
+
 4.4.8 / 2018-03-21
 ==================
 
