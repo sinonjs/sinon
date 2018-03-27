@@ -435,6 +435,41 @@ describe("sinonSpy.call", function () {
         });
     });
 
+    describe(".callback", function () {
+        it("it should be a reference for the callback", function () {
+            var spy = sinonSpy();
+            var callback1 = function () {};
+            var callback2 = function () {};
+
+            spy(1, 2, 3, callback1);
+            assert.equals(spy.getCall(0).callback, callback1);
+
+            spy(1, 2, 3, callback2);
+            assert.equals(spy.getCall(1).callback, callback2);
+
+            spy(1, 2, 3);
+            assert.equals(spy.getCall(2).callback, undefined);
+        });
+    });
+
+    describe(".lastArg", function () {
+        it("should be the last argument from the call", function () {
+            var spy = sinonSpy();
+
+            spy(41, 42, 43);
+            assert.equals(spy.getCall(0).lastArg, 43);
+
+            spy(44, 45);
+            assert.equals(spy.getCall(1).lastArg, 45);
+
+            spy(46);
+            assert.equals(spy.getCall(2).lastArg, 46);
+
+            spy();
+            assert.equals(spy.getCall(3).lastArg, undefined);
+        });
+    });
+
     describe("call.yieldTest", function () {
         beforeEach(spyCallCallSetup);
 
