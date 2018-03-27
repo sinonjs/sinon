@@ -83,6 +83,36 @@ The call's `this` value.
 Array of received arguments.
 
 
+### `spyCall.callback`
+
+This property is a convenience for a call's callback.
+
+When the last argument in a call is a `Function`, then `callback` will reference that. Otherwise it will be `undefined`.
+
+```js
+var spy = sinon.spy();
+var callback = function () {};
+
+spy(1, 2, 3, callback);
+
+spy.lastCall.callback === callback;
+// true
+```
+
+#### `spyCall.lastArg`
+
+This property is a convenience for the last argument of the call.
+
+```js
+var spy = sinon.spy();
+var date = new Date();
+
+spy(1, 2, date);
+
+spy.lastCall.lastArg === date;
+// true
+```
+
 ### `spyCall.exception`
 
 Exception thrown, if any.
