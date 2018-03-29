@@ -390,17 +390,17 @@ Array of return values, `spy.returnValues[0]` is the return value of the first c
 If the call did not explicitly return a value, the value at the call's location in `.returnValues` will be `undefined`.
 
 
-#### `spy.resetHistory()`
+#### `spy.reset();`
 
 Resets the state of a spy.
 
 
-#### `spy.restore()`
+#### `spy.restore();`
 
 Replaces the spy with the original method. Only available if the spy replaced an existing method.
 
 
-#### `spy.printf("format string", [arg1, arg2, ...])`
+#### `spy.printf("format string", [arg1, arg2, ...]);`
 
 Returns the passed format string with the following replacements performed:
 
@@ -427,7 +427,7 @@ Returns the passed format string with the following replacements performed:
 ### Individual spy calls
 
 
-##### `var spyCall = spy.getCall(n)`
+##### `var spyCall = spy.getCall(n);`
 
 Returns the *nth* [call](#spycall). Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 
