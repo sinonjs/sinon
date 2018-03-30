@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+4.5.0 / 2018-03-30
+==================
+
+  * Add .lastArg and .callback to spy call
+
 4.4.9 / 2018-03-27
 ==================
 
