@@ -1,7 +1,7 @@
 "use strict";
 
 var sinon = require("../lib/sinon");
-var assert = require("referee").assert;
+var assert = require("@sinonjs/referee").assert;
 
 describe("behaviors", function () {
     it("adds and uses a custom behavior", function () {

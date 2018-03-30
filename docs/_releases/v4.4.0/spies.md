@@ -9,7 +9,7 @@ breadcrumb: spies
 ### What is a test spy?
 
 A test spy is a function that records arguments, return value, the value of
-`this` and exception thrown (if any) for all its calls. There are two types of spies:
+`this` and exception thrown (if any) for all its [calls][call]. There are two types of spies:
 Some are anonymous functions, while others wrap methods that already exist in
 the system under test.
 
@@ -18,7 +18,7 @@ the system under test.
 
 When the behavior of the spied-on function is not under test, you can use an
 anonymous function spy. The spy won't do anything except record information
-about its calls. A common use case for this type of spy is testing how a function
+about its [calls][call]. A common use case for this type of spy is testing how a function
 handles a callback, as in the following simplified example:
 
 ```javascript
@@ -38,7 +38,7 @@ handles a callback, as in the following simplified example:
 `sinon.spy(object, "method")` creates a spy that wraps the existing function
 `object.method`. The spy will behave exactly like the original method
 (including when used as a constructor), but you will have access to data about
-all calls. The following is a slightly contrived example:
+all [calls][call]. The following is a slightly contrived example:
 
 ```javascript
 {
@@ -87,7 +87,7 @@ all calls. The following is a slightly contrived example:
 
 Spies provide a rich interface to inspect their usage. The above examples showed
 the `calledOnce` boolean property as well as the `getCall` method and the
-returned object's `args` property. There are three ways of inspecting call data.
+returned object's `args` property. There are three ways of inspecting [call][call] data.
 
 The preferred approach is to use the spy's `calledWith` method (and friends)
 because it keeps your test from being too specific about which call did what and
@@ -107,7 +107,7 @@ arguments.
 ```
 
 If you want to be specific, you can directly check the first argument of the
-first call. There are two ways of achieving this:
+first [call][call]. There are two ways of achieving this:
 
 ```javascript
 "test should call subscribers with message as first argument" : function () {
@@ -134,7 +134,7 @@ first call. There are two ways of achieving this:
 ```
 
 The first example uses the two-dimensional `args` array directly on the spy,
-while the second example fetches the first call object and then accesses its
+while the second example fetches the first [call][call] object and then accesses its
 `args` array. Which one to use is a matter of preference, but the recommended
 approach is going with `spy.calledWith(arg1, arg2, ...)` unless there's a need
 to make the tests highly specific.
@@ -151,7 +151,7 @@ are also available on `object.method`.
 
 #### `spy.withArgs(arg1[, arg2, ...]);`
 
-Creates a spy that only records calls when the received arguments match those passed to `withArgs`. This is useful to be more expressive in your assertions, where you can access the spy with the same call.
+Creates a spy that only records [calls][call] when the received arguments match those passed to `withArgs`. This is useful to be more expressive in your assertions, where you can access the spy with the same [call][call].
 
 ```javascript
 "should call method once with each argument": function () {
@@ -169,7 +169,7 @@ Creates a spy that only records calls when the received arguments match those pa
 
 #### `spy.callCount`
 
-The number of recorded calls.
+The number of recorded [calls][call].
 
 
 #### `spy.called`
@@ -199,22 +199,22 @@ The number of recorded calls.
 
 #### `spy.firstCall`
 
-The first call
+The first [call][call]
 
 
 #### `spy.secondCall`
 
-The second call
+The second [call][call]
 
 
 #### `spy.thirdCall`
 
-The third call
+The third [call][call]
 
 
 #### `spy.lastCall`
 
-The last call
+The last [call][call]
 
 
 #### `spy.calledBefore(anotherSpy);`
@@ -229,13 +229,13 @@ Returns `true` if the spy was called after `anotherSpy`
 
 #### `spy.calledImmediatelyBefore(anotherSpy);`
 
-Returns `true` if `spy` was called before `anotherSpy`, and no spy calls
+Returns `true` if `spy` was called before `anotherSpy`, and no spy [calls][call]
 occurred between `spy` and `anotherSpy`.
 
 
 #### `spy.calledImmediatelyAfter(anotherSpy);`
 
-Returns `true` if `spy` was called after `anotherSpy`, and no spy calls
+Returns `true` if `spy` was called after `anotherSpy`, and no spy [calls][call]
 occurred between `anotherSpy` and `spy`.
 
 
@@ -371,44 +371,44 @@ assertEquals("/stuffs", spyCall.args[0]);
 
 #### `var spyCalls = spy.getCalls();`
 
-Returns an `Array` of all [calls](#spycall) recorded by the spy.
+Returns an `Array` of all [calls][call] recorded by the spy.
 
 
 #### `spy.thisValues`
 
-Array of `this` objects, `spy.thisValues[0]` is the `this` object for the first call.
+Array of `this` objects, `spy.thisValues[0]` is the `this` object for the first [call][call].
 
 
 #### `spy.args`
 
-Array of arguments received, `spy.args[0]` is an array of arguments received in the first call.
+Array of arguments received, `spy.args[0]` is an array of arguments received in the first [call][call].
 
 
 #### `spy.exceptions`
 
-Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown by the first call.
+Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown by the first [call][call].
 
 If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined`.
 
 
 #### `spy.returnValues`
 
-Array of return values, `spy.returnValues[0]` is the return value of the first call.
+Array of return values, `spy.returnValues[0]` is the return value of the first [call][call].
 
 If the call did not explicitly return a value, the value at the call's location in `.returnValues` will be `undefined`.
 
 
-#### `spy.resetHistory()`
+#### `spy.reset();`
 
 Resets the state of a spy.
 
 
-#### `spy.restore()`
+#### `spy.restore();`
 
 Replaces the spy with the original method. Only available if the spy replaced an existing method.
 
 
-#### `spy.printf("format string", [arg1, arg2, ...])`
+#### `spy.printf("format string", [arg1, arg2, ...]);`
 
 Returns the passed format string with the following replacements performed:
 
@@ -431,90 +431,4 @@ Returns the passed format string with the following replacements performed:
     <dd>a comma-delimited list of the (non-format string) arguments passed to <code>printf</code></dd>
 </dl>
 
-
-### Individual spy calls
-
-
-##### `var spyCall = spy.getCall(n)`
-
-Returns the *nth* [call](#spycall). Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
-
-```javascript
-sinon.spy(jQuery, "ajax");
-jQuery.ajax("/stuffs");
-var spyCall = jQuery.ajax.getCall(0);
-
-assertEquals("/stuffs", spyCall.args[0]);
-```
-
-
-#### `spyCall.calledOn(obj);`
-
-Returns `true` if `obj` was `this` for this call. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](#matchers)).
-
-
-#### `spyCall.calledWith(arg1, arg2, ...);`
-
-Returns `true` if call received provided arguments (and possibly others).
-
-
-#### `spyCall.calledWithExactly(arg1, arg2, ...);`
-
-Returns `true` if call received provided arguments and no others.
-
-
-#### `spyCall.calledWithMatch(arg1, arg2, ...);`
-
-Returns `true` if call received matching arguments (and possibly others).
-This behaves the same as `spyCall.calledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
-
-
-#### `spyCall.notCalledWith(arg1, arg2, ...);`
-
-Returns `true` if call did not receive provided arguments.
-
-
-#### `spyCall.notCalledWithMatch(arg1, arg2, ...);`
-
-Returns `true` if call did not receive matching arguments.
-This behaves the same as `spyCall.notCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
-
-#### `spyCall.returned(value);`
-
-Returns `true` if spied function returned the provided `value` on this call.
-
-Uses deep comparison for objects and arrays. Use `spyCall.returned(sinon.match.same(obj))` for strict comparison (see [matchers](#matchers)).
-
-#### `spyCall.threw();`
-
-Returns `true` if call threw an exception.
-
-
-#### `spyCall.threw("TypeError");`
-
-Returns `true` if call threw exception of provided type.
-
-
-#### `spyCall.threw(obj);`
-
-Returns `true` if call threw provided exception object.
-
-
-#### `spyCall.thisValue`
-
-The call's `this` value.
-
-
-#### `spyCall.args`
-
-Array of received arguments.
-
-
-#### `spyCall.exception`
-
-Exception thrown, if any.
-
-
-#### `spyCall.returnValue`
-
-Return value.
+[call]: ../spy-call

@@ -95,12 +95,12 @@ The request body
 
 The request's status code.
 
-`undefined` if the request has not been handled (see [`respond`](#respond) below)
+`undefined` if the request has not been handled (see [`respond`](#serverrespond) below)
 
 
 #### `String request.statusText`
 
-Only populated if the [`respond`](#respond) method is called (see below).
+Only populated if the [`respond`](#serverrespond) method is called (see below).
 
 
 #### `boolean request.async`
@@ -120,12 +120,12 @@ Password, if any.
 
 #### `Document request.responseXML`
 
-When using [`respond`](#respond), this property is populated with a parsed document if response headers indicate as much (see [the spec](http://www.w3.org/TR/XMLHttpRequest/))
+When using [`respond`](#serverrespond), this property is populated with a parsed document if response headers indicate as much (see [the spec](http://www.w3.org/TR/XMLHttpRequest/))
 
 
 #### `String request.getResponseHeader(header);`
 
-The value of the given response header, if the request has been responded to (see [`respond`](#respond)).
+The value of the given response header, if the request has been responded to (see [`respond`](#serverrespond)).
 
 
 #### `Object request.getAllResponseHeaders();`
@@ -231,7 +231,7 @@ Creates a new server.
 
 This function also calls `sinon.useFakeXMLHttpRequest()`.
 
-`createFakeServer` accepts optional properties to configure the fake server. See [options](#options) below for configuration parameters.
+`createFakeServer` accepts optional properties to configure the fake server. See [options](#fake-server-options) below for configuration parameters.
 
 
 #### `var server = sinon.createFakeServerWithClock();`
@@ -245,7 +245,7 @@ This is useful when testing `XHR` objects created with e.g. jQuery 1.3.x, which 
 
 Configures the fake server.
 
-See [options](#options) below for configuration parameters.
+See [options](#fake-server-options) below for configuration parameters.
 
 #### `server.respondWith(response);`
 
@@ -260,7 +260,7 @@ Causes the server to respond to any request not matched by another response with
 Default status is 200 and default headers are none.
 
 When the response is a `Function`, it will be passed the request object. You
-must manually call [respond](#respond) on it to complete the
+must manually call [respond](#serverrespond) on it to complete the
 request.
 
 

@@ -1,7 +1,7 @@
 "use strict";
 
 var color = require("../lib/sinon/color");
-var referee = require("referee");
+var referee = require("@sinonjs/referee");
 var sinonStub = require("../lib/sinon/stub");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonAssert = require("../lib/sinon/assert");
@@ -1463,7 +1463,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 3, "not");
 
             assert.equals(this.message("calledWith", this.obj.doSomething, 1, 3, "hey").replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments " +
+                "expected doSomething to be called with arguments \n" +
                         "Call 1:\n" +
                         color.red("4") + " " + color.green("1") + " \n" +
                         "3\n" +
@@ -1652,7 +1652,8 @@ describe("assert", function () {
             this.obj.doSomething(1, "hey");
 
             assert.equals(this.message("alwaysCalledWith", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                "expected doSomething to always be called with arguments Call 1:\n" +
+                "expected doSomething to always be called with arguments \n" +
+                          "Call 1:\n" +
                           "1\n" +
                           color.red("3") + " " + color.green("hey") + " \n" +
                           color.red("hey") + "\n" +
@@ -1667,7 +1668,8 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("alwaysCalledWithMatch", this.obj.doSomething, 1, "hey").replace(/ at.*/g, ""),
-                "expected doSomething to always be called with match Call 1:\n" +
+                "expected doSomething to always be called with match \n" +
+                          "Call 1:\n" +
                           "1\n" +
                           color.red("3") + " " + color.green("hey") + " \n" +
                           color.red("hey") + "\n" +
@@ -1691,7 +1693,8 @@ describe("assert", function () {
             this.obj.doSomething(1, 3);
 
             assert.equals(this.message("alwaysCalledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                "expected doSomething to always be called with exact arguments Call 1:\n" +
+                "expected doSomething to always be called with exact arguments \n" +
+                          "Call 1:\n" +
                           "1\n" +
                           "3\n" +
                           color.red("hey") + "\n" +
