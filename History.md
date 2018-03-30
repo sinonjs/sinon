@@ -37,6 +37,51 @@ Publish next version including changes from 4.1.6
   * Update docs/changelog.md and set new release id in docs/_config.yml
   * Add release documentation for v4.1.4
 
+4.5.0 / 2018-03-30
+==================
+
+  * Add .lastArg and .callback to spy call
+
+4.4.9 / 2018-03-27
+==================
+
+  * Fix #1746: Remove dependency on ES2015 code from post-install script
+
+4.4.8 / 2018-03-21
+==================
+
+  * Fix 1743: Add scripts/support-sinon.js to package
+
+4.4.7 / 2018-03-21
+==================
+
+  * Improve the post-install script: remove noise, add :heart:
+
+4.4.6 / 2018-03-15
+==================
+
+  * Return returned value of invokant when using yields* and callsArg* (#1724)
+
+4.4.5 / 2018-03-13
+==================
+
+  * Add postinstall banner pointing to Open Collective
+
+4.4.4 / 2018-03-13
+==================
+
+  * Make @std/esm a devDependency
+
+4.4.3 / 2018-03-12
+==================
+
+  * Fix inconsistent newline usage for %D in spy.printf (#1717)
+
+4.4.2 / 2018-02-25
+==================
+
+  * Add descriptive error message on attempt to call argument that is not a function (#1695)
+
 4.4.1 / 2018-02-24
 ==================
 

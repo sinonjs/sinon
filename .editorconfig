@@ -11,9 +11,7 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
-# Matches the exact files either package.json or .travis.yml
-[{package.json, .travis.yml}]
-indent_style = space
+[*.{json,yml,md}]
 indent_size = 2
 
 ; Needed if doing `git add --patch` to edit patches
