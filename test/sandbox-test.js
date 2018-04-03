@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("@sinonjs/referee");
-var samsam = require("samsam");
+var samsam = require("@sinonjs/samsam");
 var assert = referee.assert;
 var refute = referee.refute;
 var fakeXhr = require("nise").fakeXhr;
