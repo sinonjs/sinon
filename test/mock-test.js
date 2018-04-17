@@ -30,7 +30,7 @@ describe("sinonMock", function () {
         it("throws without object", function () {
             assert.exception(function () {
                 sinonMock.create();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 
@@ -44,7 +44,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 mock.expects();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns expectation", function () {
@@ -130,7 +130,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throw readable error", function () {
@@ -150,7 +150,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("returns expectation for chaining", function () {
@@ -166,7 +166,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("returns expectation for chaining", function () {
@@ -183,7 +183,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("returns expectation for chaining", function () {
@@ -201,7 +201,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("returns expectation for chaining", function () {
@@ -218,7 +218,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("returns expectation for chaining", function () {
@@ -230,7 +230,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.exactly();
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws without number", function () {
@@ -238,7 +238,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.exactly("12");
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws with Symbol", function () {
@@ -260,7 +260,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.atLeast();
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws without number", function () {
@@ -268,7 +268,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.atLeast({});
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws with Symbol", function () {
@@ -357,7 +357,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.atMost();
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws without number", function () {
@@ -365,7 +365,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.atMost({});
-                }, "TypeError");
+                }, {name: "TypeError"});
             });
 
             it("throws with Symbol", function () {
@@ -416,7 +416,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
 
                 assert.isFalse(this.expectation.met());
             });
@@ -457,7 +457,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
         });
 
@@ -510,7 +510,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws when called with too few args", function () {
@@ -519,7 +519,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(1, 2);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws when called with wrong args", function () {
@@ -569,7 +569,7 @@ describe("sinonMock", function () {
                 this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
                 assert.exception(function () {
                     expectation(1, 2, 3);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
         });
 
@@ -591,7 +591,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws when called with too few args", function () {
@@ -600,7 +600,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(1, 2);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws when called with wrong args", function () {
@@ -609,7 +609,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(2, 2, 3);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("should not allow excessive args", function () {
@@ -618,7 +618,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(1, 2, 3, 4);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("accepts call with no expected args", function () {
@@ -634,7 +634,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation(1, 2, 3);
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
         });
 
@@ -656,7 +656,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws if calls on wrong Symbol", function () {
@@ -690,7 +690,7 @@ describe("sinonMock", function () {
 
                 assert.exception(function () {
                     expectation.verify();
-                }, "ExpectationError");
+                }, {name: "ExpectationError"});
             });
 
             it("throws readable error", function () {
@@ -740,7 +740,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 mock.verify();
-            }, "ExpectationError");
+            }, {name: "ExpectationError"});
 
             assert.same(this.object.method, this.method);
         });
@@ -927,7 +927,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 mock.verify();
-            }, "ExpectationError");
+            }, {name: "ExpectationError"});
         });
 
         it("does not call pass if no expectations", function () {
@@ -996,7 +996,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 assert(mock.verify());
-            }, "ExpectationError");
+            }, {name: "ExpectationError"});
         });
     });
 
@@ -1024,7 +1024,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 object.method();
-            }, "ExpectationError");
+            }, {name: "ExpectationError"});
         });
 
         it("fails on last expectation", function () {
@@ -1034,7 +1034,7 @@ describe("sinonMock", function () {
 
             assert.exception(function () {
                 object.method();
-            }, "ExpectationError");
+            }, {name: "ExpectationError"});
         });
 
         it("allows mock calls in any order", function () {

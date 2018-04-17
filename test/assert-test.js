@@ -65,7 +65,7 @@ describe("assert", function () {
 
             assert.exception(function () {
                 sinonAssert.fail("Some message");
-            }, "RetardError");
+            }, {name: "RetardError"});
         });
     });
 
@@ -1227,13 +1227,13 @@ describe("assert", function () {
         it("throws if target is undefined", function () {
             assert.exception(function () {
                 sinonAssert.expose();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if target is null", function () {
             assert.exception(function () {
                 sinonAssert.expose(null);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 

@@ -232,7 +232,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArg();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns callbacks return value", function () {
@@ -251,7 +251,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArg({});
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 
@@ -297,7 +297,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArgOn({}, thisObj);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 
@@ -351,7 +351,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArgWith();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if index is not number", function () {
@@ -359,7 +359,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArgWith({});
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 
@@ -431,7 +431,7 @@ describe("sinonSpy.call", function () {
 
             assert.exception(function () {
                 call.callArgOnWith({}, thisObj);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 

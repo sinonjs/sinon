@@ -27,7 +27,7 @@ describe("util/core/wrapMethod", function () {
     it("throws if first argument is not object", function () {
         assert.exception(function () {
             wrapMethod();
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws if object defines property but is not function", function () {
@@ -36,7 +36,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(object, "prop", function () {});
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws Symbol() if object defines property but is not function", function () {
@@ -75,7 +75,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(object, "method");
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws if third argument is not a function or a property descriptor", function () {
@@ -83,7 +83,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(object, "method", 1);
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("replaces object method", function () {
@@ -114,7 +114,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(this.object, "method", function () {});
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws Symbol if method is already wrapped", function () {
@@ -137,7 +137,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(this.object, "property", { get: function () {} });
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws if method is already a spy", function () {
@@ -145,7 +145,7 @@ describe("util/core/wrapMethod", function () {
 
         assert.exception(function () {
             wrapMethod(object, "method", function () {});
-        }, "TypeError");
+        }, {name: "TypeError"});
     });
 
     it("throws if Symbol method is already a spy", function () {
