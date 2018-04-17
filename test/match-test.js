@@ -16,10 +16,10 @@ function propertyMatcherTests(matcher, additionalTests) {
         it("throws if first argument is not string", function () {
             assert.exception(function () {
                 matcher();
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 matcher(123);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns false if value is undefined or null", function () {
@@ -444,10 +444,10 @@ describe("sinonMatch", function () {
         it("throws if given argument is not a string", function () {
             assert.exception(function () {
                 sinonMatch.typeOf();
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.typeOf(123);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns matcher", function () {
@@ -493,10 +493,10 @@ describe("sinonMatch", function () {
         it("throws if given argument is not a function", function () {
             assert.exception(function () {
                 sinonMatch.instanceOf();
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.instanceOf("foo");
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         if (typeof Symbol !== "undefined" && typeof Symbol.hasInstance !== "undefined") {
@@ -621,13 +621,13 @@ describe("sinonMatch", function () {
         it("throws if given argument is not a matcher", function () {
             assert.exception(function () {
                 sinonMatch.every({});
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.every(123);
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.every("123");
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns matcher", function () {
@@ -700,13 +700,13 @@ describe("sinonMatch", function () {
         it("throws if given argument is not a matcher", function () {
             assert.exception(function () {
                 sinonMatch.some({});
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.some(123);
-            }, "TypeError");
+            }, {name: "TypeError"});
             assert.exception(function () {
                 sinonMatch.some("123");
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns matcher", function () {
@@ -1188,7 +1188,7 @@ describe("sinonMatch", function () {
         it("requires matcher argument", function () {
             assert.exception(function () {
                 sinonMatch.instanceOf(Error).or();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("will coerce argument to matcher", function () {
@@ -1233,7 +1233,7 @@ describe("sinonMatch", function () {
         it("requires matcher argument", function () {
             assert.exception(function () {
                 sinonMatch.instanceOf(Error).and();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("will coerce to matcher", function () {

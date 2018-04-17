@@ -363,7 +363,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.returnsArg();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
     });
 
@@ -391,7 +391,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.throwsArg();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("should throw without enough arguments", function () {
@@ -694,7 +694,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 this.stub(1);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if no index is specified", function () {
@@ -702,7 +702,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArg();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if index is not number", function () {
@@ -710,7 +710,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArg({});
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns result of invocant", function () {
@@ -768,7 +768,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgWith();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if index is not number", function () {
@@ -776,7 +776,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgWith({});
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns result of invocant", function () {
@@ -837,7 +837,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 this.stub(1);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if no index is specified", function () {
@@ -845,7 +845,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgOn();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if index is not number", function () {
@@ -853,7 +853,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgOn(this.fakeContext, 2);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns result of invocant", function () {
@@ -960,7 +960,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgOnWith();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if index is not number", function () {
@@ -968,7 +968,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 stub.callsArgOnWith({});
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("returns result of invocant", function () {
@@ -1028,7 +1028,7 @@ describe("stub", function () {
 
             assert.exception(function () {
                 createStub(object, "method", 1);
-            }, {message: "stub(obj, 'meth', fn) has been removed, see documentation"}, "TypeError");
+            }, {message: "stub(obj, 'meth', fn) has been removed, see documentation"}, {name: "TypeError"});
         });
 
         it("stubbed method should be proper stub", function () {
@@ -1485,7 +1485,7 @@ describe("stub", function () {
         it("throws if no context is specified", function () {
             assert.exception(function () {
                 this.stub.yieldsOn();
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws understandable error if no callback is passed", function () {

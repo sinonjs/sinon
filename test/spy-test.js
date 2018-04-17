@@ -2109,7 +2109,7 @@ describe("spy", function () {
 
             assert.exception(function () {
                 spy.callArg(1);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if spy was not yet invoked", function () {
@@ -2145,7 +2145,7 @@ describe("spy", function () {
 
             assert.exception(function () {
                 spy.callArg("");
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("passs additional arguments", function () {
@@ -2207,7 +2207,7 @@ describe("spy", function () {
 
             assert.exception(function () {
                 spy.callArgOn(1, thisObj);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("throws if spy was not yet invoked", function () {
@@ -2246,7 +2246,7 @@ describe("spy", function () {
 
             assert.exception(function () {
                 spy.callArg("", thisObj);
-            }, "TypeError");
+            }, {name: "TypeError"});
         });
 
         it("pass additional arguments", function () {
