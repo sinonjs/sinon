@@ -4,6 +4,7 @@ var sinon = require("../lib/sinon.js");
 var fake = sinon.fake;
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
+var refute = referee.refute;
 
 referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
@@ -48,6 +49,66 @@ describe("fake", function () {
 
     describe("when passed no value", function () {
         verifyProxy(fake);
+    });
+
+    describe(".callback", function () {
+        it("it should be a reference for the callback in the last call", function () {
+            var f = fake();
+            var callback1 = function () {};
+            var callback2 = function () {};
+
+            f(1, 2, 3, callback1);
+            assert.equals(f.callback, callback1);
+
+            f(1, 2, 3, callback2);
+            assert.equals(f.callback, callback2);
+
+            f(1, 2, 3);
+            assert.equals(f.callback, undefined);
+        });
+    });
+
+    describe(".displayName", function () {
+        it("should be 'fake'", function () {
+            var fakes = [
+                fake(),
+                fake.returns(42),
+                fake.throws(new Error()),
+                fake.resolves(42),
+                fake.rejects(new Error()),
+                fake.yields(42),
+                fake.yieldsAsync(42)
+            ];
+
+            fakes.forEach(function (f) {
+                assert.equals(f.displayName, "fake");
+            });
+        });
+    });
+
+    describe(".id", function () {
+        it("should start with 'fake#'", function () {
+            for (var i = 0; i < 100; i++) {
+                assert.isTrue(fake().id.indexOf("fake#") === 0);
+            }
+        });
+    });
+
+    describe(".lastArg", function () {
+        it("should be the last argument from the last call", function () {
+            var f = fake();
+            f(41, 42, 43);
+            assert.equals(f.lastArg, 43);
+
+            f(44, 45);
+            assert.equals(f.lastArg, 45);
+
+            f(46);
+            assert.equals(f.lastArg, 46);
+
+            f();
+            refute.defined(f.lastArg);
+        });
     });
 
     describe(".returns", function () {
