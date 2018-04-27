@@ -581,6 +581,25 @@ describe("Sandbox", function () {
             assert.equals(actual, replacement);
         });
 
+        it("should replace an inherited property", function () {
+            var expected = "baz";
+            var replacement = fake.returns(expected);
+            var existing = "existing";
+            var object = Object.create({
+                get foo() {
+                    return existing;
+                }
+            });
+
+            this.sandbox.replaceGetter(object, "foo", replacement);
+
+            assert.equals(object.foo, expected);
+
+            this.sandbox.restore();
+
+            assert.equals(object.foo, existing);
+        });
+
         describe("when called with a non-function replacement argument", function () {
             it("should throw a TypeError", function () {
                 var sandbox = this.sandbox;
@@ -650,6 +669,27 @@ describe("Sandbox", function () {
             var actual = this.sandbox.replaceSetter(object, "foo", replacement);
 
             assert.equals(actual, replacement);
+        });
+
+        it("should replace an inherited property", function () {
+            // eslint-disable-next-line accessor-pairs
+            var object = Object.create({
+                set foo(value) {
+                    this.prop = value;
+                },
+                prop: "bar"
+            });
+            var replacement = function (value) {
+                this.prop = value + "blabla";
+            };
+
+            this.sandbox.replaceSetter(object, "foo", replacement);
+            object.foo = "doodle";
+            assert.equals(object.prop, "doodleblabla");
+
+            this.sandbox.restore();
+            object.foo = "doodle";
+            assert.equals(object.prop, "doodle");
         });
 
         describe("when called with a non-function replacement argument", function () {
