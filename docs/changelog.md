@@ -5,6 +5,48 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.1 / 2018-04-27
+==================
+
+  * Add .lastArg and .callback to fake and call
+  * Allow replacing non-own object properties (#1705)
+  * Change yields semantics to match stub behaviour
+  * Add a failing test for #1695
+  * Return the replacement argument in .replace* methods (#1701)
+  * Remove deprecated spy.reset method
+  * Add replace methods
+  * Extract isPropertyConfigurable to own file
+  * Extract nextTick to own file
+  * Extract isRestorable to own file
+  * Extract isNonExistentOwnProperty to own function
+  * Docs: Added example for how to use `restore`
+  * Add documentation for fake
+  * Add `fake`
+  * Export enhanced sandbox as sinon api
+  * Refactor sandbox to assimilate and remove collection
+  * Fix incorrect usage of referee's assert.exception (#1766)
+  * Add another external howto
+  * Add .lastArg and .callback to fake and call
+  * Allow replacing non-own object properties (#1705, #1695)
+  * Change yields semantics to match stub behaviour (#1703, #1697)
+  * Add a failing test for #1695
+  * Return the replacement argument in .replace* methods (#1701, #1698)
+  * Simplify hasFunctionNameSupport
+  * Fix broken test in IE11
+  * Improve language of fake documentation
+  * Add yields and yieldsTo to fake
+  * Extract nextTick to own file
+  * Improve input validation of sandbox.replace* methods
+  * Rename third argument to `replacement`
+  * Add replaceGetter and replaceSetter
+  * Extract isPropertyConfigurable to own file
+  * Extract isRestorable to own file
+  * Extract isNonExistentOwnProperty to own function
+  * Remove undesirable methods before returning fake
+  * Add `fake`
+  * Export enhanced sandbox as sinon api
+  * Refactor sandbox to assimilate collection and remove collection
+
 4.5.0 / 2018-03-30
 ==================
 
