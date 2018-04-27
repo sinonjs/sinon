@@ -90,12 +90,67 @@ fake();
 // hello world
 ```
 
-
 ### `sinon.fake(func);`
 
 Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behaviour.
 
 This is useful when complex behaviour not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
+
+### Instance properties
+
+#### `f.callback`
+
+This property is a convenience to easily get a reference to the last callback passed in the last to the fake.
+
+```js
+var f = sinon.fake();
+var cb1 = function () {};
+var cb2 = function () {};
+
+f(1, 2, 3, cb1);
+f(1, 2, 3, cb2);
+
+f.callback === cb2;
+// true
+```
+
+The same convenience has been added to [spy calls][../spy-call]:
+
+```js
+f.getCall(1).callback === cb2;
+// true
+//
+f.lastCall.callback === cb2;
+// true
+```
+
+#### `f.lastArg`
+
+This property is a convenient way to get a reference to the last argument passed in the last call to the fake.
+
+```js
+var f = sinon.fake();
+var date1 = new Date();
+var date2 = new Date();
+
+f(1, 2, date1);
+f(1, 2, date2);
+
+f.lastArg === date2;
+// true
+```
+
+The same convenience has been added to [spy calls][../spy-call]:
+
+```js
+f.getCall(0).lastArg === date1;
+// true
+f.getCall(1).lastArg === date2;
+// true
+
+f.lastCall.lastArg === date2;
+// true
+```
 
 
 ### Adding the fake to the system under test
