@@ -70,23 +70,23 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 
 #### `sinon.fake.yields(callback[, value1, ..., valueN]);`
 
-Creates a fake that calls the provided callback with the provided values.
+`fake` expects the last argument to be a callback and will invoke it with the given arguments.
 
 ```js
-var fake = sinon.fake.yields(console.log, 'hello world');
+var fake = sinon.fake.yields('hello world');
 
-fake();
+fake(console.log);
 // hello world
 ```
 
 #### `sinon.fake.yieldsAsync(callback[, value1, ..., valueN]);`
 
-Creates a fake that calls the provided callback asynchronously with the provided values.
+`fake` expects the last argument to be a callback and will invoke it asynchronously with the given arguments.
 
 ```js
-var fake = sinon.fake.yieldsAsync(console.log, 'hello world');
+var fake = sinon.fake.yieldsAsync('hello world');
 
-fake();
+fake(console.log);
 // hello world
 ```
 
