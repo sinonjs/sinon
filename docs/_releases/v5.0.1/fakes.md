@@ -157,7 +157,7 @@ f.lastCall.lastArg === date2;
 
 Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fakes, not about replacing properties in the system under test.
 
-To replace a property, you can use the [`sinon.replace`](../sandbox/sandboxreplaceobject-property-replacement) method.
+To replace a property, you can use the [`sinon.replace`](../sandbox/#sandboxreplaceobject-property-replacement) method.
 
 ```js
 var fake = sinon.fake.returns('42');
