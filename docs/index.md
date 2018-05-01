@@ -233,7 +233,7 @@ it('calls callback after 100ms', function () {
 
     // Also:
     // assert.equals(new Date().getTime(), 100);
-}
+});
 ```
 
 As before, Sinon.JS provides utilities that help test frameworks reduce the boiler-plate. [Learn more about fake time][clock].
