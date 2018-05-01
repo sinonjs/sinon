@@ -6,22 +6,21 @@ breadcrumb: fakes
 
 ### Introduction
 
-Fakes are a new concept to Sinon, simplifying and merging the concepts from `spies` and `stubs`.
+`fake` was introduced with Sinon with v5. It simplifies and merges concepts from [`spies`][spies] and [`stubs`][stubs].
 
-A test fake is a `Function` that records arguments, return value, the value of
-`this` and exception thrown (if any) for all its calls.
+In Sinon, a `fake` is a `Function` that records arguments, return value, the value of `this` and exception thrown (if any) for all of its calls.
 
-Fakes can be created with or without behaviour.
+It can be created with or without behavior; it can wrap an existing function.
 
-All fakes are immutable: once created, their behaviour will not change.
+A fake is immutable: once created, the behavior will not change.
 
-Unlike `sinon.spy` and `sinon.stub` APIs, the `sinon.fake` API knows only how to create fakes, and doesn't concern itself with plugging them into the system under test. To plug the fakes into the system under test, you can use the [`sinon.replace*`](../sandbox#replace) methods.
+Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` API knows only how to create fakes, and doesn't concern itself with plugging them into the system under test. To plug the fakes into the system under test, you can use the [`sinon.replace*`](../sandbox#sandboxreplaceobject-property-replacement) methods.
 
 
 ### Creating a fake
 
 ```js
-// create a basic fake, with no behaviour
+// create a basic fake, with no behavior
 var fake = sinon.fake();
 
 fake();
@@ -30,9 +29,9 @@ console.log(fake.callCount);
 // 1
 ```
 
-### Fakes with behaviour
+### Fakes with behavior
 
-Fakes can be created with behaviour, which cannot be changed once the fake has been created.
+Fakes can be created with behavior, which cannot be changed once the fake has been created.
 
 #### `sinon.fake.returns(value);`
 
@@ -90,11 +89,11 @@ fake(console.log);
 // hello world
 ```
 
-### `sinon.fake(func);`
+#### `sinon.fake(func);`
 
-Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behaviour.
+Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behavior.
 
-This is useful when complex behaviour not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
+This is useful when complex behavior not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
 
 ### Instance properties
 
@@ -171,6 +170,9 @@ console.log('apple pie');
 When you want to restore the replaced properties, simply call the `sinon.restore` method.
 
 ```js
-// restores all replaced properties set by sinon methods (restore, spy, stub)
+// restores all replaced properties set by sinon methods (replace, spy, stub)
 sinon.restore();
 ```
+
+[spies]: ../spies
+[stubs]: ../stubs
