@@ -259,5 +259,4 @@ Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers som
 [fakeServer]: /releases/{{current_release}}/fake-xhr-and-server#fake-server
 [clock]: /releases/{{current_release}}/fake-timers
 [api-docs]: /releases/{{current_release}}
-[sinon-group]: http://groups.google.com/group/sinonjs
 [tddjs]: http://tddjs.com/
