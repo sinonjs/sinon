@@ -735,8 +735,14 @@ describe("Sandbox", function () {
             var sandbox = this.sandbox = createSandbox();
             var fakes = sandbox.getFakes();
 
-            fakes.push({reset: sinonSpy()});
-            fakes.push({reset: sinonSpy()});
+            fakes.push({
+                reset: sinonSpy(),
+                resetHistory: sinonSpy()
+            });
+            fakes.push({
+                reset: sinonSpy(),
+                resetHistory: sinonSpy()
+            });
         });
 
         it("calls reset on all fakes", function () {
@@ -747,6 +753,16 @@ describe("Sandbox", function () {
 
             assert(fake0.reset.called);
             assert(fake1.reset.called);
+        });
+
+        it("calls resetHistory on all fakes", function () {
+            var fake0 = this.sandbox.getFakes()[0];
+            var fake1 = this.sandbox.getFakes()[1];
+
+            this.sandbox.reset();
+
+            assert(fake0.resetHistory.called);
+            assert(fake1.resetHistory.called);
         });
     });
 
