@@ -1,6 +1,6 @@
 ---
   layout: homepage
-  title: Sinon.JS - Standalone test spies, stubs and mocks for JavaScript. Works with any unit testing framework.
+  title: Sinon.JS - Standalone test fakes, spies, stubs and mocks for JavaScript. Works with any unit testing framework.
 ---
 {% assign current_release = site.sinon.current_release %}
 
@@ -36,13 +36,13 @@ function once(fn) {
 }
 ```
 
-### Spies
+### Fakes
 
-Testing this function can be quite elegantly achieved with a [test spy][spies]:
+Testing this function can be quite elegantly achieved with a [test fake][fakes]:
 
 ```javascript
 it('calls the original function', function () {
-    var callback = sinon.spy();
+    var callback = sinon.fake();
     var proxy = once(callback);
 
     proxy();
@@ -55,7 +55,7 @@ The fact that the function was only called once is important:
 
 ```javascript
 it('calls the original function only once', function () {
-    var callback = sinon.spy();
+    var callback = sinon.fake();
     var proxy = once(callback);
 
     proxy();
@@ -71,7 +71,7 @@ We also care about the `this` value and arguments:
 
 ```javascript
 it('calls original function with right this and args', function () {
-    var callback = sinon.spy();
+    var callback = sinon.fake();
     var proxy = once(callback);
     var obj = {};
 
@@ -82,24 +82,24 @@ it('calls original function with right this and args', function () {
 });
 ```
 
-[Learn more about spies][spies].
+[Learn more about fakes][fakes].
 
-### Stubs
+### Behavior
 
-The function returned by `once` should return whatever the original function returns. To test this, we create a stub:
+The function returned by `once` should return whatever the original function returns. To test this, we create a fake with behavior:
 
 ```javascript
 it("returns the return value from the original function", function () {
-    var callback = sinon.stub().returns(42);
+    var callback = sinon.fake.returns(42);
     var proxy = once(callback);
 
     assert.equals(proxy(), 42);
 });
 ```
 
-Conveniently, stubs can also be used as spies, e.g. we can query them for their callCount, received args and more.
+Conveniently, we can query fakes for their callCount, received args and more.
 
-[Learn more about stubs][stubs].
+[Learn more about fakes][fakes].
 
 ### Testing Ajax
 
@@ -117,7 +117,7 @@ function getTodos(listId, callback) {
 }
 ```
 
-To test this function without triggering network activity we could stub `jQuery.ajax`
+To test this function without triggering network activity we could replace `jQuery.ajax`
 
 ```javascript
 after(function () {
@@ -128,8 +128,8 @@ after(function () {
 });
 
 it('makes a GET request for todo items', function () {
-    sinon.stub(jQuery, 'ajax');
-    getTodos(42, sinon.spy());
+    sinon.replace(jQuery, 'ajax', sinon.fake());
+    getTodos(42, sinon.fake());
 
     assert(jQuery.ajax.calledWithMatch({ url: '/todo/42/items' }));
 });
@@ -154,7 +154,7 @@ after(function () {
 });
 
 it("makes a GET request for todo items", function () {
-    getTodos(42, sinon.spy());
+    getTodos(42, sinon.fake());
 
     assert.equals(requests.length, 1);
     assert.match(requests[0].url, "/todo/42/items");
@@ -174,7 +174,7 @@ before(function () { server = sinon.fakeServer.create(); });
 after(function () { server.restore(); });
 
 it("calls callback with deserialized data", function () {
-    var callback = sinon.spy();
+    var callback = sinon.fake();
     getTodos(42, callback);
 
     // This is part of the FakeXMLHttpRequest API
@@ -220,7 +220,7 @@ before(function () { clock = sinon.useFakeTimers(); });
 after(function () { clock.restore(); });
 
 it('calls callback after 100ms', function () {
-    var callback = sinon.spy();
+    var callback = sinon.fake();
     var throttled = debounce(callback);
 
     throttled();
@@ -254,8 +254,7 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 
 Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
 
-[spies]: /releases/{{current_release}}/spies
-[stubs]: /releases/{{current_release}}/stubs
+[fakes]: /releases/{{current_release}}/fakes
 [fakexhr]: /releases/{{current_release}}/fake-xhr-and-server
 [fakeServer]: /releases/{{current_release}}/fake-xhr-and-server#fake-server
 [clock]: /releases/{{current_release}}/fake-timers
