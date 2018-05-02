@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.3 / 2018-05-02
+==================
+
+  * Fix #1775: Default sandbox does not restore stubs, spies, mocks
+
 5.0.2 / 2018-05-01
 ==================
 
