@@ -420,4 +420,50 @@ describe("issues", function () {
             refute.isTrue(spyProp.get.called);
         });
     });
+
+    // this error was caused by overwriting methods with imported ones don't use the collection
+    // and thus were not restorable
+    describe("#1775 - sinon.restore", function () {
+        it("should restore all stubs", function () {
+            var myApi = {
+                someMethod: function someMethod() {
+                    // eslint-disable-next-line no-console
+                    console.log("test method!");
+                }
+            };
+
+            sinon.stub(myApi, "someMethod");
+            sinon.restore();
+            sinon.stub(myApi, "someMethod");
+            // TypeError: Attempted to wrap someMethod which is already wrapped
+        });
+
+        it("should restore all spies", function () {
+            var myApi = {
+                someMethod: function someMethod() {
+                    // eslint-disable-next-line no-console
+                    console.log("test method!");
+                }
+            };
+
+            sinon.spy(myApi, "someMethod");
+            sinon.restore();
+            sinon.spy(myApi, "someMethod");
+            // TypeError: Attempted to wrap someMethod which is already wrapped
+        });
+
+        it("should restore all mocks", function () {
+            var myApi = {
+                someMethod: function someMethod() {
+                    // eslint-disable-next-line no-console
+                    console.log("test method!");
+                }
+            };
+
+            sinon.mock(myApi);
+            sinon.restore();
+            sinon.mock(myApi);
+            // TypeError: Attempted to wrap someMethod which is already wrapped
+        });
+    });
 });
