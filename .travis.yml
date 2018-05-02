@@ -1,9 +1,9 @@
 language: node_js
 node_js:
   # https://github.com/nodejs/LTS
-  - "4" # ends April 2018
   - "6" # ends April 2019
   - "8" # ends December 2019
+  - "10" # ends April 2021
 
 sudo: false
 
@@ -20,24 +20,24 @@ before_install:
   - npm config set strict-ssl false
   - npm install coveralls
   # Prevent mochify -> puppeteer install script to run unnecessarily
-  - if [ "x$TRAVIS_NODE_VERSION" != "x8" ]; then npm config set ignore-scripts true; fi
+  - if [ "x$TRAVIS_NODE_VERSION" != "x10" ]; then npm config set ignore-scripts true; fi
 
 before_script:
   # Make npm run work for the script phase:
-  - if [ "x$TRAVIS_NODE_VERSION" != "x8" ]; then npm config set ignore-scripts false; fi
+  - if [ "x$TRAVIS_NODE_VERSION" != "x10" ]; then npm config set ignore-scripts false; fi
   # these build targets only need to run once per build, so let's conserve a few resources
   # ESLint only supports Node >=4
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ]; then npm run lint; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ]; then npm run lint-markdown; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ]; then npm run test-headless -- --allow-chrome-as-root; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ]; then npm run test-webworker -- --allow-chrome-as-root; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run lint; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run lint-markdown; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-headless -- --allow-chrome-as-root; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-webworker -- --allow-chrome-as-root; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
 
 script:
   - npm run test-node
 
 after_success:
-  - if [ "x$TRAVIS_NODE_VERSION" = "x8" ]; then npm run test-coverage && cat ./coverage/lcov.info | coveralls lib; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-coverage && cat ./coverage/lcov.info | coveralls lib; fi
 
 git:
   depth: 10

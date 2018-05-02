@@ -38,7 +38,7 @@ Sinon `{{page.release_id}}` is written as [ES5.1][ES5] and requires no transpile
 * Internet Explorer 11
 * Edge 14
 * Safari 9
-* Node 4
+* [Node.js LTS versions](https://github.com/nodejs/Release)
 
 There should not be any issues with using Sinon `{{page.release_id}}` in newer versions of the same runtimes.
 
