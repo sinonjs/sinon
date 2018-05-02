@@ -29,7 +29,7 @@ function makeBundle(name, config) {
             }
 
             var script = preamble + buffer.toString();
-            fs.writeFile("pkg/" + name + ".js", script);
+            fs.writeFileSync("pkg/" + name + ".js", script);
         });
 }
 
