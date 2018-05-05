@@ -23,7 +23,7 @@ referee.add("isProxy", {
 
 function verifyProxy(func, argument) {
     it("should return a Sinon proxy", function () {
-        var actual = func(argument);
+        var actual = argument ? func(argument) : func();
 
         assert.isProxy(actual);
     });
@@ -49,6 +49,16 @@ describe("fake", function () {
 
     describe("when passed no value", function () {
         verifyProxy(fake);
+    });
+
+    it("should reject non-Function argument", function () {
+        var nonFuncs = ["", 123, new Date(), {}, false, undefined, true, null];
+
+        nonFuncs.forEach(function (nf) {
+            assert.exception(function () {
+                fake(nf);
+            });
+        });
     });
 
     describe(".callback", function () {
