@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.4 / 2018-05-05
+==================
+
+  * Fix #1781: Reject non-function values a f argument to fake
+
 5.0.3 / 2018-05-02
 ==================
 
