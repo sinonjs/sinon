@@ -506,6 +506,34 @@ describe("Sandbox", function () {
             }, {message: "Cannot replace function with string"});
         });
 
+        it("should refuse to replace a fake twice", function () {
+            var sandbox = this.sandbox;
+            var object = {
+                property: function () {
+                    return "apple pie";
+                }
+            };
+
+            sandbox.replace(object, "property", fake());
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", fake());
+            }, {message: "Attempted to replace property which is already replaced"});
+        });
+
+        it("should refuse to replace a string twice", function () {
+            var sandbox = this.sandbox;
+            var object = {
+                property: "original"
+            };
+
+            sandbox.replace(object, "property", "first");
+
+            assert.exception(function () {
+                sandbox.replace(object, "property", "second");
+            }, {message: "Attempted to replace property which is already replaced"});
+        });
+
         it("should return the replacement argument", function () {
             var replacement = "replacement";
             var existing = "existing";
@@ -630,6 +658,21 @@ describe("Sandbox", function () {
 
             assert.equals(object.foo, "bar");
         });
+
+        it("should refuse to replace a getter twice", function () {
+            var sandbox = this.sandbox;
+            var object = {
+                get foo() {
+                    return "bar";
+                }
+            };
+
+            sandbox.replaceGetter(object, "foo", fake.returns("one"));
+
+            assert.exception(function () {
+                sandbox.replaceGetter(object, "foo", fake.returns("two"));
+            }, {message: "Attempted to replace foo which is already replaced"});
+        });
     });
 
     describe(".replaceSetter", function () {
@@ -727,6 +770,20 @@ describe("Sandbox", function () {
             object.prop = "bla";
 
             assert.equals(object.prop, "bla");
+        });
+
+        it("should refuse to replace a setter twice", function () {
+            var sandbox = this.sandbox;
+            // eslint-disable-next-line accessor-pairs
+            var object = {
+                set foo(value) {}
+            };
+
+            sandbox.replaceSetter(object, "foo", fake());
+
+            assert.exception(function () {
+                sandbox.replaceSetter(object, "foo", fake.returns("two"));
+            }, {message: "Attempted to replace foo which is already replaced"});
         });
     });
 

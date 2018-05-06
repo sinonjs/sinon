@@ -130,7 +130,7 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 #### `sandbox.replace(object, property, replacement);`
 
-Replaces `property` on `object` with `replacement` argument.
+Replaces `property` on `object` with `replacement` argument. Attempts to replace an already replaced value cause an exception.
 
 `replacement` can be any value, including `spies`, `stubs` and `fakes`.
 
@@ -154,7 +154,7 @@ console.log(myObject.myMethod());
 
 #### `sandbox.replaceGetter();`
 
-Replaces getter for `property` on `object` with `replacement` argument.
+Replaces getter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced getter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
@@ -175,7 +175,7 @@ console.log(myObject.myProperty);
 
 #### `sandbox.replaceSetter();`
 
-Replaces setter for `property` on `object` with `replacement` argument.
+Replaces setter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced setter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
