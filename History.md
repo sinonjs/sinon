@@ -1,4 +1,9 @@
 
+5.0.6 / 2018-05-07
+==================
+
+  * Remove support-sinon.js as postinstall banner
+
 5.0.5 / 2018-05-07
 ==================
 
