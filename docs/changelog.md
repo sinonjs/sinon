@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.7 / 2018-05-07
+==================
+
+  * Fix stub id prefix (#1786)
+
 5.0.6 / 2018-05-07
 ==================
 
