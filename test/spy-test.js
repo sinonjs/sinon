@@ -2783,5 +2783,13 @@ describe("spy", function () {
             ]);
         });
     });
+
+    describe(".id", function () {
+        it("should start with 'spy#'", function () {
+            for (var i = 0; i < 10; i++) {
+                assert.isTrue(createSpy().id.indexOf("spy#") === 0);
+            }
+        });
+    });
 });
 

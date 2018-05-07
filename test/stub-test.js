@@ -2961,4 +2961,12 @@ describe("stub", function () {
             assert.equals(myObj.prop, "newString");
         });
     });
+
+    describe(".id", function () {
+        it("should start with 'stub#'", function () {
+            for (var i = 0; i < 10; i++) {
+                assert.isTrue(createStub().id.indexOf("stub#") === 0);
+            }
+        });
+    });
 });
