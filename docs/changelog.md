@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.5 / 2018-05-07
+==================
+
+  * Refuse to replace already replaced values (#1779)
+
 5.0.4 / 2018-05-05
 ==================
 
