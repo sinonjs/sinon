@@ -57,11 +57,11 @@ fake();
 // Error: not apple pie
 ```
 
-#### `sinon.fakes.resolves(value);`
+#### `sinon.fake.resolves(value);`
 
 Creates a fake that returns a resolved `Promise` for the passed value.
 
-#### `sinon.fakes.rejects(value);`
+#### `sinon.fake.rejects(value);`
 
 Creates a fake that returns a rejected `Promise` for the passed value.
 
