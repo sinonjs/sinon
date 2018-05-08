@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("@sinonjs/referee");
-var samsam = require("samsam");
+var samsam = require("@sinonjs/samsam");
 var assert = referee.assert;
 var deprecated = require("../lib/sinon/util/core/deprecated");
 var refute = referee.refute;

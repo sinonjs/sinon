@@ -352,4 +352,51 @@ describe("util/core/deepEqual", function () {
         assert(matchDeepEqual(matchA, duplicateA));
         assert.isFalse(matchDeepEqual(matchA, matchB));
     });
+
+    it("handles shallow cyclic objects", function () {
+        var a = {
+            foo: "bar"
+        };
+        a.cyclicKeyName = a;
+
+        var b = {
+            foo: "bar"
+        };
+        b.cyclicKeyName = b;
+
+        assert(deepEqual(a, b));
+    });
+
+    it("handles deep cyclic objects", function () {
+        var a = {
+            foo: "bar",
+            key: { }
+        };
+        a.key.value = a;
+
+        var b = {
+            foo: "bar",
+            key: { }
+        };
+        b.key.value = b;
+
+        assert(deepEqual(a, b));
+    });
+
+    it("handles cyclic objects when a matcher provided", function () {
+        var matchDeepEqual = deepEqual.use(match);
+
+        var a = {
+            foo: "bar"
+        };
+        a.cyclicKeyName = a;
+
+        var b = {
+            foo: "bar"
+        };
+        b.cyclicKeyName = b;
+
+        assert(matchDeepEqual(a, b));
+    });
+
 });
