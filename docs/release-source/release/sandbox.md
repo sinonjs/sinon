@@ -7,7 +7,7 @@ breadcrumb: sandbox
 Sandboxes removes the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
-var sandbox = require('sinon').sandbox;
+var sandbox = require('sinon').createSandbox();
 var myAPI = { hello: function () {} };
 
 describe('myAPI.hello method', function () {
