@@ -59,7 +59,7 @@
     "eslint-plugin-mocha": "^4.2.0",
     "husky": "^0.14.2",
     "lint-staged": "^6.0.0",
-    "markdownlint-cli": "^0.8.1",
+    "markdownlint-cli": "^0.8.2",
     "mocha": "^4.0.0",
     "mochify": "^5.6.1",
     "mochify-istanbul": "^2.4.2",
