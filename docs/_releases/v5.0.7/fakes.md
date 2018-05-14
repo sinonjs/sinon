@@ -20,13 +20,7 @@ Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` 
 ### Creating a fake
 
 ```js
-// create a basic fake, with no behavior
-var fake = sinon.fake();
-
-fake();
-
-console.log(fake.callCount);
-// 1
+{% include examples/fakes/basic.js %}
 ```
 
 ### Fakes with behavior
@@ -38,10 +32,7 @@ Fakes can be created with behavior, which cannot be changed once the fake has be
 Creates a fake that returns the `value` argument
 
 ```js
-var fake = sinon.fake.returns('apple pie');
-
-fake();
-// apple pie
+{% include examples/fakes/returns.js %}
 ```
 
 #### `sinon.fake.throws(value);`
@@ -57,11 +48,11 @@ fake();
 // Error: not apple pie
 ```
 
-#### `sinon.fakes.resolves(value);`
+#### `sinon.fake.resolves(value);`
 
 Creates a fake that returns a resolved `Promise` for the passed value.
 
-#### `sinon.fakes.rejects(value);`
+#### `sinon.fake.rejects(value);`
 
 Creates a fake that returns a rejected `Promise` for the passed value.
 

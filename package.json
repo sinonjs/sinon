@@ -14,6 +14,7 @@
   },
   "license": "BSD-3-Clause",
   "scripts": {
+    "test-examples": "mocha -R dot docs/_includes/**/__tests.js",
     "test-node": "mocha --recursive -R dot test/**-test.js",
     "test-dev": "npm run test-node -- --watch -R min",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] test/**-test.js",
