@@ -933,6 +933,17 @@ describe("Sandbox", function () {
 
             assert.same(setTimeout, originalSetTimeout, "fakeTimers restored");
         });
+
+        it("restores spied fake timers when then sanddox is restored", function () {
+            var originalSetTimeout = setTimeout;
+
+            this.sandbox.useFakeTimers();
+            this.sandbox.spy(global, "setTimeout");
+
+            this.sandbox.restore();
+
+            assert.same(originalSetTimeout, global.setTimeout, "fakeTimers restored");
+        });
     });
 
     describe(".usingPromise", function () {
