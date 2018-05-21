@@ -467,7 +467,7 @@ describe("issues", function () {
         });
     });
 
-    describe("sinon.restore spied fakeTimers", function () {
+    describe("#1801 - sinon.restore spied fakeTimers", function () {
         it("should restore spied fake timers", function () {
             var originalSetTimeout = setTimeout;
 
