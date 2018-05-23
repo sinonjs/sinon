@@ -1,6 +1,7 @@
 import referee from "@sinonjs/referee";
 import sinon from "../../lib/sinon";
 import * as aModule from "./a-module";
+import aModuleWithToStringTag from "./a-module-with-to-string-tag";
 import aModuleWithDefaultExport from "./a-module-with-default";
 
 // Usually one would import the default module, but one can make a form of wrapper like this
@@ -23,6 +24,12 @@ function createTestSuite(action) {
             it("should NOT result in error", function () {
                 refute.exception(function () {
                     stub = sinon[action](aModuleWithDefaultExport, "anExport");
+                });
+            });
+
+            it("should NOT result in error with a custom toStringTag", function () {
+                refute.exception(function () {
+                    stub = sinon[action](aModuleWithToStringTag, "anExport");
                 });
             });
 
