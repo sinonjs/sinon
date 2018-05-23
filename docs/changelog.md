@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.0.8 / 2018-05-24
+==================
+
+  * Add isSealed check to is-es-module to make certain ESM mocks possible
+
 5.0.7 / 2018-05-07
 ==================
 
