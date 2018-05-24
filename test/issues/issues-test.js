@@ -466,4 +466,17 @@ describe("issues", function () {
             // TypeError: Attempted to wrap someMethod which is already wrapped
         });
     });
+
+    describe("#1801 - sinon.restore spied fakeTimers", function () {
+        it("should restore spied fake timers", function () {
+            var originalSetTimeout = setTimeout;
+
+            sinon.useFakeTimers();
+            sinon.spy(global, "setTimeout");
+
+            sinon.restore();
+
+            assert.same(originalSetTimeout, global.setTimeout, "fakeTimers restored");
+        });
+    });
 });
