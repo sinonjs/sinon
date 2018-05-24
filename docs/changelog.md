@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+2.5.10 / 2018-05-24
+==================
+
+  * Remove functions shadowing time related sandbox methods (#1802)
+
 5.0.9 / 2018-05-24
 ==================
 
