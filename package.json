@@ -49,7 +49,7 @@
     "type-detect": "^4.0.8"
   },
   "devDependencies": {
-    "@sinonjs/referee": "^2.0.0",
+    "@sinonjs/referee": "^2.1.1",
     "browserify": "^15.1.0",
     "dependency-check": "^2.10.1",
     "eslint": "^4.19.1",
