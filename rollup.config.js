@@ -29,7 +29,7 @@ export default {
             ignoreGlobal: false, // Default: false
 
             // if false then skip sourceMap generation for CommonJS modules
-            sourceMap: false // Default: true
+            sourceMap: true // Default: true
 
             // explicitly specify unresolvable named exports
             // (see below for more details)
