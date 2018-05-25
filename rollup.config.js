@@ -5,7 +5,7 @@ import builtins from "rollup-plugin-node-builtins";
 export default {
     input: "./lib/sinon.js",
     output: {
-        file: "pkg/bundle-esm.js",
+        file: "pkg/sinon-esm.js",
         format: "es"
     },
     plugins: [

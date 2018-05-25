@@ -87,7 +87,7 @@
     "README.md"
   ],
   "main": "./lib/sinon.js",
-  "module": "./pkg/bundle-esm.js",
+  "module": "./pkg/sinon-esm.js",
   "cdn": "./pkg/sinon.js",
   "jsdelivr": "./pkg/sinon.js"
 }
