@@ -1,6 +1,5 @@
-// rollup.config.js
 import commonjs from "rollup-plugin-commonjs";
-//import nodeResolve from "rollup-plugin-node-resolve";
+import nodeResolve from "rollup-plugin-node-resolve";
 
 export default {
     input: "./lib/sinon.js",
@@ -9,10 +8,10 @@ export default {
         format: "esm"
     },
     plugins: [
-        //nodeResolve({
-        //jsnext: true,
-        //main: true
-        //}),
+        nodeResolve({
+            jsnext: true,
+            main: true
+        }),
 
         commonjs({
             // non-CommonJS modules will be ignored, but you can also
@@ -34,7 +33,9 @@ export default {
 
             // explicitly specify unresolvable named exports
             // (see below for more details)
-            //namedExports: { "./module.js": ["foo", "bar"] }, // Default: undefined
+            //namedExports: {
+            //"node_modules/diff/lib/index.js": ["default"]
+            //} // Default: undefined
 
             // sometimes you have to leave require statements
             // unconverted. Pass an array containing the IDs
