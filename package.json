@@ -46,7 +46,6 @@
     "lodash.get": "^4.4.2",
     "lolex": "^2.6.0",
     "nise": "^1.3.3",
-    "rollup": "^0.59.3",
     "supports-color": "^5.4.0",
     "type-detect": "^4.0.8"
   },
@@ -71,6 +70,7 @@
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
     "rimraf": "^2.5.3",
+    "rollup": "^0.59.3",
     "rollup-plugin-commonjs": "^9.1.3",
     "rollup-plugin-node-resolve": "^3.3.0",
     "samsam": "^1.3.0"
