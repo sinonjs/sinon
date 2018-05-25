@@ -1,5 +1,6 @@
 import commonjs from "rollup-plugin-commonjs";
 import nodeResolve from "rollup-plugin-node-resolve";
+import builtins from "rollup-plugin-node-builtins";
 
 export default {
     input: "./lib/sinon.js",
@@ -8,6 +9,7 @@ export default {
         format: "es"
     },
     plugins: [
+        builtins(),
         nodeResolve({
             jsnext: true,
             main: true

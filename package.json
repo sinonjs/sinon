@@ -72,6 +72,7 @@
     "rimraf": "^2.5.3",
     "rollup": "^0.59.3",
     "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "samsam": "^1.3.0"
   },
