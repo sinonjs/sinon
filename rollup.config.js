@@ -5,7 +5,7 @@ export default {
     input: "./lib/sinon.js",
     output: {
         file: "pkg/bundle-esm.js",
-        format: "esm"
+        format: "es"
     },
     plugins: [
         nodeResolve({
