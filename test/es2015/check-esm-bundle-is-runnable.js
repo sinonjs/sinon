@@ -9,14 +9,14 @@ const htmlWithModuleScript = `
 <script type="module">
 import sinon from '/sinon-esm.js';
 
-const assert = (result) => { if(!result) throw new Error(); };
+const assert = (result) => { if(!result) throw new Error("Failed test"); };
 
 try {
     const stub = sinon.stub().returns(42);
     assert(42 === stub());
     console.log('sinon-result:works');
 } catch(err) {
-    console.log('sinon-result:fails');
+    console.log('sinon-result:fails Assertion incorrect' );
 }
 </script>
 `;
@@ -30,6 +30,16 @@ async function evaluatePageContent() {
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
 
+    function die(reason) {
+        if (reason) {
+            /* eslint-disable no-console */
+            console.error(reason);
+        }
+
+        browser.close();
+        process.exit(1);
+    }
+
     page.on("error", function (err) {
         throw err;
     });
@@ -42,12 +52,13 @@ async function evaluatePageContent() {
             browser.close();
             process.exit(0);
         } else if (text.startsWith("sinon-result:fails")) {
-            browser.close();
-            process.exit(1);
+            die(text);
         }
     });
 
     await page.goto("http://localhost:3876");
+
+    setTimeout(() => die("No result within timeout."), 1000);
 }
 
 const app = http.createServer((req, res) => {
