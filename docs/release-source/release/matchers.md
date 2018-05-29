@@ -181,6 +181,10 @@ Requires the value to be a `Date` object.
 
 Requires the value to be a `Symbol`.
 
+#### `sinon.match.in(array)`
+
+Requires the value to be in the `array`.
+
 *Since `sinon@2.0.0`*
 
 #### `sinon.match.same(ref)`
