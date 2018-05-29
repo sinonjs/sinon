@@ -26,7 +26,8 @@ process.chdir(`${__dirname}/../../pkg/`);
 const sinonModule = fs.readFileSync("./sinon-esm.js");
 
 async function evaluatePageContent() {
-    const browser = await puppeteer.launch();
+    // https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
+    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
 
     page.on("error", function (err) {
