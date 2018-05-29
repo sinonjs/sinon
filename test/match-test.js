@@ -446,17 +446,15 @@ describe("sinonMatch", function () {
             assert(sinonMatch.isMatcher(inMatcher));
         });
 
-        context("when the test is called with non array argument", function () {
-            it("throws TypeError (array expected)", function () {
-                var arg = "not-array";
+        it("throws if given argument is not an array", function () {
+            var arg = "not-array";
 
-                assert.exception(function () {
-                    sinonMatch.in(arg);
-                }, {name: "TypeError", message: "array expected"});
-            });
+            assert.exception(function () {
+                sinonMatch.in(arg);
+            }, {name: "TypeError", message: "array expected"});
         });
 
-        context("when the test is called with an array", function () {
+        describe("when given argument is an array", function () {
             var arrays = [
                 [1, 2, 3],
                 ["a", "b", "c"],
@@ -465,21 +463,17 @@ describe("sinonMatch", function () {
                 [null, undefined]
             ];
 
-            context("and one of the elements is the same as the actual", function () {
-                it("returns true", function () {
-                    arrays.forEach(function (array) {
-                        var inMatcher = sinonMatch.in(array);
-                        assert.isTrue(inMatcher.test(array[0]));
-                    });
+            it("returns true if the tested value in the given array", function () {
+                arrays.forEach(function (array) {
+                    var inMatcher = sinonMatch.in(array);
+                    assert.isTrue(inMatcher.test(array[0]));
                 });
             });
 
-            context("and none of the elements is the same as the actual", function () {
-                it("returns false", function () {
-                    arrays.forEach(function (array) {
-                        var inMatcher = sinonMatch.in(array);
-                        assert.isFalse(inMatcher.test("something else"));
-                    });
+            it("returns false if the tested value not in the given array", function () {
+                arrays.forEach(function (array) {
+                    var inMatcher = sinonMatch.in(array);
+                    assert.isFalse(inMatcher.test("something else"));
                 });
             });
 
