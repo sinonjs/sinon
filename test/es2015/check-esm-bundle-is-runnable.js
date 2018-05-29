@@ -26,8 +26,12 @@ process.chdir(`${__dirname}/../../pkg/`);
 const sinonModule = fs.readFileSync("./sinon-esm.js");
 
 async function evaluatePageContent() {
-    // https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
-    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({
+        // https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
+        args: ["--no-sandbox"],
+        // allow overriding chrome path
+        executablePath: process.env.SINON_CHROME_BIN || null
+    });
     const page = await browser.newPage();
 
     function die(reason) {
