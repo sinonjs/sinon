@@ -30,11 +30,10 @@ before_script:
   - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run lint; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-headless -- --allow-chrome-as-root; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-webworker -- --allow-chrome-as-root; fi
-  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-esm-bundle -- --allow-chrome-as-root; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-esm-bundle; fi
   - if [ "x$TRAVIS_NODE_VERSION" = "x10" ] && [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then npm run test-cloud; fi
 
-script:
-  - npm run test-node
+script: npm run test-node
 
 after_success:
   - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-coverage && cat ./coverage/lcov.info | coveralls lib; fi
