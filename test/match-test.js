@@ -452,7 +452,7 @@ describe("sinonMatch", function () {
 
                 assert.exception(function () {
                     sinonMatch.in(arg);
-                }, {name: "TypeError"});
+                }, {name: "TypeError", message: "array expected"});
             });
         });
 
@@ -469,13 +469,13 @@ describe("sinonMatch", function () {
                 it("returns true", function () {
                     arrays.forEach(function (array) {
                         var inMatcher = sinonMatch.in(array);
-                        assert(inMatcher.test(array[0]));
+                        assert.isTrue(inMatcher.test(array[0]));
                     });
                 });
             });
 
             context("and none of the elements is the same as the actual", function () {
-                it("returns true", function () {
+                it("returns false", function () {
                     arrays.forEach(function (array) {
                         var inMatcher = sinonMatch.in(array);
                         assert.isFalse(inMatcher.test("something else"));
