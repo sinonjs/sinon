@@ -31,6 +31,12 @@ function verifyProxy(func, argument) {
 
 function noop() {}
 
+function requirePromiseSupport() {
+    if (typeof Promise !== "function") {
+        this.skip();
+    }
+}
+
 var hasFunctionNameSupport = noop.name === "noop";
 
 describe("fake", function () {
@@ -183,6 +189,8 @@ describe("fake", function () {
     });
 
     describe(".resolves", function () {
+        before(requirePromiseSupport);
+
         it("should return a function that resolves to the argument", function () {
             var expected = 42;
             var myFake = fake.resolves(expected);
@@ -196,6 +204,8 @@ describe("fake", function () {
     });
 
     describe(".rejects", function () {
+        before(requirePromiseSupport);
+
         it("should return a function that rejects to the argument", function () {
             var expectedMessage = "42";
             var myFake = fake.rejects(expectedMessage);
