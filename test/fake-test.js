@@ -5,6 +5,7 @@ var fake = sinon.fake;
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
 var refute = referee.refute;
+var supportsPromise = typeof Promise === "function";
 
 referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
@@ -84,11 +85,16 @@ describe("fake", function () {
                 fake(),
                 fake.returns(42),
                 fake.throws(new Error()),
-                fake.resolves(42),
-                fake.rejects(new Error()),
                 fake.yields(42),
                 fake.yieldsAsync(42)
             ];
+
+            if (supportsPromise) {
+                fakes.push(
+                    fake.resolves(42),
+                    fake.rejects(new Error())
+                );
+            }
 
             fakes.forEach(function (f) {
                 assert.equals(f.displayName, "fake");
@@ -182,7 +188,10 @@ describe("fake", function () {
         });
     });
 
+    /* eslint-disable-next-line consistent-return */
     describe(".resolves", function () {
+        if (!supportsPromise) { return this.skip(); }
+
         it("should return a function that resolves to the argument", function () {
             var expected = 42;
             var myFake = fake.resolves(expected);
@@ -195,7 +204,10 @@ describe("fake", function () {
         verifyProxy(fake.resolves, "42");
     });
 
+    /* eslint-disable-next-line consistent-return */
     describe(".rejects", function () {
+        if (!supportsPromise) { return this.skip(); }
+
         it("should return a function that rejects to the argument", function () {
             var expectedMessage = "42";
             var myFake = fake.rejects(expectedMessage);
