@@ -36,7 +36,7 @@ before_script:
 script: npm run test-node
 
 after_success:
-  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-coverage && cat ./coverage/lcov.info | coveralls lib; fi
+  - if [ "x$TRAVIS_NODE_VERSION" = "x10" ]; then npm run test-coverage -- --allow-chrome-as-root && cat ./coverage/lcov.info | coveralls lib; fi
 
 git:
-  depth: 10
+  depth: 1
