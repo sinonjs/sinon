@@ -440,6 +440,46 @@ describe("sinonMatch", function () {
         });
     });
 
+    describe(".in", function () {
+        it("returns matcher", function () {
+            var inMatcher = sinonMatch.in([]);
+            assert(sinonMatch.isMatcher(inMatcher));
+        });
+
+        it("throws if given argument is not an array", function () {
+            var arg = "not-array";
+
+            assert.exception(function () {
+                sinonMatch.in(arg);
+            }, {name: "TypeError", message: "array expected"});
+        });
+
+        describe("when given argument is an array", function () {
+            var arrays = [
+                [1, 2, 3],
+                ["a", "b", "c"],
+                [{ a: "a" }, { b: "b"}],
+                [function () {}, function () {}],
+                [null, undefined]
+            ];
+
+            it("returns true if the tested value in the given array", function () {
+                arrays.forEach(function (array) {
+                    var inMatcher = sinonMatch.in(array);
+                    assert.isTrue(inMatcher.test(array[0]));
+                });
+            });
+
+            it("returns false if the tested value not in the given array", function () {
+                arrays.forEach(function (array) {
+                    var inMatcher = sinonMatch.in(array);
+                    assert.isFalse(inMatcher.test("something else"));
+                });
+            });
+
+        });
+    });
+
     describe(".typeOf", function () {
         it("throws if given argument is not a string", function () {
             assert.exception(function () {
