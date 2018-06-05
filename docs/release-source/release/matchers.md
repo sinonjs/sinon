@@ -49,18 +49,15 @@ Requires the value to be == to the given number.
 
 Requires the value to be a string and have the expectation as a substring.
 
-
 #### `sinon.match(regexp);`
 
 Requires the value to be a string and match the given regular expression.
-
 
 #### `sinon.match(object);`
 
 Requires the value to be not `null` or `undefined` and have at least the same properties as `expectation`.
 
 This supports nested matchers.
-
 
 #### `sinon.match(function)`
 
@@ -146,7 +143,6 @@ Requires the value to be a `Map`.
 
 Requires a `Map` to be deep equal another one.
 
-
 #### `sinon.match.map.contains(map)`
 
 Requires a `Map` to contain each one of the items the given map has.
@@ -185,12 +181,9 @@ Requires the value to be a `Symbol`.
 
 Requires the value to be in the `array`.
 
-*Since `sinon@2.0.0`*
-
 #### `sinon.match.same(ref)`
 
 Requires the value to strictly equal `ref`.
-
 
 #### `sinon.match.typeOf(type)`
 
@@ -211,7 +204,6 @@ Requires the value to be of the given type, where `type` can be one of
 #### `sinon.match.instanceOf(type)`
 
 Requires the value to be an instance of the given `type`.
-
 
 #### `sinon.match.has(property[, expectation])`
 
