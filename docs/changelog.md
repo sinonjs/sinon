@@ -5,7 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
-2.5.10 / 2018-05-24
+5.1.0 / 2018-06-06
+==================
+
+  * Add `in` matcher (#1811)
+
+5.0.10 / 2018-05-24
 ==================
 
   * Remove functions shadowing time related sandbox methods (#1802)
