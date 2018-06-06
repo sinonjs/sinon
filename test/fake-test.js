@@ -226,14 +226,12 @@ describe("fake", function () {
             });
         });
 
-        describe("when passed a String", function () {
-            it("should reject with an Error", function () {
-                var expected = "lorem ipsum";
-                var myFake = fake.rejects(expected);
+        it("should reject with an Error when passed a String", function () {
+            var expected = "lorem ipsum";
+            var myFake = fake.rejects(expected);
 
-                return myFake().catch(function (actual) {
-                    assert.isTrue(actual instanceof Error);
-                });
+            return myFake().catch(function (actual) {
+                assert.isTrue(actual instanceof Error);
             });
         });
     });
