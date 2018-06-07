@@ -73,6 +73,28 @@ Returns `true` if call threw exception of provided type.
 Returns `true` if call threw provided exception object.
 
 
+### `spyCall.calledBefore(otherCall)`
+
+Returns `true` if the spy call occurred before another spy call.
+
+
+### `spyCall.calledAfter(otherCall)`
+
+Returns `true` if the spy call occurred after another spy call.
+
+
+### `spyCall.calledImmediatelyBefore(otherCall)`
+
+Returns `true` if the spy call occurred before another call, and no calls to any
+other spy occurred in-between.
+
+
+### `spyCall.calledImmediatelyAfter(otherCall)`
+
+Returns `true` if the spy call occurred after another call, and no calls to any
+other spy occurred in-between.
+
+
 ### `spyCall.thisValue`
 
 The call's `this` value.
