@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+5.1.1 / 2018-06-07
+==================
+
+  * Remove ES2015 'module' field for 5x branch
+
 5.1.0 / 2018-06-06
 ==================
 
