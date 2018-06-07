@@ -147,6 +147,31 @@ describe("sinonSpy.call", function () {
 
             assert.same(spy.getCall(0).thisValue, obj);
         });
+
+        it("has methods to test relative ordering", function () {
+            var spy = sinonSpy();
+            for (var i = 0; i < 4; i++) {
+                spy.call({});
+            }
+
+            var calls = [0, 1, 2, 3].map(function (idx) {
+                return spy.getCall(idx);
+            });
+
+            assert.equals(calls[1].calledBefore(calls[3]), true);
+            assert.equals(calls[1].calledBefore(calls[0]), false);
+
+            assert.equals(calls[3].calledAfter(calls[1]), true);
+            assert.equals(calls[1].calledAfter(calls[3]), false);
+
+            assert.equals(calls[0].calledImmediatelyBefore(calls[2]), false);
+            assert.equals(calls[1].calledImmediatelyBefore(calls[2]), true);
+            assert.equals(calls[3].calledImmediatelyBefore(calls[1]), false);
+
+            assert.equals(calls[3].calledImmediatelyAfter(calls[1]), false);
+            assert.equals(calls[2].calledImmediatelyAfter(calls[1]), true);
+            assert.equals(calls[1].calledImmediatelyAfter(calls[3]), false);
+        });
     });
 
     describe("call calledOn", function () {
