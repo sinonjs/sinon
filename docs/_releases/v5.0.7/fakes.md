@@ -138,12 +138,7 @@ Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fake
 To replace a property, you can use the [`sinon.replace`](../sandbox/#sandboxreplaceobject-property-replacement) method.
 
 ```js
-var fake = sinon.fake.returns('42');
-
-sinon.replace(console, 'log', fake);
-
-console.log('apple pie');
-// 42
+{% include examples/fakes/replace.js %}
 ```
 
 When you want to restore the replaced properties, simply call the `sinon.restore` method.

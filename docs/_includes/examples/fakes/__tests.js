@@ -167,4 +167,19 @@ describe("`fake` examples", function () {
             sinon.assert.calledWithExactly(global.console.log, true);
         });
     });
+
+    // replace.js
+    describe("sinon.replace example", function () {
+        it("should output '42' on the console", function () {
+            proxyquire("./replace", {
+                "sinon": {
+                    fake: sinon.fake,
+                    replace: sinon.replace
+                }
+            });
+
+            sinon.assert.calledOnce(global.console.log);
+            sinon.assert.calledWithExactly(global.console.log, 42);
+        });
+    });
 });
