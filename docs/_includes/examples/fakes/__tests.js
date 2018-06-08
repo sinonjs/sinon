@@ -89,4 +89,18 @@ describe("`fake` examples", function () {
             });
         });
     });
+
+    // yields.js
+    describe("yields", function () {
+        it("should output 'lemon pie' on the console", function () {
+            proxyquire("./yields", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+
+            sinon.assert.calledOnce(global.console.log);
+            sinon.assert.calledWithExactly(global.console.log, "lemon pie", "key lime pie");
+        });
+    });
 });

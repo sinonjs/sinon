@@ -68,10 +68,7 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 `fake` expects the last argument to be a callback and will invoke it with the given arguments.
 
 ```js
-var fake = sinon.fake.yields('hello world');
-
-fake(console.log);
-// hello world
+{% include examples/fakes/yields.js %}
 ```
 
 #### `sinon.fake.yieldsAsync(callback[, value1, ..., valueN]);`
