@@ -123,4 +123,20 @@ describe("`fake` examples", function () {
             }, 0);
         });
     });
+
+    // wrap-func.js
+    describe("wrapping a function example", function () {
+        it("should allow existing behavior", function () {
+            proxyquire("./wrap-func", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+
+            sinon.assert.calledTwice(global.console.log);
+
+            assert.equals(global.console.log.firstCall.args[0], 4);
+            assert.equals(global.console.log.secondCall.args, ["fake.calledOnce", true]);
+        });
+    });
 });

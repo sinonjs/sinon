@@ -85,6 +85,11 @@ Wraps an existing `Function` to record all interactions, while leaving it up to 
 
 This is useful when complex behavior not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
 
+```js
+{% include examples/fakes/wrap-func.js %}
+```
+
+
 ### Instance properties
 
 #### `f.callback`
