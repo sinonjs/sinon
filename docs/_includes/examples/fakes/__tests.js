@@ -103,4 +103,24 @@ describe("`fake` examples", function () {
             sinon.assert.calledWithExactly(global.console.log, "lemon pie", "key lime pie");
         });
     });
+
+    // yields-async.js
+    describe("yieldsAsync", function () {
+        it("should output 'lemon pie' on the console", function (done) {
+            proxyquire("./yields-async", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+
+            sinon.assert.notCalled(global.console.log);
+
+            setTimeout(function () {
+                sinon.assert.calledOnce(global.console.log);
+                sinon.assert.calledWithExactly(global.console.log, "strawberry pie");
+
+                done();
+            }, 0);
+        });
+    });
 });
