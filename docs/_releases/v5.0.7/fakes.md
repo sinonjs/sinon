@@ -42,10 +42,7 @@ Creates a fake that throws an `Error` with the provided value as the `message` p
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
 ```js
-var fake = sinon.fake.throws(new Error('not apple pie'));
-
-fake();
-// Error: not apple pie
+{% include examples/fakes/throws.js %}
 ```
 
 #### `sinon.fake.resolves(value);`

@@ -2,6 +2,7 @@
 
 var proxyquire = require("proxyquire").noCallThru();
 var sinon = require("../../../../lib/sinon");
+var assert = require("@sinonjs/referee").assert;
 
 describe("`fake` examples", function () {
     beforeEach(function () {
@@ -37,6 +38,21 @@ describe("`fake` examples", function () {
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, "apple pie");
+        });
+    });
+
+    // throws.js
+    describe("throws", function () {
+        it("should throw Error with message: 'not apple pie'", function () {
+            try {
+                proxyquire("./throws", {
+                    "sinon": {
+                        fake: sinon.fake
+                    }
+                });
+            } catch (error) {
+                assert.equals(error.message, "not apple pie");
+            }
         });
     });
 });

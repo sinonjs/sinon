@@ -7,7 +7,7 @@ plugins:
 rules:
   no-console: off
   max-nested-callbacks: off
-  no-restricted-syntax: [error, TryStatement]
+  no-restricted-syntax: [off, TryStatement]
 
   # Mocha Plugin - https://github.com/lo1tuma/eslint-plugin-mocha
   mocha/handle-done-callback: error
