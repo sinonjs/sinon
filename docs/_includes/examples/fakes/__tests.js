@@ -22,7 +22,7 @@ describe("`fake` examples", function () {
             });
 
             sinon.assert.calledOnce(global.console.log);
-            sinon.assert.calledWith(global.console.log, 1);
+            sinon.assert.calledWithExactly(global.console.log, 1);
         });
     });
 
@@ -36,7 +36,7 @@ describe("`fake` examples", function () {
             });
 
             sinon.assert.calledOnce(global.console.log);
-            sinon.assert.calledWith(global.console.log, "apple pie");
+            sinon.assert.calledWithExactly(global.console.log, "apple pie");
         });
     });
 });
