@@ -59,6 +59,10 @@ Creates a fake that returns a rejected `Promise` for the passed value.
 
 If an `Error` is passed as the `value` argument, then that will be the value of the promise. If any other value is passed, then that will be used for the `message` property of the `Error` returned by the promise.
 
+```js
+{% include examples/fakes/rejects.js %}
+```
+
 #### `sinon.fake.yields(callback[, value1, ..., valueN]);`
 
 `fake` expects the last argument to be a callback and will invoke it with the given arguments.

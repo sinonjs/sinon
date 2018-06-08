@@ -72,4 +72,21 @@ describe("`fake` examples", function () {
             });
         });
     });
+
+    // rejects.js
+    describe("rejects", function () {
+        it("should output 'not cherry pie' on the console", function (done) {
+            setTimeout(function () {
+                sinon.assert.calledOnce(global.console.log);
+                sinon.assert.calledWithExactly(global.console.log, "not cherry pie");
+                done();
+            }, 0);
+
+            proxyquire("./rejects", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+        });
+    });
 });
