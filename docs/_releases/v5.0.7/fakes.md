@@ -115,15 +115,7 @@ f.lastCall.callback === cb2;
 This property is a convenient way to get a reference to the last argument passed in the last call to the fake.
 
 ```js
-var f = sinon.fake();
-var date1 = new Date();
-var date2 = new Date();
-
-f(1, 2, date1);
-f(1, 2, date2);
-
-f.lastArg === date2;
-// true
+{% include examples/fakes/last-arg.js %}
 ```
 
 The same convenience has been added to [spy calls][../spy-call]:

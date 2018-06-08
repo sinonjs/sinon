@@ -153,4 +153,18 @@ describe("`fake` examples", function () {
             sinon.assert.calledWithExactly(global.console.log, true);
         });
     });
+
+    // last-arg.js
+    describe(".lastArg convenience", function () {
+        it("should output 'true' on the console", function () {
+            proxyquire("./last-arg", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+
+            sinon.assert.calledOnce(global.console.log);
+            sinon.assert.calledWithExactly(global.console.log, true);
+        });
+    });
 });
