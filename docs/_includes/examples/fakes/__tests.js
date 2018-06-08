@@ -139,4 +139,18 @@ describe("`fake` examples", function () {
             assert.equals(global.console.log.secondCall.args, ["fake.calledOnce", true]);
         });
     });
+
+    // callback.js
+    describe(".callback convenience", function () {
+        it("should output 'true' on the console", function () {
+            proxyquire("./callback", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+
+            sinon.assert.calledOnce(global.console.log);
+            sinon.assert.calledWithExactly(global.console.log, true);
+        });
+    });
 });

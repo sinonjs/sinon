@@ -97,15 +97,7 @@ This is useful when complex behavior not covered by the `sinon.fake.*` methods i
 This property is a convenience to easily get a reference to the last callback passed in the last to the fake.
 
 ```js
-var f = sinon.fake();
-var cb1 = function () {};
-var cb2 = function () {};
-
-f(1, 2, 3, cb1);
-f(1, 2, 3, cb2);
-
-f.callback === cb2;
-// true
+{% include examples/fakes/wrap-func.js %}
 ```
 
 The same convenience has been added to [spy calls][../spy-call]:
