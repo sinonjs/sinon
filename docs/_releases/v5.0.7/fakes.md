@@ -49,6 +49,10 @@ If an `Error` is passed as the `value` argument, then that will be the thrown va
 
 Creates a fake that returns a resolved `Promise` for the passed value.
 
+```js
+{% include examples/fakes/resolves.js %}
+```
+
 #### `sinon.fake.rejects(value);`
 
 Creates a fake that returns a rejected `Promise` for the passed value.

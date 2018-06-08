@@ -55,4 +55,21 @@ describe("`fake` examples", function () {
             }
         });
     });
+
+    // resolves.js
+    describe("resolves", function () {
+        it("should output 'cherry pie' on the console", function (done) {
+            setTimeout(function () {
+                sinon.assert.calledOnce(global.console.log);
+                sinon.assert.calledWithExactly(global.console.log, "cherry pie");
+                done();
+            }, 0);
+
+            proxyquire("./resolves", {
+                "sinon": {
+                    fake: sinon.fake
+                }
+            });
+        });
+    });
 });
