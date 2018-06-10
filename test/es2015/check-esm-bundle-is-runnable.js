@@ -7,13 +7,18 @@ const port = 3876;
 
 const htmlWithModuleScript = `
 <script type="module">
-import sinon from '/sinon-esm.js';
+import sinon, { spy } from '/sinon-esm.js';
 
 const assert = (result) => { if(!result) throw new Error("Failed test"); };
 
 try {
     const stub = sinon.stub().returns(42);
     assert(42 === stub());
+
+    const calledSpy = spy();
+    calledSpy();
+    assert(1 === calledSpy.callCount);
+
     console.log('sinon-result:works');
 } catch(err) {
     console.log('sinon-result:fails Assertion incorrect' );
