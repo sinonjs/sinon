@@ -3,6 +3,12 @@
 var proxyquire = require("proxyquire").noCallThru();
 var sinon = require("../../../../lib/sinon");
 var assert = require("@sinonjs/referee").assert;
+var stubs = {
+    "sinon": {
+        fake: sinon.fake,
+        replace: sinon.replace
+    }
+};
 
 describe("`fake` examples", function () {
     beforeEach(function () {
@@ -16,11 +22,7 @@ describe("`fake` examples", function () {
     // basic.js
     describe("basic invocation", function () {
         it("should output `1` on the console", function () {
-            proxyquire("./basic", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./basic", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, 1);
@@ -30,11 +32,7 @@ describe("`fake` examples", function () {
     // returns.js
     describe("returns", function () {
         it("should output 'apple pie' on the console", function () {
-            proxyquire("./returns", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./returns", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, "apple pie");
@@ -45,11 +43,7 @@ describe("`fake` examples", function () {
     describe("throws", function () {
         it("should throw Error with message: 'not apple pie'", function () {
             try {
-                proxyquire("./throws", {
-                    "sinon": {
-                        fake: sinon.fake
-                    }
-                });
+                proxyquire("./throws", stubs);
             } catch (error) {
                 assert.equals(error.message, "not apple pie");
             }
@@ -65,11 +59,7 @@ describe("`fake` examples", function () {
                 done();
             }, 0);
 
-            proxyquire("./resolves", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./resolves", stubs);
         });
     });
 
@@ -82,22 +72,14 @@ describe("`fake` examples", function () {
                 done();
             }, 0);
 
-            proxyquire("./rejects", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./rejects", stubs);
         });
     });
 
     // yields.js
     describe("yields", function () {
         it("should output 'lemon pie' on the console", function () {
-            proxyquire("./yields", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./yields", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, "lemon pie", "key lime pie");
@@ -107,11 +89,7 @@ describe("`fake` examples", function () {
     // yields-async.js
     describe("yieldsAsync", function () {
         it("should output 'lemon pie' on the console", function (done) {
-            proxyquire("./yields-async", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./yields-async", stubs);
 
             sinon.assert.notCalled(global.console.log);
 
@@ -127,11 +105,7 @@ describe("`fake` examples", function () {
     // wrap-func.js
     describe("wrapping a function example", function () {
         it("should allow existing behavior", function () {
-            proxyquire("./wrap-func", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./wrap-func", stubs);
 
             sinon.assert.calledTwice(global.console.log);
 
@@ -143,11 +117,7 @@ describe("`fake` examples", function () {
     // callback.js
     describe(".callback convenience", function () {
         it("should output 'true' on the console", function () {
-            proxyquire("./callback", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./callback", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, true);
@@ -157,11 +127,7 @@ describe("`fake` examples", function () {
     // last-arg.js
     describe(".lastArg convenience", function () {
         it("should output 'true' on the console", function () {
-            proxyquire("./last-arg", {
-                "sinon": {
-                    fake: sinon.fake
-                }
-            });
+            proxyquire("./last-arg", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, true);
@@ -171,12 +137,7 @@ describe("`fake` examples", function () {
     // replace.js
     describe("sinon.replace example", function () {
         it("should output '42' on the console", function () {
-            proxyquire("./replace", {
-                "sinon": {
-                    fake: sinon.fake,
-                    replace: sinon.replace
-                }
-            });
+            proxyquire("./replace", stubs);
 
             sinon.assert.calledOnce(global.console.log);
             sinon.assert.calledWithExactly(global.console.log, 42);
