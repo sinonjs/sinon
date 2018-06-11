@@ -1,4 +1,15 @@
 
+6.0.0 / 2018-06-11
+==================
+
+  * Export Sinon and its functions as an EcmaScript module (#1809 and #1835)
+  * Document/test call ordering checks
+
+5.1.1 / 2018-06-07
+==================
+
+  * Remove ES2015 'module' field for 5x branch (fix in seperate branch - see tag)
+
 5.1.0 / 2018-06-06
 ==================
 
