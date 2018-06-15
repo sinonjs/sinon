@@ -113,10 +113,5 @@ describe("sinon module", function () {
             });
         });
 
-        describe("useFakeXMLHttpRequest", function () {
-            it("should be the fakeXhr.useFakeXMLHttpRequest export from nise", function () {
-                assert.equals(sinon.useFakeXMLHttpRequest, fakeNise.fakeXhr.useFakeXMLHttpRequest);
-            });
-        });
     });
 });
