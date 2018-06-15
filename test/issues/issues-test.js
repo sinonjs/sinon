@@ -5,6 +5,8 @@ var sinon = require("../../lib/sinon");
 var createStub = require("../../lib/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
+var globalXHR = global.XMLHttpRequest;
+var globalAXO = global.ActiveXObject;
 
 describe("issues", function () {
     beforeEach(function () {
@@ -478,5 +480,17 @@ describe("issues", function () {
 
             assert.same(originalSetTimeout, global.setTimeout, "fakeTimers restored");
         });
+    });
+
+    describe("#1840 - sinon.restore useFakeXMLHttpRequest", function () {
+
+        it("should restore XMLHttpRequest and ActiveXObject", function () {
+            sinon.useFakeXMLHttpRequest();
+            sinon.restore();
+
+            assert.same(global.XMLHttpRequest, globalXHR);
+            assert.same(global.ActiveXObject, globalAXO);
+        });
+
     });
 });
