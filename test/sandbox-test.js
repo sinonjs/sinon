@@ -10,7 +10,7 @@ var fakeServerWithClock = require("nise").fakeServerWithClock;
 var fakeServer = require("nise").fakeServer;
 var Sandbox = require("../lib/sinon/sandbox");
 var createSandbox = require("../lib/sinon/create-sandbox");
-var fake = require("../lib/sinon/fake");
+var sinonFake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
@@ -388,6 +388,146 @@ describe("Sandbox", function () {
         });
     });
 
+    describe(".fake", function () {
+        it("should return a fake", function () {
+            var sandbox = createSandbox();
+            var fake = sandbox.fake();
+
+            assert.isFunction(fake);
+            assert.equals(fake.displayName, "fake");
+        });
+
+        it("should add a fake to the internal collection", function () {
+            var sandbox = createSandbox();
+            var fakes = sandbox.getFakes();
+            var expected;
+
+            expected = sandbox.fake();
+
+            assert.isTrue(fakes.indexOf(expected) !== -1);
+        });
+
+        describe(".returns", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.returns();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.returns();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+
+        describe(".throws", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.throws();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.throws();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+
+        describe(".resolves", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.resolves();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.resolves();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+
+        describe(".rejects", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.rejects();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.rejects();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+
+        describe(".yields", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.yields();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.yields();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+
+        describe(".yieldsAsync", function () {
+            it("should return a fake behavior", function () {
+                var sandbox = createSandbox();
+                var fake = sandbox.fake.yieldsAsync();
+
+                assert.isFunction(fake);
+                assert.equals(fake.displayName, "fake");
+            });
+
+            it("should add a fake behavior to the internal collection", function () {
+                var sandbox = createSandbox();
+                var fakes = sandbox.getFakes();
+                var expected;
+
+                expected = sandbox.fake.yieldsAsync();
+
+                assert.isTrue(fakes.indexOf(expected) !== -1);
+            });
+        });
+    });
+
     describe(".verifyAndRestore", function () {
         beforeEach(function () {
             this.sandbox = createSandbox();
@@ -514,10 +654,10 @@ describe("Sandbox", function () {
                 }
             };
 
-            sandbox.replace(object, "property", fake());
+            sandbox.replace(object, "property", sinonFake());
 
             assert.exception(function () {
-                sandbox.replace(object, "property", fake());
+                sandbox.replace(object, "property", sinonFake());
             }, {message: "Attempted to replace property which is already replaced"});
         });
 
@@ -556,7 +696,7 @@ describe("Sandbox", function () {
                 };
 
                 assert.exception(function () {
-                    sandbox.replace(object, "foo", fake());
+                    sandbox.replace(object, "foo", sinonFake());
                 }, {message: "Use sandbox.replaceGetter for replacing getters"});
             });
         });
@@ -572,7 +712,7 @@ describe("Sandbox", function () {
                 };
 
                 assert.exception(function () {
-                    sandbox.replace(object, "foo", fake());
+                    sandbox.replace(object, "foo", sinonFake());
                 }, {message: "Use sandbox.replaceSetter for replacing setters"});
             });
         });
@@ -591,13 +731,13 @@ describe("Sandbox", function () {
                 }
             };
 
-            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+            this.sandbox.replaceGetter(object, "foo", sinonFake.returns(expected));
 
             assert.equals(object.foo, expected);
         });
 
         it("should return replacement", function () {
-            var replacement = fake.returns("baz");
+            var replacement = sinonFake.returns("baz");
             var object = {
                 get foo() {
                     return "bar";
@@ -611,7 +751,7 @@ describe("Sandbox", function () {
 
         it("should replace an inherited property", function () {
             var expected = "baz";
-            var replacement = fake.returns(expected);
+            var replacement = sinonFake.returns(expected);
             var existing = "existing";
             var object = Object.create({
                 get foo() {
@@ -652,7 +792,7 @@ describe("Sandbox", function () {
                 }
             };
 
-            this.sandbox.replaceGetter(object, "foo", fake.returns(expected));
+            this.sandbox.replaceGetter(object, "foo", sinonFake.returns(expected));
 
             this.sandbox.restore();
 
@@ -667,10 +807,10 @@ describe("Sandbox", function () {
                 }
             };
 
-            sandbox.replaceGetter(object, "foo", fake.returns("one"));
+            sandbox.replaceGetter(object, "foo", sinonFake.returns("one"));
 
             assert.exception(function () {
-                sandbox.replaceGetter(object, "foo", fake.returns("two"));
+                sandbox.replaceGetter(object, "foo", sinonFake.returns("two"));
             }, {message: "Attempted to replace foo which is already replaced"});
         });
     });
@@ -779,10 +919,10 @@ describe("Sandbox", function () {
                 set foo(value) {}
             };
 
-            sandbox.replaceSetter(object, "foo", fake());
+            sandbox.replaceSetter(object, "foo", sinonFake());
 
             assert.exception(function () {
-                sandbox.replaceSetter(object, "foo", fake.returns("two"));
+                sandbox.replaceSetter(object, "foo", sinonFake.returns("two"));
             }, {message: "Attempted to replace foo which is already replaced"});
         });
     });
@@ -820,6 +960,15 @@ describe("Sandbox", function () {
 
             assert(fake0.resetHistory.called);
             assert(fake1.resetHistory.called);
+        });
+
+        it("resets fake behaviours", function () {
+            var fake = this.sandbox.fake();
+            fake(1234);
+
+            this.sandbox.reset();
+
+            assert.equals(fake.getCalls(), []);
         });
     });
 
