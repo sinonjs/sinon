@@ -20,6 +20,7 @@
 <a href="#sponsors"><img src="https://opencollective.com/sinon/sponsors/badge.svg" alt="OpenCollective"></a>
 <a href="https://www.npmjs.com/package/sinon" target="_blank"><img src="https://img.shields.io/npm/dm/sinon.svg" alt="npm downloads per month"></a>
 <a href="https://cdnjs.com/libraries/sinon.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/sinon.js.svg" alt="CDNJS version"></a>
+<a href="https://dependabot.com/compatibility-score.html?dependency-name=sinon&package-manager=npm_and_yarn&version-scheme=semver" target="_blank"><img src="https://api.dependabot.com/badges/compatibility_score?dependency-name=sinon&package-manager=npm_and_yarn&version-scheme=semver" alt="SemVer compatibility"></a>
 </p>
 
 <p align=center>
