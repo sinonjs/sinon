@@ -17,7 +17,7 @@
     "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
     "test-dev": "npm run test-node -- --watch -R min",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] \"test/**/*-test.js\"",
-    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] --plugin [ mochify-istanbul --exclude '**/test/**' --report text --report lcovonly --dir ./coverage ] test/**-test.js",
+    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] --plugin [ mochify-istanbul --exclude '**/test/**' --report text --report lcovonly --dir ./coverage ] \"test/**/*-test.js\"",
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "mochify --https-server 8080 test/webworker/webworker-support-assessment.js",
     "test-esm": "mocha -r esm test/es2015/module-support-assessment-test.mjs",
