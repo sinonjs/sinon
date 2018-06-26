@@ -389,7 +389,9 @@ describe("stub", function () {
             var stub = createStub.create();
             stub.rejects(Error("should be superseeded")).resolvesArg(1);
 
-            return stub().then();
+            return stub("zero", "one").then(function (actual) {
+                assert.same(actual, "one");
+            });
         });
 
         it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
@@ -397,7 +399,23 @@ describe("stub", function () {
             var stub = createStub.create();
             stub.resolvesArg(2);
 
-            assert.equals(resolveSpy.callCount, 0);
+            assert(resolveSpy.notCalled);
+        });
+
+        it("throws if index is not a number", function () {
+            var stub = createStub.create();
+
+            assert.exception(function () {
+                stub.resolvesArg("not a number");
+            }, {name: "TypeError"});
+        });
+
+        it("throws if no index is specified", function () {
+            var stub = createStub.create();
+
+            assert.exception(function () {
+                stub.resolvesArg();
+            }, {name: "TypeError"});
         });
     });
 
