@@ -406,14 +406,6 @@ describe("stub", function () {
             var stub = createStub.create();
 
             assert.exception(function () {
-                stub.resolvesArg("not a number");
-            }, {name: "TypeError"});
-        });
-
-        it("throws if no index is specified", function () {
-            var stub = createStub.create();
-
-            assert.exception(function () {
                 stub.resolvesArg();
             }, {name: "TypeError"});
         });
