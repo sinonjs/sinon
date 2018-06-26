@@ -376,7 +376,7 @@ describe("stub", function () {
                 },
                 {
                     name: "TypeError",
-                    message: "returnsArg failed: 3 arguments required but only 2 present"
+                    message: "returnsArg failed: 4 arguments required but only 2 present"
                 }
             );
         });
@@ -419,7 +419,7 @@ describe("stub", function () {
                 },
                 {
                     name: "TypeError",
-                    message: "throwsArg failed: 3 arguments required but only 2 present"
+                    message: "throwsArg failed: 4 arguments required but only 2 present"
                 }
             );
         });
@@ -735,7 +735,7 @@ describe("stub", function () {
                 },
                 {
                     name: "TypeError",
-                    message: "callsArg failed: 3 arguments required but only 2 present"
+                    message: "callsArg failed: 4 arguments required but only 2 present"
                 }
             );
         });
