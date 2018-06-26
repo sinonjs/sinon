@@ -381,7 +381,7 @@ describe("stub", function () {
             stub.throws().resolvesArg(1);
 
             refute.exception(function () {
-                stub();
+                stub("zero", "one");
             });
         });
 
@@ -416,6 +416,18 @@ describe("stub", function () {
             assert.exception(function () {
                 stub.resolvesArg();
             }, {name: "TypeError"});
+        });
+
+        it("throws without enough arguments", function () {
+            var stub = createStub.create();
+            stub.resolvesArg(3);
+
+            assert.exception(function () {
+                stub("zero", "one", "two");
+            }, {
+                name: "TypeError",
+                message: "resolvesArg failed: 4 arguments required but only 3 present"
+            });
         });
     });
 
