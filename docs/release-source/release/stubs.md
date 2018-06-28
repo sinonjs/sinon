@@ -268,6 +268,16 @@ The Promise library can be overwritten using the `usingPromise` method.
 
 *Since `sinon@2.0.0`*
 
+#### `stub.resolvesArg(index);`
+
+Causes the stub to return a Promise which resolves to the argument at the
+provided index.
+
+`stub.resolvesArg(0);` causes the stub to return a Promise which resolves to the
+first argument.
+
+*Since `sinon@6.1.0`*
+
 #### `stub.throws();`
 
 Causes the stub to throw an exception (`Error`).
