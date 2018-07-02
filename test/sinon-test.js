@@ -114,19 +114,25 @@ describe("sinon module", function () {
         });
 
         describe("useFakeXMLHttpRequest", function () {
-            it("should be the fakeXhr.useFakeXMLHttpRequest export from nise", function () {
+            var nise;
+
+            beforeEach(function () {
                 // use full sinon for this test as it compares sinon instance
                 // proxyquire changes the instance, so `actual instanceof Sandbox` returns `false`
                 // see https://github.com/sinonjs/sinon/pull/1586#issuecomment-354457231
                 sinon = require("../lib/sinon");
 
-                var nise = require("nise");
+                nise = require("nise");
+            });
 
+            afterEach(function () {
+                nise.fakeXhr.useFakeXMLHttpRequest.restore();
+            });
+
+            it("should be the fakeXhr.useFakeXMLHttpRequest export from nise", function () {
                 sinon.spy(nise.fakeXhr, "useFakeXMLHttpRequest");
                 sinon.useFakeXMLHttpRequest();
                 assert.isTrue(nise.fakeXhr.useFakeXMLHttpRequest.called);
-
-                nise.fakeXhr.useFakeXMLHttpRequest.restore();
             });
         });
     });
