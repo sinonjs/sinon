@@ -483,7 +483,6 @@ describe("issues", function () {
     });
 
     describe("#1840 - sinon.restore useFakeXMLHttpRequest", function () {
-
         it("should restore XMLHttpRequest and ActiveXObject", function () {
             sinon.useFakeXMLHttpRequest();
             sinon.restore();
