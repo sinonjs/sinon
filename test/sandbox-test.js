@@ -1174,6 +1174,16 @@ describe("Sandbox", function () {
                 });
 
                 it("calls sinon.useFakeXMLHttpRequest", function () {
+                    var stubXhr = { restore: function () {} };
+
+                    this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns(stubXhr);
+                    var returnedXhr = this.sandbox.useFakeXMLHttpRequest();
+
+                    assert(fakeXhr.useFakeXMLHttpRequest.called);
+                    assert.equals(stubXhr, returnedXhr);
+                });
+
+                it("returns fake xhr object created by nise", function () {
                     this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns({ restore: function () {} });
                     this.sandbox.useFakeXMLHttpRequest();
 
