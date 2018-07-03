@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.1.0 / 2018-07-03
+==================
+
+  * Syntax sugar for resolvesArg (#1846)
+
 6.0.1 / 2018-06-24
 ==================
 
