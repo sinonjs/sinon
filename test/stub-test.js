@@ -343,6 +343,86 @@ describe("stub", function () {
         });
     });
 
+    describe(".resolvesArg", function () {
+        afterEach(function () {
+            if (Promise.resolve.restore) {
+                Promise.resolve.restore();
+            }
+        });
+
+        it("returns a promise to the argument at specified index", function () {
+            var stub = createStub.create();
+            var object = {};
+            stub.resolvesArg(0);
+
+            return stub(object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("returns a promise to the argument at another specified index", function () {
+            var stub = createStub.create();
+            var object = {};
+            stub.resolvesArg(2);
+
+            return stub("ignored", "ignored again", object).then(function (actual) {
+                assert.same(actual, object);
+            });
+        });
+
+        it("should return the same stub", function () {
+            var stub = createStub.create();
+
+            assert.same(stub.resolvesArg(1), stub);
+        });
+
+        it("supersedes previous throws", function () {
+            var stub = createStub.create();
+            stub.throws().resolvesArg(1);
+
+            refute.exception(function () {
+                stub("zero", "one");
+            });
+        });
+
+        it("supersedes previous rejects", function () {
+            var stub = createStub.create();
+            stub.rejects(Error("should be superseeded")).resolvesArg(1);
+
+            return stub("zero", "one").then(function (actual) {
+                assert.same(actual, "one");
+            });
+        });
+
+        it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
+            var resolveSpy = createSpy(Promise, "resolve");
+            var stub = createStub.create();
+            stub.resolvesArg(2);
+
+            assert(resolveSpy.notCalled);
+        });
+
+        it("throws if index is not a number", function () {
+            var stub = createStub.create();
+
+            assert.exception(function () {
+                stub.resolvesArg();
+            }, {name: "TypeError"});
+        });
+
+        it("throws without enough arguments", function () {
+            var stub = createStub.create();
+            stub.resolvesArg(3);
+
+            assert.exception(function () {
+                stub("zero", "one", "two");
+            }, {
+                name: "TypeError",
+                message: "resolvesArg failed: 4 arguments required but only 3 present"
+            });
+        });
+    });
+
     describe(".returnsArg", function () {
         it("returns argument at specified index", function () {
             var stub = createStub.create();
