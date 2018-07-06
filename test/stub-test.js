@@ -445,6 +445,21 @@ describe("stub", function () {
                 stub.returnsArg();
             }, {name: "TypeError"});
         });
+
+        it("should throw without enough arguments", function () {
+            var stub = createStub.create();
+            stub.returnsArg(3);
+
+            assert.exception(
+                function () {
+                    stub("only", "two arguments");
+                },
+                {
+                    name: "TypeError",
+                    message: "returnsArg failed: 4 arguments required but only 2 present"
+                }
+            );
+        });
     });
 
     describe(".throwsArg", function () {
@@ -482,14 +497,11 @@ describe("stub", function () {
                 function () {
                     stub("only", "two arguments");
                 },
-                function (error) {
-                    return error instanceof TypeError
-                        && error.message ===
-                        "throwArgs failed: 3 arguments required but only 2 present"
-                    ;
+                {
+                    name: "TypeError",
+                    message: "throwsArg failed: 4 arguments required but only 2 present"
                 }
             );
-
         });
 
         it("should work with call-based behavior", function () {
@@ -791,6 +803,21 @@ describe("stub", function () {
             assert.exception(function () {
                 stub.callsArg({});
             }, {name: "TypeError"});
+        });
+
+        it("should throw without enough arguments", function () {
+            var stub = createStub.create();
+            stub.callsArg(3);
+
+            assert.exception(
+                function () {
+                    stub("only", "two arguments");
+                },
+                {
+                    name: "TypeError",
+                    message: "callsArg failed: 4 arguments required but only 2 present"
+                }
+            );
         });
 
         it("returns result of invocant", function () {
