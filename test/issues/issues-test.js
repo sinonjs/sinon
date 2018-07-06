@@ -492,4 +492,20 @@ describe("issues", function () {
         });
 
     });
+
+    describe("#1709 - deepEqual fails on cyclic references", function () {
+        it("should not blow up", function () {
+            var spy = sinon.spy();
+
+            var firstObj = {};
+            firstObj.aKeyName = firstObj;
+
+            var secondObj = {};
+            secondObj.aKeyName = secondObj;
+
+            spy(firstObj);
+
+            sinon.assert.calledWith(spy, secondObj);
+        });
+    });
 });
