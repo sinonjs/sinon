@@ -383,4 +383,20 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(a, b));
     });
 
+    it("handles cyclic objects when a matcher provided", function () {
+        var matchDeepEqual = deepEqual.use(match);
+
+        var a = {
+            foo: "bar"
+        };
+        a.cyclicKeyName = a;
+
+        var b = {
+            foo: "bar"
+        };
+        b.cyclicKeyName = b;
+
+        assert(matchDeepEqual(a, b));
+    });
+
 });
