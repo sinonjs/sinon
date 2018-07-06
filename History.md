@@ -1,4 +1,9 @@
 
+6.1.2 / 2018-07-06
+==================
+
+  * Made callsArg, returnsArg, and throwsArg more strict (#1848)
+
 6.1.1 / 2018-07-06
 ==================
 
