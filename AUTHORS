@@ -103,6 +103,7 @@ Max Calabrese <max.calabrese@ymail.com>
 Michael Herman <hermanmu@gmail.com>
 Márton Salomváry <salomvary@gmail.com>
 Nathan Friedly <nathan@nfriedly.com>
+Nathan Mahdavi <mail@nathanmahdavi.com>
 Nathan Perry <nateperry333@gmail.com>
 Rens Groothuijsen <l.groothuijsen@alumni.maastrichtuniversity.nl>
 Satoshi Nakamura <snakamura@infoteria.com>
@@ -118,9 +119,8 @@ mohayonao <mohayonao@gmail.com>
 vitalets <vitalets@yandex-team.ru>
 yoshimura-toshihide <toshihide0105yoshimura@gmail.com>
 なつき <i@ntk.me>
-John Bernardo <jbernardo@linkedin.com>
+Eric Wendelin <ewendelin@twitter.com>
 charlierudolph <charles.w.rudolph@gmail.com>
-clint <clint@wealthfront.com>
 Jonathan Roitgrund <jroitgrund@gmail.com>
 Eric Stobbart <Eric_Stobbart@comcast.com>
 Eli White <github@eli-white.com>
@@ -128,8 +128,8 @@ Jordan Harband <ljharb@gmail.com>
 Jordan Hawker <hawker.jordan@gmail.com>
 Joseph Spens <joseph@workmarket.com>
 Josh Goldberg <josh@fullscreenmario.com>
+clint <clint@wealthfront.com>
 goligo <ich@malte.de>
-wwalser <waw325@gmail.com>
 JoshuaCWebDeveloper <coosriverjoshua1@outlook.com>
 Kalisa Falzone <KalisaFalzone@users.noreply.github.com>
 Duc Tri Le <duc1@email.tiger-inc.com>
@@ -148,7 +148,7 @@ Kurt Ruppel <me@kurtruppel.com>
 Lars Thorup <lars@zealake.com>
 LboAnn <extend1994@gmail.com>
 LostArchives <valentin.mullet@gmail.com>
-hannes <github@htmlcss.de>
+wwalser <waw325@gmail.com>
 Lucas Vieira <vieiralucas@users.noreply.github.com>
 Luchs <Luchs@euirc.eu>
 David Colucci <davidanthonycolucci@gmail.com>
@@ -156,22 +156,22 @@ Maarten Tromp <maarten@nouncy.com>
 Daryl Lau <daryl@goodeggs.com>
 Marco Ramirez <marco-ramirez@bankofamerica.com>
 Marcos Vanetta <marcos_vanetta@condenast.com>
-hashchange <heim@zeilenwechsel.de>
+hannes <github@htmlcss.de>
 Mario Pareja <mpareja@360incentives.com>
 Mark Banner <standard8@mozilla.com>
 Mark Gibson <mgibson@adaptavist.com>
-ichthala <alice.mottola@gmail.com>
+hashchange <heim@zeilenwechsel.de>
 Mark Stickley <markstickley@users.noreply.github.com>
 Dan Peddle <dazld@users.noreply.github.com>
 Martin Brochhaus <mbrochh@gmail.com>
-jamestalmage <james.talmage@jrtechnical.com>
+ichthala <alice.mottola@gmail.com>
 Martin Körner <martin.koerner@objectfab.de>
 Dan Bird <danielsbird@gmail.com>
+jamestalmage <james.talmage@jrtechnical.com>
 kbackowski <kbackowski@gmail.com>
-Adrian Phinney <adrian.phinney@bellaliant.net>
 Max Klymyshyn <klymyshyn@gmail.com>
 C. T. Lin <chentsulin@gmail.com>
-Aditya Vohra <avohra@yelp.com>
+Adrian Phinney <adrian.phinney@bellaliant.net>
 Michael Jackson <mjijackson@gmail.com>
 Michael Paulukonis <xraysmalevich@gmail.com>
 Michał Perłakowski <michal@perlakowski.pl>
@@ -182,6 +182,7 @@ Brian M Hunt <brianmhunt@gmail.com>
 Brian Bleakley <brianbleakley@gmail.com>
 MouseZero <rm@mousezero.com>
 Mustafa Sak <mustafa.sak@1und1.de>
+Aditya Vohra <avohra@yelp.com>
 mareq <mareq@balint.eu>
 ngryman <ngryman@gmail.com>
 Nelson Silva <nelson.silva@inevo.pt>
@@ -259,30 +260,29 @@ till <till@php.net>
 Alex Kessaris <alex@artsy.ca>
 Volkan Ozcelik <volkan.ozcelik@jivesoftware.com>
 Vynce Montgomery <vynce.montgomery@gmail.com>
-Will Butler <will@butlerhq.com>
 Gilad Peleg <giladp007@gmail.com>
 Giorgos Giannoutsos <contact@nuc.gr>
 Gavin Boulton <gavin.boulton@digital.cabinet-office.gov.uk>
 Gord Tanner <gord@tinyhippos.com>
 Gordon L. Hempton <ghempton@gmail.com>
 Gvozd <gvozdev.viktor@gmail.com>
-William Meleyal <w.meleyal@wollzelle.com>
+Will Butler <will@butlerhq.com>
 Harry Wolff <hswolff@gmail.com>
+William Meleyal <w.meleyal@wollzelle.com>
 Alex Ghiculescu <alex@tanda.co>
-Xiao Ma <x@medium.com>
 HugoMuller <hmu@debian-hmu-dev>
 Gabe Jackson <gj@mail.co.de>
 Ian Lewis <IanMLewis@gmail.com>
 Ian Thomas <ian@ian-thomas.net>
+Xiao Ma <x@medium.com>
 Zhengang Li <huttli@users.noreply.github.com>
-Aleksey Bobyr <aleksey.bobyr@beetroot.se>
 Irving <Irvingb232@gmail.com>
 GProst <gprostmail@gmail.com>
 Jack Brown <jack.brown@mi9.com.au>
 Jacob Page <jpage@godaddy.com>
 Jahangir Iqbal <35706211+jiqbal48@users.noreply.github.com>
 Jake Champion <me@jakechampion.name>
-Akira Matsuda <ronnie@dio.jp>
+Aleksey Bobyr <aleksey.bobyr@beetroot.se>
 James Beavers <jamesjbeavers@gmail.com>
 James M. Greene <james.m.greene@gmail.com>
 Jan Kopriva <jan.kopriva@gooddata.com>
@@ -290,9 +290,10 @@ Jan Suchý <jan.sandokan@gmail.com>
 Jani Hartikainen <jani.hartikainen@gmail.com>
 Jason Anderson <diurnalist@gmail.com>
 Felipe Carasso <felipe@carassonet.org>
+Akira Matsuda <ronnie@dio.jp>
 vsa <vsa@users.noreply.github.com>
 Ericat <erica.salvaneschi@gmail.com>
 Joakim Wimmerstedt <joakim.wimmerstedt@gmail.com>
 Jochen Preusche <iilei@users.noreply.github.com>
 Johann Hubert Sonntagbauer <johann.sonntagbauer@gmx.at>
-Eric Wendelin <ewendelin@twitter.com>
+John Bernardo <jbernardo@linkedin.com>
