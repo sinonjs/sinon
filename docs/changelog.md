@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.1.3 / 2018-07-07
+==================
+
+  * Fix issue with matchers and cyclic references (#1709)
+
 6.1.2 / 2018-07-06
 ==================
 
