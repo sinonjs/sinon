@@ -36,6 +36,8 @@ referee.add("fakeServerWithClock", {
 });
 
 describe("Sandbox", function () {
+    function noop() {}
+
     it("exposes match", function () {
         var sandbox = new Sandbox();
 
@@ -143,6 +145,20 @@ describe("Sandbox", function () {
             var stub = this.sandbox.createStubInstance(Class);
             stub.method.returns(3);
             assert.equals(3, stub.method());
+        });
+
+        it("should require a function", function () {
+            var sandbox = this.sandbox;
+
+            assert.exception(
+                function () {
+                    sandbox.createStubInstance("not a function");
+                },
+                {
+                    name: "TypeError",
+                    message: "The constructor should be a function."
+                }
+            );
         });
 
         it("resets all stub methods on reset()", function () {
@@ -619,6 +635,37 @@ describe("Sandbox", function () {
             assert.equals(object.property, existing);
         });
 
+        it("should error on missing descriptor", function () {
+            var sandbox = this.sandbox;
+
+            assert.exception(
+                function () {
+                    sandbox.replace({}, "i-dont-exist");
+                },
+                {
+                    message: "Cannot replace non-existent own property i-dont-exist",
+                    name: "TypeError"
+                }
+            );
+        });
+
+        it("should error on missing replacement", function () {
+            var sandbox = this.sandbox;
+            var object = Object.create({
+                property: "catpants"
+            });
+
+            assert.exception(
+                function () {
+                    sandbox.replace(object, "property");
+                },
+                {
+                    message: "Expected replacement argument to be defined",
+                    name: "TypeError"
+                }
+            );
+        });
+
         it("should refuse to replace a non-function with a function", function () {
             var sandbox = this.sandbox;
             var replacement = function () { return "replacement"; };
@@ -768,6 +815,37 @@ describe("Sandbox", function () {
             assert.equals(object.foo, existing);
         });
 
+        it("should error on missing descriptor", function () {
+            var sandbox = this.sandbox;
+
+            assert.exception(
+                function () {
+                    sandbox.replaceGetter({}, "i-dont-exist");
+                },
+                {
+                    message: "Cannot replace non-existent own property i-dont-exist",
+                    name: "TypeError"
+                }
+            );
+        });
+
+        it("should error when descriptor has no getter", function () {
+            var sandbox = this.sandbox;
+            var object = { // eslint-disable-line accessor-pairs
+                set catpants(_) {}
+            };
+
+            assert.exception(
+                function () {
+                    sandbox.replaceGetter(object, "catpants", noop);
+                },
+                {
+                    message: "`object.property` is not a getter",
+                    name: "Error"
+                }
+            );
+        });
+
         describe("when called with a non-function replacement argument", function () {
             it("should throw a TypeError", function () {
                 var sandbox = this.sandbox;
@@ -873,6 +951,37 @@ describe("Sandbox", function () {
             this.sandbox.restore();
             object.foo = "doodle";
             assert.equals(object.prop, "doodle");
+        });
+
+        it("should error on missing descriptor", function () {
+            var sandbox = this.sandbox;
+
+            assert.exception(
+                function () {
+                    sandbox.replaceSetter({}, "i-dont-exist");
+                },
+                {
+                    message: "Cannot replace non-existent own property i-dont-exist",
+                    name: "TypeError"
+                }
+            );
+        });
+
+        it("should error when descriptor has no setter", function () {
+            var sandbox = this.sandbox;
+            var object = {
+                get catpants() {}
+            };
+
+            assert.exception(
+                function () {
+                    sandbox.replaceSetter(object, "catpants", noop);
+                },
+                {
+                    message: "`object.property` is not a setter",
+                    name: "Error"
+                }
+            );
         });
 
         describe("when called with a non-function replacement argument", function () {
@@ -1017,8 +1126,6 @@ describe("Sandbox", function () {
         });
 
         it("calls reset on fake that does not have a resetHistory", function () {
-            var noop = function noop() {};
-
             noop.reset = function reset() {
                 noop.reset.called = true;
             };
