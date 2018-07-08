@@ -1,4 +1,4 @@
-# Contribruting to documentation
+# Contributing to documentation
 
 ## Documenting the next release
 
