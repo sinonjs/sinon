@@ -23,7 +23,7 @@ assertEquals("/stuffs", spyCall.args[0]);
 
 ### `spyCall.calledOn(obj);`
 
-Returns `true` if `obj` was `this` for this call. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](#matchers)).
+Returns `true` if `obj` was `this` for this call. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers][matchers]).
 
 
 ### `spyCall.calledWith(arg1, arg2, ...);`
@@ -56,7 +56,7 @@ This behaves the same as `spyCall.notCalledWith(sinon.match(arg1), sinon.match(a
 
 Returns `true` if spied function returned the provided `value` on this call.
 
-Uses deep comparison for objects and arrays. Use `spyCall.returned(sinon.match.same(obj))` for strict comparison (see [matchers](#matchers)).
+Uses deep comparison for objects and arrays. Use `spyCall.returned(sinon.match.same(obj))` for strict comparison (see [matchers][matchers]).
 
 ### `spyCall.threw();`
 
@@ -121,3 +121,5 @@ Exception thrown, if any.
 ### `spyCall.returnValue`
 
 Return value.
+
+[matchers]: ../matchers
