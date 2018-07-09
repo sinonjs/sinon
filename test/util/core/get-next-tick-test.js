@@ -1,10 +1,10 @@
 "use strict";
 
 var referee = require("@sinonjs/referee");
-var getNextTick = require("../../../lib/sinon/util/core/next-tick").getNextTick;
+var getNextTick = require("../../../lib/sinon/util/core/get-next-tick");
 var assert = referee.assert;
 
-describe("util/core/next-tick", function () {
+describe("util/core/get-next-tick", function () {
     it("should use process.nextTick when available", function () {
         var mockProcess = {
             nextTick: function () {}
@@ -22,6 +22,7 @@ describe("util/core/next-tick", function () {
     it("should fallback to setTimeout", function () {
         var nextTick = getNextTick(undefined, undefined);
 
+        assert.isFunction(nextTick);
         assert.contains(String(nextTick), "setTimeout(");
     });
 });
