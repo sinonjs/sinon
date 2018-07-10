@@ -4,13 +4,13 @@ var assert = require("@sinonjs/referee").assert;
 var proxyquire = require("proxyquire");
 
 function getColorMethods() {
-    return [{
-        name: "red",
-        code: 31
-    }, {
-        name: "green",
-        code: 32
-    }];
+    return [
+        { name: "bold", code: 1 },
+        { name: "cyan", code: 96 },
+        { name: "green", code: 32 },
+        { name: "red", code: 31 },
+        { name: "white", code: 39 }
+    ];
 }
 
 describe("color", function () {
@@ -31,7 +31,7 @@ describe("color", function () {
                     var string = "lorem ipsum";
                     var actual = color[method.name](string);
 
-                    assert.isTrue(actual.indexOf(method.code + "m" + string) !== -1);
+                    assert.contains(actual, method.code + "m" + string);
                 });
             });
         });
