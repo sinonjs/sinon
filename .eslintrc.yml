@@ -1,4 +1,4 @@
-extends: 'eslint-config-sinon'
+extends: sinon
 
 globals:
   ArrayBuffer: false
@@ -9,9 +9,11 @@ globals:
 
 plugins:
   - ie11
+  - local-rules
 
 rules:
   ie11/no-collection-args: error
   ie11/no-for-in-const: error
   ie11/no-loop-func: warn
   ie11/no-weak-collections: error
+  local-rules/no-prototype-methods: error

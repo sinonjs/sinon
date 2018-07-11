@@ -60,6 +60,7 @@
     "eslint": "^4.19.1",
     "eslint-config-sinon": "^1.0.0",
     "eslint-plugin-ie11": "^1.0.0",
+    "eslint-plugin-local-rules": "^0.1.0",
     "eslint-plugin-mocha": "^4.2.0",
     "esm": "3.0.37",
     "husky": "^0.14.2",
