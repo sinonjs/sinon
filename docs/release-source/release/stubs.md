@@ -252,6 +252,10 @@ Causes the stub to return the argument at the provided index.
 
 `stub.returnsArg(0);` causes the stub to return the first argument.
 
+If the argument at the provided index is not available, prior to `sinon@6.1.2`,
+an `undefined` value will be returned; starting from `sinon@6.1.2`, a `TypeError`
+will be thrown.
+
 
 #### `stub.returnsThis();`
 Causes the stub to return its <code>this</code> value.
@@ -276,7 +280,10 @@ provided index.
 `stub.resolvesArg(0);` causes the stub to return a Promise which resolves to the
 first argument.
 
-*Since `sinon@6.1.0`*
+If the argument at the provided index is not available, a `TypeError` will be
+thrown.
+
+*Since `sinon@6.1.1`*
 
 #### `stub.throws();`
 
@@ -297,6 +304,18 @@ Causes the stub to throw the provided exception object.
 
 Causes the stub to throw the exception returned by the function.
 
+
+### `stub.throwsArg(index);`
+
+Causes the stub to throw the argument at the provided index.
+
+`stub.throwsArg(0);` causes the stub to throw the first argument as the
+exception.
+
+If the argument at the provided index is not available, a `TypeError` will be
+thrown.
+
+*Since `sinon@2.3.0`*
 
 #### `stub.rejects();`
 
@@ -325,7 +344,12 @@ Causes the stub to return a Promise which rejects with the provided exception ob
 
 #### `stub.callsArg(index);`
 
-Causes the stub to call the argument at the provided index as a callback function. `stub.callsArg(0);` causes the stub to call the first argument as a callback.
+Causes the stub to call the argument at the provided index as a callback function.
+
+`stub.callsArg(0);` causes the stub to call the first argument as a callback.
+
+If the argument at the provided index is not available or is not a function,
+a `TypeError` will be thrown.
 
 
 #### `stub.callThrough();`
