@@ -10,16 +10,6 @@ node ./scripts/set-release-id-in-config-yml.js
 echo 'update changelog'
 ./scripts/update-changelog-page.sh
 
-for package in $(npm outdated --parseable nise lolex)
-do
-    wanted="$(cut -d: -f2 <<< "$package")"
-    current="$(cut -d: -f3 <<< "$package")"
-    if [ "$wanted" != "$current" ]
-    then
-        echo "WARNING: Building with outdated package ${current}, run 'npm update' to install ${wanted}"
-    fi
-done
-
 echo 'build new package'
 node ./build.js
 
