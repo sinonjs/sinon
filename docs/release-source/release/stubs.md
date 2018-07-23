@@ -95,7 +95,37 @@ Stubbing individual methods tests intent more precisely and is less susceptible 
 If you want to create a stub object of `MyConstructor`, but don't want the constructor to be invoked, use this utility function.
 
 ```javascript
-var stub = sinon.createStubInstance(MyConstructor)
+var stub = sinon.createStubInstance(MyConstructor, overrides);
+```
+
+`overrides` is an optional map overriding created stubs, for example:
+
+```javascript
+
+var stub = sinon.createStubInstance(MyConstructor, {
+    foo: sinon.stub().returnsThis()
+});
+```
+
+is the same as:
+
+```javascript
+var stub = sinon.createStubInstance(MyConstructor);
+stub.foo = sinon.stub().returnsThis()
+```
+
+If provided value is not a stub, it will be used as the returned value:
+
+```javascript
+var stub = sinon.createStubInstance(MyConstructor, {
+    foo: 3
+});
+```
+is the same as:
+
+```javascript
+var stub = sinon.createStubInstance(MyConstructor);
+stub.foo = sinon.stub().returns(3)
 ```
 
 #### `stub.withArgs(arg1[, arg2, ...]);`
