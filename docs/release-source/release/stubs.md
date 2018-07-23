@@ -111,7 +111,7 @@ is the same as:
 
 ```javascript
 var stub = sinon.createStubInstance(MyConstructor);
-stub.foo = sinon.stub().returnsThis()
+stub.foo.returnsThis();
 ```
 
 If provided value is not a stub, it will be used as the returned value:
@@ -125,7 +125,7 @@ is the same as:
 
 ```javascript
 var stub = sinon.createStubInstance(MyConstructor);
-stub.foo = sinon.stub().returns(3)
+stub.foo.returns(3);
 ```
 
 #### `stub.withArgs(arg1[, arg2, ...]);`
