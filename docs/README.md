@@ -4,7 +4,7 @@ published: false
 
 # Docs
 
-This folder structure contains the markdown files that becomes the Sinon.JS documentation site published to GitHub Pages. Eventually this will replace the current site at http://sinonjs.org.
+This folder structure contains the markdown files that becomes the Sinon.JS documentation site published to GitHub Pages. Eventually this will replace the current site at https://sinonjs.org.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing documentation to Sinon.JS.
 

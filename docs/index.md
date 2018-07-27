@@ -14,12 +14,6 @@ To install the current release (`{{current_release}}`) of Sinon:
 npm install sinon
 ```
 
-If you (for some reason) really want the old version of Sinon, head over to the [legacy docs](http://legacy.sinonjs.org/) and do:
-
-```shell
-npm install sinon@1
-```
-
 ## Try It Out
 The following function takes a function as its argument and returns a new function. You can call the resulting function as many times as you want, but the original function will only be called once:
 

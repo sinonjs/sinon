@@ -4,7 +4,7 @@ There are several ways of contributing to Sinon.JS
 
 * Look into [issues tagged `help-wanted`](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+wanted%22)
 * Help [improve the documentation](https://github.com/sinonjs/sinon/tree/master/docs) published
-  at [the Sinon.JS website](http://sinonjs.org). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
+  at [the Sinon.JS website](https://sinonjs.org). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
 * Help someone understand and use Sinon.JS on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
 * Report an issue, please read instructions below
 * Help with triaging the [issues](https://github.com/sinonjs/sinon/issues). The clearer they are, the more likely they are to be fixed soon.

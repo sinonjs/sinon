@@ -1,6 +1,6 @@
 <h1 align=center>
-    <a href="http://sinonjs.org" title="Sinon.JS">
-        <img alt="Sinon.JS" src="http://sinonjs.org/assets/images/logo.png">
+    <a href="https://sinonjs.org" title="Sinon.JS">
+        <img alt="Sinon.JS" src="https://sinonjs.org/assets/images/logo.png">
     </a>
     <br>
     Sinon.JS
@@ -32,11 +32,11 @@ via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
-or via sinon's browser builds available for download on the [homepage](http://sinonjs.org/releases/). There are also [npm based CDNs](http://sinonjs.org/releases#npm-cdns) one can use.
+or via sinon's browser builds available for download on the [homepage](https://sinonjs.org/releases/). There are also [npm based CDNs](https://sinonjs.org/releases#npm-cdns) one can use.
 
 ## Usage
 
-See the [sinon project homepage](http://sinonjs.org/) for documentation on usage.
+See the [sinon project homepage](https://sinonjs.org/) for documentation on usage.
 
 If you have questions that are not covered by the documentation, you can [check out the `sinon` tag on Stack Overflow](https://stackoverflow.com/questions/tagged/sinon) or drop by <a href="irc://irc.freenode.net:6667/sinon.js">#sinon.js on irc.freenode.net:6667</a>.
 
