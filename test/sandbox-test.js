@@ -230,7 +230,8 @@ describe("Sandbox", function () {
 
             for (var i = 0; i < types.length; i++) {
                 // yes, it's silly to create functions in a loop, it's also a test
-                assert.exception(function () { // eslint-disable-line no-loop-func
+                /* eslint-disable-next-line ie11/no-loop-func, no-loop-func */
+                assert.exception(function () {
                     this.sandbox.createStubInstance(types[i]);
                 });
             }
