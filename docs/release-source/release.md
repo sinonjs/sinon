@@ -8,6 +8,7 @@ release_id: master
 
 This page contains the entire Sinon.JS API documentation along with brief    introductions to the concepts Sinon implements.
 
+* [General setup](./general-setup)
 * [Fakes](./fakes)
 * [Spies](./spies)
 * [Stubs](./stubs)
