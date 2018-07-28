@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 "use strict";
+/* eslint-disable local-rules/no-prototype-methods */
 
 var fs = require("fs");
 var browserify = require("browserify");
