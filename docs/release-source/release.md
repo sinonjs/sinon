@@ -6,7 +6,7 @@ release_id: master
 
 # {{page.title}} - `{{page.release_id}}`
 
-This page contains the entire Sinon.JS API documentation along with brief    introductions to the concepts Sinon implements.
+This page contains the entire Sinon.JS API documentation along with brief introductions to the concepts Sinon implements.
 
 * [General setup](./general-setup)
 * [Fakes](./fakes)
