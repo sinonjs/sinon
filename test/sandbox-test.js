@@ -1267,6 +1267,31 @@ describe("Sandbox", function () {
                     assert(mockPromise.resolve.calledOnce);
                 });
         });
+
+        it("must set all mocks created from sandbox with mockPromise", function () {
+            if (!supportPromise) { return this.skip(); }
+
+            var resolveValue = {};
+            var mockPromise = {
+                resolve: sinonStub.create().resolves(resolveValue)
+            };
+            var mockedObject = {
+                mockedMethod: function () {
+                    return;
+                }
+            };
+
+            this.sandbox.usingPromise(mockPromise);
+            var mock = this.sandbox.mock(mockedObject);
+            mock.expects("mockedMethod").resolves({});
+
+            return mockedObject.mockedMethod()
+                .then(function (action) {
+
+                    assert.same(resolveValue, action);
+                    assert(mockPromise.resolve.calledOnce);
+                });
+        });
     });
 
     // These were not run in browsers before, as we were only testing in node

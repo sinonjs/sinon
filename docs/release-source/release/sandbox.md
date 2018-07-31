@@ -252,7 +252,7 @@ Access requests through `sandbox.requests` and server through `sandbox.server`
 
 #### `sandbox.usingPromise(promiseLibrary);`
 
-Causes all stubs created from the sandbox to return promises using a specific
+Causes all stubs and mocks created from the sandbox to return promises using a specific
 Promise library instead of the global one when using `stub.rejects` or
 `stub.resolves`. Returns the stub to allow chaining.
 
