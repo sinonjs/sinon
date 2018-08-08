@@ -511,11 +511,13 @@ describe("issues", function () {
 
     describe("#1796 - cannot stub Array.prototype.sort", function () {
         it("it should not fail with RangeError", function () {
+            var stub = sinon.stub(Array.prototype, "sort");
+
             refute.exception(function () {
-                var stub = sinon.stub(Array.prototype, "sort");
                 [1, 2, 3].sort();
-                stub.restore();
             });
+
+            stub.restore();
         });
     });
 });
