@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.1.5 / 2018-08-09
+==================
+
+  * Fix #1796, failing to stub Array.prototype.sort
+
 6.1.4 / 2018-07-21
 ==================
 
