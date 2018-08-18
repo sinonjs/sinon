@@ -218,7 +218,7 @@ Same as `sinon.match.has` but the property must be defined by the value itself. 
 
 #### `sinon.match.hasNested(propertyPath[, expectation])`
 
-Requires the value to define the given `propertyPath`. Dot (`prop.prop`) and bracket (`prop[0]`) notations are supported as in (Lodash.get)[https://lodash.com/docs/4.4.2#get].
+Requires the value to define the given `propertyPath`. Dot (`prop.prop`) and bracket (`prop[0]`) notations are supported as in [Lodash.get](https://lodash.com/docs/4.4.2#get).
 
 The propertyPath might be inherited via the prototype chain. If the optional expectation is given, the value at the propertyPath is deeply compared with the expectation. The expectation can be another matcher.
 
