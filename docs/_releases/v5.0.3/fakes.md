@@ -113,7 +113,7 @@ f.callback === cb2;
 // true
 ```
 
-The same convenience has been added to [spy calls][../spy-call]:
+The same convenience has been added to [spy calls](../spy-call):
 
 ```js
 f.getCall(1).callback === cb2;
@@ -139,7 +139,7 @@ f.lastArg === date2;
 // true
 ```
 
-The same convenience has been added to [spy calls][../spy-call]:
+The same convenience has been added to [spy calls](../spy-call):
 
 ```js
 f.getCall(0).lastArg === date1;
