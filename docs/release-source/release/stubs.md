@@ -243,6 +243,22 @@ sinon.stub(myObj, 'prop').callsFake(function fakeFn() {
 myObj.prop(); // 'bar'
 ```
 
+#### `stub.callsThroughFake(decoratorFunction);`
+Makes the stub call the provided `decoratorFunction` with the result from the call of the original method wrapped into the stub, when none of the conditional stubs are matched.
+
+```javascript
+var myObj = {};
+myObj.prop = function propFn() {
+    return 'foo';
+};
+
+sinon.stub(myObj, 'prop').callsThroughFake(function decoratorFunction(result) {
+    return result + '-bar';
+});
+
+myObj.prop(); // 'foo-bar'
+```
+
 #### `stub.returns(obj);`
 Makes the stub return the provided value.
 

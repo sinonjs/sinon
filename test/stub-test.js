@@ -1089,6 +1089,40 @@ describe("stub", function () {
         });
     });
 
+    describe(".callsThroughFake", function () {
+        beforeEach(function () {
+            this.method = function (a, b) { return a + b; };
+            this.object = {method: this.method};
+        });
+
+        it("uses provided function as a decorator of the result", function () {
+            var fakeFn = createStub.create().callsFake(
+                function (result) {
+                    return result + 8;
+                });
+
+            this.stub = createStub(this.object, "method");
+
+            this.stub.callsThroughFake(fakeFn);
+            var u = this.object.method(1, 1);
+
+            assert(fakeFn.calledWith(2));
+            assert(u === 10);
+            assert(fakeFn.calledOn(this.object));
+        });
+
+        it("is overwritten by subsequent stub behavior", function () {
+            var fakeFn = createStub.create();
+            this.stub = createStub(this.object, "method");
+
+            this.stub.callsThroughFake(fakeFn).returns(3);
+            var returned = this.object.method(1, 1);
+
+            refute(fakeFn.called);
+            assert(returned === 3);
+        });
+    });
+
     describe(".callsFake", function () {
         beforeEach(function () {
             this.method = function () { throw new Error("Should be stubbed"); };
