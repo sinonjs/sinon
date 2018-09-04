@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.1.6 / 2018-09-04
+==================
+
+  * Upgrade Lolex, Nise and other dependencies
+
 6.1.5 / 2018-08-09
 ==================
 
