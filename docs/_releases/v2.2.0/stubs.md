@@ -362,12 +362,17 @@ Similar to `callsArg`.
 
 Causes the stub to call the first callback it receives with the provided arguments (if any).
 
-If a method accepts more than one callback, you need to use `callsArg` to have the stub invoke other callbacks than the first one.
+If a method accepts more than one callback, you need to use `yieldsRight` to call the last callback or `callsArg` to have the stub invoke other callbacks than the first or last one.
+
+
+#### `stub.yieldsRight([arg1, arg2, ...])`
+
+Like `yields` but calls the last callback it receives.
 
 
 #### `stub.yieldsOn(context, [arg1, arg2, ...])`
 
-Like above but with an additional parameter to pass the `this` context.
+Like `yields` but with an additional parameter to pass the `this` context.
 
 
 #### `stub.yieldsTo(property, [arg1, arg2, ...])`
