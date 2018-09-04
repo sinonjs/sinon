@@ -1,4 +1,9 @@
 
+6.2.0 / 2018-09-04
+==================
+
+  * Add mock.usingPromise to set the Promise library for mock expectations
+
 6.1.6 / 2018-09-04
 ==================
 
