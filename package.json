@@ -44,18 +44,18 @@
     "docs/**/*.md": "markdownlint"
   },
   "dependencies": {
-    "@sinonjs/commons": "^1.0.1",
+    "@sinonjs/commons": "^1.0.2",
     "@sinonjs/formatio": "^2.0.0",
     "@sinonjs/samsam": "^2.0.0",
     "diff": "^3.5.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.7.2",
-    "nise": "^1.4.2",
-    "supports-color": "^5.4.0",
+    "nise": "^1.4.4",
+    "supports-color": "^5.5.0",
     "type-detect": "^4.0.8"
   },
   "devDependencies": {
-    "@sinonjs/referee": "^2.0.0",
+    "@sinonjs/referee": "^2.5.0",
     "browserify": "^15.1.0",
     "dependency-check": "^2.9.1",
     "eslint": "^4.19.1",
@@ -68,20 +68,20 @@
     "lint-staged": "^6.0.0",
     "markdownlint-cli": "^0.8.2",
     "mocha": "^4.0.0",
-    "mochify": "^5.6.1",
+    "mochify": "^5.8.1",
     "mochify-istanbul": "^2.4.2",
     "native-promise-only": "^0.8.1",
     "npm-run-all": "^4.1.3",
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
-    "puppeteer": "^1.4.0",
+    "puppeteer": "^1.7.0",
     "rimraf": "^2.5.3",
     "rollup": "^0.59.3",
-    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.2.1",
-    "rollup-plugin-node-resolve": "^3.3.0"
+    "rollup-plugin-node-globals": "^1.3.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
   },
   "files": [
     "lib",
