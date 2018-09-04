@@ -83,6 +83,14 @@ If any expectation is not satisfied, an exception is thrown.
 
 Also restores the mocked methods.
 
+#### `mock.usingPromise(promiseLibrary);`
+
+Causes all expectations created from the mock to return promises using a specific
+Promise library instead of the global one when using `expectation.rejects` or
+`expectation.resolves`. Returns the mock object to allow chaining.
+
+*Since `sinon@6.2.0`*
+
 
 ### Expectations
 
