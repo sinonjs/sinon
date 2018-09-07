@@ -14,6 +14,33 @@ To install the current release (`{{current_release}}`) of Sinon:
 npm install sinon
 ```
 
+### Setting up access
+
+#### Node and CommonJS build systems
+
+```javascript
+var sinon = require('sinon');
+```
+
+#### Direct browser use
+
+```html
+<script src="./node_modules/sinon/pkg/sinon.js"></script>
+<script>
+// Access the `sinon` global...
+
+</script>
+```
+
+Or in an ES6 Modules environment (modern browsers only)
+
+```html
+<script type="module">
+import sinon from './node_modules/sinon/pkg/sinon-esm.js';
+
+</script>
+```
+
 ## Try It Out
 The following function takes a function as its argument and returns a new function. You can call the resulting function as many times as you want, but the original function will only be called once:
 
@@ -91,7 +118,7 @@ it("returns the return value from the original function", function () {
 });
 ```
 
-Conveniently, we can query fakes for their callCount, received args and more.
+Conveniently, we can query fakes for their `callCount`, received args and more.
 
 [Learn more about fakes][fakes].
 
