@@ -12,7 +12,7 @@ kramdown:
   syntax_highlighter: none
   syntax_highlighter_opts:
     disable: true
-gems:
+plugins:
   - jekyll-feed
   - jekyll-redirect-from
 # these files will not be processed by Jekyll, but will just be copied as-is
