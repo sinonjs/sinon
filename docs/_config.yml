@@ -16,6 +16,7 @@ gems:
   - jekyll-feed
   - jekyll-redirect-from
 exclude:
+  - .sass-cache
   - Gemfile
   - Gemfile.lock
   - release-source
