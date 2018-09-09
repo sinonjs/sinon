@@ -15,6 +15,10 @@ kramdown:
 gems:
   - jekyll-feed
   - jekyll-redirect-from
+# these files will not be processed by Jekyll, but will just be copied as-is
+keep_files:
+  - assets
+  - releases
 exclude:
   - .sass-cache
   - Gemfile
