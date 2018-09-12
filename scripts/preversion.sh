@@ -11,6 +11,7 @@ do
     fi
 done
 
+npm run lint
 npm test
 
 echo 'Updating History.md'
