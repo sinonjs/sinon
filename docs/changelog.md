@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.3.1 / 2018-09-12
+==================
+
+  * Fix use of non-cached reference to forEach
+
 6.3.0 / 2018-09-12
 ==================
 
