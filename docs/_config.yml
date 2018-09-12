@@ -5,7 +5,7 @@ description: >-
 url: 'http://sinonjs.org'
 github_username: sinonjs
 sinon:
-  current_release: v6.2.0
+  current_release: v6.3.0
 markdown: kramdown
 kramdown:
   input: GFM
@@ -15,7 +15,6 @@ kramdown:
 plugins:
   - jekyll-feed
   - jekyll-redirect-from
-# these files will not be processed by Jekyll, but will just be copied as-is
 keep_files:
   - assets
   - releases

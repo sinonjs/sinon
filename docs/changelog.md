@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.3.0 / 2018-09-12
+==================
+
+  * Allow providing stubs overrides for sinon.createStubInstance (#1864)
+  * Bump Lolex to 2.7.4 to include IE fixes for performance.mark
+
 6.2.0 / 2018-09-04
 ==================
 
