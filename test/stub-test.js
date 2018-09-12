@@ -2755,6 +2755,39 @@ describe("stub", function () {
                 });
             }
         });
+
+        it("allows providing optional overrides", function () {
+            var Class = function () {};
+            Class.prototype.method = function () {};
+
+            var stub = createStubInstance(Class, {
+                method: createStub().returns(3)
+            });
+
+            assert.equals(3, stub.method());
+        });
+
+        it("allows providing optional returned values", function () {
+            var Class = function () {};
+            Class.prototype.method = function () {};
+
+            var stub = createStubInstance(Class, {
+                method: 3
+            });
+
+            assert.equals(3, stub.method());
+        });
+
+        it("throws an exception when trying to override non-existing property", function () {
+            var Class = function () {};
+            Class.prototype.method = function () {};
+
+            assert.exception(function () {
+                createStubInstance(Class, {
+                    foo: createStub().returns(3)
+                });
+            }, {message: "Cannot stub foo. Property does not exist!"});
+        });
     });
 
     describe(".callThrough", function () {
