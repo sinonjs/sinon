@@ -523,13 +523,13 @@ describe("issues", function () {
 
     describe("#1900 - calledWith returns false positive", function () {
         it("should return false when call args don't match", function () {
-            var stub = sinon.stub();
+            var spy = sinon.spy();
             var dateOne = new Date("2018-07-01");
             var dateTwo = new Date("2018-07-31");
 
-            stub(dateOne);
+            spy(dateOne);
 
-            var calledWith = stub.calledWith(dateTwo);
+            var calledWith = spy.calledWith(dateTwo);
             assert.same(calledWith, false);
         });
     });
