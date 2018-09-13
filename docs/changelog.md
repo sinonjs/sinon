@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.3.2 / 2018-09-13
+==================
+
+  * Adds guard for empty properties in deepEqual when a matcher is provided (#1901)
+
 6.3.1 / 2018-09-12
 ==================
 
