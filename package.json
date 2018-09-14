@@ -45,17 +45,17 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^1.0.2",
-    "@sinonjs/formatio": "^2.0.0",
-    "@sinonjs/samsam": "^2.0.0",
+    "@sinonjs/formatio": "^3.0.0",
+    "@sinonjs/samsam": "^2.1.0",
     "diff": "^3.5.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.7.4",
-    "nise": "^1.4.4",
+    "nise": "^1.4.5",
     "supports-color": "^5.5.0",
     "type-detect": "^4.0.8"
   },
   "devDependencies": {
-    "@sinonjs/referee": "^2.5.0",
+    "@sinonjs/referee": "^2.5.2",
     "browserify": "^15.1.0",
     "dependency-check": "^2.9.1",
     "eslint": "^4.19.1",
