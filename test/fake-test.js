@@ -51,6 +51,17 @@ describe("fake", function () {
 
     describe("when passed a Function", function () {
         verifyProxy(fake, function () {});
+
+        it("should keep the `this` context of the wrapped function", function () {
+            function method() { return this.foo; }
+            var o = { foo: 42 };
+            var fakeMethod = fake(method);
+
+            var result = fakeMethod.call(o);
+
+            assert.equals(fakeMethod.callCount, 1);
+            assert.equals(result, 42);
+        });
     });
 
     describe("when passed no value", function () {
