@@ -6,14 +6,10 @@ globals:
   Promise: false
   Set: false
   Symbol: false
-  Proxy: false
 
 plugins:
   - ie11
   - local-rules
-
-parserOptions:
-  ecmaVersion: 6
 
 rules:
   ie11/no-collection-args: error
