@@ -27,6 +27,7 @@ jobs:
               echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list
               apt-get -qq update
               apt-get -qq install -y --no-install-recommends google-chrome-stable
+              apt-get -qq install -y --no-install-recommends google-chrome-unstable
             fi
       - run:
           name: Pre-Test
@@ -35,7 +36,7 @@ jobs:
             if node --version | grep -q '^v10'; then
               npm run lint
 
-              npm run test-headless -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+              npm run test-headless -- --chrome $(which google-chrome-unstable) --allow-chrome-as-root
               npm run test-webworker -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
               npm run test-esm-bundle
 
