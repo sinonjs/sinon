@@ -46,7 +46,7 @@
   "dependencies": {
     "@sinonjs/commons": "^1.0.2",
     "@sinonjs/formatio": "^3.0.0",
-    "@sinonjs/samsam": "^2.1.0",
+    "@sinonjs/samsam": "^2.1.1",
     "diff": "^3.5.0",
     "lodash.get": "^4.4.2",
     "lolex": "^2.7.4",
@@ -75,12 +75,12 @@
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
-    "puppeteer": "^1.7.0",
+    "puppeteer": "^1.8.0",
     "rimraf": "^2.5.3",
     "rollup": "^0.59.3",
-    "rollup-plugin-commonjs": "^9.1.6",
+    "rollup-plugin-commonjs": "^9.1.8",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.3.0",
+    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^3.4.0"
   },
   "files": [
