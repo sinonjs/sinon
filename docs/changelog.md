@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+6.3.4 / 2018-09-18
+==================
+
+  * Update samsam, puppeteer and rollup
+  * Fix #1850 (keep context in fakes)
+
 6.3.3 / 2018-09-14
 ==================
 
