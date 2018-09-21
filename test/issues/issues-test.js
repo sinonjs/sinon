@@ -533,4 +533,19 @@ describe("issues", function () {
             assert.same(calledWith, false);
         });
     });
+
+    describe("#1882", function () {
+        it("should use constructor name when checking deepEquality", function () {
+            function ClassWithoutProps() {}
+            function AnotherClassWithoutProps() {}
+            ClassWithoutProps.prototype.constructor = ClassWithoutProps;
+            AnotherClassWithoutProps.prototype.constructor = AnotherClassWithoutProps;
+            var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
+            var arg2 = new AnotherClassWithoutProps(); //arg2.constructor.name === Object
+            var stub = sinon.stub();
+            stub.withArgs(arg1).returns(5);
+            var result = stub(arg2);
+            assert.same(result, undefined); //[ERR_ASSERTION]: 5 === undefined
+        });
+    });
 });
