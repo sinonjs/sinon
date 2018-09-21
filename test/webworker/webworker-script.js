@@ -6,9 +6,11 @@
 if (typeof importScripts !== "undefined") {
     importScripts("/pkg/sinon.js");
 
-    var stub = sinon.stub().returns("worker response");
+    var mySpy = sinon.spy(function (msg) {
+        return "worker received:" + msg;
+    });
 
-    onmessage = function () {
-        postMessage( stub() );
+    onmessage = function (e) {
+        postMessage(mySpy(e.data));
     };
 }
