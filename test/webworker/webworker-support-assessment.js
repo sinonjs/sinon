@@ -24,17 +24,24 @@ if (typeof Worker !== "undefined") {
              */
             function onError(ev) {
                 var error = ev.error;
+                var msg =
+                    "An error happened at line " +
+                    [ev.lineno, ev.colno].join(":") +
+                    " in file " +
+                    ev.filename +
+                    ":  " +
+                    ev.message;
 
                 if (!error) {
-                    var msg =
-                        "An error happened at line " +
-                        [ev.lineno, ev.colno].join(":") +
-                        " in file " +
-                        ev.filename +
-                        ":  " +
-                        ev.message;
                     error = new Error(msg);
                 }
+
+                // `ev.error` might be defined, but still might include
+                // very little information, which is why we want to
+                // include as much information as we possibly can
+
+                console.error(msg); // eslint-disable-line no-console
+
                 done(error);
             }
 
