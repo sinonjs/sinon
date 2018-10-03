@@ -1,4 +1,10 @@
 
+6.3.5 / 2018-10-03
+==================
+
+  * Upgrade lolex
+  * Upgrade @sinonjs/samsam - fixes minor issue with IE11 introduced in 6.3.4
+
 6.3.4 / 2018-09-18
 ==================
 
