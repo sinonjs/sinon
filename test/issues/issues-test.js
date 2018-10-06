@@ -550,7 +550,7 @@ describe("issues", function () {
     });
 
     describe("#1887", function () {
-        it("should match exact arguments", function () {
+        it("should not break stub behavior using multiple `match.any`", function () {
             var stub = sinon.stub();
 
             stub.withArgs(sinon.match.any, sinon.match.any, sinon.match("a")).returns("a");
