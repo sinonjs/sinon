@@ -271,7 +271,7 @@ Returns `true` if spy was called at least once with the provided arguments and n
 
 #### `spy.calledOnceWithExactly(arg1, arg2, ...);`
 
-Returns `true` if spy was called exactly once with the provided arguments and no others.
+Returns `true` if spy was called exactly once and with only the provided arguments.
 
 
 #### `spy.alwaysCalledWithExactly(arg1, arg2, ...);`
