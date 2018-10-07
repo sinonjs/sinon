@@ -548,4 +548,16 @@ describe("issues", function () {
             assert.same(result, undefined); //[ERR_ASSERTION]: 5 === undefined
         });
     });
+
+    describe("#1887", function () {
+        it("should not break stub behavior using multiple `match.any`", function () {
+            var stub = sinon.stub();
+
+            stub.withArgs(sinon.match.any, sinon.match.any, sinon.match("a")).returns("a");
+            stub.withArgs(sinon.match.any, sinon.match.any, sinon.match("b")).returns("b");
+
+            assert.equals(stub({}, [], "a"), "a");
+            assert.equals(stub({}, [], "b"), "b");
+        });
+    });
 });
