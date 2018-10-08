@@ -1016,8 +1016,8 @@ describe("fakeTimers.clock", function () {
         it("fake Date constructor should mirror Date's properties", function () {
             this.clock = fakeTimers.useFakeTimers(0);
 
-            assert(!!Date.parse);
-            assert(!!Date.UTC);
+            assert(Boolean(Date.parse));
+            assert(Boolean(Date.UTC));
         });
 
         it("decide on Date.now support at call-time when supported", function () {

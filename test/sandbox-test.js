@@ -19,7 +19,7 @@ var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake_timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
-var supportPromise = !!global.Promise;
+var supportPromise = Boolean(global.Promise);
 var globalXHR = global.XMLHttpRequest;
 var globalAXO = global.ActiveXObject;
 
