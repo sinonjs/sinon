@@ -1,4 +1,6 @@
 export default {
     [Symbol.toStringTag]: "Module",
-    anExport() { return 42; }
+    anExport() {
+        return 42;
+    }
 };

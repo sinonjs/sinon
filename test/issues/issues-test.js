@@ -8,16 +8,16 @@ var refute = referee.refute;
 var globalXHR = global.XMLHttpRequest;
 var globalAXO = global.ActiveXObject;
 
-describe("issues", function () {
-    beforeEach(function () {
+describe("issues", function() {
+    beforeEach(function() {
         this.sandbox = sinon.createSandbox();
     });
 
-    afterEach(function () {
+    afterEach(function() {
         this.sandbox.restore();
     });
 
-    it("#283", function () {
+    it("#283", function() {
         function testSinonFakeTimersWith(interval, ticks) {
             var clock = sinon.useFakeTimers();
 
@@ -39,14 +39,14 @@ describe("issues", function () {
         testSinonFakeTimersWith(1000, 1001);
     });
 
-    describe("#458", function () {
+    describe("#458", function() {
         if (typeof require("fs").readFileSync !== "undefined") {
-            describe("on node", function () {
-                it("stub out fs.readFileSync", function () {
+            describe("on node", function() {
+                it("stub out fs.readFileSync", function() {
                     var fs = require("fs");
                     var testCase = this;
 
-                    refute.exception(function () {
+                    refute.exception(function() {
                         testCase.sandbox.stub(fs, "readFileSync");
                     });
                 });
@@ -54,9 +54,9 @@ describe("issues", function () {
         }
     });
 
-    describe("#624", function () {
+    describe("#624", function() {
         // eslint-disable-next-line mocha/no-skipped-tests
-        it.skip("useFakeTimers should be idempotent", function () {
+        it.skip("useFakeTimers should be idempotent", function() {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now
             // This test verifies that it's working, at least for Date.now
@@ -73,36 +73,44 @@ describe("issues", function () {
         });
     });
 
-    describe("#852 - createStubInstance on intherited constructors", function () {
-        it("must not throw error", function () {
-            var A = function () { return; };
-            var B = function () { return; };
+    describe("#852 - createStubInstance on intherited constructors", function() {
+        it("must not throw error", function() {
+            var A = function() {
+                return;
+            };
+            var B = function() {
+                return;
+            };
 
             B.prototype = Object.create(A.prototype);
             B.prototype.constructor = A;
 
-            refute.exception(function () {
+            refute.exception(function() {
                 sinon.createStubInstance(B);
             });
         });
     });
 
-    describe("#852(2) - createStubInstance should on same constructor", function () {
-        it("must be idempotent", function () {
-            var A = function () { return; };
-            refute.exception(function () {
+    describe("#852(2) - createStubInstance should on same constructor", function() {
+        it("must be idempotent", function() {
+            var A = function() {
+                return;
+            };
+            refute.exception(function() {
                 sinon.createStubInstance(A);
                 sinon.createStubInstance(A);
             });
         });
     });
 
-    describe("#950 - first execution of a spy as a method renames that spy", function () {
-        function bob() { return; }
+    describe("#950 - first execution of a spy as a method renames that spy", function() {
+        function bob() {
+            return;
+        }
 
         // IE 11 does not support the function name property
         if (bob.name) {
-            it("should not rename spies", function () {
+            it("should not rename spies", function() {
                 var expectedName = "proxy";
                 var spy = sinon.spy(bob);
 
@@ -127,8 +135,8 @@ describe("issues", function () {
         }
     });
 
-    describe("#1026", function () {
-        it("should stub `watch` method on any Object", function () {
+    describe("#1026", function() {
+        it("should stub `watch` method on any Object", function() {
             // makes sure that Object.prototype.watch is set back to its old value
             function restore(oldWatch) {
                 if (oldWatch) {
@@ -140,15 +148,21 @@ describe("issues", function () {
 
             var oldWatch;
 
-            try { // eslint-disable-line no-restricted-syntax
+            // eslint-disable-next-line no-restricted-syntax
+            try {
                 oldWatch = Object.prototype.watch;
 
                 if (typeof Object.prototype.watch !== "function") {
-                    Object.prototype.watch = function rolex() { return; }; // eslint-disable-line no-extend-native
+                    // eslint-disable-next-line no-extend-native
+                    Object.prototype.watch = function rolex() {
+                        return;
+                    };
                 }
 
                 var stubbedObject = sinon.stub({
-                    watch: function () { return; }
+                    watch: function() {
+                        return;
+                    }
                 });
 
                 stubbedObject.watch();
@@ -163,8 +177,8 @@ describe("issues", function () {
         });
     });
 
-    describe("#1154", function () {
-        it("Ensures different matchers will not be tested against each other", function () {
+    describe("#1154", function() {
+        it("Ensures different matchers will not be tested against each other", function() {
             var match = sinon.match;
             var stub = sinon.stub;
             var readFile = stub();
@@ -184,18 +198,16 @@ describe("issues", function () {
             var argsA = match(suffixA);
             var argsB = match(suffixB);
 
-            var firstFake = readFile
-                .withArgs(argsA);
+            var firstFake = readFile.withArgs(argsA);
 
-            var secondFake = readFile
-                .withArgs(argsB);
+            var secondFake = readFile.withArgs(argsB);
 
             assert(firstFake !== secondFake);
         });
     });
 
-    describe("#1372 - sandbox.resetHistory", function () {
-        it("should reset spies", function () {
+    describe("#1372 - sandbox.resetHistory", function() {
+        it("should reset spies", function() {
             var spy = this.sandbox.spy();
 
             spy();
@@ -211,8 +223,8 @@ describe("issues", function () {
         });
     });
 
-    describe("#1398", function () {
-        it("Call order takes into account both calledBefore and callCount", function () {
+    describe("#1398", function() {
+        it("Call order takes into account both calledBefore and callCount", function() {
             var s1 = sinon.spy();
             var s2 = sinon.spy();
 
@@ -220,14 +232,13 @@ describe("issues", function () {
             s2();
             s1();
 
-            assert.exception(function () {
+            assert.exception(function() {
                 sinon.assert.callOrder(s2, s1, s2);
             });
         });
     });
 
-    describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
-
+    describe("#1474 - promise library should be propagated through fakes and behaviors", function() {
         var stub;
 
         function makeAssertions(fake, expected) {
@@ -237,15 +248,17 @@ describe("issues", function () {
             assert.equals(fake.tap(), expected);
         }
 
-        before(function () {
-            if (!global.Promise) { this.skip(); }
+        before(function() {
+            if (!global.Promise) {
+                this.skip();
+            }
         });
 
-        beforeEach(function () {
+        beforeEach(function() {
             var promiseLib = {
-                resolve: function (value) {
+                resolve: function(value) {
                     var promise = Promise.resolve(value);
-                    promise.tap = function () {
+                    promise.tap = function() {
                         return "tap " + value;
                     };
 
@@ -258,14 +271,14 @@ describe("issues", function () {
             stub.resolves("resolved");
         });
 
-        it("stub.onCall", function () {
+        it("stub.onCall", function() {
             stub.onSecondCall().resolves("resolved again");
 
             makeAssertions(stub(), "tap resolved");
             makeAssertions(stub(), "tap resolved again");
         });
 
-        it("stub.withArgs", function () {
+        it("stub.withArgs", function() {
             stub.withArgs(42).resolves("resolved again");
             stub.withArgs(true).resolves("okay");
 
@@ -275,8 +288,7 @@ describe("issues", function () {
         });
     });
 
-
-    describe("#1456", function () {
+    describe("#1456", function() {
         var sandbox;
 
         function throwsOnUnconfigurableProperty() {
@@ -292,52 +304,58 @@ describe("issues", function () {
             /* eslint-enable no-restricted-syntax */
         }
 
-        beforeEach(function () {
-            if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) { this.skip(); }
+        beforeEach(function() {
+            if (typeof window === "undefined" || throwsOnUnconfigurableProperty()) {
+                this.skip();
+            }
 
             sandbox = sinon.createSandbox();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             sandbox.restore();
         });
 
-        it("stub window innerHeight", function () {
+        it("stub window innerHeight", function() {
             sandbox.stub(window, "innerHeight").value(111);
 
             assert.equals(window.innerHeight, 111);
         });
     });
 
-    describe("#1487 - withArgs() returnValue", function () {
-        beforeEach(function () {
+    describe("#1487 - withArgs() returnValue", function() {
+        beforeEach(function() {
             this.stub = createStub().throws("Nothing set");
             this.stub.withArgs("arg").returns("return value");
             this.stub("arg");
         });
 
-        it("sets correct firstCall.returnValue", function () {
+        it("sets correct firstCall.returnValue", function() {
             assert.equals(this.stub.withArgs("arg").firstCall.returnValue, "return value");
         });
 
-        it("sets correct lastCall.returnValue", function () {
+        it("sets correct lastCall.returnValue", function() {
             assert.equals(this.stub.withArgs("arg").lastCall.returnValue, "return value");
         });
     });
 
-    describe("#1512 - sandbox.stub(obj,protoMethod)", function () {
+    describe("#1512 - sandbox.stub(obj,protoMethod)", function() {
         var sandbox;
 
-        beforeEach(function () {
+        beforeEach(function() {
             sandbox = sinon.createSandbox();
         });
 
-        afterEach(function () {
+        afterEach(function() {
             sandbox.restore();
         });
 
-        it("can stub methods on the prototype", function () {
-            var proto = { someFunction: function () { return; } };
+        it("can stub methods on the prototype", function() {
+            var proto = {
+                someFunction: function() {
+                    return;
+                }
+            };
             var instance = Object.create(proto);
 
             var stub = sandbox.stub(instance, "someFunction");
@@ -346,44 +364,47 @@ describe("issues", function () {
         });
     });
 
-    describe("#1521 - stubbing Array.prototype.filter", function () {
+    describe("#1521 - stubbing Array.prototype.filter", function() {
         var orgFilter;
 
-        before(function () {
+        before(function() {
             orgFilter = Array.prototype.filter;
         });
 
-        afterEach(function () {
+        afterEach(function() {
             /* eslint-disable no-extend-native */
             Array.prototype.filter = orgFilter;
         });
 
-        it("should be possible stub filter", function () {
+        it("should be possible stub filter", function() {
             var stub = sinon.stub(Array.prototype, "filter");
-            [1, 2, 3].filter(function () { return false; });
+            [1, 2, 3].filter(function() {
+                return false;
+            });
             assert(stub.calledOnce);
         });
-
     });
 
-    describe("#1531 - some copied functions on root sinon module throw", function () {
-        it("should create a fake server without throwing", function () {
-            refute.exception(function () {
+    describe("#1531 - some copied functions on root sinon module throw", function() {
+        it("should create a fake server without throwing", function() {
+            refute.exception(function() {
                 sinon.createFakeServer();
             });
         });
 
-        it("should create a fake server with clock without throwing", function () {
-            refute.exception(function () {
+        it("should create a fake server with clock without throwing", function() {
+            refute.exception(function() {
                 sinon.createFakeServerWithClock();
             });
         });
     });
 
-    describe("#1442 - callThrough with a mock expectation", function () {
-        it("should call original method", function () {
+    describe("#1442 - callThrough with a mock expectation", function() {
+        it("should call original method", function() {
             var foo = {
-                bar: function () { return; }
+                bar: function() {
+                    return;
+                }
             };
 
             var mock = this.sandbox.mock(foo);
@@ -395,10 +416,12 @@ describe("issues", function () {
         });
     });
 
-    describe("#1648 - resetHistory ", function () {
-        it("should reset property spies", function () {
+    describe("#1648 - resetHistory ", function() {
+        it("should reset property spies", function() {
             var obj = {
-                func: function () { return; },
+                func: function() {
+                    return;
+                },
                 get prop() {
                     return 1;
                 }
@@ -427,8 +450,8 @@ describe("issues", function () {
 
     // this error was caused by overwriting methods with imported ones don't use the collection
     // and thus were not restorable
-    describe("#1775 - sinon.restore", function () {
-        it("should restore all stubs", function () {
+    describe("#1775 - sinon.restore", function() {
+        it("should restore all stubs", function() {
             var myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
@@ -442,7 +465,7 @@ describe("issues", function () {
             // TypeError: Attempted to wrap someMethod which is already wrapped
         });
 
-        it("should restore all spies", function () {
+        it("should restore all spies", function() {
             var myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
@@ -456,7 +479,7 @@ describe("issues", function () {
             // TypeError: Attempted to wrap someMethod which is already wrapped
         });
 
-        it("should restore all mocks", function () {
+        it("should restore all mocks", function() {
             var myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
@@ -471,8 +494,8 @@ describe("issues", function () {
         });
     });
 
-    describe("#1801 - sinon.restore spied fakeTimers", function () {
-        it("should restore spied fake timers", function () {
+    describe("#1801 - sinon.restore spied fakeTimers", function() {
+        it("should restore spied fake timers", function() {
             var originalSetTimeout = setTimeout;
 
             sinon.useFakeTimers();
@@ -484,19 +507,18 @@ describe("issues", function () {
         });
     });
 
-    describe("#1840 - sinon.restore useFakeXMLHttpRequest", function () {
-        it("should restore XMLHttpRequest and ActiveXObject", function () {
+    describe("#1840 - sinon.restore useFakeXMLHttpRequest", function() {
+        it("should restore XMLHttpRequest and ActiveXObject", function() {
             sinon.useFakeXMLHttpRequest();
             sinon.restore();
 
             assert.same(global.XMLHttpRequest, globalXHR);
             assert.same(global.ActiveXObject, globalAXO);
         });
-
     });
 
-    describe("#1709 - deepEqual fails on cyclic references", function () {
-        it("should not blow up", function () {
+    describe("#1709 - deepEqual fails on cyclic references", function() {
+        it("should not blow up", function() {
             var spy = sinon.spy();
 
             var firstObj = {};
@@ -511,11 +533,11 @@ describe("issues", function () {
         });
     });
 
-    describe("#1796 - cannot stub Array.prototype.sort", function () {
-        it("it should not fail with RangeError", function () {
+    describe("#1796 - cannot stub Array.prototype.sort", function() {
+        it("it should not fail with RangeError", function() {
             var stub = sinon.stub(Array.prototype, "sort");
 
-            refute.exception(function () {
+            refute.exception(function() {
                 [1, 2, 3].sort();
             });
 
@@ -523,8 +545,8 @@ describe("issues", function () {
         });
     });
 
-    describe("#1900 - calledWith returns false positive", function () {
-        it("should return false when call args don't match", function () {
+    describe("#1900 - calledWith returns false positive", function() {
+        it("should return false when call args don't match", function() {
             var spy = sinon.spy();
             var dateOne = new Date("2018-07-01");
             var dateTwo = new Date("2018-07-31");
@@ -536,10 +558,14 @@ describe("issues", function () {
         });
     });
 
-    describe("#1882", function () {
-        it("should use constructor name when checking deepEquality", function () {
-            function ClassWithoutProps() { return; }
-            function AnotherClassWithoutProps() { return; }
+    describe("#1882", function() {
+        it("should use constructor name when checking deepEquality", function() {
+            function ClassWithoutProps() {
+                return;
+            }
+            function AnotherClassWithoutProps() {
+                return;
+            }
             ClassWithoutProps.prototype.constructor = ClassWithoutProps;
             AnotherClassWithoutProps.prototype.constructor = AnotherClassWithoutProps;
             var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
@@ -551,8 +577,8 @@ describe("issues", function () {
         });
     });
 
-    describe("#1887", function () {
-        it("should not break stub behavior using multiple `match.any`", function () {
+    describe("#1887", function() {
+        it("should not break stub behavior using multiple `match.any`", function() {
             var stub = sinon.stub();
 
             stub.withArgs(sinon.match.any, sinon.match.any, sinon.match("a")).returns("a");

@@ -4,8 +4,8 @@ var referee = require("@sinonjs/referee");
 var extend = require("../lib/sinon/util/core/extend");
 var assert = referee.assert;
 
-describe("extend", function () {
-    it("should return unaltered target when only one argument", function () {
+describe("extend", function() {
+    it("should return unaltered target when only one argument", function() {
         var target = { hello: "world" };
 
         extend(target);
@@ -13,7 +13,7 @@ describe("extend", function () {
         assert.equals(target, { hello: "world" });
     });
 
-    it("should copy all (own) properties into first argument, from all subsequent arguments", function () {
+    it("should copy all (own) properties into first argument, from all subsequent arguments", function() {
         var target = { hello: "world" };
 
         extend(target, { a: "a" }, { b: "b" });
@@ -23,15 +23,15 @@ describe("extend", function () {
         assert.equals(target.b, "b");
     });
 
-    it("should copy toString method into target", function () {
+    it("should copy toString method into target", function() {
         var target = {
             hello: "world",
-            toString: function () {
+            toString: function() {
                 return "hello world";
             }
         };
         var source = {
-            toString: function () {
+            toString: function() {
                 return "hello source";
             }
         };
@@ -41,7 +41,7 @@ describe("extend", function () {
         assert.same(target.toString, source.toString);
     });
 
-    it("must copy the last occurring property into the target", function () {
+    it("must copy the last occurring property into the target", function() {
         var target = { a: 0, b: 0, c: 0, d: 0 };
         var source1 = { a: 1, b: 1, c: 1 };
         var source2 = { a: 2, b: 2 };
@@ -55,7 +55,7 @@ describe("extend", function () {
         assert.equals(target.d, 0);
     });
 
-    it("copies all properties", function () {
+    it("copies all properties", function() {
         var object1 = {
             prop1: null,
             prop2: false
