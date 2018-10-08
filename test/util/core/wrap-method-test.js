@@ -169,14 +169,17 @@ describe("util/core/wrapMethod", function () {
 
             var i = 0;
 
-            Error = TypeError = function () { // eslint-disable-line no-native-reassign, no-undef
+            // eslint-disable-next-line no-global-assign
+            Error = TypeError = function () {
                 this.stack = ":STACK" + ++i + ":";
             };
         });
 
         afterEach(function () {
-            Error = this.oldError; // eslint-disable-line no-native-reassign, no-undef
-            TypeError = this.oldTypeError; // eslint-disable-line no-native-reassign, no-undef
+            // eslint-disable-next-line no-global-assign
+            Error = this.oldError;
+            // eslint-disable-next-line no-global-assign
+            TypeError = this.oldTypeError;
         });
 
         it("throws with stack trace showing original wrapMethod call", function () {
