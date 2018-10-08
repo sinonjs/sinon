@@ -971,7 +971,9 @@ describe("Sandbox", function () {
         it("should error when descriptor has no setter", function () {
             var sandbox = this.sandbox;
             var object = {
-                get catpants() {}
+                get catpants() {
+                    return;
+                }
             };
 
             assert.exception(

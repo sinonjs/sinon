@@ -1295,6 +1295,7 @@ describe("stub", function () {
             var obj = {
                 get prop() {
                     fail("should not call getter");
+                    return;
                 }
             };
 
@@ -2910,6 +2911,7 @@ describe("stub", function () {
             var myObj = {
                 get prop() {
                     fail("should not call the old getter");
+                    return;
                 }
             };
 
