@@ -138,8 +138,10 @@ describe("issues", function () {
                 }
             }
 
+            var oldWatch;
+
             try { // eslint-disable-line no-restricted-syntax
-                var oldWatch = Object.prototype.watch;
+                oldWatch = Object.prototype.watch;
 
                 if (typeof Object.prototype.watch !== "function") {
                     Object.prototype.watch = function rolex() {}; // eslint-disable-line no-extend-native
