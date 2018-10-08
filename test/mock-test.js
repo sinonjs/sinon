@@ -36,7 +36,7 @@ describe("sinonMock", function () {
 
     describe(".expects", function () {
         beforeEach(function () {
-            this.mock = sinonMock.create({ someMethod: function () {} });
+            this.mock = sinonMock.create({ someMethod: function () { return; } });
         });
 
         it("throws without method", function () {
@@ -324,7 +324,7 @@ describe("sinonMock", function () {
             });
 
             it("should not throw when exceeding at least expectation", function () {
-                var obj = { foobar: function () {} };
+                var obj = { foobar: function () { return; } };
                 var mock = sinonMock(obj);
                 mock.expects("foobar").atLeast(1);
 
@@ -337,7 +337,7 @@ describe("sinonMock", function () {
             });
 
             it("should not throw when exceeding at least expectation and withargs", function () {
-                var obj = { foobar: function () {} };
+                var obj = { foobar: function () { return; } };
                 var mock = sinonMock(obj);
 
                 mock.expects("foobar").withArgs("arg1");
@@ -558,7 +558,7 @@ describe("sinonMock", function () {
 
             it("works with sinon matchers", function () {
                 this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
-                this.expectation(1, "test", function () {});
+                this.expectation(1, "test", function () { return; });
 
                 assert(this.expectation.met());
             });
@@ -710,7 +710,7 @@ describe("sinonMock", function () {
 
     describe(".verify", function () {
         beforeEach(function () {
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
             this.mock = sinonMock.create(this.object);
         });
@@ -947,7 +947,7 @@ describe("sinonMock", function () {
 
     describe(".usingPromise", function () {
         beforeEach(function () {
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
             this.mock = sinonMock.create(this.object);
         });
@@ -986,7 +986,7 @@ describe("sinonMock", function () {
 
     describe("mock object", function () {
         beforeEach(function () {
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
             this.mock = sinonMock.create(this.object);
         });
@@ -1042,7 +1042,7 @@ describe("sinonMock", function () {
     describe("mock method multiple times", function () {
         beforeEach(function () {
             this.thisValue = {};
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
             this.mock = sinonMock.create(this.object);
             this.mock.expects("method");
@@ -1077,7 +1077,7 @@ describe("sinonMock", function () {
         });
 
         it("allows mock calls in any order", function () {
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
             var mock = sinonMock(object);
             mock.expects("method").once().withArgs(42);
             mock.expects("method").twice().withArgs("Yeah");

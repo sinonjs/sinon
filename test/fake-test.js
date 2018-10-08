@@ -29,7 +29,7 @@ function verifyProxy(func, argument) {
     });
 }
 
-function noop() {}
+function noop() { return; }
 
 function requirePromiseSupport() {
     if (typeof Promise !== "function") {
@@ -50,7 +50,7 @@ describe("fake", function () {
     });
 
     describe("when passed a Function", function () {
-        verifyProxy(fake, function () {});
+        verifyProxy(fake, function () { return; });
 
         it("should keep the `this` context of the wrapped function", function () {
             function method() { return this.foo; }
@@ -81,8 +81,8 @@ describe("fake", function () {
     describe(".callback", function () {
         it("it should be a reference for the callback in the last call", function () {
             var f = fake();
-            var callback1 = function () {};
-            var callback2 = function () {};
+            var callback1 = function () { return; };
+            var callback2 = function () { return; };
 
             f(1, 2, 3, callback1);
             assert.equals(f.callback, callback1);
@@ -264,7 +264,7 @@ describe("fake", function () {
             var callback = sinon.spy();
             var myFake = fake.yields();
 
-            myFake(function () {}, callback);
+            myFake(function () { return; }, callback);
 
             sinon.assert.calledOnce(callback);
         });
@@ -273,7 +273,7 @@ describe("fake", function () {
             var myFake = fake.yields();
 
             assert.exception(function () {
-                myFake(function () {}, "not a function");
+                myFake(function () { return; }, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });
@@ -301,7 +301,7 @@ describe("fake", function () {
             var callback = sinon.spy();
             var myFake = fake.yieldsAsync();
 
-            myFake(function () {}, callback);
+            myFake(function () { return; }, callback);
 
             sinon.assert.notCalled(callback);
 
@@ -316,7 +316,7 @@ describe("fake", function () {
             var myFake = fake.yieldsAsync();
 
             assert.exception(function () {
-                myFake(function () {}, "not a function");
+                myFake(function () { return; }, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });

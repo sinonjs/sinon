@@ -69,7 +69,7 @@ function propertyMatcherTests(matcher, additionalTests) {
         it("compares with matcher", function () {
             var has = matcher("callback", sinonMatch.typeOf("function"));
 
-            assert(has.test({ callback: function () {} }));
+            assert(has.test({ callback: function () { return; } }));
         });
 
         if (typeof additionalTests === "function") {
@@ -80,13 +80,13 @@ function propertyMatcherTests(matcher, additionalTests) {
 
 describe("sinonMatch", function () {
     it("returns matcher", function () {
-        var match = sinonMatch(function () {});
+        var match = sinonMatch(function () { return; });
 
         assert(sinonMatch.isMatcher(match));
     });
 
     it("exposes test function", function () {
-        var test = function () {};
+        var test = function () { return; };
 
         var match = sinonMatch(test);
 
@@ -300,7 +300,7 @@ describe("sinonMatch", function () {
     });
 
     it("returns false if test function in object returns nothing", function () {
-        var match = sinonMatch({ test: function () {}});
+        var match = sinonMatch({ test: function () { return; }});
 
         assert.isFalse(match.test());
     });
@@ -323,13 +323,13 @@ describe("sinonMatch", function () {
         it("returns message", function () {
             var message = "hello sinonMatch";
 
-            var match = sinonMatch(function () {}, message);
+            var match = sinonMatch(function () { return; }, message);
 
             assert.same(match.toString(), message);
         });
 
         it("defaults to match(functionName)", function () {
-            var match = sinonMatch(function custom() {});
+            var match = sinonMatch(function custom() { return; });
 
             assert.same(match.toString(), "match(custom)");
         });
@@ -368,7 +368,7 @@ describe("sinonMatch", function () {
 
         it("returns true if test is called with any object", function () {
             assert(sinonMatch.defined.test({}));
-            assert(sinonMatch.defined.test(function () {}));
+            assert(sinonMatch.defined.test(function () { return; }));
         });
     });
 
@@ -459,7 +459,7 @@ describe("sinonMatch", function () {
                 [1, 2, 3],
                 ["a", "b", "c"],
                 [{ a: "a" }, { b: "b"}],
-                [function () {}, function () {}],
+                [function () { return; }, function () { return; }],
                 [null, undefined]
             ];
 
@@ -542,13 +542,13 @@ describe("sinonMatch", function () {
         if (typeof Symbol !== "undefined" && typeof Symbol.hasInstance !== "undefined") {
             it("does not throw if given argument defines Symbol.hasInstance", function () {
                 var objectWithCustomTypeChecks = {};
-                objectWithCustomTypeChecks[Symbol.hasInstance] = function () {};
+                objectWithCustomTypeChecks[Symbol.hasInstance] = function () { return; };
                 sinonMatch.instanceOf(objectWithCustomTypeChecks);
             });
         }
 
         it("returns matcher", function () {
-            var instanceOf = sinonMatch.instanceOf(function () {});
+            var instanceOf = sinonMatch.instanceOf(function () { return; });
 
             assert(sinonMatch.isMatcher(instanceOf));
         });
@@ -688,7 +688,7 @@ describe("sinonMatch", function () {
             refute(every.test(1));
             refute(every.test("a"));
             refute(every.test(null));
-            refute(every.test(function () {}));
+            refute(every.test(function () { return; }));
         });
 
         it("matches an object if the predicate is true for every property", function () {
@@ -767,7 +767,7 @@ describe("sinonMatch", function () {
             refute(some.test(1));
             refute(some.test("a"));
             refute(some.test(null));
-            refute(some.test(function () {}));
+            refute(some.test(function () { return; }));
         });
 
         it("matches an object if the predicate is true for some of the properties", function () {

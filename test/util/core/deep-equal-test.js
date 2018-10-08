@@ -46,7 +46,7 @@ describe("util/core/deepEqual", function () {
     });
 
     it("passes same function", function () {
-        var func = function () {};
+        var func = function () { return; };
 
         assert(deepEqual(func, func));
     });
@@ -245,7 +245,7 @@ describe("util/core/deepEqual", function () {
     }
 
     it("passes deep objects", function () {
-        var func = function () {};
+        var func = function () { return; };
 
         var obj1 = {
             a: 1,

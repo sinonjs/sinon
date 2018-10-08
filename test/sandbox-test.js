@@ -36,7 +36,7 @@ referee.add("fakeServerWithClock", {
 });
 
 describe("Sandbox", function () {
-    function noop() {}
+    function noop() { return; }
 
     it("exposes match", function () {
         var sandbox = new Sandbox();
@@ -71,7 +71,7 @@ describe("Sandbox", function () {
         });
 
         it("returns a mock", function () {
-            var object = { method: function () { }};
+            var object = { method: function () { return; }};
 
             var actual = this.sandbox.mock(object);
             actual.expects("method");
@@ -82,7 +82,7 @@ describe("Sandbox", function () {
 
         it("adds mock to fake array", function () {
             var fakes = this.sandbox.getFakes();
-            var object = { method: function () { }};
+            var object = { method: function () { return; }};
             var expected = this.sandbox.mock(object);
 
             assert(fakes.indexOf(expected) !== -1);
@@ -106,8 +106,8 @@ describe("Sandbox", function () {
         it("appends mocks and stubs to fake array", function () {
             var fakes = this.sandbox.getFakes();
 
-            this.sandbox.mock({ method: function () {} }, "method");
-            this.sandbox.stub({ method: function () {} }, "method");
+            this.sandbox.mock({ method: function () { return; } }, "method");
+            this.sandbox.stub({ method: function () { return; } }, "method");
 
             assert.equals(fakes.length, 2);
         });
@@ -139,8 +139,8 @@ describe("Sandbox", function () {
         });
 
         it("stubs existing methods", function () {
-            var Class = function () {};
-            Class.prototype.method = function () {};
+            var Class = function () { return; };
+            Class.prototype.method = function () { return; };
 
             var stub = this.sandbox.createStubInstance(Class);
             stub.method.returns(3);
@@ -162,10 +162,10 @@ describe("Sandbox", function () {
         });
 
         it("resets all stub methods on reset()", function () {
-            var Class = function () {};
-            Class.prototype.method1 = function () {};
-            Class.prototype.method2 = function () {};
-            Class.prototype.method3 = function () {};
+            var Class = function () { return; };
+            Class.prototype.method1 = function () { return; };
+            Class.prototype.method2 = function () { return; };
+            Class.prototype.method3 = function () { return; };
 
             var stub = this.sandbox.createStubInstance(Class);
             stub.method1.returns(1);
@@ -181,7 +181,7 @@ describe("Sandbox", function () {
         });
 
         it("doesn't stub fake methods", function () {
-            var Class = function () {};
+            var Class = function () { return; };
 
             var stub = this.sandbox.createStubInstance(Class);
             assert.exception(function () {
@@ -194,7 +194,7 @@ describe("Sandbox", function () {
                 var c = a + b;
                 throw c;
             };
-            Class.prototype.method = function () {};
+            Class.prototype.method = function () { return; };
 
             var stub = this.sandbox.createStubInstance(Class);
             refute.exception(function () {
@@ -204,7 +204,7 @@ describe("Sandbox", function () {
 
         it("retains non function values", function () {
             var TYPE = "some-value";
-            var Class = function () {};
+            var Class = function () { return; };
             Class.prototype.type = TYPE;
 
             var stub = this.sandbox.createStubInstance(Class);
@@ -217,7 +217,7 @@ describe("Sandbox", function () {
                     throw "error";
                 }
             };
-            var Class = function () {};
+            var Class = function () { return; };
             Class.prototype = proto;
 
             var stub = this.sandbox.createStubInstance(Class);
@@ -272,7 +272,7 @@ describe("Sandbox", function () {
         });
 
         it("creates a stub", function () {
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
 
             this.sandbox.stub(object, "method");
 
@@ -281,7 +281,7 @@ describe("Sandbox", function () {
 
         it("adds stub to fake array", function () {
             var fakes = this.sandbox.getFakes();
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
             var stub = this.sandbox.stub(object, "method");
 
             assert.isTrue(fakes.indexOf(stub) !== -1);
@@ -290,8 +290,8 @@ describe("Sandbox", function () {
         it("appends stubs to fake array", function () {
             var fakes = this.sandbox.getFakes();
 
-            this.sandbox.stub({ method: function () {} }, "method");
-            this.sandbox.stub({ method: function () {} }, "method");
+            this.sandbox.stub({ method: function () { return; } }, "method");
+            this.sandbox.stub({ method: function () { return; } }, "method");
 
             assert.equals(fakes.length, 2);
         });
@@ -299,9 +299,9 @@ describe("Sandbox", function () {
         it("adds all object methods to fake array", function () {
             var fakes = this.sandbox.getFakes();
             var object = {
-                method: function () {},
-                method2: function () {},
-                method3: function () {}
+                method: function () { return; },
+                method2: function () { return; },
+                method3: function () { return; }
             };
 
             Object.defineProperty(object, "method3", {
@@ -317,12 +317,12 @@ describe("Sandbox", function () {
         });
 
         it("returns a stubbed object", function () {
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
             assert.equals(this.sandbox.stub(object), object);
         });
 
         it("returns a stubbed method", function () {
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
             assert.equals(this.sandbox.stub(object, "method"), object.method);
         });
 
@@ -334,7 +334,7 @@ describe("Sandbox", function () {
 
                 it("stubs environment property", function () {
                     var originalPrintWarning = deprecated.printWarning;
-                    deprecated.printWarning = function () {};
+                    deprecated.printWarning = function () { return; };
 
                     this.sandbox.stub(process.env, "HELL").value("froze over");
                     assert.equals(process.env.HELL, "froze over");
@@ -353,7 +353,7 @@ describe("Sandbox", function () {
 
         it("stubs number property", function () {
             var originalPrintWarning = deprecated.printWarning;
-            deprecated.printWarning = function () {};
+            deprecated.printWarning = function () { return; };
 
             this.sandbox.stub(this.object, "property").value(1);
 
@@ -364,7 +364,7 @@ describe("Sandbox", function () {
 
         it("restores number property", function () {
             var originalPrintWarning = deprecated.printWarning;
-            deprecated.printWarning = function () {};
+            deprecated.printWarning = function () { return; };
 
             this.sandbox.stub(this.object, "property").value(1);
             this.sandbox.restore();
@@ -376,7 +376,7 @@ describe("Sandbox", function () {
 
         it("fails if property does not exist", function () {
             var originalPrintWarning = deprecated.printWarning;
-            deprecated.printWarning = function () {};
+            deprecated.printWarning = function () { return; };
 
             var sandbox = this.sandbox;
             var object = {};
@@ -394,7 +394,7 @@ describe("Sandbox", function () {
                 var object = {};
 
                 var originalPrintWarning = deprecated.printWarning;
-                deprecated.printWarning = function () {};
+                deprecated.printWarning = function () { return; };
 
                 assert.exception(function () {
                     sandbox.stub(object, Symbol());
@@ -589,8 +589,8 @@ describe("Sandbox", function () {
         });
 
         it("should replace a function property", function () {
-            var replacement = function replacement() {};
-            var existing = function existing() {};
+            var replacement = function replacement() { return; };
+            var existing = function existing() { return; };
             var object = {
                 property: existing
             };
@@ -833,7 +833,7 @@ describe("Sandbox", function () {
         it("should error when descriptor has no getter", function () {
             var sandbox = this.sandbox;
             var object = { // eslint-disable-line accessor-pairs
-                set catpants(_) {}
+                set catpants(_) { return; }
             };
 
             assert.exception(
@@ -1028,7 +1028,7 @@ describe("Sandbox", function () {
             var sandbox = this.sandbox;
             // eslint-disable-next-line accessor-pairs
             var object = {
-                set foo(value) {}
+                set foo(value) { return; }
             };
 
             sandbox.replaceSetter(object, "foo", sinonFake());
@@ -1309,7 +1309,7 @@ describe("Sandbox", function () {
                 });
 
                 it("calls sinon.useFakeXMLHttpRequest", function () {
-                    var stubXhr = { restore: function () {} };
+                    var stubXhr = { restore: function () { return; } };
 
                     this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns(stubXhr);
                     var returnedXhr = this.sandbox.useFakeXMLHttpRequest();
@@ -1319,14 +1319,14 @@ describe("Sandbox", function () {
                 });
 
                 it("returns fake xhr object created by nise", function () {
-                    this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns({ restore: function () {} });
+                    this.sandbox.stub(fakeXhr, "useFakeXMLHttpRequest").returns({ restore: function () { return; } });
                     this.sandbox.useFakeXMLHttpRequest();
 
                     assert(fakeXhr.useFakeXMLHttpRequest.called);
                 });
 
                 it("doesn't secretly use useFakeServer", function () {
-                    this.sandbox.stub(fakeServer, "create").returns({ restore: function () {} });
+                    this.sandbox.stub(fakeServer, "create").returns({ restore: function () { return; } });
                     this.sandbox.useFakeXMLHttpRequest();
 
                     assert(fakeServer.create.notCalled);
@@ -1561,7 +1561,7 @@ describe("Sandbox", function () {
         });
 
         it("does not inject properties if they are already present", function () {
-            var server = function () {};
+            var server = function () { return; };
             var clock = {};
             var spy = false;
             var object = { server: server, clock: clock, spy: spy};

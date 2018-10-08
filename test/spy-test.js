@@ -223,7 +223,7 @@ describe("spy", function () {
     });
 
     it("returns spy function", function () {
-        var func = function () {};
+        var func = function () { return; };
         var spy = createSpy.create(func);
 
         assert.isFunction(spy);
@@ -231,7 +231,7 @@ describe("spy", function () {
     });
 
     it("mirrors custom properties on function", function () {
-        var func = function () {};
+        var func = function () { return; };
         func.myProp = 42;
         var spy = createSpy.create(func);
 
@@ -245,7 +245,7 @@ describe("spy", function () {
     });
 
     it("does not overwrite original create property", function () {
-        var func = function () {};
+        var func = function () { return; };
         var object = func.create = {};
         var spy = createSpy.create(func);
 
@@ -380,8 +380,8 @@ describe("spy", function () {
         }
 
         var object = {
-            f1: function () {},
-            f2: function () {}
+            f1: function () { return; },
+            f2: function () { return; }
         };
 
         // f1: the order of withArgs(1), withArgs(1, 1)
@@ -440,7 +440,7 @@ describe("spy", function () {
         });
 
         it("passes 'new' to underlying function", function () {
-            function TestClass() {}
+            function TestClass() { return; }
 
             var SpyClass = createSpy.create(TestClass);
 
@@ -500,37 +500,39 @@ describe("spy", function () {
         });
 
         it("retains function length 0", function () {
-            var spy = createSpy.create(function () {});
+            var spy = createSpy.create(function () { return; });
 
             assert.equals(spy.length, 0);
         });
 
         it("retains function length 1", function () {
-            var spy = createSpy.create(function (a) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a) { return; }); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 1);
         });
 
         it("retains function length 2", function () {
-            var spy = createSpy.create(function (a, b) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b) { return; }); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 2);
         });
 
         it("retains function length 3", function () {
-            var spy = createSpy.create(function (a, b, c) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b, c) { return; }); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 3);
         });
 
         it("retains function length 4", function () {
-            var spy = createSpy.create(function (a, b, c, d) {}); // eslint-disable-line no-unused-vars
+            var spy = createSpy.create(function (a, b, c, d) { return; }); // eslint-disable-line no-unused-vars
 
             assert.equals(spy.length, 4);
         });
 
         it("retains function length 12", function () {
-            var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {}; // eslint-disable-line no-unused-vars
+            var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) { // eslint-disable-line no-unused-vars
+                return;
+            };
             var spy = createSpy.create(func12Args);
 
             assert.equals(spy.length, 12);
@@ -828,7 +830,7 @@ describe("spy", function () {
         });
 
         it("is true if called with new on custom constructor", function () {
-            function MyThing() {}
+            function MyThing() { return; }
             MyThing.prototype = {};
             var ns = { MyThing: MyThing };
             createSpy(ns, "MyThing");
@@ -935,7 +937,7 @@ describe("spy", function () {
         });
 
         it("stacks up objects", function () {
-            function MyConstructor() {}
+            function MyConstructor() { return; }
             var objects = [{}, [], new MyConstructor(), { id: 243 }];
             this.spy();
             this.spy.call(objects[0]);
@@ -1530,7 +1532,7 @@ describe("spy", function () {
         });
 
         it("returns true when returned value once", function () {
-            var values = [{}, 2, "hey", function () {}];
+            var values = [{}, 2, "hey", function () { return; }];
             var spy = createSpy.create(function () {
                 return values[spy.callCount];
             });
@@ -1544,7 +1546,7 @@ describe("spy", function () {
         });
 
         it("returns false when value is never returned", function () {
-            var values = [{}, 2, "hey", function () {}];
+            var values = [{}, 2, "hey", function () { return; }];
             var spy = createSpy.create(function () {
                 return values[spy.callCount];
             });
@@ -1627,7 +1629,7 @@ describe("spy", function () {
         });
 
         it("contains the created object for spied constructors", function () {
-            var Spy = createSpy.create(function () { });
+            var Spy = createSpy.create(function () { return; });
 
             var result = new Spy();
 
@@ -2126,7 +2128,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
 
             assert.exception(
@@ -2225,7 +2227,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -2332,7 +2334,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
 
             assert.exception(
@@ -2420,7 +2422,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -2501,7 +2503,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
 
             assert.exception(
@@ -2596,7 +2598,7 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = { someMethod: function () {} };
+            var api = { someMethod: function () { return; } };
             var spy = createSpy(api, "someMethod");
             var thisObj = { name1: "value1", name2: "value2" };
 
@@ -2738,7 +2740,7 @@ describe("spy", function () {
         });
 
         it("matches the function length", function () {
-            var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
+            var api = { someMethod: function (a, b, c) { return; } }; // eslint-disable-line no-unused-vars
             var spy = createSpy(api, "someMethod");
 
             assert.equals(spy.length, 3);

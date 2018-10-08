@@ -38,8 +38,8 @@ describe("assert", function () {
     });
 
     it("supports proxy property", function () {
-        var api = { method: function () {} };
-        api.method.proxy = function () {};
+        var api = { method: function () { return; } };
+        api.method.proxy = function () { return; };
         sinonSpy(api, "method");
         api.method();
 
@@ -114,7 +114,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(function () {
-                    sinonAssert.called(function () {});
+                    sinonAssert.called(function () { return; });
                 });
 
                 assert(sinonAssert.fail.called);
@@ -176,7 +176,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(function () {
-                    sinonAssert.notCalled(function () {});
+                    sinonAssert.notCalled(function () { return; });
                 });
 
                 assert(sinonAssert.fail.called);
@@ -234,7 +234,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(function () {
-                    sinonAssert.calledOnce(function () {});
+                    sinonAssert.calledOnce(function () { return; });
                 });
 
                 assert(sinonAssert.fail.called);
@@ -502,7 +502,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "calledOn");
 
                 assert.exception(function () {
-                    sinonAssert.calledOn(function () {}, object);
+                    sinonAssert.calledOn(function () { return; }, object);
                 });
 
                 assert.isFalse(this.stub.calledOn.calledWith(object));
@@ -583,7 +583,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "calledWithNew");
 
                 assert.exception(function () {
-                    sinonAssert.calledWithNew(function () {});
+                    sinonAssert.calledWithNew(function () { return; });
                 });
 
                 assert.isFalse(this.stub.calledWithNew.called);
@@ -659,7 +659,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "alwaysCalledWithNew");
 
                 assert.exception(function () {
-                    sinonAssert.alwaysCalledWithNew(function () {});
+                    sinonAssert.alwaysCalledWithNew(function () { return; });
                 });
 
                 assert.isFalse(this.stub.alwaysCalledWithNew.called);
@@ -952,7 +952,7 @@ describe("assert", function () {
 
             it("fails if method is not fake", function () {
                 assert.exception(function () {
-                    sinonAssert.alwaysCalledOn(function () {}, {});
+                    sinonAssert.alwaysCalledOn(function () { return; }, {});
                 });
             });
 
@@ -1005,7 +1005,7 @@ describe("assert", function () {
 
         it("fails if method is not fake", function () {
             assert.exception(function () {
-                sinonAssert.alwaysCalledWith(function () {});
+                sinonAssert.alwaysCalledWith(function () { return; });
             });
         });
 
@@ -1163,7 +1163,7 @@ describe("assert", function () {
     describe("message", function () {
         beforeEach(function () {
             this.obj = {
-                doSomething: function () {}
+                doSomething: function () { return; }
             };
 
             sinonSpy(this.obj, "doSomething");
@@ -1217,7 +1217,7 @@ describe("assert", function () {
         });
 
         it("assert.callOrder exception message", function () {
-            var obj = { doop: function () {}, foo: function () {} };
+            var obj = { doop: function () { return; }, foo: function () { return; } };
             sinonSpy(obj, "doop");
             sinonSpy(obj, "foo");
 
@@ -1233,7 +1233,7 @@ describe("assert", function () {
         });
 
         it("assert.callOrder with missing first call exception message", function () {
-            var obj = { doop: function () {}, foo: function () {} };
+            var obj = { doop: function () { return; }, foo: function () { return; } };
             sinonSpy(obj, "doop");
             sinonSpy(obj, "foo");
 
@@ -1247,7 +1247,7 @@ describe("assert", function () {
         });
 
         it("assert.callOrder with missing last call exception message", function () {
-            var obj = { doop: function () {}, foo: function () {} };
+            var obj = { doop: function () { return; }, foo: function () { return; } };
             sinonSpy(obj, "doop");
             sinonSpy(obj, "foo");
 
@@ -1505,7 +1505,7 @@ describe("assert", function () {
 
         it("assert.calledWith match.instanceOf exception message", function () {
             this.obj.doSomething();
-            var matcher = sinonMatch.instanceOf(function CustomType() {});
+            var matcher = sinonMatch.instanceOf(function CustomType() { return; });
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1553,7 +1553,7 @@ describe("assert", function () {
 
         it("assert.calledWith match test function exception message", function () {
             this.obj.doSomething();
-            var matcher = sinonMatch({ test: function custom() {} });
+            var matcher = sinonMatch({ test: function custom() { return; } });
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1673,7 +1673,7 @@ describe("assert", function () {
             var obj = {};
 
             function setupSymbol(symbol) {
-                obj[symbol] = function () {};
+                obj[symbol] = function () { return; };
                 sinonSpy(obj, symbol);
             }
 

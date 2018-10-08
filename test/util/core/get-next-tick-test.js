@@ -7,14 +7,14 @@ var assert = referee.assert;
 describe("util/core/get-next-tick", function () {
     it("should use process.nextTick when available", function () {
         var mockProcess = {
-            nextTick: function () {}
+            nextTick: function () { return; }
         };
 
         assert.same(getNextTick(mockProcess), mockProcess.nextTick);
     });
 
     it("should use setImmediate when process.nextTick is not available", function () {
-        function mockSetImmediate() {}
+        function mockSetImmediate() { return; }
 
         assert.same(getNextTick(undefined, mockSetImmediate), mockSetImmediate);
     });

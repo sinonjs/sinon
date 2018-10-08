@@ -5,9 +5,9 @@ var calledInOrder = require("../../../lib/sinon/util/core/called-in-order");
 var sinonStub = require("../../../lib/sinon/stub");
 var assert = referee.assert;
 
-var testObject1 = {someFunction: function () {}};
-var testObject2 = {otherFunction: function () {}};
-var testObject3 = {thirdFunction: function () {}};
+var testObject1 = {someFunction: function () { return; }};
+var testObject2 = {otherFunction: function () { return; }};
+var testObject3 = {thirdFunction: function () { return; }};
 
 function testMethod() {
     testObject1.someFunction();

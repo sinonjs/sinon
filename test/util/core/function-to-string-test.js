@@ -7,7 +7,7 @@ var assert = referee.assert;
 
 describe("util/core/functionToString", function () {
     it("returns function's displayName property", function () {
-        var fn = function () {};
+        var fn = function () { return; };
         fn.displayName = "Larry";
 
         assert.equals(functionToString.call(fn), "Larry");

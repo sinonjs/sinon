@@ -11,8 +11,8 @@ var refute = referee.refute;
 function spyCallSetUp() {
     this.thisValue = {};
     this.args = [{}, [], new Error(), 3];
-    this.returnValue = function () {};
-    this.call = sinonSpyCall(function () {}, this.thisValue,
+    this.returnValue = function () { return; };
+    this.call = sinonSpyCall(function () { return; }, this.thisValue,
         this.args, this.returnValue, null, 0);
 }
 
@@ -121,14 +121,14 @@ describe("sinonSpy.call", function () {
         });
 
         it("stores given call id", function () {
-            var call = sinonSpyCall(function () {}, {}, [], null, null, 42);
+            var call = sinonSpyCall(function () { return; }, {}, [], null, null, 42);
 
             assert.same(call.callId, 42);
         });
 
         it("throws if callId is undefined", function () {
             assert.exception(function () {
-                sinonSpyCall.create(function () {}, {}, []);
+                sinonSpyCall.create(function () { return; }, {}, []);
             });
         });
 
@@ -219,13 +219,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns true for no arguments", function () {
-            var call = sinonSpyCall(function () {}, {}, [], null, null, 0);
+            var call = sinonSpyCall(function () { return; }, {}, [], null, null, 0);
 
             assert(call.calledWithExactly());
         });
 
         it("returns false when called with no args but matching one", function () {
-            var call = sinonSpyCall(function () {}, {}, [], null, null, 0);
+            var call = sinonSpyCall(function () { return; }, {}, [], null, null, 0);
 
             assert.isFalse(call.calledWithExactly({}));
         });
@@ -463,8 +463,8 @@ describe("sinonSpy.call", function () {
     describe(".callback", function () {
         it("it should be a reference for the callback", function () {
             var spy = sinonSpy();
-            var callback1 = function () {};
-            var callback2 = function () {};
+            var callback1 = function () { return; };
+            var callback2 = function () { return; };
 
             spy(1, 2, 3, callback1);
             assert.equals(spy.getCall(0).callback, callback1);
@@ -594,7 +594,7 @@ describe("sinonSpy.call", function () {
     describe("call.invokeCallback", function () {
 
         it("is alias for yield", function () {
-            var call = sinonSpyCall(function () {}, {}, [], null, null, 0);
+            var call = sinonSpyCall(function () { return; }, {}, [], null, null, 0);
 
             assert.same(call.yield, call.invokeCallback);
         });
@@ -1040,7 +1040,7 @@ describe("sinonSpy.call", function () {
 
     describe("constructor", function () {
         beforeEach(function () {
-            this.CustomConstructor = function () {};
+            this.CustomConstructor = function () { return; };
             this.customPrototype = this.CustomConstructor.prototype;
             sinonSpy(this, "CustomConstructor");
         });
@@ -1082,7 +1082,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("haves toString method", function () {
-            var obj = { meth: function () {} };
+            var obj = { meth: function () { return; } };
             sinonSpy(obj, "meth");
 
             assert.equals(obj.meth.toString(), "meth");
@@ -1095,14 +1095,14 @@ describe("sinonSpy.call", function () {
         });
 
         it("toString should report name of spied function", function () {
-            function myTestFunc() {}
+            function myTestFunc() { return; }
             var spy = sinonSpy(myTestFunc);
 
             assert.equals(spy.toString(), "myTestFunc");
         });
 
         it("toString should prefer displayName property if available", function () {
-            function myTestFunc() {}
+            function myTestFunc() { return; }
             myTestFunc.displayName = "My custom method";
             var spy = sinonSpy(myTestFunc);
 
@@ -1389,11 +1389,11 @@ describe("sinonSpy.call", function () {
     describe(".printf", function () {
         describe("name", function () {
             it("named", function () {
-                var named = sinonSpy(function cool() { });
+                var named = sinonSpy(function cool() { return; });
                 assert.equals(named.printf("%n"), "cool");
             });
             it("anon", function () {
-                var anon = sinonSpy(function () {});
+                var anon = sinonSpy(function () { return; });
                 assert.equals(anon.printf("%n"), "spy");
 
                 var noFn = sinonSpy();

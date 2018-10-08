@@ -75,8 +75,8 @@ describe("issues", function () {
 
     describe("#852 - createStubInstance on intherited constructors", function () {
         it("must not throw error", function () {
-            var A = function () {};
-            var B = function () {};
+            var A = function () { return; };
+            var B = function () { return; };
 
             B.prototype = Object.create(A.prototype);
             B.prototype.constructor = A;
@@ -89,7 +89,7 @@ describe("issues", function () {
 
     describe("#852(2) - createStubInstance should on same constructor", function () {
         it("must be idempotent", function () {
-            var A = function () {};
+            var A = function () { return; };
             refute.exception(function () {
                 sinon.createStubInstance(A);
                 sinon.createStubInstance(A);
@@ -98,7 +98,7 @@ describe("issues", function () {
     });
 
     describe("#950 - first execution of a spy as a method renames that spy", function () {
-        function bob() {}
+        function bob() { return; }
 
         // IE 11 does not support the function name property
         if (bob.name) {
@@ -144,11 +144,11 @@ describe("issues", function () {
                 oldWatch = Object.prototype.watch;
 
                 if (typeof Object.prototype.watch !== "function") {
-                    Object.prototype.watch = function rolex() {}; // eslint-disable-line no-extend-native
+                    Object.prototype.watch = function rolex() { return; }; // eslint-disable-line no-extend-native
                 }
 
                 var stubbedObject = sinon.stub({
-                    watch: function () {}
+                    watch: function () { return; }
                 });
 
                 stubbedObject.watch();
@@ -337,7 +337,7 @@ describe("issues", function () {
         });
 
         it("can stub methods on the prototype", function () {
-            var proto = { someFunction: function () {} };
+            var proto = { someFunction: function () { return; } };
             var instance = Object.create(proto);
 
             var stub = sandbox.stub(instance, "someFunction");
@@ -383,7 +383,7 @@ describe("issues", function () {
     describe("#1442 - callThrough with a mock expectation", function () {
         it("should call original method", function () {
             var foo = {
-                bar: function () { }
+                bar: function () { return; }
             };
 
             var mock = this.sandbox.mock(foo);
@@ -398,7 +398,7 @@ describe("issues", function () {
     describe("#1648 - resetHistory ", function () {
         it("should reset property spies", function () {
             var obj = {
-                func: function () {},
+                func: function () { return; },
                 get prop() {
                     return 1;
                 }
@@ -538,8 +538,8 @@ describe("issues", function () {
 
     describe("#1882", function () {
         it("should use constructor name when checking deepEquality", function () {
-            function ClassWithoutProps() {}
-            function AnotherClassWithoutProps() {}
+            function ClassWithoutProps() { return; }
+            function AnotherClassWithoutProps() { return; }
             ClassWithoutProps.prototype.constructor = ClassWithoutProps;
             AnotherClassWithoutProps.prototype.constructor = AnotherClassWithoutProps;
             var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps

@@ -1120,7 +1120,7 @@ describe("stub", function () {
 
     describe(".objectMethod", function () {
         beforeEach(function () {
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
         });
 
@@ -1181,7 +1181,7 @@ describe("stub", function () {
         });
 
         it("successfully stubs falsey properties", function () {
-            var obj = { 0: function () { } };
+            var obj = { 0: function () { return; } };
 
             createStub(obj, 0).callsFake(function () {
                 return "stubbed value";
@@ -1192,7 +1192,7 @@ describe("stub", function () {
 
         it("does not stub function object", function () {
             assert.exception(function () {
-                createStub(function () {});
+                createStub(function () { return; });
             });
         });
     });
@@ -1200,9 +1200,9 @@ describe("stub", function () {
     describe("everything", function () {
         it("stubs all methods of object without property", function () {
             var obj = {
-                func1: function () {},
-                func2: function () {},
-                func3: function () {}
+                func1: function () { return; },
+                func2: function () { return; },
+                func3: function () { return; }
             };
 
             createStub(obj);
@@ -1213,8 +1213,8 @@ describe("stub", function () {
         });
 
         it("stubs prototype methods", function () {
-            function Obj() {}
-            Obj.prototype.func1 = function () {};
+            function Obj() { return; }
+            Obj.prototype.func1 = function () { return; };
             var obj = new Obj();
 
             createStub(obj);
@@ -1237,12 +1237,12 @@ describe("stub", function () {
 
         it("handles non-enumerable properties", function () {
             var obj = {
-                func1: function () {},
-                func2: function () {}
+                func1: function () { return; },
+                func2: function () { return; }
             };
 
             Object.defineProperty(obj, "func3", {
-                value: function () {},
+                value: function () { return; },
                 writable: true,
                 configurable: true
             });
@@ -1255,9 +1255,9 @@ describe("stub", function () {
         });
 
         it("handles non-enumerable properties on prototypes", function () {
-            function Obj() {}
+            function Obj() { return; }
             Object.defineProperty(Obj.prototype, "func1", {
-                value: function () {},
+                value: function () { return; },
                 writable: true,
                 configurable: true
             });
@@ -1281,10 +1281,10 @@ describe("stub", function () {
 
         it("does not fail on overrides", function () {
             var parent = {
-                func: function () {}
+                func: function () { return; }
             };
             var child = Object.create(parent);
-            child.func = function () {};
+            child.func = function () { return; };
 
             refute.exception(function () {
                 createStub(child);
@@ -1320,7 +1320,7 @@ describe("stub", function () {
 
     describe("stubbed function", function () {
         it("has toString method", function () {
-            var obj = { meth: function () {} };
+            var obj = { meth: function () { return; } };
             createStub(obj, "meth");
 
             assert.equals(obj.meth.toString(), "meth");
@@ -1360,7 +1360,7 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = { somethingAwesome: function () {} };
+            var myObj = { somethingAwesome: function () { return; } };
             var stub = createStub(myObj, "somethingAwesome").yields();
 
             assert.exception(
@@ -1476,7 +1476,7 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = { somethingAwesome: function () {} };
+            var myObj = { somethingAwesome: function () { return; } };
             var stub = createStub(myObj, "somethingAwesome").yieldsRight();
 
             assert.exception(
@@ -1605,7 +1605,7 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = { somethingAwesome: function () {} };
+            var myObj = { somethingAwesome: function () { return; } };
             var stub = createStub(myObj, "somethingAwesome").yieldsOn(this.fakeContext);
 
             assert.exception(
@@ -1743,7 +1743,7 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = { somethingAwesome: function () {} };
+            var myObj = { somethingAwesome: function () { return; } };
             var stub = createStub(myObj, "somethingAwesome").yieldsTo("success");
 
             assert.exception(
@@ -1890,7 +1890,7 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = { somethingAwesome: function () {} };
+            var myObj = { somethingAwesome: function () { return; } };
             var stub = createStub(myObj, "somethingAwesome").yieldsToOn("success", this.fakeContext);
 
             assert.exception(
@@ -2493,7 +2493,7 @@ describe("stub", function () {
 
     describe(".reset", function () {
         it("resets behavior", function () {
-            var obj = { a: function () {} };
+            var obj = { a: function () { return; } };
             var spy = createSpy();
             createStub(obj, "a").callsArg(1);
 
@@ -2683,7 +2683,7 @@ describe("stub", function () {
         });
 
         it("matches the function length", function () {
-            var api = { someMethod: function (a, b, c) {} }; // eslint-disable-line no-unused-vars
+            var api = { someMethod: function (a, b, c) { return; } }; // eslint-disable-line no-unused-vars
             var stub = createStub(api, "someMethod");
 
             assert.equals(stub.length, 3);
@@ -2692,8 +2692,8 @@ describe("stub", function () {
 
     describe(".createStubInstance", function () {
         it("stubs existing methods", function () {
-            var Class = function () {};
-            Class.prototype.method = function () {};
+            var Class = function () { return; };
+            Class.prototype.method = function () { return; };
 
             var stub = createStubInstance(Class);
             stub.method.returns(3);
@@ -2701,7 +2701,7 @@ describe("stub", function () {
         });
 
         it("doesn't stub fake methods", function () {
-            var Class = function () {};
+            var Class = function () { return; };
 
             var stub = createStubInstance(Class);
             assert.exception(function () {
@@ -2714,7 +2714,7 @@ describe("stub", function () {
                 var c = a + b;
                 throw c;
             };
-            Class.prototype.method = function () {};
+            Class.prototype.method = function () { return; };
 
             var stub = createStubInstance(Class);
             refute.exception(function () {
@@ -2724,7 +2724,7 @@ describe("stub", function () {
 
         it("retains non function values", function () {
             var TYPE = "some-value";
-            var Class = function () {};
+            var Class = function () { return; };
             Class.prototype.type = TYPE;
 
             var stub = createStubInstance(Class);
@@ -2737,7 +2737,7 @@ describe("stub", function () {
                     throw "error";
                 }
             };
-            var Class = function () {};
+            var Class = function () { return; };
             Class.prototype = proto;
 
             var stub = createStubInstance(Class);
@@ -2758,8 +2758,8 @@ describe("stub", function () {
         });
 
         it("allows providing optional overrides", function () {
-            var Class = function () {};
-            Class.prototype.method = function () {};
+            var Class = function () { return; };
+            Class.prototype.method = function () { return; };
 
             var stub = createStubInstance(Class, {
                 method: createStub().returns(3)
@@ -2769,8 +2769,8 @@ describe("stub", function () {
         });
 
         it("allows providing optional returned values", function () {
-            var Class = function () {};
-            Class.prototype.method = function () {};
+            var Class = function () { return; };
+            Class.prototype.method = function () { return; };
 
             var stub = createStubInstance(Class, {
                 method: 3
@@ -2780,8 +2780,8 @@ describe("stub", function () {
         });
 
         it("throws an exception when trying to override non-existing property", function () {
-            var Class = function () {};
-            Class.prototype.method = function () {};
+            var Class = function () { return; };
+            Class.prototype.method = function () { return; };
 
             assert.exception(function () {
                 createStubInstance(Class, {
@@ -3073,7 +3073,7 @@ describe("stub", function () {
         });
 
         it("allows stubbing function static properties", function () {
-            var myFunc = function () {};
+            var myFunc = function () { return; };
             myFunc.prop = "rawString";
 
             createStub(myFunc, "prop").value("newString");
@@ -3081,7 +3081,7 @@ describe("stub", function () {
         });
 
         it("allows restoring function static properties", function () {
-            var myFunc = function () {};
+            var myFunc = function () { return; };
             myFunc.prop = "rawString";
 
             var stub = createStub(myFunc, "prop").value("newString");

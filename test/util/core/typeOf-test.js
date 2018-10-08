@@ -22,7 +22,7 @@ describe("typeOf", function () {
     });
 
     it("returns function", function () {
-        assert.equals(sinonTypeOf(function () {}), "function");
+        assert.equals(sinonTypeOf(function () { return; }), "function");
     });
 
     it("returns undefined", function () {

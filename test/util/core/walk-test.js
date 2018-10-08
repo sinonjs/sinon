@@ -85,7 +85,7 @@ describe("util/core/walk", function () {
     });
 
     it("should not invoke getters on the original receiving object", function () {
-        var Target = function Target() {};
+        var Target = function Target() { return; };
         var getter = createSpy();
         Object.defineProperty(Target.prototype, "computedFoo", {
             enumerable: true,
@@ -141,10 +141,10 @@ describe("util/core/walk", function () {
 
     it("does not walk the same property twice", function () {
         var parent = {
-            func: function parentFunc() {}
+            func: function parentFunc() { return; }
         };
         var child = Object.create(parent);
-        child.func = function childFunc() {};
+        child.func = function childFunc() { return; };
         var iterator = createSpy();
 
         walk(child, iterator);

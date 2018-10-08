@@ -9,9 +9,9 @@ var refute = referee.refute;
 
 describe("util/core/wrapMethod", function () {
     beforeEach(function () {
-        this.method = function () {};
-        this.getter = function () {};
-        this.setter = function () {};
+        this.method = function () { return; };
+        this.getter = function () { return; };
+        this.setter = function () { return; };
         this.object = {method: this.method};
         Object.defineProperty(this.object, "property", {
             get: this.getter,
@@ -35,7 +35,7 @@ describe("util/core/wrapMethod", function () {
         var object = this.object;
 
         assert.exception(function () {
-            wrapMethod(object, "prop", function () {});
+            wrapMethod(object, "prop", function () { return; });
         }, {name: "TypeError"});
     });
 
@@ -46,7 +46,7 @@ describe("util/core/wrapMethod", function () {
             object[symbol] = 42;
 
             assert.exception(function () {
-                wrapMethod(object, symbol, function () {});
+                wrapMethod(object, symbol, function () { return; });
             }, function (err) {
                 return err.message === "Attempted to wrap number property Symbol() as function";
             });
@@ -57,12 +57,12 @@ describe("util/core/wrapMethod", function () {
         var object = this.object;
 
         assert.exception(function () {
-            wrapMethod(object, "prop", function () {});
+            wrapMethod(object, "prop", function () { return; });
         });
 
         assert.exception(
             function () {
-                wrapMethod(object, "prop", function () {});
+                wrapMethod(object, "prop", function () { return; });
             },
             {
                 message: /Attempted to wrap .* property .* as function/
@@ -87,14 +87,14 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("replaces object method", function () {
-        wrapMethod(this.object, "method", function () {});
+        wrapMethod(this.object, "method", function () { return; });
 
         refute.same(this.method, this.object.method);
         assert.isFunction(this.object.method);
     });
 
     it("replaces getter", function () {
-        wrapMethod(this.object, "property", { get: function () {} });
+        wrapMethod(this.object, "property", { get: function () { return; } });
 
         refute.same(this.getter, Object.getOwnPropertyDescriptor(this.object, "property").get);
         assert.isFunction(Object.getOwnPropertyDescriptor(this.object, "property").get);
@@ -102,7 +102,7 @@ describe("util/core/wrapMethod", function () {
 
     it("replaces setter", function () {
         wrapMethod(this.object, "property", { // eslint-disable-line accessor-pairs
-            set: function () {}
+            set: function () { return; }
         });
 
         refute.same(this.setter, Object.getOwnPropertyDescriptor(this.object, "property").set);
@@ -110,10 +110,10 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if method is already wrapped", function () {
-        wrapMethod(this.object, "method", function () {});
+        wrapMethod(this.object, "method", function () { return; });
 
         assert.exception(function () {
-            wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () { return; });
         }, {name: "TypeError"});
     });
 
@@ -121,11 +121,11 @@ describe("util/core/wrapMethod", function () {
         if (typeof Symbol === "function") {
             var symbol = Symbol();
             var object = {};
-            object[symbol] = function () {};
-            wrapMethod(object, symbol, function () {});
+            object[symbol] = function () { return; };
+            wrapMethod(object, symbol, function () { return; });
 
             assert.exception(function () {
-                wrapMethod(object, symbol, function () {});
+                wrapMethod(object, symbol, function () { return; });
             }, function (err) {
                 return err.message === "Attempted to wrap Symbol() which is already wrapped";
             });
@@ -133,10 +133,10 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if property descriptor is already wrapped", function () {
-        wrapMethod(this.object, "property", { get: function () {} });
+        wrapMethod(this.object, "property", { get: function () { return; } });
 
         assert.exception(function () {
-            wrapMethod(this.object, "property", { get: function () {} });
+            wrapMethod(this.object, "property", { get: function () { return; } });
         }, {name: "TypeError"});
     });
 
@@ -144,7 +144,7 @@ describe("util/core/wrapMethod", function () {
         var object = { method: createSpy() };
 
         assert.exception(function () {
-            wrapMethod(object, "method", function () {});
+            wrapMethod(object, "method", function () { return; });
         }, {name: "TypeError"});
     });
 
@@ -155,7 +155,7 @@ describe("util/core/wrapMethod", function () {
             object[symbol] = createSpy();
 
             assert.exception(function () {
-                wrapMethod(object, symbol, function () {});
+                wrapMethod(object, symbol, function () { return; });
             }, function (err) {
                 return err.message === "Attempted to wrap Symbol() which is already spied on";
             });
@@ -183,14 +183,14 @@ describe("util/core/wrapMethod", function () {
         });
 
         it("throws with stack trace showing original wrapMethod call", function () {
-            var object = { method: function () {} };
+            var object = { method: function () { return; } };
             wrapMethod(object, "method", function () {
                 return "original";
             });
 
             assert.exception(
                 function () {
-                    wrapMethod(object, "method", function () {});
+                    wrapMethod(object, "method", function () { return; });
                 },
                 {
                     stack: ":STACK2:\n--------------\n:STACK1:"
@@ -202,25 +202,25 @@ describe("util/core/wrapMethod", function () {
     if (typeof window !== "undefined") {
         describe("in browser", function () {
             it("does not throw if object is window object", function () {
-                window.sinonTestMethod = function () {};
+                window.sinonTestMethod = function () { return; };
                 refute.exception(function () {
-                    wrapMethod(window, "sinonTestMethod", function () {});
+                    wrapMethod(window, "sinonTestMethod", function () { return; });
                 });
             });
         });
     }
 
     it("mirrors function properties", function () {
-        var object = { method: function () {} };
+        var object = { method: function () { return; } };
         object.method.prop = 42;
 
-        wrapMethod(object, "method", function () {});
+        wrapMethod(object, "method", function () { return; });
 
         assert.equals(object.method.prop, 42);
     });
 
     it("does not mirror and overwrite existing properties", function () {
-        var object = { method: function () {} };
+        var object = { method: function () { return; } };
         object.method.called = 42;
 
         createStub(object, "method");
@@ -230,24 +230,24 @@ describe("util/core/wrapMethod", function () {
 
     describe("wrapped method", function () {
         beforeEach(function () {
-            this.method = function () {};
+            this.method = function () { return; };
             this.object = { method: this.method };
         });
 
         it("defines restore method", function () {
-            wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () { return; });
 
             assert.isFunction(this.object.method.restore);
         });
 
         it("returns wrapper", function () {
-            var wrapper = wrapMethod(this.object, "method", function () {});
+            var wrapper = wrapMethod(this.object, "method", function () { return; });
 
             assert.same(this.object.method, wrapper);
         });
 
         it("restore brings back original method", function () {
-            wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () { return; });
             this.object.method.restore();
 
             assert.same(this.object.method, this.method);
@@ -256,21 +256,21 @@ describe("util/core/wrapMethod", function () {
 
     describe("wrapped prototype method", function () {
         beforeEach(function () {
-            this.type = function () {};
-            this.type.prototype.method = function () {};
+            this.type = function () { return; };
+            this.type.prototype.method = function () { return; };
 
             this.object = new this.type(); //eslint-disable-line new-cap
         });
 
         it("wrap adds owned property", function () {
-            var wrapper = wrapMethod(this.object, "method", function () {});
+            var wrapper = wrapMethod(this.object, "method", function () { return; });
 
             assert.same(this.object.method, wrapper);
             assert(this.object.hasOwnProperty("method"));
         });
 
         it("restore removes owned property", function () {
-            wrapMethod(this.object, "method", function () {});
+            wrapMethod(this.object, "method", function () { return; });
             this.object.method.restore();
 
             assert.same(this.object.method, this.type.prototype.method);

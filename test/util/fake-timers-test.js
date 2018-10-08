@@ -103,7 +103,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("returns numeric id or object with numeric id", function () {
-            var result = this.clock.setImmediate(function () { });
+            var result = this.clock.setImmediate(function () { return; });
 
             if (typeof result === "object") {
                 assert.isNumber(result.id);
@@ -639,8 +639,8 @@ describe("fakeTimers.clock", function () {
             var realDate = new Date();
 
             // eslint-disable-next-line no-global-assign
-            Date = function () {};
-            this.global.Date = function () {};
+            Date = function () { return; };
+            this.global.Date = function () { return; };
 
             var date = new this.clock.Date();
 
@@ -892,7 +892,7 @@ describe("fakeTimers.clock", function () {
 
             var to = setTimeout(stub, 1000);
 
-            if (typeof (setTimeout(function () {}, 0)) === "object") {
+            if (typeof (setTimeout(function () { return; }, 0)) === "object") {
                 assert.isNumber(to.id);
                 assert.isFunction(to.ref);
                 assert.isFunction(to.unref);
@@ -976,7 +976,7 @@ describe("fakeTimers.clock", function () {
             it("deletes global property on restore if it was inherited onto the global object", function () {
                 // Give the global object an inherited 'tick' method
                 delete this.global.tick;
-                this.global.__proto__.tick = function () { };
+                this.global.__proto__.tick = function () { return; };
 
                 if (!this.global.hasOwnProperty("tick")) {
                     this.clock = fakeTimers.useFakeTimers({toFake: ["tick"]});
@@ -995,7 +995,7 @@ describe("fakeTimers.clock", function () {
 
         it("restores global property on restore if it is present on the global object itself", function () {
             // Directly give the global object a tick method
-            this.global.tick = function () { };
+            this.global.tick = function () { return; };
 
             this.clock = fakeTimers.useFakeTimers({toFake: ["tick"]});
             assert.isTrue(this.global.hasOwnProperty("tick"));
@@ -1021,7 +1021,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("decide on Date.now support at call-time when supported", function () {
-            this.global.Date.now = function () {};
+            this.global.Date.now = function () { return; };
             this.clock = fakeTimers.useFakeTimers(0);
 
             assert.equals(typeof Date.now, "function");
@@ -1035,7 +1035,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("mirrors custom Date properties", function () {
-            var f = function () { };
+            var f = function () { return; };
             this.global.Date.format = f;
             fakeTimers.useFakeTimers();
 
