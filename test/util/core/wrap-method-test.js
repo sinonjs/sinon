@@ -169,16 +169,16 @@ describe("util/core/wrapMethod", function () {
 
             var i = 0;
 
-            // eslint-disable-next-line no-global-assign
+            // eslint-disable-next-line no-global-assign, no-native-reassign
             Error = TypeError = function () {
                 this.stack = ":STACK" + ++i + ":";
             };
         });
 
         afterEach(function () {
-            // eslint-disable-next-line no-global-assign
+            // eslint-disable-next-line no-global-assign, no-native-reassign
             Error = this.oldError;
-            // eslint-disable-next-line no-global-assign
+            // eslint-disable-next-line no-global-assign, no-native-reassign
             TypeError = this.oldTypeError;
         });
 
