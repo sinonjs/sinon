@@ -1483,8 +1483,8 @@ describe("Sandbox", function () {
             var sandbox = createSandbox();
             var fakes = sandbox.getFakes();
 
-            fakes.push.call(fakes, {verify: sinonSpy()});
-            fakes.push.call(fakes, {verify: sinonSpy()});
+            fakes.push({verify: sinonSpy()});
+            fakes.push({verify: sinonSpy()});
 
             sandbox.verify();
 
