@@ -162,44 +162,39 @@ describe("util/core/wrapMethod", function () {
         }
     });
 
-    var overridingErrorAndTypeError = (function () {
-        return !(typeof navigator === "object" && /PhantomJS/.test(navigator.userAgent));
-    }());
-    if (overridingErrorAndTypeError) {
-        describe("originating stack traces", function () {
-            beforeEach(function () {
-                this.oldError = Error;
-                this.oldTypeError = TypeError;
+    describe("originating stack traces", function () {
+        beforeEach(function () {
+            this.oldError = Error;
+            this.oldTypeError = TypeError;
 
-                var i = 0;
+            var i = 0;
 
-                Error = TypeError = function () { // eslint-disable-line no-native-reassign, no-undef
-                    this.stack = ":STACK" + ++i + ":";
-                };
-            });
-
-            afterEach(function () {
-                Error = this.oldError; // eslint-disable-line no-native-reassign, no-undef
-                TypeError = this.oldTypeError; // eslint-disable-line no-native-reassign, no-undef
-            });
-
-            it("throws with stack trace showing original wrapMethod call", function () {
-                var object = { method: function () {} };
-                wrapMethod(object, "method", function () {
-                    return "original";
-                });
-
-                assert.exception(
-                    function () {
-                        wrapMethod(object, "method", function () {});
-                    },
-                    {
-                        stack: ":STACK2:\n--------------\n:STACK1:"
-                    }
-                );
-            });
+            Error = TypeError = function () { // eslint-disable-line no-native-reassign, no-undef
+                this.stack = ":STACK" + ++i + ":";
+            };
         });
-    }
+
+        afterEach(function () {
+            Error = this.oldError; // eslint-disable-line no-native-reassign, no-undef
+            TypeError = this.oldTypeError; // eslint-disable-line no-native-reassign, no-undef
+        });
+
+        it("throws with stack trace showing original wrapMethod call", function () {
+            var object = { method: function () {} };
+            wrapMethod(object, "method", function () {
+                return "original";
+            });
+
+            assert.exception(
+                function () {
+                    wrapMethod(object, "method", function () {});
+                },
+                {
+                    stack: ":STACK2:\n--------------\n:STACK1:"
+                }
+            );
+        });
+    });
 
     if (typeof window !== "undefined") {
         describe("in browser", function () {
