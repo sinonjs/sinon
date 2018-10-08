@@ -1318,6 +1318,7 @@ describe("spy", function () {
             });
 
             this.spyWithStringError = createSpy.create(function () {
+                // eslint-disable-next-line no-throw-literal
                 throw "error";
             });
         });
@@ -1916,7 +1917,7 @@ describe("spy", function () {
 
         it("is tracked even if exceptions are thrown", function () {
             var spy = createSpy(function () {
-                throw "an exception";
+                throw new Error("an exception");
             });
 
             assert.exception(spy);

@@ -2734,7 +2734,7 @@ describe("stub", function () {
         it("has no side effects on the prototype", function () {
             var proto = {
                 method: function () {
-                    throw "error";
+                    throw new Error("error");
                 }
             };
             var Class = function () { return; };
