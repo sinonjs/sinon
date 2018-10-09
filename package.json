@@ -35,6 +35,7 @@
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "run-s test-esm-bundle",
     "prepublishOnly": "npm run build",
+    "prettier": "prettier lib/**/*.js test/**/*.js",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh"
   },
