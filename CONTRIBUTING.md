@@ -81,17 +81,28 @@ Sinon.JS aims at supporting the following runtimes:
 * Node LTS versions
 
 
-### Style
+### Linting and style
 
-Sinon.JS uses [ESLint](http://eslint.org) to keep consistent style. You probably want to install a plugin for your editor.
+Sinon.JS uses [ESLint](http://eslint.org) to keep the codebase free of lint, and uses [Prettier](https://prettier.io) to keep consistent style.
 
-The ESLint test will be run before unit tests in the CI environment, your build will fail if it doesn't pass the style check.
+If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier][https://prettier.io/docs/en/editors.html]) to make editing code a more enjoyable experience.
+
+The ESLint verification (which includes Prettier) will be run before unit tests in the CI environment. The build will fail if the source code does not pass the style check.
+
+
+You can run the linter locally:
 
 ```
 $ npm run lint
 ```
 
-To ensure consistent reporting of lint warnings, you should use the same version as CI environment (defined in `package.json`)
+You can fix a lot lint and style violations automatically:
+
+```
+$ npm run lint -- --fix
+```
+
+To ensure consistent reporting of lint warnings, you should use the same versions of ESLint and Prettier as defined in `package.json` (which is what the CI servers use).
 
 ### Run the tests
 
