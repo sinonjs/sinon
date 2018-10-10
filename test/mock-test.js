@@ -921,7 +921,7 @@ describe("sinonMock", function() {
                     object.method();
                 },
                 {
-                    message: "Unexpected call: method()\n" + "    Expected method(42) thrice (never called)"
+                    message: "Unexpected call: method()\n    Expected method(42) thrice (never called)"
                 }
             );
         });
@@ -967,7 +967,7 @@ describe("sinonMock", function() {
                     mock.verify();
                 },
                 {
-                    message: "Expected method(42) thrice (never called)\n" + "Expectation met: method(1[, ...]) once"
+                    message: "Expected method(42) thrice (never called)\nExpectation met: method(1[, ...]) once"
                 }
             );
         });
@@ -999,7 +999,7 @@ describe("sinonMock", function() {
                     object.method();
                 },
                 {
-                    message: "Unexpected call: method()\n" + "    Expectation met: method([...]) at most twice"
+                    message: "Unexpected call: method()\n    Expectation met: method([...]) at most twice"
                 }
             );
         });

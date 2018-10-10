@@ -20,7 +20,7 @@ describe("util/core/iterable-to-string", function() {
             map.set(true, true);
             map.set(undefined, undefined);
             map.set(null, null);
-            var expected = "[1,1]," + "['one','one']," + "[true,true]," + "[undefined,undefined]," + "[null,null]";
+            var expected = "[1,1],['one','one'],[true,true],[undefined,undefined],[null,null]";
 
             assert.equals(iterableToString(map), expected);
         });

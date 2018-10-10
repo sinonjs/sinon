@@ -1214,7 +1214,7 @@ describe("assert", function() {
         it("assert.called exception message", function() {
             assert.equals(
                 this.message("called", this.obj.doSomething),
-                "expected doSomething to have been called at " + "least once but was never called"
+                "expected doSomething to have been called at least once but was never called"
             );
         });
 
@@ -1223,7 +1223,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("notCalled", this.obj.doSomething).replace(/ at.*/g, ""),
-                "expected doSomething to not have been called " + "but was called once\n    doSomething()"
+                "expected doSomething to not have been called but was called once\n    doSomething()"
             );
         });
 
@@ -1275,7 +1275,7 @@ describe("assert", function() {
 
             assert.equals(
                 message,
-                "expected doSomething, doop, foo to be called in " + "order but were called as doop, doSomething, foo"
+                "expected doSomething, doop, foo to be called in order but were called as doop, doSomething, foo"
             );
         });
 
@@ -1295,7 +1295,7 @@ describe("assert", function() {
 
             var message = this.message("callOrder", obj.doop, obj.foo);
 
-            assert.equals(message, "expected doop, foo to be called in " + "order but were called as foo");
+            assert.equals(message, "expected doop, foo to be called in order but were called as foo");
         });
 
         it("assert.callOrder with missing last call exception message", function() {
@@ -1314,7 +1314,7 @@ describe("assert", function() {
 
             var message = this.message("callOrder", obj.doop, obj.foo);
 
-            assert.equals(message, "expected doop, foo to be called in " + "order but were called as doop");
+            assert.equals(message, "expected doop, foo to be called in order but were called as doop");
         });
 
         it("assert.callCount exception message", function() {
@@ -1322,7 +1322,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("callCount", this.obj.doSomething, 3).replace(/ at.*/g, ""),
-                "expected doSomething to be called thrice but was called " + "once\n    doSomething()"
+                "expected doSomething to be called thrice but was called once\n    doSomething()"
             );
         });
 
@@ -1332,7 +1332,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledOnce", this.obj.doSomething).replace(/ at.*/g, ""),
-                "expected doSomething to be called once but was called " + "twice\n    doSomething()\n    doSomething()"
+                "expected doSomething to be called once but was called twice\n    doSomething()\n    doSomething()"
             );
 
             this.obj.doSomething();
@@ -1349,7 +1349,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledTwice", this.obj.doSomething).replace(/ at.*/g, ""),
-                "expected doSomething to be called twice but was called " + "once\n    doSomething()"
+                "expected doSomething to be called twice but was called once\n    doSomething()"
             );
         });
 
@@ -1734,7 +1734,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                "expected doSomething to be called with exact arguments \n" + "1\n" + "3\n" + color.red("hey")
+                "expected doSomething to be called with exact arguments \n1\n3\n" + color.red("hey")
             );
         });
 
@@ -1761,7 +1761,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("neverCalledWith", this.obj.doSomething, 1, 2).replace(/ at.*/g, ""),
-                "expected doSomething to never be called with " + "arguments 1, 2\n    doSomething(1, 2, 3)"
+                "expected doSomething to never be called with arguments 1, 2\n    doSomething(1, 2, 3)"
             );
         });
 
@@ -1770,7 +1770,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("neverCalledWithMatch", this.obj.doSomething, 1, 2).replace(/ at.*/g, ""),
-                "expected doSomething to never be called with match " + "1, 2\n    doSomething(1, 2, 3)"
+                "expected doSomething to never be called with match 1, 2\n    doSomething(1, 2, 3)"
             );
         });
 
@@ -1780,7 +1780,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("threw", this.obj.doSomething).replace(/ at.*/g, ""),
-                "doSomething did not throw exception\n" + "    doSomething(1, 3, hey)\n    doSomething(1, 3)"
+                "doSomething did not throw exception\n    doSomething(1, 3, hey)\n    doSomething(1, 3)"
             );
         });
 
@@ -1790,14 +1790,14 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("alwaysThrew", this.obj.doSomething).replace(/ at.*/g, ""),
-                "doSomething did not always throw exception\n" + "    doSomething(1, 3, hey)\n    doSomething(1, 3)"
+                "doSomething did not always throw exception\n    doSomething(1, 3, hey)\n    doSomething(1, 3)"
             );
         });
 
         it("assert.match exception message", function() {
             assert.equals(
                 this.message("match", { foo: 1 }, [1, 3]),
-                "expected value to match\n" + "    expected = [1, 3]\n" + "    actual = { foo: 1 }"
+                "expected value to match\n    expected = [1, 3]\n    actual = { foo: 1 }"
             );
         });
     });
@@ -1828,7 +1828,7 @@ describe("assert", function() {
 
                 assert.equals(
                     createExceptionMessage("called", obj[symbol]),
-                    "expected Symbol(Something Symbolic) to have been " + "called at least once but was never called"
+                    "expected Symbol(Something Symbolic) to have been called at least once but was never called"
                 );
             });
 
@@ -1841,7 +1841,7 @@ describe("assert", function() {
 
                     assert.equals(
                         createExceptionMessage("called", obj[symbol]),
-                        "expected Symbol() to have been " + "called at least once but was never called"
+                        "expected Symbol() to have been called at least once but was never called"
                     );
                 }
             );

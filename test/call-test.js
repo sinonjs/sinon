@@ -603,7 +603,7 @@ describe("sinonSpy.call", function() {
                     call.yield();
                 },
                 {
-                    message: "somethingAwesome cannot yield since no callback was passed. " + "Received [23, 42]"
+                    message: "somethingAwesome cannot yield since no callback was passed. Received [23, 42]"
                 }
             );
         });
@@ -719,7 +719,7 @@ describe("sinonSpy.call", function() {
                     call.yieldOn(thisObj);
                 },
                 {
-                    message: "somethingAwesome cannot yield since no callback was passed. " + "Received [23, 42]"
+                    message: "somethingAwesome cannot yield since no callback was passed. Received [23, 42]"
                 }
             );
         });
@@ -1605,7 +1605,7 @@ describe("sinonSpy.call", function() {
 
                 assert.equals(
                     spy.printf("%C").replace(/ at.*/g, ""),
-                    "\n    spy(" + str + ")" + "\n\n    spy(" + str + ")" + "\n\n    spy(" + str + ")"
+                    "\n    spy(" + str + ")\n\n    spy(" + str + ")\n\n    spy(" + str + ")"
                 );
 
                 spy.resetHistory();
@@ -1616,7 +1616,7 @@ describe("sinonSpy.call", function() {
 
                 assert.equals(
                     spy.printf("%C").replace(/ at.*/g, ""),
-                    "\n    spy(test)" + "\n    spy(" + str + ")" + "\n\n    spy(" + str + ")"
+                    "\n    spy(test)\n    spy(" + str + ")\n\n    spy(" + str + ")"
                 );
             });
         });

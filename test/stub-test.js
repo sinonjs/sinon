@@ -1479,7 +1479,7 @@ describe("stub", function() {
                     stub(23, 42);
                 },
                 {
-                    message: "somethingAwesome expected to yield, but no callback " + "was passed. Received [23, 42]"
+                    message: "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]"
                 }
             );
         });
@@ -1606,7 +1606,7 @@ describe("stub", function() {
                     stub(23, 42);
                 },
                 {
-                    message: "somethingAwesome expected to yield, but no callback " + "was passed. Received [23, 42]"
+                    message: "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]"
                 }
             );
         });
@@ -1749,7 +1749,7 @@ describe("stub", function() {
                     stub(23, 42);
                 },
                 {
-                    message: "somethingAwesome expected to yield, but no callback " + "was passed. Received [23, 42]"
+                    message: "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]"
                 }
             );
         });
@@ -1859,7 +1859,7 @@ describe("stub", function() {
             var stub = createStub().yieldsTo("success");
 
             assert.exception(stub, {
-                message: "stub expected to yield to 'success', but no object " + "with such a property was passed."
+                message: "stub expected to yield to 'success', but no object with such a property was passed."
             });
         });
 
@@ -1870,7 +1870,7 @@ describe("stub", function() {
                 var stub = createStub().yieldsTo(symbol);
 
                 assert.exception(stub, {
-                    message: "stub expected to yield to 'Symbol()', but no object with " + "such a property was passed."
+                    message: "stub expected to yield to 'Symbol()', but no object with such a property was passed."
                 });
             }
         });
@@ -2030,7 +2030,7 @@ describe("stub", function() {
             this.stub.yieldsToOn("success", this.fakeContext);
 
             assert.exception(this.stub, {
-                message: "stub expected to yield to 'success', but no object " + "with such a property was passed."
+                message: "stub expected to yield to 'success', but no object with such a property was passed."
             });
         });
 
