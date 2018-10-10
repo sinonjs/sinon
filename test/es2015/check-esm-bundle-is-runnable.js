@@ -49,12 +49,12 @@ async function evaluatePageContent() {
         process.exit(1);
     }
 
-    page.on("error", function (err) {
+    page.on("error", function(err) {
         throw err;
     });
 
     // our "assertion framework" :)
-    page.on("console", function (msg) {
+    page.on("console", function(msg) {
         var text = msg.text();
 
         if (text.startsWith("sinon-result:works")) {

@@ -6,77 +6,79 @@ var match = require("../../../lib/sinon/match");
 var createSpy = require("../../../lib/sinon/spy").create;
 var assert = referee.assert;
 
-describe("util/core/deepEqual", function () {
-    it("passes null", function () {
+describe("util/core/deepEqual", function() {
+    it("passes null", function() {
         assert(deepEqual(null, null));
     });
 
-    it("fails null and object", function () {
+    it("fails null and object", function() {
         assert.isFalse(deepEqual(null, {}));
     });
 
-    it("fails object and null", function () {
+    it("fails object and null", function() {
         assert.isFalse(deepEqual({}, null));
     });
 
-    it("fails error and object", function () {
+    it("fails error and object", function() {
         assert.isFalse(deepEqual(new Error(), {}));
     });
 
-    it("fails object and error", function () {
+    it("fails object and error", function() {
         assert.isFalse(deepEqual({}, new Error()));
     });
 
-    it("fails regexp and object", function () {
+    it("fails regexp and object", function() {
         assert.isFalse(deepEqual(/.*/, {}));
     });
 
-    it("fails object and regexp", function () {
+    it("fails object and regexp", function() {
         assert.isFalse(deepEqual({}, /.*/));
     });
 
-    it("passes primitives", function () {
+    it("passes primitives", function() {
         assert(deepEqual(1, 1));
     });
 
-    it("passes same object", function () {
+    it("passes same object", function() {
         var object = {};
 
         assert(deepEqual(object, object));
     });
 
-    it("passes same function", function () {
-        var func = function () {};
+    it("passes same function", function() {
+        var func = function() {
+            return;
+        };
 
         assert(deepEqual(func, func));
     });
 
-    it("passes same array", function () {
+    it("passes same array", function() {
         var arr = [];
 
         assert(deepEqual(arr, arr));
     });
 
-    it("passes same regexp", function () {
+    it("passes same regexp", function() {
         var regexp = /foo/;
 
         assert(deepEqual(regexp, regexp));
     });
 
-    it("passes same error", function () {
+    it("passes same error", function() {
         var error = new Error();
 
         assert(deepEqual(error, error));
     });
 
-    it("passes equal arrays", function () {
+    it("passes equal arrays", function() {
         var arr1 = [1, 2, 3, "hey", "there"];
         var arr2 = [1, 2, 3, "hey", "there"];
 
         assert(deepEqual(arr1, arr2));
     });
 
-    it("passes equal arrays with custom properties", function () {
+    it("passes equal arrays with custom properties", function() {
         var arr1 = [1, 2, 3, "hey", "there"];
         var arr2 = [1, 2, 3, "hey", "there"];
 
@@ -86,7 +88,7 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(arr1, arr2));
     });
 
-    it("fails arrays with unequal custom properties", function () {
+    it("fails arrays with unequal custom properties", function() {
         var arr1 = [1, 2, 3, "hey", "there"];
         var arr2 = [1, 2, 3, "hey", "there"];
 
@@ -96,121 +98,116 @@ describe("util/core/deepEqual", function () {
         assert.isFalse(deepEqual(arr1, arr2));
     });
 
-    it("passes equal regexps", function () {
+    it("passes equal regexps", function() {
         var regexp1 = /foo/;
         var regexp2 = /foo/;
 
         assert(deepEqual(regexp1, regexp2));
-
     });
 
-    it("fails unequal regexps", function () {
+    it("fails unequal regexps", function() {
         var regexp1 = /foo/;
         var regexp2 = /bar/;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
-
     });
 
-    it("passes equal regexps with same ignoreCase flags", function () {
+    it("passes equal regexps with same ignoreCase flags", function() {
         var regexp1 = /foo/i;
         var regexp2 = /foo/i;
 
         assert(deepEqual(regexp1, regexp2));
-
     });
 
-    it("fails unequal regexps with different ignoreCase flags", function () {
+    it("fails unequal regexps with different ignoreCase flags", function() {
         var regexp1 = /foo/i;
         var regexp2 = /foo/;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
-
     });
 
-    it("passes equal regexps with same multiline flags", function () {
+    it("passes equal regexps with same multiline flags", function() {
         var regexp1 = /foo/m;
         var regexp2 = /foo/m;
 
         assert(deepEqual(regexp1, regexp2));
-
     });
 
-    it("fails unequal regexps with different multiline flags", function () {
+    it("fails unequal regexps with different multiline flags", function() {
         var regexp1 = /foo/m;
         var regexp2 = /foo/;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
     });
 
-    it("passes equal regexps with same global flags", function () {
+    it("passes equal regexps with same global flags", function() {
         var regexp1 = /foo/g;
         var regexp2 = /foo/g;
 
         assert(deepEqual(regexp1, regexp2));
     });
 
-    it("fails unequal regexps with different global flags", function () {
+    it("fails unequal regexps with different global flags", function() {
         var regexp1 = /foo/g;
         var regexp2 = /foo/;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
     });
 
-    it("passes equal regexps with multiple flags", function () {
+    it("passes equal regexps with multiple flags", function() {
         var regexp1 = /bar/im;
         var regexp2 = /bar/im;
 
         assert(deepEqual(regexp1, regexp2));
     });
 
-    it("fails unequal regexps with multiple flags", function () {
+    it("fails unequal regexps with multiple flags", function() {
         var regexp1 = /bar/im;
-        var regexp2 = /bar/ig;
+        var regexp2 = /bar/gi;
 
         assert.isFalse(deepEqual(regexp1, regexp2));
     });
 
-    it("fails unequal errors", function () {
+    it("fails unequal errors", function() {
         var error1 = new Error();
         var error2 = new Error();
 
         assert.isFalse(deepEqual(error1, error2));
     });
 
-    it("passes NaN and NaN", function () {
+    it("passes NaN and NaN", function() {
         assert(deepEqual(NaN, NaN));
     });
 
-    it("passes equal objects", function () {
+    it("passes equal objects", function() {
         var obj1 = { a: 1, b: 2, c: 3, d: "hey", e: "there" };
         var obj2 = { b: 2, c: 3, a: 1, d: "hey", e: "there" };
 
         assert(deepEqual(obj1, obj2));
     });
 
-    it("fails unequal objects with undefined properties with different names", function () {
-        var obj1 = {a: 1, b: 2, c: 3};
-        var obj2 = {a: 1, b: 2, foo: undefined};
+    it("fails unequal objects with undefined properties with different names", function() {
+        var obj1 = { a: 1, b: 2, c: 3 };
+        var obj2 = { a: 1, b: 2, foo: undefined };
 
         assert.isFalse(deepEqual(obj1, obj2));
     });
 
-    it("fails unequal objects with undefined properties with different names (different arg order)", function () {
-        var obj1 = {a: 1, b: 2, foo: undefined};
-        var obj2 = {a: 1, b: 2, c: 3};
+    it("fails unequal objects with undefined properties with different names (different arg order)", function() {
+        var obj1 = { a: 1, b: 2, foo: undefined };
+        var obj2 = { a: 1, b: 2, c: 3 };
 
         assert.isFalse(deepEqual(obj1, obj2));
     });
 
-    it("passes equal dates", function () {
+    it("passes equal dates", function() {
         var date1 = new Date(2012, 3, 5);
         var date2 = new Date(2012, 3, 5);
 
         assert(deepEqual(date1, date2));
     });
 
-    it("fails different dates", function () {
+    it("fails different dates", function() {
         var date1 = new Date(2012, 3, 5);
         var date2 = new Date(2013, 3, 5);
 
@@ -218,22 +215,21 @@ describe("util/core/deepEqual", function () {
     });
 
     if (typeof document !== "undefined") {
-        describe("in browsers", function () {
-
-            it("passes same DOM elements", function () {
+        describe("in browsers", function() {
+            it("passes same DOM elements", function() {
                 var element = document.createElement("div");
 
                 assert(deepEqual(element, element));
             });
 
-            it("fails different DOM elements", function () {
+            it("fails different DOM elements", function() {
                 var element = document.createElement("div");
                 var el = document.createElement("div");
 
                 assert.isFalse(deepEqual(element, el));
             });
 
-            it("does not modify DOM elements when comparing them", function () {
+            it("does not modify DOM elements when comparing them", function() {
                 var el = document.createElement("div");
                 document.body.appendChild(el);
                 deepEqual(el, {});
@@ -244,8 +240,10 @@ describe("util/core/deepEqual", function () {
         });
     }
 
-    it("passes deep objects", function () {
-        var func = function () {};
+    it("passes deep objects", function() {
+        var func = function() {
+            return;
+        };
 
         var obj1 = {
             a: 1,
@@ -255,9 +253,14 @@ describe("util/core/deepEqual", function () {
             e: "there",
             f: func,
             g: {
-                a1: [1, 2, "3", {
-                    prop: [func, "b"]
-                }]
+                a1: [
+                    1,
+                    2,
+                    "3",
+                    {
+                        prop: [func, "b"]
+                    }
+                ]
             }
         };
 
@@ -269,16 +272,21 @@ describe("util/core/deepEqual", function () {
             e: "there",
             f: func,
             g: {
-                a1: [1, 2, "3", {
-                    prop: [func, "b"]
-                }]
+                a1: [
+                    1,
+                    2,
+                    "3",
+                    {
+                        prop: [func, "b"]
+                    }
+                ]
             }
         };
 
         assert(deepEqual(obj1, obj2));
     });
 
-    it("passes object without prototype compared to equal object with prototype", function () {
+    it("passes object without prototype compared to equal object with prototype", function() {
         var obj1 = Object.create(null);
         obj1.a = 1;
         obj1.b = 2;
@@ -289,7 +297,7 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(obj1, obj2));
     });
 
-    it("passes object with prototype compared to equal object without prototype", function () {
+    it("passes object with prototype compared to equal object without prototype", function() {
         var obj1 = { a: 1, b: 2, c: "hey" };
 
         var obj2 = Object.create(null);
@@ -300,7 +308,7 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(obj1, obj2));
     });
 
-    it("passes equal objects without prototypes", function () {
+    it("passes equal objects without prototypes", function() {
         var obj1 = Object.create(null);
         obj1.a = 1;
         obj1.b = 2;
@@ -314,14 +322,14 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(obj1, obj2));
     });
 
-    it("passes equal objects that override hasOwnProperty", function () {
+    it("passes equal objects that override hasOwnProperty", function() {
         var obj1 = { a: 1, b: 2, c: "hey", hasOwnProperty: "silly" };
         var obj2 = { a: 1, b: 2, c: "hey", hasOwnProperty: "silly" };
 
         assert(deepEqual(obj1, obj2));
     });
 
-    it("does not run matchers against each other when using a matcher library", function () {
+    it("does not run matchers against each other when using a matcher library", function() {
         var matchDeepEqual = deepEqual.use(match);
 
         var spyA = createSpy();
@@ -336,7 +344,7 @@ describe("util/core/deepEqual", function () {
         assert.equals(spyB.callCount, 0);
     });
 
-    it("strictly compares instances when passed two matchers and using a matcher library", function () {
+    it("strictly compares instances when passed two matchers and using a matcher library", function() {
         var matchDeepEqual = deepEqual.use(match);
 
         var matchA = match(function a() {
@@ -353,7 +361,7 @@ describe("util/core/deepEqual", function () {
         assert.isFalse(matchDeepEqual(matchA, matchB));
     });
 
-    it("handles shallow cyclic objects", function () {
+    it("handles shallow cyclic objects", function() {
         var a = {
             foo: "bar"
         };
@@ -367,23 +375,23 @@ describe("util/core/deepEqual", function () {
         assert(deepEqual(a, b));
     });
 
-    it("handles deep cyclic objects", function () {
+    it("handles deep cyclic objects", function() {
         var a = {
             foo: "bar",
-            key: { }
+            key: {}
         };
         a.key.value = a;
 
         var b = {
             foo: "bar",
-            key: { }
+            key: {}
         };
         b.key.value = b;
 
         assert(deepEqual(a, b));
     });
 
-    it("handles cyclic objects when a matcher provided", function () {
+    it("handles cyclic objects when a matcher provided", function() {
         var matchDeepEqual = deepEqual.use(match);
 
         var a = {
@@ -398,5 +406,4 @@ describe("util/core/deepEqual", function () {
 
         assert(matchDeepEqual(a, b));
     });
-
 });

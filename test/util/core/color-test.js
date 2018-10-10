@@ -13,11 +13,11 @@ function getColorMethods() {
     ];
 }
 
-describe("color", function () {
-    describe("when environment supports color", function () {
+describe("color", function() {
+    describe("when environment supports color", function() {
         var color;
 
-        beforeEach(function () {
+        beforeEach(function() {
             color = proxyquire("../../../lib/sinon/color", {
                 "supports-color": {
                     stdout: true
@@ -25,9 +25,9 @@ describe("color", function () {
             });
         });
 
-        getColorMethods().forEach(function (method) {
-            describe(method.name, function () {
-                it("should return a colored string", function () {
+        getColorMethods().forEach(function(method) {
+            describe(method.name, function() {
+                it("should return a colored string", function() {
                     var string = "lorem ipsum";
                     var actual = color[method.name](string);
 
@@ -37,10 +37,10 @@ describe("color", function () {
         });
     });
 
-    describe("when environment does not support color", function () {
+    describe("when environment does not support color", function() {
         var color;
 
-        beforeEach(function () {
+        beforeEach(function() {
             color = proxyquire("../../../lib/sinon/color", {
                 "supports-color": {
                     stdout: false
@@ -48,9 +48,9 @@ describe("color", function () {
             });
         });
 
-        getColorMethods().forEach(function (method) {
-            describe(method.name, function () {
-                it("should return a regular string", function () {
+        getColorMethods().forEach(function(method) {
+            describe(method.name, function() {
+                it("should return a regular string", function() {
                     var string = "lorem ipsum";
                     var actual = color[method.name](string);
 

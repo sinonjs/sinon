@@ -5,8 +5,8 @@ var walk = require("../../../lib/sinon/util/core/walk");
 var createSpy = require("../../../lib/sinon/spy");
 var assert = referee.assert;
 
-describe("util/core/walk", function () {
-    it("should call iterator with value, key, and obj, with context as the receiver", function () {
+describe("util/core/walk", function() {
+    it("should call iterator with value, key, and obj, with context as the receiver", function() {
         var target = Object.create(null);
         var rcvr = {};
         var iterator = createSpy();
@@ -22,7 +22,7 @@ describe("util/core/walk", function () {
         assert(iterator.calledWithExactly("foo", target));
     });
 
-    it("should work with non-enumerable properties", function () {
+    it("should work with non-enumerable properties", function() {
         var target = Object.create(null);
         var iterator = createSpy();
 
@@ -38,7 +38,7 @@ describe("util/core/walk", function () {
         assert(iterator.calledWith("foo"));
     });
 
-    it("should walk the prototype chain of an object", function () {
+    it("should walk the prototype chain of an object", function() {
         var parentProto, proto, target, iterator;
 
         parentProto = Object.create(null, {
@@ -84,8 +84,10 @@ describe("util/core/walk", function () {
         assert(iterator.calledWith("enumerableParentProp", parentProto));
     });
 
-    it("should not invoke getters on the original receiving object", function () {
-        var Target = function Target() {};
+    it("should not invoke getters on the original receiving object", function() {
+        var Target = function Target() {
+            return;
+        };
         var getter = createSpy();
         Object.defineProperty(Target.prototype, "computedFoo", {
             enumerable: true,
@@ -100,7 +102,7 @@ describe("util/core/walk", function () {
         assert(getter.notCalled);
     });
 
-    it("should fall back to for..in if getOwnPropertyNames is not available", function () {
+    it("should fall back to for..in if getOwnPropertyNames is not available", function() {
         var getOwnPropertyNames = Object.getOwnPropertyNames;
         var Target = function Target() {
             this.hello = "world";
@@ -124,7 +126,8 @@ describe("util/core/walk", function () {
         }
         /* eslint-enable guard-for-in */
 
-        try { // eslint-disable-line no-restricted-syntax
+        // eslint-disable-next-line no-restricted-syntax
+        try {
             walk(target, iterator, rcvr);
             assert.equals(iterator.callCount, numCalls);
             assert(iterator.alwaysCalledOn(rcvr));
@@ -139,22 +142,26 @@ describe("util/core/walk", function () {
         assert.isNull(err, "walk tests failed with message '" + (err && err.message) + "'");
     });
 
-    it("does not walk the same property twice", function () {
+    it("does not walk the same property twice", function() {
         var parent = {
-            func: function parentFunc() {}
+            func: function parentFunc() {
+                return;
+            }
         };
         var child = Object.create(parent);
-        child.func = function childFunc() {};
+        child.func = function childFunc() {
+            return;
+        };
         var iterator = createSpy();
 
         walk(child, iterator);
 
-        var propertyNames = iterator.args.map(function (call) {
+        var propertyNames = iterator.args.map(function(call) {
             return call[0];
         });
 
         // make sure that each property name only exists once
-        propertyNames.forEach(function (name, index) {
+        propertyNames.forEach(function(name, index) {
             assert.equals(index, propertyNames.lastIndexOf(name));
         });
     });

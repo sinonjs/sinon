@@ -4,13 +4,14 @@ var referee = require("@sinonjs/referee");
 var assert = referee.assert;
 
 if (typeof Worker !== "undefined") {
-    describe("WebWorker support", function () {
+    describe("WebWorker support", function() {
         var sentMessage = "whatever";
-        it("should not crash", function (done) {
+        it("should not crash", function(done) {
             var worker = new Worker("/test/webworker/webworker-script.js");
 
-            worker.onmessage = function (msg) {
-                try { // eslint-disable-line no-restricted-syntax
+            worker.onmessage = function(msg) {
+                // eslint-disable-next-line no-restricted-syntax
+                try {
                     assert.same(msg.data, "worker received:" + sentMessage);
                     done();
                 } catch (err) {

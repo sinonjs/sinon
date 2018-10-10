@@ -2,7 +2,7 @@
 
 function getPrototypeMethods(prototype) {
     /* eslint-disable local-rules/no-prototype-methods */
-    return Object.getOwnPropertyNames(prototype).filter(function (name) {
+    return Object.getOwnPropertyNames(prototype).filter(function(name) {
         return typeof prototype[name] === "function" && prototype.hasOwnProperty(name);
     });
 }
@@ -25,19 +25,19 @@ module.exports = {
             schema: []
         },
 
-        create: function (context) {
+        create: function(context) {
             /**
-            * Reports if a disallowed property is used in a CallExpression
-            * @param {ASTNode} node The CallExpression node.
-            * @returns {void}
-            */
+             * Reports if a disallowed property is used in a CallExpression
+             * @param {ASTNode} node The CallExpression node.
+             * @returns {void}
+             */
             function disallowBuiltIns(node) {
                 if (
-                    node.callee.type !== "MemberExpression"
-                    || node.callee.computed
+                    node.callee.type !== "MemberExpression" ||
+                    node.callee.computed ||
                     // allow static method calls
-                    || node.callee.object.name === "Array"
-                    || node.callee.object.name === "Object"
+                    node.callee.object.name === "Array" ||
+                    node.callee.object.name === "Object"
                 ) {
                     return;
                 }
@@ -53,8 +53,7 @@ module.exports = {
                         },
                         node: node
                     });
-                }
-                else if (DISALLOWED_ARRAY_PROPS.indexOf(propName) > -1) {
+                } else if (DISALLOWED_ARRAY_PROPS.indexOf(propName) > -1) {
                     context.report({
                         message: "Do not access {{obj}} prototype method '{{prop}}' from target object.",
                         loc: node.callee.property.loc.start,

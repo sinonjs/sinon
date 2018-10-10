@@ -10,8 +10,7 @@ var pkg = require("./package.json");
 var date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble = "/* Sinon.JS " + pkg.version + ", " + date
-    + ", @license BSD-3 */";
+var preamble = "/* Sinon.JS " + pkg.version + ", " + date + ", @license BSD-3 */";
 
 try {
     fs.mkdirSync("pkg");
@@ -23,15 +22,14 @@ function makeBundle(name, config) {
     // Create a UMD wrapper and install the "sinon" global:
     config.standalone = "sinon";
 
-    browserify("./lib/sinon.js", config)
-        .bundle(function (err, buffer) {
-            if (err) {
-                throw err;
-            }
+    browserify("./lib/sinon.js", config).bundle(function(err, buffer) {
+        if (err) {
+            throw err;
+        }
 
-            var script = preamble + buffer.toString();
-            fs.writeFileSync("pkg/" + name + ".js", script);
-        });
+        var script = preamble + buffer.toString();
+        fs.writeFileSync("pkg/" + name + ".js", script);
+    });
 }
 
 makeBundle("sinon", {
