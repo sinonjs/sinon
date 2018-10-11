@@ -7,7 +7,7 @@ fi
 
 RELEASE_VERSION="v$1"
 NEW_VERSION_PATH="docs/_releases/$RELEASE_VERSION"
-FILE_PATH="${NEW_VERSION_PATH}.md"
+LATEST_VERSION_PATH="docs/_releases/latest"
 SOURCE_PATH='docs/release-source/'
 
 if [ -e "$NEW_VERSION_PATH" ]
@@ -22,17 +22,28 @@ if [ -e "$FILE_PATH" ]
         exit 1
 fi
 
-echo "Copy $SOURCE_PATH to $NEW_VERSION_PATH"
 
-mkdir $NEW_VERSION_PATH
-cp -r "$SOURCE_PATH/release/"* "$NEW_VERSION_PATH"
-cp "$SOURCE_PATH/release.md" "$FILE_PATH"
+function copy_source_to(){
+    local DIR="$@"
+    local FILE_PATH="${DIR}.md"
 
-# replace `release_id: master` with `release_id: $RELEASE_VERSION` in
-# $FILE_PATH
-sed -i.bak "s/release_id: master/release_id: $RELEASE_VERSION/g" "$FILE_PATH"
-rm "$FILE_PATH.bak"
+    echo "Copy $SOURCE_PATH to $DIR"
 
-git add "$NEW_VERSION_PATH"
-git add "$FILE_PATH"
+    mkdir $DIR
+    cp -r "$SOURCE_PATH/release/"* "$DIR"
+    cp "$SOURCE_PATH/release.md" "$FILE_PATH"
+
+    # replace `release_id: master` with `release_id: $RELEASE_VERSION` in
+    # $FILE_PATH
+    sed -i.bak "s/release_id: master/release_id: $RELEASE_VERSION/g" "$FILE_PATH"
+    rm "$FILE_PATH.bak"
+
+    git add "$DIR"
+    git add "$FILE_PATH"
+}
+
+copy_source_to "$NEW_VERSION_PATH"
+rm -r "$LATEST_VERSION_PATH"
+copy_source_to "$LATEST_VERSION_PATH"
+
 git commit -m "Add release documentation for $RELEASE_VERSION"
