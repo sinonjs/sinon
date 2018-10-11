@@ -50,7 +50,7 @@
     "@sinonjs/samsam": "^2.1.2",
     "diff": "^3.5.0",
     "lodash.get": "^4.4.2",
-    "lolex": "^2.7.5",
+    "lolex": "^3.0.0",
     "nise": "^1.4.5",
     "supports-color": "^5.5.0",
     "type-detect": "^4.0.8"
