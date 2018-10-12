@@ -34,7 +34,7 @@ function copy_source_to(){
 
     # replace `release_id: master` with `release_id: $RELEASE_VERSION` in
     # $FILE_PATH
-    sed -i.bak "s/release_id: master/release_id: $VERSION/g" "$FILE_PATH"
+    sed -i.bak "s/release_id: master/release_id: $RELEASE_VERSION/g" "$FILE_PATH"
     rm "$FILE_PATH.bak"
 
     git add "$DIR"
@@ -43,7 +43,7 @@ function copy_source_to(){
 
 copy_source_to "$RELEASE_VERSION"
 rm -r "docs/_releases/latest" \
-    "docs/_releases/latest.md"
+    "docs/_releases/latest.md" 2>/dev/null
 copy_source_to "latest"
 
 git commit -m "Add release documentation for $RELEASE_VERSION"
