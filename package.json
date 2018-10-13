@@ -27,6 +27,8 @@
     "build": "run-p build-*",
     "build-bundle": "node ./build.js",
     "build-esm": "rollup -c",
+    "build-docs": "cd docs; bundle exec jekyll build",
+    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
     "lint": "run-p lint-js lint-markdown",
     "lint-js": "eslint '**/*.{js,mjs}'",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
