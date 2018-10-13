@@ -6,6 +6,26 @@
     <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}">
     <link rel="shortcut icon" href="{{ "/assets/images/favicon.png" | prepend: site.baseurl }}">
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+    <script>
+        var site = {}; // site settings
+    </script>
+
+    {% comment %}
+    To make all documentation pages, regardless of version, lead search traffic to the latest version,
+    we need to point all the pages under /releases/v*/ to their latest version
+    {% endcomment %}
+
+    {% assign url_parts = page.url | split: "/" %}
+
+    {%if page.url contains "/releases/v" and url_parts[2] != "latest" and url_parts[2] != {site.sinon.current_release} %}
+        {% assign canonical_page_url = "/releases/latest/" | append: url_parts[3] %}
+        <script>
+            site.showBanner = true; // cannot dynamically create a globally available Liquid variable
+        </script>
+    {% else %}
+        {% assign canonical_page_url = page.url | replace:'index.html','' %}
+    {% endif %}
+
+    <link rel="canonical" href="{{ canonical_page_url  prepend: site.baseurl | prepend: site.url }}" />
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
 </head>
