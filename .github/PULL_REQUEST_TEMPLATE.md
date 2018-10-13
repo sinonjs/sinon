@@ -1,4 +1,4 @@
-#### Purpose (TL;DR) - mandatory
+ #### Purpose (TL;DR) - mandatory
 <!--
 > give a concise (one or two short sentences) description of what what problem is being solved by this PR
 >
@@ -7,7 +7,7 @@
 
 
 <!--
-#### Background (Problem in detail)  - optional
+ #### Background (Problem in detail)  - optional
 -->
 <!--
 > When relevant, give a more thorough description of what the problem the PR is trying to solve. Examples of good topics for this section are:
@@ -19,7 +19,7 @@
 
 
 <!--
-#### Solution  - optional
+ #### Solution  - optional
 -->
 <!--
 > When contributing code (and not just fixing typos, documentation and configuration), please describe why/how your solution works. This helps reviewers spot any mistakes in the implementation.
@@ -29,12 +29,12 @@
 > Then your reviewer might spot a mistake in the implementation, if `paintBlue()` uses the colour red.
 -->
 
-#### How to verify - mandatory
+ #### How to verify - mandatory
 1. Check out this branch
 2. `npm install`
 3. <your-steps-here>
 
-#### Checklist for author
+ #### Checklist for author
 
 - [ ] `npm run lint` passes
 - [ ] References to standard library functions are [cached](https://github.com/sinonjs/sinon/pull/1523).
