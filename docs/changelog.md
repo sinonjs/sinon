@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.0.0 / 2018-10-14
+==================
+
+  * Update to Lolex 3: no negative ticks allowed
+
 6.3.5 / 2018-10-03
 ==================
 
