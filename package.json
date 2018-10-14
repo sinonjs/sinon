@@ -1,7 +1,7 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
-  "version": "6.3.5",
+  "version": "7.0.0",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -24,9 +24,11 @@
     "test-esm-bundle": "node test/es2015/check-esm-bundle-is-runnable.js",
     "test": "run-s test-node test-headless test-webworker test-esm",
     "check-dependencies": "dependency-check package.json --unused --no-dev --ignore-module coveralls --ignore-module esm",
-    "build": "run-p build-*",
+    "build": "run-p build-esm build-bundle",
     "build-bundle": "node ./build.js",
     "build-esm": "rollup -c",
+    "build-docs": "cd docs; bundle exec jekyll build",
+    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
     "lint": "run-p lint-js lint-markdown",
     "lint-js": "eslint '**/*.{js,mjs}'",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
@@ -50,8 +52,8 @@
     "@sinonjs/samsam": "^2.1.2",
     "diff": "^3.5.0",
     "lodash.get": "^4.4.2",
-    "lolex": "^2.7.5",
-    "nise": "^1.4.5",
+    "lolex": "^3.0.0",
+    "nise": "^1.4.6",
     "supports-color": "^5.5.0",
     "type-detect": "^4.0.8"
   },

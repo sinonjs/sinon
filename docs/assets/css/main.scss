@@ -18,6 +18,20 @@ body {
   background: #fff;
 }
 
+.hidden {
+    display: none;
+}
+
+#banner-message {
+  position: sticky;
+  z-index: 400;
+  left: 0;
+  top: 0;
+  right: 0;
+  text-align: center;
+  padding: 1em;
+}
+
 .navbar {
   background: #fff;
   margin-top: 10px;
