@@ -85,7 +85,7 @@ Sinon.JS aims at supporting the following runtimes:
 
 Sinon.JS uses [ESLint](http://eslint.org) to keep the codebase free of lint, and uses [Prettier](https://prettier.io) to keep consistent style.
 
-If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier][https://prettier.io/docs/en/editors.html]) to make editing code a more enjoyable experience.
+If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier](https://prettier.io/docs/en/editors.html)) to make editing code a more enjoyable experience.
 
 The ESLint verification (which includes Prettier) will be run before unit tests in the CI environment. The build will fail if the source code does not pass the style check.
 
