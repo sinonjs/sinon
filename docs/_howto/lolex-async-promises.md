@@ -1,6 +1,6 @@
 ---
 layout: page
-title: How to speed up time with lolex
+title: How to test async functions with fake timers
 ---
 
 With lolex, testing code that depends on timers is easier, as it sometimes
