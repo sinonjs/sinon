@@ -16,7 +16,7 @@ var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
 var sinonMatch = require("../lib/sinon/match");
 var sinonAssert = require("../lib/sinon/assert");
-var sinonClock = require("../lib/sinon/util/fake_timers");
+var sinonClock = require("../lib/sinon/util/fake-timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
 var supportPromise = Boolean(global.Promise);
