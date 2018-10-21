@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("@sinonjs/referee");
-var fakeTimers = require("../../lib/sinon/util/fake_timers");
+var fakeTimers = require("../../lib/sinon/util/fake-timers");
 var sinonStub = require("../../lib/sinon/stub");
 var sinonSpy = require("../../lib/sinon/spy");
 
