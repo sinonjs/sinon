@@ -1183,5 +1183,18 @@ describe("fakeTimers.clock", function() {
                 { name: "TypeError", message: expectedError }
             );
         });
+
+        it("supports a way to pass the global context", function() {
+            var stub = sinonStub.create();
+            var globalCtx = {
+                Date: sinonStub.create(),
+                setTimeout: stub,
+                clearTimeout: sinonStub.create()
+            };
+            this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
+            refute.defined(this.clock.performance);
+            assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
+            this.clock.restore();
+        });
     });
 });
