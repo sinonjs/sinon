@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.1.0 / 2018-10-25
+==================
+
+  * Issue #1852: Add a way to pass a global context to lolex when calling useFakeTimers
+  * Get latest 'nise' patch
+
 7.0.0 / 2018-10-14
 ==================
 
