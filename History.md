@@ -1,4 +1,9 @@
 
+7.1.1 / 2018-10-31
+==================
+
+  * Make the spy functions non enumerable so that printing it is more concise (#1936)
+
 7.1.0 / 2018-10-25
 ==================
 
