@@ -17,7 +17,7 @@
     "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
     "test-dev": "npm run test-node -- --watch -R min",
     "test-headless": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] \"test/**/*-test.js\"",
-    "test-coverage": "mochify --recursive -R dot --grep WebWorker --invert --plugin [ proxyquire-universal ] --plugin [ mochify-istanbul --exclude '**/test/**' --report text --report lcovonly --dir ./coverage ] \"test/**/*-test.js\"",
+    "test-coverage": "nyc npm run test-headless -- --transform [ babelify --ignore [ test ] --plugins [ babel-plugin-istanbul ] ]",
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "mochify --https-server 8080 test/webworker/webworker-support-assessment.js",
     "test-esm": "mocha -r esm test/es2015/module-support-assessment-test.mjs",
@@ -41,6 +41,14 @@
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh"
   },
+  "nyc": {
+    "instrument": false,
+    "temp-dir": "coverage/.nyc_output",
+    "reporter": [
+      "text",
+      "lcovonly"
+    ]
+  },
   "lint-staged": {
     "*.js": "eslint",
     "*.mjs": "eslint --ext mjs --parser-options=sourceType:module",
@@ -58,8 +66,11 @@
     "type-detect": "^4.0.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
     "@sinonjs/referee": "^2.5.2",
-    "browserify": "^15.1.0",
+    "babel-plugin-istanbul": "^5.1.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
     "dependency-check": "^2.9.1",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
@@ -72,16 +83,16 @@
     "husky": "^0.14.2",
     "lint-staged": "^6.0.0",
     "markdownlint-cli": "^0.8.2",
-    "mocha": "^4.0.0",
-    "mochify": "^5.8.1",
-    "mochify-istanbul": "^2.4.2",
+    "mocha": "^5.2.0",
+    "mochify": "^6.0.2",
     "native-promise-only": "^0.8.1",
     "npm-run-all": "^4.1.3",
+    "nyc": "^13.1.0",
     "prettier": "^1.14.3",
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
-    "puppeteer": "^1.8.0",
+    "puppeteer": "^1.10.0",
     "rimraf": "^2.5.3",
     "rollup": "^0.59.3",
     "rollup-plugin-commonjs": "^9.1.8",
