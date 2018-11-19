@@ -92,7 +92,7 @@
     "proxyquire": "^1.8.0",
     "proxyquire-universal": "^1.0.8",
     "proxyquireify": "^3.2.1",
-    "puppeteer": "^1.8.0",
+    "puppeteer": "^1.10.0",
     "rimraf": "^2.5.3",
     "rollup": "^0.59.3",
     "rollup-plugin-commonjs": "^9.1.8",
