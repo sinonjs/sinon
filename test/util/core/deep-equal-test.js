@@ -1,7 +1,7 @@
 "use strict";
 
 var referee = require("@sinonjs/referee");
-var deepEqual = require("../../../lib/sinon/util/core/deep-equal");
+var deepEqual = require("@sinonjs/samsam").deepEqual;
 var match = require("../../../lib/sinon/match");
 var createSpy = require("../../../lib/sinon/spy").create;
 var assert = referee.assert;
@@ -330,23 +330,19 @@ describe("util/core/deepEqual", function() {
     });
 
     it("does not run matchers against each other when using a matcher library", function() {
-        var matchDeepEqual = deepEqual.use(match);
-
         var spyA = createSpy();
         var matchA = match(spyA);
 
         var spyB = createSpy();
         var matchB = match(spyB);
 
-        matchDeepEqual(matchA, matchB);
+        deepEqual(matchA, matchB);
 
         assert.equals(spyA.callCount, 0);
         assert.equals(spyB.callCount, 0);
     });
 
     it("strictly compares instances when passed two matchers and using a matcher library", function() {
-        var matchDeepEqual = deepEqual.use(match);
-
         var matchA = match(function a() {
             return "a";
         });
@@ -357,8 +353,8 @@ describe("util/core/deepEqual", function() {
 
         var duplicateA = matchA;
 
-        assert(matchDeepEqual(matchA, duplicateA));
-        assert.isFalse(matchDeepEqual(matchA, matchB));
+        assert(deepEqual(matchA, duplicateA));
+        assert.isFalse(deepEqual(matchA, matchB));
     });
 
     it("handles shallow cyclic objects", function() {
@@ -392,8 +388,6 @@ describe("util/core/deepEqual", function() {
     });
 
     it("handles cyclic objects when a matcher provided", function() {
-        var matchDeepEqual = deepEqual.use(match);
-
         var a = {
             foo: "bar"
         };
@@ -404,6 +398,6 @@ describe("util/core/deepEqual", function() {
         };
         b.cyclicKeyName = b;
 
-        assert(matchDeepEqual(a, b));
+        assert(deepEqual(a, b));
     });
 });
