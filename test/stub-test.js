@@ -4,7 +4,7 @@ var referee = require("@sinonjs/referee");
 var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
-var sinonMatch = require("../lib/sinon/match");
+var match = require("@sinonjs/samsam").createMatcher;
 var deprecated = require("../lib/sinon/util/core/deprecated");
 var assert = referee.assert;
 var refute = referee.refute;
@@ -2179,9 +2179,9 @@ describe("stub", function() {
             });
         });
 
-        it("ensure stub recognizes sinonMatch fuzzy arguments", function() {
+        it("ensure stub recognizes samsam match fuzzy arguments", function() {
             var stub = createStub().returns(23);
-            stub.withArgs(sinonMatch({ foo: "bar" })).returns(99);
+            stub.withArgs(match({ foo: "bar" })).returns(99);
 
             assert.equals(stub(), 23);
             assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
@@ -2202,7 +2202,7 @@ describe("stub", function() {
             assert.equals(stub(expectedArgument), secondMatchedValue);
         });
 
-        it("ensure stub uses last matching sinonMatch arguments", function() {
+        it("ensure stub uses last matching samsam match arguments", function() {
             var unmatchedValue = "0aa66a7d-3c50-49ef-8365-bdcab637b2dd";
             var firstMatchedValue = "1ab2c601-7602-4658-9377-3346f6814caa";
             var secondMatchedValue = "e2e31518-c4c4-4012-a61f-31942f603ffa";
@@ -2210,7 +2210,7 @@ describe("stub", function() {
 
             var stub = createStub().returns(unmatchedValue);
             stub.withArgs(expectedArgument).returns(firstMatchedValue);
-            stub.withArgs(sinonMatch(expectedArgument)).returns(secondMatchedValue);
+            stub.withArgs(match(expectedArgument)).returns(secondMatchedValue);
 
             assert.equals(stub(), unmatchedValue);
             assert.equals(stub(expectedArgument), secondMatchedValue);

@@ -5,7 +5,7 @@ var referee = require("@sinonjs/referee");
 var sinonStub = require("../lib/sinon/stub");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonAssert = require("../lib/sinon/assert");
-var sinonMatch = require("../lib/sinon/match");
+var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -1543,7 +1543,7 @@ describe("assert", function() {
             this.obj.doSomething(true, true);
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch.any, false).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.any, false).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n" +
                     "true any\n" +
                     color.red("true") +
@@ -1557,7 +1557,7 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch.defined).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.defined).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("defined")
             );
         });
@@ -1566,7 +1566,7 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch.truthy).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.truthy).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("truthy")
             );
         });
@@ -1575,7 +1575,7 @@ describe("assert", function() {
             this.obj.doSomething(true);
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch.falsy).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.falsy).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n" + color.green("true") + " " + color.red("falsy")
             );
         });
@@ -1584,14 +1584,14 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch.same(1)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.same(1)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("same(1)")
             );
         });
 
         it("assert.calledWith match.typeOf exception message", function() {
             this.obj.doSomething();
-            var matcher = sinonMatch.typeOf("string");
+            var matcher = match.typeOf("string");
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1601,7 +1601,7 @@ describe("assert", function() {
 
         it("assert.calledWith match.instanceOf exception message", function() {
             this.obj.doSomething();
-            var matcher = sinonMatch.instanceOf(function CustomType() {
+            var matcher = match.instanceOf(function CustomType() {
                 return;
             });
 
@@ -1613,7 +1613,7 @@ describe("assert", function() {
 
         it("assert.calledWith match object exception message", function() {
             this.obj.doSomething();
-            var matcher = sinonMatch({ some: "value", and: 123 });
+            var matcher = match({ some: "value", and: 123 });
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1625,7 +1625,7 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch(true)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match(true)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("match(true)")
             );
         });
@@ -1634,14 +1634,14 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch(123)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match(123)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("match(123)")
             );
         });
 
         it("assert.calledWith match string exception message", function() {
             this.obj.doSomething();
-            var matcher = sinonMatch("Sinon");
+            var matcher = match("Sinon");
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, matcher).replace(/ at.*/g, ""),
@@ -1653,14 +1653,14 @@ describe("assert", function() {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, sinonMatch(/[a-z]+/)).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match(/[a-z]+/)).replace(/ at.*/g, ""),
                 "expected doSomething to be called with arguments \n " + color.red("match(/[a-z]+/)")
             );
         });
 
         it("assert.calledWith match test function exception message", function() {
             this.obj.doSomething();
-            var matcher = sinonMatch({
+            var matcher = match({
                 test: function custom() {
                     return;
                 }

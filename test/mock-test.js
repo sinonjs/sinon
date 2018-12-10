@@ -1,9 +1,9 @@
 "use strict";
 
+var match = require("@sinonjs/samsam").createMatcher;
 var referee = require("@sinonjs/referee");
 var sinonMock = require("../lib/sinon/mock");
 var sinonExpectation = require("../lib/sinon/mock-expectation");
-var sinonMatch = require("../lib/sinon/match");
 var sinonStub = require("../lib/sinon/stub");
 var sinonSpy = require("../lib/sinon/spy");
 var assert = referee.assert;
@@ -634,7 +634,7 @@ describe("sinonMock", function() {
             });
 
             it("works with sinon matchers", function() {
-                this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
+                this.expectation.withArgs(match.number, match.string, match.func);
                 this.expectation(1, "test", function() {
                     return;
                 });
@@ -645,7 +645,7 @@ describe("sinonMock", function() {
             it("throws when sinon matchers fail", function() {
                 var expectation = this.expectation;
 
-                this.expectation.withArgs(sinonMatch.number, sinonMatch.string, sinonMatch.func);
+                this.expectation.withArgs(match.number, match.string, match.func);
                 assert.exception(
                     function() {
                         expectation(1, 2, 3);

@@ -8,13 +8,13 @@ var refute = referee.refute;
 var fakeXhr = require("nise").fakeXhr;
 var fakeServerWithClock = require("nise").fakeServerWithClock;
 var fakeServer = require("nise").fakeServer;
+var match = require("@sinonjs/samsam").createMatcher;
 var Sandbox = require("../lib/sinon/sandbox");
 var createSandbox = require("../lib/sinon/create-sandbox");
 var sinonFake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
-var sinonMatch = require("../lib/sinon/match");
 var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake-timers");
 
@@ -42,7 +42,7 @@ describe("Sandbox", function() {
     it("exposes match", function() {
         var sandbox = new Sandbox();
 
-        assert.same(sandbox.match, sinonMatch);
+        assert.same(sandbox.match, match);
     });
 
     it("exposes assert", function() {
@@ -1883,7 +1883,7 @@ describe("Sandbox", function() {
                 })
             );
 
-            assert.same(object.match, sinonMatch);
+            assert.same(object.match, match);
 
             sandbox.restore();
         });
