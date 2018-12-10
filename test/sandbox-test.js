@@ -31,7 +31,8 @@ referee.add("fakeServerWithClock", {
     assert: function(obj, expected) {
         return samsam.deepEqual(obj, expected) && fakeServer.create.calledOn(fakeServerWithClock);
     },
-    assertMessage: "Expected object ${0} to be a fake server with clock"
+    assertMessage: "Expected object ${0} to be a fake server with clock",
+    refuteMessage: "Expected object ${0} not to be a fake server with clock"
 });
 
 describe("Sandbox", function() {
