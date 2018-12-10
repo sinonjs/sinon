@@ -1,4 +1,10 @@
 
+7.2.0 / 2018-12-10
+==================
+
+  * Upgrade to samsam 3 (#1955)
+  * Rename History.md to CHANGELOG.md
+
 7.1.1 / 2018-10-31
 ==================
 
