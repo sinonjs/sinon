@@ -2,7 +2,7 @@
 
 var referee = require("@sinonjs/referee");
 var createSpy = require("../lib/sinon/spy");
-var sinonMatch = require("../lib/sinon/match");
+var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -62,13 +62,13 @@ function spyCalledTests(method) {
         it("uses matcher", function() {
             this.spy("abc");
 
-            assert(this.spy[method](sinonMatch.typeOf("string")));
+            assert(this.spy[method](match.typeOf("string")));
         });
 
         it("uses matcher in object", function() {
             this.spy({ some: "abc" });
 
-            assert(this.spy[method]({ some: sinonMatch.typeOf("string") }));
+            assert(this.spy[method]({ some: match.typeOf("string") }));
         });
 
         // https://github.com/sinonjs/sinon/issues/1245
@@ -759,7 +759,7 @@ describe("spy", function() {
         });
 
         it("is true if called with matcher that returns true", function() {
-            var matcher = sinonMatch(function() {
+            var matcher = match(function() {
                 return true;
             });
             this.spy();
@@ -768,7 +768,7 @@ describe("spy", function() {
         });
 
         it("is false if called with matcher that returns false", function() {
-            var matcher = sinonMatch(function() {
+            var matcher = match(function() {
                 return false;
             });
             this.spy();
@@ -782,7 +782,7 @@ describe("spy", function() {
             this.spy.call(expected);
 
             this.spy.calledOn(
-                sinonMatch(function(value) {
+                match(function(value) {
                     actual = value;
                 })
             );
@@ -1632,8 +1632,8 @@ describe("spy", function() {
 
             spy();
 
-            assert.isFalse(spy.returned(sinonMatch.same({ id: 42 })));
-            assert(spy.returned(sinonMatch.same(object)));
+            assert.isFalse(spy.returned(match.same({ id: 42 })));
+            assert(spy.returned(match.same(object)));
         });
     });
 
