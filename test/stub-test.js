@@ -2989,6 +2989,21 @@ describe("stub", function() {
             assert.equals(3, stub.method());
         });
 
+        it("allows providing null as a return value", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var stub = createStubInstance(Class, {
+                method: null
+            });
+
+            assert.equals(null, stub.method());
+        });
+
         it("throws an exception when trying to override non-existing property", function() {
             var Class = function() {
                 return;
