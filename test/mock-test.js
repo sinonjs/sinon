@@ -653,6 +653,20 @@ describe("sinonMock", function() {
                     { name: "ExpectationError" }
                 );
             });
+
+            it("should not throw when expectation withArgs using matcher", function() {
+                var obj = {
+                    foobar: function() {
+                        return;
+                    }
+                };
+                var mock = sinonMock(obj);
+                mock.expects("foobar").withArgs(match.string);
+
+                refute.exception(function() {
+                    obj.foobar("arg1");
+                });
+            });
         });
 
         describe(".withExactArgs", function() {
