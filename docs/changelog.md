@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.2.2 / 2018-12-12
+==================
+
+  * Fix mock.withArgs using matchers (#1961)
+
 7.2.1 / 2018-12-12
 ==================
 
