@@ -1,4 +1,11 @@
 
+7.2.1 / 2018-12-12
+==================
+
+  * #1957: check for truthiness before checking whether optional override is a stub
+  * Upgrade @sinonjs/samsam
+  * Upgrade @sinonjs/referee to v3
+
 7.2.0 / 2018-12-10
 ==================
 
