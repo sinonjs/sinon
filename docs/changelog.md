@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.2.3 / 2019-01-19
+==================
+
+  * Update @sinonjs/nise
+  * Fix stubbing function objects (#1968)
+
 7.2.2 / 2018-12-12
 ==================
 
