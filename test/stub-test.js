@@ -1267,11 +1267,9 @@ describe("stub", function() {
             assert.equals(obj[0](), "stubbed value");
         });
 
-        it("does not stub function object", function() {
+        it("does not stub string", function() {
             assert.exception(function() {
-                createStub(function() {
-                    return;
-                });
+                createStub("test");
             });
         });
     });
@@ -1315,6 +1313,32 @@ describe("stub", function() {
             var object = {};
 
             assert.same(createStub(object), object);
+        });
+
+        it("returns function", function() {
+            var func = function() {
+                return;
+            };
+
+            assert.same(createStub(func), func);
+        });
+
+        it("stubs methods of function", function() {
+            var func = function() {
+                return;
+            };
+            func.func1 = function() {
+                return;
+            };
+            // eslint-disable-next-line no-proto
+            func.__proto__.func2 = function() {
+                return;
+            };
+
+            createStub(func);
+
+            assert.isFunction(func.func1.restore);
+            assert.isFunction(func.func2.restore);
         });
 
         it("only stubs functions", function() {
