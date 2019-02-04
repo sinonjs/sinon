@@ -41,6 +41,21 @@ describe('myAPI.hello method', function () {
 
 Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to just use that one.
 
+```javascript
+const myObject = {
+    'hello': 'world'
+};
+
+sinon.stub(myObject, 'hello').value('Sinon');
+
+console.log(myObject.hello);
+// Sinon
+
+sinon.restore();
+console.log(myObject.hello);
+// world
+```
+
 #### `var sandbox = sinon.createSandbox();`
 
 Creates a new sandbox object with spies, stubs, and mocks.
