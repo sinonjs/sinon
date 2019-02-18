@@ -1,4 +1,16 @@
 
+7.2.4 / 2019-02-18
+==================
+
+  * minor package updates
+  * Update  eslint-plugin-mocha
+  * Fix high prio audit warnings
+  * Update nise to use @sinonjs/text-encoding
+  * Make all properties non-enumerable in spies, stubs, mocks and fakes
+  * docs(sandbox): add example for default sandbox
+  * Update docs/changelog.md and set new release id in docs/_config.yml
+  * Add release documentation for v7.2.3
+
 7.2.3 / 2019-01-19
 ==================
 
