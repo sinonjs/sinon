@@ -2860,7 +2860,7 @@ describe("spy", function() {
             spy(15);
             assert.equals(Object.keys(spy), []);
             spy.fooBar = 1;
-            assert.equals(Object.keys(spy), [ "fooBar" ]);
+            assert.equals(Object.keys(spy), ["fooBar"]);
 
             spy.withArgs(1);
             assert(spy.called);
@@ -2874,10 +2874,10 @@ describe("spy", function() {
             assert.equals(spy.thisValues.length, 1);
             assert.equals(spy.exceptions.length, 1);
             assert.equals(spy.returnValues.length, 1);
-            assert.equals(Object.keys(spy), [ "fooBar" ]);
+            assert.equals(Object.keys(spy), ["fooBar"]);
 
             spy.resetHistory();
-            assert.equals(Object.keys(spy), [ "fooBar" ]);
+            assert.equals(Object.keys(spy), ["fooBar"]);
         });
 
         it("create spy from function", function() {
@@ -2889,16 +2889,18 @@ describe("spy", function() {
 
             assert.equals(spy.myProp, func.myProp);
             assert.equals(Object.keys(spy), Object.keys(func));
-            assert.equals(Object.keys(spy), [ "aProp" ]);
+            assert.equals(Object.keys(spy), ["aProp"]);
 
+            // eslint-disable-next-line no-restricted-syntax
             try {
                 spy();
             } catch (e) {
+                // empty
             }
             assert(spy.threw());
 
             spy.resetHistory();
-            assert.equals(Object.keys(spy), [ "aProp" ]);
+            assert.equals(Object.keys(spy), ["aProp"]);
         });
     });
 });
