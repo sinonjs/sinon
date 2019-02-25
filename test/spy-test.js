@@ -2851,4 +2851,54 @@ describe("spy", function() {
             }
         });
     });
+
+    describe("non enumerable properties", function() {
+        it("create and call spy apis", function() {
+            var spy = createSpy();
+            assert.equals(Object.keys(spy), []);
+
+            spy(15);
+            assert.equals(Object.keys(spy), []);
+            spy.fooBar = 1;
+            assert.equals(Object.keys(spy), [ "fooBar" ]);
+
+            spy.withArgs(1);
+            assert(spy.called);
+            assert(spy.calledBefore(createSpy()));
+            assert(!spy.calledAfter(createSpy()));
+            assert(spy.calledOn(undefined));
+            assert(spy.calledWith(15));
+            assert(!spy.calledWithNew());
+            assert(!spy.threw());
+            assert(!spy.returned("ret"));
+            assert.equals(spy.thisValues.length, 1);
+            assert.equals(spy.exceptions.length, 1);
+            assert.equals(spy.returnValues.length, 1);
+            assert.equals(Object.keys(spy), [ "fooBar" ]);
+
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), [ "fooBar" ]);
+        });
+
+        it("create spy from function", function() {
+            var func = function() {
+                throw new Error("aError");
+            };
+            func.aProp = 42;
+            var spy = createSpy.create(func);
+
+            assert.equals(spy.myProp, func.myProp);
+            assert.equals(Object.keys(spy), Object.keys(func));
+            assert.equals(Object.keys(spy), [ "aProp" ]);
+
+            try {
+                spy();
+            } catch (e) {
+            }
+            assert(spy.threw());
+
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), [ "aProp" ]);
+        });
+    });
 });
