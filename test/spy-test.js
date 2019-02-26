@@ -2857,25 +2857,31 @@ describe("spy", function() {
             var spy = createSpy();
             assert.equals(Object.keys(spy), []);
 
+            // call spy and verify no enumerable properties are added
             spy(15);
             assert.equals(Object.keys(spy), []);
+
+            // it should still work to add properties
             spy.fooBar = 1;
             assert.equals(Object.keys(spy), ["fooBar"]);
 
+            // call some spy APIs and verify no enumerable properties are added
             spy.withArgs(1);
-            assert(spy.called);
-            assert(spy.calledBefore(createSpy()));
-            assert(!spy.calledAfter(createSpy()));
-            assert(spy.calledOn(undefined));
-            assert(spy.calledWith(15));
-            assert(!spy.calledWithNew());
-            assert(!spy.threw());
-            assert(!spy.returned("ret"));
-            assert.equals(spy.thisValues.length, 1);
-            assert.equals(spy.exceptions.length, 1);
-            assert.equals(spy.returnValues.length, 1);
+            // eslint-disable-next-line no-unused-vars
+            var val = spy.called;
+            spy.calledBefore(createSpy());
+            spy.calledAfter(createSpy());
+            spy.calledOn(undefined);
+            spy.calledWith(15);
+            spy.calledWithNew();
+            spy.threw();
+            spy.returned("ret");
+            val = spy.thisValues.length;
+            val = spy.exceptions.length;
+            val = spy.returnValues.length;
             assert.equals(Object.keys(spy), ["fooBar"]);
 
+            // verify that reset history doesn't change enumerable properties
             spy.resetHistory();
             assert.equals(Object.keys(spy), ["fooBar"]);
         });
@@ -2897,7 +2903,7 @@ describe("spy", function() {
             } catch (e) {
                 // empty
             }
-            assert(spy.threw());
+            spy.threw();
 
             spy.resetHistory();
             assert.equals(Object.keys(spy), ["aProp"]);
