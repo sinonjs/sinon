@@ -2893,7 +2893,7 @@ describe("spy", function() {
             func.aProp = 42;
             var spy = createSpy.create(func);
 
-            assert.equals(spy.myProp, func.myProp);
+            assert.equals(spy.aProp, 42);
             assert.equals(Object.keys(spy), Object.keys(func));
             assert.equals(Object.keys(spy), ["aProp"]);
 
