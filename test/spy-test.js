@@ -2851,4 +2851,62 @@ describe("spy", function() {
             }
         });
     });
+
+    describe("non enumerable properties", function() {
+        it("create and call spy apis", function() {
+            var spy = createSpy();
+            assert.equals(Object.keys(spy), []);
+
+            // call spy and verify no enumerable properties are added
+            spy(15);
+            assert.equals(Object.keys(spy), []);
+
+            // it should still work to add properties
+            spy.fooBar = 1;
+            assert.equals(Object.keys(spy), ["fooBar"]);
+
+            // call some spy APIs and verify no enumerable properties are added
+            spy.withArgs(1);
+            // eslint-disable-next-line no-unused-vars
+            var val = spy.called;
+            spy.calledBefore(createSpy());
+            spy.calledAfter(createSpy());
+            spy.calledOn(undefined);
+            spy.calledWith(15);
+            spy.calledWithNew();
+            spy.threw();
+            spy.returned("ret");
+            val = spy.thisValues.length;
+            val = spy.exceptions.length;
+            val = spy.returnValues.length;
+            assert.equals(Object.keys(spy), ["fooBar"]);
+
+            // verify that reset history doesn't change enumerable properties
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), ["fooBar"]);
+        });
+
+        it("create spy from function", function() {
+            var func = function() {
+                throw new Error("aError");
+            };
+            func.aProp = 42;
+            var spy = createSpy.create(func);
+
+            assert.equals(spy.aProp, 42);
+            assert.equals(Object.keys(spy), Object.keys(func));
+            assert.equals(Object.keys(spy), ["aProp"]);
+
+            // eslint-disable-next-line no-restricted-syntax
+            try {
+                spy();
+            } catch (e) {
+                // empty
+            }
+            spy.threw();
+
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), ["aProp"]);
+        });
+    });
 });
