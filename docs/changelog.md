@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.2.6 / 2019-03-01
+==================
+
+  * Upgrade @sinonjs/formatio
+  * Set `fake.lastArg` to last argument regardless of type
+
 7.2.5 / 2019-02-27
 ==================
 
