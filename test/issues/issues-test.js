@@ -588,4 +588,14 @@ describe("issues", function() {
             assert.equals(stub({}, [], "b"), "b");
         });
     });
+
+    describe("#1986", function() {
+        it("should not set `lastArg` to undefined when last argument is `false`", function() {
+            var fake = sinon.fake();
+
+            fake(99, false);
+
+            assert.equals(fake.lastArg, false);
+        });
+    });
 });
