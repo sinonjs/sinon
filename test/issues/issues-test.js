@@ -111,7 +111,8 @@ describe("issues", function() {
         // IE 11 does not support the function name property
         if (bob.name) {
             it("should not rename spies", function() {
-                var expectedName = "proxy";
+                var nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
+                var expectedName = nameDescriptor && nameDescriptor.configurable ? "bob" : "proxy";
                 var spy = sinon.spy(bob);
 
                 assert.equals(spy.name, expectedName);

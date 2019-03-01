@@ -207,6 +207,16 @@ function spyNeverCalledTests(method) {
     };
 }
 
+function verifyFunctionName(func, expectedName) {
+    var descriptor = Object.getOwnPropertyDescriptor(func, "name");
+    if (descriptor && descriptor.configurable) {
+        // IE 11 functions don't have a name.
+        // Safari 9 has names that are not configurable.
+        assert.equals(descriptor.value, expectedName);
+        assert.equals(func.name, expectedName);
+    }
+}
+
 describe("spy", function() {
     it("does not throw if called without function", function() {
         refute.exception(function() {
@@ -423,10 +433,11 @@ describe("spy", function() {
     });
 
     describe(".named", function() {
-        it("sets displayName", function() {
+        it("sets name and displayName", function() {
             var spy = createSpy();
             var retval = spy.named("beep");
             assert.equals(spy.displayName, "beep");
+            verifyFunctionName(spy, "beep");
             assert.same(spy, retval);
         });
     });
@@ -504,6 +515,17 @@ describe("spy", function() {
             });
 
             assert.exception(spy, err);
+        });
+
+        it("retains function name", function() {
+            function test() {
+                return;
+            }
+
+            var spy = createSpy.create(test);
+
+            assert.equals(spy.displayName, "test");
+            verifyFunctionName(spy, "test");
         });
 
         it("retains function length 0", function() {
