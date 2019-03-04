@@ -4,6 +4,11 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
+7.2.7 / 2019-03-04
+==================
+
+  * Retain spy function names and fix spy.named(name) (#1987)
+  * Document spying on accessors (#1976)
 
 7.2.6 / 2019-03-01
 ==================
