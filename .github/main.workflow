@@ -1,6 +1,6 @@
 workflow "Run tests" {
   on = "push"
-  resolves = ["lint", "test"]
+  resolves = ["lint", "test-esm-bundle", "test-node"]
 }
 
 action "install" {
