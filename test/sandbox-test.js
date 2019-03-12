@@ -1671,7 +1671,6 @@ describe("Sandbox", function() {
         it("yields stub, mock as arguments", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["stub", "mock"]
                 })
             );
@@ -1686,7 +1685,6 @@ describe("Sandbox", function() {
         it("yields spy, stub, mock as arguments", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["spy", "stub", "mock"]
                 })
             );
@@ -1701,7 +1699,6 @@ describe("Sandbox", function() {
         it("does not yield server when not faking xhr", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["server", "stub", "mock"],
                     useFakeServer: false
                 })
@@ -1740,7 +1737,6 @@ describe("Sandbox", function() {
                 it("yields server when faking xhr", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server", "stub", "mock"]
                         })
                     );
@@ -1756,7 +1752,6 @@ describe("Sandbox", function() {
                 it("uses serverWithClock when faking xhr", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server"],
                             useFakeServer: fakeServerWithClock
                         })
@@ -1784,7 +1779,6 @@ describe("Sandbox", function() {
                 it("yields clock when faking timers", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server", "clock"]
                         })
                     );
@@ -1846,7 +1840,6 @@ describe("Sandbox", function() {
         it("fakes specified timers", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["clock"],
                     useFakeTimers: { toFake: ["Date", "setTimeout"] }
                 })
