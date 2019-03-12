@@ -1551,12 +1551,42 @@ describe("Sandbox", function() {
             this.sandbox.restore();
         });
 
-        it("injects spy, stub, mock", function() {
+        it("injects spy, stub, mock, fake, replace, replaceSetter, createStubInstance", function() {
             this.sandbox.inject(this.obj);
 
             assert.isFunction(this.obj.spy);
             assert.isFunction(this.obj.stub);
             assert.isFunction(this.obj.mock);
+            assert.isFunction(this.obj.createStubInstance);
+            assert.isFunction(this.obj.fake);
+            assert.isFunction(this.obj.replace);
+            assert.isFunction(this.obj.replaceSetter);
+            assert.isFunction(this.obj.replaceGetter);
+        });
+
+        it("should inject callable functions", function() {
+            /* eslint-disable no-empty-function, accessor-pairs */
+            this.sandbox.inject(this.obj);
+
+            var myObj = { a: function() {} };
+            function MyClass() {}
+            Object.defineProperty(myObj, "b", {
+                get: function() {
+                    return 42;
+                },
+                configurable: true
+            });
+            Object.defineProperty(myObj, "c", { set: function() {}, configurable: true });
+
+            refute.exception(
+                function() {
+                    this.obj.createStubInstance(MyClass);
+                    var fake = this.obj.fake();
+                    this.obj.replace(myObj, "a", fake);
+                    this.obj.replaceGetter(myObj, "b", fake);
+                    this.obj.replaceSetter(myObj, "c", fake);
+                }.bind(this)
+            );
         });
 
         it("does not define clock, server and requests objects", function() {
