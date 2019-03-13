@@ -27,7 +27,6 @@ jobs:
               echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google.list
               apt-get -qq update
               apt-get -qq install -y --no-install-recommends google-chrome-stable
-              apt-get -qq install -y --no-install-recommends google-chrome-unstable
             fi
       - run:
           name: Pre-Test
