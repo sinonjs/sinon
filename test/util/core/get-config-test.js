@@ -12,7 +12,6 @@ describe("core/util/getConfig", function() {
             var config = getConfig();
 
             refute.same(config, defaultConfig);
-            assert.equals(config.injectIntoThis, defaultConfig.injectIntoThis);
             assert.equals(config.injectInto, defaultConfig.injectInto);
             assert.equals(config.properties, defaultConfig.properties);
             assert.equals(config.useFakeTimers, defaultConfig.useFakeTimers);
@@ -26,7 +25,6 @@ describe("core/util/getConfig", function() {
             });
 
             refute.same(config, defaultConfig);
-            assert.equals(config.injectIntoThis, defaultConfig.injectIntoThis);
             assert.equals(config.injectInto, defaultConfig.injectInto);
             assert.equals(config.properties, ["stub", "mock"]);
             assert.equals(config.useFakeTimers, defaultConfig.useFakeTimers);
