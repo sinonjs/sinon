@@ -17,13 +17,13 @@ services:
     volumes:
       # This mounts the local directory - saving `npm install`
       - ./:/home/node/app
-    command: >
-      sh -c "
-      $$SINON_CHROME_BIN --version
 
-      npm run test-headless -- --chrome $$SINON_CHROME_BIN --allow-chrome-as-root
+    # There are differences between Circle CI and Docker `command`,
+    # forcing us to do this little workaround
+    command: >
+      sh -c " $$SINON_CHROME_BIN --version
+      && npm run test-headless -- --chrome $$SINON_CHROME_BIN --allow-chrome-as-root
       && npm run test-webworker -- --chrome $$SINON_CHROME_BIN --allow-chrome-as-root
       && npm run test-esm-bundle
       && npm run test-node
-
       "
