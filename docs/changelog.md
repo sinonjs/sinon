@@ -4,6 +4,16 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
+
+7.3.0 / 2019-03-20
+==================
+
+  * Simplify Circle CI setup
+  * Add a Docker Compose config file for testing the setup locally
+  * Inject createStubInstance and fake functionality
+  * Remove unused prop 'injectIntoThis'
+  * Fix #1974 by upgrading to @sinonjs/samsam@3.3.0
+
 7.2.7 / 2019-03-04
 ==================
 
