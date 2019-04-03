@@ -137,19 +137,16 @@ function getTodos(listId, callback) {
     });
 }
 ```
-
-To test this function without triggering network activity we could replace `jQuery.ajax`
+A unit test should not actually trigger a function's network activity. To test `getTodos()` without triggering its  network activity, use the `sinon.replace()` method to replace the `jQuery.ajax` method in your test. Restore the `jQuery.ajax` method after your test by calling `sinon.restore()` in your test runner's `after()` function.
 
 ```javascript
 after(function () {
-    // When the test either fails or passes, restore the original
-    // jQuery ajax function (Sinon.JS also provides tools to help
-    // test frameworks automate clean-up like this)
-    jQuery.ajax.restore();
+    sinon.restore();
 });
 
 it('makes a GET request for todo items', function () {
     sinon.replace(jQuery, 'ajax', sinon.fake());
+
     getTodos(42, sinon.fake());
 
     assert(jQuery.ajax.calledWithMatch({ url: '/todo/42/items' }));
