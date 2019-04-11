@@ -1206,7 +1206,7 @@ describe("stub", function() {
                 function() {
                     createStub(object, "method", 1);
                 },
-                { message: "stub(obj, 'meth', fn) has been removed, see documentation" },
+                { message: "stub(obj, 'meth', fn) has been removed from v3.0.0. Instead you should use stub(obj, 'meth').callsFake(fn)" },
                 { name: "TypeError" }
             );
         });
