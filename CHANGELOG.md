@@ -1,4 +1,9 @@
 
+7.3.2 / 2019-04-17
+==================
+
+  * Update Lolex to bring in fix for sinonjs/lolex#232 (queueMicrotask warning)
+
 7.3.1 / 2019-03-27
 ==================
 
