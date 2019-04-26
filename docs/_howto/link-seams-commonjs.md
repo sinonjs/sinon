@@ -154,7 +154,7 @@ Dependency mocking is a powerful tool, but sometimes you have to extract some fu
 to another module to be able to mock it.
 
 
-[IoT]: https://en.wikipedia.org/wiki/Inversion_of_control
+[IoC]: https://en.wikipedia.org/wiki/Inversion_of_control
 [di]: https://en.wikipedia.org/wiki/Dependency_injection
 [ava]: https://github.com/avajs/ava
 [mock-fs]: https://github.com/tschaub/mock-fs
