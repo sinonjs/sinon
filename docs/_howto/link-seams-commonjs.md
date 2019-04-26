@@ -5,7 +5,7 @@ title: Dependency mocking with Sinon
 This page describes how to isolate your system under test, by stubbing out dependencies.
 
 While in other languages you might use [link seams][seams], [Dependency Injection(DI)][di] or
-[Inversion or Control(IoT)][IoT], which are not just _patterns_ but also requires some pattern
+[Inversion of Control (IoC)][IoC], which are not just _patterns_ but also requires some pattern
 implementation(a framework) - CommonJS(aka nodejs) module system provides a way better to replace
 any module, or package you need - _require-time_ dependency replacement.
 
