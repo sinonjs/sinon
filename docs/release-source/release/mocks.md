@@ -38,7 +38,7 @@ To see what mocks look like in Sinon.JS, here is one of the [PubSubJS][pubsubjs]
 
     var spy = sinon.spy();
     var mock = sinon.mock(myAPI);
-    mock.expects("method").once().throws();
+    mock.expects("message").once().throws();
 
     PubSub.subscribe("message", myAPI.method);
     PubSub.subscribe("message", spy);
