@@ -601,16 +601,14 @@ describe("issues", function() {
     });
 
     describe("#2016", function() {
-        var sandbox;
-
         function Foo() {
             return;
         }
-
-        Foo.prototype.testMethod = function testMethod() {
+        Foo.prototype.testMethod = function() {
             return;
         };
 
+        var sandbox;
         beforeEach(function() {
             sandbox = sinon.createStubInstance(Foo);
         });
@@ -623,6 +621,7 @@ describe("issues", function() {
             it("should clear 'called' status on stub", function() {
                 sandbox.testMethod();
                 assert.isTrue(sandbox.testMethod.called);
+
                 sandbox.testMethod.resetHistory();
                 assert.isFalse(sandbox.testMethod.called);
             });
@@ -632,6 +631,7 @@ describe("issues", function() {
             it("should clear 'called' status on all stubs", function() {
                 sandbox.testMethod();
                 assert.isTrue(sandbox.testMethod.called);
+
                 sinon.resetHistory();
                 assert.isFalse(sandbox.testMethod.called);
             });
