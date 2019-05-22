@@ -619,4 +619,42 @@ describe("issues", function() {
             assert.isTrue(calledThrough);
         });
     });
+
+    describe("#2016", function() {
+        function Foo() {
+            return;
+        }
+        Foo.prototype.testMethod = function() {
+            return;
+        };
+
+        var sandbox;
+        beforeEach(function() {
+            sandbox = sinon.createStubInstance(Foo);
+        });
+
+        afterEach(function() {
+            sinon.restore();
+        });
+
+        describe("called on individual stub method", function() {
+            it("should clear 'called' status on stub", function() {
+                sandbox.testMethod();
+                assert.isTrue(sandbox.testMethod.called);
+
+                sandbox.testMethod.resetHistory();
+                assert.isFalse(sandbox.testMethod.called);
+            });
+        });
+
+        describe("called on module", function() {
+            it("should clear 'called' status on all stubs", function() {
+                sandbox.testMethod();
+                assert.isTrue(sandbox.testMethod.called);
+
+                sinon.resetHistory();
+                assert.isFalse(sandbox.testMethod.called);
+            });
+        });
+    });
 });
