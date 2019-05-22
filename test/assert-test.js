@@ -54,6 +54,25 @@ describe("assert", function() {
         });
     });
 
+    it("supports no properties", function() {
+        var api = {
+            method1: function() {
+                return;
+            },
+            method2: function() {
+                return;
+            }
+        };
+        sinonSpy(api);
+        api.method1();
+        api.method2();
+
+        refute.exception(function() {
+            sinonAssert.calledOnce(api.method1);
+            sinonAssert.calledOnce(api.method2);
+        });
+    });
+
     describe(".fail", function() {
         beforeEach(function() {
             this.exceptionName = sinonAssert.failException;
