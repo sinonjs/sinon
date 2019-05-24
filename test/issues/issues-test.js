@@ -600,6 +600,26 @@ describe("issues", function() {
         });
     });
 
+    describe("#1964", function() {
+        it("should allow callThrough on a withArgs fake", function() {
+            var calledThrough = false;
+            var obj = {
+                method: function() {
+                    calledThrough = true;
+                }
+            };
+
+            var baseStub = sinon.stub(obj, "method");
+            baseStub.throws("Should always hit the withArgs fake");
+            var argsStub = baseStub.withArgs("foo").callThrough();
+
+            obj.method("foo");
+
+            sinon.assert.calledOnce(argsStub);
+            assert.isTrue(calledThrough);
+        });
+    });
+
     describe("#2016", function() {
         function Foo() {
             return;
