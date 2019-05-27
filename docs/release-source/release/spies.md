@@ -257,7 +257,7 @@ Can be used for partial matching, Sinon only checks the provided arguments again
 
 #### `spy.calledOnceWith(arg1, arg2, ...);`
 
-Returns `true` if spy was called at exactly once with the provided arguments.
+Returns `true` if spy was called exactly once in total and that one call was using the provided arguments.
 
 
 #### `spy.alwaysCalledWith(arg1, arg2, ...);`
@@ -271,7 +271,7 @@ Returns `true` if spy was called at least once with the provided arguments and n
 
 #### `spy.calledOnceWithExactly(arg1, arg2, ...);`
 
-Returns `true` if spy was called exactly once and with only the provided arguments.
+Returns `true` if spy was called exactly once in total and that one call was using the exact provided arguments and no no others.
 
 
 #### `spy.alwaysCalledWithExactly(arg1, arg2, ...);`
