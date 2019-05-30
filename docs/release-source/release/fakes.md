@@ -67,26 +67,33 @@ Creates a fake that returns a rejected `Promise` for the passed value.
 
 If an `Error` is passed as the `value` argument, then that will be the value of the promise. If any other value is passed, then that will be used for the `message` property of the `Error` returned by the promise.
 
-#### `sinon.fake.yields(callback[, value1, ..., valueN]);`
+#### `sinon.fake.yields([value1, ..., valueN]);`
 
-`fake` expects the last argument to be a callback and will invoke it with the given arguments.
+`sinon.fake.yields` takes some values, and returns a function that when being called, expects the last argument to be a callback and invokes that callback with the same previously given values. The returned function is normally used to fake a service function that takes a callback as the last argument.
+
+ In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
 
 ```js
-var fake = sinon.fake.yields('hello world');
-
-fake(console.log);
-// hello world
+var fake = sinon.fake.yields(null, 'file content');
+sinon.replace(fs, 'readFile', fake);
+fs.readFile('somefile',(err,data)=>{console.log(data);});
+console.log('end of this event loop');
+// file content
+// end of this event loop
 ```
+#### `sinon.fake.yieldsAsync([value1, ..., valueN]);`
 
-#### `sinon.fake.yieldsAsync(callback[, value1, ..., valueN]);`
+Similar to `yields`, `yieldsAsync` also returns a function that when invoked, the function expects the last argument to be a callback and invokes that callback with the same previously given values. However, the returned function invokes that callback asynchronously rather than immediately, i.e. in the next event loop.
 
-`fake` expects the last argument to be a callback and will invoke it asynchronously with the given arguments.
+Compare the output of the code example below with the output of the code example above for `yields` to see the difference.
 
 ```js
-var fake = sinon.fake.yieldsAsync('hello world');
-
-fake(console.log);
-// hello world
+var fakeAsync = sinon.fake.yieldsAsync(null, 'file content');
+sinon.replace(fs, 'readFile', fakeAsync);
+fs.readFile('somefile',(err,data)=>{console.log(data);});
+console.log('end of this event loop');
+// end of this event loop
+// file content
 ```
 
 #### `sinon.fake(func);`
