@@ -28,11 +28,11 @@ See [our issue template](https://github.com/sinonjs/sinon/blob/master/.github/) 
 
 ## Contributing to the code base
 
-Read [GitHub's Project Forking Guide](https://guides.github.com/activities/forking/) to learn about the general contribution process. 
-
 Pick [an issue](https://github.com/sinonjs/sinon/issues) to fix, or pitch
 new features. To avoid wasting your time, please ask for feedback on feature
 suggestions with [an issue](https://github.com/sinonjs/sinon/issues/new).
+
+Make sure you have read [GitHub's guide on forking](https://guides.github.com/activities/forking/). It explains the general contribution process and key concepts.
 
 ### Making a pull request
 
