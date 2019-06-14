@@ -86,7 +86,7 @@ A [codemod is available](https://github.com/hurrymaplelad/sinon-codemod) to upgr
 
 #### `var stub = sinon.stub(obj);`
 
-Stubs all the object's methods.
+Stubs all the object's methods. Use the `restore` utility to restore an object stubbed this way.
 
 Note that it's usually better practice to stub individual methods, particularly on objects that you don't understand or control all the methods for (e.g. library dependencies).
 
