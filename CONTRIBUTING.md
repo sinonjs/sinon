@@ -65,7 +65,7 @@ This will also install a pre-commit hook, that runs style validation on staged f
 
 ### Compatibility
 
-Please see [`COMPATIBILITY.md`][COMPATIBILITY.md]
+For details on compatibility and browser support, please see [`COMPATIBILITY.md`](COMPATIBILITY.md)
 
 ### Linting and style
 
