@@ -28,7 +28,7 @@
 
 ## Compatibility
 
-For details on compatibility, please see [`COMPATIBILITY.md`][COMPATIBILITY.md]
+For details on compatibility and browser support, please see [`COMPATIBILITY.md`][COMPATIBILITY.md]
 
 ## Installation
 
