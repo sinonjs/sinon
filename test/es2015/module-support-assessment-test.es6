@@ -1,12 +1,21 @@
-import referee from "@sinonjs/referee";
-import sinon from "../../lib/sinon";
+/**
+ * About these tests:
+ * These tests concern EcmaScript Modules. That is, they test Sinon's behaviour
+ * when running in a EcmaScript 2015+ environment that has the Module type.
+ * They do not assert how code that has been transpiled into ES5 using Babel
+ * and similar will behave.
+ */
 import * as aModule from "./a-module";
-import aModuleWithToStringTag from "./a-module-with-to-string-tag";
-import aModuleWithDefaultExport from "./a-module-with-default";
 
 // Usually one would import the default module, but one can make a form of wrapper like this
 /* eslint-disable no-unused-vars */
 import functionModule, * as functionModuleAlternative from "./a-function-module";
+
+import aModuleWithDefaultExport from "./a-module-with-default";
+import aModuleWithToStringTag from "./a-module-with-to-string-tag";
+import referee from "@sinonjs/referee";
+import sinon from "../../lib/sinon";
+
 const { assert, refute } = referee;
 
 function createTestSuite(action) {
@@ -52,7 +61,7 @@ function createTestSuite(action) {
         describe("Modules that exports a function as their default export", function() {
             it("should not be possible to spy/stub the default export using a wrapper for the exports", function() {
                 assert.exception(function() {
-                    stub = sinon[action](functionModuleAlternative, "anExport");
+                    stub = sinon[action](functionModuleAlternative, "default");
                 }, errorRegEx);
             });
         });
