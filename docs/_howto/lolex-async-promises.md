@@ -42,7 +42,8 @@ The same approach can be used to test an `async` function:
 
 ```js
 module.exports.asyncReturnAfterOneSecond = async () => {
-    // util.promisify is not used deliberately
+    // Using util.promisify would look nicer, but there is a lolex issue
+    // blocking this at the moment: https://github.com/sinonjs/lolex/pull/227
     const setTimeoutPromise = timeout => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     };
