@@ -32,6 +32,8 @@ Pick [an issue](https://github.com/sinonjs/sinon/issues) to fix, or pitch
 new features. To avoid wasting your time, please ask for feedback on feature
 suggestions with [an issue](https://github.com/sinonjs/sinon/issues/new).
 
+Make sure you have read [GitHub's guide on forking](https://guides.github.com/activities/forking/). It explains the general contribution process and key concepts.
+
 ### Making a pull request
 
 Please try to [write great commit messages](http://chris.beams.io/posts/git-commit/).
@@ -63,29 +65,13 @@ This will also install a pre-commit hook, that runs style validation on staged f
 
 ### Compatibility
 
-#### ES5.1
-
-Sinon's source is written as [ES5.1][ES5] and requires no transpiler or polyfills.
-
-Sinon.JS uses feature detection to support [ES6][ES6] features, but does not rely on any of the new syntax introduced in [ES6][ES6] and remains compatible with [ES5.1][ES5] runtimes.
-
-#### Runtimes
-
-Sinon.JS aims at supporting the following runtimes:
-
-* Firefox 45+
-* Chrome 48+
-* Internet Explorer 11+
-* Edge 14+
-* Safari 9+
-* Node LTS versions
-
+For details on compatibility and browser support, please see [`COMPATIBILITY.md`](COMPATIBILITY.md)
 
 ### Linting and style
 
 Sinon.JS uses [ESLint](http://eslint.org) to keep the codebase free of lint, and uses [Prettier](https://prettier.io) to keep consistent style.
 
-If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier][https://prettier.io/docs/en/editors.html]) to make editing code a more enjoyable experience.
+If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier](https://prettier.io/docs/en/editors.html)) to make editing code a more enjoyable experience.
 
 The ESLint verification (which includes Prettier) will be run before unit tests in the CI environment. The build will fail if the source code does not pass the style check.
 
@@ -135,5 +121,3 @@ To build simply run
     $ node build.js
 
 
-[ES5]: http://www.ecma-international.org/ecma-262/5.1/
-[ES6]: http://www.ecma-international.org/ecma-262/6.0/

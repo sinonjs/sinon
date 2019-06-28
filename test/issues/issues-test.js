@@ -111,7 +111,8 @@ describe("issues", function() {
         // IE 11 does not support the function name property
         if (bob.name) {
             it("should not rename spies", function() {
-                var expectedName = "proxy";
+                var nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
+                var expectedName = nameDescriptor && nameDescriptor.configurable ? "bob" : "proxy";
                 var spy = sinon.spy(bob);
 
                 assert.equals(spy.name, expectedName);
@@ -586,6 +587,74 @@ describe("issues", function() {
 
             assert.equals(stub({}, [], "a"), "a");
             assert.equals(stub({}, [], "b"), "b");
+        });
+    });
+
+    describe("#1986", function() {
+        it("should not set `lastArg` to undefined when last argument is `false`", function() {
+            var fake = sinon.fake();
+
+            fake(99, false);
+
+            assert.equals(fake.lastArg, false);
+        });
+    });
+
+    describe("#1964", function() {
+        it("should allow callThrough on a withArgs fake", function() {
+            var calledThrough = false;
+            var obj = {
+                method: function() {
+                    calledThrough = true;
+                }
+            };
+
+            var baseStub = sinon.stub(obj, "method");
+            baseStub.throws("Should always hit the withArgs fake");
+            var argsStub = baseStub.withArgs("foo").callThrough();
+
+            obj.method("foo");
+
+            sinon.assert.calledOnce(argsStub);
+            assert.isTrue(calledThrough);
+        });
+    });
+
+    describe("#2016", function() {
+        function Foo() {
+            return;
+        }
+        Foo.prototype.testMethod = function() {
+            return;
+        };
+
+        var sandbox;
+        beforeEach(function() {
+            sandbox = sinon.createStubInstance(Foo);
+        });
+
+        afterEach(function() {
+            sinon.restore();
+        });
+
+        describe("called on individual stub method", function() {
+            it("should clear 'called' status on stub", function() {
+                sandbox.testMethod();
+                assert.isTrue(sandbox.testMethod.called);
+
+                sandbox.testMethod.resetHistory();
+                assert.isFalse(sandbox.testMethod.called);
+            });
+        });
+
+        describe("called on module", function() {
+            it("should clear 'called' status on all stubs", function() {
+                sandbox.testMethod();
+                assert.isTrue(sandbox.testMethod.called);
+
+                sinon.resetHistory();
+                assert.isFalse(sandbox.testMethod.called);
+            });
         });
     });
 });

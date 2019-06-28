@@ -76,6 +76,8 @@ Replaces `object.method` with a stub function. An exception is thrown if the pro
 
 The original function can be restored by calling `object.method.restore();` (or `stub.restore();`).
 
+Stubs can be used to replace a module's dependencies, ensuring it is tested in isolation. [For simple cases](../../_howto/stub-dependency.md) you might not need additional helper libraries, but for more complex cases you might need to [target the module loading mechanisms](../../link-seams-commonjs.md).
+
 #### ~~`var stub = sinon.stub(object, "method", func);`~~
 
 This has been removed from `v3.0.0`. Instead you should use
@@ -86,7 +88,7 @@ A [codemod is available](https://github.com/hurrymaplelad/sinon-codemod) to upgr
 
 #### `var stub = sinon.stub(obj);`
 
-Stubs all the object's methods.
+Stubs all the object's methods. Use the `restore` utility to restore an object stubbed this way.
 
 Note that it's usually better practice to stub individual methods, particularly on objects that you don't understand or control all the methods for (e.g. library dependencies).
 

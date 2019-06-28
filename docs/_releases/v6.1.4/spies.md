@@ -60,6 +60,32 @@ all [calls][call]. The following is a slightly contrived example:
 }
 ```
 
+### Using a spy to wrap property getter and setter
+
+`sinon.spy(object, "property", ["get", "set"])` creates spies that wrap the
+getters and setters for `object.property`. The spies will behave exactly like
+the original getters and setters, but you will have access to data about all
+[calls][call]. Example:
+
+
+```javascript
+var object = {
+  get test() {
+    return this.property;
+  },
+  set test(value) {
+    this.property = value * 2;
+  }
+};
+
+var spy = sinon.spy(object, "test", ["get", "set"]);
+
+object.test = 42;
+assert(spy.set.calledOnce);
+
+assert.equals(object.test, 84);
+assert(spy.get.calledOnce);
+```
 
 ### Creating spies: `sinon.spy()` Method Signatures
 
@@ -79,6 +105,16 @@ all [calls][call]. The following is a slightly contrived example:
     all cases. The original method can be restored by calling
     <code>object.method.restore()</code>. The returned spy is the function
     object which replaced the original method. <code>spy === object.method</code>.
+  </dd>
+  <dt><code>var spy = sinon.spy(object, "property", types);</code></dt>
+  <dd>
+    Creates a spy for <code>object.property</code> descriptor and replaces the
+    original accessor methods (`get`, `set`) listed in the <code>types</code>
+    array with a spy. The spies act exactly like the original accessors in all
+    cases. The original accessors can be restored by calling
+    <code>spy.restore()</code>. The returned spy is the object which replaced
+    the original property descriptor. <code>spy.get ===
+    Object.getOwnPropertyDescriptor(object, 'property').get</code>.
   </dd>
 </dl>
 
@@ -241,7 +277,7 @@ occurred between `anotherSpy` and `spy`.
 
 #### `spy.calledOn(obj);`
 
-Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](matchers)).
+Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers][matchers]).
 
 
 #### `spy.alwaysCalledOn(obj);`
@@ -346,7 +382,7 @@ Returns `true` if spy always threw the provided exception object.
 
 Returns `true` if spy returned the provided value at least once.
 
-Uses deep comparison for objects and arrays. Use `spy.returned(sinon.match.same(obj))` for strict comparison (see [matchers](matchers)).
+Uses deep comparison for objects and arrays. Use `spy.returned(sinon.match.same(obj))` for strict comparison (see [matchers][matchers]).
 
 
 #### `spy.alwaysReturned(obj);`
@@ -436,3 +472,4 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 [call]: ../spy-call
+[matchers]: ../matchers

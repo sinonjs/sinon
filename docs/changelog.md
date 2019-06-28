@@ -5,6 +5,93 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+7.3.2 / 2019-04-17
+==================
+
+  * Update Lolex to bring in fix for sinonjs/lolex#232 (queueMicrotask warning)
+
+7.3.1 / 2019-03-27
+==================
+
+  * Fix security issues
+  * Update @sinonjs/samsam to v3.3.1
+
+7.3.0 / 2019-03-20
+==================
+
+  * Simplify Circle CI setup
+  * Add a Docker Compose config file for testing the setup locally
+  * Inject createStubInstance and fake functionality
+  * Remove unused prop 'injectIntoThis'
+  * Fix #1974 by upgrading to @sinonjs/samsam@3.3.0
+
+7.2.7 / 2019-03-04
+==================
+
+  * Retain spy function names and fix spy.named(name) (#1987)
+  * Document spying on accessors (#1976)
+
+7.2.6 / 2019-03-01
+==================
+
+  * Upgrade @sinonjs/formatio
+  * Set `fake.lastArg` to last argument regardless of type
+
+7.2.5 / 2019-02-27
+==================
+
+  * don't call extends.nonEnum in spy.resetHistory (#1984)
+
+7.2.4 / 2019-02-18
+==================
+
+  * minor package updates
+  * Update  eslint-plugin-mocha
+  * Fix high prio audit warnings
+  * Update nise to use @sinonjs/text-encoding
+  * Make all properties non-enumerable in spies, stubs, mocks and fakes
+  * docs(sandbox): add example for default sandbox
+
+7.2.3 / 2019-01-19
+==================
+
+  * Update @sinonjs/nise
+  * Fix stubbing function objects (#1968)
+
+7.2.2 / 2018-12-12
+==================
+
+  * Fix mock.withArgs using matchers (#1961)
+
+7.2.1 / 2018-12-12
+==================
+
+  * #1957: check for truthiness before checking whether optional override is a stub
+  * Upgrade @sinonjs/samsam
+  * Upgrade @sinonjs/referee to v3
+
+7.2.0 / 2018-12-10
+==================
+
+  * Upgrade to samsam 3 (#1955)
+  * Rename History.md to CHANGELOG.md
+
+7.1.1 / 2018-10-31
+==================
+
+  * Make the spy functions non enumerable so that printing it is more concise (#1936)
+
+7.1.0 / 2018-10-25
+==================
+
+  * Issue #1852: Add a way to pass a global context to lolex when calling useFakeTimers
+  * Get latest 'nise' patch
+
+7.0.0 / 2018-10-14
+==================
+
+  * Update to Lolex 3: no negative ticks allowed
+
 6.3.5 / 2018-10-03
 ==================
 

@@ -2,7 +2,7 @@
 
 var referee = require("@sinonjs/referee");
 var createSpy = require("../lib/sinon/spy");
-var sinonMatch = require("../lib/sinon/match");
+var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -62,13 +62,13 @@ function spyCalledTests(method) {
         it("uses matcher", function() {
             this.spy("abc");
 
-            assert(this.spy[method](sinonMatch.typeOf("string")));
+            assert(this.spy[method](match.typeOf("string")));
         });
 
         it("uses matcher in object", function() {
             this.spy({ some: "abc" });
 
-            assert(this.spy[method]({ some: sinonMatch.typeOf("string") }));
+            assert(this.spy[method]({ some: match.typeOf("string") }));
         });
 
         // https://github.com/sinonjs/sinon/issues/1245
@@ -205,6 +205,16 @@ function spyNeverCalledTests(method) {
             assert(this.spy[method](1, 2, 3));
         });
     };
+}
+
+function verifyFunctionName(func, expectedName) {
+    var descriptor = Object.getOwnPropertyDescriptor(func, "name");
+    if (descriptor && descriptor.configurable) {
+        // IE 11 functions don't have a name.
+        // Safari 9 has names that are not configurable.
+        assert.equals(descriptor.value, expectedName);
+        assert.equals(func.name, expectedName);
+    }
 }
 
 describe("spy", function() {
@@ -423,10 +433,11 @@ describe("spy", function() {
     });
 
     describe(".named", function() {
-        it("sets displayName", function() {
+        it("sets name and displayName", function() {
             var spy = createSpy();
             var retval = spy.named("beep");
             assert.equals(spy.displayName, "beep");
+            verifyFunctionName(spy, "beep");
             assert.same(spy, retval);
         });
     });
@@ -504,6 +515,17 @@ describe("spy", function() {
             });
 
             assert.exception(spy, err);
+        });
+
+        it("retains function name", function() {
+            function test() {
+                return;
+            }
+
+            var spy = createSpy.create(test);
+
+            assert.equals(spy.displayName, "test");
+            verifyFunctionName(spy, "test");
         });
 
         it("retains function length 0", function() {
@@ -759,7 +781,7 @@ describe("spy", function() {
         });
 
         it("is true if called with matcher that returns true", function() {
-            var matcher = sinonMatch(function() {
+            var matcher = match(function() {
                 return true;
             });
             this.spy();
@@ -768,7 +790,7 @@ describe("spy", function() {
         });
 
         it("is false if called with matcher that returns false", function() {
-            var matcher = sinonMatch(function() {
+            var matcher = match(function() {
                 return false;
             });
             this.spy();
@@ -782,7 +804,7 @@ describe("spy", function() {
             this.spy.call(expected);
 
             this.spy.calledOn(
-                sinonMatch(function(value) {
+                match(function(value) {
                     actual = value;
                 })
             );
@@ -1632,8 +1654,8 @@ describe("spy", function() {
 
             spy();
 
-            assert.isFalse(spy.returned(sinonMatch.same({ id: 42 })));
-            assert(spy.returned(sinonMatch.same(object)));
+            assert.isFalse(spy.returned(match.same({ id: 42 })));
+            assert(spy.returned(match.same(object)));
         });
     });
 
@@ -2849,6 +2871,64 @@ describe("spy", function() {
             for (var i = 0; i < 10; i++) {
                 assert.isTrue(createSpy().id.indexOf("spy#") === 0);
             }
+        });
+    });
+
+    describe("non enumerable properties", function() {
+        it("create and call spy apis", function() {
+            var spy = createSpy();
+            assert.equals(Object.keys(spy), []);
+
+            // call spy and verify no enumerable properties are added
+            spy(15);
+            assert.equals(Object.keys(spy), []);
+
+            // it should still work to add properties
+            spy.fooBar = 1;
+            assert.equals(Object.keys(spy), ["fooBar"]);
+
+            // call some spy APIs and verify no enumerable properties are added
+            spy.withArgs(1);
+            // eslint-disable-next-line no-unused-vars
+            var val = spy.called;
+            spy.calledBefore(createSpy());
+            spy.calledAfter(createSpy());
+            spy.calledOn(undefined);
+            spy.calledWith(15);
+            spy.calledWithNew();
+            spy.threw();
+            spy.returned("ret");
+            val = spy.thisValues.length;
+            val = spy.exceptions.length;
+            val = spy.returnValues.length;
+            assert.equals(Object.keys(spy), ["fooBar"]);
+
+            // verify that reset history doesn't change enumerable properties
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), ["fooBar"]);
+        });
+
+        it("create spy from function", function() {
+            var func = function() {
+                throw new Error("aError");
+            };
+            func.aProp = 42;
+            var spy = createSpy.create(func);
+
+            assert.equals(spy.aProp, 42);
+            assert.equals(Object.keys(spy), Object.keys(func));
+            assert.equals(Object.keys(spy), ["aProp"]);
+
+            // eslint-disable-next-line no-restricted-syntax
+            try {
+                spy();
+            } catch (e) {
+                // empty
+            }
+            spy.threw();
+
+            spy.resetHistory();
+            assert.equals(Object.keys(spy), ["aProp"]);
         });
     });
 });

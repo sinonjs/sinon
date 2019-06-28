@@ -4,8 +4,8 @@ var referee = require("@sinonjs/referee");
 var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
-var sinonMatch = require("../lib/sinon/match");
-var deprecated = require("../lib/sinon/util/core/deprecated");
+var match = require("@sinonjs/samsam").createMatcher;
+var deprecated = require("@sinonjs/commons").deprecated;
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
@@ -1267,11 +1267,9 @@ describe("stub", function() {
             assert.equals(obj[0](), "stubbed value");
         });
 
-        it("does not stub function object", function() {
+        it("does not stub string", function() {
             assert.exception(function() {
-                createStub(function() {
-                    return;
-                });
+                createStub("test");
             });
         });
     });
@@ -1315,6 +1313,32 @@ describe("stub", function() {
             var object = {};
 
             assert.same(createStub(object), object);
+        });
+
+        it("returns function", function() {
+            var func = function() {
+                return;
+            };
+
+            assert.same(createStub(func), func);
+        });
+
+        it("stubs methods of function", function() {
+            var func = function() {
+                return;
+            };
+            func.func1 = function() {
+                return;
+            };
+            // eslint-disable-next-line no-proto
+            func.__proto__.func2 = function() {
+                return;
+            };
+
+            createStub(func);
+
+            assert.isFunction(func.func1.restore);
+            assert.isFunction(func.func2.restore);
         });
 
         it("only stubs functions", function() {
@@ -2179,9 +2203,9 @@ describe("stub", function() {
             });
         });
 
-        it("ensure stub recognizes sinonMatch fuzzy arguments", function() {
+        it("ensure stub recognizes samsam match fuzzy arguments", function() {
             var stub = createStub().returns(23);
-            stub.withArgs(sinonMatch({ foo: "bar" })).returns(99);
+            stub.withArgs(match({ foo: "bar" })).returns(99);
 
             assert.equals(stub(), 23);
             assert.equals(stub({ foo: "bar", bar: "foo" }), 99);
@@ -2202,7 +2226,7 @@ describe("stub", function() {
             assert.equals(stub(expectedArgument), secondMatchedValue);
         });
 
-        it("ensure stub uses last matching sinonMatch arguments", function() {
+        it("ensure stub uses last matching samsam match arguments", function() {
             var unmatchedValue = "0aa66a7d-3c50-49ef-8365-bdcab637b2dd";
             var firstMatchedValue = "1ab2c601-7602-4658-9377-3346f6814caa";
             var secondMatchedValue = "e2e31518-c4c4-4012-a61f-31942f603ffa";
@@ -2210,7 +2234,7 @@ describe("stub", function() {
 
             var stub = createStub().returns(unmatchedValue);
             stub.withArgs(expectedArgument).returns(firstMatchedValue);
-            stub.withArgs(sinonMatch(expectedArgument)).returns(secondMatchedValue);
+            stub.withArgs(match(expectedArgument)).returns(secondMatchedValue);
 
             assert.equals(stub(), unmatchedValue);
             assert.equals(stub(expectedArgument), secondMatchedValue);
@@ -2987,6 +3011,21 @@ describe("stub", function() {
             });
 
             assert.equals(3, stub.method());
+        });
+
+        it("allows providing null as a return value", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var stub = createStubInstance(Class, {
+                method: null
+            });
+
+            assert.equals(null, stub.method());
         });
 
         it("throws an exception when trying to override non-existing property", function() {

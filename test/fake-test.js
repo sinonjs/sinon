@@ -143,6 +143,18 @@ describe("fake", function() {
             f(46);
             assert.equals(f.lastArg, 46);
 
+            f(false, true, 47, "string");
+            assert.equals(f.lastArg, "string");
+
+            f("string", false, true, 47);
+            assert.equals(f.lastArg, 47);
+
+            f(47, "string", false, true);
+            assert.equals(f.lastArg, true);
+
+            f(true, 47, "string", false);
+            assert.equals(f.lastArg, false);
+
             f();
             refute.defined(f.lastArg);
         });

@@ -26,6 +26,10 @@
 <a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
 </p>
 
+## Compatibility
+
+For details on compatibility and browser support, please see [`COMPATIBILITY.md`](COMPATIBILITY.md)
+
 ## Installation
 
 via [npm](https://github.com/npm/npm)

@@ -17,11 +17,14 @@
 
     {% assign url_parts = page.url | split: "/" %}
 
-    {%if page.url contains "/releases/v" and url_parts[2] != "latest" and url_parts[2] != {site.sinon.current_release} %}
+    {% if page.url contains "/releases/v" } %}
         {% assign canonical_page_url = "/releases/latest/" | append: url_parts[3] %}
-        <script>
-            site.showBanner = true; // cannot dynamically create a globally available Liquid variable
-        </script>
+
+        {% if url_parts[2] != {site.sinon.current_release} %}
+            <script>
+                site.showBanner = true; // cannot dynamically create a globally available Liquid variable
+            </script>
+        {% endif %}
     {% else %}
         {% assign canonical_page_url = page.url | replace:'index.html','' %}
     {% endif %}

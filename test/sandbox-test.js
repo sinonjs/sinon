@@ -3,20 +3,20 @@
 var referee = require("@sinonjs/referee");
 var samsam = require("@sinonjs/samsam");
 var assert = referee.assert;
-var deprecated = require("../lib/sinon/util/core/deprecated");
+var deprecated = require("@sinonjs/commons").deprecated;
 var refute = referee.refute;
 var fakeXhr = require("nise").fakeXhr;
 var fakeServerWithClock = require("nise").fakeServerWithClock;
 var fakeServer = require("nise").fakeServer;
+var match = require("@sinonjs/samsam").createMatcher;
 var Sandbox = require("../lib/sinon/sandbox");
 var createSandbox = require("../lib/sinon/create-sandbox");
 var sinonFake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
-var sinonMatch = require("../lib/sinon/match");
 var sinonAssert = require("../lib/sinon/assert");
-var sinonClock = require("../lib/sinon/util/fake_timers");
+var sinonClock = require("../lib/sinon/util/fake-timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
 var supportPromise = Boolean(global.Promise);
@@ -31,7 +31,8 @@ referee.add("fakeServerWithClock", {
     assert: function(obj, expected) {
         return samsam.deepEqual(obj, expected) && fakeServer.create.calledOn(fakeServerWithClock);
     },
-    assertMessage: "Expected object ${0} to be a fake server with clock"
+    assertMessage: "Expected object ${0} to be a fake server with clock",
+    refuteMessage: "Expected object ${0} not to be a fake server with clock"
 });
 
 describe("Sandbox", function() {
@@ -42,7 +43,7 @@ describe("Sandbox", function() {
     it("exposes match", function() {
         var sandbox = new Sandbox();
 
-        assert.same(sandbox.match, sinonMatch);
+        assert.same(sandbox.match, match);
     });
 
     it("exposes assert", function() {
@@ -1550,12 +1551,42 @@ describe("Sandbox", function() {
             this.sandbox.restore();
         });
 
-        it("injects spy, stub, mock", function() {
+        it("injects spy, stub, mock, fake, replace, replaceSetter, createStubInstance", function() {
             this.sandbox.inject(this.obj);
 
             assert.isFunction(this.obj.spy);
             assert.isFunction(this.obj.stub);
             assert.isFunction(this.obj.mock);
+            assert.isFunction(this.obj.createStubInstance);
+            assert.isFunction(this.obj.fake);
+            assert.isFunction(this.obj.replace);
+            assert.isFunction(this.obj.replaceSetter);
+            assert.isFunction(this.obj.replaceGetter);
+        });
+
+        it("should inject callable functions", function() {
+            /* eslint-disable no-empty-function, accessor-pairs */
+            this.sandbox.inject(this.obj);
+
+            var myObj = { a: function() {} };
+            function MyClass() {}
+            Object.defineProperty(myObj, "b", {
+                get: function() {
+                    return 42;
+                },
+                configurable: true
+            });
+            Object.defineProperty(myObj, "c", { set: function() {}, configurable: true });
+
+            refute.exception(
+                function() {
+                    this.obj.createStubInstance(MyClass);
+                    var fake = this.obj.fake();
+                    this.obj.replace(myObj, "a", fake);
+                    this.obj.replaceGetter(myObj, "b", fake);
+                    this.obj.replaceSetter(myObj, "c", fake);
+                }.bind(this)
+            );
         });
 
         it("does not define clock, server and requests objects", function() {
@@ -1670,7 +1701,6 @@ describe("Sandbox", function() {
         it("yields stub, mock as arguments", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["stub", "mock"]
                 })
             );
@@ -1685,7 +1715,6 @@ describe("Sandbox", function() {
         it("yields spy, stub, mock as arguments", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["spy", "stub", "mock"]
                 })
             );
@@ -1700,7 +1729,6 @@ describe("Sandbox", function() {
         it("does not yield server when not faking xhr", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["server", "stub", "mock"],
                     useFakeServer: false
                 })
@@ -1739,7 +1767,6 @@ describe("Sandbox", function() {
                 it("yields server when faking xhr", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server", "stub", "mock"]
                         })
                     );
@@ -1755,7 +1782,6 @@ describe("Sandbox", function() {
                 it("uses serverWithClock when faking xhr", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server"],
                             useFakeServer: fakeServerWithClock
                         })
@@ -1783,7 +1809,6 @@ describe("Sandbox", function() {
                 it("yields clock when faking timers", function() {
                     var sandbox = createSandbox(
                         sinonConfig({
-                            injectIntoThis: false,
                             properties: ["server", "clock"]
                         })
                     );
@@ -1845,7 +1870,6 @@ describe("Sandbox", function() {
         it("fakes specified timers", function() {
             var sandbox = createSandbox(
                 sinonConfig({
-                    injectIntoThis: false,
                     properties: ["clock"],
                     useFakeTimers: { toFake: ["Date", "setTimeout"] }
                 })
@@ -1883,7 +1907,7 @@ describe("Sandbox", function() {
                 })
             );
 
-            assert.same(object.match, sinonMatch);
+            assert.same(object.match, match);
 
             sandbox.restore();
         });
