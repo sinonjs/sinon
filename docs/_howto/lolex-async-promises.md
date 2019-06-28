@@ -62,7 +62,7 @@ it('should return 42 after one second', () => {
 });
 ```
 
-While returning a Promise from the Mocha’s test, we can still progress the timers
+While returning a Promise from Mocha’s test, we can still progress the timers
 using lolex, so the test passes almost instantly, and not in 1 second.
 
 Since `async` functions behave the same way as functions that return promises
