@@ -63,7 +63,11 @@ As above, but allows further configuration options, some of which are:
 - `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
 - `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
 
-Please visit the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full feature set.
+Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
+
+*Since `sinon@3.0.0`*
+
+`var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
 **Important note:** when faking `nextTick`, normal calls to `process.nextTick()` would not execute automatically as they would during normal event-loop phases. You would have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [lolex](https://github.com/sinonjs/lolex) documentation for more information.
 
@@ -108,11 +112,38 @@ setTimeout(function () {
 }, 35);
 ```
 
-Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
+Using fake timers with `async` / `await`:
 
-*Since `sinon@3.0.0`*
+```
+async function asyncFn() {
 
-`var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
+    await wait(100);
+
+    console.log('resolved 1', Date.now());
+
+    await wait(10);
+
+    console.log('resolved 2', Date.now());
+}
+
+async function test() {
+
+    const clock = sinon.useFakeTimers();
+
+    setTimeout(() => console.log('timeout', Date.now()), 200);
+
+    asyncFn(); // NOTE: no `await` here - it would hang, as the clock is stopped
+
+    await clock.tickAsync(200);
+}
+    
+// test() prints: 
+// - resolved 1 100
+// - resolved 2 110
+// - timeout 200
+```
+
+Note that in the above example, the synchronous `clock.tick(200)` would only print `timeout 200` and `resolved 1 200`. 
 
 
 #### `clock.tick(time);` / `await clock.tickAsync(time)`
