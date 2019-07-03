@@ -115,23 +115,29 @@ Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/l
 `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
 
-#### `clock.tick(time);`
+#### `clock.tick(time);` / `await clock.tickAsync(time)`
 
 Tick the clock ahead `time` milliseconds.
 
 Causes all timers scheduled within the affected time range to be called. `time` may be the number of milliseconds to advance the clock by or a human-readable string. Valid string formats are "08" for eight seconds, "01:00" for one minute and "02:34:10" for two hours, 34 minutes and ten seconds.
 
-time may be negative, which causes the clock to change but won't fire any callbacks.
+`time` may be negative, which causes the clock to change but won't fire any callbacks.
 
-#### `clock.next();`
+The `tickAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
+
+#### `clock.next();` / `await clock.nextAsync()`
 
 Advances the clock to the the moment of the first scheduled timer, firing it.
 
-#### `clock.runAll();`
+The `nextAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
+
+#### `clock.runAll();` / `await clock.runAllAsync()`
 
 This runs all pending timers until there are none remaining. If new timers are added while it is executing they will be run as well.
 
 This makes it easier to run asynchronous tests to completion without worrying about the number of timers they use, or the delays in those timers.
+
+The `runAllAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
 
 #### `clock.restore();`
 
