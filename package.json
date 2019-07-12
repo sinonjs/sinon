@@ -109,6 +109,7 @@
     "LICENSE",
     "README.md"
   ],
+  "browser": "./lib/sinon.js",
   "main": "./lib/sinon.js",
   "module": "./pkg/sinon-esm.js",
   "cdn": "./pkg/sinon.js",
