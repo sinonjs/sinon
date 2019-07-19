@@ -117,7 +117,7 @@
   "esm": {
     "cjs": {
       "mutableNamespace": false,
-      "cache":true
+      "cache": true
     },
     "mode": "auto"
   }
