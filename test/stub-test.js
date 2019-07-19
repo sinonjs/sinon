@@ -3136,6 +3136,73 @@ describe("stub", function() {
         });
     });
 
+    describe(".callThroughWithNew", function() {
+        it("does not call original function with new when arguments match conditional stub", function() {
+            // We need a function here because we can't wrap properties that are already stubs
+            var callCount = 0;
+            var OriginalClass = function SomeClass() {
+                this.foo = "bar";
+                callCount++;
+            };
+
+            var myObj = {
+                MyClass: OriginalClass
+            };
+
+            var propStub = createStub(myObj, "MyClass");
+            propStub.withArgs("foo").returns({ foo: "bar" });
+            propStub.callThroughWithNew(propStub);
+
+            var result = new myObj.MyClass("foo");
+
+            assert.equals(result.foo, "bar");
+            assert.equals(callCount, 0);
+        });
+
+        it("calls original function with new when arguments do not match conditional stub", function() {
+            var callCount = 0;
+            function OriginalClass() {
+                this.foo = "baz";
+                callCount++;
+            }
+
+            var myObj = {
+                MyClass: OriginalClass
+            };
+
+            var propStub = createStub(myObj, "MyClass");
+            propStub.withArgs("foo").returns({ foo: "bar" });
+            propStub.callThroughWithNew(propStub);
+
+            var result = new myObj.MyClass("not foo");
+            assert.equals(result.foo, "baz");
+            assert.equals(callCount, 1);
+        });
+
+        it("calls original function with new with same arguments when call does not match conditional stub", function() {
+            // We need a function here because we can't wrap properties that are already stubs
+            var callArgs = [];
+
+            function OriginalClass() {
+                callArgs = arguments;
+                this.foo = "baz";
+            }
+
+            var myObj = {
+                MyClass: OriginalClass
+            };
+
+            var propStub = createStub(myObj, "MyClass");
+            propStub.withArgs("foo").returns({ foo: "bar" });
+            propStub.callThroughWithNew(propStub);
+
+            var result = new myObj.MyClass("not foo");
+            assert.equals(callArgs[0].length, 1);
+            assert.equals(callArgs[0][0], "not foo");
+            assert.equals(result.foo, "baz");
+        });
+    });
+
     describe(".get", function() {
         it("allows users to stub getter functions for properties", function() {
             var myObj = {
