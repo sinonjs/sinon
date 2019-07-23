@@ -4,7 +4,6 @@ var sinon = require("../lib/sinon.js");
 var fake = sinon.fake;
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
-var refute = referee.refute;
 
 referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
