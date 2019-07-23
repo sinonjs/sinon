@@ -405,6 +405,27 @@ obj.sum.callThrough();
 
 obj.sum(2, 2); // 'bar'
 obj.sum(1, 2); // 3
+
+
+#### `stub.callThroughWithNew();`
+
+Causes the original method wrapped into the stub to be called using the `new` operator when none of the conditional stubs are matched.
+
+```javascript
+var obj = {};
+
+obj.Sum = function MyConstructor(a, b) {
+    this.result = a + b;
+};
+
+sinon
+    .stub(obj, 'Sum')
+    .callThroughWithNew()
+    .withArgs(1, 2)
+    .returns({ result: 9000 });
+
+(new obj.Sum(2, 2)).result;  // 4
+(new obj.Sum(1, 2)).result;  // 9000
 ```
 
 
