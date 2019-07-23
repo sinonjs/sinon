@@ -156,7 +156,7 @@ describe("fake", function() {
             assert.equals(f.lastArg, false);
 
             f();
-            refute.defined(f.lastArg);
+            assert.isUndefined(f.lastArg);
         });
     });
 

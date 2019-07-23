@@ -1215,7 +1215,7 @@ describe("sinonSpy.call", function() {
                 sinonSpy(myObj, "ouch");
             });
 
-            refute.defined(myObj.ouch);
+            assert.isUndefined(myObj.ouch);
         });
 
         it("throws if spying on non-existent object", function() {

@@ -128,7 +128,7 @@ describe("stub", function() {
         it("returns undefined", function() {
             var stub = createStub.create();
 
-            refute.defined(stub());
+            assert.isUndefined(stub());
         });
 
         it("supersedes previous throws", function() {
@@ -794,7 +794,7 @@ describe("stub", function() {
 
             assert.exception(stub);
 
-            refute.defined(stub.invoking);
+            assert.isUndefined(stub.invoking);
         });
     });
 
@@ -1441,7 +1441,7 @@ describe("stub", function() {
                 createStub(myObj, "ouch");
             });
 
-            refute.defined(myObj.ouch);
+            assert.isUndefined(myObj.ouch);
         });
     });
 
@@ -2504,7 +2504,7 @@ describe("stub", function() {
 
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 2);
-                refute.defined(stub(5));
+                assert.isUndefined(stub(5));
             });
 
             it("does not create undefined behaviour just by calling onCall", function() {
@@ -2525,13 +2525,13 @@ describe("stub", function() {
 
                 assert.same(stub(5), 1);
                 assert.same(stub(5), 2);
-                refute.defined(stub(5));
+                assert.isUndefined(stub(5));
 
                 stub.reset();
 
                 assert.same(stub(5), undefined);
                 assert.same(stub(5), undefined);
-                refute.defined(stub(5));
+                assert.isUndefined(stub(5));
             });
 
             it("throws an understandable error when trying to use withArgs on behavior", function() {
@@ -2777,7 +2777,7 @@ describe("stub", function() {
 
             stub.resetBehavior();
 
-            refute.defined(stub());
+            assert.isUndefined(stub());
         });
 
         it("cleans behavior of fakes returned by withArgs", function() {
@@ -2786,7 +2786,7 @@ describe("stub", function() {
 
             stub.resetBehavior();
 
-            refute.defined(stub("lolz"));
+            assert.isUndefined(stub("lolz"));
         });
 
         it("does not clean parents' behavior when called on a fake returned by withArgs", function() {
@@ -2804,7 +2804,7 @@ describe("stub", function() {
 
             stub.resetBehavior();
 
-            refute.defined(stub("defined"));
+            assert.isUndefined(stub("defined"));
         });
 
         it("cleans 'returnsThis' behavior", function() {
@@ -2814,7 +2814,7 @@ describe("stub", function() {
 
             instance.stub.resetBehavior();
 
-            refute.defined(instance.stub());
+            assert.isUndefined(instance.stub());
         });
 
         it("cleans 'resolvesThis' behavior, so the stub does not resolve nor returns anything", function() {
@@ -2824,7 +2824,7 @@ describe("stub", function() {
 
             instance.stub.resetBehavior();
 
-            refute.defined(instance.stub());
+            assert.isUndefined(instance.stub());
         });
 
         describe("does not touch properties that are reset by 'reset'", function() {
@@ -2850,10 +2850,10 @@ describe("stub", function() {
                 assert.equals(stub.returnValues.length, 3);
                 assert.equals(stub.exceptions.length, 3);
                 assert.equals(stub.thisValues.length, 3);
-                assert.defined(stub.firstCall);
-                assert.defined(stub.secondCall);
-                assert.defined(stub.thirdCall);
-                assert.defined(stub.lastCall);
+                refute.isUndefined(stub.firstCall);
+                refute.isUndefined(stub.secondCall);
+                refute.isUndefined(stub.thirdCall);
+                refute.isUndefined(stub.lastCall);
             });
 
             it("call order state", function() {

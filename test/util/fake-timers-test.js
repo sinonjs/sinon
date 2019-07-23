@@ -792,7 +792,7 @@ describe("fakeTimers.clock", function() {
         } else {
             describe("unsupported now", function() {
                 it("is undefined", function() {
-                    refute.defined(this.clock.Date.now);
+                    assert.isUndefined(this.clock.Date.now);
                 });
             });
         }
@@ -818,7 +818,7 @@ describe("fakeTimers.clock", function() {
         } else {
             describe("unsupported toSource", function() {
                 it("is undefined", function() {
-                    refute.defined(this.clock.Date.toSource);
+                    assert.isUndefined(this.clock.Date.toSource);
                 });
             });
         }
@@ -1047,7 +1047,7 @@ describe("fakeTimers.clock", function() {
             this.global.Date.now = null;
             this.clock = fakeTimers.useFakeTimers(0);
 
-            refute.defined(Date.now);
+            assert.isUndefined(Date.now);
         });
 
         it("mirrors custom Date properties", function() {
@@ -1192,7 +1192,7 @@ describe("fakeTimers.clock", function() {
                 clearTimeout: sinonStub.create()
             };
             this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
-            refute.defined(this.clock.performance);
+            assert.isUndefined(this.clock.performance);
             assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
             this.clock.restore();
         });

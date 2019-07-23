@@ -1832,10 +1832,10 @@ describe("Sandbox", function() {
                     assert.equals(sandbox.args.length, 0);
                     assert.equals(object.server, this.fakeServer);
                     assert.clock(object.clock);
-                    refute.defined(object.spy);
-                    refute.defined(object.stub);
-                    refute.defined(object.mock);
-                    refute.defined(object.requests);
+                    assert.isUndefined(object.spy);
+                    assert.isUndefined(object.stub);
+                    assert.isUndefined(object.mock);
+                    assert.isUndefined(object.requests);
 
                     sandbox.restore();
                 });
@@ -1858,7 +1858,7 @@ describe("Sandbox", function() {
                     assert.isFunction(object.stub);
                     assert.isFunction(object.mock);
                     assert.isArray(object.requests);
-                    refute.defined(object.sandbox);
+                    assert.isUndefined(object.sandbox);
 
                     sandbox.restore();
                 });
