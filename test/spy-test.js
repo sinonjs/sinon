@@ -255,7 +255,7 @@ describe("spy", function() {
     it("does not define create method", function() {
         var spy = createSpy.create();
 
-        refute.defined(spy.create);
+        assert.isUndefined(spy.create);
     });
 
     it("does not overwrite original create property", function() {
@@ -351,15 +351,15 @@ describe("spy", function() {
             assert.equals(spy.withArgs(1, 2).callCount, 1);
 
             // assert call
-            refute.defined(spy.getCall(0).args[0]);
+            assert.isUndefined(spy.getCall(0).args[0]);
             assert.equals(spy.getCall(1).args[0], 1);
-            refute.defined(spy.getCall(1).args[1]);
+            assert.isUndefined(spy.getCall(1).args[1]);
             assert.equals(spy.getCall(2).args[0], 1);
             assert.equals(spy.getCall(2).args[1], 1);
-            refute.defined(spy.getCall(2).args[2]);
+            assert.isUndefined(spy.getCall(2).args[2]);
             assert.equals(spy.getCall(3).args[0], 1);
             assert.equals(spy.getCall(3).args[1], 2);
-            refute.defined(spy.getCall(3).args[2]);
+            assert.isUndefined(spy.getCall(3).args[2]);
             ["args", "callCount", "callId"].forEach(function(propName) {
                 assert.equals(spy.withArgs(1).getCall(0)[propName], spy.getCall(1)[propName]);
                 assert.equals(spy.withArgs(1).getCall(1)[propName], spy.getCall(2)[propName]);
@@ -1531,7 +1531,7 @@ describe("spy", function() {
             this.spy();
 
             assert.equals(this.spy.exceptions.length, 1);
-            refute.defined(this.spy.exceptions[0]);
+            assert.isUndefined(this.spy.exceptions[0]);
         });
 
         it("stacks up exceptions and undefined", function() {
@@ -1557,11 +1557,11 @@ describe("spy", function() {
             spy();
 
             assert.equals(spy.exceptions.length, 5);
-            refute.defined(spy.exceptions[0]);
+            assert.isUndefined(spy.exceptions[0]);
             assert.equals(spy.exceptions[1], err);
-            refute.defined(spy.exceptions[2]);
+            assert.isUndefined(spy.exceptions[2]);
             assert.equals(spy.exceptions[3], err);
-            refute.defined(spy.exceptions[4]);
+            assert.isUndefined(spy.exceptions[4]);
         });
     });
 
@@ -1665,7 +1665,7 @@ describe("spy", function() {
             spy();
 
             assert.equals(spy.returnValues.length, 1);
-            refute.defined(spy.returnValues[0]);
+            assert.isUndefined(spy.returnValues[0]);
         });
 
         it("contains return value", function() {
@@ -1688,7 +1688,7 @@ describe("spy", function() {
             assert.exception(spy);
 
             assert.equals(spy.returnValues.length, 1);
-            refute.defined(spy.returnValues[0]);
+            assert.isUndefined(spy.returnValues[0]);
         });
 
         it("contains the created object for spied constructors", function() {
@@ -1742,11 +1742,11 @@ describe("spy", function() {
             spy();
 
             assert.equals(spy.returnValues.length, 5);
-            refute.defined(spy.returnValues[0]);
+            assert.isUndefined(spy.returnValues[0]);
             assert.equals(spy.returnValues[1], 2);
-            refute.defined(spy.returnValues[2]);
+            assert.isUndefined(spy.returnValues[2]);
             assert.equals(spy.returnValues[3], 4);
-            refute.defined(spy.returnValues[4]);
+            assert.isUndefined(spy.returnValues[4]);
         });
     });
 
