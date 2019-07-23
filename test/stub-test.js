@@ -3176,9 +3176,9 @@ describe("stub", function() {
             propStub.withArgs("foo").returns({ foo: "bar" });
             propStub.callThroughWithNew(propStub);
 
-            var result = new myObj.MyClass("not foo", "definitely not foo");
+            var result = new myObj.MyClass("not foo", ["definitely", "not", "foo"]);
             assert.equals(callArgs[0], "not foo");
-            assert.equals(callArgs[1], "definitely not foo");
+            assert.equals(callArgs[1], ["definitely", "not", "foo"]);
             assert.equals(result.foo, "baz");
         });
     });
