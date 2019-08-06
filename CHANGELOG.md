@@ -1,4 +1,17 @@
 
+7.4.1 / 2019-08-06
+==================
+
+  * Update nise and lolex (minor versions)
+  * add callThroughWithNew method
+  * add browser field
+  * Create COMPATIBILITY.md (#2051)
+  * Fix sinon.resetHistory() does not reset history (#2022)
+
+7.4.0
+=====
+  * Was unpublished (see #2071)
+
 7.3.2 / 2019-04-17
 ==================
 
