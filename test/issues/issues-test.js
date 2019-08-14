@@ -657,4 +657,27 @@ describe("issues", function() {
             });
         });
     });
+
+    describe("#2073 - sinon.createStubInstance()", function() {
+        function Foo() {
+            return;
+        }
+        Foo.prototype.testMethod = function() {
+            return 1;
+        };
+
+        it("should override the method", function() {
+            var thing = sinon.createStubInstance(Foo, {
+                testMethod: sinon.stub().returns(2)
+            });
+            assert.equals(thing.testMethod(), 2);
+        });
+
+        it("should support calling without object binding", function() {
+            var createStubInstance = sinon.createStubInstance;
+            refute.exception(function() {
+                createStubInstance(Foo);
+            });
+        });
+    });
 });
