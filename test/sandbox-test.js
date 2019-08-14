@@ -280,6 +280,71 @@ describe("Sandbox", function() {
                 });
             }
         });
+
+        it("allows providing optional overrides", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var stub = this.sandbox.createStubInstance(Class, {
+                method: sinonStub().returns(3)
+            });
+
+            assert.equals(3, stub.method());
+        });
+
+        it("allows providing optional returned values", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var stub = this.sandbox.createStubInstance(Class, {
+                method: 3
+            });
+
+            assert.equals(3, stub.method());
+        });
+
+        it("allows providing null as a return value", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var stub = this.sandbox.createStubInstance(Class, {
+                method: null
+            });
+
+            assert.equals(null, stub.method());
+        });
+
+        it("throws an exception when trying to override non-existing property", function() {
+            var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
+                return;
+            };
+
+            var sandbox = this.sandbox;
+
+            assert.exception(
+                function() {
+                    sandbox.createStubInstance(Class, {
+                        foo: sinonStub().returns(3)
+                    });
+                },
+                { message: "Cannot stub foo. Property does not exist!" }
+            );
+        });
     });
 
     describe(".stub", function() {
