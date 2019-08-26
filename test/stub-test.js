@@ -3296,8 +3296,8 @@ describe("stub", function() {
         });
 
         it("replaces old setters", function() {
-            // eslint-disable-next-line accessor-pairs
             var myObj = {
+                // eslint-disable-next-line accessor-pairs
                 set prop(val) {
                     fail("should not call the old setter");
                 }
@@ -3333,8 +3333,8 @@ describe("stub", function() {
         });
 
         it("can restore stubbed setters for properties", function() {
-            // eslint-disable-next-line accessor-pairs
             var myObj = {
+                // eslint-disable-next-line accessor-pairs
                 set prop(val) {
                     this.otherProp = "bar";
                     return "bar";
