@@ -867,8 +867,8 @@ describe("Sandbox", function() {
         describe("when asked to replace a setter", function() {
             it("should throw an Error", function() {
                 var sandbox = this.sandbox;
-                // eslint-disable-next-line accessor-pairs
                 var object = {
+                    // eslint-disable-next-line accessor-pairs
                     set foo(value) {
                         this.prop = value;
                     }
@@ -950,8 +950,8 @@ describe("Sandbox", function() {
 
         it("should error when descriptor has no getter", function() {
             var sandbox = this.sandbox;
-            // eslint-disable-next-line accessor-pairs
             var object = {
+                // eslint-disable-next-line accessor-pairs
                 set catpants(_) {
                     return;
                 }
@@ -1027,8 +1027,8 @@ describe("Sandbox", function() {
         });
 
         it("should replace setter", function() {
-            // eslint-disable-next-line accessor-pairs
             var object = {
+                // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
@@ -1045,8 +1045,8 @@ describe("Sandbox", function() {
         });
 
         it("should return replacement", function() {
-            // eslint-disable-next-line accessor-pairs
             var object = {
+                // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
@@ -1061,8 +1061,8 @@ describe("Sandbox", function() {
         });
 
         it("should replace an inherited property", function() {
-            // eslint-disable-next-line accessor-pairs
             var object = Object.create({
+                // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
@@ -1117,8 +1117,8 @@ describe("Sandbox", function() {
         describe("when called with a non-function replacement argument", function() {
             it("should throw a TypeError", function() {
                 var sandbox = this.sandbox;
-                // eslint-disable-next-line accessor-pairs
                 var object = {
+                    // eslint-disable-next-line accessor-pairs
                     set foo(value) {
                         this.prop = value;
                     },
@@ -1135,8 +1135,8 @@ describe("Sandbox", function() {
         });
 
         it("allows restoring setters", function() {
-            // eslint-disable-next-line accessor-pairs
             var object = {
+                // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
@@ -1156,8 +1156,8 @@ describe("Sandbox", function() {
 
         it("should refuse to replace a setter twice", function() {
             var sandbox = this.sandbox;
-            // eslint-disable-next-line accessor-pairs
             var object = {
+                // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     return;
                 }
