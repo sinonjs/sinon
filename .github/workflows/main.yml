@@ -29,8 +29,11 @@ jobs:
     - name: npm test
       run: npm run test-node
 
+    - name: generate coverage
+      run: npm run test-coverage -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+      if: matrix.node-version == 10
     - name: code coverage
-      run: |
-        npm run test-coverage -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
-        cat ./coverage/lcov.info | npx coveralls lib
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
       if: matrix.node-version == 10
