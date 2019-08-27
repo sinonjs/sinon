@@ -3,13 +3,12 @@ name: Node CI
 on: [push]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [8, 10, 12]
 
     steps:
     - uses: actions/checkout@v1
@@ -17,9 +16,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm ci
-      run: npm ci
-
+    - run: npm ci
     - name: Pre-Test
       run: |
         npm run lint
@@ -27,8 +24,13 @@ jobs:
         npm run test-headless -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
         npm run test-webworker -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
         npm run test-esm-bundle
-      if: matrix.node-version == '10.x'
+      if: matrix.node-version == 10
 
     - name: npm test
       run: npm run test-node
 
+    - name: code coverage
+      run: |
+        npm run test-coverage -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+        cat ./coverage/lcov.info | coveralls lib
+      if: matrix.node-version == 10
