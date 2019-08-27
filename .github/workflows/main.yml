@@ -32,5 +32,5 @@ jobs:
     - name: code coverage
       run: |
         npm run test-coverage -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
-        cat ./coverage/lcov.info | coveralls lib
+        cat ./coverage/lcov.info | npx coveralls lib
       if: matrix.node-version == 10
