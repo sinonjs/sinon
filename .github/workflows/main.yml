@@ -1,0 +1,39 @@
+name: Node CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8, 10, 12]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: Pre-Test
+      run: |
+        npm run lint
+
+        npm run test-headless -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+        npm run test-webworker -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+        npm run test-esm-bundle
+      if: matrix.node-version == 10
+
+    - name: npm test
+      run: npm run test-node
+
+    - name: generate coverage
+      run: npm run test-coverage -- --chrome $(which google-chrome-stable) --allow-chrome-as-root
+      if: matrix.node-version == 10
+    - name: coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+      if: matrix.node-version == 10
