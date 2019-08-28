@@ -835,6 +835,104 @@ describe("assert", function() {
             });
         });
 
+        describe(".calledOnceWithExactly", function() {
+            requiresValidFake("calledOnceWithExactly");
+
+            it("fails when method fails", function() {
+                var object = {};
+                sinonStub(this.stub, "calledOnceWithExactly").returns(false);
+                var stub = this.stub;
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub, object, 1);
+                });
+
+                assert(this.stub.calledOnceWithExactly.calledOnceWithExactly(object, 1));
+                assert(sinonAssert.fail.called);
+            });
+
+            it("passes when method doesn't fail", function() {
+                var object = {};
+                sinonStub(this.stub, "calledOnceWithExactly").returns(true);
+                var stub = this.stub;
+
+                refute.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub, object, 1);
+                });
+
+                assert(this.stub.calledOnceWithExactly.calledOnceWithExactly(object, 1));
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("calls pass callback", function() {
+                this.stub("yeah");
+                sinonAssert.calledOnceWithExactly(this.stub, "yeah");
+
+                assert(sinonAssert.pass.calledOnce);
+                assert(sinonAssert.pass.calledWith("calledOnceWithExactly"));
+            });
+
+            it("fails when method does not exist", function() {
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly();
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method is not stub", function() {
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly(function() {
+                        return;
+                    });
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method was not called", function() {
+                var stub = this.stub;
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when called with more than one argument", function() {
+                var stub = this.stub;
+                stub();
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub, 1);
+                });
+            });
+
+            it("passes when method was called", function() {
+                var stub = this.stub;
+                stub();
+
+                refute.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub);
+                });
+
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("fails when method was called more than once", function() {
+                var stub = this.stub;
+                stub();
+                stub();
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithExactly(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+        });
+
         describe(".neverCalledWith", function() {
             it("fails when method fails", function() {
                 var object = {};
@@ -871,7 +969,7 @@ describe("assert", function() {
             });
         });
 
-        describe(".threwTest", function() {
+        describe(".threw", function() {
             it("fails when method fails", function() {
                 sinonStub(this.stub, "threw").returns(false);
                 var stub = this.stub;
@@ -1113,6 +1211,7 @@ describe("assert", function() {
             assert.isFunction(test.assertCalledOn);
             assert.isFunction(test.assertCalledWith);
             assert.isFunction(test.assertCalledWithExactly);
+            assert.isFunction(test.assertCalledOnceWithExactly);
             assert.isFunction(test.assertThrew);
             assert.isFunction(test.assertCallCount);
         });
@@ -1128,6 +1227,7 @@ describe("assert", function() {
             assert.isFunction(assertCalledOn);
             assert.isFunction(assertCalledWith);
             assert.isFunction(assertCalledWithExactly);
+            assert.isFunction(assertCalledOnceWithExactly);
             assert.isFunction(assertThrew);
             assert.isFunction(assertCallCount);
             /*eslint-enable no-undef*/
@@ -1159,6 +1259,7 @@ describe("assert", function() {
             assert.isFunction(test.calledOn);
             assert.isFunction(test.calledWith);
             assert.isFunction(test.calledWithExactly);
+            assert.isFunction(test.calledOnceWithExactly);
             assert.isFunction(test.threw);
             assert.isFunction(test.callCount);
         });
@@ -1735,6 +1836,39 @@ describe("assert", function() {
             assert.equals(
                 this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
                 "expected doSomething to be called with exact arguments \n1\n3\n" + color.red("hey")
+            );
+        });
+
+        it("assert.calledOnceWithExactly exception messages", function() {
+            assert.equals(
+                this.message("calledOnceWithExactly", this.obj.doSomething, 1, 3, "bob").replace(/ at.*/g, ""),
+                "expected doSomething to be called once and with exact arguments "
+            );
+
+            this.obj.doSomething(4, 3, "bob");
+            assert.equals(
+                this.message("calledOnceWithExactly", this.obj.doSomething, 1, 3, "bob").replace(/ at.*/g, ""),
+                "expected doSomething to be called once and with exact arguments \n" +
+                    color.red("4") +
+                    " " +
+                    color.green("1") +
+                    " \n" +
+                    "3\n" +
+                    "bob"
+            );
+
+            this.obj.doSomething();
+            assert.equals(
+                this.message("calledOnceWithExactly", this.obj.doSomething).replace(/ at.*/g, ""),
+                "expected doSomething to be called once and with exact arguments \n" +
+                    "Call 1:\n" +
+                    color.red("4") +
+                    "\n" +
+                    color.red("3") +
+                    "\n" +
+                    color.red("bob") +
+                    "\n" +
+                    "Call 2:"
             );
         });
 
