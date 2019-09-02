@@ -1,4 +1,10 @@
 
+7.4.2 / 2019-09-02
+==================
+
+  * Restore sinon.createStubInstance() behaviour (#2073)
+  * Fix Typo in migration 6 and updated migration docs for migration from… (#2074)
+
 7.4.1 / 2019-08-06
 ==================
 
