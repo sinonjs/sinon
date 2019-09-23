@@ -2931,4 +2931,8 @@ describe("spy", function() {
             assert.equals(Object.keys(spy), ["aProp"]);
         });
     });
+
+    describe("everything", function() {
+        require("./shared-spy-stub-everything-tests")(createSpy);
+    });
 });
