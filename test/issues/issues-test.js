@@ -680,4 +680,15 @@ describe("issues", function() {
             });
         });
     });
+
+    describe("#2065", function() {
+        it("should restore the state of lastArg on the stub when resetting the sandbox", function() {
+            var sandbox = sinon.createSandbox();
+            var fake = sandbox.fake();
+            fake(1, 2, 3);
+            assert.equals(fake.lastArg, 3);
+            sandbox.reset();
+            refute.equals(fake.lastArg, 3);
+        });
+    });
 });
