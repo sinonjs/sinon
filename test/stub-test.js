@@ -1275,45 +1275,7 @@ describe("stub", function() {
     });
 
     describe("everything", function() {
-        it("stubs all methods of object without property", function() {
-            var obj = {
-                func1: function() {
-                    return;
-                },
-                func2: function() {
-                    return;
-                },
-                func3: function() {
-                    return;
-                }
-            };
-
-            createStub(obj);
-
-            assert.isFunction(obj.func1.restore);
-            assert.isFunction(obj.func2.restore);
-            assert.isFunction(obj.func3.restore);
-        });
-
-        it("stubs prototype methods", function() {
-            function Obj() {
-                return;
-            }
-            Obj.prototype.func1 = function() {
-                return;
-            };
-            var obj = new Obj();
-
-            createStub(obj);
-
-            assert.isFunction(obj.func1.restore);
-        });
-
-        it("returns object", function() {
-            var object = {};
-
-            assert.same(createStub(object), object);
-        });
+        require("./shared-spy-stub-everything-tests")(createStub);
 
         it("returns function", function() {
             var func = function() {
@@ -1341,83 +1303,6 @@ describe("stub", function() {
             assert.isFunction(func.func2.restore);
         });
 
-        it("only stubs functions", function() {
-            var object = { foo: "bar" };
-            createStub(object);
-
-            assert.equals(object.foo, "bar");
-        });
-
-        it("handles non-enumerable properties", function() {
-            var obj = {
-                func1: function() {
-                    return;
-                },
-                func2: function() {
-                    return;
-                }
-            };
-
-            Object.defineProperty(obj, "func3", {
-                value: function() {
-                    return;
-                },
-                writable: true,
-                configurable: true
-            });
-
-            createStub(obj);
-
-            assert.isFunction(obj.func1.restore);
-            assert.isFunction(obj.func2.restore);
-            assert.isFunction(obj.func3.restore);
-        });
-
-        it("handles non-enumerable properties on prototypes", function() {
-            function Obj() {
-                return;
-            }
-            Object.defineProperty(Obj.prototype, "func1", {
-                value: function() {
-                    return;
-                },
-                writable: true,
-                configurable: true
-            });
-
-            var obj = new Obj();
-
-            createStub(obj);
-
-            assert.isFunction(obj.func1.restore);
-        });
-
-        it("does not stub non-enumerable properties from Object.prototype", function() {
-            var obj = {};
-
-            createStub(obj);
-
-            refute.isFunction(obj.toString.restore);
-            refute.isFunction(obj.toLocaleString.restore);
-            refute.isFunction(obj.propertyIsEnumerable.restore);
-        });
-
-        it("does not fail on overrides", function() {
-            var parent = {
-                func: function() {
-                    return;
-                }
-            };
-            var child = Object.create(parent);
-            child.func = function() {
-                return;
-            };
-
-            refute.exception(function() {
-                createStub(child);
-            });
-        });
-
         it("does not call getter during restore", function() {
             var obj = {
                 get prop() {
@@ -1432,16 +1317,6 @@ describe("stub", function() {
             assert.equals(obj.prop, 43);
 
             stub.restore();
-        });
-
-        it("throws if stubbing non-existent property", function() {
-            var myObj = {};
-
-            assert.exception(function() {
-                createStub(myObj, "ouch");
-            });
-
-            refute.defined(myObj.ouch);
         });
     });
 

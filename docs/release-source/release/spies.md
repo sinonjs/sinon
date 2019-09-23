@@ -40,7 +40,7 @@ Spies all the object's methods.
 
 Note that it's usually better practice to spy individual methods, particularly on objects that you don't understand or control all the methods for (e.g. library dependencies).
 
-spying individual methods tests intent more precisely and is less susceptible to unexpected behavior as the object's code evolves.
+Spying individual methods tests intent more precisely and is less susceptible to unexpected behavior as the object's code evolves.
 
  The following is a slightly contrived example:
 
