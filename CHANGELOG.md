@@ -1,4 +1,10 @@
 
+7.5.0 / 2019-09-23
+==================
+
+  * Add sinon.assert.calledOnceWithExactly
+  * Feature parity: support _spying_ all methods on an object
+
 7.4.2 / 2019-09-02
 ==================
 
