@@ -102,56 +102,62 @@ describe("fakeTimers.clock", function() {
             this.clock = fakeTimers.clock.create();
         });
 
-        it("returns numeric id or object with numeric id", function() {
-            var result = this.clock.setImmediate(function() {
-                return;
+        if (typeof setImmediate === "function") {
+            it("returns numeric id or object with numeric id", function() {
+                var result = this.clock.setImmediate(function() {
+                    return;
+                });
+
+                if (typeof result === "object") {
+                    assert.isNumber(result.id);
+                } else {
+                    assert.isNumber(result);
+                }
             });
 
-            if (typeof result === "object") {
-                assert.isNumber(result.id);
-            } else {
-                assert.isNumber(result);
-            }
-        });
+            it("calls the given callback immediately", function() {
+                var stub = sinonStub();
 
-        it("calls the given callback immediately", function() {
-            var stub = sinonStub();
+                this.clock.setImmediate(stub);
+                this.clock.tick(0);
 
-            this.clock.setImmediate(stub);
-            this.clock.tick(0);
-
-            assert(stub.called);
-        });
-
-        it("throws if no arguments", function() {
-            var clock = this.clock;
-
-            assert.exception(function() {
-                clock.setImmediate();
+                assert(stub.called);
             });
-        });
 
-        it("manages separate timers per clock instance", function() {
-            var clock1 = fakeTimers.clock.create();
-            var clock2 = fakeTimers.clock.create();
-            var stubs = [sinonStub(), sinonStub()];
+            it("throws if no arguments", function() {
+                var clock = this.clock;
 
-            clock1.setImmediate(stubs[0]);
-            clock2.setImmediate(stubs[1]);
-            clock2.tick(0);
+                assert.exception(function() {
+                    clock.setImmediate();
+                });
+            });
 
-            assert.isFalse(stubs[0].called);
-            assert(stubs[1].called);
-        });
+            it("manages separate timers per clock instance", function() {
+                var clock1 = fakeTimers.clock.create();
+                var clock2 = fakeTimers.clock.create();
+                var stubs = [sinonStub(), sinonStub()];
 
-        it("passes extra parameters through to the callback", function() {
-            var stub = sinonStub();
+                clock1.setImmediate(stubs[0]);
+                clock2.setImmediate(stubs[1]);
+                clock2.tick(0);
 
-            this.clock.setImmediate(stub, "value1", 2);
-            this.clock.tick(1);
+                assert.isFalse(stubs[0].called);
+                assert(stubs[1].called);
+            });
 
-            assert(stub.calledWithExactly("value1", 2));
-        });
+            it("passes extra parameters through to the callback", function() {
+                var stub = sinonStub();
+
+                this.clock.setImmediate(stub, "value1", 2);
+                this.clock.tick(1);
+
+                assert(stub.calledWithExactly("value1", 2));
+            });
+        } else {
+            it("shouldn't install setImmedate", function() {
+                refute.isFunction(this.clock.setImmediate);
+            });
+        }
     });
 
     describe(".clearImmediate", function() {
@@ -159,15 +165,21 @@ describe("fakeTimers.clock", function() {
             this.clock = fakeTimers.clock.create();
         });
 
-        it("removes immediate callbacks", function() {
-            var callback = sinonStub();
+        if (typeof clearImmediate === "function") {
+            it("removes immediate callbacks", function() {
+                var callback = sinonStub();
 
-            var id = this.clock.setImmediate(callback);
-            this.clock.clearImmediate(id);
-            this.clock.tick(1);
+                var id = this.clock.setImmediate(callback);
+                this.clock.clearImmediate(id);
+                this.clock.tick(1);
 
-            assert.isFalse(callback.called);
-        });
+                assert.isFalse(callback.called);
+            });
+        } else {
+            it("shouldn't install clearImmedate", function() {
+                refute.isFunction(this.clock.clearImmediate);
+            });
+        }
     });
 
     describe(".tick", function() {
@@ -980,6 +992,42 @@ describe("fakeTimers.clock", function() {
 
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
         });
+
+        if (typeof setImmediate === "function") {
+            it("restores global setImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+                var stub = sinonStub();
+                this.clock.restore();
+
+                this.timer = setImmediate(stub);
+                this.clock.tick(1);
+
+                assert.isFalse(stub.called);
+                assert.same(setImmediate, fakeTimers.timers.setImmediate);
+            });
+        } else {
+            it("does not install global setImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+
+                assert.isUndefined(setImmediate);
+            });
+        }
+
+        if (typeof clearImmediate === "function") {
+            it("restores global clearImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+                sinonStub();
+                this.clock.restore();
+
+                assert.same(clearImmediate, fakeTimers.timers.clearImmediate);
+            });
+        } else {
+            it("does not install global clearImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+
+                assert.isUndefined(clearImmediate);
+            });
+        }
 
         /*eslint-disable no-proto*/
         if (Object.__proto__) {
