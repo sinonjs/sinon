@@ -1253,7 +1253,7 @@ describe("stub", function() {
             assert.isFalse(stub.called);
         });
 
-        it("successfully stubs falsey properties", function() {
+        it("successfully stubs falsy properties", function() {
             var obj = {
                 0: function() {
                     return;

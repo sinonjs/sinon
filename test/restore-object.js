@@ -19,7 +19,7 @@ describe("restore-object", function() {
         });
     });
 
-    it("quietly ignores falsey input", function() {
+    it("quietly ignores falsy input", function() {
         refute.exception(function() {
             restoreObject(false);
             restoreObject(null);
