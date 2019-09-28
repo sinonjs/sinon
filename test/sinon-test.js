@@ -1,17 +1,17 @@
 "use strict";
 
 var assert = require("@sinonjs/referee").assert;
-var hasPromise = typeof Promise === "function";
 var Sandbox = require("../lib/sinon/sandbox");
-
-if (!hasPromise) {
-    return;
-}
-
 var proxyquire = require("proxyquire");
 
 describe("sinon module", function() {
     var sinon, fakeNise;
+
+    before(function() {
+        if (typeof Promise !== "function") {
+            this.skip();
+        }
+    });
 
     beforeEach(function() {
         fakeNise = {
