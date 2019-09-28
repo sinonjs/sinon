@@ -42,13 +42,16 @@ describe("restore-object", function() {
         );
     });
 
-    it("works with no spies or stubs", function() {
-        refute.exception(function() {
-            restoreObject({
-                catpants: function() {},
-                meh: "okay"
-            });
-        });
+    it("throws with no spies or stubs", function() {
+        assert.exception(
+            function() {
+                restoreObject({
+                    catpants: function() {},
+                    meh: "okay"
+                });
+            },
+            { message: "Expected to restore methods on object but found none" }
+        );
     });
 
     it("works with mixed spies and stubs", function() {
