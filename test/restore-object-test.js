@@ -19,11 +19,27 @@ describe("restore-object", function() {
         });
     });
 
-    it("quietly ignores falsy input", function() {
-        refute.exception(function() {
-            restoreObject(false);
-            restoreObject(null);
-        });
+    it("throws on falsy input", function() {
+        assert.exception(
+            function() {
+                restoreObject(false);
+            },
+            { message: "Trying to restore object but received false" }
+        );
+
+        assert.exception(
+            function() {
+                restoreObject(null);
+            },
+            { message: "Trying to restore object but received null" }
+        );
+
+        assert.exception(
+            function() {
+                restoreObject();
+            },
+            { message: "Trying to restore object but received undefined" }
+        );
     });
 
     it("works with no spies or stubs", function() {
