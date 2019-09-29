@@ -62,7 +62,7 @@
     "diff": "^3.5.0",
     "lolex": "^4.2.0",
     "nise": "^1.5.2",
-    "supports-color": "^5.5.0"
+    "supports-color": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
