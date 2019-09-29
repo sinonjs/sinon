@@ -758,19 +758,23 @@ describe("spy", function() {
             assert(this.spy.calledOn(object));
         });
 
-        if (typeof window !== "undefined") {
-            describe("in browser", function() {
-                it("is true if called on object at least once", function() {
-                    var object = {};
-                    this.spy();
-                    this.spy.call({});
-                    this.spy.call(object);
-                    this.spy.call(window);
-
-                    assert(this.spy.calledOn(object));
-                });
+        describe("in browser", function() {
+            before(function() {
+                if (typeof window === "undefined") {
+                    this.skip();
+                }
             });
-        }
+
+            it("is true if called on object at least once", function() {
+                var object = {};
+                this.spy();
+                this.spy.call({});
+                this.spy.call(object);
+                this.spy.call(window);
+
+                assert(this.spy.calledOn(object));
+            });
+        });
 
         it("returns false if not called on object", function() {
             var object = {};
@@ -893,19 +897,23 @@ describe("spy", function() {
             assert.isFalse(this.spy.calledWithNew());
         });
 
-        if (typeof window !== "undefined") {
-            describe("in browser", function() {
-                it("is true if called with new at least once", function() {
-                    var object = {};
-                    this.spy();
-                    var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
-                    this.spy(object);
-                    this.spy(window);
-
-                    assert(this.spy.calledWithNew());
-                });
+        describe("in browser", function() {
+            before(function() {
+                if (typeof window === "undefined") {
+                    this.skip();
+                }
             });
-        }
+
+            it("is true if called with new at least once", function() {
+                var object = {};
+                this.spy();
+                var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
+                this.spy(object);
+                this.spy(window);
+
+                assert(this.spy.calledWithNew());
+            });
+        });
 
         it("is true newed constructor returns object", function() {
             function MyThing() {
@@ -919,29 +927,27 @@ describe("spy", function() {
             assert(object.MyThing.calledWithNew());
         });
 
-        var applyableNatives = (function() {
-            // eslint-disable-next-line no-restricted-syntax
-            try {
-                // eslint-disable-next-line no-console
-                console.log.apply({}, []);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        })();
-        if (applyableNatives) {
-            describe("spied native function", function() {
-                it("is false when called on spied native function", function() {
-                    var log = { info: console.log }; // eslint-disable-line no-console
-                    createSpy(log, "info");
-
-                    // by logging an empty string, we're not polluting the test console output
-                    log.info("");
-
-                    assert.isFalse(log.info.calledWithNew());
-                });
+        describe("spied native function", function() {
+            before(function() {
+                // eslint-disable-next-line no-restricted-syntax
+                try {
+                    // eslint-disable-next-line no-console
+                    console.log.apply({}, []);
+                } catch (e) {
+                    this.skip();
+                }
             });
-        }
+
+            it("is false when called on spied native function", function() {
+                var log = { info: console.log }; // eslint-disable-line no-console
+                createSpy(log, "info");
+
+                // by logging an empty string, we're not polluting the test console output
+                log.info("");
+
+                assert.isFalse(log.info.calledWithNew());
+            });
+        });
     });
 
     describe(".alwaysCalledWithNew", function() {
@@ -2601,18 +2607,20 @@ describe("spy", function() {
         });
 
         it("throws readable message for symbol when spy was not yet invoked", function() {
-            if (typeof Symbol === "function") {
-                var spy = createSpy();
-
-                assert.exception(
-                    function() {
-                        spy.yieldTo(Symbol());
-                    },
-                    {
-                        message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
-                    }
-                );
+            if (typeof Symbol !== "function") {
+                this.skip();
             }
+
+            var spy = createSpy();
+
+            assert.exception(
+                function() {
+                    spy.yieldTo(Symbol());
+                },
+                {
+                    message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
+                }
+            );
         });
 
         it("pass additional arguments", function() {
@@ -2698,19 +2706,21 @@ describe("spy", function() {
         });
 
         it("throws readable message for symbol when spy was not yet invoked", function() {
-            if (typeof Symbol === "function") {
-                var spy = createSpy();
-                var thisObj = { name1: "value1", name2: "value2" };
-
-                assert.exception(
-                    function() {
-                        spy.yieldToOn(Symbol(), thisObj);
-                    },
-                    {
-                        message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
-                    }
-                );
+            if (typeof Symbol !== "function") {
+                this.skip();
             }
+
+            var spy = createSpy();
+            var thisObj = { name1: "value1", name2: "value2" };
+
+            assert.exception(
+                function() {
+                    spy.yieldToOn(Symbol(), thisObj);
+                },
+                {
+                    message: "spy cannot yield to 'Symbol()' since it was not yet invoked."
+                }
+            );
         });
 
         it("pass additional arguments", function() {

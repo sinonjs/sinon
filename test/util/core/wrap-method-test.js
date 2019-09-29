@@ -54,22 +54,24 @@ describe("util/core/wrapMethod", function() {
     });
 
     it("throws Symbol() if object defines property but is not function", function() {
-        if (typeof Symbol === "function") {
-            var symbol = Symbol();
-            var object = {};
-            object[symbol] = 42;
-
-            assert.exception(
-                function() {
-                    wrapMethod(object, symbol, function() {
-                        return;
-                    });
-                },
-                function(err) {
-                    return err.message === "Attempted to wrap number property Symbol() as function";
-                }
-            );
+        if (typeof Symbol !== "function") {
+            this.skip();
         }
+
+        var symbol = Symbol();
+        var object = {};
+        object[symbol] = 42;
+
+        assert.exception(
+            function() {
+                wrapMethod(object, symbol, function() {
+                    return;
+                });
+            },
+            function(err) {
+                return err.message === "Attempted to wrap number property Symbol() as function";
+            }
+        );
     });
 
     it("throws if object does not define property", function() {
@@ -163,27 +165,29 @@ describe("util/core/wrapMethod", function() {
     });
 
     it("throws Symbol if method is already wrapped", function() {
-        if (typeof Symbol === "function") {
-            var symbol = Symbol();
-            var object = {};
-            object[symbol] = function() {
-                return;
-            };
-            wrapMethod(object, symbol, function() {
-                return;
-            });
-
-            assert.exception(
-                function() {
-                    wrapMethod(object, symbol, function() {
-                        return;
-                    });
-                },
-                function(err) {
-                    return err.message === "Attempted to wrap Symbol() which is already wrapped";
-                }
-            );
+        if (typeof Symbol !== "function") {
+            this.skip();
         }
+
+        var symbol = Symbol();
+        var object = {};
+        object[symbol] = function() {
+            return;
+        };
+        wrapMethod(object, symbol, function() {
+            return;
+        });
+
+        assert.exception(
+            function() {
+                wrapMethod(object, symbol, function() {
+                    return;
+                });
+            },
+            function(err) {
+                return err.message === "Attempted to wrap Symbol() which is already wrapped";
+            }
+        );
     });
 
     it("throws if property descriptor is already wrapped", function() {
@@ -219,22 +223,24 @@ describe("util/core/wrapMethod", function() {
     });
 
     it("throws if Symbol method is already a spy", function() {
-        if (typeof Symbol === "function") {
-            var symbol = Symbol();
-            var object = {};
-            object[symbol] = createSpy();
-
-            assert.exception(
-                function() {
-                    wrapMethod(object, symbol, function() {
-                        return;
-                    });
-                },
-                function(err) {
-                    return err.message === "Attempted to wrap Symbol() which is already spied on";
-                }
-            );
+        if (typeof Symbol !== "function") {
+            this.skip();
         }
+
+        var symbol = Symbol();
+        var object = {};
+        object[symbol] = createSpy();
+
+        assert.exception(
+            function() {
+                wrapMethod(object, symbol, function() {
+                    return;
+                });
+            },
+            function(err) {
+                return err.message === "Attempted to wrap Symbol() which is already spied on";
+            }
+        );
     });
 
     describe("originating stack traces", function() {
@@ -280,20 +286,24 @@ describe("util/core/wrapMethod", function() {
         });
     });
 
-    if (typeof window !== "undefined") {
-        describe("in browser", function() {
-            it("does not throw if object is window object", function() {
-                window.sinonTestMethod = function() {
+    describe("in browser", function() {
+        before(function() {
+            if (typeof window === "undefined") {
+                this.skip();
+            }
+        });
+
+        it("does not throw if object is window object", function() {
+            window.sinonTestMethod = function() {
+                return;
+            };
+            refute.exception(function() {
+                wrapMethod(window, "sinonTestMethod", function() {
                     return;
-                };
-                refute.exception(function() {
-                    wrapMethod(window, "sinonTestMethod", function() {
-                        return;
-                    });
                 });
             });
         });
-    }
+    });
 
     it("mirrors function properties", function() {
         var object = {

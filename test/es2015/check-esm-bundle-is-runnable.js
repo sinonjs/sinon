@@ -41,7 +41,7 @@ async function evaluatePageContent() {
 
     function die(reason) {
         if (reason) {
-            /* eslint-disable no-console */
+            /* eslint-disable-next-line no-console */
             console.error(reason);
         }
 

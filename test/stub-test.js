@@ -42,16 +42,18 @@ describe("stub", function() {
     });
 
     it("throws a readable error if stubbing Symbol on null", function() {
-        if (typeof Symbol === "function") {
-            assert.exception(
-                function() {
-                    createStub(null, Symbol());
-                },
-                {
-                    message: "Trying to stub property 'Symbol()' of null"
-                }
-            );
+        if (typeof Symbol !== "function") {
+            this.skip();
         }
+
+        assert.exception(
+            function() {
+                createStub(null, Symbol());
+            },
+            {
+                message: "Trying to stub property 'Symbol()' of null"
+            }
+        );
     });
 
     it("should contain asynchronous versions of callsArg*, and yields* methods", function() {
@@ -578,19 +580,21 @@ describe("stub", function() {
             assert.same(instance.stub(), instance);
         });
 
-        var strictMode =
-            (function() {
+        it("stub returns undefined when detached", function() {
+            var thisValue = (function() {
                 return this;
-            })() === undefined;
-        if (strictMode) {
-            it("stub returns undefined when detached", function() {
-                var stub = createStub.create();
-                stub.returnsThis();
+            })();
 
-                // Due to strict mode, would be `global` otherwise
-                assert.same(stub(), undefined);
-            });
-        }
+            if (thisValue !== undefined) {
+                this.skip();
+            }
+
+            var stub = createStub.create();
+            stub.returnsThis();
+
+            // Due to strict mode, would be `global` otherwise
+            assert.same(stub(), undefined);
+        });
 
         it("stub respects call/apply", function() {
             var stub = createStub.create();
@@ -1763,15 +1767,17 @@ describe("stub", function() {
         });
 
         it("throws understandable error if failing to yield callback by symbol", function() {
-            if (typeof Symbol === "function") {
-                var symbol = Symbol();
-
-                var stub = createStub().yieldsTo(symbol);
-
-                assert.exception(stub, {
-                    message: "stub expected to yield to 'Symbol()', but no object with such a property was passed."
-                });
+            if (typeof Symbol !== "function") {
+                this.skip();
             }
+
+            var symbol = Symbol();
+
+            var stub = createStub().yieldsTo(symbol);
+
+            assert.exception(stub, {
+                message: "stub expected to yield to 'Symbol()', but no object with such a property was passed."
+            });
         });
 
         it("includes stub name and actual arguments in error", function() {
