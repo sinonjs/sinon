@@ -40,13 +40,23 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("returns object", function() {
-        var object = {};
+        var object = {
+            func1: function() {
+                return;
+            }
+        };
 
         assert.same(createSpyOrStub(object), object);
     });
 
     it("only replaces functions", function() {
-        var object = { foo: "bar" };
+        var object = {
+            foo: "bar",
+            baz: function() {
+                return;
+            }
+        };
+
         createSpyOrStub(object);
 
         assert.equals(object.foo, "bar");
@@ -97,7 +107,11 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("does not replace non-enumerable properties from Object.prototype", function() {
-        var obj = {};
+        var obj = {
+            noop: function() {
+                return;
+            }
+        };
 
         createSpyOrStub(obj);
 
@@ -123,7 +137,11 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("throws on non-existent property", function() {
-        var myObj = {};
+        var myObj = {
+            ignoreme: function() {
+                return;
+            }
+        };
 
         assert.exception(function() {
             createSpyOrStub(myObj, "ouch");
