@@ -89,7 +89,7 @@
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "proxyquire": "^1.8.0",
-    "proxyquire-universal": "^1.0.8",
+    "proxyquire-universal": "^2.1.0",
     "proxyquireify": "^3.2.1",
     "puppeteer": "^1.19.0",
     "rimraf": "^2.6.3",
