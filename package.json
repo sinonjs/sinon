@@ -72,7 +72,7 @@
     "browserify": "^16.2.3",
     "dependency-check": "^2.9.1",
     "eslint": "^6.2.2",
-    "eslint-config-prettier": "^3.6.0",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-config-sinon": "^3.0.0",
     "eslint-plugin-ie11": "^1.0.0",
     "eslint-plugin-local-rules": "^0.1.0",
