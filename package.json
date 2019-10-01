@@ -59,7 +59,7 @@
     "@sinonjs/commons": "^1.4.0",
     "@sinonjs/formatio": "^3.2.1",
     "@sinonjs/samsam": "^3.3.3",
-    "diff": "^3.5.0",
+    "diff": "^4.0.1",
     "lolex": "^4.2.0",
     "nise": "^1.5.2",
     "supports-color": "^7.1.0"
