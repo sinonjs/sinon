@@ -23,3 +23,21 @@ Creates a new object with the given function as the protoype and stubs all imple
 ```
 
 The given constructor function is not invoked. See also the [stub API](../stubs).
+
+### `sinon.restoreObject(object);`
+
+Restores all methods of an object and returns the restored object.
+
+```javascript
+    const obj = {
+        foo: () => {}
+    }
+    sinon.spy(obj)
+    sinon.restoreObject(obj);
+```
+
+Throws an error if the object contains no restorable methods (spies, stubs, etc).
+
+```javascript
+    sinon.restoreObject({});
+```
