@@ -80,7 +80,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "esm": "^3.2.25",
     "husky": "^0.14.2",
-    "lint-staged": "^6.0.0",
+    "lint-staged": "^9.4.1",
     "markdownlint-cli": "^0.8.2",
     "mocha": "^6.2.0",
     "mochify": "^6.3.0",
