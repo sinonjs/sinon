@@ -93,7 +93,7 @@
     "proxyquireify": "^3.2.1",
     "puppeteer": "^1.19.0",
     "rimraf": "^3.0.0",
-    "rollup": "^0.59.3",
+    "rollup": "^1.23.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
