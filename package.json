@@ -70,7 +70,7 @@
     "babel-plugin-istanbul": "^5.2.0",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
-    "dependency-check": "^2.9.1",
+    "dependency-check": "^4.1.0",
     "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.3.0",
     "eslint-config-sinon": "^3.0.0",
