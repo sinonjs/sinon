@@ -2,6 +2,15 @@
 layout: page
 title: Spies - Sinon.JS
 breadcrumb: spies
+examples:
+- spies-1-pubsub
+- spies-2-wrap-object-methods
+- spies-3-wrap-existing-method
+- spies-4-pubsub-message-1
+- spies-5-pubsub-message-2
+- spies-6-pubsub-message-3
+- spies-7-with-args
+- spies-8-spy-call
 ---
 
 ### Introduction
@@ -21,16 +30,7 @@ anonymous function spy. The spy won't do anything except record information
 about its [calls][call]. A common use case for this type of spy is testing how a function
 handles a callback, as in the following simplified example:
 
-```javascript
-"test should call subscribers on publish": function () {
-    var callback = sinon.spy();
-    PubSub.subscribe("message", callback);
-
-    PubSub.publishSync("message");
-
-    assertTrue(callback.called);
-}
-```
+<div data-example-id="spies-1-pubsub"></div>
 
 ### Using a spy to wrap all object method
 
@@ -42,29 +42,9 @@ Note that it's usually better practice to spy individual methods, particularly o
 
 Spying individual methods tests intent more precisely and is less susceptible to unexpected behavior as the object's code evolves.
 
- The following is a slightly contrived example:
+The following is a slightly contrived example:
 
-```javascript
-{
-    sandbox: sinon.createSandbox(),
-
-    setUp: function () {
-        this.sandbox.spy(jQuery);
-    },
-
-    tearDown: function () {
-        this.sandbox.restore(); // Unwraps all spied methods
-    },
-
-    "test should inspect jQuery.getJSON's usage of jQuery.ajax": function () {
-        jQuery.getJSON("/some/resource");
-
-        assert(jQuery.ajax.calledOnce);
-        assertEquals("/some/resource", jQuery.ajax.getCall(0).args[0].url);
-        assertEquals("json", jQuery.ajax.getCall(0).args[0].dataType);
-    }
-}
-```
+<div data-example-id="spies-2-wrap-object-methods"></div>
 
 
 ### Using a spy to wrap an existing method
@@ -74,25 +54,7 @@ Spying individual methods tests intent more precisely and is less susceptible to
 (including when used as a constructor), but you will have access to data about
 all [calls][call]. The following is a slightly contrived example:
 
-```javascript
-{
-    setUp: function () {
-        sinon.spy(jQuery, "ajax");
-    },
-
-    tearDown: function () {
-        jQuery.ajax.restore(); // Unwraps the spy
-    },
-
-    "test should inspect jQuery.getJSON's usage of jQuery.ajax": function () {
-        jQuery.getJSON("/some/resource");
-
-        assert(jQuery.ajax.calledOnce);
-        assertEquals("/some/resource", jQuery.ajax.getCall(0).args[0].url);
-        assertEquals("json", jQuery.ajax.getCall(0).args[0].dataType);
-    }
-}
-```
+<div data-example-id="spies-3-wrap-existing-method"></div>
 
 
 ### Creating spies: `sinon.spy()` Method Signatures
@@ -128,44 +90,14 @@ because it keeps your test from being too specific about which call did what and
 so on. It will return `true` if the spy was ever called with the provided
 arguments.
 
-```javascript
-"test should call subscribers with message as first argument" : function () {
-    var message = 'an example message';
-    var spy = sinon.spy();
-
-    PubSub.subscribe(message, spy);
-    PubSub.publishSync(message, "some payload");
-
-    assert(spy.calledWith(message));
-}
-```
+<div data-example-id="spies-4-pubsub-message-1"></div>
 
 If you want to be specific, you can directly check the first argument of the
 first [call][call]. There are two ways of achieving this:
 
-```javascript
-"test should call subscribers with message as first argument" : function () {
-    var message = 'an example message';
-    var spy = sinon.spy();
+<div data-example-id="spies-5-pubsub-message-2"></div>
 
-    PubSub.subscribe(message, spy);
-    PubSub.publishSync(message, "some payload");
-
-    assertEquals(message, spy.args[0][0]);
-}
-```
-
-```javascript
-"test should call subscribers with message as first argument" : function () {
-    var message = 'an example message';
-    var spy = sinon.spy();
-
-    PubSub.subscribe(message, spy);
-    PubSub.publishSync(message, "some payload");
-
-    assertEquals(message, spy.getCall(0).args[0]);
-}
-```
+<div data-example-id="spies-6-pubsub-message-3"></div>
 
 The first example uses the two-dimensional `args` array directly on the spy,
 while the second example fetches the first [call][call] object and then accesses its
@@ -187,18 +119,7 @@ are also available on `object.method`.
 
 Creates a spy that only records [calls][call] when the received arguments match those passed to `withArgs`. This is useful to be more expressive in your assertions, where you can access the spy with the same [call][call].
 
-```javascript
-"should call method once with each argument": function () {
-    var object = { method: function () {} };
-    var spy = sinon.spy(object, "method");
-
-    object.method(42);
-    object.method(1);
-
-    assert(spy.withArgs(42).calledOnce);
-    assert(spy.withArgs(1).calledOnce);
-}
-```
+<div data-example-id="spies-7-with-args"></div>
 
 
 #### `spy.callCount`
@@ -394,13 +315,7 @@ Returns the *nth* [call](#spycall).
 
 Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 
-```javascript
-sinon.spy(jQuery, "ajax");
-jQuery.ajax("/stuffs");
-var spyCall = jQuery.ajax.getCall(0);
-
-assertEquals("/stuffs", spyCall.args[0]);
-```
+<div data-example-id="spies-8-spy-call"></div>
 
 
 #### `var spyCalls = spy.getCalls();`
@@ -470,3 +385,5 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 [call]: ../spy-call
+
+{% include embed-scripts.html %}

@@ -25,9 +25,6 @@ exclude:
   - Gemfile.lock
   - release-source
 collections:
-  demo:
-    output: true
-    permalink: '/demo/:path/'
   howto:
     output: true
     permalink: '/how-to/:path/'
