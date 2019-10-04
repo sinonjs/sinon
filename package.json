@@ -24,7 +24,7 @@
     "test-esm-bundle": "node test/es2015/check-esm-bundle-is-runnable.js",
     "test-docker-image": "docker-compose up",
     "test": "run-s test-node test-headless test-webworker test-esm",
-    "check-dependencies": "dependency-check package.json --unused --no-dev --ignore-module esm",
+    "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
     "build": "run-p build-esm build-bundle",
     "build-bundle": "node ./build.js",
     "build-esm": "rollup -c",
