@@ -25,9 +25,7 @@
     "test-docker-image": "docker-compose up",
     "test": "run-s test-node test-headless test-webworker test-esm",
     "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
-    "build": "run-p build-esm build-bundle",
-    "build-bundle": "node ./build.js",
-    "build-esm": "rollup -c",
+    "build": "node ./build.js",
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
     "lint": "run-p lint-js lint-markdown",
@@ -36,7 +34,7 @@
     "precommit": "lint-staged",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
-    "postbuild": "run-s test-esm-bundle",
+    "postbuild": "npm run test-esm-bundle",
     "prepublishOnly": "npm run build",
     "prettier": "prettier lib/**/*.js test/**/*.js",
     "preversion": "./scripts/preversion.sh",
@@ -92,12 +90,7 @@
     "proxyquire-universal": "^2.1.0",
     "proxyquireify": "^3.2.1",
     "puppeteer": "^1.19.0",
-    "rimraf": "^3.0.0",
-    "rollup": "^1.23.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-node-resolve": "^4.2.4"
+    "rimraf": "^3.0.0"
   },
   "files": [
     "lib",

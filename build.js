@@ -5,6 +5,7 @@
 var fs = require("fs");
 var browserify = require("browserify");
 var pkg = require("./package.json");
+var sinon = require("./lib/sinon");
 
 // YYYY-MM-DD
 var date = new Date().toISOString().split("T")[0];
@@ -18,23 +19,44 @@ try {
     // We seem to have it already
 }
 
-function makeBundle(name, config) {
-    // Create a UMD wrapper and install the "sinon" global:
-    config.standalone = "sinon";
-
-    browserify("./lib/sinon.js", config).bundle(function(err, buffer) {
+function makeBundle(entryPoint, config, done) {
+    browserify(entryPoint, config).bundle(function(err, buffer) {
         if (err) {
             throw err;
         }
-
-        var script = preamble + buffer.toString();
-        fs.writeFileSync("pkg/" + name + ".js", script);
+        done(buffer.toString());
     });
 }
 
-makeBundle("sinon", {
-    // Add inline source maps to the default bundle
-    debug: true
+makeBundle(
+    "./lib/sinon.js",
+    {
+        // Add inline source maps to the default bundle
+        debug: true,
+        // Create a UMD wrapper and install the "sinon" global:
+        standalone: "sinon"
+    },
+    function(bundle) {
+        var script = preamble + bundle;
+        fs.writeFileSync("pkg/sinon.js", script);
+    }
+);
+
+makeBundle("./lib/sinon.js", {}, function(bundle) {
+    var script = preamble + bundle;
+    fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
 });
 
-makeBundle("sinon-no-sourcemaps", {});
+makeBundle("./lib/sinon-esm.js", {}, function(bundle) {
+    var intro = "let sinon;";
+    var outro =
+        "\nexport default sinon;\n" +
+        Object.keys(sinon)
+            .map(function(key) {
+                return "const _" + key + " = sinon." + key + ";\nexport { _" + key + " as " + key + " };";
+            })
+            .join("\n");
+
+    var script = preamble + intro + bundle + outro;
+    fs.writeFileSync("pkg/sinon-esm.js", script);
+});
