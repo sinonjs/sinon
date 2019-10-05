@@ -385,5 +385,3 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 [call]: ../spy-call
-
-{% include embed-scripts.html %}
