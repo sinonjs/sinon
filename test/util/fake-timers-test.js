@@ -310,7 +310,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("triggers in the order scheduled", function() {
-            var spies = [sinonSpy.create(), sinonSpy.create()];
+            var spies = [sinonSpy(), sinonSpy()];
             this.clock.setTimeout(spies[0], 13);
             this.clock.setTimeout(spies[1], 11);
 
@@ -320,7 +320,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("creates updated Date while ticking", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
 
             this.clock.setInterval(function() {
                 spy(new Date().getTime());
@@ -342,7 +342,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("fires timer in intervals of 13", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 13);
 
             this.clock.tick(500);
@@ -353,8 +353,8 @@ describe("fakeTimers.clock", function() {
         it("fires timers in correct order", function() {
             this.timeout(5000);
 
-            var spy13 = sinonSpy.create();
-            var spy10 = sinonSpy.create();
+            var spy13 = sinonSpy();
+            var spy10 = sinonSpy();
 
             this.clock.setInterval(function() {
                 spy13(new Date().getTime());
@@ -377,7 +377,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("triggers timeouts and intervals in the order scheduled", function() {
-            var spies = [sinonSpy.create(), sinonSpy.create()];
+            var spies = [sinonSpy(), sinonSpy()];
             this.clock.setInterval(spies[0], 10);
             this.clock.setTimeout(spies[1], 50);
 
@@ -403,7 +403,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("passes 6 seconds", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 4000);
 
             this.clock.tick("08");
@@ -412,7 +412,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("passes 1 minute", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 6000);
 
             this.clock.tick("01:00");
@@ -423,7 +423,7 @@ describe("fakeTimers.clock", function() {
         it("passes 2 hours, 34 minutes and 12 seconds", function() {
             this.timeout(50000);
 
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 10000);
 
             this.clock.tick("02:34:10");
@@ -432,7 +432,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("throws for invalid format", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 10000);
             var test = this;
 
@@ -444,7 +444,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("throws for invalid minutes", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 10000);
             var test = this;
 
@@ -456,7 +456,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("throws for negative minutes", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             this.clock.setInterval(spy, 10000);
             var test = this;
 
@@ -586,7 +586,7 @@ describe("fakeTimers.clock", function() {
         it("does not schedule recurring timeout when cleared", function() {
             var clock = this.clock;
             var id;
-            var stub = sinonSpy.create(function() {
+            var stub = sinonSpy(function() {
                 if (stub.callCount === 3) {
                     clock.clearInterval(id);
                 }
