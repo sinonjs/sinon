@@ -1121,7 +1121,7 @@ describe("sinonMock", function() {
 
             var resolveValue = {};
             var mockPromise = {
-                resolve: sinonStub.create().resolves(resolveValue)
+                resolve: sinonStub().resolves(resolveValue)
             };
 
             this.mock.usingPromise(mockPromise);
