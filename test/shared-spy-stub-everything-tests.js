@@ -129,6 +129,6 @@ module.exports = function shared(createSpyOrStub) {
             createSpyOrStub(myObj, "ouch");
         });
 
-        refute.defined(myObj.ouch);
+        assert.isUndefined(myObj.ouch);
     });
 };
