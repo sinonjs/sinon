@@ -8,6 +8,7 @@ var sinonSpy = require("../../lib/sinon/spy");
 var assert = referee.assert;
 var refute = referee.refute;
 var GlobalDate = Date;
+var setImmediatePresent = global.setImmediate && typeof global.setImmediate === "function";
 
 describe("fakeTimers.clock", function() {
     beforeEach(function() {
@@ -1116,24 +1117,22 @@ describe("fakeTimers.clock", function() {
         });
 
         it("fakes provided methods", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
 
             refute.same(setTimeout, fakeTimers.timers.setTimeout);
             refute.same(Date, fakeTimers.timers.Date);
-            refute.same(setImmediate, fakeTimers.timers.setImmediate);
         });
 
         it("resets faked methods", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
             this.clock.restore();
 
             assert.same(setTimeout, fakeTimers.timers.setTimeout);
             assert.same(Date, fakeTimers.timers.Date);
-            assert.same(setImmediate, fakeTimers.timers.setImmediate);
         });
 
         it("does not fake methods not provided", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
 
             assert.same(clearTimeout, fakeTimers.timers.clearTimeout);
             assert.same(setInterval, fakeTimers.timers.setInterval);
@@ -1191,6 +1190,10 @@ describe("fakeTimers.clock", function() {
         });
 
         it("installs clock in advancing mode and triggers setImmediate", function(done) {
+            if (!setImmediatePresent) {
+                this.skip();
+            }
+
             this.clock = fakeTimers.useFakeTimers({ shouldAdvanceTime: true });
             this.clock.setImmediate(
                 function() {
