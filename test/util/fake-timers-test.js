@@ -52,7 +52,7 @@ describe("fakeTimers.clock", function() {
         it("sets timers on instance", function() {
             var clock1 = fakeTimers.clock.create();
             var clock2 = fakeTimers.clock.create();
-            var stubs = [sinonStub.create(), sinonStub.create()];
+            var stubs = [sinonStub(), sinonStub()];
 
             clock1.setTimeout(stubs[0], 100);
             clock2.setTimeout(stubs[1], 100);
@@ -73,7 +73,7 @@ describe("fakeTimers.clock", function() {
 
         it("passes setTimeout parameters", function() {
             var clock = fakeTimers.clock.create();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             clock.setTimeout(stub, 2, "the first", "the second");
 
@@ -84,7 +84,7 @@ describe("fakeTimers.clock", function() {
 
         it("calls correct timeout on recursive tick", function() {
             var clock = fakeTimers.clock.create();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             var recurseCallback = function() {
                 clock.tick(100);
             };
@@ -115,7 +115,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("calls the given callback immediately", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             this.clock.setImmediate(stub);
             this.clock.tick(0);
@@ -134,7 +134,7 @@ describe("fakeTimers.clock", function() {
         it("manages separate timers per clock instance", function() {
             var clock1 = fakeTimers.clock.create();
             var clock2 = fakeTimers.clock.create();
-            var stubs = [sinonStub.create(), sinonStub.create()];
+            var stubs = [sinonStub(), sinonStub()];
 
             clock1.setImmediate(stubs[0]);
             clock2.setImmediate(stubs[1]);
@@ -145,7 +145,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("passes extra parameters through to the callback", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             this.clock.setImmediate(stub, "value1", 2);
             this.clock.tick(1);
@@ -160,7 +160,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("removes immediate callbacks", function() {
-            var callback = sinonStub.create();
+            var callback = sinonStub();
 
             var id = this.clock.setImmediate(callback);
             this.clock.clearImmediate(id);
@@ -180,7 +180,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("triggers immediately without specified delay", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setTimeout(stub);
 
             this.clock.tick(0);
@@ -189,7 +189,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("does not trigger without sufficient delay", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setTimeout(stub, 100);
             this.clock.tick(10);
 
@@ -197,7 +197,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("triggers after sufficient delay", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setTimeout(stub, 100);
             this.clock.tick(100);
 
@@ -253,7 +253,7 @@ describe("fakeTimers.clock", function() {
 
         it("waits after setTimeout was called", function() {
             this.clock.tick(100);
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setTimeout(stub, 150);
             this.clock.tick(50);
 
@@ -263,7 +263,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("mini integration test", function() {
-            var stubs = [sinonStub.create(), sinonStub.create(), sinonStub.create()];
+            var stubs = [sinonStub(), sinonStub(), sinonStub()];
             this.clock.setTimeout(stubs[0], 100);
             this.clock.setTimeout(stubs[1], 120);
             this.clock.tick(10);
@@ -284,7 +284,7 @@ describe("fakeTimers.clock", function() {
 
         it("triggers even when some throw", function() {
             var clock = this.clock;
-            var stubs = [sinonStub.create().throws(), sinonStub.create()];
+            var stubs = [sinonStub().throws(), sinonStub()];
 
             clock.setTimeout(stubs[0], 100);
             clock.setTimeout(stubs[1], 120);
@@ -299,7 +299,7 @@ describe("fakeTimers.clock", function() {
 
         it("calls function with global object or null (strict mode) as this", function() {
             var clock = this.clock;
-            var stub = sinonStub.create().throws();
+            var stub = sinonStub().throws();
             clock.setTimeout(stub, 100);
 
             assert.exception(function() {
@@ -516,7 +516,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("removes timeout", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             var id = this.clock.setTimeout(stub, 50);
             this.clock.clearTimeout(id);
             this.clock.tick(50);
@@ -536,7 +536,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("empties timeouts queue", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setTimeout(stub);
             this.clock.reset();
             this.clock.tick(0);
@@ -576,7 +576,7 @@ describe("fakeTimers.clock", function() {
         });
 
         it("schedules recurring timeout", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.setInterval(stub, 10);
             this.clock.tick(99);
 
@@ -600,7 +600,7 @@ describe("fakeTimers.clock", function() {
 
         it("passes setTimeout parameters", function() {
             var clock = fakeTimers.clock.create();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             clock.setInterval(stub, 2, "the first", "the second");
 
@@ -884,7 +884,7 @@ describe("fakeTimers.clock", function() {
 
         it("replaces global setTimeout", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             setTimeout(stub, 1000);
             this.clock.tick(1000);
@@ -894,7 +894,7 @@ describe("fakeTimers.clock", function() {
 
         it("global fake setTimeout should return id", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             var to = setTimeout(stub, 1000);
 
@@ -913,7 +913,7 @@ describe("fakeTimers.clock", function() {
 
         it("replaces global clearTimeout", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             clearTimeout(setTimeout(stub, 1000));
             this.clock.tick(1000);
@@ -923,7 +923,7 @@ describe("fakeTimers.clock", function() {
 
         it("restores global setTimeout", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.restore();
 
             this.timer = setTimeout(stub, 1000);
@@ -935,7 +935,7 @@ describe("fakeTimers.clock", function() {
 
         it("restores global clearTimeout", function() {
             this.clock = fakeTimers.useFakeTimers();
-            sinonStub.create();
+            sinonStub();
             this.clock.restore();
 
             assert.same(clearTimeout, fakeTimers.timers.clearTimeout);
@@ -943,7 +943,7 @@ describe("fakeTimers.clock", function() {
 
         it("replaces global setInterval", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             setInterval(stub, 500);
             this.clock.tick(1000);
@@ -953,7 +953,7 @@ describe("fakeTimers.clock", function() {
 
         it("replaces global clearInterval", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
 
             clearInterval(setInterval(stub, 500));
             this.clock.tick(1000);
@@ -963,7 +963,7 @@ describe("fakeTimers.clock", function() {
 
         it("restores global setInterval", function() {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             this.clock.restore();
 
             this.timer = setInterval(stub, 1000);
@@ -975,7 +975,7 @@ describe("fakeTimers.clock", function() {
 
         it("restores global clearInterval", function() {
             this.clock = fakeTimers.useFakeTimers();
-            sinonStub.create();
+            sinonStub();
             this.clock.restore();
 
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
@@ -1185,11 +1185,11 @@ describe("fakeTimers.clock", function() {
         });
 
         it("supports a way to pass the global context", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             var globalCtx = {
-                Date: sinonStub.create(),
+                Date: sinonStub(),
                 setTimeout: stub,
-                clearTimeout: sinonStub.create()
+                clearTimeout: sinonStub()
             };
             this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
             assert.isUndefined(this.clock.performance);

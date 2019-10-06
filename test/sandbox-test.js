@@ -1433,7 +1433,7 @@ describe("Sandbox", function() {
 
             var resolveValue = {};
             var mockPromise = {
-                resolve: sinonStub.create().resolves(resolveValue)
+                resolve: sinonStub().resolves(resolveValue)
             };
 
             this.sandbox.usingPromise(mockPromise);
@@ -1453,7 +1453,7 @@ describe("Sandbox", function() {
 
             var resolveValue = {};
             var mockPromise = {
-                resolve: sinonStub.create().resolves(resolveValue)
+                resolve: sinonStub().resolves(resolveValue)
             };
             var stubbedObject = {
                 stubbedMethod: function() {
@@ -1478,7 +1478,7 @@ describe("Sandbox", function() {
 
             var resolveValue = {};
             var mockPromise = {
-                resolve: sinonStub.create().resolves(resolveValue)
+                resolve: sinonStub().resolves(resolveValue)
             };
             var mockedObject = {
                 mockedMethod: function() {

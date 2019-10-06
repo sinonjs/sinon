@@ -23,11 +23,17 @@ describe("stub", function() {
     });
 
     it("is spy", function() {
-        var stub = createStub.create();
+        var stub = createStub();
 
         assert.isFalse(stub.called);
         assert.isFunction(stub.calledWith);
         assert.isFunction(stub.calledOn);
+    });
+
+    it("does not define create method", function() {
+        var stub = createStub();
+
+        assert.isUndefined(stub.create);
     });
 
     it("fails if stubbing property on null", function() {
@@ -55,7 +61,7 @@ describe("stub", function() {
     });
 
     it("should contain asynchronous versions of callsArg*, and yields* methods", function() {
-        var stub = createStub.create();
+        var stub = createStub();
 
         var syncVersions = 0;
         var asyncVersions = 0;
@@ -112,7 +118,7 @@ describe("stub", function() {
 
     describe(".returns", function() {
         it("returns specified value", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var object = {};
             stub.returns(object);
 
@@ -120,19 +126,19 @@ describe("stub", function() {
         });
 
         it("returns should return stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.returns(""), stub);
         });
 
         it("returns undefined", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.isUndefined(stub());
         });
 
         it("supersedes previous throws", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws().returns(1);
 
             refute.exception(function() {
@@ -141,7 +147,7 @@ describe("stub", function() {
         });
 
         it("throws only on the first call", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.returns("no exception");
             stub.onFirstCall().throws();
 
@@ -162,7 +168,7 @@ describe("stub", function() {
         });
 
         it("returns a promise to the specified value", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var object = {};
             stub.resolves(object);
 
@@ -172,13 +178,13 @@ describe("stub", function() {
         });
 
         it("should return the same stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.resolves(""), stub);
         });
 
         it("supersedes previous throws", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws().resolves(1);
 
             refute.exception(function() {
@@ -187,14 +193,14 @@ describe("stub", function() {
         });
 
         it("supersedes previous rejects", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects(Error("should be superseeded")).resolves(1);
 
             return stub().then();
         });
 
         it("can be superseded by returns", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolves(2).returns(1);
 
             assert.equals(stub(), 1);
@@ -202,7 +208,7 @@ describe("stub", function() {
 
         it("does not invoke Promise.resolve when the behavior is added to the stub", function() {
             var resolveSpy = createSpy(Promise, "resolve");
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolves(2);
 
             assert.equals(resolveSpy.callCount, 0);
@@ -217,7 +223,7 @@ describe("stub", function() {
         });
 
         it("returns a promise which rejects for the specified reason", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var reason = new Error();
             stub.rejects(reason);
 
@@ -231,13 +237,13 @@ describe("stub", function() {
         });
 
         it("should return the same stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.rejects({}), stub);
         });
 
         it("specifies exception message", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var message = "Oh no!";
             stub.rejects("Error", message);
 
@@ -251,7 +257,7 @@ describe("stub", function() {
         });
 
         it("does not specify exception message if not provided", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects("Error");
 
             return stub()
@@ -264,7 +270,7 @@ describe("stub", function() {
         });
 
         it("rejects for a generic reason", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects();
 
             return stub()
@@ -277,7 +283,7 @@ describe("stub", function() {
         });
 
         it("can be superseded by returns", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects(2).returns(1);
 
             assert.equals(stub(), 1);
@@ -285,7 +291,7 @@ describe("stub", function() {
 
         it("does not invoke Promise.reject when the behavior is added to the stub", function() {
             var rejectSpy = createSpy(Promise, "reject");
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects(2);
 
             assert.equals(rejectSpy.callCount, 0);
@@ -301,7 +307,7 @@ describe("stub", function() {
 
         it("returns a promise resolved with this", function() {
             var instance = {};
-            instance.stub = createStub.create();
+            instance.stub = createStub();
             instance.stub.resolvesThis();
 
             return instance.stub().then(function(actual) {
@@ -310,7 +316,7 @@ describe("stub", function() {
         });
 
         it("returns a promise resolved with the context bound with stub#call", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolvesThis();
             var object = {};
 
@@ -320,7 +326,7 @@ describe("stub", function() {
         });
 
         it("returns a promise resolved with the context bound with stub#apply", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolvesThis();
             var object = {};
 
@@ -330,15 +336,14 @@ describe("stub", function() {
         });
 
         it("returns the stub itself, allowing to chain function calls", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.resolvesThis(), stub);
         });
 
         it("overrides throws behavior for error objects", function() {
             var instance = {};
-            instance.stub = createStub
-                .create()
+            instance.stub = createStub()
                 .throws(new Error())
                 .resolvesThis();
 
@@ -349,8 +354,7 @@ describe("stub", function() {
 
         it("overrides throws behavior for dynamically created errors", function() {
             var instance = {};
-            instance.stub = createStub
-                .create()
+            instance.stub = createStub()
                 .throws()
                 .resolvesThis();
 
@@ -368,7 +372,7 @@ describe("stub", function() {
         });
 
         it("returns a promise to the argument at specified index", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var object = {};
             stub.resolvesArg(0);
 
@@ -378,7 +382,7 @@ describe("stub", function() {
         });
 
         it("returns a promise to the argument at another specified index", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var object = {};
             stub.resolvesArg(2);
 
@@ -388,13 +392,13 @@ describe("stub", function() {
         });
 
         it("should return the same stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.resolvesArg(1), stub);
         });
 
         it("supersedes previous throws", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws().resolvesArg(1);
 
             refute.exception(function() {
@@ -403,7 +407,7 @@ describe("stub", function() {
         });
 
         it("supersedes previous rejects", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.rejects(Error("should be superseeded")).resolvesArg(1);
 
             return stub("zero", "one").then(function(actual) {
@@ -413,14 +417,14 @@ describe("stub", function() {
 
         it("does not invoke Promise.resolve when the behavior is added to the stub", function() {
             var resolveSpy = createSpy(Promise, "resolve");
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolvesArg(2);
 
             assert(resolveSpy.notCalled);
         });
 
         it("throws if index is not a number", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.exception(
                 function() {
@@ -431,7 +435,7 @@ describe("stub", function() {
         });
 
         it("throws without enough arguments", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.resolvesArg(3);
 
             assert.exception(
@@ -448,7 +452,7 @@ describe("stub", function() {
 
     describe(".returnsArg", function() {
         it("returns argument at specified index", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.returnsArg(0);
             var object = {};
 
@@ -456,13 +460,13 @@ describe("stub", function() {
         });
 
         it("returns stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.returnsArg(0), stub);
         });
 
         it("throws if no index is specified", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.exception(
                 function() {
@@ -473,7 +477,7 @@ describe("stub", function() {
         });
 
         it("should throw without enough arguments", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.returnsArg(3);
 
             assert.exception(
@@ -490,7 +494,7 @@ describe("stub", function() {
 
     describe(".throwsArg", function() {
         it("throws argument at specified index", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throwsArg(0);
             var expectedError = new Error("The expected error message");
 
@@ -505,13 +509,13 @@ describe("stub", function() {
         });
 
         it("returns stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.throwsArg(0), stub);
         });
 
         it("throws TypeError if no index is specified", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.exception(
                 function() {
@@ -522,7 +526,7 @@ describe("stub", function() {
         });
 
         it("should throw without enough arguments", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throwsArg(3);
 
             assert.exception(
@@ -537,7 +541,7 @@ describe("stub", function() {
         });
 
         it("should work with call-based behavior", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var expectedError = new Error("catpants");
 
             stub.returns(1);
@@ -558,7 +562,7 @@ describe("stub", function() {
         });
 
         it("should be reset by .resetBeahvior", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             stub.throwsArg(0);
             stub.resetBehavior();
@@ -572,7 +576,7 @@ describe("stub", function() {
     describe(".returnsThis", function() {
         it("stub returns this", function() {
             var instance = {};
-            instance.stub = createStub.create();
+            instance.stub = createStub();
             instance.stub.returnsThis();
 
             assert.same(instance.stub(), instance);
@@ -584,7 +588,7 @@ describe("stub", function() {
             })() === undefined;
         if (strictMode) {
             it("stub returns undefined when detached", function() {
-                var stub = createStub.create();
+                var stub = createStub();
                 stub.returnsThis();
 
                 // Due to strict mode, would be `global` otherwise
@@ -593,7 +597,7 @@ describe("stub", function() {
         }
 
         it("stub respects call/apply", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.returnsThis();
             var object = {};
 
@@ -602,7 +606,7 @@ describe("stub", function() {
         });
 
         it("returns stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.returnsThis(), stub);
         });
@@ -610,22 +614,22 @@ describe("stub", function() {
 
     describe(".usingPromise", function() {
         it("should exist and be a function", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert(stub.usingPromise);
             assert.isFunction(stub.usingPromise);
         });
 
         it("should return the current stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.usingPromise(Promise), stub);
         });
 
         it("should set the promise used by resolve", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var promise = {
-                resolve: createStub.create().callsFake(function(value) {
+                resolve: createStub().callsFake(function(value) {
                     return Promise.resolve(value);
                 })
             };
@@ -641,9 +645,9 @@ describe("stub", function() {
         });
 
         it("should set the promise used by reject", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var promise = {
-                reject: createStub.create().callsFake(function(err) {
+                reject: createStub().callsFake(function(err) {
                     return Promise.reject(err);
                 })
             };
@@ -665,7 +669,7 @@ describe("stub", function() {
 
     describe(".throws", function() {
         it("throws specified exception", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var error = new Error();
             stub.throws(error);
 
@@ -673,13 +677,13 @@ describe("stub", function() {
         });
 
         it("returns stub", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             assert.same(stub.throws({}), stub);
         });
 
         it("sets type of exception to throw", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var exceptionType = "TypeError";
             stub.throws(exceptionType);
 
@@ -689,7 +693,7 @@ describe("stub", function() {
         });
 
         it("specifies exception message", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             var message = "Oh no!";
             stub.throws("Error", message);
 
@@ -699,7 +703,7 @@ describe("stub", function() {
         });
 
         it("does not specify exception message if not provided", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws("Error");
 
             assert.exception(stub, {
@@ -708,14 +712,14 @@ describe("stub", function() {
         });
 
         it("throws generic error", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws();
 
             assert.exception(stub, "Error");
         });
 
         it("throws an exception created using a function", function() {
-            var stub = createStub.create();
+            var stub = createStub();
 
             stub.throws(function() {
                 return new Error("not implemented");
@@ -743,7 +747,7 @@ describe("stub", function() {
             });
 
             it("uses a lazily created exception for the generic error", function() {
-                var stub = createStub.create();
+                var stub = createStub();
                 stub.throws();
 
                 assert.isFalse(errorSpy.called);
@@ -752,7 +756,7 @@ describe("stub", function() {
             });
 
             it("uses a lazily created exception for the named error", function() {
-                var stub = createStub.create();
+                var stub = createStub();
                 stub.throws("Named Error", "error message");
 
                 assert.isFalse(errorSpy.called);
@@ -764,7 +768,7 @@ describe("stub", function() {
             });
 
             it("uses a lazily created exception provided by a function", function() {
-                var stub = createStub.create();
+                var stub = createStub();
 
                 stub.throws(function() {
                     return new Error("not implemented");
@@ -778,7 +782,7 @@ describe("stub", function() {
             });
 
             it("does not use a lazily created exception if the error object is provided", function() {
-                var stub = createStub.create();
+                var stub = createStub();
                 var exception = new Error();
                 stub.throws(exception);
 
@@ -789,7 +793,7 @@ describe("stub", function() {
         });
 
         it("resets 'invoking' flag", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.throws();
 
             assert.exception(stub);
@@ -800,12 +804,12 @@ describe("stub", function() {
 
     describe(".callsArg", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
         });
 
         it("calls argument at specified index", function() {
             this.stub.callsArg(2);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -850,7 +854,7 @@ describe("stub", function() {
         });
 
         it("should throw without enough arguments", function() {
-            var stub = createStub.create();
+            var stub = createStub();
             stub.callsArg(3);
 
             assert.exception(
@@ -875,13 +879,13 @@ describe("stub", function() {
 
     describe(".callsArgWith", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
         });
 
         it("calls argument at specified index with provided args", function() {
             var object = {};
             this.stub.callsArgWith(1, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -896,7 +900,7 @@ describe("stub", function() {
 
         it("calls callback without args", function() {
             this.stub.callsArgWith(1);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -907,7 +911,7 @@ describe("stub", function() {
             var object = {};
             var array = [];
             this.stub.callsArgWith(1, object, array);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -947,7 +951,7 @@ describe("stub", function() {
 
     describe(".callsArgOn", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = {
                 foo: "bar"
             };
@@ -955,7 +959,7 @@ describe("stub", function() {
 
         it("calls argument at specified index", function() {
             this.stub.callsArgOn(2, this.fakeContext);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -965,7 +969,7 @@ describe("stub", function() {
 
         it("calls argument at specified index with undefined context", function() {
             this.stub.callsArgOn(2, undefined);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -975,7 +979,7 @@ describe("stub", function() {
 
         it("calls argument at specified index with number context", function() {
             this.stub.callsArgOn(2, 5);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -1034,14 +1038,14 @@ describe("stub", function() {
 
     describe(".callsArgOnWith", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
         it("calls argument at specified index with provided args", function() {
             var object = {};
             this.stub.callsArgOnWith(1, this.fakeContext, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1052,7 +1056,7 @@ describe("stub", function() {
         it("calls argument at specified index with provided args and undefined context", function() {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1063,7 +1067,7 @@ describe("stub", function() {
         it("calls argument at specified index with provided args and number context", function() {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1074,7 +1078,7 @@ describe("stub", function() {
         it("calls argument at specified index with provided args with undefined context", function() {
             var object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1085,7 +1089,7 @@ describe("stub", function() {
         it("calls argument at specified index with provided args with number context", function() {
             var object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1101,7 +1105,7 @@ describe("stub", function() {
 
         it("calls callback without args", function() {
             this.stub.callsArgOnWith(1, this.fakeContext);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1113,7 +1117,7 @@ describe("stub", function() {
             var object = {};
             var array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
-            var callback = createStub.create();
+            var callback = createStub();
 
             this.stub(1, callback);
 
@@ -1163,7 +1167,7 @@ describe("stub", function() {
         });
 
         it("uses provided function as stub", function() {
-            var fakeFn = createStub.create();
+            var fakeFn = createStub();
             this.stub = createStub(this.object, "method");
 
             this.stub.callsFake(fakeFn);
@@ -1174,7 +1178,7 @@ describe("stub", function() {
         });
 
         it("is overwritten by subsequent stub behavior", function() {
-            var fakeFn = createStub.create();
+            var fakeFn = createStub();
             this.stub = createStub(this.object, "method");
 
             this.stub.callsFake(fakeFn).returns(3);
@@ -1603,7 +1607,7 @@ describe("stub", function() {
 
     describe(".yieldsOn", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
@@ -1888,7 +1892,7 @@ describe("stub", function() {
 
     describe(".yieldsToOn", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
@@ -2118,7 +2122,7 @@ describe("stub", function() {
 
     describe(".callsArgAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
         });
 
         it("asynchronously calls argument at specified index", function(done) {
@@ -2133,7 +2137,7 @@ describe("stub", function() {
 
     describe(".callsArgWithAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
         });
 
         it("asynchronously calls callback at specified index with multiple args", function(done) {
@@ -2154,7 +2158,7 @@ describe("stub", function() {
 
     describe(".callsArgOnAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = {
                 foo: "bar"
             };
@@ -2177,7 +2181,7 @@ describe("stub", function() {
 
     describe(".callsArgOnWithAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
@@ -2212,7 +2216,7 @@ describe("stub", function() {
 
     describe(".yieldsOnAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
@@ -2251,7 +2255,7 @@ describe("stub", function() {
 
     describe(".yieldsToOnAsync", function() {
         beforeEach(function() {
-            this.stub = createStub.create();
+            this.stub = createStub();
             this.fakeContext = { foo: "bar" };
         });
 
@@ -2684,7 +2688,7 @@ describe("stub", function() {
 
         it("cleans 'returnsThis' behavior", function() {
             var instance = {};
-            instance.stub = createStub.create();
+            instance.stub = createStub();
             instance.stub.returnsThis();
 
             instance.stub.resetBehavior();
@@ -2694,7 +2698,7 @@ describe("stub", function() {
 
         it("cleans 'resolvesThis' behavior, so the stub does not resolve nor returns anything", function() {
             var instance = {};
-            instance.stub = createStub.create();
+            instance.stub = createStub();
             instance.stub.resolvesThis();
 
             instance.stub.resetBehavior();
