@@ -1,0 +1,21 @@
+{% for example in page.examples %}
+    {% assign filename = 'examples/' | append: example | append: '.stub' %}
+    <template data-example-script="{{ example }}">{% include_relative {{filename}} %}</template>
+    <script>
+        (function(){
+            // get script example div
+            var element = document.querySelector("[data-example-id={{ example }}]");
+
+            // get script example source from the template
+            var scriptTemplate = document.querySelector("[data-example-script={{ example }}]");
+
+            var notebook = RunKit.createNotebook({
+                // the parent element for the new notebook
+                element: element,
+                // specify the source of the notebook
+                source: scriptTemplate.innerHTML,
+                theme: "untilted-c3qcs6lijfuc"
+            });
+        })(); // IIFE - to avoid leaking variables
+    </script>
+{% endfor %}
