@@ -644,10 +644,10 @@ describe("fakeTimers.clock", function() {
             assert(Date.prototype.isPrototypeOf(date));
         });
 
-        it("creates real Date objects when called as function", function() {
+        it("creates date strings when called as function", function() {
             var date = this.clock.Date();
 
-            assert(Date.prototype.isPrototypeOf(date));
+            assert.isString(date);
         });
 
         it("creates real Date objects when Date constructor is gone", function() {
@@ -676,12 +676,6 @@ describe("fakeTimers.clock", function() {
             assert.equals(date.getTime(), new Date(this.now).getTime());
         });
 
-        it("returns Date object representing clock time", function() {
-            var date = this.clock.Date();
-
-            assert.equals(date.getTime(), new Date(this.now).getTime());
-        });
-
         it("listens to ticking clock", function() {
             var date1 = new this.clock.Date();
             this.clock.tick(3);
@@ -697,23 +691,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with timestamp", function() {
-            var date = new Date();
-            var fakeDate = this.clock.Date(date.getTime());
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing year, month", function() {
             var date = new Date(2010, 4);
             var fakeDate = new this.clock.Date(2010, 4);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with year, month", function() {
-            var date = new Date(2010, 4);
-            var fakeDate = this.clock.Date(2010, 4);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
@@ -725,23 +705,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d", function() {
-            var date = new Date(2010, 4, 2);
-            var fakeDate = this.clock.Date(2010, 4, 2);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h", function() {
             var date = new Date(2010, 4, 2, 12);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with y, m, d, h", function() {
-            var date = new Date(2010, 4, 2, 12);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
@@ -753,13 +719,6 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d, h, m", function() {
-            var date = new Date(2010, 4, 2, 12, 42);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h, m, s", function() {
             var date = new Date(2010, 4, 2, 12, 42, 53);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53);
@@ -767,23 +726,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d, h, m, s", function() {
-            var date = new Date(2010, 4, 2, 12, 42, 53);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h, m, s, ms", function() {
             var date = new Date(2010, 4, 2, 12, 42, 53, 498);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with y, m, d, h, m, s, ms", function() {
-            var date = new Date(2010, 4, 2, 12, 42, 53, 498);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
