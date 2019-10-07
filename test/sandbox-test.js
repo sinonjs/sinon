@@ -220,6 +220,7 @@ describe("Sandbox", function() {
             var Class = function() {
                 return;
             };
+            Class.prototype.noop = noop;
 
             var stub = this.sandbox.createStubInstance(Class);
             assert.exception(function() {
@@ -247,6 +248,7 @@ describe("Sandbox", function() {
             var Class = function() {
                 return;
             };
+            Class.prototype.noop = noop;
             Class.prototype.type = TYPE;
 
             var stub = this.sandbox.createStubInstance(Class);
@@ -1635,6 +1637,7 @@ describe("Sandbox", function() {
 
             var myObj = { a: function() {} };
             function MyClass() {}
+            MyClass.prototype.method1 = noop;
             Object.defineProperty(myObj, "b", {
                 get: function() {
                     return 42;

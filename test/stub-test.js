@@ -2797,15 +2797,17 @@ describe("stub", function() {
             assert.equals(3, stub.method());
         });
 
-        it("doesn't stub fake methods", function() {
+        it("throws with no methods to stub", function() {
             var Class = function() {
                 return;
             };
 
-            var stub = createStubInstance(Class);
-            assert.exception(function() {
-                stub.method.returns(3);
-            });
+            assert.exception(
+                function() {
+                    createStubInstance(Class);
+                },
+                { message: "Expected to stub methods on object but found none" }
+            );
         });
 
         it("doesn't call the constructor", function() {
@@ -2826,6 +2828,9 @@ describe("stub", function() {
         it("retains non function values", function() {
             var TYPE = "some-value";
             var Class = function() {
+                return;
+            };
+            Class.prototype.method = function() {
                 return;
             };
             Class.prototype.type = TYPE;

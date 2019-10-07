@@ -84,6 +84,9 @@ describe("issues", function() {
 
             B.prototype = Object.create(A.prototype);
             B.prototype.constructor = A;
+            B.prototype.noop = function() {
+                return;
+            };
 
             refute.exception(function() {
                 sinon.createStubInstance(B);
@@ -96,6 +99,10 @@ describe("issues", function() {
             var A = function() {
                 return;
             };
+            A.prototype.meth = function() {
+                return;
+            };
+
             refute.exception(function() {
                 sinon.createStubInstance(A);
                 sinon.createStubInstance(A);

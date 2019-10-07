@@ -13,26 +13,39 @@ describe("restore-object", function() {
         assert.isFunction(restoreObject);
     });
 
-    it("works on empty objects", function() {
-        refute.exception(function() {
-            restoreObject({});
-        });
+    it("throws on falsy input", function() {
+        assert.exception(
+            function() {
+                restoreObject(false);
+            },
+            { message: "Trying to restore object but received false" }
+        );
+
+        assert.exception(
+            function() {
+                restoreObject(null);
+            },
+            { message: "Trying to restore object but received null" }
+        );
+
+        assert.exception(
+            function() {
+                restoreObject();
+            },
+            { message: "Trying to restore object but received undefined" }
+        );
     });
 
-    it("quietly ignores falsy input", function() {
-        refute.exception(function() {
-            restoreObject(false);
-            restoreObject(null);
-        });
-    });
-
-    it("works with no spies or stubs", function() {
-        refute.exception(function() {
-            restoreObject({
-                catpants: function() {},
-                meh: "okay"
-            });
-        });
+    it("throws with no spies or stubs", function() {
+        assert.exception(
+            function() {
+                restoreObject({
+                    catpants: function() {},
+                    meh: "okay"
+                });
+            },
+            { message: "Expected to restore methods on object but found none" }
+        );
     });
 
     it("works with mixed spies and stubs", function() {
@@ -55,31 +68,27 @@ describe("restore-object", function() {
         refute.isFunction(object.when.restore);
     });
 
-    describe("spies", function() {
-        it("restores entire object", function() {
-            var object = sinonSpy({
-                foo: function() {},
-                bar: function() {}
-            });
-
-            object = restoreObject(object);
-
-            refute.isFunction(object.foo.restore);
-            refute.isFunction(object.bar.restore);
+    it("restores entire spied object", function() {
+        var object = sinonSpy({
+            foo: function() {},
+            bar: function() {}
         });
+
+        object = restoreObject(object);
+
+        refute.isFunction(object.foo.restore);
+        refute.isFunction(object.bar.restore);
     });
 
-    describe("stubs", function() {
-        it("restores entire object", function() {
-            var object = sinonStub({
-                foo: function() {},
-                bar: function() {}
-            });
-
-            object = restoreObject(object);
-
-            refute.isFunction(object.foo.restore);
-            refute.isFunction(object.bar.restore);
+    it("restores entire stubbed object", function() {
+        var object = sinonStub({
+            foo: function() {},
+            bar: function() {}
         });
+
+        object = restoreObject(object);
+
+        refute.isFunction(object.foo.restore);
+        refute.isFunction(object.bar.restore);
     });
 });
