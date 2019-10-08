@@ -34,7 +34,9 @@ makeBundle(
         // Add inline source maps to the default bundle
         debug: true,
         // Create a UMD wrapper and install the "sinon" global:
-        standalone: "sinon"
+        standalone: "sinon",
+        // Avoid installing node shims like process
+        builtins: false
     },
     function(bundle) {
         var script = preamble + bundle;
