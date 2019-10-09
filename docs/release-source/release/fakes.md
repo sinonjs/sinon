@@ -6,36 +6,50 @@ breadcrumb: fakes
 
 ### Introduction
 
-`fake` was introduced with Sinon with v5. It simplifies and merges concepts from [`spies`][spies] and [`stubs`][stubs].
+`fake` is available in Sinon from v5 onwards. It allows creation of a `fake` `Function` with the ability to set a default [behavior](#fakes-with-behavior). Set the [behavior](#fakes-with-behavior) using `Functions` with the same API as those in a [`sinon.stub`][stubs]. The created `fake` `Function`, with or without behavior has the same API as a (`sinon.spy`)[spies].
 
 In Sinon, a `fake` is a `Function` that records arguments, return value, the value of `this` and exception thrown (if any) for all of its calls.
-
-It can be created with or without behavior; it can wrap an existing function.
 
 A fake is immutable: once created, the behavior will not change.
 
 Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` API knows only how to create fakes, and doesn't concern itself with plugging them into the system under test. To plug the fakes into the system under test, you can use the [`sinon.replace*`](../sandbox#sandboxreplaceobject-property-replacement) methods.
 
-
 ### Creating a fake
+
+Create a `fake` `Function` with or without [behavior](#fakes-with-behavior). The created `Function` has the same API as a [`sinon.spy`][spies].
+
+#### Creating a fake without behavior
 
 ```js
 // create a basic fake, with no behavior
 var fake = sinon.fake();
 
 fake();
+// undefined
 
-console.log(fake.callCount);
+fake.callCount;
 // 1
+```
+
+#### Creating a fake with custom behaviour
+
+```js
+// create a fake that returns the text "foo"
+var fake = sinon.fake.returns('foo');
+
+fake()
+// foo
 ```
 
 ### Fakes with behavior
 
-Fakes can be created with behavior, which cannot be changed once the fake has been created.
+Fakes cannot change once created with behaviour. These methods are from the implemenation of the [`sinon.stub`][stubs].
 
 #### `sinon.fake.returns(value);`
 
-Creates a fake that returns the `value` argument
+Creates a fake that returns the `value` argument.
+
+Taken from the [`Stub` return `Function`](./stubs.md#stubreturnsobj).
 
 ```js
 var fake = sinon.fake.returns('apple pie');
@@ -47,6 +61,8 @@ fake();
 #### `sinon.fake.throws(value);`
 
 Creates a fake that throws an `Error` with the provided value as the `message` property.
+
+Taken from the [`Stub` throws `Function`](./stubs.md#stubthrows).
 
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
@@ -61,15 +77,21 @@ fake();
 
 Creates a fake that returns a resolved `Promise` for the passed value.
 
+Taken from the [`Stub` resolves `Function`](./stubs.md#stubresolvesvalue).
+
 #### `sinon.fake.rejects(value);`
 
 Creates a fake that returns a rejected `Promise` for the passed value.
+
+Taken from the [`Stub` rejects `Function`](./stubs.md#stubrejects).
 
 If an `Error` is passed as the `value` argument, then that will be the value of the promise. If any other value is passed, then that will be used for the `message` property of the `Error` returned by the promise.
 
 #### `sinon.fake.yields([value1, ..., valueN]);`
 
 `sinon.fake.yields` takes some values, and returns a function that when being called, expects the last argument to be a callback and invokes that callback with the same previously given values. The returned function is normally used to fake a service function that takes a callback as the last argument.
+
+Taken from the [`Stub` yields `Function`](./stubs.md#stubyieldsarg1-arg2-).
 
  In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
 
@@ -84,6 +106,8 @@ console.log('end of this event loop');
 #### `sinon.fake.yieldsAsync([value1, ..., valueN]);`
 
 Similar to `yields`, `yieldsAsync` also returns a function that when invoked, the function expects the last argument to be a callback and invokes that callback with the same previously given values. However, the returned function invokes that callback asynchronously rather than immediately, i.e. in the next event loop.
+
+Taken from the [`Stub` yields `Function`](./stubs.md#stubyieldsasyncarg1-arg2-).
 
 Compare the output of the code example below with the output of the code example above for `yields` to see the difference.
 
@@ -100,9 +124,13 @@ console.log('end of this event loop');
 
 Wraps an existing `Function` to record all interactions, while leaving it up to the `func` to provide the behavior.
 
+The created `fake` `Function` has the same API as a [`sinon.spy`][spies].
+
 This is useful when complex behavior not covered by the `sinon.fake.*` methods is required or when wrapping an existing function or method.
 
 ### Instance properties
+
+The instance properties are the same as a [`sinon.spy`][spies].
 
 #### `f.callback`
 
