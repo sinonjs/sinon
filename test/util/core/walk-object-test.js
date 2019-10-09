@@ -48,14 +48,14 @@ describe("util/core/walk-object", function() {
                 function() {
                     walkObject(anonymousFn, false);
                 },
-                { message: "Trying to  object but received false" }
+                { message: "Trying to undefined object but received false" }
             );
 
             assert.exception(
                 function() {
                     walkObject(anonymousFn, {});
                 },
-                { message: "Expected to  methods on object but found none" }
+                { message: "Expected to undefined methods on object but found none" }
             );
         });
     });
