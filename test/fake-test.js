@@ -51,6 +51,7 @@ describe("fake", function() {
     });
 
     describe("when passed a Function", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake, function() {
             return;
         });
@@ -70,6 +71,7 @@ describe("fake", function() {
     });
 
     describe("when passed no value", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake);
     });
 
@@ -168,6 +170,7 @@ describe("fake", function() {
             assert.equals(actual, expected);
         });
 
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.returns, "42");
     });
 
@@ -189,6 +192,7 @@ describe("fake", function() {
             /* eslint-disable no-restricted-syntax */
         });
 
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.throws, "42");
 
         it("should return the same error type as it is passed", function() {
@@ -232,6 +236,7 @@ describe("fake", function() {
             });
         });
 
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.resolves, "42");
     });
 
@@ -247,6 +252,7 @@ describe("fake", function() {
             });
         });
 
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.rejects, "42");
 
         it("should return the same error type as it is passed", function() {
@@ -269,6 +275,7 @@ describe("fake", function() {
     });
 
     describe(".yields", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.yields, noop, "42", "43");
 
         it("should call a callback with the provided values", function() {
@@ -304,6 +311,7 @@ describe("fake", function() {
     });
 
     describe(".yieldsAsync", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.yieldsAsync, noop, "42", "43");
 
         it("should call the callback asynchronously with the provided values", function(done) {

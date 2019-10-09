@@ -111,6 +111,7 @@ describe("assert", function() {
         });
 
         describe(".called", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("called");
 
             it("fails when method does not exist", function() {
@@ -175,6 +176,7 @@ describe("assert", function() {
         });
 
         describe(".notCalled", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("notCalled");
 
             it("fails when method does not exist", function() {
@@ -234,6 +236,7 @@ describe("assert", function() {
         });
 
         describe(".calledOnce", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledOnce");
 
             it("fails when method does not exist", function() {
@@ -307,6 +310,7 @@ describe("assert", function() {
         });
 
         describe(".calledTwice", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledTwice");
 
             it("fails if called once", function() {
@@ -350,6 +354,7 @@ describe("assert", function() {
         });
 
         describe(".calledThrice", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledThrice");
 
             it("fails if called once", function() {
@@ -582,6 +587,7 @@ describe("assert", function() {
         });
 
         describe(".calledWithNew", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledWithNew");
 
             it("fails when method does not exist", function() {
@@ -660,6 +666,7 @@ describe("assert", function() {
         });
 
         describe(".alwaysCalledWithNew", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("alwaysCalledWithNew");
 
             it("fails when method does not exist", function() {
@@ -836,6 +843,7 @@ describe("assert", function() {
         });
 
         describe(".calledOnceWithExactly", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledOnceWithExactly");
 
             it("fails when method fails", function() {
@@ -1027,6 +1035,7 @@ describe("assert", function() {
         });
 
         describe(".callCount", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("callCount");
 
             it("fails when method fails", function() {

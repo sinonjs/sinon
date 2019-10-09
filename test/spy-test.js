@@ -217,6 +217,7 @@ function verifyFunctionName(func, expectedName) {
     }
 }
 
+//eslint-disable-next-line mocha/max-top-level-suites
 describe("spy", function() {
     it("does not throw if called without function", function() {
         refute.exception(function() {
@@ -1007,7 +1008,9 @@ describe("spy", function() {
         });
     });
 
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".calledWith", spyCalledTests("calledWith"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".calledWithMatch", spyCalledTests("calledWithMatch"));
 
     describe(".calledWithMatchSpecial", function() {
@@ -1037,7 +1040,9 @@ describe("spy", function() {
         });
     });
 
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".alwaysCalledWith", spyAlwaysCalledTests("alwaysCalledWith"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".alwaysCalledWithMatch", spyAlwaysCalledTests("alwaysCalledWithMatch"));
 
     describe(".alwaysCalledWithMatchSpecial", function() {
@@ -1087,7 +1092,9 @@ describe("spy", function() {
         });
     });
 
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".neverCalledWith", spyNeverCalledTests("neverCalledWith"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".neverCalledWithMatch", spyNeverCalledTests("neverCalledWithMatch"));
 
     describe(".neverCalledWithMatchSpecial", function() {
@@ -2943,6 +2950,7 @@ describe("spy", function() {
     });
 
     describe("everything", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         require("./shared-spy-stub-everything-tests")(createSpy);
     });
 });

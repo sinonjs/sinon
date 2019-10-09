@@ -1279,6 +1279,7 @@ describe("stub", function() {
     });
 
     describe("everything", function() {
+        // eslint-disable-next-line mocha/no-setup-in-describe
         require("./shared-spy-stub-everything-tests")(createStub);
 
         it("returns function", function() {
