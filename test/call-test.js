@@ -119,7 +119,7 @@ describe("sinonSpy.call", function() {
         beforeEach(spyCallSetUp);
 
         it("gets call object", function() {
-            var spy = sinonSpy.create();
+            var spy = sinonSpy();
             spy();
             var firstCall = spy.getCall(0);
 

@@ -22,7 +22,7 @@ describe("assert", function() {
         this.global = typeof window !== "undefined" ? window : global;
 
         this.setUpStubs = function() {
-            this.stub = sinonStub.create();
+            this.stub = sinonStub();
             sinonStub(sinonAssert, "fail").throws();
             sinonStub(sinonAssert, "pass");
         };
@@ -1097,7 +1097,7 @@ describe("assert", function() {
             });
 
             it("passes if stub returns true", function() {
-                var stub = sinonStub.create();
+                var stub = sinonStub();
                 sinonStub(stub, "alwaysCalledOn").returns(true);
 
                 sinonAssert.alwaysCalledOn(stub, {});
@@ -1141,7 +1141,7 @@ describe("assert", function() {
         });
 
         it("fails if stub returns false", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             sinonStub(stub, "alwaysCalledWith").returns(false);
 
             assert.exception(function() {
@@ -1152,7 +1152,7 @@ describe("assert", function() {
         });
 
         it("passes if stub returns true", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             sinonStub(stub, "alwaysCalledWith").returns(true);
 
             sinonAssert.alwaysCalledWith(stub, {}, []);
@@ -1182,7 +1182,7 @@ describe("assert", function() {
         });
 
         it("fails if stub returns false", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             sinonStub(stub, "alwaysCalledWithExactly").returns(false);
 
             sinonAssert.alwaysCalledWithExactly(stub, {}, []);
@@ -1191,7 +1191,7 @@ describe("assert", function() {
         });
 
         it("passes if stub returns true", function() {
-            var stub = sinonStub.create();
+            var stub = sinonStub();
             sinonStub(stub, "alwaysCalledWithExactly").returns(true);
 
             sinonAssert.alwaysCalledWithExactly(stub, {}, []);
