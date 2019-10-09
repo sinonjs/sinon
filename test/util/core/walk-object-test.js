@@ -17,7 +17,11 @@ describe("util/core/walk-object", function() {
         };
 
         before(function() {
-            if (typeof Object.defineProperty !== "function") {
+            if (
+                typeof Object.defineProperty !== "function" ||
+                typeof Object.getOwnPropertyDescriptor !== "function" ||
+                (Object.getOwnPropertyDescriptor(fnWithNoName, "name") || {}).configurable !== true
+            ) {
                 this.skip();
             }
 
