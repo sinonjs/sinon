@@ -8,6 +8,7 @@ var sinonSpy = require("../../lib/sinon/spy");
 var assert = referee.assert;
 var refute = referee.refute;
 var GlobalDate = Date;
+var setImmediatePresent = global.setImmediate && typeof global.setImmediate === "function";
 
 describe("fakeTimers.clock", function() {
     beforeEach(function() {
@@ -102,56 +103,62 @@ describe("fakeTimers.clock", function() {
             this.clock = fakeTimers.clock.create();
         });
 
-        it("returns numeric id or object with numeric id", function() {
-            var result = this.clock.setImmediate(function() {
-                return;
+        if (typeof setImmediate === "function") {
+            it("returns numeric id or object with numeric id", function() {
+                var result = this.clock.setImmediate(function() {
+                    return;
+                });
+
+                if (typeof result === "object") {
+                    assert.isNumber(result.id);
+                } else {
+                    assert.isNumber(result);
+                }
             });
 
-            if (typeof result === "object") {
-                assert.isNumber(result.id);
-            } else {
-                assert.isNumber(result);
-            }
-        });
+            it("calls the given callback immediately", function() {
+                var stub = sinonStub();
 
-        it("calls the given callback immediately", function() {
-            var stub = sinonStub();
+                this.clock.setImmediate(stub);
+                this.clock.tick(0);
 
-            this.clock.setImmediate(stub);
-            this.clock.tick(0);
-
-            assert(stub.called);
-        });
-
-        it("throws if no arguments", function() {
-            var clock = this.clock;
-
-            assert.exception(function() {
-                clock.setImmediate();
+                assert(stub.called);
             });
-        });
 
-        it("manages separate timers per clock instance", function() {
-            var clock1 = fakeTimers.clock.create();
-            var clock2 = fakeTimers.clock.create();
-            var stubs = [sinonStub(), sinonStub()];
+            it("throws if no arguments", function() {
+                var clock = this.clock;
 
-            clock1.setImmediate(stubs[0]);
-            clock2.setImmediate(stubs[1]);
-            clock2.tick(0);
+                assert.exception(function() {
+                    clock.setImmediate();
+                });
+            });
 
-            assert.isFalse(stubs[0].called);
-            assert(stubs[1].called);
-        });
+            it("manages separate timers per clock instance", function() {
+                var clock1 = fakeTimers.clock.create();
+                var clock2 = fakeTimers.clock.create();
+                var stubs = [sinonStub(), sinonStub()];
 
-        it("passes extra parameters through to the callback", function() {
-            var stub = sinonStub();
+                clock1.setImmediate(stubs[0]);
+                clock2.setImmediate(stubs[1]);
+                clock2.tick(0);
 
-            this.clock.setImmediate(stub, "value1", 2);
-            this.clock.tick(1);
+                assert.isFalse(stubs[0].called);
+                assert(stubs[1].called);
+            });
 
-            assert(stub.calledWithExactly("value1", 2));
-        });
+            it("passes extra parameters through to the callback", function() {
+                var stub = sinonStub();
+
+                this.clock.setImmediate(stub, "value1", 2);
+                this.clock.tick(1);
+
+                assert(stub.calledWithExactly("value1", 2));
+            });
+        } else {
+            it("shouldn't install setImmedate", function() {
+                refute.isFunction(this.clock.setImmediate);
+            });
+        }
     });
 
     describe(".clearImmediate", function() {
@@ -159,15 +166,21 @@ describe("fakeTimers.clock", function() {
             this.clock = fakeTimers.clock.create();
         });
 
-        it("removes immediate callbacks", function() {
-            var callback = sinonStub();
+        if (typeof clearImmediate === "function") {
+            it("removes immediate callbacks", function() {
+                var callback = sinonStub();
 
-            var id = this.clock.setImmediate(callback);
-            this.clock.clearImmediate(id);
-            this.clock.tick(1);
+                var id = this.clock.setImmediate(callback);
+                this.clock.clearImmediate(id);
+                this.clock.tick(1);
 
-            assert.isFalse(callback.called);
-        });
+                assert.isFalse(callback.called);
+            });
+        } else {
+            it("shouldn't install clearImmedate", function() {
+                refute.isFunction(this.clock.clearImmediate);
+            });
+        }
     });
 
     describe(".tick", function() {
@@ -631,10 +644,10 @@ describe("fakeTimers.clock", function() {
             assert(Date.prototype.isPrototypeOf(date));
         });
 
-        it("creates real Date objects when called as function", function() {
+        it("creates date strings when called as function", function() {
             var date = this.clock.Date();
 
-            assert(Date.prototype.isPrototypeOf(date));
+            assert.isString(date);
         });
 
         it("creates real Date objects when Date constructor is gone", function() {
@@ -663,12 +676,6 @@ describe("fakeTimers.clock", function() {
             assert.equals(date.getTime(), new Date(this.now).getTime());
         });
 
-        it("returns Date object representing clock time", function() {
-            var date = this.clock.Date();
-
-            assert.equals(date.getTime(), new Date(this.now).getTime());
-        });
-
         it("listens to ticking clock", function() {
             var date1 = new this.clock.Date();
             this.clock.tick(3);
@@ -684,23 +691,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with timestamp", function() {
-            var date = new Date();
-            var fakeDate = this.clock.Date(date.getTime());
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing year, month", function() {
             var date = new Date(2010, 4);
             var fakeDate = new this.clock.Date(2010, 4);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with year, month", function() {
-            var date = new Date(2010, 4);
-            var fakeDate = this.clock.Date(2010, 4);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
@@ -712,23 +705,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d", function() {
-            var date = new Date(2010, 4, 2);
-            var fakeDate = this.clock.Date(2010, 4, 2);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h", function() {
             var date = new Date(2010, 4, 2, 12);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with y, m, d, h", function() {
-            var date = new Date(2010, 4, 2, 12);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
@@ -740,13 +719,6 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d, h, m", function() {
-            var date = new Date(2010, 4, 2, 12, 42);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h, m, s", function() {
             var date = new Date(2010, 4, 2, 12, 42, 53);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53);
@@ -754,23 +726,9 @@ describe("fakeTimers.clock", function() {
             assert.equals(fakeDate.getTime(), date.getTime());
         });
 
-        it("returns regular date when calling with y, m, d, h, m, s", function() {
-            var date = new Date(2010, 4, 2, 12, 42, 53);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
         it("creates regular date when passing y, m, d, h, m, s, ms", function() {
             var date = new Date(2010, 4, 2, 12, 42, 53, 498);
             var fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
-
-            assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("returns regular date when calling with y, m, d, h, m, s, ms", function() {
-            var date = new Date(2010, 4, 2, 12, 42, 53, 498);
-            var fakeDate = this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
             assert.equals(fakeDate.getTime(), date.getTime());
         });
@@ -981,6 +939,42 @@ describe("fakeTimers.clock", function() {
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
         });
 
+        if (typeof setImmediate === "function") {
+            it("restores global setImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+                var stub = sinonStub();
+                this.clock.restore();
+
+                this.timer = setImmediate(stub);
+                this.clock.tick(1);
+
+                assert.isFalse(stub.called);
+                assert.same(setImmediate, fakeTimers.timers.setImmediate);
+            });
+        } else {
+            it("does not install global setImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+
+                assert.isUndefined(setImmediate);
+            });
+        }
+
+        if (typeof clearImmediate === "function") {
+            it("restores global clearImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+                sinonStub();
+                this.clock.restore();
+
+                assert.same(clearImmediate, fakeTimers.timers.clearImmediate);
+            });
+        } else {
+            it("does not install global clearImmediate", function() {
+                this.clock = fakeTimers.useFakeTimers();
+
+                assert.isUndefined(clearImmediate);
+            });
+        }
+
         /*eslint-disable no-proto*/
         if (Object.__proto__) {
             it("deletes global property on restore if it was inherited onto the global object", function() {
@@ -1068,24 +1062,22 @@ describe("fakeTimers.clock", function() {
         });
 
         it("fakes provided methods", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
 
             refute.same(setTimeout, fakeTimers.timers.setTimeout);
             refute.same(Date, fakeTimers.timers.Date);
-            refute.same(setImmediate, fakeTimers.timers.setImmediate);
         });
 
         it("resets faked methods", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
             this.clock.restore();
 
             assert.same(setTimeout, fakeTimers.timers.setTimeout);
             assert.same(Date, fakeTimers.timers.Date);
-            assert.same(setImmediate, fakeTimers.timers.setImmediate);
         });
 
         it("does not fake methods not provided", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date", "setImmediate"] });
+            this.clock = fakeTimers.useFakeTimers({ toFake: ["setTimeout", "Date"] });
 
             assert.same(clearTimeout, fakeTimers.timers.clearTimeout);
             assert.same(setInterval, fakeTimers.timers.setInterval);
@@ -1143,6 +1135,10 @@ describe("fakeTimers.clock", function() {
         });
 
         it("installs clock in advancing mode and triggers setImmediate", function(done) {
+            if (!setImmediatePresent) {
+                this.skip();
+            }
+
             this.clock = fakeTimers.useFakeTimers({ shouldAdvanceTime: true });
             this.clock.setImmediate(
                 function() {
