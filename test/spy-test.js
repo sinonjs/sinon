@@ -2906,8 +2906,6 @@ describe("spy", function() {
 
             // call some spy APIs and verify no enumerable properties are added
             spy.withArgs(1);
-            // eslint-disable-next-line no-unused-vars
-            var val = spy.called;
             spy.calledBefore(createSpy());
             spy.calledAfter(createSpy());
             spy.calledOn(undefined);
@@ -2915,9 +2913,9 @@ describe("spy", function() {
             spy.calledWithNew();
             spy.threw();
             spy.returned("ret");
-            val = spy.thisValues.length;
-            val = spy.exceptions.length;
-            val = spy.returnValues.length;
+            assert.equals(spy.thisValues.length, 1);
+            assert.equals(spy.exceptions.length, 1);
+            assert.equals(spy.returnValues.length, 1);
             assert.equals(Object.keys(spy), ["fooBar"]);
 
             // verify that reset history doesn't change enumerable properties
@@ -2936,13 +2934,10 @@ describe("spy", function() {
             assert.equals(Object.keys(spy), Object.keys(func));
             assert.equals(Object.keys(spy), ["aProp"]);
 
-            // eslint-disable-next-line no-restricted-syntax
-            try {
+            assert.exception(function() {
                 spy();
-            } catch (e) {
-                // empty
-            }
-            spy.threw();
+            });
+            assert(spy.threw());
 
             spy.resetHistory();
             assert.equals(Object.keys(spy), ["aProp"]);

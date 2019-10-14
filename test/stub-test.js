@@ -11,6 +11,16 @@ var refute = referee.refute;
 var fail = referee.fail;
 var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
 
+function verifyFunctionName(func, expectedName) {
+    var descriptor = Object.getOwnPropertyDescriptor(func, "name");
+    if (descriptor && descriptor.configurable) {
+        // IE 11 functions don't have a name.
+        // Safari 9 has names that are not configurable.
+        assert.equals(descriptor.value, expectedName);
+        assert.equals(func.name, expectedName);
+    }
+}
+
 describe("stub", function() {
     beforeEach(function() {
         createStub(deprecated, "printWarning");
@@ -116,6 +126,72 @@ describe("stub", function() {
         stub(1);
 
         refute.isNull(stub.withArgs(1).firstCall);
+    });
+
+    it("retains function name", function() {
+        var object = {
+            test: function test() {
+                return;
+            }
+        };
+
+        var stub = createStub(object, "test");
+
+        assert.equals(stub.displayName, "test");
+        verifyFunctionName(stub, "test");
+    });
+
+    describe("non enumerable properties", function() {
+        it("create and call spy apis", function() {
+            var stub = createStub();
+            assert.equals(Object.keys(stub), []);
+
+            // call spy and verify no enumerable properties are added
+            stub(15);
+            assert.equals(Object.keys(stub), []);
+
+            // it should still work to add properties
+            stub.fooBar = 1;
+            assert.equals(Object.keys(stub), ["fooBar"]);
+
+            // call some spy APIs and verify no enumerable properties are added
+            stub.withArgs(1);
+            stub.calledBefore(createStub());
+            stub.calledAfter(createStub());
+            stub.calledOn(undefined);
+            stub.calledWith(15);
+            stub.calledWithNew();
+            stub.threw();
+            stub.returned("ret");
+            assert.equals(stub.thisValues.length, 1);
+            assert.equals(stub.exceptions.length, 1);
+            assert.equals(stub.returnValues.length, 1);
+            assert.equals(Object.keys(stub), ["fooBar"]);
+
+            // verify that reset history doesn't change enumerable properties
+            stub.resetHistory();
+            assert.equals(Object.keys(stub), ["fooBar"]);
+        });
+
+        it("create stub from function on object", function() {
+            var func = function() {
+                throw new Error("aError");
+            };
+            var object = {
+                test: func
+            };
+            func.aProp = 42;
+            createStub(object, "test");
+
+            assert.equals(object.test.aProp, 42);
+            assert.equals(Object.keys(object.test), Object.keys(func));
+            assert.equals(Object.keys(object.test), ["aProp"]);
+
+            object.test();
+
+            object.test.resetHistory();
+            assert.equals(Object.keys(object.test), ["aProp"]);
+        });
     });
 
     describe(".returns", function() {
@@ -2777,16 +2853,82 @@ describe("stub", function() {
             assert.equals(stub.length, 0);
         });
 
-        it("matches the function length", function() {
-            var api = {
-                // eslint-disable-next-line no-unused-vars
-                someMethod: function(a, b, c) {
+        it("retains function length 0", function() {
+            var object = {
+                test: function() {
                     return;
                 }
             };
-            var stub = createStub(api, "someMethod");
+
+            var stub = createStub(object, "test");
+
+            assert.equals(stub.length, 0);
+        });
+
+        it("retains function length 1", function() {
+            var object = {
+                // eslint-disable-next-line no-unused-vars
+                test: function(a) {
+                    return;
+                }
+            };
+
+            var stub = createStub(object, "test");
+
+            assert.equals(stub.length, 1);
+        });
+
+        it("retains function length 2", function() {
+            var object = {
+                // eslint-disable-next-line no-unused-vars
+                test: function(a, b) {
+                    return;
+                }
+            };
+
+            var stub = createStub(object, "test");
+
+            assert.equals(stub.length, 2);
+        });
+
+        it("retains function length 3", function() {
+            var object = {
+                // eslint-disable-next-line no-unused-vars
+                test: function(a, b, c) {
+                    return;
+                }
+            };
+
+            var stub = createStub(object, "test");
 
             assert.equals(stub.length, 3);
+        });
+
+        it("retains function length 4", function() {
+            var object = {
+                // eslint-disable-next-line no-unused-vars
+                test: function(a, b, c, d) {
+                    return;
+                }
+            };
+
+            var stub = createStub(object, "test");
+
+            assert.equals(stub.length, 4);
+        });
+
+        it("retains function length 12", function() {
+            // eslint-disable-next-line no-unused-vars
+            var func12Args = function(a, b, c, d, e, f, g, h, i, j, k, l) {
+                return;
+            };
+            var object = {
+                test: func12Args
+            };
+
+            var stub = createStub(object, "test");
+
+            assert.equals(stub.length, 12);
         });
     });
 
