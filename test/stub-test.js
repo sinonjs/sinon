@@ -669,7 +669,7 @@ describe("stub", function() {
                 this.skip();
             }
 
-            var stub = createStub.create();
+            var stub = createStub();
             stub.returnsThis();
 
             // Due to strict mode, would be `global` otherwise
