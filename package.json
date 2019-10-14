@@ -31,7 +31,6 @@
     "lint": "run-p lint-js lint-markdown",
     "lint-js": "eslint '**/*.{js,mjs}'",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
-    "precommit": "lint-staged",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-bundle",
@@ -77,7 +76,7 @@
     "eslint-plugin-mocha": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "esm": "^3.2.25",
-    "husky": "^0.14.2",
+    "husky": "^3.0.8",
     "lint-staged": "^9.4.1",
     "markdownlint-cli": "^0.18.0",
     "mocha": "^6.2.0",
@@ -113,5 +112,10 @@
       "cache": true
     },
     "mode": "auto"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
