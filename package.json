@@ -31,7 +31,6 @@
     "lint": "run-p lint-js lint-markdown",
     "lint-js": "eslint '**/*.{js,mjs}'",
     "lint-markdown": "find docs -type f -name '*.md' ! -name 'changelog.md' | xargs markdownlint",
-    "precommit": "lint-staged",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-bundle",
@@ -113,5 +112,10 @@
       "cache": true
     },
     "mode": "auto"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
