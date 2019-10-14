@@ -136,14 +136,14 @@ async function test() {
 
     await clock.tickAsync(200);
 }
-    
-// test() prints: 
+
+// test() prints:
 // - resolved 1 100
 // - resolved 2 110
 // - timeout 200
 ```
 
-Note that in the above example, the synchronous `clock.tick(200)` would only print `timeout 200` and `resolved 1 200`. 
+Note that in the above example, the synchronous `clock.tick(200)` would only print `timeout 200` and `resolved 1 200`.
 
 
 #### `clock.tick(time);` / `await clock.tickAsync(time)`
