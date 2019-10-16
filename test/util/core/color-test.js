@@ -3,15 +3,13 @@
 var assert = require("@sinonjs/referee").assert;
 var proxyquire = require("proxyquire");
 
-function getColorMethods() {
-    return [
-        { name: "bold", code: 1 },
-        { name: "cyan", code: 96 },
-        { name: "green", code: 32 },
-        { name: "red", code: 31 },
-        { name: "white", code: 39 }
-    ];
-}
+var colors = [
+    { name: "bold", code: 1 },
+    { name: "cyan", code: 96 },
+    { name: "green", code: 32 },
+    { name: "red", code: 31 },
+    { name: "white", code: 39 }
+];
 
 describe("color", function() {
     describe("when environment supports color", function() {
@@ -25,7 +23,9 @@ describe("color", function() {
             });
         });
 
-        getColorMethods().forEach(function(method) {
+        // eslint-disable-next-line mocha/no-setup-in-describe
+        colors.forEach(function(method) {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             describe(method.name, function() {
                 it("should return a colored string", function() {
                     var string = "lorem ipsum";
@@ -48,7 +48,9 @@ describe("color", function() {
             });
         });
 
-        getColorMethods().forEach(function(method) {
+        // eslint-disable-next-line mocha/no-setup-in-describe
+        colors.forEach(function(method) {
+            // eslint-disable-next-line mocha/no-setup-in-describe
             describe(method.name, function() {
                 it("should return a regular string", function() {
                     var string = "lorem ipsum";

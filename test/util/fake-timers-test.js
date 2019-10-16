@@ -741,19 +741,29 @@ describe("fakeTimers.clock", function() {
             assert.same(typeof this.clock.Date.now, typeof Date.now);
         });
 
-        if (Date.now) {
-            describe(".now", function() {
-                it("returns clock.now", function() {
-                    assert.equals(this.clock.Date.now(), this.now);
-                });
+        describe(".now", function() {
+            before(function() {
+                if (typeof Date.now !== "function") {
+                    this.skip();
+                }
             });
-        } else {
-            describe("unsupported now", function() {
-                it("is undefined", function() {
-                    assert.isUndefined(this.clock.Date.now);
-                });
+
+            it("returns clock.now", function() {
+                assert.equals(this.clock.Date.now(), this.now);
             });
-        }
+        });
+
+        describe("unsupported now", function() {
+            before(function() {
+                if (typeof Date.now === "function") {
+                    this.skip();
+                }
+            });
+
+            it("is undefined", function() {
+                assert.isUndefined(this.clock.Date.now);
+            });
+        });
 
         it("mirrors parse method", function() {
             assert.same(this.clock.Date.parse, Date.parse);
@@ -767,19 +777,29 @@ describe("fakeTimers.clock", function() {
             assert.same(this.clock.Date.prototype.toUTCString, Date.prototype.toUTCString);
         });
 
-        if (Date.toSource) {
-            describe(".toSource", function() {
-                it("is mirrored", function() {
-                    assert.same(this.clock.Date.toSource(), Date.toSource());
-                });
+        describe(".toSource", function() {
+            before(function() {
+                if (typeof Date.toSource !== "function") {
+                    this.skip();
+                }
             });
-        } else {
-            describe("unsupported toSource", function() {
-                it("is undefined", function() {
-                    assert.isUndefined(this.clock.Date.toSource);
-                });
+
+            it("is mirrored", function() {
+                assert.same(this.clock.Date.toSource(), Date.toSource());
             });
-        }
+        });
+
+        describe("unsupported toSource", function() {
+            before(function() {
+                if (typeof Date.toSource === "function") {
+                    this.skip();
+                }
+            });
+
+            it("is undefined", function() {
+                assert.isUndefined(this.clock.Date.toSource);
+            });
+        });
 
         it("mirrors toString", function() {
             assert.same(this.clock.Date.toString(), Date.toString());
@@ -939,65 +959,79 @@ describe("fakeTimers.clock", function() {
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
         });
 
-        if (typeof setImmediate === "function") {
-            it("restores global setImmediate", function() {
-                this.clock = fakeTimers.useFakeTimers();
-                var stub = sinonStub();
+        it("restores global setImmediate", function() {
+            if (typeof setImmediate !== "function") {
+                this.skip();
+            }
+
+            this.clock = fakeTimers.useFakeTimers();
+            var stub = sinonStub();
+            this.clock.restore();
+
+            this.timer = setImmediate(stub);
+            this.clock.tick(1);
+
+            assert.isFalse(stub.called);
+            assert.same(setImmediate, fakeTimers.timers.setImmediate);
+        });
+
+        it("does not install global setImmediate", function() {
+            if (typeof setImmediate !== "undefined") {
+                this.skip();
+            }
+
+            this.clock = fakeTimers.useFakeTimers();
+
+            assert.isUndefined(setImmediate);
+        });
+
+        it("restores global clearImmediate", function() {
+            if (typeof clearImmediate !== "function") {
+                this.skip();
+            }
+
+            this.clock = fakeTimers.useFakeTimers();
+            sinonStub();
+            this.clock.restore();
+
+            assert.same(clearImmediate, fakeTimers.timers.clearImmediate);
+        });
+
+        it("does not install global clearImmediate", function() {
+            if (typeof clearImmediate !== "undefined") {
+                this.skip();
+            }
+
+            this.clock = fakeTimers.useFakeTimers();
+
+            assert.isUndefined(clearImmediate);
+        });
+
+        it("deletes global property on restore if it was inherited onto the global object", function() {
+            /*eslint-disable no-proto*/
+            if (!Object.__proto__) {
+                this.skip();
+            }
+
+            // Give the global object an inherited 'tick' method
+            delete this.global.tick;
+            this.global.__proto__.tick = function() {
+                return;
+            };
+
+            if (!this.global.hasOwnProperty("tick")) {
+                this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
+                assert.isTrue(this.global.hasOwnProperty("tick"));
                 this.clock.restore();
 
-                this.timer = setImmediate(stub);
-                this.clock.tick(1);
-
-                assert.isFalse(stub.called);
-                assert.same(setImmediate, fakeTimers.timers.setImmediate);
-            });
-        } else {
-            it("does not install global setImmediate", function() {
-                this.clock = fakeTimers.useFakeTimers();
-
-                assert.isUndefined(setImmediate);
-            });
-        }
-
-        if (typeof clearImmediate === "function") {
-            it("restores global clearImmediate", function() {
-                this.clock = fakeTimers.useFakeTimers();
-                sinonStub();
-                this.clock.restore();
-
-                assert.same(clearImmediate, fakeTimers.timers.clearImmediate);
-            });
-        } else {
-            it("does not install global clearImmediate", function() {
-                this.clock = fakeTimers.useFakeTimers();
-
-                assert.isUndefined(clearImmediate);
-            });
-        }
-
-        /*eslint-disable no-proto*/
-        if (Object.__proto__) {
-            it("deletes global property on restore if it was inherited onto the global object", function() {
-                // Give the global object an inherited 'tick' method
-                delete this.global.tick;
-                this.global.__proto__.tick = function() {
-                    return;
-                };
-
-                if (!this.global.hasOwnProperty("tick")) {
-                    this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-                    assert.isTrue(this.global.hasOwnProperty("tick"));
-                    this.clock.restore();
-
-                    assert.isFalse(this.global.hasOwnProperty("tick"));
-                    delete this.global.__proto__.tick;
-                } else {
-                    // hasOwnProperty does not work as expected.
-                    assert(true);
-                }
-            });
-        }
-        /*eslint-enable no-proto*/
+                assert.isFalse(this.global.hasOwnProperty("tick"));
+                delete this.global.__proto__.tick;
+            } else {
+                // hasOwnProperty does not work as expected.
+                assert(true);
+            }
+            /*eslint-enable no-proto*/
+        });
 
         it("restores global property on restore if it is present on the global object itself", function() {
             // Directly give the global object a tick method

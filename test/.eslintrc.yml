@@ -1,6 +1,9 @@
 env:
   mocha: true
 
+extends:
+  - plugin:mocha/recommended
+
 plugins:
   - local-rules
   - mocha

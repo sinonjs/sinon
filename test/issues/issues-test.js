@@ -40,18 +40,22 @@ describe("issues", function() {
     });
 
     describe("#458", function() {
-        if (typeof require("fs").readFileSync !== "undefined") {
-            describe("on node", function() {
-                it("stub out fs.readFileSync", function() {
-                    var fs = require("fs");
-                    var testCase = this;
+        describe("on node", function() {
+            beforeEach(function() {
+                if (typeof require("fs").readFileSync !== "function") {
+                    this.skip();
+                }
+            });
 
-                    refute.exception(function() {
-                        testCase.sandbox.stub(fs, "readFileSync");
-                    });
+            it("stub out fs.readFileSync", function() {
+                var fs = require("fs");
+                var testCase = this;
+
+                refute.exception(function() {
+                    testCase.sandbox.stub(fs, "readFileSync");
                 });
             });
-        }
+        });
     });
 
     describe("#624", function() {
@@ -115,32 +119,36 @@ describe("issues", function() {
             return;
         }
 
-        // IE 11 does not support the function name property
-        if (bob.name) {
-            it("should not rename spies", function() {
-                var nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
-                var expectedName = nameDescriptor && nameDescriptor.configurable ? "bob" : "proxy";
-                var spy = sinon.spy(bob);
+        before(function() {
+            // IE 11 does not support the function name property
+            if (!bob.name) {
+                this.skip();
+            }
+        });
 
-                assert.equals(spy.name, expectedName);
+        it("should not rename spies", function() {
+            var nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
+            var expectedName = nameDescriptor && nameDescriptor.configurable ? "bob" : "proxy";
+            var spy = sinon.spy(bob);
 
-                var obj = { methodName: spy };
-                assert.equals(spy.name, expectedName);
+            assert.equals(spy.name, expectedName);
 
-                spy();
-                assert.equals(spy.name, expectedName);
+            var obj = { methodName: spy };
+            assert.equals(spy.name, expectedName);
 
-                obj.methodName.call(null);
-                assert.equals(spy.name, expectedName);
+            spy();
+            assert.equals(spy.name, expectedName);
 
-                obj.methodName();
-                assert.equals(spy.name, expectedName);
+            obj.methodName.call(null);
+            assert.equals(spy.name, expectedName);
 
-                obj.otherProp = spy;
-                obj.otherProp();
-                assert.equals(spy.name, expectedName);
-            });
-        }
+            obj.methodName();
+            assert.equals(spy.name, expectedName);
+
+            obj.otherProp = spy;
+            obj.otherProp();
+            assert.equals(spy.name, expectedName);
+        });
     });
 
     describe("#1026", function() {
@@ -631,6 +639,7 @@ describe("issues", function() {
         function Foo() {
             return;
         }
+        // eslint-disable-next-line mocha/no-setup-in-describe
         Foo.prototype.testMethod = function() {
             return;
         };
@@ -669,6 +678,7 @@ describe("issues", function() {
         function Foo() {
             return;
         }
+        // eslint-disable-next-line mocha/no-setup-in-describe
         Foo.prototype.testMethod = function() {
             return 1;
         };

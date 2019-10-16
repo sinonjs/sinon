@@ -209,9 +209,13 @@ describe("sinonSpy.call", function() {
         });
     });
 
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe("call.calledWith", spyCallCalledTests("calledWith"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe("call.calledWithMatch", spyCallCalledTests("calledWithMatch"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe("call.notCalledWith", spyCallNotCalledTests("notCalledWith"));
+    // eslint-disable-next-line mocha/no-setup-in-describe
     describe("call.notCalledWithMatch", spyCallNotCalledTests("notCalledWithMatch"));
 
     describe("call.calledWithExactly", function() {
