@@ -36,6 +36,7 @@ makeBundle(
         // Create a UMD wrapper and install the "sinon" global:
         standalone: "sinon",
         // Avoid installing node shims like process
+        detectGlobals: false,
         builtins: false
     },
     function(bundle) {
