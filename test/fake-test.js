@@ -359,6 +359,21 @@ describe("fake", function() {
         });
     });
 
+    describe(".named", function() {
+        before(function beforeFunc() {
+            var desc = Object.getOwnPropertyDescriptor(beforeFunc, "name");
+            if (!desc || !desc.configurable) {
+                this.skip();
+            }
+        });
+
+        it("should set the name of the fake to the given string", function() {
+            var myFake = fake().named("something");
+
+            assert.equals(myFake.name, "something");
+        });
+    });
+
     describe(".calledBefore/After", function() {
         var fakeA;
         var fakeB;
