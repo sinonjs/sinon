@@ -2,7 +2,7 @@
 
 var color = require("../lib/sinon/color");
 var referee = require("@sinonjs/referee");
-var sinonSpyCall = require("../lib/sinon/call");
+var proxyCall = require("../lib/sinon/proxy-call");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var assert = referee.assert;
@@ -14,7 +14,7 @@ function spyCallSetUp() {
     this.returnValue = function() {
         return;
     };
-    this.call = sinonSpyCall(
+    this.call = proxyCall(
         function() {
             return;
         },
@@ -29,7 +29,7 @@ function spyCallSetUp() {
 function spyCallCallSetup() {
     this.args = [];
     this.proxy = sinonSpy();
-    this.call = sinonSpyCall(this.proxy, {}, this.args, null, null, 0);
+    this.call = proxyCall(this.proxy, {}, this.args, null, null, 0);
 }
 
 function spyCallCalledTests(method) {
@@ -129,7 +129,7 @@ describe("sinonSpy.call", function() {
         });
 
         it("stores given call id", function() {
-            var call = sinonSpyCall(
+            var call = proxyCall(
                 function() {
                     return;
                 },
@@ -145,7 +145,7 @@ describe("sinonSpy.call", function() {
 
         it("throws if callId is undefined", function() {
             assert.exception(function() {
-                sinonSpyCall.create(
+                proxyCall.create(
                     function() {
                         return;
                     },
@@ -246,7 +246,7 @@ describe("sinonSpy.call", function() {
         });
 
         it("returns true for no arguments", function() {
-            var call = sinonSpyCall(
+            var call = proxyCall(
                 function() {
                     return;
                 },
@@ -261,7 +261,7 @@ describe("sinonSpy.call", function() {
         });
 
         it("returns false when called with no args but matching one", function() {
-            var call = sinonSpyCall(
+            var call = proxyCall(
                 function() {
                     return;
                 },
@@ -668,7 +668,7 @@ describe("sinonSpy.call", function() {
 
     describe("call.invokeCallback", function() {
         it("is alias for yield", function() {
-            var call = sinonSpyCall(
+            var call = proxyCall(
                 function() {
                     return;
                 },
