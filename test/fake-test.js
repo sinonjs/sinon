@@ -4,6 +4,7 @@ var sinon = require("../lib/sinon.js");
 var fake = sinon.fake;
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
+var refute = referee.refute;
 
 referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
@@ -355,6 +356,68 @@ describe("fake", function() {
                     return;
                 }, "not a function");
             }, /TypeError: Expected last argument to be a function/);
+        });
+    });
+
+    describe(".calledBefore/After", function() {
+        var fakeA;
+        var fakeB;
+
+        beforeEach(function() {
+            fakeA = fake();
+            fakeB = fake();
+
+            fakeA();
+            fakeB();
+        });
+
+        it("should return true if called before", function() {
+            assert.isTrue(fakeA.calledBefore(fakeB));
+        });
+
+        it("should return false if not called before", function() {
+            assert.isFalse(fakeB.calledBefore(fakeA));
+        });
+
+        it("should return true if called after", function() {
+            assert.isTrue(fakeB.calledAfter(fakeA));
+        });
+
+        it("should return false if not called after", function() {
+            assert.isFalse(fakeA.calledAfter(fakeB));
+        });
+
+        it("should pass sinon.assert.callOrder", function() {
+            refute.exception(function() {
+                sinon.assert.callOrder(fakeA, fakeB);
+            });
+        });
+
+        it("should fail sinon.assert.callOrder", function() {
+            assert.exception(
+                function() {
+                    sinon.assert.callOrder(fakeB, fakeA);
+                },
+                {
+                    name: "AssertError"
+                }
+            );
+        });
+
+        it("should return true if called immediately before", function() {
+            assert.isTrue(fakeA.calledImmediatelyBefore(fakeB));
+        });
+
+        it("should return false if not called immediately before", function() {
+            assert.isFalse(fakeB.calledImmediatelyBefore(fakeA));
+        });
+
+        it("should return true if called immediately after", function() {
+            assert.isTrue(fakeB.calledImmediatelyAfter(fakeA));
+        });
+
+        it("should return false if not called immediately after", function() {
+            assert.isFalse(fakeA.calledImmediatelyAfter(fakeB));
         });
     });
 });
