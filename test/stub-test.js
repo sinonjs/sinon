@@ -5,7 +5,6 @@ var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
 var match = require("@sinonjs/samsam").createMatcher;
-var deprecated = require("@sinonjs/commons").deprecated;
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
@@ -22,16 +21,6 @@ function verifyFunctionName(func, expectedName) {
 }
 
 describe("stub", function() {
-    beforeEach(function() {
-        createStub(deprecated, "printWarning");
-    });
-
-    afterEach(function() {
-        if (deprecated.printWarning.restore) {
-            deprecated.printWarning.restore();
-        }
-    });
-
     it("is spy", function() {
         var stub = createStub();
 
