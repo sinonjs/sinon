@@ -1,6 +1,7 @@
 "use strict";
 
 var assert = require("@sinonjs/referee").assert;
+var functionName = require("@sinonjs/commons").functionName;
 var Sandbox = require("../lib/sinon/sandbox");
 var proxyquire = require("proxyquire");
 
@@ -73,7 +74,8 @@ describe("sinon module", function() {
             it("should be a unary Function named 'createSandbox'", function() {
                 assert.isFunction(sinon.createSandbox);
                 assert.equals(sinon.createSandbox.length, 1);
-                assert.equals(sinon.createSandbox.name, "createSandbox");
+                // Use helper because IE 11 doesn't support the `name` property:
+                assert.equals(functionName(sinon.createSandbox), "createSandbox");
             });
         });
 
