@@ -8,6 +8,19 @@ layout: default
     </header>
 
     <div class="post-content">
+
+        {% comment %}
+        We add Carbon Ads on most posts.
+        The formatting gets a bit weird on the release.md page, so we need a
+        way of turning the ads off.
+
+        P.S. 'skip_ad == false' didn't work out for some reason (?)
+        {% endcomment %}
+
+        {% if page.skip_ad != true %}
+            <div>{% include carbonads.html %}</div>
+        {% endif %}
+
         {{ content }}
     </div>
 
