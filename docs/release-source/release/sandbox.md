@@ -118,6 +118,19 @@ What properties to inject. Note that simply naming "server" here is not
 sufficient to have a `server` property show up in the target object, you also
 have to set `useFakeServer` to `true`.
 
+The list of properties that can be injected are the ones exposed by the object
+returned by the function `inject`, namely:
+
+```javascript
+{
+    //...
+    properties: [
+        "spy", "stub", "mock", "createStubInstance", "fake", "replace",
+        "replaceSetter", "replaceGetter", "clock", "server", "requests", "match"
+    ]
+}
+```
+
 ##### useFakeTimers
 
 If set to `true`, the sandbox will have a `clock` property. You can optionally pass
@@ -135,6 +148,22 @@ but if you're using jQuery 1.3.x or some other library that does not set the XHR
 sinon.config = {
     useFakeServer: sinon.fakeServerWithClock
 };
+```
+
+##### exposing sandbox example
+
+To create an object `sandboxFacade` which gets the method `spy` injected, you
+can code:
+
+```javascript
+// object that will have the spy method injected into it
+var sandboxFacade = {};
+
+// create sandbox and inject properties (in this case spy) into sandboxFacade
+var sandbox = sinon.createSandbox({
+    injectInto: sandboxFacade,
+    properties: ["spy"]
+});
 ```
 
 #### `sandbox.assert();`
