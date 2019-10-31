@@ -152,6 +152,22 @@ f.lastCall.callback === cb2;
 // true
 ```
 
+#### `f.firstArg`
+
+This property is a convenient way to get a reference to the first argument passed in the last call to the fake.
+
+```js
+var f = sinon.fake();
+var date1 = new Date();
+var date2 = new Date();
+
+f(date1, 1, 2);
+f(date2, 1, 2);
+
+f.firstArg === date2;
+// true
+```
+
 #### `f.lastArg`
 
 This property is a convenient way to get a reference to the last argument passed in the last call to the fake.

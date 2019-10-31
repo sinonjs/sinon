@@ -133,6 +133,35 @@ describe("fake", function() {
         });
     });
 
+    describe(".firstArg", function() {
+        it("should be the first argument from the last call", function() {
+            var f = fake();
+            f(41, 42, 43);
+            assert.equals(f.firstArg, 41);
+
+            f(44, 45);
+            assert.equals(f.firstArg, 44);
+
+            f(46);
+            assert.equals(f.firstArg, 46);
+
+            f(false, true, 47, "string");
+            assert.equals(f.firstArg, false);
+
+            f("string", false, true, 47);
+            assert.equals(f.firstArg, "string");
+
+            f(47, "string", false, true);
+            assert.equals(f.firstArg, 47);
+
+            f(true, 47, "string", false);
+            assert.equals(f.firstArg, true);
+
+            f();
+            assert.isUndefined(f.firstArg);
+        });
+    });
+
     describe(".lastArg", function() {
         it("should be the last argument from the last call", function() {
             var f = fake();
