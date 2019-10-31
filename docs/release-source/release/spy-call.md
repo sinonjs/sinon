@@ -121,6 +121,20 @@ spy.lastCall.callback === callback;
 // true
 ```
 
+#### `spyCall.firstArg`
+
+This property is a convenience for the first argument of the call.
+
+```js
+var spy = sinon.spy();
+var date = new Date();
+
+spy(date, 1, 2);
+
+spy.lastCall.firstArg === date;
+// true
+```
+
 #### `spyCall.lastArg`
 
 This property is a convenience for the last argument of the call.
