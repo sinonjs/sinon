@@ -12,6 +12,10 @@
     "mail": "christian@cjohansen.no",
     "url": "http://github.com/sinonjs/sinon/issues"
   },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/sinon"
+  },
   "license": "BSD-3-Clause",
   "scripts": {
     "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
