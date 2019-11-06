@@ -8,6 +8,10 @@
     "type": "git",
     "url": "http://github.com/sinonjs/sinon.git"
   },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/sinon"
+  },
   "bugs": {
     "mail": "christian@cjohansen.no",
     "url": "http://github.com/sinonjs/sinon/issues"
