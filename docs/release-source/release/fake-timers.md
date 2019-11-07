@@ -60,6 +60,7 @@ You can also pass in a Date object, and its `getTime()` will be used for the sta
 As above, but allows further configuration options, some of which are:
 
 - `config.now` - *Number/Date* - installs lolex with the specified unix epoch (default: 0)
+- `config.target` - *Object* - use `target` instead of the usual global object. This is useful if you use JSDOM along with Node.
 - `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
 - `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
 
