@@ -1183,7 +1183,8 @@ describe("fakeTimers.clock", function() {
         });
 
         it("throws on old useFakeTimers signatures", function() {
-            var expectedError = "useFakeTimers expected epoch or config object. See https://github.com/sinonjs/sinon";
+            var expectedError =
+                "useFakeTimers expected a config object similar to lolex.install(). See https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig";
 
             assert.exception(
                 function() {
@@ -1221,7 +1222,7 @@ describe("fakeTimers.clock", function() {
                 setTimeout: stub,
                 clearTimeout: sinonStub()
             };
-            this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
+            this.clock = fakeTimers.useFakeTimers({ target: globalCtx });
             assert.isUndefined(this.clock.performance);
             assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
             this.clock.restore();
