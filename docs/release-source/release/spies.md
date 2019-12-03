@@ -67,7 +67,7 @@ all [calls][call]. The following is a slightly contrived example:
   </dd>
   <dt><code>var spy = sinon.spy(myFunc);</code></dt>
   <dd>
-    Wraps the function in a spy. You can pass this spy where the original function would otherwise 
+    Wraps the function in a spy. You can pass this spy where the original function would otherwise
     be passed when you need to verify how the function is being used.
   </dd>
   <dt><code>var spy = sinon.spy(object, "method");</code></dt>
