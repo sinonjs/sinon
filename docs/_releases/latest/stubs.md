@@ -405,7 +405,7 @@ obj.sum.callThrough();
 
 obj.sum(2, 2); // 'bar'
 obj.sum(1, 2); // 3
-
+```
 
 #### `stub.callThroughWithNew();`
 
