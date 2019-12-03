@@ -64,6 +64,7 @@ Creates a new sandbox object with spies, stubs, and mocks.
 
 The `sinon.createSandbox(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
 
+
 Sandboxes are partially configured by default such that calling:
 
 ```javascript
@@ -82,7 +83,7 @@ var sandbox = sinon.createSandbox({
 });
 ```
 
-The `useFakeTimers` and `useFakeServers` are **false** as opposed to the defaults in `sinon.defaultConfig`:
+The `useFakeTimers` and `useFakeServers` are **false** as opposed to the [defaults in `sinon.defaultConfig`](https://github.com/sinonjs/sinon/blob/master/lib/sinon/util/core/default-config.js):
 
 ```javascript
 sinon.defaultConfig = {
