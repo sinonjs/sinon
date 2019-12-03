@@ -60,7 +60,7 @@
     "@sinonjs/formatio": "^3.2.1",
     "@sinonjs/samsam": "^4.0.1",
     "diff": "^4.0.1",
-    "lolex": "^5.0.0",
+    "lolex": "^5.1.1",
     "nise": "^1.5.2",
     "supports-color": "^7.1.0"
   },
