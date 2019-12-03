@@ -66,7 +66,10 @@ all [calls][call]. The following is a slightly contrived example:
     exceptions and return values for all calls.
   </dd>
   <dt><code>var spy = sinon.spy(myFunc);</code></dt>
-  <dd>Spies on the provided function</dd>
+  <dd>
+    Wraps the function in a spy. You can pass this spy where the original function would otherwise 
+    be passed when you need to verify how the function is being used.
+  </dd>
   <dt><code>var spy = sinon.spy(object, "method");</code></dt>
   <dd>
     Creates a spy for <code>object.method</code> and
