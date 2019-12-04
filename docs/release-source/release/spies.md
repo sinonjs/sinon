@@ -56,6 +56,29 @@ all [calls][call]. The following is a slightly contrived example:
 
 <div data-example-id="spies-3-wrap-existing-method"></div>
 
+### Using a spy to wrap property getter and setter
+
+`sinon.spy(object, "property", ["get", "set"])` creates spies that wrap the
+getters and setters for `object.property`. The spies will behave exactly like
+the original getters and setters, but you will have access to data about all
+[calls][call]. Example:
+
+
+```javascript
+var object = {
+  get test() {
+    return this.property;
+  },
+  set test(value) {
+    this.property = value * 2;
+  }
+};
+var spy = sinon.spy(object, "test", ["get", "set"]);
+object.test = 42;
+assert(spy.set.calledOnce);
+assert.equals(object.test, 84);
+assert(spy.get.calledOnce);
+```
 
 ### Creating spies: `sinon.spy()` Method Signatures
 
@@ -78,6 +101,16 @@ all [calls][call]. The following is a slightly contrived example:
     all cases. The original method can be restored by calling
     <code>object.method.restore()</code>. The returned spy is the function
     object which replaced the original method. <code>spy === object.method</code>.
+  </dd>
+  <dt><code>var spy = sinon.spy(object, "property", types);</code></dt>
+  <dd>
+    Creates a spy for <code>object.property</code> descriptor and replaces the
+    original accessor methods (`get`, `set`) listed in the <code>types</code>
+    array with a spy. The spies act exactly like the original accessors in all
+    cases. The original accessors can be restored by calling
+    <code>spy.restore()</code>. The returned spy is the object which replaced
+    the original property descriptor. <code>spy.get ===
+    Object.getOwnPropertyDescriptor(object, 'property').get</code>.
   </dd>
 </dl>
 
