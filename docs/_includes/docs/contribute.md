@@ -4,4 +4,4 @@ Please ask questions on [Stack Overflow](https://stackoverflow.com/questions/tag
 
 ### Contribute
 
-We really appreciate suggestions to improve the documentation so Sinon.JS can be easy to work with. Get in touch!
+We really appreciate suggestions to improve the documentation so Sinon.JS can be easier to work with. Get in touch!
