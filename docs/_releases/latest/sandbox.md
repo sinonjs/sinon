@@ -39,7 +39,7 @@ describe('myAPI.hello method', function () {
 
 #### Default sandbox
 
-Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to just use that one.
+Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to only use that one.
 
 ```javascript
 const myObject = {
@@ -114,7 +114,7 @@ The sandbox's methods can be injected into another object for convenience. The
 
 ##### properties
 
-What properties to inject. Note that simply naming "server" here is not
+What properties to inject. Note that only naming "server" here is not
 sufficient to have a `server` property show up in the target object, you also
 have to set `useFakeServer` to `true`.
 
@@ -217,7 +217,7 @@ Works exactly like `sinon.spy`
 
 #### `sandbox.createStubInstance();`
 
-Works almost exactly like `sinon.createStubInstance`, only also adds the returned stubs to the internal collection of fakes for easy restoring through `sandbox.restore()`.
+Works almost exactly like `sinon.createStubInstance`, only also adds the returned stubs to the internal collection of fakes for restoring through `sandbox.restore()`.
 
 #### `sandbox.stub();`
 

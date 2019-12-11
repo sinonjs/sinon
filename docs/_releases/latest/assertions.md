@@ -31,7 +31,7 @@ Every assertion fails by calling this method.
 
 By default it throws an error of type `sinon.assert.failException`.
 
-If the test framework looks for assertion errors by checking for a specific exception, you can simply override the kind of exception thrown. If that does not fit with your testing framework of choice, override the `fail` method to do the right thing.
+If the test framework looks for assertion errors by checking for a specific exception, you can override the kind of exception thrown. If that does not fit with your testing framework of choice, override the `fail` method to do the right thing.
 
 
 #### `sinon.assert.failException;`
