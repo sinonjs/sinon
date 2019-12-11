@@ -341,7 +341,7 @@ Supports a pattern common to Ruby on Rails applications. For custom HTTP method 
 
 Used internally to determine the HTTP method used with the provided request.
 
-By default this method simply returns `request.method`. When `server.fakeHTTPMethods` is true, the method will return the value of the `_method` parameter if the method is "POST".
+By default this method returns `request.method`. When `server.fakeHTTPMethods` is true, the method will return the value of the `_method` parameter if the method is "POST".
 
 This method can be overridden to provide custom behavior.
 

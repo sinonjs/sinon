@@ -106,7 +106,7 @@ This is useful when complex behavior not covered by the `sinon.fake.*` methods i
 
 #### `f.callback`
 
-This property is a convenience to easily get a reference to the last callback passed in the last to the fake.
+This property is a convenience to get a reference to the last callback passed in the last to the fake.
 
 ```js
 var f = sinon.fake();
@@ -174,7 +174,7 @@ console.log('apple pie');
 // 42
 ```
 
-When you want to restore the replaced properties, simply call the `sinon.restore` method.
+When you want to restore the replaced properties, call the `sinon.restore` method.
 
 ```js
 // restores all replaced properties set by sinon methods (replace, spy, stub)

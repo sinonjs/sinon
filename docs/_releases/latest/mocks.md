@@ -106,7 +106,7 @@ jQuery.ajax.verify();
 
 #### `var expectation = sinon.expectation.create([methodName]);`
 
-Creates an expectation without a mock object, basically an anonymous mock function.
+Creates an expectation without a mock object, which is essentially an anonymous mock function.
 
 Method name is optional and is used in exception messages to make them more readable.
 
