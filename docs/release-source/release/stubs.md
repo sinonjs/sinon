@@ -544,7 +544,7 @@ Like `yield`, `yieldTo` grabs the first matching argument, finds the callback an
 
 Like `yield`, but with an explicit argument number specifying which callback to call.
 
-Useful if a function is called with more than one callback, and simply calling the first callback is not desired.
+Useful if a function is called with more than one callback, and calling the first callback is not desired.
 
 ```javascript
 "calling the last callback": function () {
