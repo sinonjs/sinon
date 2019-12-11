@@ -40,7 +40,7 @@ Please try to [write great commit messages](http://chris.beams.io/posts/git-comm
 
 There are numerous benefits to great commit messages
 
-* They allow Sinon.JS users to easily understand the consequences of updating to a newer version
+* They allow Sinon.JS users to understand the consequences of updating to a newer version
 * They help contributors understand what is going on with the codebase, allowing features and fixes to be developed faster
 * They save maintainers time when compiling the changelog for a new release
 
@@ -116,7 +116,7 @@ Note that in dev mode tests run only in Node. Before creating your PR please ens
 
 Build requires Node. Under the hood [Browserify](http://browserify.org/) is used.
 
-To build simply run
+To build run
 
     $ node build.js
 
