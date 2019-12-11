@@ -14,7 +14,7 @@ In a previous version we deprecated and aliased `spy.reset` in favour of using `
 
 ## `sinon` is now a (default) sandbox
 
-Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to just use that one.
+Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to only use that one.
 
 The old sandbox API is still available, so you don't **have** to do anything.
 
