@@ -1116,7 +1116,7 @@ describe("sinonMock", function() {
         });
 
         it("must set all expectations with mockPromise", function() {
-            if (!global.Promise) {
+            if (typeof Promise === "undefined") {
                 return this.skip();
             }
 

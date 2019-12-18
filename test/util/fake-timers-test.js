@@ -8,7 +8,7 @@ var sinonSpy = require("../../lib/sinon/spy");
 var assert = referee.assert;
 var refute = referee.refute;
 var GlobalDate = Date;
-var setImmediatePresent = global.setImmediate && typeof global.setImmediate === "function";
+var setImmediatePresent = typeof setImmediate === "function";
 
 describe("fakeTimers.clock", function() {
     beforeEach(function() {
@@ -1118,26 +1118,34 @@ describe("fakeTimers.clock", function() {
             assert.same(clearInterval, fakeTimers.timers.clearInterval);
         });
 
-        it("installs by default without nextTick", function() {
-            this.clock = fakeTimers.useFakeTimers();
-            var called = false;
-            process.nextTick(function() {
-                called = true;
+        context("with nextTick", function() {
+            before(function() {
+                if (typeof process === "undefined" || typeof process.nextTick === "undefined") {
+                    this.skip();
+                }
             });
-            this.clock.runAll();
-            assert(!called);
-            this.clock.restore();
-        });
 
-        it("installs with nextTick", function() {
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["nextTick"] });
-            var called = false;
-            process.nextTick(function() {
-                called = true;
+            it("installs by default without nextTick", function() {
+                this.clock = fakeTimers.useFakeTimers();
+                var called = false;
+                process.nextTick(function() {
+                    called = true;
+                });
+                this.clock.runAll();
+                assert(!called);
+                this.clock.restore();
             });
-            this.clock.runAll();
-            assert(called);
-            this.clock.restore();
+
+            it("installs with nextTick", function() {
+                this.clock = fakeTimers.useFakeTimers({ toFake: ["nextTick"] });
+                var called = false;
+                process.nextTick(function() {
+                    called = true;
+                });
+                this.clock.runAll();
+                assert(called);
+                this.clock.restore();
+            });
         });
 
         it("installs clock in advancing mode and triggers setTimeout", function(done) {

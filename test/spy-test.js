@@ -3,6 +3,7 @@
 var referee = require("@sinonjs/referee");
 var createSpy = require("../lib/sinon/spy");
 var match = require("@sinonjs/samsam").createMatcher;
+var globalContext = typeof global !== "undefined" ? global : window;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -329,16 +330,16 @@ describe("spy", function() {
 
     describe("global.Error", function() {
         beforeEach(function() {
-            this.originalError = global.Error;
+            this.originalError = globalContext.Error;
         });
 
         afterEach(function() {
-            global.Error = this.originalError;
+            globalContext.Error = this.originalError;
         });
 
         it("creates a spy for Error", function() {
             refute.exception(function() {
-                createSpy(global, "Error");
+                createSpy(globalContext, "Error");
             });
         });
     });
