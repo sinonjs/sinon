@@ -34,7 +34,9 @@ makeBundle(
         // Add inline source maps to the default bundle
         debug: true,
         // Create a UMD wrapper and install the "sinon" global:
-        standalone: "sinon"
+        standalone: "sinon",
+        // Do not detect and insert globals:
+        detectGlobals: false
     },
     function(bundle) {
         var script = preamble + bundle;
@@ -42,21 +44,37 @@ makeBundle(
     }
 );
 
-makeBundle("./lib/sinon.js", {}, function(bundle) {
-    var script = preamble + bundle;
-    fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
-});
+makeBundle(
+    "./lib/sinon.js",
+    {
+        // Create a UMD wrapper and install the "sinon" global:
+        standalone: "sinon",
+        // Do not detect and insert globals:
+        detectGlobals: false
+    },
+    function(bundle) {
+        var script = preamble + bundle;
+        fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
+    }
+);
 
-makeBundle("./lib/sinon-esm.js", {}, function(bundle) {
-    var intro = "let sinon;";
-    var outro =
-        "\nexport default sinon;\n" +
-        Object.keys(sinon)
-            .map(function(key) {
-                return "const _" + key + " = sinon." + key + ";\nexport { _" + key + " as " + key + " };";
-            })
-            .join("\n");
+makeBundle(
+    "./lib/sinon-esm.js",
+    {
+        // Do not detect and insert globals:
+        detectGlobals: false
+    },
+    function(bundle) {
+        var intro = "let sinon;";
+        var outro =
+            "\nexport default sinon;\n" +
+            Object.keys(sinon)
+                .map(function(key) {
+                    return "const _" + key + " = sinon." + key + ";\nexport { _" + key + " as " + key + " };";
+                })
+                .join("\n");
 
-    var script = preamble + intro + bundle + outro;
-    fs.writeFileSync("pkg/sinon-esm.js", script);
-});
+        var script = preamble + intro + bundle + outro;
+        fs.writeFileSync("pkg/sinon-esm.js", script);
+    }
+);
