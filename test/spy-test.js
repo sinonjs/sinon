@@ -1159,7 +1159,11 @@ describe("spy", function() {
             this.spy(1, 2, objects[1]);
             this.spy(objects[2], 2, 3);
 
-            assert.equals(this.spy.args, [[1, objects[0], 3], [1, 2, objects[1]], [objects[2], 2, 3]]);
+            assert.equals(this.spy.args, [
+                [1, objects[0], 3],
+                [1, 2, objects[1]],
+                [objects[2], 2, 3]
+            ]);
         });
     });
 
