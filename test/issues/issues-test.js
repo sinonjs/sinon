@@ -5,8 +5,9 @@ var sinon = require("../../lib/sinon");
 var createStub = require("../../lib/sinon/stub");
 var assert = referee.assert;
 var refute = referee.refute;
-var globalXHR = global.XMLHttpRequest;
-var globalAXO = global.ActiveXObject;
+var globalContext = typeof global !== "undefined" ? global : window;
+var globalXHR = globalContext.XMLHttpRequest;
+var globalAXO = globalContext.ActiveXObject;
 
 describe("issues", function() {
     beforeEach(function() {
@@ -265,7 +266,7 @@ describe("issues", function() {
         }
 
         before(function() {
-            if (!global.Promise) {
+            if (typeof Promise === "undefined") {
                 this.skip();
             }
         });
@@ -515,11 +516,11 @@ describe("issues", function() {
             var originalSetTimeout = setTimeout;
 
             sinon.useFakeTimers();
-            sinon.spy(global, "setTimeout");
+            sinon.spy(globalContext, "setTimeout");
 
             sinon.restore();
 
-            assert.same(originalSetTimeout, global.setTimeout, "fakeTimers restored");
+            assert.same(originalSetTimeout, globalContext.setTimeout, "fakeTimers restored");
         });
     });
 
@@ -528,8 +529,8 @@ describe("issues", function() {
             sinon.useFakeXMLHttpRequest();
             sinon.restore();
 
-            assert.same(global.XMLHttpRequest, globalXHR);
-            assert.same(global.ActiveXObject, globalAXO);
+            assert.same(globalContext.XMLHttpRequest, globalXHR);
+            assert.same(globalContext.ActiveXObject, globalAXO);
         });
     });
 

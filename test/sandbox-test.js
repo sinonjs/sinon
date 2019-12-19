@@ -19,9 +19,10 @@ var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake-timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
-var supportPromise = Boolean(global.Promise);
-var globalXHR = global.XMLHttpRequest;
-var globalAXO = global.ActiveXObject;
+var supportPromise = typeof Promise !== "undefined";
+var globalContext = typeof global !== "undefined" ? global : window;
+var globalXHR = globalContext.XMLHttpRequest;
+var globalAXO = globalContext.ActiveXObject;
 
 if (!assert.stub) {
     require("./test-helper");
@@ -473,25 +474,29 @@ describe("Sandbox", function() {
             assert.equals(this.sandbox.stub(object, "method"), object.method);
         });
 
-        if (typeof process !== "undefined") {
-            describe("on node", function() {
-                beforeEach(function() {
-                    process.env.HELL = "Ain't too bad";
-                });
-
-                it("stubs environment property", function() {
-                    var originalPrintWarning = deprecated.printWarning;
-                    deprecated.printWarning = function() {
-                        return;
-                    };
-
-                    this.sandbox.stub(process.env, "HELL").value("froze over");
-                    assert.equals(process.env.HELL, "froze over");
-
-                    deprecated.printWarning = originalPrintWarning;
-                });
+        describe("on node", function() {
+            before(function() {
+                if (typeof process === "undefined" || !process.env) {
+                    this.skip();
+                }
             });
-        }
+
+            beforeEach(function() {
+                process.env.HELL = "Ain't too bad";
+            });
+
+            it("stubs environment property", function() {
+                var originalPrintWarning = deprecated.printWarning;
+                deprecated.printWarning = function() {
+                    return;
+                };
+
+                this.sandbox.stub(process.env, "HELL").value("froze over");
+                assert.equals(process.env.HELL, "froze over");
+
+                deprecated.printWarning = originalPrintWarning;
+            });
+        });
     });
 
     describe("stub anything", function() {
@@ -1399,11 +1404,11 @@ describe("Sandbox", function() {
             var originalSetTimeout = setTimeout;
 
             this.sandbox.useFakeTimers();
-            this.sandbox.spy(global, "setTimeout");
+            this.sandbox.spy(globalContext, "setTimeout");
 
             this.sandbox.restore();
 
-            assert.same(originalSetTimeout, global.setTimeout, "fakeTimers restored");
+            assert.same(originalSetTimeout, globalContext.setTimeout, "fakeTimers restored");
         });
     });
 
@@ -1551,8 +1556,8 @@ describe("Sandbox", function() {
                     this.sandbox.useFakeXMLHttpRequest();
                     this.sandbox.restore();
 
-                    assert.same(global.XMLHttpRequest, globalXHR);
-                    assert.same(global.ActiveXObject, globalAXO);
+                    assert.same(globalContext.XMLHttpRequest, globalXHR);
+                    assert.same(globalContext.ActiveXObject, globalAXO);
                 });
             });
 
@@ -1601,8 +1606,8 @@ describe("Sandbox", function() {
                     this.sandbox.useFakeServer();
                     this.sandbox.restore();
 
-                    assert.same(global.XMLHttpRequest, globalXHR);
-                    assert.same(global.ActiveXObject, globalAXO);
+                    assert.same(globalContext.XMLHttpRequest, globalXHR);
+                    assert.same(globalContext.ActiveXObject, globalAXO);
                 });
             });
         });

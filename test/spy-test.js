@@ -3,6 +3,7 @@
 var referee = require("@sinonjs/referee");
 var createSpy = require("../lib/sinon/spy");
 var match = require("@sinonjs/samsam").createMatcher;
+var globalContext = typeof global !== "undefined" ? global : window;
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -329,16 +330,16 @@ describe("spy", function() {
 
     describe("global.Error", function() {
         beforeEach(function() {
-            this.originalError = global.Error;
+            this.originalError = globalContext.Error;
         });
 
         afterEach(function() {
-            global.Error = this.originalError;
+            globalContext.Error = this.originalError;
         });
 
         it("creates a spy for Error", function() {
             refute.exception(function() {
-                createSpy(global, "Error");
+                createSpy(globalContext, "Error");
             });
         });
     });
@@ -1158,7 +1159,11 @@ describe("spy", function() {
             this.spy(1, 2, objects[1]);
             this.spy(objects[2], 2, 3);
 
-            assert.equals(this.spy.args, [[1, objects[0], 3], [1, 2, objects[1]], [objects[2], 2, 3]]);
+            assert.equals(this.spy.args, [
+                [1, objects[0], 3],
+                [1, 2, objects[1]],
+                [objects[2], 2, 3]
+            ]);
         });
     });
 

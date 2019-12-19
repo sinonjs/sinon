@@ -8,7 +8,7 @@ var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
 var fail = referee.fail;
-var Promise = require("native-promise-only"); // eslint-disable-line no-unused-vars
+var globalContext = typeof global !== "undefined" ? global : window;
 
 function verifyFunctionName(func, expectedName) {
     var descriptor = Object.getOwnPropertyDescriptor(func, "name");
@@ -228,6 +228,12 @@ describe("stub", function() {
     });
 
     describe(".resolves", function() {
+        before(function() {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
+        });
+
         afterEach(function() {
             if (Promise.resolve.restore) {
                 Promise.resolve.restore();
@@ -283,6 +289,12 @@ describe("stub", function() {
     });
 
     describe(".rejects", function() {
+        before(function() {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
+        });
+
         afterEach(function() {
             if (Promise.reject.restore) {
                 Promise.reject.restore();
@@ -366,6 +378,12 @@ describe("stub", function() {
     });
 
     describe(".resolvesThis", function() {
+        before(function() {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
+        });
+
         afterEach(function() {
             if (Promise.resolve.restore) {
                 Promise.resolve.restore();
@@ -432,6 +450,12 @@ describe("stub", function() {
     });
 
     describe(".resolvesArg", function() {
+        before(function() {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
+        });
+
         afterEach(function() {
             if (Promise.resolve.restore) {
                 Promise.resolve.restore();
@@ -682,6 +706,12 @@ describe("stub", function() {
     });
 
     describe(".usingPromise", function() {
+        before(function() {
+            if (typeof Promise === "undefined") {
+                this.skip();
+            }
+        });
+
         it("should exist and be a function", function() {
             var stub = createStub();
 
@@ -804,15 +834,15 @@ describe("stub", function() {
         describe("lazy instantiation of exceptions", function() {
             var errorSpy;
             beforeEach(function() {
-                this.originalError = global.Error;
-                errorSpy = createSpy(global, "Error");
+                this.originalError = globalContext.Error;
+                errorSpy = createSpy(globalContext, "Error");
                 // errorSpy starts with a call already made, not sure why
                 errorSpy.resetHistory();
             });
 
             afterEach(function() {
                 errorSpy.restore();
-                global.Error = this.originalError;
+                globalContext.Error = this.originalError;
             });
 
             it("uses a lazily created exception for the generic error", function() {
@@ -1267,8 +1297,8 @@ describe("stub", function() {
         });
 
         afterEach(function() {
-            if (global.console.info.restore) {
-                global.console.info.restore();
+            if (globalContext.console.info.restore) {
+                globalContext.console.info.restore();
             }
         });
 

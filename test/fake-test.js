@@ -328,7 +328,7 @@ describe("fake", function() {
                 sinon.assert.calledWith(callback, "one", "two", "three");
 
                 done();
-            }, 0);
+            }, 5); // IE 11 and Edge are sometimes slow
         });
 
         it("should call the last function argument", function(done) {
@@ -345,7 +345,7 @@ describe("fake", function() {
                 sinon.assert.calledOnce(callback);
 
                 done();
-            }, 0);
+            }, 5); // IE 11 and Edge are sometimes slow
         });
 
         it("should throw if the last argument is not a function", function() {

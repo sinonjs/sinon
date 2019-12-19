@@ -1156,7 +1156,7 @@ describe("sinonSpy.call", function() {
         // https://github.com/sinonjs/sinon/issues/1066
         /* eslint-disable consistent-return */
         it("does not throw when the call stack is empty", function(done) {
-            if (!global.Promise) {
+            if (typeof Promise === "undefined") {
                 this.skip();
             }
 
