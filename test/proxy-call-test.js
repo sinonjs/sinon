@@ -549,7 +549,7 @@ describe("sinonSpy.call", function() {
             assert.equals(spy.getCall(1).callback, callback2);
 
             spy(1, 2, 3);
-            assert.equals(spy.getCall(2).callback, undefined);
+            assert.isUndefined(spy.getCall(2).callback);
         });
     });
 
@@ -567,7 +567,7 @@ describe("sinonSpy.call", function() {
             assert.equals(spy.getCall(2).lastArg, 46);
 
             spy();
-            assert.equals(spy.getCall(3).lastArg, undefined);
+            assert.isUndefined(spy.getCall(3).lastArg);
         });
     });
 

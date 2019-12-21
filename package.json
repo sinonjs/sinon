@@ -57,16 +57,16 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^1.4.0",
-    "@sinonjs/formatio": "^3.2.1",
+    "@sinonjs/formatio": "^4.0.1",
     "@sinonjs/samsam": "^4.0.1",
     "diff": "^4.0.1",
     "lolex": "^5.1.2",
-    "nise": "^2.0.1",
+    "nise": "^3.0.0",
     "supports-color": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
-    "@sinonjs/referee": "^3.2.0",
+    "@sinonjs/referee": "^4.0.0",
     "babel-plugin-istanbul": "^5.2.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",

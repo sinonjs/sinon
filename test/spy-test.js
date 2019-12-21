@@ -362,7 +362,7 @@ describe("spy", function() {
             assert.equals(spy.getCall(3).args[0], 1);
             assert.equals(spy.getCall(3).args[1], 2);
             assert.isUndefined(spy.getCall(3).args[2]);
-            ["args", "callCount", "callId"].forEach(function(propName) {
+            ["args", "callId"].forEach(function(propName) {
                 assert.equals(spy.withArgs(1).getCall(0)[propName], spy.getCall(1)[propName]);
                 assert.equals(spy.withArgs(1).getCall(1)[propName], spy.getCall(2)[propName]);
                 assert.equals(spy.withArgs(1).getCall(2)[propName], spy.getCall(3)[propName]);
