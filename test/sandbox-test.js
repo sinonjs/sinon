@@ -212,9 +212,9 @@ describe("Sandbox", function() {
             assert.equals(3, stub.method3());
 
             this.sandbox.reset();
-            assert.equals(undefined, stub.method1());
-            assert.equals(undefined, stub.method2());
-            assert.equals(undefined, stub.method3());
+            assert.isUndefined(stub.method1());
+            assert.isUndefined(stub.method2());
+            assert.isUndefined(stub.method3());
         });
 
         it("doesn't stub fake methods", function() {

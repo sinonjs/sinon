@@ -103,7 +103,7 @@ describe("fake", function() {
             assert.equals(f.callback, callback2);
 
             f(1, 2, 3);
-            assert.equals(f.callback, undefined);
+            assert.isUndefined(f.callback);
         });
     });
 
