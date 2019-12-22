@@ -5,6 +5,17 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+8.0.0 / 2019-12-22
+==================
+
+The major release is caused by removing old mistakes and upgrading dependencies that themselves have had new major releases.
+
+  * Upgrade nise, @sinonjs/formatio, @sinonjs/samsam and @sinonjs/referee
+  * Update lolex and nise to get new async timer methods (see https://github.com/sinonjs/lolex/blob/master/CHANGELOG.md)
+  * Remove `sinon.spyCall`
+  * Remove `sinon.sandbox.create`
+  * Remove obsolete `deprecated.printWarning` stubbing from test
+
 7.5.0 / 2019-09-23
 ==================
 
