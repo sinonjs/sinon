@@ -56,7 +56,7 @@
     "docs/**/*.md": "markdownlint"
   },
   "dependencies": {
-    "@sinonjs/commons": "^1.4.0",
+    "@sinonjs/commons": "^1.7.0",
     "@sinonjs/formatio": "^4.0.1",
     "@sinonjs/samsam": "^4.0.1",
     "diff": "^4.0.1",
