@@ -5,6 +5,13 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+8.0.1 / 2019-12-23
+==================
+
+  * Force upgrade @sinonjs/commons (#2181)
+  * Update `docs/changelog.md` and set new release id in `docs/_config.yml`
+  * Add release documentation for v8.0.0
+
 8.0.0 / 2019-12-22
 ==================
 
