@@ -104,13 +104,14 @@ assert(spy.get.calledOnce);
   </dd>
   <dt><code>var spy = sinon.spy(object, "property", types);</code></dt>
   <dd>
-    Creates a spy for <code>object.property</code> descriptor and replaces the
-    original accessor methods (`get`, `set`) listed in the <code>types</code>
-    array with a spy. The spies act exactly like the original accessors in all
-    cases. The original accessors can be restored by calling
-    <code>spy.restore()</code>. The returned spy is the object which replaced
-    the original property descriptor. <code>spy.get ===
-    Object.getOwnPropertyDescriptor(object, 'property').get</code>.
+    Creates a spy for the property <code>object.property</code> which
+    replaces the descriptor with an equivalent where each
+    specified accessor (<code>types</code> parameter) has been
+    wrapped as a spy. The returned object, unlike regular spies, is a
+    property descriptor containing the wrapped accessors (spies).
+    The original accessors can be restored by calling
+    <code>spy.get.restore()</code> (where <code>get</code>
+    is the accessor you wish to restore).
   </dd>
 </dl>
 
