@@ -1558,7 +1558,7 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    "hey"
+                    "'hey'"
             );
         });
 
@@ -1575,13 +1575,13 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    "hey\n" +
+                    "'hey'\n" +
                     "Call 2:\n" +
                     "1\n" +
                     "3\n" +
-                    color.red("not") +
+                    color.red("'not'") +
                     " " +
-                    color.green("hey") +
+                    color.green("'hey'") +
                     " "
             );
         });
@@ -1793,7 +1793,7 @@ describe("assert", function() {
                     color.green("4") +
                     " \n" +
                     "3\n" +
-                    "hey"
+                    "'hey'"
             );
         });
 
@@ -1808,13 +1808,13 @@ describe("assert", function() {
                     "1\n" +
                     color.red("3") +
                     " " +
-                    color.green("hey") +
+                    color.green("'hey'") +
                     " \n" +
-                    color.red("hey") +
+                    color.red("'hey'") +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
-                    "hey"
+                    "'hey'"
             );
         });
 
@@ -1829,13 +1829,13 @@ describe("assert", function() {
                     "1\n" +
                     color.red("3") +
                     " " +
-                    color.green("hey") +
+                    color.green("'hey'") +
                     " \n" +
-                    color.red("hey") +
+                    color.red("'hey'") +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
-                    "hey"
+                    "'hey'"
             );
         });
 
@@ -1844,7 +1844,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                "expected doSomething to be called with exact arguments \n1\n3\n" + color.red("hey")
+                "expected doSomething to be called with exact arguments \n1\n3\n" + color.red("'hey'")
             );
         });
 
@@ -1863,7 +1863,7 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    "bob"
+                    "'bob'"
             );
 
             this.obj.doSomething();
@@ -1875,7 +1875,7 @@ describe("assert", function() {
                     "\n" +
                     color.red("3") +
                     "\n" +
-                    color.red("bob") +
+                    color.red("'bob'") +
                     "\n" +
                     "Call 2:"
             );
@@ -1891,7 +1891,7 @@ describe("assert", function() {
                     "Call 1:\n" +
                     "1\n" +
                     "3\n" +
-                    color.red("hey") +
+                    color.red("'hey'") +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
@@ -1941,6 +1941,19 @@ describe("assert", function() {
             assert.equals(
                 this.message("match", { foo: 1 }, [1, 3]),
                 "expected value to match\n    expected = [1, 3]\n    actual = { foo: 1 }"
+            );
+        });
+
+        it("assert.calledWith exception message with equal string representations", function() {
+            this.obj.doSomething(1234);
+
+            assert.equals(
+                this.message("calledWith", this.obj.doSomething, "1234"),
+                "expected doSomething to be called with arguments \n" +
+                    color.red("1234") +
+                    " " +
+                    color.green("'1234'") +
+                    " "
             );
         });
     });

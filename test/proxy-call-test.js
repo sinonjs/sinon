@@ -1668,7 +1668,7 @@ describe("sinonSpy.call", function() {
                     "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red("a") +
+                        color.red("'a'") +
                         "\n" +
                         color.red("true") +
                         "\n" +
@@ -1705,7 +1705,7 @@ describe("sinonSpy.call", function() {
                         "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red("a") +
+                        color.red("'a'") +
                         "\n" +
                         color.red("true") +
                         "\nCall 2:" +
