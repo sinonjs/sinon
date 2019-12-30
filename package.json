@@ -58,7 +58,7 @@
   "dependencies": {
     "@sinonjs/commons": "^1.7.0",
     "@sinonjs/formatio": "^4.0.1",
-    "@sinonjs/samsam": "^4.0.1",
+    "@sinonjs/samsam": "^4.2.1",
     "diff": "^4.0.1",
     "lolex": "^5.1.2",
     "nise": "^3.0.1",
