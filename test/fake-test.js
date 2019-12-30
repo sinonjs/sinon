@@ -1,6 +1,7 @@
 "use strict";
 
 var sinon = require("../lib/sinon.js");
+var createProxy = require("../lib/sinon/proxy");
 var fake = sinon.fake;
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
@@ -433,6 +434,15 @@ describe("fake", function() {
 
         it("should return false if not called immediately after", function() {
             assert.isFalse(fakeA.calledImmediatelyAfter(fakeB));
+        });
+    });
+
+    describe(".printf", function() {
+        it("is delegated to proxy", function() {
+            var myFake = fake();
+            var proxy = createProxy(noop, noop);
+
+            assert.same(myFake.printf, proxy.printf);
         });
     });
 });

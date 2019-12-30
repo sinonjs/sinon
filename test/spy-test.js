@@ -2,6 +2,7 @@
 
 var referee = require("@sinonjs/referee");
 var createSpy = require("../lib/sinon/spy");
+var createProxy = require("../lib/sinon/proxy");
 var match = require("@sinonjs/samsam").createMatcher;
 var globalContext = typeof global !== "undefined" ? global : window;
 var assert = referee.assert;
@@ -2946,6 +2947,19 @@ describe("spy", function() {
 
             spy.resetHistory();
             assert.equals(Object.keys(spy), ["aProp"]);
+        });
+    });
+
+    describe(".printf", function() {
+        it("is delegated to proxy", function() {
+            var f = function() {
+                throw new Error("aError");
+            };
+
+            var spy = createSpy();
+            var proxy = createProxy(f, f);
+
+            assert.same(spy.printf, proxy.printf);
         });
     });
 
