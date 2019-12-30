@@ -61,7 +61,7 @@
     "@sinonjs/samsam": "^4.0.1",
     "diff": "^4.0.1",
     "lolex": "^5.1.2",
-    "nise": "^3.0.0",
+    "nise": "^3.0.1",
     "supports-color": "^7.1.0"
   },
   "devDependencies": {
