@@ -67,7 +67,7 @@
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@sinonjs/referee": "^4.0.0",
-    "babel-plugin-istanbul": "^5.2.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "dependency-check": "^4.1.0",
