@@ -562,7 +562,7 @@ describe("Sandbox", function() {
                     function() {
                         sandbox.stub(object, Symbol());
                     },
-                    { message: "Cannot stub non-existent own property Symbol()" },
+                    { message: "Cannot stub or spy on non-existent own property Symbol()" },
                     TypeError
                 );
 
@@ -1754,6 +1754,35 @@ describe("Sandbox", function() {
                     message: "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()"
                 }
             );
+        });
+
+        // https://github.com/sinonjs/sinon/issues/2192
+        it("restores all fields of a spied object", function() {
+            var sandbox = new Sandbox();
+            var o = {
+                foo: function() {
+                    return 42;
+                }
+            };
+
+            sandbox.spy(o);
+            sandbox.restore();
+
+            assert.isUndefined(o.foo.callCount);
+        });
+
+        it("restores all fields of a stubbed object", function() {
+            var sandbox = new Sandbox();
+            var o = {
+                foo: function() {
+                    return 42;
+                }
+            };
+
+            sandbox.stub(o);
+            sandbox.restore();
+
+            assert.isUndefined(o.foo.callCount);
         });
     });
 
