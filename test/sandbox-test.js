@@ -814,7 +814,7 @@ describe("Sandbox", function() {
                     sandbox.replace({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
@@ -1014,7 +1014,7 @@ describe("Sandbox", function() {
                     sandbox.replaceGetter({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
@@ -1161,7 +1161,7 @@ describe("Sandbox", function() {
                     sandbox.replaceSetter({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
