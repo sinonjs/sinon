@@ -562,7 +562,7 @@ describe("Sandbox", function() {
                     function() {
                         sandbox.stub(object, Symbol());
                     },
-                    { message: "Cannot stub or spy on non-existent own property Symbol()" },
+                    { message: "Cannot stub non-existent own property Symbol()" },
                     TypeError
                 );
 
