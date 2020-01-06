@@ -4,6 +4,7 @@ var referee = require("@sinonjs/referee");
 var createStub = require("../lib/sinon/stub");
 var createStubInstance = require("../lib/sinon/stub").createStubInstance;
 var createSpy = require("../lib/sinon/spy");
+var createProxy = require("../lib/sinon/proxy");
 var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
@@ -3468,6 +3469,19 @@ describe("stub", function() {
             for (var i = 0; i < 10; i++) {
                 assert.isTrue(createStub().id.indexOf("stub#") === 0);
             }
+        });
+    });
+
+    describe(".printf", function() {
+        it("is delegated to proxy", function() {
+            var f = function() {
+                throw new Error("aError");
+            };
+
+            var stub = createStub();
+            var proxy = createProxy(f, f);
+
+            assert.same(stub.printf, proxy.printf);
         });
     });
 });
