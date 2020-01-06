@@ -1,4 +1,9 @@
 
+8.0.4 / 2020-01-06
+==================
+
+  * Remove misleading 'own' from exception message
+
 8.0.3 / 2020-01-06
 ==================
 
