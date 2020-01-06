@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+8.0.3 / 2020-01-06
+==================
+
+  * Move .printf to proxy
+
 8.0.2 / 2019-12-30
 ==================
 
