@@ -814,7 +814,7 @@ describe("Sandbox", function() {
                     sandbox.replace({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
@@ -1014,7 +1014,7 @@ describe("Sandbox", function() {
                     sandbox.replaceGetter({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
@@ -1161,7 +1161,7 @@ describe("Sandbox", function() {
                     sandbox.replaceSetter({}, "i-dont-exist");
                 },
                 {
-                    message: "Cannot replace non-existent own property i-dont-exist",
+                    message: "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError"
                 }
             );
@@ -1754,6 +1754,35 @@ describe("Sandbox", function() {
                     message: "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()"
                 }
             );
+        });
+
+        // https://github.com/sinonjs/sinon/issues/2192
+        it("restores all fields of a spied object", function() {
+            var sandbox = new Sandbox();
+            var o = {
+                foo: function() {
+                    return 42;
+                }
+            };
+
+            sandbox.spy(o);
+            sandbox.restore();
+
+            assert.isUndefined(o.foo.callCount);
+        });
+
+        it("restores all fields of a stubbed object", function() {
+            var sandbox = new Sandbox();
+            var o = {
+                foo: function() {
+                    return 42;
+                }
+            };
+
+            sandbox.stub(o);
+            sandbox.restore();
+
+            assert.isUndefined(o.foo.callCount);
         });
     });
 
