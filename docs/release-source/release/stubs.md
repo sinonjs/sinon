@@ -335,7 +335,7 @@ Causes the stub to throw the provided exception object.
 Causes the stub to throw the exception returned by the function.
 
 
-### `stub.throwsArg(index);`
+#### `stub.throwsArg(index);`
 
 Causes the stub to throw the argument at the provided index.
 
@@ -684,3 +684,7 @@ stub.restore()
 myObj.example; // 'oldValue'
 ```
 
+#### `stub.wrappedMethod`
+
+Holds a reference to the original method/function this stub has
+wrapped.
