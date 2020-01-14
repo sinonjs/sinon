@@ -350,6 +350,8 @@ Returns `true` if spy always returned the provided value.
 
 Returns the *nth* [call](#spycall).
 
+If *n* is negative, the *nth* call from the end is returned. For example, `spy.getCall(-1)` returns the last call, and `spy.getCall(-2)` returns the second to last call.
+
 Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 
 <div data-example-id="spies-8-spy-call"></div>
