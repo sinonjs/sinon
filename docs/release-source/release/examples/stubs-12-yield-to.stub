@@ -1,0 +1,23 @@
+require("@fatso83/mini-mocha").install();
+var sinon = require("sinon");
+var referee = require("@sinonjs/referee");
+var assert = referee.assert;
+
+describe("stub", function() {
+    it("should call specified callback", function() {
+        var actual;
+        var callback = sinon.stub();
+        callback({
+            "success": function () {
+                actual = "Success!";
+            },
+            "failure": function () {
+                actual = "Oh noes!";
+            }
+        });
+
+        callback.yieldTo("failure");
+        
+        assert.equals(actual, "Oh noes!");
+    });
+});

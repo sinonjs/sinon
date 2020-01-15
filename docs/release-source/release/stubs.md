@@ -2,6 +2,23 @@
 layout: page
 title: Stubs - Sinon.JS
 breadcrumb: stubs
+examples:
+- stubs-1-pubsub
+- stubs-2-different-args
+- stubs-3-sequential-interactions
+- stubs-4-sequential-with-args
+- stubs-5-reset-behaviour
+- stubs-6-reset-history
+- stubs-7-call-fake
+- stubs-8-call-through
+- stubs-9-call-through-with-new
+- stubs-10-use-promise-library
+- stubs-12-yield-to
+- stubs-14-add-behavior
+- stubs-15-replace-getter
+- stubs-16-define-new-setter
+- stubs-17-define-new-value
+- stubs-18-restore-values
 ---
 
 ### What are stubs?
@@ -24,24 +41,8 @@ Use a stub when you want to:
 
 The following example is yet another test from [PubSubJS][pubsubjs] which shows how to create an anonymous stub that throws an exception when called.
 
-```javascript
-"test should call all subscribers, even if there are exceptions" : function(){
-    var message = 'an example message';
-    var stub = sinon.stub().throws();
-    var spy1 = sinon.spy();
-    var spy2 = sinon.spy();
+<div data-example-id="stubs-1-pubsub"></div>
 
-    PubSub.subscribe(message, stub);
-    PubSub.subscribe(message, spy1);
-    PubSub.subscribe(message, spy2);
-
-    PubSub.publishSync(message, undefined);
-
-    assert(spy1.called);
-    assert(spy2.called);
-    assert(stub.calledBefore(spy1));
-}
-```
 
 Note how the stub also implements the spy interface. The test verifies that all
 callbacks were called, and also that the exception throwing stub was called
@@ -134,55 +135,22 @@ Stubs the method only for the provided arguments.
 
 This is useful to be more expressive in your assertions, where you can access the spy with the same call. It is also useful to create a stub that can act differently in response to different arguments.
 
-```javascript
-"test should stub method differently based on arguments": function () {
-    var callback = sinon.stub();
-    callback.withArgs(42).returns(1);
-    callback.withArgs(1).throws("name");
+<div data-example-id="stubs-2-different-args"></div>
 
-    callback(); // No return value, no exception
-    callback(42); // Returns 1
-    callback(1); // Throws Error("name")
-}
-```
 
 #### `stub.onCall(n);` *Added in v1.8*
 
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
 
-```javascript
-"test should stub method differently on consecutive calls": function () {
-    var callback = sinon.stub();
-    callback.onCall(0).returns(1);
-    callback.onCall(1).returns(2);
-    callback.returns(3);
+<div data-example-id="stubs-3-sequential-interactions"></div>
 
-    callback(); // Returns 1
-    callback(); // Returns 2
-    callback(); // All following calls return 3
-}
-```
 
 There are methods `onFirstCall`, `onSecondCall`,`onThirdCall` to make stub definitions read more naturally.
 
 `onCall` can be combined with all of the behavior defining methods in this section.  In particular, it can be used together with `withArgs`.
 
-```javascript
-"test should stub method differently on consecutive calls with certain argument": function () {
-    var callback = sinon.stub();
-    callback.withArgs(42)
-        .onFirstCall().returns(1)
-        .onSecondCall().returns(2);
-    callback.returns(0);
+<div data-example-id="stubs-4-sequential-with-args"></div>
 
-    callback(1); // Returns 0
-    callback(42); // Returns 1
-    callback(1); // Returns 0
-    callback(42); // Returns 2
-    callback(1); // Returns 0
-    callback(42); // Returns 0
-}
-```
 
 Note how the behavior of the stub for argument `42` falls back to the default behavior once no more calls have been defined.
 
@@ -214,17 +182,8 @@ As a convenience, you can apply `stub.reset()` to all stubs using `sinon.reset()
 
 Resets the stub's behaviour to the default behaviour
 
-```javascript
-var stub = sinon.stub();
+<div data-example-id="stubs-5-reset-behaviour"></div>
 
-stub.returns(54)
-
-stub(); // 54
-
-stub.resetBehavior();
-
-stub(); // undefined
-```
 
 *Since `sinon@5.0.0`*
 
@@ -237,19 +196,7 @@ You can reset behaviour of all stubs using `sinon.resetBehavior()`
 
 Resets the stub's history
 
-```javascript
-var stub = sinon.stub();
-
-stub.called // false
-
-stub();
-
-stub.called // true
-
-stub.resetHistory();
-
-stub.called // false
-```
+<div data-example-id="stubs-6-reset-history"></div>
 
 
 *Since `sinon@5.0.0`*
@@ -260,18 +207,8 @@ You can reset history of all stubs using `sinon.resetHistory()`
 #### `stub.callsFake(fakeFunction);`
 Makes the stub call the provided `fakeFunction` when invoked.
 
-```javascript
-var myObj = {};
-myObj.prop = function propFn() {
-    return 'foo';
-};
+<div data-example-id="stubs-7-call-fake"></div>
 
-sinon.stub(myObj, 'prop').callsFake(function fakeFn() {
-    return 'bar';
-});
-
-myObj.prop(); // 'bar'
-```
 
 #### `stub.returns(obj);`
 Makes the stub return the provided value.
@@ -386,48 +323,14 @@ a `TypeError` will be thrown.
 
 Causes the original method wrapped into the stub to be called when none of the conditional stubs are matched.
 
-```javascript
-var stub = sinon.stub();
-
-var obj = {};
-
-obj.sum = function sum(a, b) {
-    return a + b;
-};
-
-stub(obj, 'sum');
-
-obj.sum.withArgs(2, 2).callsFake(function foo() {
-    return 'bar';
-});
-
-obj.sum.callThrough();
-
-obj.sum(2, 2); // 'bar'
-obj.sum(1, 2); // 3
-```
+<div data-example-id="stubs-8-call-through"></div>
 
 
 #### `stub.callThroughWithNew();`
 
 Causes the original method wrapped into the stub to be called using the `new` operator when none of the conditional stubs are matched.
 
-```javascript
-var obj = {};
-
-obj.Sum = function MyConstructor(a, b) {
-    this.result = a + b;
-};
-
-sinon
-    .stub(obj, 'Sum')
-    .callThroughWithNew()
-    .withArgs(1, 2)
-    .returns({ result: 9000 });
-
-(new obj.Sum(2, 2)).result;  // 4
-(new obj.Sum(1, 2)).result;  // 9000
-```
+<div data-example-id="stubs-9-call-through-with-new"></div>
 
 
 #### `stub.callsArgOn(index, context);`
@@ -450,16 +353,8 @@ Causes the stub to return promises using a specific Promise library instead of
 the global one when using `stub.rejects` or `stub.resolves`. Returns the stub
 to allow chaining.
 
-```javascript
-var myObj = {
-    saveSomething: sinon.stub().usingPromise(bluebird.Promise).resolves("baz");
-}
+<div data-example-id="stubs-10-use-promise-library"></div>
 
-myObj.saveSomething()
-    .tap(function(actual) {
-        console.log(actual); // baz
-    });
-```
 
 *Since `sinon@2.0.0`*
 
@@ -488,11 +383,6 @@ Causes the spy to invoke a callback passed as a property of an object to the spy
 
 Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback and calls it with the (optional) arguments.
 
-
-#### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
-
-Like above but with an additional parameter to pass the `this` context.
-
 ```javascript
 "test should fake successful ajax request": function () {
     sinon.stub(jQuery, "ajax").yieldsTo("success", [1, 2, 3]);
@@ -504,6 +394,11 @@ Like above but with an additional parameter to pass the `this` context.
     });
 }
 ```
+
+
+#### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
+
+Like above but with an additional parameter to pass the `this` context.
 
 
 #### `stub.yield([arg1, arg2, ...])`
@@ -523,21 +418,7 @@ Invokes callbacks passed as a property of an object to the stub.
 
 Like `yield`, `yieldTo` grabs the first matching argument, finds the callback and calls it with the (optional) arguments.
 
-```javascript
-"calling callbacks": function () {
-    var callback = sinon.stub();
-    callback({
-        "success": function () {
-            console.log("Success!");
-        },
-        "failure": function () {
-            console.log("Oh noes!");
-        }
-    });
-
-    callback.yieldTo("failure"); // Logs "Oh noes!"
-}
-```
+<div data-example-id="stubs-12-yield-to"></div>
 
 
 #### `stub.callArg(argNum)`
@@ -612,75 +493,31 @@ Async version of [stub.yieldsToOn(property, context, [arg1, arg2, ...])](#stubyi
 
 Add a custom behavior. The name will be available as a function on stubs, and the chaining mechanism will be set up for you (e.g. no need to return anything from your function, its return value will be ignored). The `fn` will be passed the fake instance as its first argument, and then the user's arguments.
 
-```javascript
-const sinon = require('sinon');
+<div data-example-id="stubs-14-add-behavior"></div>
 
-sinon.addBehavior('returnsNum', (fake, n) => fake.returns(n));
-
-var stub = sinon.stub().returnsNum(42);
-
-assert.equals(stub(), 42);
-```
 
 #### `stub.get(getterFn)`
 
 Replaces a new getter for this stub.
 
-```javascript
-var myObj = {
-    prop: 'foo'
-};
+<div data-example-id="stubs-15-replace-getter"></div>
 
-sinon.stub(myObj, 'prop').get(function getterFn() {
-    return 'bar';
-});
-
-myObj.prop; // 'bar'
-```
 
 #### `stub.set(setterFn)`
 
 Defines a new setter for this stub.
 
-```javascript
-var myObj = {
-    example: 'oldValue',
-    prop: 'foo'
-};
+<div data-example-id="stubs-16-define-new-setter"></div>
 
-sinon.stub(myObj, 'prop').set(function setterFn(val) {
-    myObj.example = val;
-});
-
-myObj.prop = 'baz';
-
-myObj.example; // 'baz'
-```
 
 #### `stub.value(newVal)`
 
 Defines a new value for this stub.
 
-```javascript
-var myObj = {
-    example: 'oldValue',
-};
+<div data-example-id="stubs-17-define-new-value"></div>
 
-sinon.stub(myObj, 'example').value('newValue');
-
-myObj.example; // 'newValue'
-```
 
 You can restore values by calling the `restore` method:
 
-```javascript
-var myObj = {
-    example: 'oldValue',
-};
-
-var stub = sinon.stub(myObj, 'example').value('newValue');
-stub.restore()
-
-myObj.example; // 'oldValue'
-```
+<div data-example-id="stubs-18-restore-values"></div>
 

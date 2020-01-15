@@ -1,0 +1,25 @@
+require("@fatso83/mini-mocha").install();
+var sinon = require("sinon");
+var PubSub = require("pubsub-js");
+var referee = require("@sinonjs/referee");
+var assert = referee.assert;
+
+describe("PubSub", function() {
+    it("should call all subscribers, even if there are exceptions", function(){
+        var message = "an example message";
+        var stub = sinon.stub().throws();
+        var spy1 = sinon.spy();
+        var spy2 = sinon.spy();
+
+        PubSub.subscribe(message, stub);
+        PubSub.subscribe(message, spy1);
+        PubSub.subscribe(message, spy2);
+
+        PubSub.publishSync(message, undefined);
+
+        assert.exception(stub);
+        assert(spy1.called);
+        assert(spy2.called);
+        assert(stub.calledBefore(spy1));
+    });
+});
