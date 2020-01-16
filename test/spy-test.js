@@ -2086,6 +2086,48 @@ describe("spy", function() {
         });
     });
 
+    describe(".getCall", function() {
+        it("is null for indexes >= length", function() {
+            var spy = createSpy();
+
+            spy();
+
+            assert.isNull(spy.getCall(1));
+            assert.isNull(spy.getCall(2));
+        });
+
+        it("is null for indexes < -length", function() {
+            var spy = createSpy();
+
+            spy();
+
+            assert.isNull(spy.getCall(-2));
+            assert.isNull(spy.getCall(-3));
+        });
+
+        it("is same as last call when passed index -1", function() {
+            var spy = createSpy();
+
+            spy();
+            spy();
+            spy();
+
+            assert.same(spy.getCall(-1).callId, spy.lastCall.callId);
+            assert.same(spy.getCall(-1).spy, spy.lastCall.spy);
+        });
+
+        it("is same as n-1th call when passed index -2", function() {
+            var spy = createSpy();
+
+            spy();
+            spy();
+            spy();
+
+            assert.same(spy.getCall(-2).callId, spy.getCall(1).callId);
+            assert.same(spy.getCall(-2).spy, spy.getCall(1).spy);
+        });
+    });
+
     describe(".lastCall", function() {
         it("is undefined by default", function() {
             var spy = createSpy();
