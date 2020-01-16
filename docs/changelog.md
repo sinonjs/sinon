@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+8.1.0 / 2020-01-16
+==================
+
+  * Support negative indices in getCall (#2199)
+
 8.0.4 / 2020-01-06
 ==================
 
