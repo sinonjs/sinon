@@ -25,6 +25,8 @@ jobs:
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
     - run: npm ci
+      env:
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
     - name: Pre-Test
       run: |
         npm run lint
