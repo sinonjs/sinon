@@ -1,4 +1,9 @@
 
+8.1.1 / 2020-01-22
+==================
+
+  * Fundraiser for better docs: https://www.gofundme.com/f/sinon-docs
+
 8.1.0 / 2020-01-16
 ==================
 
