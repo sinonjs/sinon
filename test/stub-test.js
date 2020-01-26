@@ -3484,4 +3484,29 @@ describe("stub", function() {
             assert.same(stub.printf, proxy.printf);
         });
     });
+
+    describe(".wrappedMethod", function() {
+        it("should return the original method being stubbed", function() {
+            var myFn = function() {
+                return "foo";
+            };
+            var myObj = {
+                fn: myFn
+            };
+            createStub(myObj, "fn");
+            assert.same(myFn, myObj.fn.wrappedMethod);
+        });
+
+        it("should not exist for accessors", function() {
+            var myObj = {
+                get prop() {
+                    return "foo";
+                }
+            };
+            createStub(myObj, "prop").get(function() {
+                return "bar";
+            });
+            assert.isUndefined(myObj.prop.wrappedMethod);
+        });
+    });
 });
