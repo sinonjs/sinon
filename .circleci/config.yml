@@ -48,15 +48,6 @@ jobs:
           name: Lint
           command: npm run lint
 
-  node-8:
-    docker:
-      - image: circleci/node:8
-    steps:
-      - *attach-step
-      - run:
-          name: Test
-          command: npm run test-node
-
   node-10:
     docker:
       - image: circleci/node:10
@@ -69,6 +60,15 @@ jobs:
   node-12:
     docker:
       - image: circleci/node:12
+    steps:
+      - *attach-step
+      - run:
+          name: Test
+          command: npm run test-node
+
+  node-13:
+    docker:
+      - image: circleci/node:13
     steps:
       - *attach-step
       - run:
@@ -105,19 +105,19 @@ workflows:
       - lint:
           requires:
             - install-dependencies
-      - node-8:
-          requires:
-            - install-dependencies
       - node-10:
           requires:
             - install-dependencies
       - node-12:
           requires:
             - install-dependencies
+      - node-13:
+          requires:
+            - install-dependencies
       - integration-tests:
           requires:
             - install-dependencies
             - lint
-            - node-8
             - node-10
             - node-12
+            - node-13
