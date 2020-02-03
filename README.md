@@ -20,6 +20,7 @@
 <a href="#sponsors"><img src="https://opencollective.com/sinon/sponsors/badge.svg" alt="OpenCollective"></a>
 <a href="https://www.npmjs.com/package/sinon" target="_blank"><img src="https://img.shields.io/npm/dm/sinon.svg" alt="npm downloads per month"></a>
 <a href="https://cdnjs.com/libraries/sinon.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/sinon.js.svg" alt="CDNJS version"></a>
+<a href="CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg" alt="Contributor Covenant" /></a>
 </p>
 
 <p align=center>
