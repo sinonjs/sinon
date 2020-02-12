@@ -97,6 +97,15 @@ jobs:
           name: Upload coverage report
           command: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
 
+  saucelabs:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - *attach-step
+      - run:
+          name: Test in browsers (Sauce Labs)
+          command: npm run test-cloud
+
 workflows:
   version: 2
   sinon-workflow:
@@ -121,3 +130,10 @@ workflows:
             - node-10
             - node-12
             - node-13
+      - saucelabs:
+          context: SAUCE_LABS
+          requires:
+            - integration-tests
+          filters:
+            branches:
+              only: master
