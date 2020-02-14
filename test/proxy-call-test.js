@@ -552,6 +552,24 @@ describe("sinonSpy.call", function() {
         });
     });
 
+    describe(".firstArg", function() {
+        it("should be the first argument from the call", function() {
+            var spy = sinonSpy();
+
+            spy(41, 42, 43);
+            assert.equals(spy.getCall(0).firstArg, 41);
+
+            spy(44, 45);
+            assert.equals(spy.getCall(1).firstArg, 44);
+
+            spy(46);
+            assert.equals(spy.getCall(2).firstArg, 46);
+
+            spy();
+            assert.equals(spy.getCall(3).firstArg, undefined);
+        });
+    });
+
     describe(".lastArg", function() {
         it("should be the last argument from the call", function() {
             var spy = sinonSpy();
