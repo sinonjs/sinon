@@ -147,7 +147,7 @@ describe("fake", function() {
             assert.equals(f.firstArg, 46);
 
             f(false, true, 47, "string");
-            assert.equals(f.firstArg, false);
+            assert.isFalse(f.firstArg);
 
             f("string", false, true, 47);
             assert.equals(f.firstArg, "string");
@@ -156,7 +156,7 @@ describe("fake", function() {
             assert.equals(f.firstArg, 47);
 
             f(true, 47, "string", false);
-            assert.equals(f.firstArg, true);
+            assert.isTrue(f.firstArg);
 
             f();
             assert.isUndefined(f.firstArg);
@@ -182,10 +182,10 @@ describe("fake", function() {
             assert.equals(f.lastArg, 47);
 
             f(47, "string", false, true);
-            assert.equals(f.lastArg, true);
+            assert.isTrue(f.lastArg);
 
             f(true, 47, "string", false);
-            assert.equals(f.lastArg, false);
+            assert.isFalse(f.lastArg);
 
             f();
             assert.isUndefined(f.lastArg);

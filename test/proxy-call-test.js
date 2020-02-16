@@ -180,19 +180,19 @@ describe("sinonSpy.call", function() {
                 return spy.getCall(idx);
             });
 
-            assert.equals(calls[1].calledBefore(calls[3]), true);
-            assert.equals(calls[1].calledBefore(calls[0]), false);
+            assert.isTrue(calls[1].calledBefore(calls[3]));
+            assert.isFalse(calls[1].calledBefore(calls[0]));
 
-            assert.equals(calls[3].calledAfter(calls[1]), true);
-            assert.equals(calls[1].calledAfter(calls[3]), false);
+            assert.isTrue(calls[3].calledAfter(calls[1]));
+            assert.isFalse(calls[1].calledAfter(calls[3]));
 
-            assert.equals(calls[0].calledImmediatelyBefore(calls[2]), false);
-            assert.equals(calls[1].calledImmediatelyBefore(calls[2]), true);
-            assert.equals(calls[3].calledImmediatelyBefore(calls[1]), false);
+            assert.isFalse(calls[0].calledImmediatelyBefore(calls[2]));
+            assert.isTrue(calls[1].calledImmediatelyBefore(calls[2]));
+            assert.isFalse(calls[3].calledImmediatelyBefore(calls[1]));
 
-            assert.equals(calls[3].calledImmediatelyAfter(calls[1]), false);
-            assert.equals(calls[2].calledImmediatelyAfter(calls[1]), true);
-            assert.equals(calls[1].calledImmediatelyAfter(calls[3]), false);
+            assert.isFalse(calls[3].calledImmediatelyAfter(calls[1]));
+            assert.isTrue(calls[2].calledImmediatelyAfter(calls[1]));
+            assert.isFalse(calls[1].calledImmediatelyAfter(calls[3]));
         });
     });
 
@@ -566,7 +566,7 @@ describe("sinonSpy.call", function() {
             assert.equals(spy.getCall(2).firstArg, 46);
 
             spy();
-            assert.equals(spy.getCall(3).firstArg, undefined);
+            assert.isUndefined(spy.getCall(3).firstArg);
         });
     });
 
