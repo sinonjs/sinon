@@ -612,7 +612,7 @@ describe("issues", function() {
 
             fake(99, false);
 
-            assert.equals(fake.lastArg, false);
+            assert.isFalse(fake.lastArg);
         });
     });
 
