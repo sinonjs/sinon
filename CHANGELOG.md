@@ -1,4 +1,11 @@
 
+9.0.0 / 2020-02-19
+==================
+
+  * Ignore errors on thisValue property accesses (#2216)
+  * Add firstArg to spy calls and fakes. (#2150)
+  * Drop Node 8 support
+
 8.1.1 / 2020-01-22
 ==================
 
