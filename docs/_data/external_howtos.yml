@@ -22,5 +22,8 @@
 - title: Stubbing Node Authentication Middleware with Sinon
   url: http://mherman.org/blog/2018/01/22/stubbing-node-authentication-middleware-with-sinon
 
+- title: Testing ImmutableJS with Sinon custom matchers
+  url: https://www.scraggo.com/testing-immutable-js-with-sinon-custom-matchers/
+
 - title: SinonJS Fundamentals
   url: https://www.pluralsight.com/courses/sinonjs-fundamentals
