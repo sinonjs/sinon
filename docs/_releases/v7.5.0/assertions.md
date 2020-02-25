@@ -114,6 +114,13 @@ Passes if `spy` was called with the provided arguments and no others.
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWithExactly(spy.getCall(1), arg1, arg2, ...);`.
 
 
+#### `sinon.assert.calledOnceWithExactly(spyOrSpyCall, arg1, arg2, ...);`
+
+Passes if `spy` was called once and only once with the provided arguments and no others.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.calledOnceWithExactly(spy.getCall(1), arg1, arg2, ...);`.
+
+
 #### `sinon.assert.alwaysCalledWithExactly(spy, arg1, arg2, ...);`
 
 Passes if `spy` was always called with the provided arguments and no others.
