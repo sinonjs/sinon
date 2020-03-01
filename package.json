@@ -73,7 +73,7 @@
     "dependency-check": "^4.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
-    "eslint-config-sinon": "^3.0.0",
+    "eslint-config-sinon": "^4.0.0",
     "eslint-plugin-ie11": "^1.0.0",
     "eslint-plugin-local-rules": "^0.1.0",
     "eslint-plugin-mocha": "^6.1.0",
