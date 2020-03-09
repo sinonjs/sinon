@@ -580,9 +580,11 @@ describe("issues", function() {
             function ClassWithoutProps() {
                 return;
             }
+
             function AnotherClassWithoutProps() {
                 return;
             }
+
             ClassWithoutProps.prototype.constructor = ClassWithoutProps;
             AnotherClassWithoutProps.prototype.constructor = AnotherClassWithoutProps;
             var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
@@ -640,6 +642,7 @@ describe("issues", function() {
         function Foo() {
             return;
         }
+
         // eslint-disable-next-line mocha/no-setup-in-describe
         Foo.prototype.testMethod = function() {
             return;
@@ -679,6 +682,7 @@ describe("issues", function() {
         function Foo() {
             return;
         }
+
         // eslint-disable-next-line mocha/no-setup-in-describe
         Foo.prototype.testMethod = function() {
             return 1;
@@ -707,6 +711,48 @@ describe("issues", function() {
             assert.equals(fake.lastArg, 3);
             sandbox.reset();
             refute.equals(fake.lastArg, 3);
+        });
+    });
+
+    describe("#2226 - props on prototype are not restored correctly", function() {
+        function createObjectWithPropFromPrototype() {
+            var proto = {};
+            var obj = {};
+
+            Object.setPrototypeOf(obj, proto);
+            Object.defineProperty(proto, "test", { writable: true, value: 1 });
+            return obj;
+        }
+
+        it("should restore fakes shadowing prototype props correctly", function() {
+            var obj = createObjectWithPropFromPrototype();
+
+            var originalPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            sinon.replace(obj, "test", 2);
+            var replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            sinon.restore();
+            var restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            assert.isUndefined(originalPropertyDescriptor);
+            refute.isUndefined(replacedPropertyDescriptor);
+            assert.isUndefined(restoredPropertyDescriptor);
+        });
+
+        it("should restore stubs shadowing prototype props correctly", function() {
+            var obj = createObjectWithPropFromPrototype();
+            var originalPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            sinon.stub(obj, "test").value(2);
+            var replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            sinon.restore();
+            var restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(obj, "test");
+
+            assert.isUndefined(originalPropertyDescriptor);
+            refute.isUndefined(replacedPropertyDescriptor);
+            assert.isUndefined(restoredPropertyDescriptor);
         });
     });
 });
