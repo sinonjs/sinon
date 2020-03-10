@@ -1,4 +1,9 @@
 
+9.0.1 / 2020-03-10
+==================
+
+  * Fix #2226: restore props defined on prototype chain by deleting
+
 9.0.0 / 2020-02-19
 ==================
 
