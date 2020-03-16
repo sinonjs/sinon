@@ -1,0 +1,17 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Simulate running the Sinon runnable examples in RunKit",
+  "scripts": {
+    "test": "./run-test.sh"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fatso83/mini-mocha": "latest",
+    "bluebird": "latest",
+    "jquery": "latest",
+    "jsdom": "latest",
+    "pubsub-js": "latest",
+    "sinon": "latest"
+  }
+}

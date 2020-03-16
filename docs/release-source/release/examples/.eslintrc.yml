@@ -1,0 +1,11 @@
+extends:
+  - ../../../../test/.eslintrc.yml
+
+plugins:
+  - local-rules
+
+rules:
+  local-rules/no-underscore-dangle: off
+  no-underscore-dangle: off
+  no-console: off
+  mocha/no-setup-in-describe: off

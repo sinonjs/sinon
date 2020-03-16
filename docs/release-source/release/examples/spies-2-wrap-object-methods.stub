@@ -2,30 +2,36 @@ require("@fatso83/mini-mocha").install();
 var sinon = require("sinon");
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
-var jsdom = require('jsdom');
-var JSDOM = jsdom.JSDOM;
-var window = (new JSDOM()).window;
-var document = (new JSDOM('')).window;
-var jQuery = require('jquery')(window);
-global.document = document;
 
-describe('Wrap all object method', function() {
+// This is just an example of an external library you might require()
+var myExternalLibrary = {
+    getJSON: function(url) {
+        return this._doNetworkCall({ url: url, dataType: "json" });
+    },
+    _doNetworkCall: function(httpParams) {
+        console.log("Simulating fetching stuff from the network: ", httpParams);
+        return { result: 42 };
+    }
+};
+
+describe("Wrap all object methods", function() {
     var sandbox = sinon.createSandbox();
 
     beforeEach(function() {
-        sandbox.spy(jQuery);
+        sandbox.spy(myExternalLibrary);
     });
 
     afterEach(function() {
         sandbox.restore();
     });
 
-    it("should inspect jQuery.getJSON's usage of jQuery.ajax", function () {
+    it("should inspect the external lib's usage of its internal methods", function() {
         var url = "https://jsonplaceholder.typicode.com/todos/1";
-        jQuery.getJSON(url);
+        myExternalLibrary.getJSON(url);
 
-        assert(jQuery.ajax.calledOnce);
-        assert.equals(url, jQuery.ajax.getCall(0).args[0].url);
-        assert.equals("json", jQuery.ajax.getCall(0).args[0].dataType);
-    })
+        assert(myExternalLibrary.getJSON.calledOnce);
+        assert(myExternalLibrary._doNetworkCall.calledOnce);
+        assert.equals(url, myExternalLibrary._doNetworkCall.getCall(0).args[0].url);
+        assert.equals("json", myExternalLibrary._doNetworkCall.getCall(0).args[0].dataType);
+    });
 });
