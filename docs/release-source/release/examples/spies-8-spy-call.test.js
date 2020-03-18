@@ -1,4 +1,3 @@
-"use strict";
 const { it, describe, afterEach, beforeEach } = (exports.lab = require("@hapi/lab").script());
 const sinon = require("sinon");
 const referee = require("@sinonjs/referee");

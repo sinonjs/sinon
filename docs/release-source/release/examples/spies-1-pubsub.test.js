@@ -1,4 +1,3 @@
-"use strict";
 const Lab = (exports.lab = require("@hapi/lab"));
 const { it, describe } = (exports.lab = Lab.script());
 

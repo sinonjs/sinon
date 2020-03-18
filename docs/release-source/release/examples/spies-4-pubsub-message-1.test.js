@@ -1,4 +1,3 @@
-"use strict";
 const { it, describe } = (exports.lab = require("@hapi/lab").script());
 const sinon = require("sinon");
 const PubSub = require("pubsub-js");
