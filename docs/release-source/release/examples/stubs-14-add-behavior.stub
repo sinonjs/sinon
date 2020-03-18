@@ -5,7 +5,9 @@ var assert = referee.assert;
 
 describe("stub", function() {
     it("should add a custom behavior", function() {
-        sinon.addBehavior('returnsNum', function(fake, n) { fake.returns(n) });
+        sinon.addBehavior("returnsNum", function(fake, n) {
+            fake.returns(n);
+        });
 
         var stub = sinon.stub().returnsNum(42);
 

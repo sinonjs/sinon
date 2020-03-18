@@ -8,4 +8,6 @@ rules:
   local-rules/no-underscore-dangle: off
   no-underscore-dangle: off
   no-console: off
+  strict: off
+  no-empty-function: off
   mocha/no-setup-in-describe: off

@@ -10,8 +10,8 @@ describe("stub", function() {
         callback.onCall(1).returns(2);
         callback.returns(3);
 
-        assert.equals(callback(), 1) // Returns 1
-        assert.equals(callback(), 2) // Returns 2
-        assert.equals(callback(), 3) // All following calls return 3
+        assert.equals(callback(), 1); // Returns 1
+        assert.equals(callback(), 2); // Returns 2
+        assert.equals(callback(), 3); // All following calls return 3
     });
 });

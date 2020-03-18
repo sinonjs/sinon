@@ -8,16 +8,16 @@ describe("stub", function() {
         var actual;
         var callback = sinon.stub();
         callback({
-            "success": function () {
+            success: function() {
                 actual = "Success!";
             },
-            "failure": function () {
+            failure: function() {
                 actual = "Oh noes!";
             }
         });
 
         callback.yieldTo("failure");
-        
+
         assert.equals(actual, "Oh noes!");
     });
 });

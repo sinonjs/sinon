@@ -6,17 +6,16 @@ var assert = referee.assert;
 describe("stub", function() {
     it("should define new setter", function() {
         var myObj = {
-            example: 'oldValue',
-            prop: 'foo'
+            example: "oldValue",
+            prop: "foo"
         };
 
-        sinon.stub(myObj, 'prop').set(function setterFn(val) {
+        sinon.stub(myObj, "prop").set(function setterFn(val) {
             myObj.example = val;
         });
 
-        myObj.prop = 'baz';
+        myObj.prop = "baz";
 
-        assert.equals(myObj.example, 'baz');
+        assert.equals(myObj.example, "baz");
     });
 });
-

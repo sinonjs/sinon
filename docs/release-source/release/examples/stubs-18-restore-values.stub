@@ -6,12 +6,12 @@ var assert = referee.assert;
 describe("stub", function() {
     it("should restore values", function() {
         var myObj = {
-            example: 'oldValue',
+            example: "oldValue"
         };
 
-        var stub = sinon.stub(myObj, 'example').value('newValue');
+        var stub = sinon.stub(myObj, "example").value("newValue");
         stub.restore();
 
-        assert.equals(myObj.example, 'oldValue');
+        assert.equals(myObj.example, "oldValue");
     });
 });

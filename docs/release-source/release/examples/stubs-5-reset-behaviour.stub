@@ -7,7 +7,7 @@ describe("stub", function() {
     it("should reset behaviour", function() {
         var stub = sinon.stub();
 
-        stub.returns(54)
+        stub.returns(54);
 
         assert.equals(stub(), 54);
 

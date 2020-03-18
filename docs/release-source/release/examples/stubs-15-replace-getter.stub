@@ -6,13 +6,13 @@ var assert = referee.assert;
 describe("stub", function() {
     it("should replace getter", function() {
         var myObj = {
-            prop: 'foo'
+            prop: "foo"
         };
 
-        sinon.stub(myObj, 'prop').get(function getterFn() {
-            return 'bar';
+        sinon.stub(myObj, "prop").get(function getterFn() {
+            return "bar";
         });
 
-        assert.equals(myObj.prop, 'bar');
+        assert.equals(myObj.prop, "bar");
     });
 });

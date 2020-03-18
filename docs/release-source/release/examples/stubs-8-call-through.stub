@@ -10,9 +10,12 @@ obj.sum = function sum(a, b) {
 
 describe("stub", function() {
     it("should call through", function() {
-        sinon.stub(obj, 'sum').withArgs(2, 2).callsFake(function foo() {
-            return 'bar';
-        });
+        sinon
+            .stub(obj, "sum")
+            .withArgs(2, 2)
+            .callsFake(function foo() {
+                return "bar";
+            });
 
         obj.sum.callThrough();
 

@@ -4,14 +4,14 @@ var PubSub = require("pubsub-js");
 var referee = require("@sinonjs/referee");
 var assert = referee.assert;
 
-describe('PubSub', function() {
-    it("should call subscribers with message as first argument", function () {
-        var message = 'an example message';
+describe("PubSub", function() {
+    it("should call subscribers with message as first argument", function() {
+        var message = "an example message";
         var spy = sinon.spy();
 
         PubSub.subscribe(message, spy);
         PubSub.publishSync(message, "some payload");
 
         assert(spy.calledWith(message));
-    })
+    });
 });

@@ -11,7 +11,7 @@ obj.Sum = function MyConstructor(a, b) {
 describe("stub", function() {
     it("should call through with new operator", function() {
         sinon
-            .stub(obj, 'Sum')
+            .stub(obj, "Sum")
             .callThroughWithNew()
             .withArgs(1, 2)
             .returns({ result: 9000 });
