@@ -7,10 +7,9 @@ npm link
 
 # Install examples project and link to local sinon folder
 cd "$SCRIPT_DIR"
+rm -r node_modules
 npm install
 npm link sinon
 
 # Make sure all examples are still runnable
-for f in *.stub; do
-    node $f
-done
+$(npm bin)/lab --silence --ignore document *.test.js
