@@ -1,15 +1,16 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-var myObj = {};
+const myObj = {};
 myObj.prop = function propFn() {
     return "foo";
 };
 
-describe("stub", function() {
-    it("should call fake", function() {
+describe("stub", () => {
+    it("should call fake", () => {
         sinon.stub(myObj, "prop").callsFake(function fakeFn() {
             return "bar";
         });

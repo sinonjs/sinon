@@ -1,12 +1,13 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("withArgs", function() {
-    it("should call method once with each argument", function() {
-        var object = { method: function() {} };
-        var spy = sinon.spy(object, "method");
+describe("withArgs", () => {
+    it("should call method once with each argument", () => {
+        const object = { method() {} };
+        const spy = sinon.spy(object, "method");
 
         object.method(42);
         object.method(1);

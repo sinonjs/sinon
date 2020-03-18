@@ -1,17 +1,18 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("stub", function() {
-    it("should call specified callback", function() {
-        var actual;
-        var callback = sinon.stub();
+describe("stub", () => {
+    it("should call specified callback", () => {
+        let actual;
+        const callback = sinon.stub();
         callback({
-            success: function() {
+            success() {
                 actual = "Success!";
             },
-            failure: function() {
+            failure() {
                 actual = "Oh noes!";
             }
         });

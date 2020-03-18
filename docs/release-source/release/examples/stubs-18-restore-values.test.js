@@ -1,15 +1,16 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("stub", function() {
-    it("should restore values", function() {
-        var myObj = {
+describe("stub", () => {
+    it("should restore values", () => {
+        const myObj = {
             example: "oldValue"
         };
 
-        var stub = sinon.stub(myObj, "example").value("newValue");
+        const stub = sinon.stub(myObj, "example").value("newValue");
         stub.restore();
 
         assert.equals(myObj.example, "oldValue");

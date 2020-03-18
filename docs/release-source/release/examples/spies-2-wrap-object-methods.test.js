@@ -1,32 +1,33 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe, afterEach, beforeEach } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
 // This is just an example of an external library you might require()
-var myExternalLibrary = {
-    getJSON: function(url) {
+const myExternalLibrary = {
+    getJSON(url) {
         return this._doNetworkCall({ url: url, dataType: "json" });
     },
-    _doNetworkCall: function(httpParams) {
+    _doNetworkCall(httpParams) {
         console.log("Simulating fetching stuff from the network: ", httpParams);
         return { result: 42 };
     }
 };
 
-describe("Wrap all object methods", function() {
-    var sandbox = sinon.createSandbox();
+describe("Wrap all object methods", () => {
+    const sandbox = sinon.createSandbox();
 
-    beforeEach(function() {
+    beforeEach(() => {
         sandbox.spy(myExternalLibrary);
     });
 
-    afterEach(function() {
+    afterEach(() => {
         sandbox.restore();
     });
 
-    it("should inspect the external lib's usage of its internal methods", function() {
-        var url = "https://jsonplaceholder.typicode.com/todos/1";
+    it("should inspect the external lib's usage of its internal methods", () => {
+        const url = "https://jsonplaceholder.typicode.com/todos/1";
         myExternalLibrary.getJSON(url);
 
         assert(myExternalLibrary.getJSON.calledOnce);

@@ -1,11 +1,12 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("stub", function() {
-    it("should behave differently on consecutive calls with certain argument", function() {
-        var callback = sinon.stub();
+describe("stub", () => {
+    it("should behave differently on consecutive calls with certain argument", () => {
+        const callback = sinon.stub();
         callback
             .withArgs(42)
             .onFirstCall()

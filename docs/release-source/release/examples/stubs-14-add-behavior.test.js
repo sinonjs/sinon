@@ -1,15 +1,16 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("stub", function() {
-    it("should add a custom behavior", function() {
+describe("stub", () => {
+    it("should add a custom behavior", () => {
         sinon.addBehavior("returnsNum", function(fake, n) {
             fake.returns(n);
         });
 
-        var stub = sinon.stub().returnsNum(42);
+        const stub = sinon.stub().returnsNum(42);
 
         assert.equals(stub(), 42);
     });

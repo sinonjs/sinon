@@ -1,22 +1,23 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var PubSub = require("pubsub-js");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const PubSub = require("pubsub-js");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-describe("PubSub", function() {
-    it("should call all subscribers, even if there are exceptions", function() {
-        var message = "an example message";
-        var stub = sinon.stub().throws();
-        var spy1 = sinon.spy();
-        var spy2 = sinon.spy();
-        var clock = sinon.useFakeTimers();
+describe("PubSub", () => {
+    it("should call all subscribers, even if there are exceptions", () => {
+        const message = "an example message";
+        const stub = sinon.stub().throws();
+        const spy1 = sinon.spy();
+        const spy2 = sinon.spy();
+        const clock = sinon.useFakeTimers();
 
         PubSub.subscribe(message, stub);
         PubSub.subscribe(message, spy1);
         PubSub.subscribe(message, spy2);
 
-        assert.exception(function() {
+        assert.exception(() => {
             PubSub.publishSync(message, "some data");
 
             // PubSubJS reschedules exceptions using setTimeout(fn,0)

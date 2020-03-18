@@ -1,12 +1,15 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var PubSub = require("pubsub-js");
-var referee = require("@sinonjs/referee");
-var assertTrue = referee.assert;
+"use strict";
+const Lab = (exports.lab = require("@hapi/lab"));
+const { it, describe } = (exports.lab = Lab.script());
 
-describe("PubSub", function() {
-    it("should call subscribers on publish", function() {
-        var callback = sinon.spy();
+const sinon = require("sinon");
+const PubSub = require("pubsub-js");
+const referee = require("@sinonjs/referee");
+const assertTrue = referee.assert;
+
+describe("PubSub", () => {
+    it("should call subscribers on publish", () => {
+        const callback = sinon.spy();
 
         PubSub.subscribe("message", callback);
         PubSub.publishSync("message");

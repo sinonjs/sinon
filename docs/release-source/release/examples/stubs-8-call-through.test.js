@@ -1,15 +1,16 @@
-require("@fatso83/mini-mocha").install();
-var sinon = require("sinon");
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+"use strict";
+const { it, describe } = (exports.lab = require("@hapi/lab").script());
+const sinon = require("sinon");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
-var obj = {};
+const obj = {};
 obj.sum = function sum(a, b) {
     return a + b;
 };
 
-describe("stub", function() {
-    it("should call through", function() {
+describe("stub", () => {
+    it("should call through", () => {
         sinon
             .stub(obj, "sum")
             .withArgs(2, 2)

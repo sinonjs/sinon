@@ -8,7 +8,7 @@
   "license": "ISC",
   "// dependencies": "We use 'latest' for the versions, as that is what RunKit will use",
   "dependencies": {
-    "@fatso83/mini-mocha": "latest",
+    "@hapi/lab": "latest",
     "bluebird": "latest",
     "jquery": "latest",
     "jsdom": "latest",
