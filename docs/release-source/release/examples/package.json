@@ -6,6 +6,7 @@
     "test": "./run-test.sh"
   },
   "license": "ISC",
+  "// dependencies": "We use 'latest' for the versions, as that is what RunKit will use",
   "dependencies": {
     "@fatso83/mini-mocha": "latest",
     "bluebird": "latest",
