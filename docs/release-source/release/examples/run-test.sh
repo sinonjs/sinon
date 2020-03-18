@@ -13,3 +13,10 @@ npm link sinon
 
 # Make sure all examples are still runnable
 $(npm bin)/lab --silence --ignore document *.test.js
+
+# clean up to avoid circular links confusing watchers
+npm unlink sinon
+git checkout -- package.json
+npm install
+cd "$SCRIPT_DIR/.."
+npm unlink
