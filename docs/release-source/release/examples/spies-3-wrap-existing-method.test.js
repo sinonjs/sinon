@@ -1,4 +1,5 @@
-const { it, describe, afterEach, beforeEach } = (exports.lab = require("@hapi/lab").script());
+require("@fatso83/mini-mocha").install();
+
 const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;

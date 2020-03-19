@@ -1,4 +1,5 @@
-const { it, describe } = (exports.lab = require("@hapi/lab").script());
+require("@fatso83/mini-mocha").install();
+
 const sinon = require("sinon");
 const PubSub = require("pubsub-js");
 const referee = require("@sinonjs/referee");

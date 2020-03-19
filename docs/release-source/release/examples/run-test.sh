@@ -11,9 +11,11 @@ npm install
 npm link sinon
 
 # Make sure all examples are still runnable
+set -e
 for f in *.test.js; do
     node $f
 done
+set +e
 
 # clean up to avoid circular links confusing watchers
 npm unlink sinon
