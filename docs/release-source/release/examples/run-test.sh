@@ -7,12 +7,13 @@ npm link
 
 # Install examples project and link to local sinon folder
 cd "$SCRIPT_DIR"
-rm -r node_modules
 npm install
 npm link sinon
 
 # Make sure all examples are still runnable
-$(npm bin)/lab --silence --ignore document *.test.js
+for f in *.test.js; do
+    node $f
+done
 
 # clean up to avoid circular links confusing watchers
 npm unlink sinon
