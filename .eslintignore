@@ -6,5 +6,8 @@ docs/js/
 docs/releases/
 docs/assets/js/
 
+# has linting of its own
+docs/release-source/release/examples
+
 # has "invalid" ESM syntax
 rollup.config.js
