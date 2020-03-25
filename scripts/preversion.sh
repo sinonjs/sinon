@@ -14,6 +14,7 @@ done
 npm run lint
 npm test
 npm run test-cloud
+npm run test-runnable-examples
 
 echo 'Updating CHANGELOG.md'
 git changelog --no-merges
