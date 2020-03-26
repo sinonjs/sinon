@@ -7,7 +7,7 @@ npm link
 
 # Install examples project and link to local sinon folder
 cd "$SCRIPT_DIR"
-npm install
+npm install --ignore-scripts
 npm link sinon
 
 # Make sure all examples are still runnable
@@ -20,6 +20,6 @@ set +e
 # clean up to avoid circular links confusing watchers
 npm unlink sinon
 git checkout -- package.json
-npm install
+npm install --ignore-scripts
 cd "$SCRIPT_DIR/.."
 npm unlink
