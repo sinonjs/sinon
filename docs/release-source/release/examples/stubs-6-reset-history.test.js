@@ -4,8 +4,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("stub", () => {
-    it("should reset history", () => {
+describe("stub", function() {
+    it("should reset history", function() {
         const stub = sinon.stub();
 
         assert.isFalse(stub.called);

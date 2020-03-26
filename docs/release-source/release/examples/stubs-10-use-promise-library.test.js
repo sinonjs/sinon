@@ -12,8 +12,8 @@ const myObj = {
         .resolves("baz")
 };
 
-describe("stub", () => {
-    it("should resolve using specific Promise library", () => {
+describe("stub", function() {
+    it("should resolve using specific Promise library", function() {
         myObj.saveSomething().tap(function(actual) {
             assert.equals(actual, "baz");
         });

@@ -10,6 +10,9 @@ cd "$SCRIPT_DIR"
 npm install --ignore-scripts
 npm link sinon
 
+# Lint
+$(npm bin)/eslint .
+
 # Make sure all examples are still runnable
 set -e
 for f in *.test.js; do
