@@ -9,6 +9,7 @@
   "// dependencies": "We use 'latest' for the versions, as that is what RunKit will use",
   "dependencies": {
     "@fatso83/mini-mocha": "^2.2.0",
+    "@sinonjs/referee": "^5.0.1",
     "bluebird": "latest",
     "jquery": "latest",
     "jsdom": "latest",

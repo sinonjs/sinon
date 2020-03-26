@@ -1,11 +1,10 @@
 require("@fatso83/mini-mocha").install();
 
 const sinon = require("sinon");
-const referee = require("@sinonjs/referee");
-const assert = referee.assert;
+const { assert } = require("@sinonjs/referee");
 
-describe("stub", () => {
-    it("should reset behaviour", () => {
+describe("stub", function() {
+    it("should reset behaviour", function() {
         const stub = sinon.stub();
 
         stub.returns(54);
@@ -14,6 +13,6 @@ describe("stub", () => {
 
         stub.resetBehavior();
 
-        assert.equals(stub(), undefined);
+        assert.isUndefined(stub());
     });
 });
