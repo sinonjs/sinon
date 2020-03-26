@@ -15,18 +15,18 @@ const myExternalLibrary = {
     }
 };
 
-describe("Wrap all object methods", function() {
+describe("Wrap all object methods", () => {
     const sandbox = sinon.createSandbox();
 
-    beforeEach(function() {
+    beforeEach(() => {
         sandbox.spy(myExternalLibrary);
     });
 
-    afterEach(function() {
+    afterEach(() => {
         sandbox.restore();
     });
 
-    it("should inspect the external lib's usage of its internal methods", function() {
+    it("should inspect the external lib's usage of its internal methods", () => {
         const url = "https://jsonplaceholder.typicode.com/todos/1";
         myExternalLibrary.getJSON(url);
 

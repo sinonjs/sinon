@@ -10,23 +10,22 @@ const document = new JSDOM("").window;
 const jQuery = require("jquery")(window);
 global.document = document;
 
-describe("Wrap existing method", function() {
+describe("Return nth call", () => {
     const sandbox = sinon.createSandbox();
 
-    beforeEach(function() {
+    beforeEach(() => {
         sandbox.spy(jQuery, "ajax");
     });
 
-    afterEach(function() {
+    afterEach(() => {
         sandbox.restore();
     });
 
-    it("should inspect jQuery.getJSON's usage of jQuery.ajax", function() {
+    it("should inspect jQuery.getJSON's usage of jQuery.ajax", () => {
         const url = "https://jsonplaceholder.typicode.com/todos/1";
-        jQuery.getJSON(url);
+        jQuery.ajax(url);
+        const spyCall = jQuery.ajax.getCall(0);
 
-        assert(jQuery.ajax.calledOnce);
-        assert.equals(url, jQuery.ajax.getCall(0).args[0].url);
-        assert.equals("json", jQuery.ajax.getCall(0).args[0].dataType);
+        assert.equals(url, spyCall.args[0]);
     });
 });

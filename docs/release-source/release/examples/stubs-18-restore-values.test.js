@@ -4,8 +4,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("stub", () => {
-    it("should restore values", () => {
+describe("stub", function() {
+    it("should restore values", function() {
         const myObj = {
             example: "oldValue"
         };

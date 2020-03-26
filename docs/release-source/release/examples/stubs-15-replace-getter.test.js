@@ -4,8 +4,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("stub", () => {
-    it("should replace getter", () => {
+describe("stub", function() {
+    it("should replace getter", function() {
         const myObj = {
             prop: "foo"
         };
