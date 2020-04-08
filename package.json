@@ -57,7 +57,7 @@
     "docs/**/*.md": "markdownlint"
   },
   "dependencies": {
-    "@sinonjs/commons": "^1.7.0",
+    "@sinonjs/commons": "^1.7.2",
     "@sinonjs/fake-timers": "^6.0.0",
     "@sinonjs/formatio": "^5.0.1",
     "@sinonjs/samsam": "^5.0.3",
