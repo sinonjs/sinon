@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+9.0.2 / 2020-04-08
+==================
+
+  * Bump @sinonjs/fake-timers (fix error when using Node's util/promisify with setTimeout)
+  * Upgrade @sinonjs/commons (fix error when trying to calculate function name from generators)
+
 9.0.1 / 2020-03-10
 ==================
 
