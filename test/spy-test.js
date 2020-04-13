@@ -329,8 +329,38 @@ describe("spy", function () {
         assert(spy.get.calledOnce);
     });
 
-    describe("global.Error", function () {
-        beforeEach(function () {
+    it("sets wrappedMethod on getter and setter", function() {
+        var object = {
+            get test() {
+                return this.property;
+            },
+            set test(value) {
+                this.property = value;
+            }
+        };
+
+        var descriptor1 = Object.getOwnPropertyDescriptor(object, "test");
+        var spy = createSpy(object, "test", ["get", "set"]);
+        var descriptor2 = Object.getOwnPropertyDescriptor(object, "test");
+
+        refute.equals(descriptor1, descriptor2);
+
+        refute.isUndefined(spy.get.wrappedMethod);
+        refute.isUndefined(spy.get.restore);
+        refute.isUndefined(spy.set.wrappedMethod);
+        refute.isUndefined(spy.set.restore);
+        assert.isUndefined(spy.wrappedMethod);
+        assert.isUndefined(spy.restore);
+
+        spy.get.restore();
+        spy.set.restore();
+
+        var descriptor3 = Object.getOwnPropertyDescriptor(object, "test");
+        assert.equals(descriptor1, descriptor3);
+    });
+
+    describe("global.Error", function() {
+        beforeEach(function() {
             this.originalError = globalContext.Error;
         });
 
