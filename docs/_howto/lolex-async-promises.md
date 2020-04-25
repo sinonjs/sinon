@@ -73,7 +73,7 @@ explicitly, the following code can be tested using the same approach:
 // maker.js
 module.exports.fulfillAfterOneSecond = () => {
     return new Promise(resolve => {
-        setTimeout(() => fulfill(42), 1000);
+        setTimeout(() => resolve(42), 1000);
     });
 };
 ```
