@@ -11,7 +11,7 @@ test code using them.
 Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects created through either `new Date();`
 or `Date.now();` (if supported by the browser).
 
-For standalone usage of fake timers it is recommended to use [lolex](https://github.com/sinonjs/lolex) package instead. It provides the same
+For standalone usage of fake timers it is recommended to use [@sinonjs/fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
 set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
 
 ```javascript
@@ -59,17 +59,17 @@ You can also pass in a Date object, and its `getTime()` will be used for the sta
 
 As above, but allows further configuration options, some of which are:
 
-- `config.now` - *Number/Date* - installs lolex with the specified unix epoch (default: 0)
-- `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
-- `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
+- `config.now` - *Number/Date* - installs FakeTimers with the specified unix epoch (default: 0)
+- `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default FakeTimers will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
+- `config.shouldAdvanceTime` - *Boolean* - tells FakeTimers to increment mocked time automatically based on the real system time shift (default: false)
 
-Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
+Please refer to the `FakeTimers.install` [documentation](https://github.com/sinonjs/fake-timers#var-clock--faketimersinstallconfig) for the full set of features available and more elaborate explanations.
 
 *Since `sinon@3.0.0`*
 
 `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
-**Important note:** when faking `nextTick`, normal calls to `process.nextTick()` would not execute automatically as they would during normal event-loop phases. You would have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [lolex](https://github.com/sinonjs/lolex) documentation for more information.
+**Important note:** when faking `nextTick`, normal calls to `process.nextTick()` would not execute automatically as they would during normal event-loop phases. You would have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [@sinonjs/fake-timers](https://github.com/sinonjs/fake-timers) documentation for more information.
 
 #### Examples
 
