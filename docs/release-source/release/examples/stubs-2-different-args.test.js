@@ -11,6 +11,7 @@ describe("stubbed callback", function() {
 
         assert.isUndefined(callback()); // No return value, no exception
         assert.equals(callback(42), 1); // Returns 1
+        assert.equals(callback.withArgs(42).callCount, 1);// Use withArgs in assertion
         assert.exception(() => {
             callback(1);
         }); // Throws Error("name")
