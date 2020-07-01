@@ -524,4 +524,4 @@ You can restore values by calling the `restore` method:
 #### `stub.wrappedMethod`
 
 Holds a reference to the original method/function this stub has
-wrapped.
+wrapped. `undefined` for the property accessors.
