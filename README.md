@@ -27,19 +27,6 @@
 <a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
 </p>
 
-## Better docs?
-
-Do you wish that Sinon had better documentation?
-
-So do we!
-
-With your support, we can improve the documentation for everyone.
-
-1. [Donate to the campaign for better documentation](https://www.gofundme.com/f/sinon-docs)
-1. Spread the word of the campaign in your companies and on social media
-
-Thank you!
-
 ## Compatibility
 
 For details on compatibility and browser support, please see [`COMPATIBILITY.md`](COMPATIBILITY.md)
