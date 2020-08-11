@@ -60,7 +60,7 @@
     "@sinonjs/commons": "^1.7.2",
     "@sinonjs/fake-timers": "^6.0.1",
     "@sinonjs/formatio": "^5.0.1",
-    "@sinonjs/samsam": "^5.0.3",
+    "@sinonjs/samsam": "^5.1.0",
     "diff": "^4.0.2",
     "nise": "^4.0.1",
     "supports-color": "^7.1.0"
