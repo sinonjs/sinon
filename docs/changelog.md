@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+9.0.3 / 2020-08-11
+==================
+
+  * Upgrade nise to latest
+  * Upgrade @sinonjs/samsam to latest
+
 9.0.2 / 2020-04-08
 ==================
 
