@@ -62,7 +62,7 @@
     "@sinonjs/formatio": "^5.0.1",
     "@sinonjs/samsam": "^5.1.0",
     "diff": "^4.0.2",
-    "nise": "^4.0.1",
+    "nise": "^4.0.4",
     "supports-color": "^7.1.0"
   },
   "devDependencies": {
