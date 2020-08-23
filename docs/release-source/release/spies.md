@@ -156,6 +156,8 @@ are also available on `object.method`.
 
 Creates a spy that only records [calls][call] when the received arguments match those passed to `withArgs`. This is useful to be more expressive in your assertions, where you can access the spy with the same [call][call].
 
+Uses deep comparison for objects and arrays. Use `spy.withArgs(sinon.match.same(obj))` for strict comparison (see [matchers](matchers)).
+
 <div data-example-id="spies-7-with-args"></div>
 
 
