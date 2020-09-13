@@ -941,6 +941,105 @@ describe("assert", function() {
             });
         });
 
+        describe(".calledOnceWithMatch", function() {
+            // eslint-disable-next-line mocha/no-setup-in-describe
+            requiresValidFake("calledOnceWithMatch");
+
+            it("fails when method fails", function() {
+                var object = {};
+                sinonStub(this.stub, "calledOnceWithMatch").returns(false);
+                var stub = this.stub;
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub, object, 1);
+                });
+
+                assert(this.stub.calledOnceWithMatch.calledOnceWithMatch(object, 1));
+                assert(sinonAssert.fail.called);
+            });
+
+            it("passes when method doesn't fail", function() {
+                var object = {};
+                sinonStub(this.stub, "calledOnceWithMatch").returns(true);
+                var stub = this.stub;
+
+                refute.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub, object, 1);
+                });
+
+                assert(this.stub.calledOnceWithMatch.calledOnceWithMatch(object, 1));
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("calls pass callback", function() {
+                this.stub("yeah");
+                sinonAssert.calledOnceWithMatch(this.stub, "yeah");
+
+                assert(sinonAssert.pass.calledOnce);
+                assert(sinonAssert.pass.calledWith("calledOnceWithMatch"));
+            });
+
+            it("fails when method does not exist", function() {
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch();
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method is not stub", function() {
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch(function() {
+                        return;
+                    });
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method was not called", function() {
+                var stub = this.stub;
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when called with more than one argument", function() {
+                var stub = this.stub;
+                stub();
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub, 1);
+                });
+            });
+
+            it("passes when method was called", function() {
+                var stub = this.stub;
+                stub();
+
+                refute.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub);
+                });
+
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("fails when method was called more than once", function() {
+                var stub = this.stub;
+                stub();
+                stub();
+
+                assert.exception(function() {
+                    sinonAssert.calledOnceWithMatch(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+        });
+
         describe(".neverCalledWith", function() {
             it("fails when method fails", function() {
                 var object = {};
