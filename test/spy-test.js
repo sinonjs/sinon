@@ -1314,6 +1314,44 @@ describe("spy", function() {
         });
     });
 
+    describe(".calledOnceWithMatch", function() {
+        beforeEach(function() {
+            this.spy = createSpy();
+        });
+
+        it("returns true for exact match", function() {
+            this.spy(1, 2, 3);
+
+            assert.isTrue(this.spy.calledOnceWithMatch(1, 2, 3));
+        });
+
+        it("returns true for partial match", function() {
+            this.spy(1, 2, 3);
+
+            assert.isTrue(this.spy.calledOnceWithMatch(1, 2));
+        });
+
+        it("returns false for exact parameters but called more then once", function() {
+            this.spy(1, 2, 3);
+            this.spy(1, 2, 3);
+
+            assert.isFalse(this.spy.calledOnceWithMatch(1, 2, 3));
+        });
+
+        it("return false for one mismatched call", function() {
+            this.spy(1, 2);
+
+            assert.isFalse(this.spy.calledOnceWithMatch(1, 2, 3));
+        });
+
+        it("return false for one mismatched call with some other", function() {
+            this.spy(1, 2, 3);
+            this.spy(1, 2);
+
+            assert.isFalse(this.spy.calledOnceWithMatch(1, 2, 3));
+        });
+    });
+
     describe(".alwaysCalledWithExactly", function() {
         beforeEach(function() {
             this.spy = createSpy();
