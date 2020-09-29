@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+9.1.0 / 2020-09-29
+==================
+
+  * Add a calledOnceWithMatch assertion (#2294)
+
 9.0.3 / 2020-08-11
 ==================
 
