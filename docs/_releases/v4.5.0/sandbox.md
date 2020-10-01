@@ -86,7 +86,7 @@ var sandbox = sinon.createSandbox(sinon.defaultConfig);
 
 // (OR) Add the extra properties that differ from the sinon defaults.
 var sandbox = sinon.createSandbox({
-    useFakeTimers: true
+    useFakeTimers: true,
     useFakeServer: true
 });
 ```
