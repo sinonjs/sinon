@@ -108,12 +108,12 @@ var sandbox = sinon.createSandbox({
 });
 ```
 
-##### injectInto
+##### `injectInto`
 
 The sandbox's methods can be injected into another object for convenience. The
 `injectInto` configuration option can name an object to add properties to.
 
-##### properties
+##### `properties`
 
 What properties to inject. Note that only naming "server" here is not
 sufficient to have a `server` property show up in the target object, you also
@@ -132,13 +132,13 @@ returned by the function `inject`, namely:
 }
 ```
 
-##### useFakeTimers
+##### `useFakeTimers`
 
 If set to `true`, the sandbox will have a `clock` property. You can optionally pass
 in a configuration object that follows the [specification for fake timers](../fake-timers),
 such as `{ toFake: ["setTimeout", "setInterval"] }`.
 
-##### useFakeServer
+##### `useFakeServer`
 
 If `true`, `server` and `requests` properties are added to the sandbox. Can
 also be an object to use for fake server. The default one is `sinon.fakeServer`,
