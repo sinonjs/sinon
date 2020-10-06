@@ -1,4 +1,12 @@
 
+9.2.0 / 2020-10-06
+==================
+
+  * Update dependencies (#2299)
+  * Update sandbox docs with missing comma
+  * Add minor markdown formatting to release docs for sandbox
+  * Minor formatting improvements to legacy sandbox documentation
+
 9.1.0 / 2020-09-29
 ==================
 
