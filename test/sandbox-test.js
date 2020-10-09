@@ -15,7 +15,6 @@ var sinonFake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
 var sinonConfig = require("../lib/sinon/util/core/get-config");
-var sinonAssert = require("../lib/sinon/assert");
 var sinonClock = require("../lib/sinon/util/fake-timers");
 
 var supportsAjax = typeof XMLHttpRequest !== "undefined" || typeof ActiveXObject !== "undefined";
@@ -45,12 +44,6 @@ describe("Sandbox", function() {
         var sandbox = new Sandbox();
 
         assert.same(sandbox.match, match);
-    });
-
-    it("exposes assert", function() {
-        var sandbox = new Sandbox();
-
-        assert.same(sandbox.assert, sinonAssert);
     });
 
     it("can be reset without failing when pre-configured to use a fake server", function() {
@@ -2075,6 +2068,26 @@ describe("Sandbox", function() {
             object.prop = "bla";
 
             assert.equals(object.prop, "bla");
+        });
+    });
+
+    describe(".assert", function() {
+        it("allows rebinding of .fail on a per-sandbox level", function() {
+            var sandboxA = createSandbox();
+            var sandboxB = createSandbox();
+
+            sandboxA.assert.failException = "CustomErrorA";
+            sandboxB.assert.failException = "CustomErrorB";
+
+            assert.exception(
+                function() {
+                    sandboxA.assert.fail("Some message");
+                },
+                { name: "CustomErrorA" }
+            );
+
+            sandboxA.restore();
+            sandboxB.restore();
         });
     });
 });
