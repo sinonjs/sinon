@@ -474,4 +474,47 @@ describe("fake", function() {
             assert.same(myFake.printf, proxy.printf);
         });
     });
+
+    describe(".usingPromise", function() {
+        before(requirePromiseSupport);
+
+        it("should exist and be a function", function() {
+            assert(fake.usingPromise);
+            assert.isFunction(fake.usingPromise);
+        });
+
+        it("should set the promise used by resolve", function() {
+            var promise = {
+                resolve: function(value) {
+                    return Promise.resolve(value);
+                }
+            };
+            var object = {};
+
+            var myFake = fake.usingPromise(promise).resolves(object);
+
+            return myFake().then(function(actual) {
+                assert.same(actual, object, "Same object resolved");
+            });
+        });
+
+        it("should set the promise used by reject", function() {
+            var promise = {
+                reject: function(err) {
+                    return Promise.reject(err);
+                }
+            };
+            var reason = new Error();
+
+            var myFake = fake.usingPromise(promise).rejects(reason);
+
+            return myFake()
+                .then(function() {
+                    referee.fail("this should not resolve");
+                })
+                .catch(function(actual) {
+                    assert.same(actual, reason, "Same object resolved");
+                });
+        });
+    });
 });
