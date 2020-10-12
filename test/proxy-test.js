@@ -161,7 +161,7 @@ describe("proxy", function() {
                     "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red("a") +
+                        color.red('"a"') +
                         "\n" +
                         color.red("true") +
                         "\n" +
@@ -198,7 +198,7 @@ describe("proxy", function() {
                         "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red("a") +
+                        color.red('"a"') +
                         "\n" +
                         color.red("true") +
                         "\nCall 2:" +
