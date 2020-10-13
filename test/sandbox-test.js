@@ -2086,6 +2086,13 @@ describe("Sandbox", function() {
                 { name: "CustomErrorA" }
             );
 
+            assert.exception(
+                function() {
+                    sandboxB.assert.fail("Some message");
+                },
+                { name: "CustomErrorB" }
+            );
+
             sandboxA.restore();
             sandboxB.restore();
         });
