@@ -77,4 +77,30 @@ describe("extend", function() {
 
         assert.equals(result, expected);
     });
+
+    it("does not attempt to write to 'name' property if it is not [[writable]]", function() {
+        var object1 = { prop1: null };
+
+        Object.defineProperty(object1, "name", {
+            configurable: false,
+            enumerable: true,
+            value: "not-writable",
+            writable: false
+        });
+
+        var object2 = {
+            prop2: "hey",
+            name: "write-attempt"
+        };
+
+        var result = extend(object1, object2);
+
+        var expected = {
+            prop1: null,
+            prop2: "hey",
+            name: "not-writable"
+        };
+
+        assert.equals(result, expected);
+    });
 });
