@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
+    "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.0",
     "@sinonjs/referee": "^6.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babelify": "^10.0.0",
@@ -76,7 +77,6 @@
     "eslint-config-prettier": "^6.9.0",
     "eslint-config-sinon": "^3.0.0",
     "eslint-plugin-ie11": "^1.0.0",
-    "eslint-plugin-local-rules": "^0.1.0",
     "eslint-plugin-mocha": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "esm": "^3.2.25",

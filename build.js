@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 "use strict";
-/* eslint-disable local-rules/no-prototype-methods */
-
+/* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
 var fs = require("fs");
 var browserify = require("browserify");
 var pkg = require("./package.json");
