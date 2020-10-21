@@ -11,7 +11,7 @@ globals:
 
 plugins:
   - ie11
-  - local-rules
+  - "@sinonjs/no-prototype-methods"
   - prettier
 
 rules:
@@ -20,4 +20,4 @@ rules:
   ie11/no-for-in-const: error
   ie11/no-loop-func: warn
   ie11/no-weak-collections: error
-  local-rules/no-prototype-methods: error
+  "@sinonjs/no-prototype-methods/no-prototype-methods": error

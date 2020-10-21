@@ -5,11 +5,11 @@ extends:
   - plugin:mocha/recommended
 
 plugins:
-  - local-rules
+  - "@sinonjs/no-prototype-methods"
   - mocha
 
 rules:
-  local-rules/no-prototype-methods: off
+  "@sinonjs/no-prototype-methods/no-prototype-methods": off
 
   max-nested-callbacks: off
   no-restricted-syntax: [error, 'TryStatement']
