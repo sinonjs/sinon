@@ -78,7 +78,7 @@ describe("extend", function() {
         assert.equals(result, expected);
     });
 
-    context("when 'name' property is not writable", function(){
+    context("when 'name' property is not writable", function() {
         it("does not attempt to write to the property", function() {
             var object1 = { prop1: null };
 
