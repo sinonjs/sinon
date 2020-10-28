@@ -1,4 +1,12 @@
 
+9.2.1 / 2020-10-28
+==================
+
+  * Fix #2203: skip writing 'name' property if not writable (#2304)
+  * Update error message on assert when representation of expected and actual value is equal, fixing issue #2084 (#2303)
+  * Make sandboxes each use their own assert object (#2302)
+  * Add usingPromise() method on fakes to fix issue #2293 (#2301)
+
 9.2.0 / 2020-10-06
 ==================
 
