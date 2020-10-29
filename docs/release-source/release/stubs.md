@@ -135,7 +135,7 @@ Stubs the method only for the provided arguments.
 
 This is useful to be more expressive in your assertions, where you can access the spy with the same call. It is also useful to create a stub that can act differently in response to different arguments.
 
-Uses deep comparison for objects and arrays. Use `stub.withArgs(sinon.match.same(obj))` for strict comparison (see [matchers](matchers)).
+Uses deep comparison for objects and arrays. Use `stub.withArgs(sinon.match.same(obj))` for strict comparison (see [matchers][matchers]).
 
 <div data-example-id="stubs-2-different-args"></div>
 
@@ -527,3 +527,5 @@ You can restore values by calling the `restore` method:
 
 Holds a reference to the original method/function this stub has
 wrapped. `undefined` for the property accessors.
+
+[matchers]: ../matchers

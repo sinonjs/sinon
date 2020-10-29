@@ -199,7 +199,7 @@ occurred between `anotherSpy` and `spy`.
 
 #### `spy.calledOn(obj);`
 
-Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers](matchers)).
+Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers][matchers]).
 
 
 #### `spy.alwaysCalledOn(obj);`
@@ -304,7 +304,7 @@ Returns `true` if spy always threw the provided exception object.
 
 Returns `true` if spy returned the provided value at least once.
 
-Uses deep comparison for objects and arrays. Use `spy.returned(sinon.match.same(obj))` for strict comparison (see [matchers](matchers)).
+Uses deep comparison for objects and arrays. Use `spy.returned(sinon.match.same(obj))` for strict comparison (see [matchers][matchers]).
 
 
 #### `spy.alwaysReturned(obj);`
@@ -388,3 +388,4 @@ Returns the passed format string with the following replacements performed:
 </dl>
 
 [call]: ../spy-call
+[matchers]: ../matchers
