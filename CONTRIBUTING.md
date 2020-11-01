@@ -86,7 +86,7 @@ You can run the linter locally:
 $ npm run lint
 ```
 
-You can fix a lot lint and style violations automatically:
+You can fix a lot of lint and style violations automatically:
 
 ```
 $ npm run lint -- --fix
