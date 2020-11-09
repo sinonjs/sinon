@@ -61,7 +61,7 @@ As above, but allows further configuration options, some of which are:
 
 - `config.now` - *Number/Date* - installs lolex with the specified unix epoch (default: 0)
 - `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
-- `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
+- `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false). When used in conjunction with `config.toFake`, it will only work if `'setInterval'` is included in `config.toFake`.
 
 Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
 
