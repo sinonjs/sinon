@@ -210,7 +210,7 @@ var myObject = {
     }
 };
 
-sandbox.replaceGetter(myObject, 'myMethod', function () {
+sandbox.replaceGetter(myObject, 'myProperty', function () {
     return 'strawberry';
 });
 
