@@ -245,7 +245,7 @@ Requires **any** element of an `Array`, `Set` or `Map`, or alternatively **any**
 
 ## Combining matchers
 
-All matchers implement `and` and `or`. This allows to logically combine mutliple matchers. The result is a new matchers that requires both (and) or one of the matchers (or) to return `true`.
+All matchers implement `and` and `or`. This allows to logically combine multiple matchers. The result is a new matcher that requires both (and) or one of the matchers (or) to return `true`.
 
 ```javascript
 var stringOrNumber = sinon.match.string.or(sinon.match.number);
