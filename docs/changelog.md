@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+9.2.2 / 2020-12-11
+==================
+
+  * Fix #2316: handle absent Promise (#2317)
+
 9.2.1 / 2020-10-28
 ==================
 
