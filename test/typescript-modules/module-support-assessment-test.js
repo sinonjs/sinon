@@ -11,7 +11,7 @@ var referee = require("@sinonjs/referee");
 var sinon = require("../../lib/sinon");
 
 var assert = referee.assert;
-var equals = referee.equals;
+var equals = assert.equals;
 
 var envBackup = process.env.SINON_ES_MODULE_DETECTION;
 describe("stubbing typescript", function() {
