@@ -12,3 +12,8 @@ docs/release-source/release/examples
 
 # has "invalid" ESM syntax
 rollup.config.js
+
+# generated code
+test/typescript-modules/foo.js
+test/typescript-modules/foo-impl.js
+test/typescript-modules/ts-index.js
