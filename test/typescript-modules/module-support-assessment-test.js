@@ -6,6 +6,7 @@
  */
 var aModule = require("./ts-index");
 var fooModule = require("./foo");
+var fooImplModule = require("./foo-impl");
 
 var referee = require("@sinonjs/referee");
 var sinon = require("../../lib/sinon");
@@ -17,6 +18,7 @@ var envBackup = process.env.SINON_ES_MODULE_DETECTION;
 describe("stubbing typescript", function() {
     afterEach(function() {
         process.env.SINON_ES_MODULE_DETECTION = envBackup;
+        sinon.restore();
     });
 
     it("silently fails to stub", function() {
@@ -34,5 +36,10 @@ describe("stubbing typescript", function() {
         assert.exception(function() {
             sinon.stub(fooModule, "foo");
         }, /ES Module read-only property/);
+    });
+
+    it("stubs the impl correctly", function() {
+        sinon.stub(fooImplModule, "foo").returns("impl");
+        equals(aModule.main(), "impl");
     });
 });
