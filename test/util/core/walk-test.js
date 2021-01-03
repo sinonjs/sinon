@@ -112,7 +112,7 @@ describe("util/core/walk", function() {
         var iterator = createSpy();
         var err = null;
         var numCalls = 0;
-        var placeholder; // eslint-disable-line no-unused-vars
+        var placeholder;
 
         Target.prototype.foo = 15;
         Object.getOwnPropertyNames = null;
@@ -120,11 +120,11 @@ describe("util/core/walk", function() {
         // Different environments may be inconsistent in how they handle for..in, therefore we
         // use it to track the number of expected calls, rather than setting it to a hard
         // number.
-        /* eslint-disable guard-for-in */
+        /* eslint-disable guard-for-in, no-unused-vars */
         for (placeholder in target) {
             numCalls++;
         }
-        /* eslint-enable guard-for-in */
+        /* eslint-enable guard-for-in, no-unused-vars */
 
         // eslint-disable-next-line no-restricted-syntax
         try {
