@@ -1079,7 +1079,7 @@ describe("sinonSpy.call", function() {
                     .getCall(0)
                     .toString()
                     .replace(/ at.*/g, ""),
-                "doIt(42, Hey)"
+                "doIt(42, 'Hey')"
             );
         });
 
@@ -1092,7 +1092,7 @@ describe("sinonSpy.call", function() {
                     .getCall(0)
                     .toString()
                     .replace(/ at.*/g, ""),
-                "doIt(42, Hey) => 42"
+                "doIt(42, 'Hey') => 42"
             );
         });
 
@@ -1105,7 +1105,7 @@ describe("sinonSpy.call", function() {
                     .getCall(0)
                     .toString()
                     .replace(/ at.*/g, ""),
-                "doIt(42, Hey) => (empty string)"
+                "doIt(42, 'Hey') => ''"
             );
         });
 

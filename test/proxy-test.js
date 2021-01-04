@@ -88,8 +88,8 @@ describe("proxy", function() {
                 verify(-1, "faux(-1)");
                 verify(-1.1, "faux(-1.1)");
                 verify(Infinity, "faux(Infinity)");
-                verify(["a"], 'faux(["a"])');
-                verify({ a: "a" }, 'faux({ a: "a" })');
+                verify(["a"], "faux([ 'a' ])");
+                verify({ a: "a" }, "faux({ a: 'a' })");
             });
 
             it("multiline", function() {
@@ -102,7 +102,7 @@ describe("proxy", function() {
 
                 assert.equals(
                     faux.printf("%C").replace(/ at.*/g, ""),
-                    "\n    faux(" + str + ")\n\n    faux(" + str + ")\n\n    faux(" + str + ")"
+                    "\n    faux('faux\\ntest')\n    faux('faux\\ntest')\n    faux('faux\\ntest')"
                 );
 
                 faux.resetHistory();
@@ -113,7 +113,7 @@ describe("proxy", function() {
 
                 assert.equals(
                     faux.printf("%C").replace(/ at.*/g, ""),
-                    "\n    faux(test)\n    faux(" + str + ")\n\n    faux(" + str + ")"
+                    "\n    faux('test')\n    faux('faux\\ntest')\n    faux('faux\\ntest')"
                 );
             });
         });
@@ -139,9 +139,9 @@ describe("proxy", function() {
 
             assert.equals(
                 faux.printf("%*", 1.4567, "a", true, {}, [], undefined, null),
-                "1.4567, a, true, {  }, [], undefined, null"
+                "1.4567, 'a', true, {}, [], undefined, null"
             );
-            assert.equals(faux.printf("%*", "a", "b", "c"), "a, b, c");
+            assert.equals(faux.printf("%*", "a", "b", "c"), "'a', 'b', 'c'");
         });
 
         describe("arguments", function() {
@@ -161,7 +161,7 @@ describe("proxy", function() {
                     "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red('"a"') +
+                        color.red("'\"a\"'") +
                         "\n" +
                         color.red("true") +
                         "\n" +
@@ -169,7 +169,7 @@ describe("proxy", function() {
                         "\n" +
                         color.red("[]") +
                         "\n" +
-                        color.red("{  }") +
+                        color.red("{}") +
                         "\n" +
                         color.red("null") +
                         "\n" +
@@ -198,7 +198,7 @@ describe("proxy", function() {
                         "\n" +
                         color.red("1") +
                         "\n" +
-                        color.red('"a"') +
+                        color.red("'\"a\"'") +
                         "\n" +
                         color.red("true") +
                         "\nCall 2:" +
@@ -207,7 +207,7 @@ describe("proxy", function() {
                         "\n" +
                         color.red("[]") +
                         "\n" +
-                        color.red("{  }") +
+                        color.red("{}") +
                         "\nCall 3:" +
                         "\n" +
                         color.red("null") +

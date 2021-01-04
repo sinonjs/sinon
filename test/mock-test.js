@@ -822,7 +822,7 @@ describe("sinonMock", function() {
                         expectation.verify();
                     },
                     {
-                        message: "Expected myMeth([...]) once (never called)"
+                        message: "Expected myMeth('[...]') once (never called)"
                     }
                 );
             });
@@ -884,8 +884,8 @@ describe("sinonMock", function() {
                 },
                 {
                     message:
-                        "Expected method([...]) thrice (never called)\n" +
-                        "Expected method(42[, ...]) once (never called)"
+                        "Expected method('[...]') thrice (never called)\n" +
+                        "Expected method(42, '[...]') once (never called)"
                 }
             );
         });
@@ -960,7 +960,7 @@ describe("sinonMock", function() {
                 {
                     message:
                         "Unexpected call: method()\n" +
-                        "    Expectation met: method(1[, ...]) once\n" +
+                        "    Expectation met: method(1, '[...]') once\n" +
                         "    Expected method(42) thrice (never called)"
                 }
             );
@@ -982,7 +982,7 @@ describe("sinonMock", function() {
                     mock.verify();
                 },
                 {
-                    message: "Expected method(42) thrice (never called)\nExpectation met: method(1[, ...]) once"
+                    message: "Expected method(42) thrice (never called)\nExpectation met: method(1, '[...]') once"
                 }
             );
         });
@@ -996,7 +996,7 @@ describe("sinonMock", function() {
                     mock.verify();
                 },
                 {
-                    message: "Expected method([...]) at least once (never called)"
+                    message: "Expected method('[...]') at least once (never called)"
                 }
             );
         });
@@ -1014,7 +1014,7 @@ describe("sinonMock", function() {
                     object.method();
                 },
                 {
-                    message: "Unexpected call: method()\n    Expectation met: method([...]) at most twice"
+                    message: "Unexpected call: method()\n    Expectation met: method('[...]') at most twice"
                 }
             );
         });
@@ -1037,8 +1037,8 @@ describe("sinonMock", function() {
                 {
                     message:
                         "Unexpected call: method(2)\n" +
-                        "    Expectation met: method([...]) at least once\n" +
-                        "    Expectation met: method(2[, ...]) once"
+                        "    Expectation met: method('[...]') at least once\n" +
+                        "    Expectation met: method(2, '[...]') once"
                 }
             );
         });
@@ -1054,7 +1054,7 @@ describe("sinonMock", function() {
                     mock.verify();
                 },
                 {
-                    message: "Expected method([...]) at least once and at most twice (never called)"
+                    message: "Expected method('[...]') at least once and at most twice (never called)"
                 }
             );
         });
