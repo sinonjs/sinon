@@ -8,6 +8,7 @@ var sinonAssert = require("../lib/sinon/assert");
 var match = require("@sinonjs/samsam").createMatcher;
 var assert = referee.assert;
 var refute = referee.refute;
+var inspect = require("util").inspect;
 
 function requiresValidFake(method) {
     it("should fail with non-function fake", function() {
@@ -1596,7 +1597,12 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledOn", this.obj.doSomething, this.obj),
-                "expected doSomething to be called with [Oh yeah] as this but was called with [Oh no], [Oh well]"
+                "expected doSomething to be called with " +
+                    inspect(this.obj) +
+                    " as this but was called with " +
+                    inspect(obj) +
+                    ", " +
+                    inspect(obj2)
             );
         });
 
@@ -1622,8 +1628,14 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
-                "expected doSomething to always be called with [Oh yeah] as this but was called with " +
-                    "[Oh no], [Oh well], [Oh yeah]"
+                "expected doSomething to always be called with " +
+                    inspect(this.obj) +
+                    " as this but was called with " +
+                    inspect(obj) +
+                    ", " +
+                    inspect(obj2) +
+                    ", " +
+                    inspect(this.obj)
             );
         });
 
@@ -1657,7 +1669,7 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    '"hey"'
+                    inspect('"hey"')
             );
         });
 
@@ -1674,13 +1686,14 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    '"hey"\n' +
+                    inspect('"hey"') +
+                    "\n" +
                     "Call 2:\n" +
                     "1\n" +
                     "3\n" +
-                    color.red('"not"') +
+                    color.red(inspect('"not"')) +
                     " " +
-                    color.green('"hey"') +
+                    color.green(inspect('"hey"')) +
                     " "
             );
         });
@@ -1706,18 +1719,45 @@ describe("assert", function() {
                 },
                 "fifth"
             ];
-            assert.equals(
-                this.message("calledWith", this.obj.doSomething, expectedArg).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n" +
-                    "[{\n" +
-                    '  first: "a",\n' +
-                    color.red("  mismatchKey: true,\n") +
-                    color.green("  mismatchKeyX: true,\n") +
-                    "  second: { nest: true },\n" +
-                    color.red("  third: [{ fourth: { nest: true } }]\n") +
-                    color.green("  third: [{ fourth: { nest: false } }]\n") +
-                    '}, "fifth"]'
-            );
+
+            var actual = this.message("calledWith", this.obj.doSomething, expectedArg);
+
+            /**
+             * Unfortunately, `util.inspect` behaves differently in node than
+             * it does in browsers, so we need to detect the difference in order
+             * to set the correct value for expected `expected`.
+             *
+             * In node the output uses more whitespace than in browsers.
+             *
+             * @type {Boolean}
+             */
+            var usesCondensedFormat =
+                inspect([
+                    { apple: "e4d13f88-9b9b-4e05-8abb-f76df2d4ef40" },
+                    { pear: "841b661f-80f4-4560-9cf4-133dcffd240c" }
+                ]).indexOf("[ {") === 0;
+
+            var expected = usesCondensedFormat
+                ? "expected doSomething to be called with arguments \n" +
+                  "[ { first: 'a',\n" +
+                  "    second: { nest: true },\n" +
+                  "    third: [ [Object] ],\n" +
+                  color.red("    mismatchKey: true },\n") +
+                  color.green("    mismatchKeyX: true },\n") +
+                  "  'fifth' ]"
+                : "expected doSomething to be called with arguments \n" +
+                  "[\n" +
+                  "  {\n" +
+                  "    first: 'a',\n" +
+                  "    second: { nest: true },\n" +
+                  "    third: [ [Object] ],\n" +
+                  color.red("    mismatchKey: true\n") +
+                  color.green("    mismatchKeyX: true\n") +
+                  "  },\n" +
+                  "  'fifth'\n" +
+                  "]";
+
+            assert.equals(actual, expected);
         });
 
         it("assert.calledWith exception message with a missing argument", function() {
@@ -1892,7 +1932,7 @@ describe("assert", function() {
                     color.green("4") +
                     " \n" +
                     "3\n" +
-                    '"hey"'
+                    inspect('"hey"')
             );
         });
 
@@ -1907,13 +1947,13 @@ describe("assert", function() {
                     "1\n" +
                     color.red("3") +
                     " " +
-                    color.green('"hey"') +
+                    color.green(inspect('"hey"')) +
                     " \n" +
-                    color.red('"hey"') +
+                    color.red(inspect('"hey"')) +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
-                    '"hey"'
+                    inspect('"hey"')
             );
         });
 
@@ -1928,13 +1968,13 @@ describe("assert", function() {
                     "1\n" +
                     color.red("3") +
                     " " +
-                    color.green('"hey"') +
+                    color.green(inspect('"hey"')) +
                     " \n" +
-                    color.red('"hey"') +
+                    color.red(inspect('"hey"')) +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
-                    '"hey"'
+                    inspect('"hey"')
             );
         });
 
@@ -1943,7 +1983,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("calledWithExactly", this.obj.doSomething, 1, 3).replace(/ at.*/g, ""),
-                "expected doSomething to be called with exact arguments \n1\n3\n" + color.red('"hey"')
+                "expected doSomething to be called with exact arguments \n1\n3\n" + color.red(inspect('"hey"'))
             );
         });
 
@@ -1962,7 +2002,7 @@ describe("assert", function() {
                     color.green("1") +
                     " \n" +
                     "3\n" +
-                    '"bob"'
+                    inspect('"bob"')
             );
 
             this.obj.doSomething();
@@ -1974,7 +2014,7 @@ describe("assert", function() {
                     "\n" +
                     color.red("3") +
                     "\n" +
-                    color.red(JSON.stringify('"bob"')) +
+                    color.red(inspect(JSON.stringify('"bob"'))) +
                     "\n" +
                     "Call 2:"
             );
@@ -1988,7 +2028,7 @@ describe("assert", function() {
                 "expected doSomething to be called with arguments \n" +
                     color.red(1234) +
                     " " +
-                    color.green('"1234"') +
+                    color.green(inspect('"1234"')) +
                     " "
             );
         });
@@ -2003,7 +2043,7 @@ describe("assert", function() {
                     "Call 1:\n" +
                     "1\n" +
                     "3\n" +
-                    color.red('"hey"') +
+                    color.red(inspect('"hey"')) +
                     "\n" +
                     "Call 2:\n" +
                     "1\n" +
@@ -2035,7 +2075,7 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("threw", this.obj.doSomething).replace(/ at.*/g, ""),
-                "doSomething did not throw exception\n    doSomething(1, 3, hey)\n    doSomething(1, 3)"
+                "doSomething did not throw exception\n    doSomething(1, 3, 'hey')\n    doSomething(1, 3)"
             );
         });
 
@@ -2045,14 +2085,14 @@ describe("assert", function() {
 
             assert.equals(
                 this.message("alwaysThrew", this.obj.doSomething).replace(/ at.*/g, ""),
-                "doSomething did not always throw exception\n    doSomething(1, 3, hey)\n    doSomething(1, 3)"
+                "doSomething did not always throw exception\n    doSomething(1, 3, 'hey')\n    doSomething(1, 3)"
             );
         });
 
         it("assert.match exception message", function() {
             assert.equals(
                 this.message("match", { foo: 1 }, [1, 3]),
-                "expected value to match\n    expected = [1, 3]\n    actual = { foo: 1 }"
+                "expected value to match\n    expected = [ 1, 3 ]\n    actual = { foo: 1 }"
             );
         });
     });
