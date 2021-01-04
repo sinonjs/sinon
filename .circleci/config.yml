@@ -66,9 +66,9 @@ jobs:
           name: Test
           command: npm run test-node
 
-  node-13:
+  node-14:
     docker:
-      - image: circleci/node:13
+      - image: circleci/node:14
     steps:
       - *attach-step
       - run:
@@ -120,7 +120,7 @@ workflows:
       - node-12:
           requires:
             - install-dependencies
-      - node-13:
+      - node-14:
           requires:
             - install-dependencies
       - integration-tests:
@@ -129,7 +129,7 @@ workflows:
             - lint
             - node-10
             - node-12
-            - node-13
+            - node-14
       - saucelabs:
           context: SAUCE_LABS
           requires:
