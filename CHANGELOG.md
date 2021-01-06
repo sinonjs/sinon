@@ -1,4 +1,10 @@
 
+9.2.3 / 2021-01-06
+==================
+
+  * Use `util.inspect` for formatting human readable output
+    (this retires @sinonjs/formatio)
+
 9.2.2 / 2020-12-11
 ==================
 
