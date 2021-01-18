@@ -11,7 +11,7 @@ test code using them.
 Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects created through either `new Date();`
 or `Date.now();` (if supported by the browser).
 
-For standalone usage of fake timers it is recommended to use [lolex](https://github.com/sinonjs/lolex) package instead. It provides the same
+For standalone usage of fake timers it is recommended to use [fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
 set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
 
 ```javascript
@@ -50,20 +50,19 @@ Starts the clock at the UNIX epoch (timestamp of `0`).
 #### `var clock = sinon.useFakeTimers(now);`
 
 As above, but rather than starting the clock with a timestamp of 0, start at the provided timestamp `now`.
-
-*Since `sinon@2.0.0`*
-
 You can also pass in a Date object, and its `getTime()` will be used for the starting timestamp.
 
 #### `var clock = sinon.useFakeTimers(config);`
 
-As above, but allows further configuration options, some of which are:
+As above, but allows further configuration options. 
 
 - `config.now` - *Number/Date* - installs lolex with the specified unix epoch (default: 0)
 - `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
 - `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false). When used in conjunction with `config.toFake`, it will only work if `'setInterval'` is included in `config.toFake`.
+- **`config.global`** - *Object* - use `global` instead of the usual global object. This is useful if you use JSDOM along with Node.
 
-Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
+The options are basically all of those supported by the `install()` method of our `fake-timers` library, with the sole exception of `global`.
+Please refer to the `fakeTimers.install` [documentation](https://github.com/sinonjs/fake-timers/#var-clock--faketimersinstallconfig) for the full set of features available and more elaborate explanations.
 
 *Since `sinon@3.0.0`*
 
