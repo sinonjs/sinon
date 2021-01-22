@@ -1,10 +1,10 @@
- #### Purpose (TL;DR) - mandatory
+#### Purpose (TL;DR) - mandatory
+
 <!--
 > give a concise (one or two short sentences) description of what what problem is being solved by this PR
 >
 > Example: Fix issue #123456 by re-structuring the colour selection conditional in method `paintBlue`
 -->
-
 
 <!--
  #### Background (Problem in detail)  - optional
@@ -17,7 +17,6 @@
 > * Discussion of different approaches to solving this problem and why you chose your proposed solution
 -->
 
-
 <!--
  #### Solution  - optional
 -->
@@ -29,12 +28,13 @@
 > Then your reviewer might spot a mistake in the implementation, if `paintBlue()` uses the colour red.
 -->
 
- #### How to verify - mandatory
+#### How to verify - mandatory
+
 1. Check out this branch
 2. `npm install`
 3. <your-steps-here>
 
- #### Checklist for author
+#### Checklist for author
 
 - [ ] `npm run lint` passes
 - [ ] References to standard library functions are [cached](https://github.com/sinonjs/sinon/pull/1523).

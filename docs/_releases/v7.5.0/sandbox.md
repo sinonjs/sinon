@@ -7,31 +7,30 @@ breadcrumb: sandbox
 Sandboxes removes the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
-var sandbox = require('sinon').createSandbox();
+var sandbox = require("sinon").createSandbox();
 var myAPI = { hello: function () {} };
 
-describe('myAPI.hello method', function () {
+describe("myAPI.hello method", function () {
+  beforeEach(function () {
+    // stub out the `hello` method
+    sandbox.stub(myAPI, "hello");
+  });
 
-    beforeEach(function () {
-        // stub out the `hello` method
-        sandbox.stub(myAPI, 'hello');
-    });
+  afterEach(function () {
+    // completely restore all fakes created through the sandbox
+    sandbox.restore();
+  });
 
-    afterEach(function () {
-        // completely restore all fakes created through the sandbox
-        sandbox.restore();
-    });
+  it("should be called once", function () {
+    myAPI.hello();
+    sandbox.assert.calledOnce(myAPI.hello);
+  });
 
-    it('should be called once', function () {
-        myAPI.hello();
-        sandbox.assert.calledOnce(myAPI.hello);
-    });
-
-    it('should be called twice', function () {
-        myAPI.hello();
-        myAPI.hello();
-        sandbox.assert.calledTwice(myAPI.hello);
-    });
+  it("should be called twice", function () {
+    myAPI.hello();
+    myAPI.hello();
+    sandbox.assert.calledTwice(myAPI.hello);
+  });
 });
 ```
 
@@ -43,10 +42,10 @@ Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a 
 
 ```javascript
 const myObject = {
-    'hello': 'world'
+  hello: "world",
 };
 
-sinon.stub(myObject, 'hello').value('Sinon');
+sinon.stub(myObject, "hello").value("Sinon");
 
 console.log(myObject.hello);
 // Sinon
@@ -74,11 +73,11 @@ will merge in extra defaults analogous to:
 
 ```javascript
 var sandbox = sinon.createSandbox({
-    // ...
-    injectInto: null,
-    properties: ["spy", "stub", "mock"],
-    useFakeTimers: false,
-    useFakeServer: false
+  // ...
+  injectInto: null,
+  properties: ["spy", "stub", "mock"],
+  useFakeTimers: false,
+  useFakeServer: false,
 });
 ```
 
@@ -86,12 +85,12 @@ The `useFakeTimers` and `useFakeServers` are **false** as opposed to the default
 
 ```javascript
 sinon.defaultConfig = {
-    // ...
-    injectInto: null,
-    properties: ["spy", "stub", "mock", "clock", "server", "requests"],
-    useFakeTimers: true,
-    useFakeServer: true
-}
+  // ...
+  injectInto: null,
+  properties: ["spy", "stub", "mock", "clock", "server", "requests"],
+  useFakeTimers: true,
+  useFakeServer: true,
+};
 ```
 
 To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, you can call:
@@ -102,8 +101,8 @@ var sandbox = sinon.createSandbox(sinon.defaultConfig);
 
 // (OR) Add the extra properties that differ from the sinon defaults.
 var sandbox = sinon.createSandbox({
-    useFakeTimers: true,
-    useFakeServer: true
+  useFakeTimers: true,
+  useFakeServer: true,
 });
 ```
 
@@ -133,7 +132,7 @@ but if you're using jQuery 1.3.x or some other library that does not set the XHR
 
 ```javascript
 sinon.config = {
-    useFakeServer: sinon.fakeServerWithClock
+  useFakeServer: sinon.fakeServerWithClock,
 };
 ```
 
@@ -141,7 +140,7 @@ sinon.config = {
 
 A convenience reference for [`sinon.assert`](./assertions)
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `sandbox.replace(object, property, replacement);`
 
@@ -151,16 +150,15 @@ Replaces `property` on `object` with `replacement` argument. Attempts to replace
 
 This method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
 
-
 ```js
 var myObject = {
-    myMethod: function() {
-        return 'apple pie';
-    }
+  myMethod: function () {
+    return "apple pie";
+  },
 };
 
-sandbox.replace(myObject, 'myMethod', function () {
-    return 'strawberry';
+sandbox.replace(myObject, "myMethod", function () {
+  return "strawberry";
 });
 
 console.log(myObject.myMethod());
@@ -196,16 +194,16 @@ Replaces setter for `property` on `object` with `replacement` argument. Attempts
 
 ```js
 var object = {
-    set myProperty(value) {
-        this.prop = value;
-    }
+  set myProperty(value) {
+    this.prop = value;
+  },
 };
 
-sandbox.replaceSetter(object, 'myProperty', function (value) {
-    this.prop = 'strawberry ' + value;
+sandbox.replaceSetter(object, "myProperty", function (value) {
+  this.prop = "strawberry " + value;
 });
 
-object.myProperty = 'pie';
+object.myProperty = "pie";
 
 console.log(object.prop);
 // strawberry pie
@@ -223,14 +221,14 @@ Works almost exactly like `sinon.createStubInstance`, only also adds the returne
 
 Works exactly like `sinon.stub`.
 
-
 ##### Stubbing a non-function property
+
 ```javascript
 const myObject = {
-    'hello': 'world'
+  hello: "world",
 };
 
-sandbox.stub(myObject, 'hello').value('Sinon');
+sandbox.stub(myObject, "hello").value("Sinon");
 
 console.log(myObject.hello);
 // Sinon
@@ -244,20 +242,17 @@ console.log(myObject.hello);
 
 Works exactly like `sinon.mock`
 
-
 #### `sandbox.useFakeTimers();`
 
 Fakes timers and binds the `clock` object to the sandbox such that it too is restored when calling `sandbox.restore()`.
 
 Access through `sandbox.clock`.
 
-
 #### `sandbox.useFakeXMLHttpRequest();`
 
 Fakes XHR and binds the resulting object to the sandbox such that it too is restored when calling `sandbox.restore()`.
 
 Since 2.x, you can no longer access requests through `sandbox.requests` - use `sandbox.useFakeServer` to do this. This function maps to `sinon.useFakeXMLHttpRequest`, only with sandboxing.
-
 
 #### `sandbox.useFakeServer();`
 
@@ -271,7 +266,7 @@ Causes all stubs and mocks created from the sandbox to return promises using a s
 Promise library instead of the global one when using `stub.rejects` or
 `stub.resolves`. Returns the stub to allow chaining.
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `sandbox.restore();`
 
@@ -285,13 +280,13 @@ Resets the internal state of all fakes created through sandbox.
 
 Resets the behaviour of all stubs created through the sandbox.
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `sandbox.resetHistory();`
 
 Resets the history of all stubs created through the sandbox.
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `sandbox.verify();`
 

@@ -13,7 +13,6 @@ A test spy is a function that records arguments, return value, the value of
 Some are anonymous functions, while others wrap methods that already exist in
 the system under test.
 
-
 ### Creating a spy as an anonymous function
 
 When the behavior of the spied-on function is not under test, you can use an
@@ -31,7 +30,6 @@ handles a callback, as in the following simplified example:
     assertTrue(callback.called);
 }
 ```
-
 
 ### Using a spy to wrap an existing method
 
@@ -67,7 +65,6 @@ getters and setters for `object.property`. The spies will behave exactly like
 the original getters and setters, but you will have access to data about all
 [calls][call]. Example:
 
-
 ```javascript
 var object = {
   get test() {
@@ -75,7 +72,7 @@ var object = {
   },
   set test(value) {
     this.property = value * 2;
-  }
+  },
 };
 
 var spy = sinon.spy(object, "test", ["get", "set"]);
@@ -117,7 +114,6 @@ assert(spy.get.calledOnce);
     Object.getOwnPropertyDescriptor(object, 'property').get</code>.
   </dd>
 </dl>
-
 
 ### Spy API
 
@@ -175,7 +171,6 @@ while the second example fetches the first [call][call] object and then accesses
 approach is going with `spy.calledWith(arg1, arg2, ...)` unless there's a need
 to make the tests highly specific.
 
-
 ## API
 
 Spy objects are objects returned from `sinon.spy()`. When spying on existing
@@ -183,7 +178,6 @@ methods with `sinon.spy(object, method)`, the following properties and methods
 are also available on `object.method`.
 
 ### Properties
-
 
 #### `spy.withArgs(arg1[, arg2, ...]);`
 
@@ -202,88 +196,71 @@ Creates a spy that only records [calls][call] when the received arguments match 
 }
 ```
 
-
 #### `spy.callCount`
 
 The number of recorded [calls][call].
-
 
 #### `spy.called`
 
 `true` if the spy was called at least once
 
-
 #### `spy.notCalled`
 
 `true` if the spy was not called
-
 
 #### `spy.calledOnce`
 
 `true` if spy was called exactly once
 
-
 #### `spy.calledTwice`
 
 `true` if the spy was called exactly twice
-
 
 #### `spy.calledThrice`
 
 `true` if the spy was called exactly thrice
 
-
 #### `spy.firstCall`
 
 The first [call][call]
-
 
 #### `spy.secondCall`
 
 The second [call][call]
 
-
 #### `spy.thirdCall`
 
 The third [call][call]
-
 
 #### `spy.lastCall`
 
 The last [call][call]
 
-
 #### `spy.calledBefore(anotherSpy);`
 
 Returns `true` if the spy was called before `anotherSpy`
 
-
 #### `spy.calledAfter(anotherSpy);`
 
 Returns `true` if the spy was called after `anotherSpy`
-
 
 #### `spy.calledImmediatelyBefore(anotherSpy);`
 
 Returns `true` if `spy` was called before `anotherSpy`, and no spy [calls][call]
 occurred between `spy` and `anotherSpy`.
 
-
 #### `spy.calledImmediatelyAfter(anotherSpy);`
 
 Returns `true` if `spy` was called after `anotherSpy`, and no spy [calls][call]
 occurred between `anotherSpy` and `spy`.
 
-
 #### `spy.calledOn(obj);`
 
 Returns `true` if the spy was called at least once with `obj` as `this`. `calledOn` also accepts a matcher `spyCall.calledOn(sinon.match(fn))` (see [matchers][matchers]).
 
-
 #### `spy.alwaysCalledOn(obj);`
 
 Returns `true` if the spy was always called with `obj` as `this`.
-
 
 #### `spy.calledWith(arg1, arg2, ...);`
 
@@ -295,11 +272,9 @@ Can be used for partial matching, Sinon only checks the provided arguments again
 
 Returns `true` if spy was called at exactly once with the provided arguments.
 
-
 #### `spy.alwaysCalledWith(arg1, arg2, ...);`
 
 Returns `true` if spy was always called with the provided arguments (and possibly others).
-
 
 #### `spy.calledWithExactly(arg1, arg2, ...);`
 
@@ -309,11 +284,9 @@ Returns `true` if spy was called at least once with the provided arguments and n
 
 Returns `true` if spy was called exactly once and with only the provided arguments.
 
-
 #### `spy.alwaysCalledWithExactly(arg1, arg2, ...);`
 
 Returns `true` if spy was always called with the exact provided arguments.
-
 
 #### `spy.calledWithMatch(arg1, arg2, ...);`
 
@@ -321,13 +294,11 @@ Returns `true` if spy was called with matching arguments (and possibly others).
 
 This behaves the same as `spy.calledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
 
-
 #### `spy.alwaysCalledWithMatch(arg1, arg2, ...);`
 
 Returns `true` if spy was always called with matching arguments (and possibly others).
 
 This behaves the same as `spy.alwaysCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
-
 
 #### `spy.calledWithNew();`
 
@@ -335,11 +306,9 @@ Returns `true` if spy/stub was called the `new` operator.
 
 Beware that this is inferred based on the value of the `this` object and the spy function's `prototype`, so it may give false positives if you actively return the right kind of object.
 
-
 #### `spy.neverCalledWith(arg1, arg2, ...);`
 
 Returns `true` if the spy/stub was never called with the provided arguments.
-
 
 #### `spy.neverCalledWithMatch(arg1, arg2, ...);`
 
@@ -347,36 +316,29 @@ Returns `true` if the spy/stub was never called with matching arguments.
 
 This behaves the same as `spy.neverCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`.
 
-
 #### `spy.threw();`
 
 Returns `true` if spy threw an exception at least once.
-
 
 #### `spy.threw("TypeError");`
 
 Returns `true` if spy threw an exception of the provided type at least once.
 
-
 #### `spy.threw(obj);`
 
 Returns `true` if spy threw the provided exception object at least once.
-
 
 #### `spy.alwaysThrew();`
 
 Returns `true` if spy always threw an exception.
 
-
 #### `spy.alwaysThrew("TypeError");`
 
 Returns `true` if spy always threw an exception of the provided type.
 
-
 #### `spy.alwaysThrew(obj);`
 
 Returns `true` if spy always threw the provided exception object.
-
 
 #### `spy.returned(obj);`
 
@@ -384,15 +346,13 @@ Returns `true` if spy returned the provided value at least once.
 
 Uses deep comparison for objects and arrays. Use `spy.returned(sinon.match.same(obj))` for strict comparison (see [matchers][matchers]).
 
-
 #### `spy.alwaysReturned(obj);`
 
 Returns `true` if spy always returned the provided value.
 
-
 #### `var spyCall = spy.getCall(n);`
 
-Returns the *nth* [call](#spycall).
+Returns the _nth_ [call](#spycall).
 
 Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 
@@ -404,21 +364,17 @@ var spyCall = jQuery.ajax.getCall(0);
 assertEquals("/stuffs", spyCall.args[0]);
 ```
 
-
 #### `var spyCalls = spy.getCalls();`
 
 Returns an `Array` of all [calls][call] recorded by the spy.
-
 
 #### `spy.thisValues`
 
 Array of `this` objects, `spy.thisValues[0]` is the `this` object for the first [call][call].
 
-
 #### `spy.args`
 
 Array of arguments received, `spy.args[0]` is an array of arguments received in the first [call][call].
-
 
 #### `spy.exceptions`
 
@@ -426,23 +382,19 @@ Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown b
 
 If the call did not throw an error, the value at the call's location in `.exceptions` will be `undefined`.
 
-
 #### `spy.returnValues`
 
 Array of return values, `spy.returnValues[0]` is the return value of the first [call][call].
 
 If the call did not explicitly return a value, the value at the call's location in `.returnValues` will be `undefined`.
 
-
 #### `spy.resetHistory();`
 
 Resets the state of a spy.
 
-
 #### `spy.restore();`
 
 Replaces the spy with the original method. Only available if the spy replaced an existing method.
-
 
 #### `spy.printf("format string", [arg1, arg2, ...]);`
 

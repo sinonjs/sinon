@@ -12,18 +12,18 @@ You might also be interested in our How To-articles: http://sinonjs.org/how-to/
 
 > We understand you have a problem and are in a hurry, but please provide us with some info to make it much more likely for your issue to be understood, worked on and resolved quickly.
 
-
-* Sinon version : _please verify that the bug exists in the latest Sinon release_
-* Environment   :
-* Example URL   :
-* Other libraries you are using:
+- Sinon version : _please verify that the bug exists in the latest Sinon release_
+- Environment :
+- Example URL :
+- Other libraries you are using:
 
 **What did you expect to happen?**
 
 **What actually happens**
 
 **How to reproduce**
-> Describe *with code* how to reproduce the faulty behaviour,
+
+> Describe _with code_ how to reproduce the faulty behaviour,
 > or link to code on JSBin or similar
 
 <!-- Delete the section below if it is irrelevant to your issue -->
@@ -34,4 +34,5 @@ You might also be interested in our How To-articles: http://sinonjs.org/how-to/
     other lengthy material, such as 80 lines of example code,
     please stuff it in a `<details>` tag such as this
     to make the issue more readable. Thanks.
+
 </details>

@@ -49,12 +49,12 @@ You can also search through the [Sinon.JS mailing list archives](http://groups.g
 
 ## Goals
 
-* No global pollution
-* Easy to use
-* Require minimal “integration”
-* Easy to embed seamlessly with any testing framework
-* Easily fake any interface
-* Ship with ready-to-use fakes for XMLHttpRequest, timers and more
+- No global pollution
+- Easy to use
+- Require minimal “integration”
+- Easy to embed seamlessly with any testing framework
+- Easily fake any interface
+- Ship with ready-to-use fakes for XMLHttpRequest, timers and more
 
 ## Contribute?
 
@@ -94,7 +94,6 @@ Support us with a monthly donation and help us continue our activities. [[Become
 <a href="https://opencollective.com/sinon/backer/27/website" target="_blank"><img src="https://opencollective.com/sinon/backer/27/avatar.svg"></a>
 <a href="https://opencollective.com/sinon/backer/28/website" target="_blank"><img src="https://opencollective.com/sinon/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/sinon/backer/29/website" target="_blank"><img src="https://opencollective.com/sinon/backer/29/avatar.svg"></a>
-
 
 ## Sponsors
 

@@ -10,18 +10,18 @@ const document = new JSDOM("").window;
 const jQuery = require("jquery")(window);
 global.document = document;
 
-describe("Wrap existing method", function() {
+describe("Wrap existing method", function () {
     const sandbox = sinon.createSandbox();
 
-    beforeEach(function() {
+    beforeEach(function () {
         sandbox.spy(jQuery, "ajax");
     });
 
-    afterEach(function() {
+    afterEach(function () {
         sandbox.restore();
     });
 
-    it("should inspect jQuery.getJSON's usage of jQuery.ajax", function() {
+    it("should inspect jQuery.getJSON's usage of jQuery.ajax", function () {
         const url = "https://jsonplaceholder.typicode.com/todos/1";
         jQuery.getJSON(url);
 

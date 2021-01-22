@@ -44,7 +44,6 @@ corresponding `sinon.assert` functions as well as `spy.withArgs`. Matchers allow
 
 Requires the value to be == to the given number.
 
-
 #### `sinon.match(string);`
 
 Requires the value to be a string and have the expectation as a substring.
@@ -63,81 +62,65 @@ This supports nested matchers.
 
 See `custom matchers`.
 
-
 #### `sinon.match.any`
 
 Matches anything.
-
 
 #### `sinon.match.defined`
 
 Requires the value to be defined.
 
-
 #### `sinon.match.truthy`
 
 Requires the value to be truthy.
-
 
 #### `sinon.match.falsy`
 
 Requires the value to be falsy.
 
-
 #### `sinon.match.bool`
 
 Requires the value to be a `Boolean`
-
 
 #### `sinon.match.number`
 
 Requires the value to be a `Number`.
 
-
 #### `sinon.match.string`
 
 Requires the value to be a `String`.
-
 
 #### `sinon.match.object`
 
 Requires the value to be an `Object`.
 
-
 #### `sinon.match.func`
 
 Requires the value to be a `Function`.
-
 
 #### `sinon.match.array`
 
 Requires the value to be an `Array`.
 
-
 #### `sinon.match.array.deepEquals(arr)`
 
 Requires an `Array` to be deep equal another one.
-
 
 #### `sinon.match.array.startsWith(arr)`
 
 Requires an `Array` to start with the same values as another one.
 
-
 #### `sinon.match.array.endsWith(arr)`
 
 Requires an `Array` to end with the same values as another one.
-
 
 #### `sinon.match.array.contains(arr)`
 
 Requires an `Array` to contain each one of the values the given array has.
 
-
 #### `sinon.match.map`
 
 Requires the value to be a `Map`.
-
 
 #### `sinon.match.map.deepEquals(map)`
 
@@ -147,31 +130,25 @@ Requires a `Map` to be deep equal another one.
 
 Requires a `Map` to contain each one of the items the given map has.
 
-
 #### `sinon.match.set`
 
 Requires the value to be a `Set`.
-
 
 #### `sinon.match.set.deepEquals(set)`
 
 Requires a `Set` to be deep equal another one.
 
-
 #### `sinon.match.set.contains(set)`
 
 Requires a `Set` to contain each one of the items the given set has.
-
 
 #### `sinon.match.regexp`
 
 Requires the value to be a regular expression.
 
-
 #### `sinon.match.date`
 
 Requires the value to be a `Date` object.
-
 
 #### `sinon.match.symbol`
 
@@ -188,18 +165,17 @@ Requires the value to strictly equal `ref`.
 #### `sinon.match.typeOf(type)`
 
 Requires the value to be of the given type, where `type` can be one of
-    `"undefined"`,
-    `"null"`,
-    `"boolean"`,
-    `"number"`,
-    `"string"`,
-    `"object"`,
-    `"function"`,
-    `"array"`,
-    `"regexp"`,
-    `"date"` or
-    `"symbol"`.
-
+`"undefined"`,
+`"null"`,
+`"boolean"`,
+`"number"`,
+`"string"`,
+`"object"`,
+`"function"`,
+`"array"`,
+`"regexp"`,
+`"date"` or
+`"symbol"`.
 
 #### `sinon.match.instanceOf(type)`
 
@@ -215,24 +191,22 @@ The property might be inherited via the prototype chain. If the optional expecta
 
 Same as `sinon.match.has` but the property must be defined by the value itself. Inherited properties are ignored.
 
-
 #### `sinon.match.hasNested(propertyPath[, expectation])`
 
 Requires the value to define the given `propertyPath`. Dot (`prop.prop`) and bracket (`prop[0]`) notations are supported as in [Lodash.get](https://lodash.com/docs/4.4.2#get).
 
 The propertyPath might be inherited via the prototype chain. If the optional expectation is given, the value at the propertyPath is deeply compared with the expectation. The expectation can be another matcher.
 
-
 ```javascript
 sinon.match.hasNested("a[0].b.c");
 
 // Where actual is something like
-var actual = { "a": [{ "b": { "c": 3 } }] };
+var actual = { a: [{ b: { c: 3 } }] };
 
 sinon.match.hasNested("a.b.c");
 
 // Where actual is something like
-var actual = { "a": { "b": { "c": 3 } } };
+var actual = { a: { b: { c: 3 } } };
 ```
 
 #### `sinon.match.every(matcher)`
@@ -252,7 +226,6 @@ var stringOrNumber = sinon.match.string.or(sinon.match.number);
 var bookWithPages = sinon.match.instanceOf(Book).and(sinon.match.has("pages"));
 ```
 
-
 ## Custom matchers
 
 Custom matchers are created with the `sinon.match` factory which takes a test function and an optional message.
@@ -261,6 +234,6 @@ The test function takes a value as the only argument, returns `true` if the valu
 
 ```javascript
 var trueIsh = sinon.match(function (value) {
-    return !!value;
+  return !!value;
 }, "trueIsh");
 ```

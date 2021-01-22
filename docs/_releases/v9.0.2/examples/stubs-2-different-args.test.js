@@ -3,8 +3,8 @@ require("@fatso83/mini-mocha").install();
 const sinon = require("sinon");
 const { assert } = require("@sinonjs/referee");
 
-describe("stubbed callback", function() {
-    it("should behave differently based on arguments", function() {
+describe("stubbed callback", function () {
+    it("should behave differently based on arguments", function () {
         const callback = sinon.stub();
         callback.withArgs(42).returns(1);
         callback.withArgs(1).throws("name");

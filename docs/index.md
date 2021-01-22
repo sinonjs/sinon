@@ -2,6 +2,7 @@
   layout: homepage
   title: Sinon.JS - Standalone test fakes, spies, stubs and mocks for JavaScript. Works with any unit testing framework.
 ---
+
 {% assign current_release = site.sinon.current_release %}
 
 ## Get Started
@@ -19,7 +20,7 @@ npm install sinon
 #### Node and CommonJS build systems
 
 ```javascript
-var sinon = require('sinon');
+var sinon = require("sinon");
 ```
 
 #### Direct browser use
@@ -27,8 +28,7 @@ var sinon = require('sinon');
 ```html
 <script src="./node_modules/sinon/pkg/sinon.js"></script>
 <script>
-// Access the `sinon` global...
-
+  // Access the `sinon` global...
 </script>
 ```
 
@@ -36,24 +36,25 @@ Or in an ES6 Modules environment (modern browsers only)
 
 ```html
 <script type="module">
-import sinon from './node_modules/sinon/pkg/sinon-esm.js';
-
+  import sinon from "./node_modules/sinon/pkg/sinon-esm.js";
 </script>
 ```
 
 ## Try It Out
+
 The following function takes a function as its argument and returns a new function. You can call the resulting function as many times as you want, but the original function will only be called once:
 
 ```javascript
 function once(fn) {
-    var returnValue, called = false;
-    return function () {
-        if (!called) {
-            called = true;
-            returnValue = fn.apply(this, arguments);
-        }
-        return returnValue;
-    };
+  var returnValue,
+    called = false;
+  return function () {
+    if (!called) {
+      called = true;
+      returnValue = fn.apply(this, arguments);
+    }
+    return returnValue;
+  };
 }
 ```
 
@@ -62,44 +63,44 @@ function once(fn) {
 Testing this function can be quite elegantly achieved with a [test fake][fakes]:
 
 ```javascript
-it('calls the original function', function () {
-    var callback = sinon.fake();
-    var proxy = once(callback);
+it("calls the original function", function () {
+  var callback = sinon.fake();
+  var proxy = once(callback);
 
-    proxy();
+  proxy();
 
-    assert(callback.called);
+  assert(callback.called);
 });
 ```
 
 The fact that the function was only called once is important:
 
 ```javascript
-it('calls the original function only once', function () {
-    var callback = sinon.fake();
-    var proxy = once(callback);
+it("calls the original function only once", function () {
+  var callback = sinon.fake();
+  var proxy = once(callback);
 
-    proxy();
-    proxy();
+  proxy();
+  proxy();
 
-    assert(callback.calledOnce);
-    // ...or:
-    // assert.equals(callback.callCount, 1);
+  assert(callback.calledOnce);
+  // ...or:
+  // assert.equals(callback.callCount, 1);
 });
 ```
 
 We also care about the `this` value and arguments:
 
 ```javascript
-it('calls original function with right this and args', function () {
-    var callback = sinon.fake();
-    var proxy = once(callback);
-    var obj = {};
+it("calls original function with right this and args", function () {
+  var callback = sinon.fake();
+  var proxy = once(callback);
+  var obj = {};
 
-    proxy.call(obj, 1, 2, 3);
+  proxy.call(obj, 1, 2, 3);
 
-    assert(callback.calledOn(obj));
-    assert(callback.calledWith(1, 2, 3));
+  assert(callback.calledOn(obj));
+  assert(callback.calledWith(1, 2, 3));
 });
 ```
 
@@ -111,10 +112,10 @@ The function returned by `once` should return whatever the original function ret
 
 ```javascript
 it("returns the return value from the original function", function () {
-    var callback = sinon.fake.returns(42);
-    var proxy = once(callback);
+  var callback = sinon.fake.returns(42);
+  var proxy = once(callback);
 
-    assert.equals(proxy(), 42);
+  assert.equals(proxy(), 42);
 });
 ```
 
@@ -128,28 +129,29 @@ The following function triggers network activity:
 
 ```javascript
 function getTodos(listId, callback) {
-    jQuery.ajax({
-        url: '/todo/' + listId + '/items',
-        success: function (data) {
-            // Node-style CPS: callback(err, data)
-            callback(null, data);
-        }
-    });
+  jQuery.ajax({
+    url: "/todo/" + listId + "/items",
+    success: function (data) {
+      // Node-style CPS: callback(err, data)
+      callback(null, data);
+    },
+  });
 }
 ```
-A unit test should not actually trigger a function's network activity. To test `getTodos()` without triggering its  network activity, use the `sinon.replace()` method to replace the `jQuery.ajax` method in your test. Restore the `jQuery.ajax` method after your test by calling `sinon.restore()` in your test runner's `after()` function.
+
+A unit test should not actually trigger a function's network activity. To test `getTodos()` without triggering its network activity, use the `sinon.replace()` method to replace the `jQuery.ajax` method in your test. Restore the `jQuery.ajax` method after your test by calling `sinon.restore()` in your test runner's `after()` function.
 
 ```javascript
 after(function () {
-    sinon.restore();
+  sinon.restore();
 });
 
-it('makes a GET request for todo items', function () {
-    sinon.replace(jQuery, 'ajax', sinon.fake());
+it("makes a GET request for todo items", function () {
+  sinon.replace(jQuery, "ajax", sinon.fake());
 
-    getTodos(42, sinon.fake());
+  getTodos(42, sinon.fake());
 
-    assert(jQuery.ajax.calledWithMatch({ url: '/todo/42/items' }));
+  assert(jQuery.ajax.calledWithMatch({ url: "/todo/42/items" }));
 });
 ```
 
@@ -161,21 +163,23 @@ While the preceding test shows off some nifty Sinon.JS tricks, it is too tightly
 var xhr, requests;
 
 before(function () {
-    xhr = sinon.useFakeXMLHttpRequest();
-    requests = [];
-    xhr.onCreate = function (req) { requests.push(req); };
+  xhr = sinon.useFakeXMLHttpRequest();
+  requests = [];
+  xhr.onCreate = function (req) {
+    requests.push(req);
+  };
 });
 
 after(function () {
-    // Like before we must clean up when tampering with globals.
-    xhr.restore();
+  // Like before we must clean up when tampering with globals.
+  xhr.restore();
 });
 
 it("makes a GET request for todo items", function () {
-    getTodos(42, sinon.fake());
+  getTodos(42, sinon.fake());
 
-    assert.equals(requests.length, 1);
-    assert.match(requests[0].url, "/todo/42/items");
+  assert.equals(requests.length, 1);
+  assert.match(requests[0].url, "/todo/42/items");
 });
 ```
 
@@ -188,25 +192,29 @@ The preceding example shows how flexible this API is. If it looks too laborous, 
 ```javascript
 var server;
 
-before(function () { server = sinon.fakeServer.create(); });
-after(function () { server.restore(); });
+before(function () {
+  server = sinon.fakeServer.create();
+});
+after(function () {
+  server.restore();
+});
 
 it("calls callback with deserialized data", function () {
-    var callback = sinon.fake();
-    getTodos(42, callback);
+  var callback = sinon.fake();
+  getTodos(42, callback);
 
-    // This is part of the FakeXMLHttpRequest API
-    server.requests[0].respond(
-        200,
-        { "Content-Type": "application/json" },
-        JSON.stringify([{ id: 1, text: "Provide examples", done: true }])
-    );
+  // This is part of the FakeXMLHttpRequest API
+  server.requests[0].respond(
+    200,
+    { "Content-Type": "application/json" },
+    JSON.stringify([{ id: 1, text: "Provide examples", done: true }])
+  );
 
-    assert(callback.calledOnce);
+  assert(callback.calledOnce);
 });
 ```
 
-Test framework integration can typically reduce boilerplate further. [Learn more about the fake server][fakeServer].
+Test framework integration can typically reduce boilerplate further. [Learn more about the fake server][fakeserver].
 
 ### Faking time
 
@@ -218,14 +226,14 @@ Testing time-sensitive logic without the wait is a breeze with Sinon.JS. The fol
 
 ```javascript
 function debounce(callback) {
-    var timer;
-    return function () {
-        clearTimeout(timer);
-        var args = [].slice.call(arguments);
-        timer = setTimeout(function () {
-            callback.apply(this, args);
-        }, 100);
-    };
+  var timer;
+  return function () {
+    clearTimeout(timer);
+    var args = [].slice.call(arguments);
+    timer = setTimeout(function () {
+      callback.apply(this, args);
+    }, 100);
+  };
 }
 ```
 
@@ -234,23 +242,27 @@ Thanks to Sinon.JS' time-bending abilities, testing it is easy:
 ```javascript
 var clock;
 
-before(function () { clock = sinon.useFakeTimers(); });
-after(function () { clock.restore(); });
+before(function () {
+  clock = sinon.useFakeTimers();
+});
+after(function () {
+  clock.restore();
+});
 
-it('calls callback after 100ms', function () {
-    var callback = sinon.fake();
-    var throttled = debounce(callback);
+it("calls callback after 100ms", function () {
+  var callback = sinon.fake();
+  var throttled = debounce(callback);
 
-    throttled();
+  throttled();
 
-    clock.tick(99);
-    assert(callback.notCalled);
+  clock.tick(99);
+  assert(callback.notCalled);
 
-    clock.tick(1);
-    assert(callback.calledOnce);
+  clock.tick(1);
+  assert(callback.calledOnce);
 
-    // Also:
-    // assert.equals(new Date().getTime(), 100);
+  // Also:
+  // assert.equals(new Date().getTime(), 100);
 });
 ```
 
@@ -262,19 +274,19 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 
 ### Get help
 
-* [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
-* IRC: #sinon.js on freenode
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
+- IRC: #sinon.js on freenode
 
 ### Sinon.JS elsewhere
 
-* [Testing Backbone applications with Jasmine and Sinon](http://tinnedfruit.com/2011/03/03/testing-backbone-apps-with-jasmine-sinon.html)
-* [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
+- [Testing Backbone applications with Jasmine and Sinon](http://tinnedfruit.com/2011/03/03/testing-backbone-apps-with-jasmine-sinon.html)
+- [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
 
 Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
 
 [fakes]: /releases/{{current_release}}/fakes
 [fakexhr]: /releases/{{current_release}}/fake-xhr-and-server
-[fakeServer]: /releases/{{current_release}}/fake-xhr-and-server#fake-server
+[fakeserver]: /releases/{{current_release}}/fake-xhr-and-server#fake-server
 [clock]: /releases/{{current_release}}/fake-timers
 [api-docs]: /releases/{{current_release}}
 [tddjs]: http://tddjs.com/

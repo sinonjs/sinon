@@ -4,5 +4,5 @@
 // the IE filter for IE9 and below.
 
 @mixin reset-filter() {
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }

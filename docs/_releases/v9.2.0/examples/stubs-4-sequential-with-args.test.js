@@ -4,8 +4,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("stub", function() {
-    it("should behave differently on consecutive calls with certain argument", function() {
+describe("stub", function () {
+    it("should behave differently on consecutive calls with certain argument", function () {
         const callback = sinon.stub();
         callback
             .withArgs(42)

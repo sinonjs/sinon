@@ -5,8 +5,8 @@ const PubSub = require("pubsub-js");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("PubSub", function() {
-    it("should call all subscribers, even if there are exceptions", function() {
+describe("PubSub", function () {
+    it("should call all subscribers, even if there are exceptions", function () {
         const message = "an example message";
         const stub = sinon.stub().throws();
         const spy1 = sinon.spy();

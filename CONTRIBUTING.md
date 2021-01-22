@@ -2,13 +2,13 @@
 
 There are several ways of contributing to Sinon.JS
 
-* Look into [issues tagged `help-wanted`](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+wanted%22)
-* Help [improve the documentation](https://github.com/sinonjs/sinon/tree/master/docs) published
+- Look into [issues tagged `help-wanted`](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+wanted%22)
+- Help [improve the documentation](https://github.com/sinonjs/sinon/tree/master/docs) published
   at [the Sinon.JS website](https://sinonjs.org). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
-* Help someone understand and use Sinon.JS on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
-* Report an issue, please read instructions below
-* Help with triaging the [issues](https://github.com/sinonjs/sinon/issues). The clearer they are, the more likely they are to be fixed soon.
-* Contribute to the code base.
+- Help someone understand and use Sinon.JS on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
+- Report an issue, please read instructions below
+- Help with triaging the [issues](https://github.com/sinonjs/sinon/issues). The clearer they are, the more likely they are to be fixed soon.
+- Contribute to the code base.
 
 ## Contributor Code of Conduct
 
@@ -20,13 +20,13 @@ To save everyone time and make it much more likely for your issue to be understo
 
 As a minimum, please report the following:
 
-* Which environment are you using? Browser? Node? Which version(s)?
-* Which version of SinonJS?
-* How are you loading SinonJS?
-* What other libraries are you using?
-* What you expected to happen
-* What actually happens
-* Describe **with code** how to reproduce the faulty behaviour
+- Which environment are you using? Browser? Node? Which version(s)?
+- Which version of SinonJS?
+- How are you loading SinonJS?
+- What other libraries are you using?
+- What you expected to happen
+- What actually happens
+- Describe **with code** how to reproduce the faulty behaviour
 
 See [our issue template](https://github.com/sinonjs/sinon/blob/master/.github/) for all details.
 
@@ -44,9 +44,9 @@ Please try to [write great commit messages](http://chris.beams.io/posts/git-comm
 
 There are numerous benefits to great commit messages
 
-* They allow Sinon.JS users to understand the consequences of updating to a newer version
-* They help contributors understand what is going on with the codebase, allowing features and fixes to be developed faster
-* They save maintainers time when compiling the changelog for a new release
+- They allow Sinon.JS users to understand the consequences of updating to a newer version
+- They help contributors understand what is going on with the codebase, allowing features and fixes to be developed faster
+- They save maintainers time when compiling the changelog for a new release
 
 If you're already a few commits in by the time you read this, you can still [change your commit messages](https://help.github.com/articles/changing-a-commit-message/).
 
@@ -66,7 +66,6 @@ Node installed, and install Sinon's dependencies:
 
 This will also install a pre-commit hook, that runs style validation on staged files.
 
-
 ### Compatibility
 
 For details on compatibility and browser support, please see [`COMPATIBILITY.md`](COMPATIBILITY.md)
@@ -78,7 +77,6 @@ Sinon.JS uses [ESLint](http://eslint.org) to keep the codebase free of lint, and
 If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier](https://prettier.io/docs/en/editors.html)) to make editing code a more enjoyable experience.
 
 The ESLint verification (which includes Prettier) will be run before unit tests in the CI environment. The build will fail if the source code does not pass the style check.
-
 
 You can run the linter locally:
 
@@ -111,8 +109,9 @@ To start tests in dev mode run
     $ npm run test-dev
 
 Dev mode features:
- * [watching related files](https://mochajs.org/#w---watch) to restart tests once changes are made
- * using [Min reporter](https://mochajs.org/#min), which cleans the console each time tests run, so test results are always on top
+
+- [watching related files](https://mochajs.org/#w---watch) to restart tests once changes are made
+- using [Min reporter](https://mochajs.org/#min), which cleans the console each time tests run, so test results are always on top
 
 Note that in dev mode tests run only in Node. Before creating your PR please ensure tests are passing in Phantom and WebWorker as well. To check this please use [Run the tests](#run-the-tests) instructions.
 
@@ -123,5 +122,3 @@ Build requires Node. Under the hood [Browserify](http://browserify.org/) is used
 To build run
 
     $ node build.js
-
-

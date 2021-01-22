@@ -9,8 +9,8 @@ obj.sum = function sum(a, b) {
     return a + b;
 };
 
-describe("stub", function() {
-    it("should call through", function() {
+describe("stub", function () {
+    it("should call through", function () {
         sinon
             .stub(obj, "sum")
             .withArgs(2, 2)

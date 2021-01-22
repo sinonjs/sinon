@@ -1,230 +1,231 @@
 body {
-  font-family: 'Karla', sans-serif;
+    font-family: "Karla", sans-serif;
 }
 
 h1 {
-  font-size: 34px;
-  color: #4B352A;
-  line-height: 49px;
+    font-size: 34px;
+    color: #4b352a;
+    line-height: 49px;
 }
 
 ::selection {
-  background: #A0D3A4;
+    background: #a0d3a4;
 }
 ::-moz-selection {
-  background: #A0D3A4;
+    background: #a0d3a4;
 }
 
 .btn {
-  border: none;
-  border-radius: 100px;
-  font-size: 15px;
+    border: none;
+    border-radius: 100px;
+    font-size: 15px;
 }
 
-*:focus{
-  outline: 0 none !important;
+*:focus {
+    outline: 0 none !important;
 }
 
 a {
-  color: #469A4C;
-  @include transition(all, .1s, ease-in-out);
-  &:hover{
-    color: darken(#469A4C, 10%);
-    text-decoration-color: #DDD!important;
-    @include transition(all, .1s, ease-in-out);
-  }
+    color: #469a4c;
+    @include transition(all, 0.1s, ease-in-out);
+    &:hover {
+        color: darken(#469a4c, 10%);
+        text-decoration-color: #ddd !important;
+        @include transition(all, 0.1s, ease-in-out);
+    }
 }
 
 // Base styling for the content
 .content {
-  h2 {
-    text-align: center;
-    font-size: 24px;
-    color: #281D18;
-    margin-bottom: 40px;
-    position: relative;
-    margin-top: 60px;
+    h2 {
+        text-align: center;
+        font-size: 24px;
+        color: #281d18;
+        margin-bottom: 40px;
+        position: relative;
+        margin-top: 60px;
 
-    &:first-child {
-      margin-top: 0px;
+        &:first-child {
+            margin-top: 0px;
+        }
+        &:before {
+            content: "";
+            width: 34px;
+            height: 34px;
+            display: block;
+            margin: 20px auto;
+            background: url($baseurl + "/assets/images/sword.png") no-repeat 50%
+                0;
+            background-size: 100%;
+        }
     }
-    &:before {
-      content: "";
-      width: 34px;
-      height: 34px;
-      display: block;
-      margin: 20px auto;
-      background: url($baseurl+"/assets/images/sword.png") no-repeat 50% 0;
-      background-size: 100%;
+    h3 {
+        font-size: 22px;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: #281d18;
     }
-  }
-  h3 {
-    font-size: 22px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    color: #281D18;
-  }
 
-  h4 {
-    font-size: 18px;
-    margin-top: 32px;
-    color: #281D18;
-  }
-
-  p {
-    color: #4B382F;
-  }
-  pre {
-    background: #18120F;
-    padding: 18px;
-    border: none;
-    color: #fff;
-    margin-top: 15px!important;
-    margin-bottom: 30px!important;
-  }
-  blockquote {
-    border: none;
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 5px;
-  }
-  em {
-    a {
-      font-size: 16px;
-      font-style: normal;
-      margin-bottom: 30px;
-      text-align: center;
-      display: block;
+    h4 {
+        font-size: 18px;
+        margin-top: 32px;
+        color: #281d18;
     }
-  }
+
+    p {
+        color: #4b382f;
+    }
+    pre {
+        background: #18120f;
+        padding: 18px;
+        border: none;
+        color: #fff;
+        margin-top: 15px !important;
+        margin-bottom: 30px !important;
+    }
+    blockquote {
+        border: none;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    em {
+        a {
+            font-size: 16px;
+            font-style: normal;
+            margin-bottom: 30px;
+            text-align: center;
+            display: block;
+        }
+    }
 }
 
 // Footer
 .footer {
-  background: #5F5954;
-  color: #fff;
-  padding: 36px 0px;
-  .join-btn {
+    background: #5f5954;
     color: #fff;
-    border-radius: 100px;
-    margin-bottom: 10px;
-    text-decoration: none;
-    padding: 10px 20px;
-    display: inline-block;
-    border: 1px solid lighten($primary, 20%);
-    &:hover{
-      color: #5F5954;
-      border: 1px solid #fff;
-      background: #fff;
-      @include transition(all, .1s, ease-in-out);
+    padding: 36px 0px;
+    .join-btn {
+        color: #fff;
+        border-radius: 100px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: inline-block;
+        border: 1px solid lighten($primary, 20%);
+        &:hover {
+            color: #5f5954;
+            border: 1px solid #fff;
+            background: #fff;
+            @include transition(all, 0.1s, ease-in-out);
+        }
     }
-  }
-  a {
-    color: #fff;
-  }
-  img {
-    margin-bottom: 20px;
-    width: 50px;
-  }
-  p {
-    opacity: 0.7;
-  }
+    a {
+        color: #fff;
+    }
+    img {
+        margin-bottom: 20px;
+        width: 50px;
+    }
+    p {
+        opacity: 0.7;
+    }
 }
 
 // Navigation
 .navbar-collapse.collapse {
-  display: block!important;
+    display: block !important;
 }
 
-.navbar-nav>li, .navbar-nav {
-  float: left !important;
+.navbar-nav > li,
+.navbar-nav {
+    float: left !important;
 }
 
 .navbar-nav.navbar-right:last-child {
-  margin-right: -15px !important;
+    margin-right: -15px !important;
 }
 
 .navbar-right {
-  float: right!important;
+    float: right !important;
 }
 
 // Responsive
-@media only screen and (max-width : 768px) {
-  .navbar-header {
-    float: left;
-    padding: 15px;
-    text-align: center;
-    width: 100%;
-  }
-  .navbar-brand {
-    float: none;
-  }
-  .navbar-nav {
-      width: 100%;
-      text-align: center;
-      li {
-        float: none!important;
-        display: inline-block;
-      }
-  }
-  .home-header {
-    padding: 20px 10px!important;
-    h1 {
-      font-size: 28px;
-
+@media only screen and (max-width: 768px) {
+    .navbar-header {
+        float: left;
+        padding: 15px;
+        text-align: center;
+        width: 100%;
     }
-  }
+    .navbar-brand {
+        float: none;
+    }
+    .navbar-nav {
+        width: 100%;
+        text-align: center;
+        li {
+            float: none !important;
+            display: inline-block;
+        }
+    }
+    .home-header {
+        padding: 20px 10px !important;
+        h1 {
+            font-size: 28px;
+        }
+    }
 }
 
-@media only screen and (max-width : 480px) {
-  .navbar-nav {
-      padding: 0px!important;
-      li {
-        float: none!important;
-        display: block;
-        margin-bottom: 10px;
-      }
-  }
+@media only screen and (max-width: 480px) {
+    .navbar-nav {
+        padding: 0px !important;
+        li {
+            float: none !important;
+            display: block;
+            margin-bottom: 10px;
+        }
+    }
 
-  .home-header {
-    .btn-top {
-      a {
-        margin-bottom: 20px;
-      }
+    .home-header {
+        .btn-top {
+            a {
+                margin-bottom: 20px;
+            }
+        }
+        .backed {
+            .wrap {
+                margin: 0px !important;
+            }
+            p.centre-line {
+                display: block;
+                width: 100% !important;
+            }
+        }
+        .backer {
+            span {
+                margin-right: 0px !important;
+                display: block;
+                line-height: 24px;
+                margin-bottom: 20px;
+            }
+            .btn-primary {
+                text-align: center;
+                margin-right: 0px;
+            }
+        }
     }
-    .backed {
-      .wrap {
-        margin: 0px!important;
-      }
-      p.centre-line {
-        display: block;
-        width: 100%!important;
-      }
-    }
-    .backer {
-      span {
-        margin-right: 0px!important;
-        display: block;
-        line-height: 24px;
-        margin-bottom: 20px;
-      }
-      .btn-primary {
-        text-align: center;
-        margin-right: 0px;
-      }
-    }
-  }
 }
 
 @media (min-width: 1100px) {
     // Main container
-    .container{
+    .container {
         max-width: 1000px;
     }
 }
 @media (min-width: 737px) {
     // The small container
-    .container.container-2{
+    .container.container-2 {
         max-width: 737px;
     }
 }

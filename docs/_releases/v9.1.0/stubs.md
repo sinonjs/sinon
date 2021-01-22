@@ -3,22 +3,22 @@ layout: page
 title: Stubs - Sinon.JS
 breadcrumb: stubs
 examples:
-- stubs-1-pubsub
-- stubs-2-different-args
-- stubs-3-sequential-interactions
-- stubs-4-sequential-with-args
-- stubs-5-reset-behaviour
-- stubs-6-reset-history
-- stubs-7-call-fake
-- stubs-8-call-through
-- stubs-9-call-through-with-new
-- stubs-10-use-promise-library
-- stubs-12-yield-to
-- stubs-14-add-behavior
-- stubs-15-replace-getter
-- stubs-16-define-new-setter
-- stubs-17-define-new-value
-- stubs-18-restore-values
+  - stubs-1-pubsub
+  - stubs-2-different-args
+  - stubs-3-sequential-interactions
+  - stubs-4-sequential-with-args
+  - stubs-5-reset-behaviour
+  - stubs-6-reset-history
+  - stubs-7-call-fake
+  - stubs-8-call-through
+  - stubs-9-call-through-with-new
+  - stubs-10-use-promise-library
+  - stubs-12-yield-to
+  - stubs-14-add-behavior
+  - stubs-15-replace-getter
+  - stubs-16-define-new-setter
+  - stubs-17-define-new-value
+  - stubs-18-restore-values
 ---
 
 ### What are stubs?
@@ -29,7 +29,6 @@ They support the full [test spy API](../spies) in addition to methods which can 
 
 As spies, stubs can be either anonymous, or wrap existing functions. When
 wrapping an existing function with a stub, the original function is not called.
-
 
 ### When to use stubs?
 
@@ -42,7 +41,6 @@ Use a stub when you want to:
 The following example is yet another test from [PubSubJS][pubsubjs] which shows how to create an anonymous stub that throws an exception when called.
 
 <div data-example-id="stubs-1-pubsub"></div>
-
 
 Note how the stub also implements the spy interface. The test verifies that all
 callbacks were called, and also that the exception throwing stub was called
@@ -69,7 +67,6 @@ calls. As of 1.8, this functionality has been removed in favor of the
 #### `var stub = sinon.stub();`
 
 Creates an anonymous stub function
-
 
 #### `var stub = sinon.stub(object, "method");`
 
@@ -102,9 +99,8 @@ var stub = sinon.createStubInstance(MyConstructor, overrides);
 `overrides` is an optional map overriding created stubs, for example:
 
 ```javascript
-
 var stub = sinon.createStubInstance(MyConstructor, {
-    foo: sinon.stub().returnsThis()
+  foo: sinon.stub().returnsThis(),
 });
 ```
 
@@ -119,9 +115,10 @@ If provided value is not a stub, it will be used as the returned value:
 
 ```javascript
 var stub = sinon.createStubInstance(MyConstructor, {
-    foo: 3
+  foo: 3,
 });
 ```
+
 is the same as:
 
 ```javascript
@@ -139,20 +136,17 @@ Uses deep comparison for objects and arrays. Use `stub.withArgs(sinon.match.same
 
 <div data-example-id="stubs-2-different-args"></div>
 
+#### `stub.onCall(n);` _Added in v1.8_
 
-#### `stub.onCall(n);` *Added in v1.8*
-
-Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
+Defines the behavior of the stub on the _nth_ call. Useful for testing sequential interactions.
 
 <div data-example-id="stubs-3-sequential-interactions"></div>
 
-
 There are methods `onFirstCall`, `onSecondCall`,`onThirdCall` to make stub definitions read more naturally.
 
-`onCall` can be combined with all of the behavior defining methods in this section.  In particular, it can be used together with `withArgs`.
+`onCall` can be combined with all of the behavior defining methods in this section. In particular, it can be used together with `withArgs`.
 
 <div data-example-id="stubs-4-sequential-with-args"></div>
-
 
 Note how the behavior of the stub for argument `42` falls back to the default behavior once no more calls have been defined.
 
@@ -165,8 +159,8 @@ Alias for `stub.onCall(0);`
 Alias for `stub.onCall(1);`
 
 #### `stub.onThirdCall();`
-Alias for `stub.onCall(2);`
 
+Alias for `stub.onCall(2);`
 
 #### `stub.reset();`
 
@@ -174,9 +168,9 @@ Resets both behaviour and history of the stub.
 
 This is equivalent to calling both `stub.resetBehavior()` and `stub.resetHistory()`
 
-*Updated in `sinon@2.0.0`*
+_Updated in `sinon@2.0.0`_
 
-*Since `sinon@5.0.0`*
+_Since `sinon@5.0.0`_
 
 As a convenience, you can apply `stub.reset()` to all stubs using `sinon.reset()`
 
@@ -186,33 +180,30 @@ Resets the stub's behaviour to the default behaviour
 
 <div data-example-id="stubs-5-reset-behaviour"></div>
 
-
-*Since `sinon@5.0.0`*
+_Since `sinon@5.0.0`_
 
 You can reset behaviour of all stubs using `sinon.resetBehavior()`
 
-
 #### `stub.resetHistory();`
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 Resets the stub's history
 
 <div data-example-id="stubs-6-reset-history"></div>
 
-
-*Since `sinon@5.0.0`*
+_Since `sinon@5.0.0`_
 
 You can reset history of all stubs using `sinon.resetHistory()`
 
-
 #### `stub.callsFake(fakeFunction);`
+
 Makes the stub call the provided `fakeFunction` when invoked.
 
 <div data-example-id="stubs-7-call-fake"></div>
 
-
 #### `stub.returns(obj);`
+
 Makes the stub return the provided value.
 
 #### `stub.returnsArg(index);`
@@ -225,8 +216,8 @@ If the argument at the provided index is not available, prior to `sinon@6.1.2`,
 an `undefined` value will be returned; starting from `sinon@6.1.2`, a `TypeError`
 will be thrown.
 
-
 #### `stub.returnsThis();`
+
 Causes the stub to return its <code>this</code> value.
 
 Useful for stubbing jQuery-style fluent APIs.
@@ -239,7 +230,7 @@ When constructing the Promise, sinon uses the `Promise.resolve` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
 The Promise library can be overwritten using the `usingPromise` method.
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `stub.resolvesArg(index);`
 
@@ -252,27 +243,23 @@ first argument.
 If the argument at the provided index is not available, a `TypeError` will be
 thrown.
 
-*Since `sinon@6.1.1`*
+_Since `sinon@6.1.1`_
 
 #### `stub.throws();`
 
 Causes the stub to throw an exception (`Error`).
 
-
 #### `stub.throws("name"[, "optional message"]);`
 
 Causes the stub to throw an exception with the `name` property set to the provided string. The message parameter is optional and will set the `message` property of the exception.
-
 
 #### `stub.throws(obj);`
 
 Causes the stub to throw the provided exception object.
 
-
 #### `stub.throws(function() { return new Error(); });`
 
 Causes the stub to throw the exception returned by the function.
-
 
 #### `stub.throwsArg(index);`
 
@@ -284,7 +271,7 @@ exception.
 If the argument at the provided index is not available, a `TypeError` will be
 thrown.
 
-*Since `sinon@2.3.0`*
+_Since `sinon@2.3.0`_
 
 #### `stub.rejects();`
 
@@ -294,22 +281,19 @@ When constructing the Promise, sinon uses the `Promise.reject` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
 The Promise library can be overwritten using the `usingPromise` method.
 
-*Since `sinon@2.0.0`*
-
+_Since `sinon@2.0.0`_
 
 #### `stub.rejects("TypeError");`
 
 Causes the stub to return a Promise which rejects with an exception of the provided type.
 
-*Since `sinon@2.0.0`*
-
+_Since `sinon@2.0.0`_
 
 #### `stub.rejects(value);`
 
 Causes the stub to return a Promise which rejects with the provided exception object.
 
-*Since `sinon@2.0.0`*
-
+_Since `sinon@2.0.0`_
 
 #### `stub.callsArg(index);`
 
@@ -320,13 +304,11 @@ Causes the stub to call the argument at the provided index as a callback functio
 If the argument at the provided index is not available or is not a function,
 a `TypeError` will be thrown.
 
-
 #### `stub.callThrough();`
 
 Causes the original method wrapped into the stub to be called when none of the conditional stubs are matched.
 
 <div data-example-id="stubs-8-call-through"></div>
-
 
 #### `stub.callThroughWithNew();`
 
@@ -334,16 +316,13 @@ Causes the original method wrapped into the stub to be called using the `new` op
 
 <div data-example-id="stubs-9-call-through-with-new"></div>
 
-
 #### `stub.callsArgOn(index, context);`
 
 Like `stub.callsArg(index);` but with an additional parameter to pass the `this` context.
 
-
 #### `stub.callsArgWith(index, arg1, arg2, ...);`
 
 Like `callsArg`, but with arguments to pass to the callback.
-
 
 #### `stub.callsArgOnWith(index, context, arg1, arg2, ...);`
 
@@ -357,8 +336,7 @@ to allow chaining.
 
 <div data-example-id="stubs-10-use-promise-library"></div>
 
-
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 #### `stub.yields([arg1, arg2, ...])`
 
@@ -368,16 +346,13 @@ Causes the stub to call the first callback it receives with the provided argumen
 
 If a method accepts more than one callback, you need to use `yieldsRight` to call the last callback or `callsArg` to have the stub invoke other callbacks than the first or last one.
 
-
 #### `stub.yieldsRight([arg1, arg2, ...])`
 
 Like `yields` but calls the last callback it receives.
 
-
 #### `stub.yieldsOn(context, [arg1, arg2, ...])`
 
 Like `yields` but with an additional parameter to pass the `this` context.
-
 
 #### `stub.yieldsTo(property, [arg1, arg2, ...])`
 
@@ -397,11 +372,9 @@ Like `yields`, `yieldsTo` grabs the first matching argument, finds the callback 
 }
 ```
 
-
 #### `stub.yieldsToOn(property, context, [arg1, arg2, ...])`
 
 Like above but with an additional parameter to pass the `this` context.
-
 
 #### `stub.yield([arg1, arg2, ...])`
 
@@ -413,7 +386,6 @@ Returns an Array with all callbacks return values in the order they were called,
 
 Also aliased as `invokeCallback`.
 
-
 #### `stub.yieldTo(callback, [arg1, arg2, ...])`
 
 Invokes callbacks passed as a property of an object to the stub.
@@ -421,7 +393,6 @@ Invokes callbacks passed as a property of an object to the stub.
 Like `yield`, `yieldTo` grabs the first matching argument, finds the callback and calls it with the (optional) arguments.
 
 <div data-example-id="stubs-12-yield-to"></div>
-
 
 #### `stub.callArg(argNum)`
 
@@ -450,14 +421,14 @@ Like `callArg`, but with arguments.
 
 Same as their corresponding non-Async counterparts, but with callback being deferred at called after all instructions in the current call stack are processed.
 
-* In Node environment the callback is deferred with `process.nextTick`.
-* In a browser the callback is deferred with `setTimeout(callback, 0)`.
+- In Node environment the callback is deferred with `process.nextTick`.
+- In a browser the callback is deferred with `setTimeout(callback, 0)`.
 
 More information:
 
-* <https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick>,
-* <https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>,
-* <https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout>.
+- <https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick>,
+- <https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop>,
+- <https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout>.
 
 ##### `stub.callsArgAsync(index);`
 
@@ -497,13 +468,11 @@ Add a custom behavior. The name will be available as a function on stubs, and th
 
 <div data-example-id="stubs-14-add-behavior"></div>
 
-
 #### `stub.get(getterFn)`
 
 Replaces a new getter for this stub.
 
 <div data-example-id="stubs-15-replace-getter"></div>
-
 
 #### `stub.set(setterFn)`
 
@@ -511,13 +480,11 @@ Defines a new setter for this stub.
 
 <div data-example-id="stubs-16-define-new-setter"></div>
 
-
 #### `stub.value(newVal)`
 
 Defines a new value for this stub.
 
 <div data-example-id="stubs-17-define-new-value"></div>
-
 
 You can restore values by calling the `restore` method:
 

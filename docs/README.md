@@ -18,8 +18,7 @@ Likewise, the `_releases/release.md` file is copied into a file matching the rel
 
 Let's say that we're making a new `v2.0.3` release.
 
-* `release-source/release/` is copied into a new folder `_releases/v2.0.3/`
-* `release-source/release.md` is copied into a new file `_releases/v2.0.3.md`
+- `release-source/release/` is copied into a new folder `_releases/v2.0.3/`
+- `release-source/release.md` is copied into a new file `_releases/v2.0.3.md`
 
 The release is packaged, tagged and pushed to GitHub. GitHub Pages will build a new site in a few minutes, and replace the old one.
-

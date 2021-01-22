@@ -11,49 +11,53 @@ redirect_from:
 ---
 
 <div class="head-page">
-  <h1>Releases</h1>
-  In addition to our download page, you can also <a href="#npm-cdns">use a NPM based CDN</a> for your convenience.
+    <h1>Releases</h1>
+    In addition to our download page, you can also
+    <a href="#npm-cdns">use a NPM based CDN</a> for your convenience.
 </div>
 
 <div class="in-content releases">
-  <ul>
-    {% assign sorted_releases = site.releases | sort | reverse  %}
-    {% for release in sorted_releases %}
-      {% assign url_parts = release.url | split: "/" %}
-
-        {% comment %}
-            Weird as hell, but .size == 3 means there are 2 elements ...
-        {% endcomment %}
-        {% if url_parts.size == 3 and url_parts[2] != "latest" %}
-          <li>
+    <ul>
+        {% assign sorted_releases = site.releases | sort | reverse %} {% for
+        release in sorted_releases %} {% assign url_parts = release.url | split:
+        "/" %} {% comment %} Weird as hell, but .size == 3 means there are 2
+        elements ... {% endcomment %} {% if url_parts.size == 3 and url_parts[2]
+        != "latest" %}
+        <li>
             <p>
-              <span class="ver">{{ release.release_id }}</span>
-              <span class="pull-right">
-                <a class="btn btn-primary" href="{{site.baseurl}}/releases/sinon-{{ release.release_id | remove_first: 'v' }}.js">Download</a>
-                <a class="btn btn-default" href="{{site.baseurl}}{{ release.url }}">Docs</a>
-              </span>
+                <span class="ver">{{ release.release_id }}</span>
+                <span class="pull-right">
+                    <a
+                        class="btn btn-primary"
+                        href="{{site.baseurl}}/releases/sinon-{{ release.release_id | remove_first: 'v' }}.js"
+                        >Download</a
+                    >
+                    <a
+                        class="btn btn-default"
+                        href="{{site.baseurl}}{{ release.url }}"
+                        >Docs</a
+                    >
+                </span>
             </p>
-          </li>
-        {% endif %}
-  {% endfor %}
-  </ul>
+        </li>
+        {% endif %} {% endfor %}
+    </ul>
 </div>
-
 
 <div>
     <h2 id="npm-cdns">Using NPM based CDNs</h2>
     <p>
-    There are now several CDNs that are backed by NPM,
-    which means that you can have auto-updated scripts.
-    Examples of such free providers are
-    <a href="http://jsdelivr.com">jsDelivr</a>,
-    <a href="https://unpkg.com">UNPKG</a> and
-    <a href="https://cdnjs.com">cdnjs</a>.
+        There are now several CDNs that are backed by NPM, which means that you
+        can have auto-updated scripts. Examples of such free providers are
+        <a href="http://jsdelivr.com">jsDelivr</a>,
+        <a href="https://unpkg.com">UNPKG</a> and
+        <a href="https://cdnjs.com">cdnjs</a>.
     </p>
     <p>
-    Their adressing schemes vary, but an example
-    url such as <a href="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js">https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js</a>
-    would download the latest browser bundle of Sinon 3.
+        Their adressing schemes vary, but an example url such as
+        <a href="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js"
+            >https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js</a
+        >
+        would download the latest browser bundle of Sinon 3.
     </p>
-
 </div>

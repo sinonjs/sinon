@@ -8,30 +8,36 @@
 // fields in IE7-8. Source: https://github.com/twbs/bootstrap/pull/3552.
 
 .fade {
-  opacity: 0;
-  @include transition(opacity .15s linear);
-  &.in {
-    opacity: 1;
-  }
+    opacity: 0;
+    @include transition(opacity 0.15s linear);
+    &.in {
+        opacity: 1;
+    }
 }
 
 .collapse {
-  display: none;
+    display: none;
 
-  &.in      { display: block; }
-  // [converter] extracted tr&.in to tr.collapse.in
-  // [converter] extracted tbody&.in to tbody.collapse.in
+    &.in {
+        display: block;
+    }
+    // [converter] extracted tr&.in to tr.collapse.in
+    // [converter] extracted tbody&.in to tbody.collapse.in
 }
 
-tr.collapse.in    { display: table-row; }
+tr.collapse.in {
+    display: table-row;
+}
 
-tbody.collapse.in { display: table-row-group; }
+tbody.collapse.in {
+    display: table-row-group;
+}
 
 .collapsing {
-  position: relative;
-  height: 0;
-  overflow: hidden;
-  @include transition-property(height, visibility);
-  @include transition-duration(.35s);
-  @include transition-timing-function(ease);
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    @include transition-property(height, visibility);
+    @include transition-duration(0.35s);
+    @include transition-timing-function(ease);
 }

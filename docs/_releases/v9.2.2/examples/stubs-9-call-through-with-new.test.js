@@ -9,8 +9,8 @@ obj.Sum = function MyConstructor(a, b) {
     this.result = a + b;
 };
 
-describe("stub", function() {
-    it("should call through with new operator", function() {
+describe("stub", function () {
+    it("should call through with new operator", function () {
         sinon
             .stub(obj, "Sum")
             .callThroughWithNew()

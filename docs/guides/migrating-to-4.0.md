@@ -11,4 +11,3 @@ This guide will walk you through those changes.
 
 Trying to stub a non-existing property will now fail, to ensure you are creating
 [less error-prone tests](https://github.com/sinonjs/sinon/pull/1557).
-

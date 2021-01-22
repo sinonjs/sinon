@@ -9,8 +9,8 @@ myObj.prop = function propFn() {
     return "foo";
 };
 
-describe("stub", function() {
-    it("should call fake", function() {
+describe("stub", function () {
+    it("should call fake", function () {
         sinon.stub(myObj, "prop").callsFake(function fakeFn() {
             return "bar";
         });

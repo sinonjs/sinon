@@ -5,8 +5,8 @@ const PubSub = require("pubsub-js");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("PubSub", function() {
-    it("should call subscribers with message as first argument", function() {
+describe("PubSub", function () {
+    it("should call subscribers with message as first argument", function () {
         const message = "an example message";
         const spy = sinon.spy();
 

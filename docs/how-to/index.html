@@ -4,30 +4,30 @@ permalink: /how-to/
 ---
 
 <div class="head-page">
-  <h1>How To articles</h1>
+    <h1>How To articles</h1>
 </div>
 <p>
     This is a collection of how to articles for common scenarios using Sinon.JS.
 </p>
 
 <ul>
-{% assign sorted_articles = site.howto | sort  %}
-{% for article in sorted_articles %}
-  <li><a href="{{site.baseurl}}{{ article.url }}">{{ article.title }}</a></li>
-{% endfor %}
+    {% assign sorted_articles = site.howto | sort %} {% for article in
+    sorted_articles %}
+    <li><a href="{{site.baseurl}}{{ article.url }}">{{ article.title }}</a></li>
+    {% endfor %}
 </ul>
 
 <h2>Related libraries</h2>
 <ul>
-{% for library in site.data.related_libraries %}
-        <li><a href="{{ library.url }}">{{ library.title }}</a></li>
-{% endfor %}
+    {% for library in site.data.related_libraries %}
+    <li><a href="{{ library.url }}">{{ library.title }}</a></li>
+    {% endfor %}
 </ul>
 
 <h2>Articles elsewhere on the web</h2>
 
 <ul>
-{% for article in site.data.external_howtos %}
-        <li><a href="{{ article.url }}">{{ article.title }}</a></li>
-{% endfor %}
+    {% for article in site.data.external_howtos %}
+    <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+    {% endfor %}
 </ul>

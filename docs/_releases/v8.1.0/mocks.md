@@ -12,13 +12,11 @@ Mocks (and mock expectations) are fake methods (like spies) with pre-programmed 
 
 A mock will fail your test if it is not used as expected.
 
-
 ### When to use mocks?
 
-Mocks should only be used for the *method under test*. In every unit test, there should be one unit under test.
+Mocks should only be used for the _method under test_. In every unit test, there should be one unit under test.
 
 If you want to control how your unit is being used and like stating expectations upfront (as opposed to asserting after the fact), use a mock.
-
 
 ### When to **not** use mocks?
 
@@ -51,7 +49,6 @@ To see what mocks look like in Sinon.JS, here is one of the [PubSubJS][pubsubjs]
 
 [pubsubjs]: https://github.com/mroderick/pubsubjs
 
-
 ## Mocks API
 
 ### Properties
@@ -62,18 +59,15 @@ Creates a mock for the provided object.
 
 Does not change the object, but returns a mock object to set expectations on the object's methods.
 
-
 #### `var expectation = mock.expects("method");`
 
 Overrides `obj.method` with a mock function and returns it.
 
 See [expectations](#expectations) below.
 
-
 #### `mock.restore();`
 
 Restores all mocked methods.
-
 
 #### `mock.verify();`
 
@@ -89,8 +83,7 @@ Causes all expectations created from the mock to return promises using a specifi
 Promise library instead of the global one when using `expectation.rejects` or
 `expectation.resolves`. Returns the mock object to allow chaining.
 
-*Since `sinon@6.2.0`*
-
+_Since `sinon@6.2.0`_
 
 ### Expectations
 
@@ -103,52 +96,43 @@ sinon.mock(jQuery).expects("ajax").atLeast(2).atMost(5);
 jQuery.ajax.verify();
 ```
 
-
 #### `var expectation = sinon.expectation.create([methodName]);`
 
 Creates an expectation without a mock object, which is essentially an anonymous mock function.
 
 Method name is optional and is used in exception messages to make them more readable.
 
-
 #### `var expectation = sinon.mock([methodName]);`
 
 The same as the above.
-
 
 #### `expectation.atLeast(number);`
 
 Specify the minimum amount of calls expected.
 
-
 #### `expectation.atMost(number);`
 
 Specify the maximum amount of calls expected.
 
-
 #### `expectation.never();`
-Expect the method to never be called.
 
+Expect the method to never be called.
 
 #### `expectation.once();`
 
 Expect the method to be called exactly once.
 
-
 #### `expectation.twice();`
 
 Expect the method to be called exactly twice.
-
 
 #### `expectation.thrice();`
 
 Expect the method to be called exactly thrice.
 
-
 #### `expectation.exactly(number);`
 
 Expect the method to be called exactly `number` times.
-
 
 #### `expectation.withArgs(arg1, arg2, ...);`
 
@@ -156,18 +140,15 @@ Expect the method to be called with the provided arguments and possibly others.
 
 An `expectation` instance only holds onto a single set of arguments specified with `withArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
 
-
 #### `expectation.withExactArgs(arg1, arg2, ...);`
 
 Expect the method to be called with the provided arguments and no others.
 
 An `expectation` instance only holds onto a single set of arguments specified with `withExactArgs`. Subsequent calls will overwrite the previously-specified set of arguments (even if they are different), so it is generally not intended that this method be invoked more than once per test case.
 
-
 #### `expectation.on(obj);`
 
 Expect the method to be called with `obj` as `this`."}
-
 
 #### `expectation.verify();`
 
