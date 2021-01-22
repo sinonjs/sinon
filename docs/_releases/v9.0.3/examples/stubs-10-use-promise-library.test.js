@@ -6,15 +6,12 @@ const assert = referee.assert;
 const bluebird = require("bluebird");
 
 const myObj = {
-    saveSomething: sinon
-        .stub()
-        .usingPromise(bluebird.Promise)
-        .resolves("baz")
+    saveSomething: sinon.stub().usingPromise(bluebird.Promise).resolves("baz"),
 };
 
-describe("stub", function() {
-    it("should resolve using specific Promise library", function() {
-        myObj.saveSomething().tap(function(actual) {
+describe("stub", function () {
+    it("should resolve using specific Promise library", function () {
+        myObj.saveSomething().tap(function (actual) {
             assert.equals(actual, "baz");
         });
     });

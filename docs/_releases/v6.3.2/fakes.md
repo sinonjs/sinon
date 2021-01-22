@@ -16,7 +16,6 @@ A fake is immutable: once created, the behavior will not change.
 
 Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` API knows only how to create fakes, and doesn't concern itself with plugging them into the system under test. To plug the fakes into the system under test, you can use the [`sinon.replace*`](../sandbox#sandboxreplaceobject-property-replacement) methods.
 
-
 ### Creating a fake
 
 ```js
@@ -38,7 +37,7 @@ Fakes can be created with behavior, which cannot be changed once the fake has be
 Creates a fake that returns the `value` argument
 
 ```js
-var fake = sinon.fake.returns('apple pie');
+var fake = sinon.fake.returns("apple pie");
 
 fake();
 // apple pie
@@ -51,7 +50,7 @@ Creates a fake that throws an `Error` with the provided value as the `message` p
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
 ```js
-var fake = sinon.fake.throws(new Error('not apple pie'));
+var fake = sinon.fake.throws(new Error("not apple pie"));
 
 fake();
 // Error: not apple pie
@@ -72,7 +71,7 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 `fake` expects the last argument to be a callback and will invoke it with the given arguments.
 
 ```js
-var fake = sinon.fake.yields('hello world');
+var fake = sinon.fake.yields("hello world");
 
 fake(console.log);
 // hello world
@@ -83,7 +82,7 @@ fake(console.log);
 `fake` expects the last argument to be a callback and will invoke it asynchronously with the given arguments.
 
 ```js
-var fake = sinon.fake.yieldsAsync('hello world');
+var fake = sinon.fake.yieldsAsync("hello world");
 
 fake(console.log);
 // hello world
@@ -151,7 +150,6 @@ f.lastCall.lastArg === date2;
 // true
 ```
 
-
 ### Adding the fake to the system under test
 
 Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fakes, not about replacing properties in the system under test.
@@ -159,11 +157,11 @@ Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fake
 To replace a property, you can use the [`sinon.replace`](../sandbox/#sandboxreplaceobject-property-replacement) method.
 
 ```js
-var fake = sinon.fake.returns('42');
+var fake = sinon.fake.returns("42");
 
-sinon.replace(console, 'log', fake);
+sinon.replace(console, "log", fake);
 
-console.log('apple pie');
+console.log("apple pie");
 // 42
 ```
 

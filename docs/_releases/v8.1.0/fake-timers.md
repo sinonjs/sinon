@@ -39,19 +39,17 @@ set of features (Sinon uses it under the hood) and was previously extracted from
 
 ## Fake timers API
 
-
 #### `var clock = sinon.useFakeTimers();`
 
 Causes Sinon to replace the global `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate`, `process.hrtime`, `performance.now`(when available) and `Date` with a custom implementation which is bound to the returned `clock` object.
 
 Starts the clock at the UNIX epoch (timestamp of `0`).
 
-
 #### `var clock = sinon.useFakeTimers(now);`
 
 As above, but rather than starting the clock with a timestamp of 0, start at the provided timestamp `now`.
 
-*Since `sinon@2.0.0`*
+_Since `sinon@2.0.0`_
 
 You can also pass in a Date object, and its `getTime()` will be used for the starting timestamp.
 
@@ -59,13 +57,13 @@ You can also pass in a Date object, and its `getTime()` will be used for the sta
 
 As above, but allows further configuration options, some of which are:
 
-- `config.now` - *Number/Date* - installs lolex with the specified unix epoch (default: 0)
-- `config.toFake` - *String[ ]* - an array with explicit function names to fake. By default lolex will automatically fake all methods *except* `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
-- `config.shouldAdvanceTime` - *Boolean* - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
+- `config.now` - _Number/Date_ - installs lolex with the specified unix epoch (default: 0)
+- `config.toFake` - _String[ ]_ - an array with explicit function names to fake. By default lolex will automatically fake all methods _except_ `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
+- `config.shouldAdvanceTime` - _Boolean_ - tells lolex to increment mocked time automatically based on the real system time shift (default: false)
 
 Please refer to the `lolex.install` [documentation](https://github.com/sinonjs/lolex#var-clock--lolexinstallconfig) for the full set of features available and more elaborate explanations.
 
-*Since `sinon@3.0.0`*
+_Since `sinon@3.0.0`_
 
 `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
@@ -77,14 +75,14 @@ Installs fake timers at January 1st 2017 and fakes `setTimeout` and `process.nex
 
 ```javascript
 var clock = sinon.useFakeTimers({
-                now: 1483228800000,
-                toFake: ["setTimeout", "nextTick"]
-            });
+  now: 1483228800000,
+  toFake: ["setTimeout", "nextTick"],
+});
 
 var called = false;
 
 process.nextTick(function () {
-    called = true;
+  called = true;
 });
 
 clock.runAll(); //forces nextTick calls to flush synchronously
@@ -95,20 +93,20 @@ Install at the same date, advancing the fake time automatically (default is ever
 
 ```js
 var clock = sinon.useFakeTimers({
-                now: 1483228800000,
-                shouldAdvanceTime: true
-            });
+  now: 1483228800000,
+  shouldAdvanceTime: true,
+});
 
 setImmediate(function () {
-    console.log('tick'); //will print after 20ms
+  console.log("tick"); //will print after 20ms
 });
 
 setTimeout(function () {
-    console.log('tock'); //will print after 20ms
+  console.log("tock"); //will print after 20ms
 }, 15);
 
 setTimeout(function () {
-    console.log('tack'); //will print after 40ms
+  console.log("tack"); //will print after 40ms
 }, 35);
 ```
 
@@ -144,7 +142,6 @@ async function test() {
 ```
 
 Note that in the above example, the synchronous `clock.tick(200)` would only print `timeout 200` and `resolved 1 200`.
-
 
 #### `clock.tick(time);` / `await clock.tickAsync(time)`
 

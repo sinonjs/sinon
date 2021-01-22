@@ -10,8 +10,8 @@ that makes things):
 
 ```js
 // maker.js
-module.exports.callAfterOneSecond = callback => {
-    setTimeout(callback, 1000);
+module.exports.callAfterOneSecond = (callback) => {
+  setTimeout(callback, 1000);
 };
 ```
 
@@ -42,13 +42,13 @@ The same approach can be used to test an `async` function:
 
 ```js
 module.exports.asyncReturnAfterOneSecond = async () => {
-    // Using util.promisify would look nicer, but there is a lolex issue
-    // blocking this at the moment: https://github.com/sinonjs/lolex/pull/227
-    const setTimeoutPromise = timeout => {
-        return new Promise(resolve => setTimeout(resolve, timeout));
-    };
-    await setTimeoutPromise(1000);
-    return 42;
+  // Using util.promisify would look nicer, but there is a lolex issue
+  // blocking this at the moment: https://github.com/sinonjs/lolex/pull/227
+  const setTimeoutPromise = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+  await setTimeoutPromise(1000);
+  return 42;
 };
 ```
 
@@ -56,10 +56,10 @@ The following test uses Mocha's [support for promises](https://mochajs.org/#work
 
 ```js
 // test.js
-it('should return 42 after one second', () => {
-    const promise = maker.asyncReturnAfterOneSecond();
-    clock.tick(1000);
-    return promise.then(result => assert.equal(result, 42)); // PASS
+it("should return 42 after one second", () => {
+  const promise = maker.asyncReturnAfterOneSecond();
+  clock.tick(1000);
+  return promise.then((result) => assert.equal(result, 42)); // PASS
 });
 ```
 
@@ -72,18 +72,18 @@ explicitly, the following code can be tested using the same approach:
 ```js
 // maker.js
 module.exports.fulfillAfterOneSecond = () => {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(42), 1000);
-    });
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(42), 1000);
+  });
 };
 ```
 
 ```js
 // test.js
-it('should be fulfilled after one second', () => {
-    const promise = maker.fulfillAfterOneSecond();
-    clock.tick(1000);
-    return promise.then(result => assert.equal(result, 42)); // PASS
+it("should be fulfilled after one second", () => {
+  const promise = maker.fulfillAfterOneSecond();
+  clock.tick(1000);
+  return promise.then((result) => assert.equal(result, 42)); // PASS
 });
 ```
 
@@ -92,11 +92,11 @@ we can write another test using `async/await`:
 
 ```js
 // test.js
-it('should return 42 after 1000ms', async () => {
-    const promise = maker.asyncReturnAfterOneSecond();
-    clock.tick(1000);
-    const result = await promise;
-    assert.equal(result, 42); // PASS
+it("should return 42 after 1000ms", async () => {
+  const promise = maker.asyncReturnAfterOneSecond();
+  clock.tick(1000);
+  const result = await promise;
+  assert.equal(result, 42); // PASS
 });
 ```
 

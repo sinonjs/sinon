@@ -4,9 +4,9 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("stub", function() {
-    it("should add a custom behavior", function() {
-        sinon.addBehavior("returnsNum", function(fake, n) {
+describe("stub", function () {
+    it("should add a custom behavior", function () {
+        sinon.addBehavior("returnsNum", function (fake, n) {
             fake.returns(n);
         });
 

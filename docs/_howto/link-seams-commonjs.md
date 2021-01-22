@@ -32,10 +32,10 @@ The folder structure in our example looks like this
 This is the source file of the module `doesFileExist`, it only has one dependency: `fs`.
 
 ```javascript
-var fs = require('fs');
+var fs = require("fs");
 
-function doesFileExist(path){
-    return fs.existsSync(path);
+function doesFileExist(path) {
+  return fs.existsSync(path);
 }
 
 module.exports = doesFileExist;
@@ -46,36 +46,36 @@ module.exports = doesFileExist;
 In order to isolate our `doesFileExist` module for testing, we will stub out `fs` and provide a fake implementation of `fs.existsSync`, where we have complete control of the behaviour.
 
 ```javascript
-var proxyquire = require('proxyquire');
-var sinon = require('sinon');
-var assert = require('referee').assert;
+var proxyquire = require("proxyquire");
+var sinon = require("sinon");
+var assert = require("referee").assert;
 
 var doesFileExist; // the module to test
 var existsSyncStub; // the fake method on the dependency
 
-describe('example', function () {
+describe("example", function () {
+  beforeEach(function () {
+    existsSyncStub = sinon.stub(); // create a stub for every test
+
+    // import the module to test, using a fake dependency
+    doesFileExist = proxyquire("../lib/does-file-exist", {
+      fs: {
+        existsSync: existsSyncStub,
+      },
+    });
+  });
+
+  describe("when a path exists", function () {
     beforeEach(function () {
-        existsSyncStub = sinon.stub(); // create a stub for every test
-
-        // import the module to test, using a fake dependency
-        doesFileExist = proxyquire('../lib/does-file-exist', {
-            fs: {
-                existsSync: existsSyncStub
-            }
-        });
+      existsSyncStub.returns(true); // set the return value that we want
     });
 
-    describe('when a path exists', function () {
-        beforeEach(function() {
-            existsSyncStub.returns(true); // set the return value that we want
-        });
+    it("should return `true`", function () {
+      var actual = doesFileExist("9d7af804-4719-4578-ba1d-5dd8a4dae89f");
 
-        it('should return `true`', function () {
-            var actual = doesFileExist('9d7af804-4719-4578-ba1d-5dd8a4dae89f');
-
-            assert.isTrue(actual);
-        });
+      assert.isTrue(actual);
     });
+  });
 });
 ```
 

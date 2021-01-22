@@ -35,9 +35,9 @@ fake.callCount;
 
 ```js
 // create a fake that returns the text "foo"
-var fake = sinon.fake.returns('foo');
+var fake = sinon.fake.returns("foo");
 
-fake()
+fake();
 // foo
 ```
 
@@ -49,9 +49,8 @@ Fakes cannot change once created with behaviour.
 
 Creates a fake that returns the `value` argument.
 
-
 ```js
-var fake = sinon.fake.returns('apple pie');
+var fake = sinon.fake.returns("apple pie");
 
 fake();
 // apple pie
@@ -61,11 +60,10 @@ fake();
 
 Creates a fake that throws an `Error` with the provided value as the `message` property.
 
-
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
 ```js
-var fake = sinon.fake.throws(new Error('not apple pie'));
+var fake = sinon.fake.throws(new Error("not apple pie"));
 
 fake();
 // Error: not apple pie
@@ -75,11 +73,9 @@ fake();
 
 Creates a fake that returns a resolved `Promise` for the passed value.
 
-
 #### `sinon.fake.rejects(value);`
 
 Creates a fake that returns a rejected `Promise` for the passed value.
-
 
 If an `Error` is passed as the `value` argument, then that will be the value of the promise. If any other value is passed, then that will be used for the `message` property of the `Error` returned by the promise.
 
@@ -87,29 +83,32 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 
 `sinon.fake.yields` takes some values, and returns a function that when being called, expects the last argument to be a callback and invokes that callback with the same previously given values. The returned function is normally used to fake a service function that takes a callback as the last argument.
 
-
- In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
+In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
 
 ```js
-var fake = sinon.fake.yields(null, 'file content');
-sinon.replace(fs, 'readFile', fake);
-fs.readFile('somefile',(err,data)=>{console.log(data);});
-console.log('end of this event loop');
+var fake = sinon.fake.yields(null, "file content");
+sinon.replace(fs, "readFile", fake);
+fs.readFile("somefile", (err, data) => {
+  console.log(data);
+});
+console.log("end of this event loop");
 // file content
 // end of this event loop
 ```
+
 #### `sinon.fake.yieldsAsync([value1, ..., valueN]);`
 
 Similar to `yields`, `yieldsAsync` also returns a function that when invoked, the function expects the last argument to be a callback and invokes that callback with the same previously given values. However, the returned function invokes that callback asynchronously rather than immediately, i.e. in the next event loop.
 
-
 Compare the output of the code example below with the output of the code example above for `yields` to see the difference.
 
 ```js
-var fakeAsync = sinon.fake.yieldsAsync(null, 'file content');
-sinon.replace(fs, 'readFile', fakeAsync);
-fs.readFile('somefile',(err,data)=>{console.log(data);});
-console.log('end of this event loop');
+var fakeAsync = sinon.fake.yieldsAsync(null, "file content");
+sinon.replace(fs, "readFile", fakeAsync);
+fs.readFile("somefile", (err, data) => {
+  console.log(data);
+});
+console.log("end of this event loop");
 // end of this event loop
 // file content
 ```
@@ -180,7 +179,6 @@ f.lastCall.lastArg === date2;
 // true
 ```
 
-
 ### Adding the fake to the system under test
 
 Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fakes, not about replacing properties in the system under test.
@@ -188,11 +186,11 @@ Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fake
 To replace a property, you can use the [`sinon.replace`](../sandbox/#sandboxreplaceobject-property-replacement) method.
 
 ```js
-var fake = sinon.fake.returns('42');
+var fake = sinon.fake.returns("42");
 
-sinon.replace(console, 'log', fake);
+sinon.replace(console, "log", fake);
 
-console.log('apple pie');
+console.log("apple pie");
 // 42
 ```
 

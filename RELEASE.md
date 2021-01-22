@@ -5,11 +5,11 @@ You will need a working installation of [git-extras](https://github.com/tj/git-e
 The release process is mostly automated, here is a brief overview of the steps
 
 1. `npm version [keyword]`
-    - Updates `CHANGELOG.md` - you will need to edit this
-    - Updates `AUTHORS`
-    - Updates `package.json` with new version
-    - Creates a new git tag
-    - Copies new release documentation into place in `docs/_releases/`, using the new release id
+   - Updates `CHANGELOG.md` - you will need to edit this
+   - Updates `AUTHORS`
+   - Updates `package.json` with new version
+   - Creates a new git tag
+   - Copies new release documentation into place in `docs/_releases/`, using the new release id
 2. `npm publish` publishes the new release to the npm registry
 3. `git push origin --follow-tags` pushes the changes to GitHub
 

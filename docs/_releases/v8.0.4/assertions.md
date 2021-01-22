@@ -33,18 +33,15 @@ By default it throws an error of type `sinon.assert.failException`.
 
 If the test framework looks for assertion errors by checking for a specific exception, you can override the kind of exception thrown. If that does not fit with your testing framework of choice, override the `fail` method to do the right thing.
 
-
 #### `sinon.assert.failException;`
 
 Defaults to `AssertError`.
-
 
 #### `sinon.assert.pass(assertion);`
 
 Called every time `assertion` passes.
 
 Default implementation does nothing.
-
 
 #### `sinon.assert.notCalled(spy);`
 
@@ -54,29 +51,25 @@ Passes if `spy` was never called
 
 Passes if `spy` was called at least once.
 
-
 #### `sinon.assert.calledOnce(spy);`
 
 Passes if `spy` was called once and only once.
-
 
 #### `sinon.assert.calledTwice(spy);`
 
 Passes if `spy` was called exactly twice.
 
-
 #### `sinon.assert.calledThrice(spy)`
 
 Passes if `spy` was called exactly three times.
 
-
 #### `sinon.assert.callCount(spy, num)`
+
 Passes if `spy` was called exactly `num` times.
 
-
 #### `sinon.assert.callOrder(spy1, spy2, ...)`
-Passes if provided spies were called in the specified order.
 
+Passes if provided spies were called in the specified order.
 
 #### `sinon.assert.calledOn(spyOrSpyCall, obj)`
 
@@ -84,11 +77,9 @@ Passes if `spy` was ever called with `obj` as its `this` value.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledOn(spy.firstCall, arg1, arg2, ...);`.
 
-
 #### `sinon.assert.alwaysCalledOn(spy, obj)`
 
 Passes if `spy` was always called with `obj` as its `this` value.
-
 
 #### `sinon.assert.calledWith(spyOrSpyCall, arg1, arg2, ...);`
 
@@ -96,16 +87,13 @@ Passes if `spy` was called with the provided arguments.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWith(spy.firstCall, arg1, arg2, ...);`.
 
-
 #### `sinon.assert.alwaysCalledWith(spy, arg1, arg2, ...);`
 
 Passes if `spy` was always called with the provided arguments.
 
-
 #### `sinon.assert.neverCalledWith(spy, arg1, arg2, ...);`
 
 Passes if `spy` was never called with the provided arguments.
-
 
 #### `sinon.assert.calledWithExactly(spyOrSpyCall, arg1, arg2, ...);`
 
@@ -113,18 +101,15 @@ Passes if `spy` was called with the provided arguments and no others.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWithExactly(spy.getCall(1), arg1, arg2, ...);`.
 
-
 #### `sinon.assert.calledOnceWithExactly(spyOrSpyCall, arg1, arg2, ...);`
 
 Passes if `spy` was called once and only once with the provided arguments and no others.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledOnceWithExactly(spy.getCall(1), arg1, arg2, ...);`.
 
-
 #### `sinon.assert.alwaysCalledWithExactly(spy, arg1, arg2, ...);`
 
 Passes if `spy` was always called with the provided arguments and no others.
-
 
 #### `sinon.assert.calledWithMatch(spyOrSpyCall, arg1, arg2, ...)`
 
@@ -134,13 +119,11 @@ This behaves the same way as `sinon.assert.calledWith(spy, sinon.match(arg1), si
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWithMatch(spy.secondCall, arg1, arg2, ...);`.
 
-
 #### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was always called with matching arguments.
 
 This behaves the same way as `sinon.assert.alwaysCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
-
 
 #### `sinon.assert.calledWithNew(spyOrSpyCall)`
 
@@ -148,13 +131,11 @@ Passes if `spy` was called with the `new` operator.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWithNew(spy.secondCall, arg1, arg2, ...);`.
 
-
 #### `sinon.assert.neverCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was never called with matching arguments.
 
 This behaves the same way as `sinon.assert.neverCalledWith(spy, sinon.match(arg1), sinon.match(arg2), ...)`.
-
 
 #### `sinon.assert.threw(spyOrSpyCall, exception);`
 
@@ -166,7 +147,6 @@ If only one argument is provided, the assertion passes if `spy` ever threw any e
 
 It's possible to assert on a dedicated spy call: `sinon.assert.threw(spy.thirdCall, exception);`.
 
-
 #### `sinon.assert.alwaysThrew(spy, exception);`
 
 Like above, only required for all calls to the spy.
@@ -176,15 +156,15 @@ Like above, only required for all calls to the spy.
 Uses [`sinon.match`](../matchers) to test if the arguments can be considered a match.
 
 ```javascript
-var sinon = require('sinon');
+var sinon = require("sinon");
 
-describe('example', function(){
-    it('should match on `x` property, and ignore `y` property', function() {
-        var expected = {x: 1},
-            actual = {x: 1, y: 2};
+describe("example", function () {
+  it("should match on `x` property, and ignore `y` property", function () {
+    var expected = { x: 1 },
+      actual = { x: 1, y: 2 };
 
-        sinon.assert.match(actual, expected);
-    });
+    sinon.assert.match(actual, expected);
+  });
 });
 ```
 
@@ -206,4 +186,5 @@ The method accepts an optional options object with two options.
 
     <dt>includeFail</dt>
     <dd><code>true</code> by default, copies over the <code>fail</code> and <code>failException</code> properties</dd>
+
 </dl>

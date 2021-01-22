@@ -4,8 +4,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("withArgs", function() {
-    it("should call method once with each argument", function() {
+describe("withArgs", function () {
+    it("should call method once with each argument", function () {
         const object = { method() {} };
         const spy = sinon.spy(object, "method");
 

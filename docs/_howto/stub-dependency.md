@@ -17,7 +17,7 @@ function getSecretNumber() {
 }
 
 module.exports = {
-  getSecretNumber
+  getSecretNumber,
 };
 ```
 
@@ -31,7 +31,7 @@ function getTheSecret() {
 }
 
 module.exports = {
-  getTheSecret
+  getTheSecret,
 };
 ```
 
@@ -44,9 +44,9 @@ const sinon = require("sinon");
 const dependencyModule = require("./dependencyModule");
 const { getTheSecret } = require("./moduleUnderTest");
 
-describe("moduleUnderTest", function() {
-  describe("when the secret is 3", function() {
-    it("should be returned with a string prefix", function() {
+describe("moduleUnderTest", function () {
+  describe("when the secret is 3", function () {
+    it("should be returned with a string prefix", function () {
       sinon.stub(dependencyModule, "getSecretNumber").returns(3);
       const result = getTheSecret();
       assert.equal(result, "The secret was: 3");
@@ -67,13 +67,13 @@ const axios = require("axios");
 async function getPageOfUsers(page) {
   const result = await axios({
     method: "GET",
-    url: `https://reqres.in/api/users?page=${page}`
+    url: `https://reqres.in/api/users?page=${page}`,
   });
   return result.data;
 }
 
 module.exports = {
-  getPageOfUsers
+  getPageOfUsers,
 };
 ```
 
@@ -99,7 +99,7 @@ async function getAllUsers() {
 }
 
 module.exports = {
-  getAllUsers
+  getAllUsers,
 };
 ```
 
@@ -117,28 +117,28 @@ function aUser(id) {
     email: `someemail@user${id}.com`,
     first_name: `firstName${id}`,
     last_name: `lastName${id}`,
-    avatar: `https://www.somepage${id}.com`
+    avatar: `https://www.somepage${id}.com`,
   };
 }
 
-describe("userUtils", function() {
+describe("userUtils", function () {
   let getPageOfUsersStub;
 
-  beforeEach(function() {
+  beforeEach(function () {
     getPageOfUsersStub = sinon.stub(userApi, "getPageOfUsers");
   });
 
-  afterEach(function() {
+  afterEach(function () {
     getPageOfUsersStub.restore();
   });
 
-  describe("when a single page of users exists", function() {
-    it("should return users from that page", async function() {
+  describe("when a single page of users exists", function () {
+    it("should return users from that page", async function () {
       // Arrange
       const pageOfUsers = {
         page: 1,
         total_pages: 1,
-        data: [aUser(1), aUser(2), aUser(3)]
+        data: [aUser(1), aUser(2), aUser(3)],
       };
 
       getPageOfUsersStub.returns(Promise.resolve(pageOfUsers));
@@ -152,18 +152,18 @@ describe("userUtils", function() {
     });
   });
 
-  describe("when multiple pages of users exists", function() {
-    it("should return a combined list of all users", async function() {
+  describe("when multiple pages of users exists", function () {
+    it("should return a combined list of all users", async function () {
       // Arrange
       const pageOfUsers1 = {
         page: 1,
         total_pages: 2,
-        data: [aUser(1), aUser(2), aUser(3)]
+        data: [aUser(1), aUser(2), aUser(3)],
       };
       const pageOfUsers2 = {
         page: 2,
         total_pages: 2,
-        data: [aUser(4), aUser(5)]
+        data: [aUser(4), aUser(5)],
       };
 
       getPageOfUsersStub.withArgs(1).returns(Promise.resolve(pageOfUsers1));

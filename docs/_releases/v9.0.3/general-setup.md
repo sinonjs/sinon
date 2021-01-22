@@ -19,8 +19,7 @@ afterEach(() => {
 Or in Jasmine you should place it in each describe:
 
 ```js
-describe('My test suite', () => {
-
+describe("My test suite", () => {
   afterEach(() => {
     // Restore the default sandbox here
     sinon.restore();
