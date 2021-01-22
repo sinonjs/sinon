@@ -15,7 +15,7 @@ function createFaux(func) {
     var funk = func;
 
     if (typeof funk !== "function") {
-        funk = function() {
+        funk = function () {
             return;
         };
     } else {
@@ -28,22 +28,22 @@ function createFaux(func) {
         displayName: name || "faux",
         fakes: [],
         instantiateFake: createFaux,
-        id: "faux#" + uuid++
+        id: "faux#" + uuid++,
     });
     return proxy;
 }
 
-describe("proxy", function() {
-    describe(".printf", function() {
-        describe("name", function() {
-            it("named", function() {
+describe("proxy", function () {
+    describe(".printf", function () {
+        describe("name", function () {
+            it("named", function () {
                 var named = createFaux(function cool() {
                     return;
                 });
                 assert.equals(named.printf("%n"), "cool");
             });
-            it("anon", function() {
-                var anon = sinonSpy(function() {
+            it("anon", function () {
+                var anon = sinonSpy(function () {
                     return;
                 });
                 assert.equals(anon.printf("%n"), "spy");
@@ -53,11 +53,11 @@ describe("proxy", function() {
             });
         });
 
-        it("count", function() {
+        it("count", function () {
             // Throwing just to make sure it has no effect.
             var faux = createFaux(sinonStub().throws());
             function call() {
-                assert.exception(function() {
+                assert.exception(function () {
                     faux();
                 });
             }
@@ -72,12 +72,15 @@ describe("proxy", function() {
             assert.equals(faux.printf("%c"), "4 times");
         });
 
-        describe("calls", function() {
-            it("oneLine", function() {
+        describe("calls", function () {
+            it("oneLine", function () {
                 function verify(arg, expected) {
                     var faux = createFaux();
                     faux(arg);
-                    assert.equals(faux.printf("%C").replace(/ at.*/g, ""), "\n    " + expected);
+                    assert.equals(
+                        faux.printf("%C").replace(/ at.*/g, ""),
+                        "\n    " + expected
+                    );
                 }
 
                 verify(true, "faux(true)");
@@ -92,7 +95,7 @@ describe("proxy", function() {
                 verify({ a: "a" }, "faux({ a: 'a' })");
             });
 
-            it("multiline", function() {
+            it("multiline", function () {
                 var str = "faux\ntest";
                 var faux = createFaux();
 
@@ -118,7 +121,7 @@ describe("proxy", function() {
             });
         });
 
-        it("thisValues", function() {
+        it("thisValues", function () {
             var faux = createFaux();
             faux();
             assert.equals(faux.printf("%t"), "undefined");
@@ -128,13 +131,13 @@ describe("proxy", function() {
             assert.equals(faux.printf("%t"), "true");
         });
 
-        it("unmatched", function() {
+        it("unmatched", function () {
             var faux = createFaux();
 
             assert.equals(faux.printf("%λ"), "%λ");
         });
 
-        it("*", function() {
+        it("*", function () {
             var faux = createFaux();
 
             assert.equals(
@@ -144,14 +147,14 @@ describe("proxy", function() {
             assert.equals(faux.printf("%*", "a", "b", "c"), "'a', 'b', 'c'");
         });
 
-        describe("arguments", function() {
-            it("no calls", function() {
+        describe("arguments", function () {
+            it("no calls", function () {
                 var faux = createFaux();
 
                 assert.equals(faux.printf("%D"), "");
             });
 
-            it("single call with arguments", function() {
+            it("single call with arguments", function () {
                 var faux = createFaux();
 
                 faux(1, "a", true, false, [], {}, null, undefined);
@@ -177,7 +180,7 @@ describe("proxy", function() {
                 );
             });
 
-            it("single call without arguments", function() {
+            it("single call without arguments", function () {
                 var faux = createFaux();
 
                 faux();
@@ -185,7 +188,7 @@ describe("proxy", function() {
                 assert.equals(faux.printf("%D"), "");
             });
 
-            it("multiple calls with arguments", function() {
+            it("multiple calls with arguments", function () {
                 var faux = createFaux();
 
                 faux(1, "a", true);
@@ -216,7 +219,7 @@ describe("proxy", function() {
                 );
             });
 
-            it("multiple calls without arguments", function() {
+            it("multiple calls without arguments", function () {
                 var faux = createFaux();
 
                 faux();

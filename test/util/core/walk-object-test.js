@@ -6,21 +6,22 @@ var walkObject = require("../../../lib/sinon/util/core/walk-object");
 
 var assert = referee.assert;
 
-describe("util/core/walk-object", function() {
+describe("util/core/walk-object", function () {
     // IE11
-    describe("without function.name support", function() {
+    describe("without function.name support", function () {
         function fnWithNoName() {
             return;
         }
-        var anonymousFn = function() {
+        var anonymousFn = function () {
             return;
         };
 
-        before(function() {
+        before(function () {
             if (
                 typeof Object.defineProperty !== "function" ||
                 typeof Object.getOwnPropertyDescriptor !== "function" ||
-                (Object.getOwnPropertyDescriptor(fnWithNoName, "name") || {}).configurable !== true
+                (Object.getOwnPropertyDescriptor(fnWithNoName, "name") || {})
+                    .configurable !== true
             ) {
                 this.skip();
             }
@@ -31,35 +32,41 @@ describe("util/core/walk-object", function() {
             Object.defineProperty(fnWithNoName, "name", descriptor);
         });
 
-        it("should still identify functions in environments", function() {
+        it("should still identify functions in environments", function () {
             assert.exception(
-                function() {
+                function () {
                     walkObject(fnWithNoName, false);
                 },
                 { message: "Trying to fnWithNoName object but received false" }
             );
 
             assert.exception(
-                function() {
+                function () {
                     walkObject(fnWithNoName, {});
                 },
-                { message: "Expected to fnWithNoName methods on object but found none" }
+                {
+                    message:
+                        "Expected to fnWithNoName methods on object but found none",
+                }
             );
         });
 
-        it("should work with anonymous functions", function() {
+        it("should work with anonymous functions", function () {
             assert.exception(
-                function() {
+                function () {
                     walkObject(anonymousFn, false);
                 },
                 { message: "Trying to undefined object but received false" }
             );
 
             assert.exception(
-                function() {
+                function () {
                     walkObject(anonymousFn, {});
                 },
-                { message: "Expected to undefined methods on object but found none" }
+                {
+                    message:
+                        "Expected to undefined methods on object but found none",
+                }
             );
         });
     });

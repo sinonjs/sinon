@@ -5,8 +5,8 @@ var walk = require("../../../lib/sinon/util/core/walk");
 var createSpy = require("../../../lib/sinon/spy");
 var assert = referee.assert;
 
-describe("util/core/walk", function() {
-    it("should call iterator with value, key, and obj, with context as the receiver", function() {
+describe("util/core/walk", function () {
+    it("should call iterator with value, key, and obj, with context as the receiver", function () {
         var target = Object.create(null);
         var rcvr = {};
         var iterator = createSpy();
@@ -22,13 +22,13 @@ describe("util/core/walk", function() {
         assert(iterator.calledWithExactly("foo", target));
     });
 
-    it("should work with non-enumerable properties", function() {
+    it("should work with non-enumerable properties", function () {
         var target = Object.create(null);
         var iterator = createSpy();
 
         target.hello = "world";
         Object.defineProperty(target, "foo", {
-            value: 15
+            value: 15,
         });
 
         walk(target, iterator);
@@ -38,37 +38,37 @@ describe("util/core/walk", function() {
         assert(iterator.calledWith("foo"));
     });
 
-    it("should walk the prototype chain of an object", function() {
+    it("should walk the prototype chain of an object", function () {
         var parentProto, proto, target, iterator;
 
         parentProto = Object.create(null, {
             nonEnumerableParentProp: {
-                value: "non-enumerable parent prop"
+                value: "non-enumerable parent prop",
             },
             enumerableParentProp: {
                 value: "enumerable parent prop",
-                enumerable: true
-            }
+                enumerable: true,
+            },
         });
 
         proto = Object.create(parentProto, {
             nonEnumerableProp: {
-                value: "non-enumerable prop"
+                value: "non-enumerable prop",
             },
             enumerableProp: {
                 value: "enumerable prop",
-                enumerable: true
-            }
+                enumerable: true,
+            },
         });
 
         target = Object.create(proto, {
             nonEnumerableOwnProp: {
-                value: "non-enumerable own prop"
+                value: "non-enumerable own prop",
             },
             enumerableOwnProp: {
                 value: "enumerable own prop",
-                enumerable: true
-            }
+                enumerable: true,
+            },
         });
 
         iterator = createSpy();
@@ -84,14 +84,14 @@ describe("util/core/walk", function() {
         assert(iterator.calledWith("enumerableParentProp", parentProto));
     });
 
-    it("should not invoke getters on the original receiving object", function() {
+    it("should not invoke getters on the original receiving object", function () {
         var Target = function Target() {
             return;
         };
         var getter = createSpy();
         Object.defineProperty(Target.prototype, "computedFoo", {
             enumerable: true,
-            get: getter
+            get: getter,
         });
         var target = new Target();
         var iterator = createSpy();
@@ -102,7 +102,7 @@ describe("util/core/walk", function() {
         assert(getter.notCalled);
     });
 
-    it("should fall back to for..in if getOwnPropertyNames is not available", function() {
+    it("should fall back to for..in if getOwnPropertyNames is not available", function () {
         var getOwnPropertyNames = Object.getOwnPropertyNames;
         var Target = function Target() {
             this.hello = "world";
@@ -139,14 +139,17 @@ describe("util/core/walk", function() {
             Object.getOwnPropertyNames = getOwnPropertyNames;
         }
 
-        assert.isNull(err, "walk tests failed with message '" + (err && err.message) + "'");
+        assert.isNull(
+            err,
+            "walk tests failed with message '" + (err && err.message) + "'"
+        );
     });
 
-    it("does not walk the same property twice", function() {
+    it("does not walk the same property twice", function () {
         var parent = {
             func: function parentFunc() {
                 return;
-            }
+            },
         };
         var child = Object.create(parent);
         child.func = function childFunc() {
@@ -156,12 +159,12 @@ describe("util/core/walk", function() {
 
         walk(child, iterator);
 
-        var propertyNames = iterator.args.map(function(call) {
+        var propertyNames = iterator.args.map(function (call) {
             return call[0];
         });
 
         // make sure that each property name only exists once
-        propertyNames.forEach(function(name, index) {
+        propertyNames.forEach(function (name, index) {
             assert.equals(index, propertyNames.lastIndexOf(name));
         });
     });

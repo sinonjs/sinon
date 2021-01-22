@@ -35,7 +35,7 @@ async function evaluatePageContent() {
         // https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
         args: ["--no-sandbox"],
         // allow overriding chrome path
-        executablePath: process.env.SINON_CHROME_BIN || null
+        executablePath: process.env.SINON_CHROME_BIN || null,
     });
     const page = await browser.newPage();
 
@@ -49,12 +49,12 @@ async function evaluatePageContent() {
         process.exit(1);
     }
 
-    page.on("error", function(err) {
+    page.on("error", function (err) {
         throw err;
     });
 
     // our "assertion framework" :)
-    page.on("console", function(msg) {
+    page.on("console", function (msg) {
         var text = msg.text();
 
         if (text.startsWith("sinon-result:works")) {
@@ -83,7 +83,7 @@ const app = http.createServer((req, res) => {
 
     const headers = {
         "Content-Length": Buffer.byteLength(body),
-        "Content-Type": type
+        "Content-Type": type,
     };
     res.writeHead(200, headers);
     res.end(body);
