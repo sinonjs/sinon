@@ -12,7 +12,7 @@ services:
     # https://github.com/GoogleChrome/puppeteer/issues/3774
     # This variable is used by all scripts - including the `test-esm-bundle`
     environment:
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
       SINON_CHROME_BIN: /usr/bin/google-chrome-stable
     volumes:
       # This mounts the local directory - saving `npm install`

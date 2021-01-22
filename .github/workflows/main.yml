@@ -11,31 +11,31 @@ jobs:
         node-version: [10, 12, 14]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Cache modules
-      uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.OS }}-node-${{ hashFiles('package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
-    - run: npm ci
-      env:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
-    - name: Pre-Test
-      run: |
-        npm run lint
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - run: npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Pre-Test
+        run: |
+          npm run lint
 
-        export SINON_CHROME_BIN=$(which google-chrome-stable)
-        npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-        npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-        npm run test-esm-bundle
-      if: matrix.node-version == 10
+          export SINON_CHROME_BIN=$(which google-chrome-stable)
+          npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
+          npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
+          npm run test-esm-bundle
+        if: matrix.node-version == 10
 
-    - name: npm test
-      run: npm run test-node
+      - name: npm test
+        run: npm run test-node
