@@ -10,7 +10,8 @@ var sinon = require("./lib/sinon");
 var date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble = "/* Sinon.JS " + pkg.version + ", " + date + ", @license BSD-3 */";
+var preamble =
+    "/* Sinon.JS " + pkg.version + ", " + date + ", @license BSD-3 */";
 
 try {
     fs.mkdirSync("pkg");
@@ -19,7 +20,7 @@ try {
 }
 
 function makeBundle(entryPoint, config, done) {
-    browserify(entryPoint, config).bundle(function(err, buffer) {
+    browserify(entryPoint, config).bundle(function (err, buffer) {
         if (err) {
             throw err;
         }
@@ -35,9 +36,9 @@ makeBundle(
         // Create a UMD wrapper and install the "sinon" global:
         standalone: "sinon",
         // Do not detect and insert globals:
-        detectGlobals: false
+        detectGlobals: false,
     },
-    function(bundle) {
+    function (bundle) {
         var script = preamble + bundle;
         fs.writeFileSync("pkg/sinon.js", script);
     }
@@ -49,9 +50,9 @@ makeBundle(
         // Create a UMD wrapper and install the "sinon" global:
         standalone: "sinon",
         // Do not detect and insert globals:
-        detectGlobals: false
+        detectGlobals: false,
     },
-    function(bundle) {
+    function (bundle) {
         var script = preamble + bundle;
         fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
     }
@@ -61,15 +62,25 @@ makeBundle(
     "./lib/sinon-esm.js",
     {
         // Do not detect and insert globals:
-        detectGlobals: false
+        detectGlobals: false,
     },
-    function(bundle) {
+    function (bundle) {
         var intro = "let sinon;";
         var outro =
             "\nexport default sinon;\n" +
             Object.keys(sinon)
-                .map(function(key) {
-                    return "const _" + key + " = sinon." + key + ";\nexport { _" + key + " as " + key + " };";
+                .map(function (key) {
+                    return (
+                        "const _" +
+                        key +
+                        " = sinon." +
+                        key +
+                        ";\nexport { _" +
+                        key +
+                        " as " +
+                        key +
+                        " };"
+                    );
                 })
                 .join("\n");
 

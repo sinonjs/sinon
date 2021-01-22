@@ -8,58 +8,58 @@ var restoreObject = require("../lib/sinon/restore-object.js");
 var assert = referee.assert;
 var refute = referee.refute;
 
-describe("restore-object", function() {
-    it("is defined", function() {
+describe("restore-object", function () {
+    it("is defined", function () {
         assert.isFunction(restoreObject);
     });
 
-    it("throws on falsy input", function() {
+    it("throws on falsy input", function () {
         assert.exception(
-            function() {
+            function () {
                 restoreObject(false);
             },
             { message: "Trying to restore object but received false" }
         );
 
         assert.exception(
-            function() {
+            function () {
                 restoreObject(null);
             },
             { message: "Trying to restore object but received null" }
         );
 
         assert.exception(
-            function() {
+            function () {
                 restoreObject();
             },
             { message: "Trying to restore object but received undefined" }
         );
     });
 
-    it("throws with no spies or stubs", function() {
+    it("throws with no spies or stubs", function () {
         assert.exception(
-            function() {
+            function () {
                 restoreObject({
-                    catpants: function() {},
-                    meh: "okay"
+                    catpants: function () {},
+                    meh: "okay",
                 });
             },
             { message: "Expected to restore methods on object but found none" }
         );
     });
 
-    it("works with mixed spies and stubs", function() {
+    it("works with mixed spies and stubs", function () {
         var object = {
-            who: function() {},
-            what: function() {},
-            when: function() {},
-            why: "I don't know"
+            who: function () {},
+            what: function () {},
+            when: function () {},
+            why: "I don't know",
         };
 
         sinonSpy(object, "who");
         sinonStub(object, "what");
 
-        refute.exception(function() {
+        refute.exception(function () {
             object = restoreObject(object);
         });
 
@@ -68,10 +68,10 @@ describe("restore-object", function() {
         refute.isFunction(object.when.restore);
     });
 
-    it("restores entire spied object", function() {
+    it("restores entire spied object", function () {
         var object = sinonSpy({
-            foo: function() {},
-            bar: function() {}
+            foo: function () {},
+            bar: function () {},
         });
 
         object = restoreObject(object);
@@ -80,10 +80,10 @@ describe("restore-object", function() {
         refute.isFunction(object.bar.restore);
     });
 
-    it("restores entire stubbed object", function() {
+    it("restores entire stubbed object", function () {
         var object = sinonStub({
-            foo: function() {},
-            bar: function() {}
+            foo: function () {},
+            bar: function () {},
         });
 
         object = restoreObject(object);

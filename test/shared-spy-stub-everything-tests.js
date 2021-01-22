@@ -5,17 +5,17 @@ var assert = referee.assert;
 var refute = referee.refute;
 
 module.exports = function shared(createSpyOrStub) {
-    it("replaces all methods of an object when no property is given", function() {
+    it("replaces all methods of an object when no property is given", function () {
         var obj = {
-            func1: function() {
+            func1: function () {
                 return;
             },
-            func2: function() {
+            func2: function () {
                 return;
             },
-            func3: function() {
+            func3: function () {
                 return;
-            }
+            },
         };
 
         createSpyOrStub(obj);
@@ -25,11 +25,11 @@ module.exports = function shared(createSpyOrStub) {
         assert.isFunction(obj.func3.restore);
     });
 
-    it("replaces prototype methods", function() {
+    it("replaces prototype methods", function () {
         function Obj() {
             return;
         }
-        Obj.prototype.func1 = function() {
+        Obj.prototype.func1 = function () {
             return;
         };
         var obj = new Obj();
@@ -39,22 +39,22 @@ module.exports = function shared(createSpyOrStub) {
         assert.isFunction(obj.func1.restore);
     });
 
-    it("returns object", function() {
+    it("returns object", function () {
         var object = {
-            func1: function() {
+            func1: function () {
                 return;
-            }
+            },
         };
 
         assert.same(createSpyOrStub(object), object);
     });
 
-    it("only replaces functions", function() {
+    it("only replaces functions", function () {
         var object = {
             foo: "bar",
-            baz: function() {
+            baz: function () {
                 return;
-            }
+            },
         };
 
         createSpyOrStub(object);
@@ -62,22 +62,22 @@ module.exports = function shared(createSpyOrStub) {
         assert.equals(object.foo, "bar");
     });
 
-    it("handles non-enumerable properties", function() {
+    it("handles non-enumerable properties", function () {
         var obj = {
-            func1: function() {
+            func1: function () {
                 return;
             },
-            func2: function() {
+            func2: function () {
                 return;
-            }
+            },
         };
 
         Object.defineProperty(obj, "func3", {
-            value: function() {
+            value: function () {
                 return;
             },
             writable: true,
-            configurable: true
+            configurable: true,
         });
 
         createSpyOrStub(obj);
@@ -87,16 +87,16 @@ module.exports = function shared(createSpyOrStub) {
         assert.isFunction(obj.func3.restore);
     });
 
-    it("handles non-enumerable properties on prototypes", function() {
+    it("handles non-enumerable properties on prototypes", function () {
         function Obj() {
             return;
         }
         Object.defineProperty(Obj.prototype, "func1", {
-            value: function() {
+            value: function () {
                 return;
             },
             writable: true,
-            configurable: true
+            configurable: true,
         });
 
         var obj = new Obj();
@@ -106,11 +106,11 @@ module.exports = function shared(createSpyOrStub) {
         assert.isFunction(obj.func1.restore);
     });
 
-    it("does not replace non-enumerable properties from Object.prototype", function() {
+    it("does not replace non-enumerable properties from Object.prototype", function () {
         var obj = {
-            noop: function() {
+            noop: function () {
                 return;
-            }
+            },
         };
 
         createSpyOrStub(obj);
@@ -120,30 +120,30 @@ module.exports = function shared(createSpyOrStub) {
         refute.isFunction(obj.propertyIsEnumerable.restore);
     });
 
-    it("does not fail on overrides", function() {
+    it("does not fail on overrides", function () {
         var parent = {
-            func: function() {
+            func: function () {
                 return;
-            }
+            },
         };
         var child = Object.create(parent);
-        child.func = function() {
+        child.func = function () {
             return;
         };
 
-        refute.exception(function() {
+        refute.exception(function () {
             createSpyOrStub(child);
         });
     });
 
-    it("throws on non-existent property", function() {
+    it("throws on non-existent property", function () {
         var myObj = {
-            ignoreme: function() {
+            ignoreme: function () {
                 return;
-            }
+            },
         };
 
-        assert.exception(function() {
+        assert.exception(function () {
             createSpyOrStub(myObj, "ouch");
         });
 
