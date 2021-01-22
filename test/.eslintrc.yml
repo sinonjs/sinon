@@ -12,7 +12,7 @@ rules:
   "@sinonjs/no-prototype-methods/no-prototype-methods": off
 
   max-nested-callbacks: off
-  no-restricted-syntax: [error, 'TryStatement']
+  no-restricted-syntax: [error, "TryStatement"]
 
   # Mocha Plugin - https://github.com/lo1tuma/eslint-plugin-mocha
   mocha/handle-done-callback: error

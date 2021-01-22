@@ -79,7 +79,7 @@ jobs:
     docker:
       - image: circleci/node:10.15.1-browsers
     environment:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     steps:
       - *attach-step
       - run:
