@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+9.2.4 / 2021-01-23
+==================
+
+  * Upgrade @sinonjs/samsam@5.3.1
+
 9.2.3 / 2021-01-06
 ==================
 
