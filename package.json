@@ -1,6 +1,20 @@
 {
   "name": "sinon",
   "description": "JavaScript test spies, stubs and mocks.",
+  "keywords": [
+    "sinon",
+    "test",
+    "testing",
+    "unit",
+    "stub",
+    "spy",
+    "fake",
+    "time",
+    "clock",
+    "mock",
+    "xhr",
+    "assert"
+  ],
   "version": "9.2.3",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
