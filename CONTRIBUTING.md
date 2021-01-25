@@ -76,7 +76,7 @@ Sinon.JS uses [ESLint](http://eslint.org) to keep the codebase free of lint, and
 
 If you are contributing to a Sinon project, you'll probably want to configure your editors ([ESLint](https://eslint.org/docs/user-guide/integrations#editors), [Prettier](https://prettier.io/docs/en/editors.html)) to make editing code a more enjoyable experience.
 
-The ESLint verification (which includes Prettier) will be run before unit tests in the CI environment. The build will fail if the source code does not pass the style check.
+Both Prettier and ESLint will check the code in pre-commit hooks (when installed) and will be run before unit tests in the CI environment. The build will fail if the source code does not pass the checks.
 
 You can run the linter locally:
 
@@ -84,10 +84,22 @@ You can run the linter locally:
 $ npm run lint
 ```
 
-You can fix a lot of lint and style violations automatically:
+You can fix a lot of lint violations automatically:
 
 ```
 $ npm run lint -- --fix
+```
+
+You can run prettier locally:
+
+```
+$ npm run prettier:check
+```
+
+You can fix style violations automatically:
+
+```
+$ npm run prettier:write
 ```
 
 To ensure consistent reporting of lint warnings, you should use the same versions of ESLint and Prettier as defined in `package.json` (which is what the CI servers use).

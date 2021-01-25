@@ -1,6 +1,5 @@
 extends:
   - sinon
-  - plugin:prettier/recommended
 
 globals:
   ArrayBuffer: false
@@ -12,12 +11,16 @@ globals:
 plugins:
   - ie11
   - "@sinonjs/no-prototype-methods"
-  - prettier
 
 rules:
-  prettier/prettier: error
   ie11/no-collection-args: error
   ie11/no-for-in-const: error
   ie11/no-loop-func: warn
   ie11/no-weak-collections: error
   "@sinonjs/no-prototype-methods/no-prototype-methods": error
+  # the sinon config is currently using prettier plugin
+  # once that has been updated, this line can be removed
+  # See https://github.com/sinonjs/eslint-config-sinon/blob/956db70f2e0566d0e7f8f1f093da4704cf16afb2/index.js#L288-L290
+  prettier/prettier: off
+  # This needs to go into eslint-config-sinon
+  quotes: off

@@ -52,6 +52,8 @@
     "postbuild": "npm run test-esm-bundle",
     "prepublishOnly": "npm run build",
     "prettier": "prettier lib/**/*.js test/**/*.js",
+    "prettier:check": "prettier --check '**/*.{js,css,md}'",
+    "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
     "postversion": "./scripts/postversion.sh"
   },
@@ -64,9 +66,9 @@
     ]
   },
   "lint-staged": {
+    "*.{js,css,md}": "prettier --check",
     "*.js": "eslint",
-    "*.mjs": "eslint --ext mjs --parser-options=sourceType:module",
-    "docs/**/*.md": "markdownlint"
+    "*.mjs": "eslint --ext mjs --parser-options=sourceType:module"
   },
   "dependencies": {
     "@sinonjs/commons": "^1.8.1",
