@@ -3216,31 +3216,33 @@ describe("stub", function () {
             assert.equals(callCount, 0);
         });
 
-        it("calls original function with new with same arguments when call does not match conditional stub", function () {
-            // We need a function here because we can't wrap properties that are already stubs
-            var callArgs = [];
+        context("when call does not match conditional stub", function () {
+            it("calls original function with new with same arguments", function () {
+                // We need a function here because we can't wrap properties that are already stubs
+                var callArgs = [];
 
-            function OriginalClass() {
-                callArgs = arguments;
-                this.foo = "baz";
-            }
+                function OriginalClass() {
+                    callArgs = arguments;
+                    this.foo = "baz";
+                }
 
-            var myObj = {
-                MyClass: OriginalClass,
-            };
+                var myObj = {
+                    MyClass: OriginalClass,
+                };
 
-            var propStub = createStub(myObj, "MyClass");
-            propStub.withArgs("foo").returns({ foo: "bar" });
-            propStub.callThroughWithNew(propStub);
+                var propStub = createStub(myObj, "MyClass");
+                propStub.withArgs("foo").returns({ foo: "bar" });
+                propStub.callThroughWithNew(propStub);
 
-            var result = new myObj.MyClass("not foo", [
-                "definitely",
-                "not",
-                "foo",
-            ]);
-            assert.equals(callArgs[0], "not foo");
-            assert.equals(callArgs[1], ["definitely", "not", "foo"]);
-            assert.equals(result.foo, "baz");
+                var result = new myObj.MyClass("not foo", [
+                    "definitely",
+                    "not",
+                    "foo",
+                ]);
+                assert.equals(callArgs[0], "not foo");
+                assert.equals(callArgs[1], ["definitely", "not", "foo"]);
+                assert.equals(result.foo, "baz");
+            });
         });
     });
 
