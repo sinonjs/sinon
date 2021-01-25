@@ -51,7 +51,6 @@
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-bundle",
     "prepublishOnly": "npm run build",
-    "prettier": "prettier lib/**/*.js test/**/*.js",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
