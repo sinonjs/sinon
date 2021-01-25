@@ -27,6 +27,9 @@ jobs:
       - run: npm ci
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Prettier
+        run: |
+          npm run prettier:check
       - name: Pre-Test
         run: |
           npm run lint
