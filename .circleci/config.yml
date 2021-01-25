@@ -38,6 +38,16 @@ jobs:
             - node_modules
       - *persist-step
 
+  prettier:
+    <<: *work-dir
+    docker:
+      - image: node
+    steps:
+      - *attach-step
+      - run:
+          name: Prettier
+          command: npm run prettier:check
+
   lint:
     <<: *work-dir
     docker:
@@ -111,6 +121,9 @@ workflows:
   sinon-workflow:
     jobs:
       - install-dependencies
+      - prettier:
+          requires:
+            - install-dependencies
       - lint:
           requires:
             - install-dependencies
