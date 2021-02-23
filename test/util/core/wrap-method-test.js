@@ -58,7 +58,7 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol();
+        var symbol = Symbol("apple pie");
         var object = {};
         object[symbol] = 42;
 
@@ -71,7 +71,7 @@ describe("util/core/wrapMethod", function () {
             function (err) {
                 return (
                     err.message ===
-                    "Attempted to wrap number property Symbol() as function"
+                    "Attempted to wrap number property Symbol(apple pie) as function"
                 );
             }
         );
@@ -182,7 +182,7 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol();
+        var symbol = Symbol("apple pie");
         var object = {};
         object[symbol] = function () {
             return;
@@ -200,7 +200,7 @@ describe("util/core/wrapMethod", function () {
             function (err) {
                 return (
                     err.message ===
-                    "Attempted to wrap Symbol() which is already wrapped"
+                    "Attempted to wrap Symbol(apple pie) which is already wrapped"
                 );
             }
         );
@@ -243,7 +243,7 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol();
+        var symbol = Symbol("apple pie");
         var object = {};
         object[symbol] = createSpy();
 
@@ -256,7 +256,7 @@ describe("util/core/wrapMethod", function () {
             function (err) {
                 return (
                     err.message ===
-                    "Attempted to wrap Symbol() which is already spied on"
+                    "Attempted to wrap Symbol(apple pie) which is already spied on"
                 );
             }
         );
