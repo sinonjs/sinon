@@ -1138,7 +1138,7 @@ describe("Sandbox", function () {
             };
 
             this.sandbox.replaceSetter(object, "foo", function (val) {
-                this.prop = val + "bla";
+                this.prop = `${val}bla`;
             });
 
             object.foo = "bla";
@@ -1155,7 +1155,7 @@ describe("Sandbox", function () {
                 prop: "bar",
             };
             var replacement = function (val) {
-                this.prop = val + "bla";
+                this.prop = `${val}bla`;
             };
             var actual = this.sandbox.replaceSetter(object, "foo", replacement);
 
@@ -1171,7 +1171,7 @@ describe("Sandbox", function () {
                 prop: "bar",
             });
             var replacement = function (value) {
-                this.prop = value + "blabla";
+                this.prop = `${value}blabla`;
             };
 
             this.sandbox.replaceSetter(object, "foo", replacement);
@@ -1250,7 +1250,7 @@ describe("Sandbox", function () {
             };
 
             this.sandbox.replaceSetter(object, "foo", function (val) {
-                this.prop = val + "bla";
+                this.prop = `${val}bla`;
             });
 
             this.sandbox.restore();
@@ -2125,7 +2125,7 @@ describe("Sandbox", function () {
 
             var sandbox = new Sandbox();
             sandbox.stub(object, "foo").set(function (val) {
-                object.prop = val + "bla";
+                object.prop = `${val}bla`;
             });
 
             object.foo = "bla";
@@ -2140,7 +2140,7 @@ describe("Sandbox", function () {
 
             var sandbox = new Sandbox();
             sandbox.stub(object, "prop").set(function setterFn(val) {
-                object.prop = val + "bla";
+                object.prop = `${val}bla`;
             });
 
             sandbox.restore();

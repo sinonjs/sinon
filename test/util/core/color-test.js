@@ -31,7 +31,7 @@ describe("color", function () {
                     var string = "lorem ipsum";
                     var actual = color[method.name](string);
 
-                    assert.contains(actual, method.code + "m" + string);
+                    assert.contains(actual, `${method.code}m${string}`);
                 });
             });
         });

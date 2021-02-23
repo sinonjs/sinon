@@ -64,9 +64,9 @@ describe("fakeTimers.clock", function () {
         });
 
         it("evals non-function callbacks", function () {
-            var evalCalledString =
-                (typeof global !== "undefined" ? "global" : "window") +
-                ".sinonClockEvalCalled = true";
+            var evalCalledString = `${
+                typeof global !== "undefined" ? "global" : "window"
+            }.sinonClockEvalCalled = true`;
             this.clock.setTimeout(evalCalledString, 10);
             this.clock.tick(10);
 

@@ -271,7 +271,7 @@ describe("util/core/wrapMethod", function () {
 
             // eslint-disable-next-line no-global-assign, no-native-reassign
             Error = TypeError = function () {
-                this.stack = ":STACK" + ++i + ":";
+                this.stack = `:STACK${++i}:`;
             };
         });
 

@@ -277,7 +277,7 @@ describe("issues", function () {
                 resolve: function (value) {
                     var promise = Promise.resolve(value);
                     promise.tap = function () {
-                        return "tap " + value;
+                        return `tap ${value}`;
                     };
 
                     return promise;

@@ -2405,7 +2405,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             spy(1, 2, callback);
             spy(3, 4, callback);
@@ -2517,7 +2517,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
@@ -2613,7 +2613,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             spy(1, 2, callback);
             spy(3, 4, callback);
@@ -2706,7 +2706,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
@@ -2805,7 +2805,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
@@ -2910,7 +2910,7 @@ describe("spy", function () {
             var i = 0;
             var callback = createSpy(function () {
                 i++;
-                return "useful value " + i;
+                return `useful value ${i}`;
             });
             var thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, { success: callback });

@@ -25,7 +25,7 @@ describe("util/core/timesInWords", function () {
 
         for (i = 4; i < 100; i++) {
             result = timesInWords(i);
-            assert.equals(result, i + " times");
+            assert.equals(result, `${i} times`);
         }
     });
 
