@@ -66,8 +66,8 @@
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --check",
-    "*.js": "eslint",
-    "*.mjs": "eslint --ext mjs --parser-options=sourceType:module"
+    "*.js": "eslint --quiet",
+    "*.mjs": "eslint --quiet --ext mjs --parser-options=sourceType:module"
   },
   "dependencies": {
     "@sinonjs/commons": "^1.8.1",
