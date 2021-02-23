@@ -1724,7 +1724,7 @@ describe("assert", function () {
                 ).replace(/ at.*/g, ""),
                 `expected doSomething to be called with arguments \n${color.red(
                     "4"
-                )} ${color.green("1")} \n` + `3\n${inspect('"hey"')}`
+                )} ${color.green("1")} \n3\n${inspect('"hey"')}`
             );
         });
 
@@ -2070,7 +2070,7 @@ describe("assert", function () {
                 ).replace(/ at.*/g, ""),
                 `expected doSomething to be called with match \n${color.red(
                     "1"
-                )} ${color.green("4")} \n` + `3\n${inspect('"hey"')}`
+                )} ${color.green("4")} \n3\n${inspect('"hey"')}`
             );
         });
 
@@ -2159,7 +2159,7 @@ describe("assert", function () {
                 ).replace(/ at.*/g, ""),
                 `expected doSomething to be called once and with exact arguments \n${color.red(
                     "4"
-                )} ${color.green("1")} \n` + `3\n${inspect('"bob"')}`
+                )} ${color.green("1")} \n3\n${inspect('"bob"')}`
             );
 
             this.obj.doSomething();
@@ -2173,7 +2173,7 @@ describe("assert", function () {
                     "Call 1:\n"
                 }${color.red("4")}\n${color.red("3")}\n${color.red(
                     inspect(JSON.stringify('"bob"'))
-                )}\n` + `Call 2:`
+                )}\nCall 2:`
             );
         });
 
