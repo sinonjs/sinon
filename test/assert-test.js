@@ -2312,6 +2312,7 @@ describe("assert", function () {
             "should indicate that an assertion failure with a symbol method name " +
                 "occured in exception messages, even if the symbol has no description",
             function () {
+                // eslint-disable-next-line symbol-description
                 var symbol = Symbol();
                 setupSymbol(symbol);
 

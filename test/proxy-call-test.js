@@ -972,7 +972,7 @@ describe("sinonSpy.call", function () {
         it("throws understandable error if symbol prop is not found", function () {
             if (typeof Symbol === "function") {
                 var call = this.call;
-                var symbol = Symbol();
+                var symbol = Symbol("apple pie");
 
                 assert.exception(
                     function () {
@@ -980,7 +980,7 @@ describe("sinonSpy.call", function () {
                     },
                     {
                         message:
-                            "spy cannot yield to 'Symbol()' since no callback was passed.",
+                            "spy cannot yield to 'Symbol(apple pie)' since no callback was passed.",
                     }
                 );
             }

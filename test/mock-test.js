@@ -281,10 +281,13 @@ describe("sinonMock", function () {
 
                     assert.exception(
                         function () {
-                            expectation.exactly(Symbol());
+                            expectation.exactly(Symbol("apple pie"));
                         },
                         function (err) {
-                            return err.message === "'Symbol()' is not a number";
+                            return (
+                                err.message ===
+                                "'Symbol(apple pie)' is not a number"
+                            );
                         }
                     );
                 }
@@ -320,10 +323,13 @@ describe("sinonMock", function () {
 
                     assert.exception(
                         function () {
-                            expectation.atLeast(Symbol());
+                            expectation.atLeast(Symbol("apple pie"));
                         },
                         function (err) {
-                            return err.message === "'Symbol()' is not number";
+                            return (
+                                err.message ===
+                                "'Symbol(apple pie)' is not number"
+                            );
                         }
                     );
                 }
@@ -434,10 +440,13 @@ describe("sinonMock", function () {
 
                     assert.exception(
                         function () {
-                            expectation.atMost(Symbol());
+                            expectation.atMost(Symbol("apple pie"));
                         },
                         function (err) {
-                            return err.message === "'Symbol()' is not number";
+                            return (
+                                err.message ===
+                                "'Symbol(apple pie)' is not number"
+                            );
                         }
                     );
                 }
@@ -786,16 +795,16 @@ describe("sinonMock", function () {
             it("throws if calls on wrong Symbol", function () {
                 if (typeof Symbol === "function") {
                     var expectation = sinonExpectation.create("method");
-                    expectation.on(Symbol());
+                    expectation.on(Symbol("apple pie"));
 
                     assert.exception(
                         function () {
-                            expectation.call(Symbol());
+                            expectation.call(Symbol("pear pie"));
                         },
                         function (err) {
                             return (
                                 err.message ===
-                                "method called with Symbol() as thisValue, expected Symbol()"
+                                "method called with Symbol(pear pie) as thisValue, expected Symbol(apple pie)"
                             );
                         }
                     );

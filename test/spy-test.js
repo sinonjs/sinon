@@ -2779,11 +2779,11 @@ describe("spy", function () {
 
             assert.exception(
                 function () {
-                    spy.yieldTo(Symbol());
+                    spy.yieldTo(Symbol("apple pie"));
                 },
                 {
                     message:
-                        "spy cannot yield to 'Symbol()' since it was not yet invoked.",
+                        "spy cannot yield to 'Symbol(apple pie)' since it was not yet invoked.",
                 }
             );
         });
@@ -2882,11 +2882,11 @@ describe("spy", function () {
 
             assert.exception(
                 function () {
-                    spy.yieldToOn(Symbol(), thisObj);
+                    spy.yieldToOn(Symbol("apple pie"), thisObj);
                 },
                 {
                     message:
-                        "spy cannot yield to 'Symbol()' since it was not yet invoked.",
+                        "spy cannot yield to 'Symbol(apple pie)' since it was not yet invoked.",
                 }
             );
         });

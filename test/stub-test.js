@@ -54,10 +54,10 @@ describe("stub", function () {
 
         assert.exception(
             function () {
-                createStub(null, Symbol());
+                createStub(null, Symbol("apple pie"));
             },
             {
-                message: "Trying to stub property 'Symbol()' of null",
+                message: "Trying to stub property 'Symbol(apple pie)' of null",
             }
         );
     });
@@ -1882,13 +1882,13 @@ describe("stub", function () {
                 this.skip();
             }
 
-            var symbol = Symbol();
+            var symbol = Symbol("apple pie");
 
             var stub = createStub().yieldsTo(symbol);
 
             assert.exception(stub, {
                 message:
-                    "stub expected to yield to 'Symbol()', but no object with such a property was passed.",
+                    "stub expected to yield to 'Symbol(apple pie)', but no object with such a property was passed.",
             });
         });
 

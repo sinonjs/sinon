@@ -372,10 +372,11 @@ describe("Sandbox", function () {
 
                 assert.exception(
                     function () {
-                        sandbox.stub(null, Symbol());
+                        sandbox.stub(null, Symbol("apple pie"));
                     },
                     {
-                        message: "Trying to stub property 'Symbol()' of null",
+                        message:
+                            "Trying to stub property 'Symbol(apple pie)' of null",
                     }
                 );
             }
@@ -558,9 +559,12 @@ describe("Sandbox", function () {
 
                 assert.exception(
                     function () {
-                        sandbox.stub(object, Symbol());
+                        sandbox.stub(object, Symbol("apple pie"));
                     },
-                    { message: "Cannot stub non-existent property Symbol()" },
+                    {
+                        message:
+                            "Cannot stub non-existent property Symbol(apple pie)",
+                    },
                     TypeError
                 );
 
