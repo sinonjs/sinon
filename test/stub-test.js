@@ -3400,7 +3400,6 @@ describe("stub", function () {
                 // eslint-disable-next-line accessor-pairs
                 set prop(val) {
                     this.otherProp = "bar";
-                    return "bar";
                 },
             };
 
