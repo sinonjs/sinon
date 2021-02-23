@@ -14,7 +14,7 @@ if (typeof Worker !== "undefined") {
             worker.onmessage = function (msg) {
                 // eslint-disable-next-line no-restricted-syntax
                 try {
-                    assert.same(msg.data, "worker received:" + sentMessage);
+                    assert.same(msg.data, `worker received:${sentMessage}`);
                     done();
                 } catch (err) {
                     done(err);
@@ -27,13 +27,10 @@ if (typeof Worker !== "undefined") {
              */
             function onError(ev) {
                 var error = ev.error;
-                var msg =
-                    "An error happened at line " +
-                    [ev.lineno, ev.colno].join(":") +
-                    " in file " +
-                    ev.filename +
-                    ":  " +
-                    ev.message;
+                var msg = `An error happened at line ${[
+                    ev.lineno,
+                    ev.colno,
+                ].join(":")} in file ${ev.filename}:  ${ev.message}`;
 
                 if (!error) {
                     error = new Error(msg);
@@ -50,7 +47,7 @@ if (typeof Worker !== "undefined") {
 
             /* Will be triggered if a message cannot be serialized */
             function onMessageError(ev) {
-                done(new TypeError("A messageerror happened: " + ev.data));
+                done(new TypeError(`A messageerror happened: ${ev.data}`));
             }
 
             worker.addEventListener("error", onError, false);

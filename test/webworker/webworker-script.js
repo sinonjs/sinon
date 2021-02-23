@@ -7,7 +7,7 @@ if (typeof importScripts !== "undefined") {
     importScripts("/pkg/sinon.js");
 
     var mySpy = sinon.spy(function (msg) {
-        return "worker received:" + msg;
+        return `worker received:${msg}`;
     });
 
     onmessage = function (e) {

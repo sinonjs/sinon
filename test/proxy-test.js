@@ -28,7 +28,7 @@ function createFaux(func) {
         displayName: name || "faux",
         fakes: [],
         instantiateFake: createFaux,
-        id: "faux#" + uuid++,
+        id: `faux#${uuid++}`,
     });
     return proxy;
 }
@@ -79,7 +79,7 @@ describe("proxy", function () {
                     faux(arg);
                     assert.equals(
                         faux.printf("%C").replace(/ at.*/g, ""),
-                        "\n    " + expected
+                        `\n    ${expected}`
                     );
                 }
 
@@ -161,22 +161,11 @@ describe("proxy", function () {
 
                 assert.equals(
                     faux.printf("%D"),
-                    "\n" +
-                        color.red("1") +
-                        "\n" +
-                        color.red("'\"a\"'") +
-                        "\n" +
-                        color.red("true") +
-                        "\n" +
-                        color.red("false") +
-                        "\n" +
-                        color.red("[]") +
-                        "\n" +
-                        color.red("{}") +
-                        "\n" +
-                        color.red("null") +
-                        "\n" +
-                        color.red("undefined")
+                    `\n${color.red("1")}\n${color.red("'\"a\"'")}\n${color.red(
+                        "true"
+                    )}\n${color.red("false")}\n${color.red("[]")}\n${color.red(
+                        "{}"
+                    )}\n${color.red("null")}\n${color.red("undefined")}`
                 );
             });
 
@@ -197,25 +186,13 @@ describe("proxy", function () {
 
                 assert.equals(
                     faux.printf("%D"),
-                    "\nCall 1:" +
-                        "\n" +
-                        color.red("1") +
-                        "\n" +
-                        color.red("'\"a\"'") +
-                        "\n" +
-                        color.red("true") +
-                        "\nCall 2:" +
-                        "\n" +
-                        color.red("false") +
-                        "\n" +
-                        color.red("[]") +
-                        "\n" +
-                        color.red("{}") +
-                        "\nCall 3:" +
-                        "\n" +
-                        color.red("null") +
-                        "\n" +
-                        color.red("undefined")
+                    `${"\nCall 1:" + "\n"}${color.red("1")}\n${color.red(
+                        "'\"a\"'"
+                    )}\n${color.red("true")}\nCall 2:` +
+                        `\n${color.red("false")}\n${color.red(
+                            "[]"
+                        )}\n${color.red("{}")}\nCall 3:` +
+                        `\n${color.red("null")}\n${color.red("undefined")}`
                 );
             });
 

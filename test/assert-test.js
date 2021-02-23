@@ -1654,12 +1654,11 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledOn", this.obj.doSomething, this.obj),
-                "expected doSomething to be called with " +
-                    inspect(this.obj) +
-                    " as this but was called with " +
-                    inspect(obj) +
-                    ", " +
-                    inspect(obj2)
+                `expected doSomething to be called with ${inspect(
+                    this.obj
+                )} as this but was called with ${inspect(obj)}, ${inspect(
+                    obj2
+                )}`
             );
         });
 
@@ -1685,14 +1684,11 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("alwaysCalledOn", this.obj.doSomething, this.obj),
-                "expected doSomething to always be called with " +
-                    inspect(this.obj) +
-                    " as this but was called with " +
-                    inspect(obj) +
-                    ", " +
-                    inspect(obj2) +
-                    ", " +
-                    inspect(this.obj)
+                `expected doSomething to always be called with ${inspect(
+                    this.obj
+                )} as this but was called with ${inspect(obj)}, ${inspect(
+                    obj2
+                )}, ${inspect(this.obj)}`
             );
         });
 
@@ -1726,13 +1722,9 @@ describe("assert", function () {
                     3,
                     "hey"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n" +
-                    color.red("4") +
-                    " " +
-                    color.green("1") +
-                    " \n" +
-                    "3\n" +
-                    inspect('"hey"')
+                `expected doSomething to be called with arguments \n${color.red(
+                    "4"
+                )} ${color.green("1")} \n` + `3\n${inspect('"hey"')}`
             );
         });
 
@@ -1748,22 +1740,16 @@ describe("assert", function () {
                     3,
                     "hey"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n" +
-                    "Call 1:\n" +
-                    color.red("4") +
-                    " " +
-                    color.green("1") +
-                    " \n" +
-                    "3\n" +
-                    inspect('"hey"') +
-                    "\n" +
-                    "Call 2:\n" +
-                    "1\n" +
-                    "3\n" +
-                    color.red(inspect('"not"')) +
-                    " " +
-                    color.green(inspect('"hey"')) +
-                    " "
+                `${
+                    "expected doSomething to be called with arguments \n" +
+                    "Call 1:\n"
+                }${color.red("4")} ${color.green("1")} \n` +
+                    `3\n${inspect('"hey"')}\n` +
+                    `Call 2:\n` +
+                    `1\n` +
+                    `3\n${color.red(inspect('"not"'))} ${color.green(
+                        inspect('"hey"')
+                    )} `
             );
         });
 
@@ -1811,24 +1797,26 @@ describe("assert", function () {
                 ]).indexOf("[ {") === 0;
 
             var expected = usesCondensedFormat
-                ? "expected doSomething to be called with arguments \n" +
-                  "[ { first: 'a',\n" +
-                  "    second: { nest: true },\n" +
-                  "    third: [ [Object] ],\n" +
-                  color.red("    mismatchKey: true },\n") +
-                  color.green("    mismatchKeyX: true },\n") +
-                  "  'fifth' ]"
-                : "expected doSomething to be called with arguments \n" +
-                  "[\n" +
-                  "  {\n" +
-                  "    first: 'a',\n" +
-                  "    second: { nest: true },\n" +
-                  "    third: [ [Object] ],\n" +
-                  color.red("    mismatchKey: true\n") +
-                  color.green("    mismatchKeyX: true\n") +
-                  "  },\n" +
-                  "  'fifth'\n" +
-                  "]";
+                ? `${
+                      "expected doSomething to be called with arguments \n" +
+                      "[ { first: 'a',\n" +
+                      "    second: { nest: true },\n" +
+                      "    third: [ [Object] ],\n"
+                  }${color.red("    mismatchKey: true },\n")}${color.green(
+                      "    mismatchKeyX: true },\n"
+                  )}  'fifth' ]`
+                : `${
+                      "expected doSomething to be called with arguments \n" +
+                      "[\n" +
+                      "  {\n" +
+                      "    first: 'a',\n" +
+                      "    second: { nest: true },\n" +
+                      "    third: [ [Object] ],\n"
+                  }${color.red("    mismatchKey: true\n")}${color.green(
+                      "    mismatchKeyX: true\n"
+                  )}  },\n` +
+                  `  'fifth'\n` +
+                  `]`;
 
             assert.equals(actual, expected);
         });
@@ -1841,12 +1829,9 @@ describe("assert", function () {
                     / at.*/g,
                     ""
                 ),
-                "expected doSomething to be called with arguments \n" +
-                    color.red("4") +
-                    " " +
-                    color.green("1") +
-                    " \n" +
-                    color.green("3")
+                `expected doSomething to be called with arguments \n${color.red(
+                    "4"
+                )} ${color.green("1")} \n${color.green("3")}`
             );
         });
 
@@ -1858,12 +1843,9 @@ describe("assert", function () {
                     / at.*/g,
                     ""
                 ),
-                "expected doSomething to be called with arguments \n" +
-                    color.red("4") +
-                    " " +
-                    color.green("1") +
-                    " \n" +
-                    color.red("3")
+                `expected doSomething to be called with arguments \n${color.red(
+                    "4"
+                )} ${color.green("1")} \n${color.red("3")}`
             );
         });
 
@@ -1877,12 +1859,10 @@ describe("assert", function () {
                     match.any,
                     false
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n" +
-                    "true any\n" +
-                    color.red("true") +
-                    " " +
-                    color.green("false") +
-                    " "
+                `${
+                    "expected doSomething to be called with arguments \n" +
+                    "true any\n"
+                }${color.red("true")} ${color.green("false")} `
             );
         });
 
@@ -1895,8 +1875,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match.defined
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("defined")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "defined"
+                )}`
             );
         });
 
@@ -1909,8 +1890,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match.truthy
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("truthy")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "truthy"
+                )}`
             );
         });
 
@@ -1923,10 +1905,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match.falsy
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n" +
-                    color.green("true") +
-                    " " +
-                    color.red("falsy")
+                `expected doSomething to be called with arguments \n${color.green(
+                    "true"
+                )} ${color.red("falsy")}`
             );
         });
 
@@ -1939,8 +1920,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match.same(1)
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("same(1)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "same(1)"
+                )}`
             );
         });
 
@@ -1954,8 +1936,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     matcher
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red('typeOf("string")')
+                `expected doSomething to be called with arguments \n ${color.red(
+                    'typeOf("string")'
+                )}`
             );
         });
 
@@ -1971,8 +1954,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     matcher
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("instanceOf(CustomType)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "instanceOf(CustomType)"
+                )}`
             );
         });
 
@@ -1986,8 +1970,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     matcher
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("match(some: value, and: 123)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "match(some: value, and: 123)"
+                )}`
             );
         });
 
@@ -2000,8 +1985,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match(true)
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("match(true)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "match(true)"
+                )}`
             );
         });
 
@@ -2014,8 +2000,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match(123)
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("match(123)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "match(123)"
+                )}`
             );
         });
 
@@ -2029,8 +2016,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     matcher
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red('match("Sinon")')
+                `expected doSomething to be called with arguments \n ${color.red(
+                    'match("Sinon")'
+                )}`
             );
         });
 
@@ -2043,8 +2031,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match(/[a-z]+/)
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("match(/[a-z]+/)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "match(/[a-z]+/)"
+                )}`
             );
         });
 
@@ -2062,8 +2051,9 @@ describe("assert", function () {
                     this.obj.doSomething,
                     matcher
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with arguments \n " +
-                    color.red("match(custom)")
+                `expected doSomething to be called with arguments \n ${color.red(
+                    "match(custom)"
+                )}`
             );
         });
 
@@ -2078,13 +2068,9 @@ describe("assert", function () {
                     3,
                     "hey"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with match \n" +
-                    color.red("1") +
-                    " " +
-                    color.green("4") +
-                    " \n" +
-                    "3\n" +
-                    inspect('"hey"')
+                `expected doSomething to be called with match \n${color.red(
+                    "1"
+                )} ${color.green("4")} \n` + `3\n${inspect('"hey"')}`
             );
         });
 
@@ -2099,18 +2085,15 @@ describe("assert", function () {
                     1,
                     "hey"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to always be called with arguments \n" +
+                `${
+                    "expected doSomething to always be called with arguments \n" +
                     "Call 1:\n" +
-                    "1\n" +
-                    color.red("3") +
-                    " " +
-                    color.green(inspect('"hey"')) +
-                    " \n" +
-                    color.red(inspect('"hey"')) +
-                    "\n" +
-                    "Call 2:\n" +
-                    "1\n" +
+                    "1\n"
+                }${color.red("3")} ${color.green(
                     inspect('"hey"')
+                )} \n${color.red(inspect('"hey"'))}\n` +
+                    `Call 2:\n` +
+                    `1\n${inspect('"hey"')}`
             );
         });
 
@@ -2125,18 +2108,15 @@ describe("assert", function () {
                     1,
                     "hey"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to always be called with match \n" +
+                `${
+                    "expected doSomething to always be called with match \n" +
                     "Call 1:\n" +
-                    "1\n" +
-                    color.red("3") +
-                    " " +
-                    color.green(inspect('"hey"')) +
-                    " \n" +
-                    color.red(inspect('"hey"')) +
-                    "\n" +
-                    "Call 2:\n" +
-                    "1\n" +
+                    "1\n"
+                }${color.red("3")} ${color.green(
                     inspect('"hey"')
+                )} \n${color.red(inspect('"hey"'))}\n` +
+                    `Call 2:\n` +
+                    `1\n${inspect('"hey"')}`
             );
         });
 
@@ -2150,8 +2130,9 @@ describe("assert", function () {
                     1,
                     3
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called with exact arguments \n1\n3\n" +
-                    color.red(inspect('"hey"'))
+                `expected doSomething to be called with exact arguments \n1\n3\n${color.red(
+                    inspect('"hey"')
+                )}`
             );
         });
 
@@ -2176,13 +2157,9 @@ describe("assert", function () {
                     3,
                     "bob"
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called once and with exact arguments \n" +
-                    color.red("4") +
-                    " " +
-                    color.green("1") +
-                    " \n" +
-                    "3\n" +
-                    inspect('"bob"')
+                `expected doSomething to be called once and with exact arguments \n${color.red(
+                    "4"
+                )} ${color.green("1")} \n` + `3\n${inspect('"bob"')}`
             );
 
             this.obj.doSomething();
@@ -2191,15 +2168,12 @@ describe("assert", function () {
                     "calledOnceWithExactly",
                     this.obj.doSomething
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to be called once and with exact arguments \n" +
-                    "Call 1:\n" +
-                    color.red("4") +
-                    "\n" +
-                    color.red("3") +
-                    "\n" +
-                    color.red(inspect(JSON.stringify('"bob"'))) +
-                    "\n" +
-                    "Call 2:"
+                `${
+                    "expected doSomething to be called once and with exact arguments \n" +
+                    "Call 1:\n"
+                }${color.red("4")}\n${color.red("3")}\n${color.red(
+                    inspect(JSON.stringify('"bob"'))
+                )}\n` + `Call 2:`
             );
         });
 
@@ -2208,11 +2182,9 @@ describe("assert", function () {
 
             assert.equals(
                 this.message("calledWith", this.obj.doSomething, "1234"),
-                "expected doSomething to be called with arguments \n" +
-                    color.red(1234) +
-                    " " +
-                    color.green(inspect('"1234"')) +
-                    " "
+                `expected doSomething to be called with arguments \n${color.red(
+                    1234
+                )} ${color.green(inspect('"1234"'))} `
             );
         });
 
@@ -2227,15 +2199,15 @@ describe("assert", function () {
                     1,
                     3
                 ).replace(/ at.*/g, ""),
-                "expected doSomething to always be called with exact arguments \n" +
+                `${
+                    "expected doSomething to always be called with exact arguments \n" +
                     "Call 1:\n" +
                     "1\n" +
-                    "3\n" +
-                    color.red(inspect('"hey"')) +
-                    "\n" +
-                    "Call 2:\n" +
-                    "1\n" +
-                    "3"
+                    "3\n"
+                }${color.red(inspect('"hey"'))}\n` +
+                    `Call 2:\n` +
+                    `1\n` +
+                    `3`
             );
         });
 

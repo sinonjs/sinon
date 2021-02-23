@@ -10,8 +10,7 @@ var sinon = require("./lib/sinon");
 var date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble =
-    "/* Sinon.JS " + pkg.version + ", " + date + ", @license BSD-3 */";
+var preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
 
 try {
     fs.mkdirSync("pkg");
@@ -66,23 +65,11 @@ makeBundle(
     },
     function (bundle) {
         var intro = "let sinon;";
-        var outro =
-            "\nexport default sinon;\n" +
-            Object.keys(sinon)
-                .map(function (key) {
-                    return (
-                        "const _" +
-                        key +
-                        " = sinon." +
-                        key +
-                        ";\nexport { _" +
-                        key +
-                        " as " +
-                        key +
-                        " };"
-                    );
-                })
-                .join("\n");
+        var outro = `\nexport default sinon;\n${Object.keys(sinon)
+            .map(function (key) {
+                return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
+            })
+            .join("\n")}`;
 
         var script = preamble + intro + bundle + outro;
         fs.writeFileSync("pkg/sinon-esm.js", script);
