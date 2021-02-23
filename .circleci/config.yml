@@ -56,7 +56,7 @@ jobs:
       - *attach-step
       - run:
           name: Lint
-          command: npm run lint
+          command: npm run lint -- --quiet
 
   node-10:
     docker:
