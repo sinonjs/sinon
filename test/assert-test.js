@@ -1788,7 +1788,7 @@ describe("assert", function () {
              *
              * In node the output uses more whitespace than in browsers.
              *
-             * @type {Boolean}
+             * @type {boolean}
              */
             var usesCondensedFormat =
                 inspect([
