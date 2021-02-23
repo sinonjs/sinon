@@ -186,7 +186,7 @@ describe("proxy", function () {
 
                 assert.equals(
                     faux.printf("%D"),
-                    `${"\nCall 1:" + "\n"}${color.red("1")}\n${color.red(
+                    `${"\nCall 1:\n"}${color.red("1")}\n${color.red(
                         "'\"a\"'"
                     )}\n${color.red("true")}\nCall 2:` +
                         `\n${color.red("false")}\n${color.red(
