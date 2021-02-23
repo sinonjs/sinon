@@ -1,5 +1,5 @@
 extends:
-  - sinon
+  - "@sinonjs/eslint-config"
 
 globals:
   ArrayBuffer: false
@@ -9,14 +9,9 @@ globals:
   Symbol: false
 
 plugins:
-  - ie11
   - "@sinonjs/no-prototype-methods"
 
 rules:
-  ie11/no-collection-args: error
-  ie11/no-for-in-const: error
-  ie11/no-loop-func: warn
-  ie11/no-weak-collections: error
   "@sinonjs/no-prototype-methods/no-prototype-methods": error
   # the sinon config is currently using prettier plugin
   # once that has been updated, this line can be removed
