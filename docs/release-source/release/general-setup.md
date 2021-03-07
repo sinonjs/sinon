@@ -16,6 +16,25 @@ afterEach(() => {
 });
 ```
 
+On Mocha v8.0.0 or newer you can now add a root hook to your entire test suite, which will execute before/after every test:
+
+```js
+// tests/hooks.js
+
+// Restores the default sandbox after every test
+exports.mochaHooks = {
+  afterEach() {
+    sinon.restore();
+  },
+};
+```
+
+This root file needs to be loaded using the `--require` option:
+
+```shell
+mocha --require tests/hooks.js
+```
+
 Or in Jasmine you should place it in each describe:
 
 ```js
