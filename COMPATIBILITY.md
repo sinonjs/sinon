@@ -2,26 +2,32 @@
 
 This file is the canonical resource for compatibility goals for the libraries that make up Sinon.JS.
 
-## ES5.1
+## ES2017
 
-The source is written as [ES5.1][es5] and requires no transpiler or polyfills.
+The source is as [ES2017][es2017] and requires no transpiler or polyfills in supporting runtimes.
 
-Sinon.JS uses feature detection to support [ES6][es6] features, but does not rely on any of the new syntax introduced in [ES6][es6] and remains compatible with [ES5.1][es5] runtimes.
+For legacy runtimes, a transpiler can be used by dependent projects.
 
 ## Runtimes
 
 Sinon.JS aims at supporting the following runtimes:
 
-- Firefox 45+
-- Chrome 48+
-- Internet Explorer 11+
-- Edge 14+
-- Safari 9+
-- Node LTS versions
+```
+> 0.5%
+last 2 versions
+Firefox ESR
+not dead
+not IE 11
+not op_mini all
+maintained node versions
+```
+
+The compatibility is enforced using [`eslint-plugin-compat`](https://www.npmjs.com/package/eslint-plugin-compat).
+
+To see what that means in practice, you can use https://browserslist.dev
 
 <p align=center>
 <a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
 </p>
 
-[es5]: http://www.ecma-international.org/ecma-262/5.1/
-[es6]: http://www.ecma-international.org/ecma-262/6.0/
+[es2017]: https://262.ecma-international.org/8.0/
