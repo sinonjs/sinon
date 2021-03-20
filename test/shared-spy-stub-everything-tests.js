@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+/* eslint-disable jsdoc/require-jsdoc */
 "use strict";
 
 var referee = require("@sinonjs/referee");

@@ -1,4 +1,4 @@
-/* eslint-disable no-process-exit */
+/* eslint-disable no-process-exit, jsdoc/require-jsdoc */
 const puppeteer = require("puppeteer");
 
 const http = require("http");
