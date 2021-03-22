@@ -1,4 +1,10 @@
 
+10.0.0 / 2021-03-22
+==================
+
+  * Upgrade nise to 4.1.0
+  * Use @sinonjs/eslint-config@4 => Adopts ES2017 => Drops support for IE 11, Legacy Edge and legacy Safari
+
 9.2.4 / 2021-01-23
 ==================
 
