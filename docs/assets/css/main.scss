@@ -90,7 +90,7 @@ body {
     }
 }
 .home-header {
-    padding: 50px 0px 20px 0px;
+    padding: 50px 0px;
     text-align: center;
     .btn-top {
         margin-top: 35px;
@@ -136,73 +136,65 @@ body {
         margin: 0 auto;
     }
 
-    // Backed Badge
-    .backed {
-        .wrap {
-            height: 100px;
-            position: relative;
-            margin-top: 50px;
+}
+
+// Backed Badge
+.backed {
+    text-align: center;
+    .wrap {
+        position: relative;
+        margin-top: 50px;
+    }
+    p.centre-line {
+        text-align: center;
+        border-bottom: 1px solid #dcccbe;
+        line-height: 0.1em;
+        width: 40%;
+        display: inline-block;
+        span {
+            background: #fff9f4;
+            font-size: 14px;
+            padding: 5px 20px;
+            color: #4b352a;
         }
-        p.centre-line {
-            text-align: center;
-            border-bottom: 1px solid #dcccbe;
-            line-height: 0.1em;
-            width: 40%;
+    }
+
+    .people {
+        display: block;
+        margin: 25px 0;
+        img {
+            margin: 3px 4px;
+            max-width: 120px;
+            max-height: 40px;
             display: inline-block;
-            span {
-                background: #fff9f4;
-                font-size: 14px;
-                padding: 5px 20px;
-                color: #4b352a;
-            }
         }
-
-        .people {
-            display: block;
-            img {
-                margin-top: 20px;
-                width: 42px;
-                display: inline-block;
-            }
-            span {
-                position: relative;
-                top: 10px;
-                margin-left: 10px;
-                font-size: 13px;
-                color: #656565;
-                a {
-                    color: #000;
-                    &:hover {
-                        color: #469a4c;
-                    }
-                }
-            }
-        }
-
-        .backer {
-            span {
-                font-size: 13px;
-                color: #281d18;
-                margin-right: 25px;
-            }
-            .btn-primary {
-                border: 1px solid #eadcd5;
-                font-size: 14px;
-                color: #281d18;
-                background: none;
-                font-weight: 800;
+        span {
+            position: relative;
+            top: 10px;
+            margin-left: 10px;
+            font-size: 13px;
+            color: #656565;
+            a {
+                color: #000;
                 &:hover {
                     color: #469a4c;
-                    border: 1px solid #469a4c;
                 }
             }
+        }
+    }
+
+    .backer {
+        span {
+            font-size: 13px;
+            color: #281d18;
+            margin-right: 25px;
         }
     }
 }
 
 // Content
 .content {
-    padding: 30px 0px 60px 0px;
+    padding: 60px 0px;
 }
 
 // Pages
