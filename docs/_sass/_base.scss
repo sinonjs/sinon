@@ -45,9 +45,6 @@ a {
         position: relative;
         margin-top: 60px;
 
-        &:first-child {
-            margin-top: 0px;
-        }
         &:before {
             content: "";
             width: 34px;
@@ -193,26 +190,22 @@ a {
                 margin-bottom: 20px;
             }
         }
-        .backed {
-            .wrap {
-                margin: 0px !important;
-            }
-            p.centre-line {
-                display: block;
-                width: 100% !important;
-            }
+    }
+    .backed {
+        .wrap {
+            margin-top: 25px !important;
         }
-        .backer {
-            span {
-                margin-right: 0px !important;
-                display: block;
-                line-height: 24px;
-                margin-bottom: 20px;
-            }
-            .btn-primary {
-                text-align: center;
-                margin-right: 0px;
-            }
+        p.centre-line {
+            display: block;
+            width: 100% !important;
+        }
+    }
+    .backer {
+        span {
+            margin-right: 0px !important;
+            display: block;
+            line-height: 24px;
+            margin-bottom: 20px;
         }
     }
 }
