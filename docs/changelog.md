@@ -5,6 +5,12 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+10.0.1 / 2021-04-08
+==================
+
+  * Upgrade sinon components (bumps y18n to 4.0.1)
+  * Bump y18n from 4.0.0 to 4.0.1
+
 10.0.0 / 2021-03-22
 ==================
 
