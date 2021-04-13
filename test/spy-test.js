@@ -474,6 +474,29 @@ describe("spy", function () {
         assertSpy(spy2);
     });
 
+    describe(".matching", function () {
+        it("should filter matching function calls", function () {
+            var object = {
+                f1: function () {
+                    return "real";
+                },
+            };
+            var spy1 = createSpy(object, "f1");
+            var matchingSpy = spy1.matching((...args) => args.length >= 3);
+
+            object.f1(1);
+            object.f1(1, 2);
+            object.f1(1, 2, 3);
+            object.f1(1, 2, 3, 4);
+            object.f1(1, 2, 3, 4, 5);
+            object.f1(1, 2, 3, 4, 5, 6);
+            object.f1(1, 2, 3, 4, 5, 6, 7);
+
+            assert.equals(spy1.callCount, 7);
+            assert.equals(matchingSpy.callCount, 5);
+        });
+    });
+
     describe(".named", function () {
         it("sets name and displayName", function () {
             var spy = createSpy();

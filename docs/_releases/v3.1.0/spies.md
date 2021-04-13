@@ -202,6 +202,23 @@ Creates a spy that only records [calls][call] when the received arguments match 
 }
 ```
 
+#### `spy.matching((arg1[, arg2, ...]) => boolean);`
+
+Creates a spy that only records [calls][call] when the received arguments are resolved as matching by function passed to `matching`. This is useful to differentiate calls by a dynamic logic, where you can access the spy with the same [call][call].
+
+```javascript
+"should call method once with each argument": function () {
+    var object = { method: function () {} };
+    var spy = sinon.spy(object, "method");
+
+    object.method(42);
+    object.method(1);
+
+    assert(spy.matching((number) => number > 5).calledOnce);
+    assert(spy.matching((number) => number < 5).calledOnce);
+}
+```
+
 
 #### `spy.callCount`
 

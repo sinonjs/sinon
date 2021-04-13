@@ -116,6 +116,24 @@ This is useful to be more expressive in your assertions, where you can access th
 }
 ```
 
+#### `stub.matching((arg1[, arg2, ...]) => boolean);`
+
+Stubs the method only for arguments matching a function.
+
+This is useful to be more expressive in your assertions in a dynamic way, where you can access the spy with the same call. It is also useful to create a stub that can act differently in response to different arguments.
+
+```javascript
+"test should stub method differently based on arguments": function () {
+    var callback = sinon.stub();
+    callback.matching((num) => num > 5).returns(1);
+    callback.matching((num) => num <= 5).throws("name");
+
+    callback(); // No return value, no exception
+    callback(42); // Returns 1
+    callback(1); // Throws Error("name")
+}
+```
+
 #### `stub.onCall(n);` *Added in v1.8*
 
 Defines the behavior of the stub on the *nth* call. Useful for testing sequential interactions.
