@@ -134,6 +134,51 @@ describe("Sandbox", function () {
 
             assert.equals(fakes.length, 2);
         });
+
+        describe("warns of potential leak when", function () {
+            var warn;
+
+            beforeEach(function () {
+                warn = this.sandbox.stub(console, "warn");
+            });
+
+            afterEach(function () {
+                warn.restore();
+            });
+
+            it("many fakes are created", function () {
+                assert.equals(typeof this.sandbox.leakThreshold, "number");
+
+                createTooManyFakes(this.sandbox);
+
+                assert(warn.called);
+            });
+
+            it("a configurable number of fakes are created", function () {
+                this.sandbox.leakThreshold = 20;
+
+                createTooManyFakes(this.sandbox);
+
+                assert(warn.called);
+            });
+
+            it("a leak warning has not already been output", function () {
+                this.sandbox.leakThreshold = 20;
+
+                createTooManyFakes(this.sandbox);
+                this.sandbox.restore();
+                warn.resetHistory();
+
+                createTooManyFakes(this.sandbox);
+                assert(!warn.called);
+            });
+
+            function createTooManyFakes(sandbox) {
+                for (var i = 0; i < sandbox.leakThreshold; i++) {
+                    sandbox.spy();
+                }
+            }
+        });
     });
 
     describe(".spy", function () {
