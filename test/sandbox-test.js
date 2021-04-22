@@ -139,7 +139,7 @@ describe("Sandbox", function () {
             var warn;
 
             beforeEach(function () {
-                warn = this.sandbox.stub(console, "warn");
+                warn = this.sandbox.stub(deprecated, "printWarning");
             });
 
             afterEach(function () {
