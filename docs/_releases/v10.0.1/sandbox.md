@@ -183,7 +183,7 @@ _Since `sinon@2.0.0`_
 
 #### `sandbox.replace(object, property, replacement);`
 
-Replaces `property` on `object` with `replacement` argument. Attempts to replace an already replaced value cause an exception.
+Replaces `property` on `object` with `replacement` argument. Attempts to replace an already replaced value cause an exception. Returns the `replacement`.
 
 `replacement` can be any value, including `spies`, `stubs` and `fakes`.
 
