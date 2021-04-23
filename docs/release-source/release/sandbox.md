@@ -334,3 +334,7 @@ Verifies all mocks created through the sandbox.
 #### `sandbox.verifyAndRestore();`
 
 Verifies all mocks and restores all fakes created through the sandbox.
+
+#### `sandbox.leakThreshold`
+
+Gets/sets the threshold at which memory leak detection warnings are logged.
