@@ -6,57 +6,13 @@ breadcrumb: fakes
 
 ### Introduction
 
-`fake` is available in Sinon from v5 onwards. It allows creation of a `fake` `Function` with the ability to set a default [behavior](#fakes-with-behavior). Set the [behavior](#fakes-with-behavior) using `Functions` with the same API as those in a [`sinon.stub`][stubs].
+`fake` is available in Sinon from v5 onwards. It allows creation of a `fake` `Function` with the ability to set a default [behavior](#fakes-with-behavior). Set the [behavior](#fakes-with-behavior) using `Functions` with the same API as those in a [`sinon.stub`][stubs]. The created `fake` `Function`, with or without behavior has the same API as a (`sinon.spy`)[spies].
 
 In Sinon, a `fake` is a `Function` that records arguments, return value, the value of `this` and exception thrown (if any) for all of its calls.
 
 A fake is immutable: once created, the behavior will not change.
 
 Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` API knows only how to create fakes, and doesn't concern itself with plugging them into the system under test. To plug the fakes into the system under test, you can use the [`sinon.replace*`](../sandbox#sandboxreplaceobject-property-replacement) methods.
-
-### When to use fakes?
-
-Fakes are alternatives to the Stubs and Spies, and they can fully replace all such use cases.
-
-They are intended to be simpler to use, and avoids many bugs by having immutable behaviour.
-
-The created `fake` `Function`, with or without behavior has the same API as a (`sinon.spy`)[spies].
-
-#### Using fakes instead of spies
-
-```js
-var foo = {
-  bar: () => {
-    return 'baz';
-  }
-};
-// wrap existing method without changing its behaviour
-var fake = sinon.replace(foo, 'bar', sinon.fake(foo.bar));
-
-fake();
-// baz
-
-fake.callCount;
-// 1
-```
-
-#### Using fakes instead of stubs
-
-```js
-var foo = {
-  bar: () => {
-    return 'baz';
-  }
-};
-// replace method with a fake one
-var fake = sinon.replace(foo, 'bar', sinon.fake.returns('fake value'));
-
-fake();
-// fake value
-
-fake.callCount;
-// 1
-```
 
 ### Creating a fake
 
@@ -167,8 +123,7 @@ This is useful when complex behavior not covered by the `sinon.fake.*` methods i
 
 ### Instance properties
 
-The instance properties are the same as a [`sinon.spy`][spies]. The following properties are just a few of them, you can refer to
-[spies][spies] documentation for all of them.
+The instance properties are the same as a [`sinon.spy`][spies].
 
 #### `f.callback`
 
@@ -186,7 +141,7 @@ f.callback === cb2;
 // true
 ```
 
-The same convenience has been added to [spy calls](../spy-call#spycallcallback):
+The same convenience has been added to [spy calls](../spy-call):
 
 ```js
 f.getCall(1).callback === cb2;
@@ -212,18 +167,6 @@ f.firstArg === date2;
 // true
 ```
 
-The same convenience has been added to [spy calls](../spy-call#spycallfirstarg):
-
-```js
-f.getCall(0).firstArg === date1;
-// true
-f.getCall(1).firstArg === date2;
-// true
-//
-f.lastCall.firstArg === date2;
-// true
-```
-
 #### `f.lastArg`
 
 This property is a convenient way to get a reference to the last argument passed in the last call to the fake.
@@ -240,7 +183,7 @@ f.lastArg === date2;
 // true
 ```
 
-The same convenience has been added to [spy calls](../spy-call#spycalllastarg):
+The same convenience has been added to [spy calls](../spy-call):
 
 ```js
 f.getCall(0).lastArg === date1;
