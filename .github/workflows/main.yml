@@ -3,6 +3,93 @@ name: Node CI
 on: [push]
 
 jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Prettier
+        run: |
+          npm run prettier:check
+        if: matrix.node-version == 14
+
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: ESLint
+        run: |
+          npm run lint
+
+  browser-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Integration
+        run: |
+          export SINON_CHROME_BIN=$(which google-chrome-stable)
+          npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
+          npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
+          npm run test-esm-bundle
+
   test:
     runs-on: ubuntu-latest
 
@@ -17,28 +104,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
-      - run: npm ci
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm ci
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
-      - name: Prettier
-        run: |
-          npm run prettier:check
-      - name: Pre-Test
-        run: |
-          npm run lint
-
-          export SINON_CHROME_BIN=$(which google-chrome-stable)
-          npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-          npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-          npm run test-esm-bundle
-        if: matrix.node-version == 10
-
       - name: npm test
         run: npm run test-node
