@@ -26,6 +26,7 @@ jobs:
           npm ci
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+          HUSKY_SKIP_INSTALL: 1
       - name: Prettier
         run: |
           npm run prettier:check
