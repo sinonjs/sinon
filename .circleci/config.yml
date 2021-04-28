@@ -38,53 +38,6 @@ jobs:
             - node_modules
       - *persist-step
 
-  prettier:
-    <<: *work-dir
-    docker:
-      - image: node
-    steps:
-      - *attach-step
-      - run:
-          name: Prettier
-          command: npm run prettier:check
-
-  lint:
-    <<: *work-dir
-    docker:
-      - image: node
-    steps:
-      - *attach-step
-      - run:
-          name: Lint
-          command: npm run lint -- --quiet
-
-  node-10:
-    docker:
-      - image: circleci/node:10
-    steps:
-      - *attach-step
-      - run:
-          name: Test
-          command: npm run test-node
-
-  node-12:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - *attach-step
-      - run:
-          name: Test
-          command: npm run test-node
-
-  node-14:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - *attach-step
-      - run:
-          name: Test
-          command: npm run test-node
-
   integration-tests:
     docker:
       - image: circleci/node:10.15.1-browsers
@@ -97,8 +50,6 @@ jobs:
           command: |
             # test-coverage runs test-headless in Chrome
             npm run test-coverage  -- --chrome "$SINON_CHROME_BIN" --allow-chrome-as-root
-            npm run test-webworker -- --chrome "$SINON_CHROME_BIN" --allow-chrome-as-root
-            npm run test-esm-bundle
 
             if [ -z "$CIRCLE_PULL_REQUESTS" ]; then
               npm run test-cloud
@@ -121,28 +72,9 @@ workflows:
   sinon-workflow:
     jobs:
       - install-dependencies
-      - prettier:
-          requires:
-            - install-dependencies
-      - lint:
-          requires:
-            - install-dependencies
-      - node-10:
-          requires:
-            - install-dependencies
-      - node-12:
-          requires:
-            - install-dependencies
-      - node-14:
-          requires:
-            - install-dependencies
       - integration-tests:
           requires:
             - install-dependencies
-            - lint
-            - node-10
-            - node-12
-            - node-14
       - saucelabs:
           context: SAUCE_LABS
           requires:
