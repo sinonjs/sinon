@@ -177,19 +177,21 @@ When `autoRespond` is `true`, respond to requests after this number of milliseco
 
 High-level API to manipulate `FakeXMLHttpRequest` instances.
 
-For help with handling JSON-P please refer to our [notes below](#json-p)
-
 ```javascript
-{
-    setUp: function () {
-        this.server = sinon.createFakeServer();
-    },
+// example.test.js in Mocha TDD
+var sinon = require("sinon");
 
-    tearDown: function () {
+suite("sinon.fakeServer", function () {
+
+    setup(function () {
+        this.server = sinon.fakeServer.create();
+    });
+
+    teardown(function () {
         this.server.restore();
-    },
+    });
 
-    "test should fetch comments from server" : function () {
+    test("test should fetch comments from server", function () {
         this.server.respondWith("GET", "/some/article/comments.json",
             [200, { "Content-Type": "application/json" },
              '[{ "id": 12, "comment": "Hey there" }]']);
@@ -200,30 +202,35 @@ For help with handling JSON-P please refer to our [notes below](#json-p)
 
         sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
 
-        assert(server.requests.length > 0)
-    }
-}
+        assert(server.requests.length > 0);
+    });
+
+});
 ```
 
-#### `var server = sinon.createFakeServer([config]);`
+### Methods
+
+#### `var server = sinon.fakeServer.create([config]);`
 
 Creates a new server.
 
 This function also calls `sinon.useFakeXMLHttpRequest()`.
 
-`createFakeServer` accepts optional properties to configure the fake server. See [options](#fake-server-options) below for configuration parameters.
+`create()` accepts an optional properties object to configure the fake server. See [Configuration Properties](#configuration-properties) below for available options.
 
-#### `var server = sinon.createFakeServerWithClock();`
+#### `var server = sinon.fakeServerWithClock.create();`
 
 Creates a server that also manages fake timers.
 
 This is useful when testing `XHR` objects created with e.g. jQuery 1.3.x, which uses a timer to poll the object for completion, rather than the usual `onreadystatechange`.
 
+Just as a `create()` above, an optional properties object can be provided to set configuration parameters during instantiation.
+
 #### `server.configure(config);`
 
-Configures the fake server.
+Changes the configuration the fake server after it has been created.
 
-See [options](#fake-server-options) below for configuration parameters.
+This can be useful for changing the delay of an automatic response for a specific test requirement.  For more options, see [Configuration Properties](#configuration-properties) below.
 
 #### `server.respondWith(response);`
 
@@ -275,42 +282,11 @@ Responds to all `method` requests to URLs matching the regular expression.
 
 Causes all queued asynchronous requests to receive a response.
 
-If none of the responses added through `respondWith` match, the default response is `[404, {}, ""]`.
+If none of the responses added through `respondWith()` match, the default response is `[404, {}, ""]`.
 
-Synchronous requests are responded to immediately, so make sure to call `respondWith` upfront.
+Synchronous requests are responded to immediately so make sure to call `respondWith()` to configure the server response before calling `respond()`. If not, you will recieve the default `404 NOT FOUND` response.
 
-If called with arguments, `respondWith` will be called with those arguments before responding to requests.
-
-#### `server.autoRespond = true;`
-
-If set, will automatically respond to every request after a timeout.
-
-The default timeout is 10ms but you can control it through the `autoRespondAfter` property.
-
-Note that this feature is intended to help during mockup development, and is not suitable for use in tests. For synchronous immediate responses, use `respondImmediately` instead.
-
-#### `server.autoRespondAfter = ms;`
-
-Causes the server to automatically respond to incoming requests after a timeout.
-
-#### `server.respondImmediately = true;`
-
-If set, the server will respond to every request immediately and synchronously.
-
-This is ideal for faking the server from within a test without having to call `server.respond()` after each request made in that test.
-
-As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
-
-#### array `server.requests`
-
-You can inspect the `server.requests` to verify request ordering, find unmatched requests or check that no requests has been done.
-`server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.
-
-#### `Boolean server.fakeHTTPMethods`
-
-If set to `true`, server will find `_method` parameter in POST body and recognize that as the actual method.
-
-Supports a pattern common to Ruby on Rails applications. For custom HTTP method faking, override `server.getHTTPMethod(request)`.
+If called with arguments, `respondWith()` will be called with those arguments before responding to requests.
 
 #### `server.getHTTPMethod(request)`
 
@@ -324,42 +300,54 @@ This method can be overridden to provide custom behavior.
 
 Restores the native XHR constructor.
 
-### Fake server options
+### Properties
 
-These options are properties on the server object and can be set directly
+#### Array[] `server.requests`
+
+`server.requests` is an array of all the `FakeXMLHttpRequest` objects that have been created.
+
+This property allows you to inspect the received requests to verify request ordering, find unmatched requests or check that no requests has been done.
+
+### Configuration Properties
+
+The Fake Server exposes configurable properties to modify the behavior of the server as desired.  These properties can be set directly or with an object literal passed into `create(options)` and/or `server.configure(options)`.
 
 ```javascript
+// Defaults
+server.autoRespond = false;
+server.autoRespondAfter = 10; // in milliseconds
+server.respondImmediately = false;
+server.fakeHTTPMethods = false;
+
+// configure fakeServer to autoRespond
 server.autoRespond = true;
+
+// Change server now to respondImmediately
+server.configure({ respondImmediately: true });
 ```
 
-You can also pass options with an object literal to `createFakeServer` and `.configure`.
+#### Boolean `autoRespond`
 
-#### `Boolean autoRespond`
-
-If set, will automatically respond to every request after a timeout.
+If set, will automatically respond to every request after a timeout. **Default: false**.
 
 The default timeout is 10ms but you can control it through the `autoRespondAfter` property.
 
-Note that this feature is intended to help during mockup development, and is not suitable for use in tests.
+Note that this feature is intended to help during mockup development, and is not suitable for use in tests. For synchronous immediate responses, use `respondImmediately` instead.
 
-For synchronous immediate responses, use `respondImmediately` instead.
+#### Number `autoRespondAfter (ms)`
 
-#### `Number autoRespondAfter (ms)`
+Causes the server to automatically respond to incoming requests after a timeout.  Requires `server.autoRespond` to be set to `true` to have an effect.  If `server.respondImmediately` is set to `true`, this setting is ignored.
 
-Causes the server to automatically respond to incoming requests after a timeout.
+#### Boolean `respondImmediately`
 
-#### `Boolean respondImmediately`
-
-If set, the server will respond to every request immediately and synchronously.
+If set, the server will respond to every request immediately and synchronously. **Default: false**
 
 This is ideal for faking the server from within a test without having to call `server.respond()` after each request made in that test.
 
-As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `server.autoRespond` and `server.autoRespondAfter`.
+As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `autoRespond` and `autoRespondAfter` properties.  If `server.respondImmediately == true`, it will override all `autoRespond` behavior.
 
-#### `boolean fakeHTTPMethods`
+#### Boolean `fakeHTTPMethods`
 
-If set to `true`, server will find `_method` parameter in `POST` body and recognize that as the actual method.
+If set to `true`, server will find `_method` parameter in POST body and recognize that as the actual method.
 
-Supports a pattern common to Ruby on Rails applications.
-
-For custom HTTP method faking, override `server.getHTTPMethod(request)`
+Supports a pattern common to Ruby on Rails applications. For custom HTTP method faking, override `server.getHTTPMethod(request)`.
