@@ -6,7 +6,7 @@ const assertTrue = referee.assert;
 
 describe("PubSub", function () {
     it("should call subscribers on publish", function () {
-        const callback = sinon.spy();
+        const callback = sinon.fake();
 
         PubSub.subscribe("message", callback);
         PubSub.publishSync("message");
