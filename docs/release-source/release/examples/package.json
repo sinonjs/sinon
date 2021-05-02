@@ -17,6 +17,6 @@
     "sinon": "latest"
   },
   "devDependencies": {
-    "eslint": "^6.8.0"
+    "eslint": "^7.21.0"
   }
 }
