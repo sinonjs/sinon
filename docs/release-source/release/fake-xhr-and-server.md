@@ -182,29 +182,29 @@ High-level API to manipulate `FakeXMLHttpRequest` instances.
 var sinon = require("sinon");
 
 suite("sinon.fakeServer", function () {
+  setup(function () {
+    this.server = sinon.fakeServer.create();
+  });
 
-    setup(function () {
-        this.server = sinon.fakeServer.create();
-    });
+  teardown(function () {
+    this.server.restore();
+  });
 
-    teardown(function () {
-        this.server.restore();
-    });
+  test("test should fetch comments from server", function () {
+    this.server.respondWith("GET", "/some/article/comments.json", [
+      200,
+      { "Content-Type": "application/json" },
+      '[{ "id": 12, "comment": "Hey there" }]',
+    ]);
 
-    test("test should fetch comments from server", function () {
-        this.server.respondWith("GET", "/some/article/comments.json",
-            [200, { "Content-Type": "application/json" },
-             '[{ "id": 12, "comment": "Hey there" }]']);
+    var callback = sinon.spy();
+    myLib.getCommentsFor("/some/article", callback);
+    this.server.respond();
 
-        var callback = sinon.spy();
-        myLib.getCommentsFor("/some/article", callback);
-        this.server.respond();
+    sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
 
-        sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
-
-        assert(server.requests.length > 0);
-    });
-
+    assert(server.requests.length > 0);
+  });
 });
 ```
 
@@ -230,7 +230,7 @@ Just as a `create()` above, an optional properties object can be provided to set
 
 Changes the configuration the fake server after it has been created.
 
-This can be useful for changing the delay of an automatic response for a specific test requirement.  For more options, see [Configuration Properties](#configuration-properties) below.
+This can be useful for changing the delay of an automatic response for a specific test requirement. For more options, see [Configuration Properties](#configuration-properties) below.
 
 #### `server.respondWith(response);`
 
@@ -310,7 +310,7 @@ This property allows you to inspect the received requests to verify request orde
 
 ### Configuration Properties
 
-The Fake Server exposes configurable properties to modify the behavior of the server as desired.  These properties can be set directly or with an object literal passed into `create(options)` and/or `server.configure(options)`.
+The Fake Server exposes configurable properties to modify the behavior of the server as desired. These properties can be set directly or with an object literal passed into `create(options)` and/or `server.configure(options)`.
 
 ```javascript
 // Defaults
@@ -336,7 +336,7 @@ Note that this feature is intended to help during mockup development, and is not
 
 #### Number `autoRespondAfter (ms)`
 
-Causes the server to automatically respond to incoming requests after a timeout.  Requires `server.autoRespond` to be set to `true` to have an effect.  If `server.respondImmediately` is set to `true`, this setting is ignored.
+Causes the server to automatically respond to incoming requests after a timeout. Requires `server.autoRespond` to be set to `true` to have an effect. If `server.respondImmediately` is set to `true`, this setting is ignored.
 
 #### Boolean `respondImmediately`
 
@@ -344,7 +344,7 @@ If set, the server will respond to every request immediately and synchronously. 
 
 This is ideal for faking the server from within a test without having to call `server.respond()` after each request made in that test.
 
-As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `autoRespond` and `autoRespondAfter` properties.  If `server.respondImmediately == true`, it will override all `autoRespond` behavior.
+As this is synchronous and immediate, this is not suitable for simulating actual network latency in tests or mockups. To simulate network latency with automatic responses, see `autoRespond` and `autoRespondAfter` properties. If `server.respondImmediately == true`, it will override all `autoRespond` behavior.
 
 #### Boolean `fakeHTTPMethods`
 
