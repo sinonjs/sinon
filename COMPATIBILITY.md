@@ -12,6 +12,8 @@ For legacy runtimes, a transpiler can be used by dependent projects.
 
 Sinon.JS aims at supporting the following runtimes:
 
+<!-- browserslist start -->
+
 ```
 > 0.5%
 last 2 versions
@@ -21,6 +23,8 @@ not IE 11
 not op_mini all
 maintained node versions
 ```
+
+<!-- browserslist end -->
 
 The compatibility is enforced using [`eslint-plugin-compat`](https://www.npmjs.com/package/eslint-plugin-compat).
 
