@@ -8,8 +8,7 @@ describe("FakeTest", function () {
         // create a basic fake, with no behavior
         const fake = sinon.fake();
 
-        assert.isUndefined(fake());
-
-        assert.equals(fake.callCount, 1);
+        assert.isUndefined(fake()); // by default returns undefined
+        assert.equals(fake.callCount, 1); // saves call information
     });
 });

@@ -13,6 +13,7 @@ describe("FakeTest", function () {
         f(1, 2, 3, cb2);
 
         assert.isTrue(f.callback === cb2);
+        // spy call methods:
         assert.isTrue(f.getCall(1).callback === cb2);
         assert.isTrue(f.lastCall.callback === cb2);
     });

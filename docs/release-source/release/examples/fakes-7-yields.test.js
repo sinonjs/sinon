@@ -11,8 +11,10 @@ describe("FakeTest", function () {
 
         sinon.replace(fs, "readFile", fake);
         fs.readFile("somefile", (err, data) => {
+            // called with fake values given to yields as arguments
             assert.isNull(err);
             assert.equals(data, "file content");
+            // since yields is synchronous, anotherFake is not called yet
             assert.isFalse(anotherFake.called);
         });
 

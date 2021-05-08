@@ -6,7 +6,7 @@ breadcrumb: fakes
 
 ### Introduction
 
-`fake` is available in Sinon from v5 onwards. It allows creation of a `fake` `Function` with the ability to set a default [behavior](#fakes-with-behavior). Set the [behavior](#fakes-with-behavior) using `Functions` with the same API as those in a [`sinon.stub`][stubs].
+`fake` is available in Sinon from v5 onwards. It allows creation of a `fake` `Function` with the ability to set a default [behavior](#fakes-with-behavior). The available [behaviors](#fakes-with-behavior) for the most part match the API of a [`sinon.stub`][stubs].
 
 In Sinon, a `fake` is a `Function` that records arguments, return value, the value of `this` and exception thrown (if any) for all of its calls.
 
@@ -167,8 +167,7 @@ This is useful when complex behavior not covered by the `sinon.fake.*` methods i
 
 ### Instance properties
 
-The instance properties are the same as a [`sinon.spy`][spies]. The following properties are just a few of them, you can refer to
-[spies][spies] documentation for all of them.
+The instance properties are the same as those of a [`sinon.spy`][spies]. The following examples showcase just a few of the properties available to you. Refer to the [spy docs][spies] for a complete list.
 
 #### `f.callback`
 

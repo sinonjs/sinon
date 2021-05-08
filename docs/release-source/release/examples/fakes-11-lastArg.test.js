@@ -13,6 +13,7 @@ describe("FakeTest", function () {
         f(1, 2, date2);
 
         assert.isTrue(f.lastArg === date2);
+        // spy call methods:
         assert.isTrue(f.getCall(0).lastArg === date1);
         assert.isTrue(f.getCall(1).lastArg === date2);
         assert.isTrue(f.lastCall.lastArg === date2);
