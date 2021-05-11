@@ -341,7 +341,7 @@ describe("issues", function () {
         });
 
         afterEach(function () {
-            sandbox.restore();
+            if (sandbox) {sandbox.restore();}
         });
 
         it("stub window innerHeight", function () {
@@ -607,7 +607,8 @@ describe("issues", function () {
             }
 
             ClassWithoutProps.prototype.constructor = ClassWithoutProps;
-            AnotherClassWithoutProps.prototype.constructor = AnotherClassWithoutProps;
+            AnotherClassWithoutProps.prototype.constructor =
+                AnotherClassWithoutProps;
             var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
             var arg2 = new AnotherClassWithoutProps(); //arg2.constructor.name === Object
             var stub = sinon.stub();
