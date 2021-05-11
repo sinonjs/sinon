@@ -341,7 +341,9 @@ describe("issues", function () {
         });
 
         afterEach(function () {
-            if (sandbox) {sandbox.restore();}
+            if (sandbox) {
+                sandbox.restore();
+            }
         });
 
         it("stub window innerHeight", function () {
