@@ -25,24 +25,14 @@ This page contains the entire Sinon.JS API documentation along with brief introd
 
 {% include docs/migration-guides.md %}
 
-## Compatibility
-
-The most up-to-date reference on which runtimes and browsers we support can be found by looking at our shared [eslint-config][shared-config].
-
-### ECMAScript versions
-
-Sinon has historically been written as [ES5][es5], but starting from Sinon 10 we made the breaking change to use more modern ECMAScript versions, starting with ECMAScript [2017][es2017]. `{{page.release_id}}` requires no transpiler or polyfills to run in the runtimes mentioned below.
-
-### Supported runtimes
+## Compatibility and supported runtimes
 
 As of Sinon 10 we stopped maintaining compatibility with legacy browsers. Instead, we focus on compatibility with evergreen browsers, [Node.js LTS versions](https://github.com/nodejs/Release) and recent Safari versions.
+The most up-to-date reference on which runtimes and browsers we support can be found by looking at our [compatibility docs][compat-doc].
 
-There should not be any issues with using Sinon `{{page.release_id}}` in newer versions of the same runtimes.
-
-If you need to support old runtimes you can try one of the older Sinon versions.
+If you need to support old runtimes you can try [Sinon 9][compat-doc-v9].
 
 {% include docs/contribute.md %}
 
-[es5]: http://www.ecma-international.org/ecma-262/5.1/
-[es2017]: http://www.ecma-international.org/ecma-262/8.0/
-[shared-config]: https://github.com/sinonjs/eslint-config
+[compat-doc]: https://github.com/sinonjs/sinon/COMPATIBILITY.md
+[compat-doc-v9]: https://github.com/sinonjs/sinon/blob/v9.2.4/COMPATIBILITY.md
