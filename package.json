@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
-    "@sinonjs/eslint-config": "^4.0.1",
+    "@sinonjs/eslint-config": "^4.0.2",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.0",
     "@sinonjs/referee": "^6.1.0",
     "babel-plugin-istanbul": "^6.0.0",

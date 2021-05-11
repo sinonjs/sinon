@@ -31,21 +31,21 @@ let changeLogData = "";
 
 /* eslint-disable jsdoc/require-jsdoc, @sinonjs/no-prototype-methods/no-prototype-methods */
 function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
+    return Object.keys(object).find((key) => object[key] === value);
 }
 
 const NOOP = {};
 const processLine = (() => {
     let state;
     const STATES = {
-        BEFORE: line => {
+        BEFORE: (line) => {
             if (line.search("browserslist start") > -1) {
                 state = STATES.IN;
             }
 
             return line;
         },
-        IN: line => {
+        IN: (line) => {
             if (line.search("browserslist end") > -1) {
                 state = STATES.AFTER;
                 // newlines following Prettier's formatting
@@ -55,10 +55,10 @@ const processLine = (() => {
             }
             return NOOP;
         },
-        AFTER: line => line,
+        AFTER: (line) => line,
     };
     state = STATES.BEFORE;
-    return line => {
+    return (line) => {
         debug(`current state: ${getKeyByValue(STATES, state)}`);
         debug(`current line input:  '${line}'`);
         const val = state(line);
@@ -67,7 +67,7 @@ const processLine = (() => {
     };
 })();
 
-rl.on("line", line => {
+rl.on("line", (line) => {
     const output = processLine(line);
     changeLogData += output === NOOP ? "" : `${output}\n`;
 });
