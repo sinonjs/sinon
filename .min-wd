@@ -1,13 +1,15 @@
 {
   "sauceLabs": true,
-  "browsers": [{
-    "name": "chrome"
-  }, {
-    "name": "firefox"
-  }, {
-    "name": "MicrosoftEdge"
-  }, {
-    "name": "safari"
-  }],
+  "browsers": [
+    {
+      "name": "chrome"
+    },
+    {
+      "name": "firefox"
+    },
+    {
+      "name": "MicrosoftEdge"
+    }
+  ],
   "BUILD_VAR": "TRAVIS_BUILD_NUMBER"
 }
