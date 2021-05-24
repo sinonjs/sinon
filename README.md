@@ -24,7 +24,9 @@
 </p>
 
 <p align=center>
-<a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
+<a href="https://app.saucelabs.com/u/sinonjs">
+  <img src="https://app.saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"/>
+</a> 
 </p>
 
 ## Compatibility
