@@ -5,6 +5,16 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+11.0.0 / 2021-05-24
+==================
+
+  * Explicitly use samsam 6.0.2 with fix for #2345
+  * Update most packages (#2371)
+  * Update compatibility docs (#2366)
+  * Update packages (includes breaking fake-timers change, see #2352)
+  * Warn of potential memory leaks (#2357)
+  * Fix clock test errors
+
 10.0.1 / 2021-04-08
 ==================
 
