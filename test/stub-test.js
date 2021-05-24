@@ -217,6 +217,14 @@ describe("stub", function () {
             });
         });
 
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().returns(2);
+            var stub = createStub().callsFake(fakeFn).returns(1);
+
+            assert.equals(stub(), 1);
+            refute(fakeFn.called);
+        });
+
         it("throws only on the first call", function () {
             var stub = createStub();
             stub.returns("no exception");
@@ -274,6 +282,16 @@ describe("stub", function () {
             stub.rejects(Error("should be superseeded")).resolves(1);
 
             return stub().then();
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().resolves(2);
+            var stub = createStub().callsFake(fakeFn).resolves(1);
+
+            return stub().then(function (actual) {
+                assert.same(actual, 1);
+                refute(fakeFn.called);
+            });
         });
 
         it("can be superseded by returns", function () {
@@ -372,6 +390,21 @@ describe("stub", function () {
             assert.equals(stub(), 1);
         });
 
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().resolves(2);
+            var reason = new Error();
+            var stub = createStub().callsFake(fakeFn).rejects(reason);
+
+            return stub()
+                .then(function () {
+                    referee.fail("this should not resolve");
+                })
+                .catch(function (actual) {
+                    assert.same(actual, reason);
+                    refute(fakeFn.called);
+                });
+        });
+
         it("does not invoke Promise.reject when the behavior is added to the stub", function () {
             var rejectSpy = createSpy(Promise, "reject");
             var stub = createStub();
@@ -447,6 +480,18 @@ describe("stub", function () {
                 assert.same(actual, instance);
             });
         });
+
+        it("supersedes previous callsFake", function () {
+            var fakeInstance = {};
+            var fakeFn = createStub().resolves(fakeInstance);
+            var instance = {};
+            instance.stub = createStub().callsFake(fakeFn).resolvesThis();
+
+            return instance.stub().then(function (actual) {
+                assert.same(actual, instance);
+                refute(fakeFn.called);
+            });
+        });
     });
 
     describe(".resolvesArg", function () {
@@ -508,6 +553,16 @@ describe("stub", function () {
             });
         });
 
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().resolves("fake");
+            var stub = createStub().callsFake(fakeFn).resolvesArg(1);
+
+            return stub("zero", "one").then(function (actual) {
+                assert.same(actual, "one");
+                refute(fakeFn.called);
+            });
+        });
+
         it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
             var resolveSpy = createSpy(Promise, "resolve");
             var stub = createStub();
@@ -557,6 +612,14 @@ describe("stub", function () {
             var stub = createStub();
 
             assert.same(stub.returnsArg(0), stub);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().returns("fake");
+            var stub = createStub().callsFake(fakeFn).returnsArg(0);
+
+            assert.equals(stub("myarg"), "myarg");
+            refute(fakeFn.called);
         });
 
         it("throws if no index is specified", function () {
@@ -667,6 +730,23 @@ describe("stub", function () {
                 stub(new Error("catpants"));
             });
         });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub();
+            var stub = createStub().callsFake(fakeFn).throwsArg(1);
+            var expectedError = new Error("catpants");
+
+            assert.exception(
+                function () {
+                    stub(null, expectedError);
+                },
+                function (error) {
+                    return error.message === expectedError.message;
+                }
+            );
+
+            refute(fakeFn.called);
+        });
     });
 
     describe(".returnsThis", function () {
@@ -707,6 +787,18 @@ describe("stub", function () {
             var stub = createStub();
 
             assert.same(stub.returnsThis(), stub);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeInstance = {};
+            var fakeFn = createStub().returns(fakeInstance);
+
+            var instance = {};
+            instance.stub = createStub();
+            instance.stub.callsFake(fakeFn).returnsThis();
+
+            assert.same(instance.stub(), instance);
+            refute(fakeFn.called);
         });
     });
 
@@ -915,6 +1007,17 @@ describe("stub", function () {
             assert.exception(stub);
 
             assert.isUndefined(stub.invoking);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub();
+            var expectedError = new Error("error");
+            var stub = createStub().callsFake(fakeFn).throws(expectedError);
+
+            assert.exception(stub, {
+                message: expectedError.message,
+            });
+            refute(fakeFn.called);
         });
     });
 
@@ -1590,6 +1693,16 @@ describe("stub", function () {
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().yields(1);
+            var stub = createStub().callsFake(fakeFn).yields(2);
+            var spy = createSpy();
+            stub(spy);
+
+            assert(spy.calledWith, 2);
+            refute(fakeFn.called);
+        });
     });
 
     describe(".yieldsRight", function () {
@@ -1709,6 +1822,16 @@ describe("stub", function () {
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().yieldsRight(1);
+            var stub = createStub().callsFake(fakeFn).yieldsRight(2);
+            var spy = createSpy();
+            stub(spy);
+
+            assert(spy.calledWith, 2);
+            refute(fakeFn.called);
         });
     });
 
@@ -1855,6 +1978,18 @@ describe("stub", function () {
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().yieldsOn(this.fakeContext, 1);
+            var stub = createStub()
+                .callsFake(fakeFn)
+                .yieldsOn(this.fakeContext, 2);
+            var spy = createSpy();
+            stub(spy);
+
+            assert(spy.calledWith, 2);
+            refute(fakeFn.called);
+        });
     });
 
     describe(".yieldsTo", function () {
@@ -1995,6 +2130,16 @@ describe("stub", function () {
 
             assert.same(stub({ success: callback }), "return value");
             assert(callback.calledOnce);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().yieldsTo("success", 1);
+            var stub = createStub().callsFake(fakeFn).yieldsTo("success", 2);
+            var callback = createSpy();
+            stub({ success: callback });
+
+            assert(callback.calledWith(2));
+            refute(fakeFn.called);
         });
     });
 
@@ -2165,6 +2310,22 @@ describe("stub", function () {
 
             assert.same(stub({ success: callback }), "return value");
             assert(callback.calledOnce);
+        });
+
+        it("supersedes previous callsFake", function () {
+            var fakeFn = createStub().yieldsToOn(
+                "success",
+                this.fakeContext,
+                1
+            );
+            var stub = createStub()
+                .callsFake(fakeFn)
+                .yieldsToOn("success", this.fakeContext, 2);
+            var callback = createSpy();
+            stub({ success: callback });
+
+            assert(callback.calledWith(2));
+            refute(fakeFn.called);
         });
     });
 
