@@ -72,14 +72,14 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^1.8.3",
-    "@sinonjs/fake-timers": "^7.0.5",
+    "@sinonjs/fake-timers": "^7.1.0",
     "@sinonjs/samsam": "^6.0.2",
     "diff": "^5.0.0",
-    "nise": "^5.0.2",
+    "nise": "^5.0.4",
     "supports-color": "^8.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
+    "@babel/core": "^7.14.3",
     "@sinonjs/eslint-config": "^4.0.2",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^8.0.2",
@@ -92,7 +92,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "mocha": "^8.4.0",
-    "mochify": "^7.1.0",
+    "mochify": "^7.1.1",
     "nyc": "^15.1.0",
     "prettier": "^2.3.0",
     "proxyquire": "^2.1.3",
