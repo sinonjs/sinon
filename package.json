@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "10.0.1",
+  "version": "11.0.0",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
