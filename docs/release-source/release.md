@@ -15,6 +15,7 @@ This page contains the entire Sinon.JS API documentation along with brief introd
 - [Stubs](./stubs)
 - [Mocks](./mocks)
 - [Spy calls](./spy-call)
+- [Promises](./promises)
 - [Fake timers](./fake-timers)
 - [Fake <code>XHR</code> and server](./fake-xhr-and-server)
 - [JSON-P](./json-p)
