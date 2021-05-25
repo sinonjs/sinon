@@ -75,7 +75,7 @@
     "@sinonjs/fake-timers": "^7.1.0",
     "@sinonjs/samsam": "^6.0.2",
     "diff": "^5.0.0",
-    "nise": "^5.0.4",
+    "nise": "^5.1.0",
     "supports-color": "^8.1.1"
   },
   "devDependencies": {
