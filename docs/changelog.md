@@ -5,6 +5,15 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+11.1.0 / 2021-05-25
+==================
+
+  * Add sinon.promise() implementation (#2369)
+  * Set wrappedMethod on getters/setters (#2378)
+  * [Docs] Update fake-server usage & descriptions (#2365)
+  * Fake docs improvement (#2360)
+  * Update nise to 5.1.0 (fixed #2318)
+
 11.0.0 / 2021-05-24
 ==================
 
