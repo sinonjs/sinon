@@ -329,14 +329,14 @@ describe("spy", function () {
         assert(spy.get.calledOnce);
     });
 
-    it("sets wrappedMethod on getter and setter", function() {
+    it("sets wrappedMethod on getter and setter", function () {
         var object = {
             get test() {
                 return this.property;
             },
             set test(value) {
                 this.property = value;
-            }
+            },
         };
 
         var descriptor1 = Object.getOwnPropertyDescriptor(object, "test");
@@ -359,8 +359,8 @@ describe("spy", function () {
         assert.equals(descriptor1, descriptor3);
     });
 
-    describe("global.Error", function() {
-        beforeEach(function() {
+    describe("global.Error", function () {
+        beforeEach(function () {
             this.originalError = globalContext.Error;
         });
 
