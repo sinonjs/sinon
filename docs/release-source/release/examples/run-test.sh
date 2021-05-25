@@ -1,12 +1,14 @@
 #!/bin/bash
-
 # Link 'sinon' to local development dir
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR/.."
+SINON_ROOT="$SCRIPT_DIR/../../../.."
+
+cd "$SINON_ROOT"
 npm link
 
 # Install examples project and link to local sinon folder
 cd "$SCRIPT_DIR"
+rm -r node_modules 2>/dev/null
 npm install --ignore-scripts
 npm link sinon
 
