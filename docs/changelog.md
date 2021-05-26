@@ -5,6 +5,11 @@ permalink: /releases/changelog
 ---
 # Changelog
 
+11.0.1 / 2021-05-26
+==================
+
+  * Fix #2379 by using v7 of supports-color
+
 11.1.0 / 2021-05-25
 ==================
 
