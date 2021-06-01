@@ -2,6 +2,19 @@
 layout: page
 title: Fakes - Sinon.JS
 breadcrumb: fakes
+examples:
+  - fakes-1-using-fakes-instead-of-spies
+  - fakes-2-using-fakes-instead-of-stubs
+  - fakes-3-creating-without-behaviour
+  - fakes-4-creating-with-custom-behaviour
+  - fakes-5-returns
+  - fakes-6-throws
+  - fakes-7-yields
+  - fakes-8-yields-async
+  - fakes-9-callback
+  - fakes-10-firstArg
+  - fakes-11-lastArg
+  - fakes-12-adding-fake-to-system-under-test
 ---
 
 ### Introduction
@@ -24,39 +37,11 @@ The created `fake` `Function`, with or without behavior has the same API as a (`
 
 #### Using fakes instead of spies
 
-```js
-var foo = {
-  bar: () => {
-    return "baz";
-  },
-};
-// wrap existing method without changing its behaviour
-var fake = sinon.replace(foo, "bar", sinon.fake(foo.bar));
-
-fake();
-// baz
-
-fake.callCount;
-// 1
-```
+<div data-example-id="fakes-1-using-fakes-instead-of-spies"></div>
 
 #### Using fakes instead of stubs
 
-```js
-var foo = {
-  bar: () => {
-    return "baz";
-  },
-};
-// replace method with a fake one
-var fake = sinon.replace(foo, "bar", sinon.fake.returns("fake value"));
-
-fake();
-// fake value
-
-fake.callCount;
-// 1
-```
+<div data-example-id="fakes-2-using-fakes-instead-of-stubs"></div>
 
 ### Creating a fake
 
@@ -64,26 +49,11 @@ Create a `fake` `Function` with or without [behavior](#fakes-with-behavior). The
 
 #### Creating a fake without behavior
 
-```js
-// create a basic fake, with no behavior
-var fake = sinon.fake();
-
-fake();
-// undefined
-
-fake.callCount;
-// 1
-```
+<div data-example-id="fakes-3-creating-without-behaviour"></div>
 
 #### Creating a fake with custom behaviour
 
-```js
-// create a fake that returns the text "foo"
-var fake = sinon.fake.returns("foo");
-
-fake();
-// foo
-```
+<div data-example-id="fakes-4-creating-with-custom-behaviour"></div>
 
 ### Fakes with behavior
 
@@ -93,12 +63,7 @@ Fakes cannot change once created with behaviour.
 
 Creates a fake that returns the `value` argument.
 
-```js
-var fake = sinon.fake.returns("apple pie");
-
-fake();
-// apple pie
-```
+<div data-example-id="fakes-5-returns"></div>
 
 #### `sinon.fake.throws(value);`
 
@@ -106,12 +71,7 @@ Creates a fake that throws an `Error` with the provided value as the `message` p
 
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
-```js
-var fake = sinon.fake.throws(new Error("not apple pie"));
-
-fake();
-// Error: not apple pie
-```
+<div data-example-id="fakes-6-throws"></div>
 
 #### `sinon.fake.resolves(value);`
 
@@ -129,33 +89,15 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 
 In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
 
-```js
-var fake = sinon.fake.yields(null, "file content");
-sinon.replace(fs, "readFile", fake);
-fs.readFile("somefile", (err, data) => {
-  console.log(data);
-});
-console.log("end of this event loop");
-// file content
-// end of this event loop
-```
+<div data-example-id="fakes-7-yields"></div>
 
 #### `sinon.fake.yieldsAsync([value1, ..., valueN]);`
 
 Similar to `yields`, `yieldsAsync` also returns a function that when invoked, the function expects the last argument to be a callback and invokes that callback with the same previously given values. However, the returned function invokes that callback asynchronously rather than immediately, i.e. in the next event loop.
 
-Compare the output of the code example below with the output of the code example above for `yields` to see the difference.
+Compare the code example below with the code example above for `yields` to see the difference.
 
-```js
-var fakeAsync = sinon.fake.yieldsAsync(null, "file content");
-sinon.replace(fs, "readFile", fakeAsync);
-fs.readFile("somefile", (err, data) => {
-  console.log(data);
-});
-console.log("end of this event loop");
-// end of this event loop
-// file content
-```
+<div data-example-id="fakes-8-yields-async"></div>
 
 #### `sinon.fake(func);`
 
@@ -172,106 +114,32 @@ The instance properties are the same as those of a [`sinon.spy`][spies]. The fol
 #### `f.callback`
 
 This property is a convenience to get a reference to the last callback passed in the last to the fake.
+The same convenience has been added to [spy calls](../spy-call#spycallcallback).
 
-```js
-var f = sinon.fake();
-var cb1 = function () {};
-var cb2 = function () {};
-
-f(1, 2, 3, cb1);
-f(1, 2, 3, cb2);
-
-f.callback === cb2;
-// true
-```
-
-The same convenience has been added to [spy calls](../spy-call#spycallcallback):
-
-```js
-f.getCall(1).callback === cb2;
-// true
-//
-f.lastCall.callback === cb2;
-// true
-```
+<div data-example-id="fakes-9-callback"></div>
 
 #### `f.firstArg`
 
 This property is a convenient way to get a reference to the first argument passed in the last call to the fake.
+The same convenience has been added to [spy calls](../spy-call#spycallfirstarg).
 
-```js
-var f = sinon.fake();
-var date1 = new Date();
-var date2 = new Date();
-
-f(date1, 1, 2);
-f(date2, 1, 2);
-
-f.firstArg === date2;
-// true
-```
-
-The same convenience has been added to [spy calls](../spy-call#spycallfirstarg):
-
-```js
-f.getCall(0).firstArg === date1;
-// true
-f.getCall(1).firstArg === date2;
-// true
-//
-f.lastCall.firstArg === date2;
-// true
-```
+<div data-example-id="fakes-10-firstArg"></div>
 
 #### `f.lastArg`
 
 This property is a convenient way to get a reference to the last argument passed in the last call to the fake.
+The same convenience has been added to [spy calls](../spy-call#spycalllastarg).
 
-```js
-var f = sinon.fake();
-var date1 = new Date();
-var date2 = new Date();
-
-f(1, 2, date1);
-f(1, 2, date2);
-
-f.lastArg === date2;
-// true
-```
-
-The same convenience has been added to [spy calls](../spy-call#spycalllastarg):
-
-```js
-f.getCall(0).lastArg === date1;
-// true
-f.getCall(1).lastArg === date2;
-// true
-
-f.lastCall.lastArg === date2;
-// true
-```
+<div data-example-id="fakes-11-lastArg"></div>
 
 ### Adding the fake to the system under test
 
 Unlike `sinon.spy` and `sinon.stub`, `sinon.fake` only knows about creating fakes, not about replacing properties in the system under test.
 
 To replace a property, you can use the [`sinon.replace`](../sandbox/#sandboxreplaceobject-property-replacement) method.
-
-```js
-var fake = sinon.fake.returns("42");
-
-sinon.replace(console, "log", fake);
-
-console.log("apple pie");
-// 42
-```
-
 When you want to restore the replaced properties, call the `sinon.restore` method.
 
-```js
-// restores all replaced properties set by sinon methods (replace, spy, stub)
-sinon.restore();
-```
+<div data-example-id="fakes-12-adding-fake-to-system-under-test"></div>
 
 [spies]: ../spies
 [stubs]: ../stubs

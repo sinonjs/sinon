@@ -4,7 +4,7 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
 describe("FakeTest", function () {
-    it("should have working firstArg property", function () {
+    it("should have working firstArg", function () {
         const f = sinon.fake();
         const date1 = new Date();
         const date2 = new Date();

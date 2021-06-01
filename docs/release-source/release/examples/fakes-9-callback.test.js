@@ -4,7 +4,7 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
 describe("FakeTest", function () {
-    it("should have working callback property", function () {
+    it("should have working callback", function () {
         const f = sinon.fake();
         const cb1 = function () {};
         const cb2 = function () {};
