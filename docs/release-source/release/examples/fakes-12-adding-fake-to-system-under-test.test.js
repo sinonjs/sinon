@@ -4,7 +4,7 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
 describe("FakeTest", function () {
-    it("should have working lastArg property", function () {
+    it("should be able to be added to the system under test", function () {
         const fake = sinon.fake.returns("42");
 
         sinon.replace(console, "log", fake);
