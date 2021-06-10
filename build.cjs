@@ -18,6 +18,11 @@ try {
     // We seem to have it already
 }
 
+/**
+ * @param entryPoint
+ * @param config
+ * @param done
+ */
 function makeBundle(entryPoint, config, done) {
     browserify(entryPoint, config).bundle(function (err, buffer) {
         if (err) {
@@ -39,7 +44,8 @@ makeBundle(
     },
     function (bundle) {
         var script = preamble + bundle;
-        fs.writeFileSync("pkg/sinon.js", script);
+        fs.writeFileSync("pkg/sinon.cjs", script);
+        fs.writeFileSync("pkg/sinon.js", script); // WebWorker can only load js files
     }
 );
 
@@ -53,7 +59,7 @@ makeBundle(
     },
     function (bundle) {
         var script = preamble + bundle;
-        fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
+        fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", script);
     }
 );
 
