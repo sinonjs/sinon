@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 "use strict";
 /* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
-var fs = require("fs");
-var browserify = require("browserify");
-var pkg = require("./package.json");
-var sinon = require("./lib/sinon");
+const fs = require("fs");
+const browserify = require("browserify");
+const pkg = require("./package.json");
+const sinon = require("./lib/sinon");
 
 // YYYY-MM-DD
-var date = new Date().toISOString().split("T")[0];
+const date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
+const preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
 
 try {
     fs.mkdirSync("pkg");
@@ -18,14 +18,14 @@ try {
     // We seem to have it already
 }
 
-function makeBundle(entryPoint, config, done) {
-    browserify(entryPoint, config).bundle(function (err, buffer) {
+const makeBundle = (entryPoint, config, done) => {
+    browserify(entryPoint, config).bundle((err, buffer) => {
         if (err) {
             throw err;
         }
         done(buffer.toString());
     });
-}
+};
 
 makeBundle(
     "./lib/sinon.js",
@@ -37,8 +37,8 @@ makeBundle(
         // Do not detect and insert globals:
         detectGlobals: false,
     },
-    function (bundle) {
-        var script = preamble + bundle;
+    (bundle) => {
+        const script = preamble + bundle;
         fs.writeFileSync("pkg/sinon.js", script);
     }
 );
@@ -51,8 +51,8 @@ makeBundle(
         // Do not detect and insert globals:
         detectGlobals: false,
     },
-    function (bundle) {
-        var script = preamble + bundle;
+    (bundle) => {
+        const script = preamble + bundle;
         fs.writeFileSync("pkg/sinon-no-sourcemaps.js", script);
     }
 );
@@ -63,15 +63,16 @@ makeBundle(
         // Do not detect and insert globals:
         detectGlobals: false,
     },
-    function (bundle) {
-        var intro = "let sinon;";
-        var outro = `\nexport default sinon;\n${Object.keys(sinon)
-            .map(function (key) {
-                return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
-            })
+    (bundle) => {
+        const intro = "let sinon;";
+        const outro = `\nexport default sinon;\n${Object.keys(sinon)
+            .map(
+                (key) =>
+                    `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`
+            )
             .join("\n")}`;
 
-        var script = preamble + intro + bundle + outro;
+        const script = preamble + intro + bundle + outro;
         fs.writeFileSync("pkg/sinon-esm.js", script);
     }
 );
