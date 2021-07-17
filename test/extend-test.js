@@ -78,6 +78,58 @@ describe("extend", function () {
         assert.equals(result, expected);
     });
 
+    it("copies acessor properties into the target", function () {
+        var target = {
+            hello: "hello",
+        };
+        const obj = {
+            private: 1,
+        };
+        Object.defineProperty(obj, "lexical", {
+            configurable: true,
+            enumerable: true,
+            get: () => this.private,
+            set: (value) => {
+                this.private = value;
+            },
+        });
+        Object.defineProperty(obj, "instance", {
+            configurable: true,
+            enumerable: true,
+            get: () => obj.private,
+            set: (value) => {
+                obj.private = value;
+            },
+        });
+        Object.defineProperty(obj, "bound", {
+            configurable: true,
+            enumerable: true,
+            get: function () {
+                return this.private;
+            },
+            set: function (value) {
+                this.private = value;
+            },
+        });
+        extend(target, obj);
+        assert.equals(target.hello, "hello");
+        assert.equals(target.lexical === undefined, true);
+        assert.equals(target.instance, 1);
+        assert.equals(target.bound, 1);
+        target.lexical = 2;
+        assert.equals(target.lexical, 2);
+        assert.equals(target.instance, 1);
+        assert.equals(target.bound, 1);
+        target.instance = 3;
+        assert.equals(target.lexical, 2);
+        assert.equals(target.instance, 3);
+        assert.equals(target.bound, 1);
+        target.bound = 4;
+        assert.equals(target.lexical, 2);
+        assert.equals(target.instance, 3);
+        assert.equals(target.bound, 4);
+    });
+
     context("when 'name' property is not writable", function () {
         it("does not attempt to write to the property", function () {
             var object1 = { prop1: null };
