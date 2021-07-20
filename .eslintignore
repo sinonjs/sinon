@@ -1,4 +1,5 @@
 coverage/
+out/
 pkg/
 tmp/
 docs/_site/
