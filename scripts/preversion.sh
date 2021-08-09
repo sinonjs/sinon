@@ -15,9 +15,3 @@ npm run lint
 npm test
 npm run test-cloud
 npm run test-runnable-examples
-
-echo 'Updating CHANGELOG.md'
-git changelog --no-merges
-git add CHANGELOG.md
-
-git commit -m "Update CHANGELOG.md for new release"

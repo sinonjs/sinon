@@ -55,6 +55,7 @@
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
+    "version": "changes --commits --footer",
     "postversion": "./scripts/postversion.sh"
   },
   "nyc": {
@@ -83,6 +84,7 @@
     "@sinonjs/eslint-config": "^4.0.2",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^8.0.2",
+    "@studio/changes": "^2.2.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.2",
