@@ -87,9 +87,48 @@ jobs:
       - name: Integration
         run: |
           export SINON_CHROME_BIN=$(which google-chrome-stable)
+
+          # test-coverage runs test-headless in Chrome
+          npm run test-coverage  -- --chrome "$SINON_CHROME_BIN" --allow-chrome-as-root
+
           npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
           npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
           npm run test-esm-bundle
+      - name: Upload coverage report
+        run: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
+
+  saucelabs-test:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Saucelabs test
+        env:
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+        run: |
+          npm run test-cloud
 
   test:
     runs-on: ubuntu-latest
