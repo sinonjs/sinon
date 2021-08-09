@@ -20,8 +20,4 @@ echo 'Updating CHANGELOG.md'
 git changelog --no-merges
 git add CHANGELOG.md
 
-echo 'Updating AUTHORS'
-git authors --list > AUTHORS
-git add AUTHORS
-
-git commit -m "Update CHANGELOG.md and AUTHORS for new release"
+git commit -m "Update CHANGELOG.md for new release"
