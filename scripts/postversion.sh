@@ -21,3 +21,5 @@ git add "docs/releases/sinon-$PACKAGE_VERSION.js"
 git add docs/changelog.md
 git add docs/_config.yml
 git commit -n -m "Update docs/changelog.md and set new release id in docs/_config.yml"
+
+git push --follow-tags && npm publish
