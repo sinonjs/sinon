@@ -5,15 +5,11 @@ on: [push]
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16]
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16"
       - name: Cache modules
         uses: actions/cache@v2
         with:
@@ -34,15 +30,11 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16]
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16"
       - name: Cache modules
         uses: actions/cache@v2
         with:
@@ -61,17 +53,11 @@ jobs:
 
   browser-test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16]
-
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16"
       - name: Cache npm
         uses: actions/cache@v2
         with:
@@ -100,17 +86,11 @@ jobs:
   saucelabs-test:
     if: ${{ github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16]
-
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16"
       - name: Cache npm
         uses: actions/cache@v2
         with:
@@ -140,7 +120,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache modules
