@@ -1183,7 +1183,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 - Update call properties even if exceptions are thrown (Tim Perry)
 - Reverse matching order for fake server (Gordon L. Hempton)
 - Fix restoring globals on another frame fails on Firefox (Burak Yiğit Kaya)
-- Handle stubbing falsey properties (Tim Perry)
+- Handle stubbing falsy properties (Tim Perry)
 - Set returnValues correctly when the spied function is called as a constructor (Tim Perry)
 - When creating a sandbox, do not overwrite existing properties when inject
   properties into an object (Sergio Cinos)

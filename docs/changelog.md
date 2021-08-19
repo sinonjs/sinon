@@ -1309,7 +1309,7 @@ v2.0.0-pre.5 / 2016-12-31
 * Update call properties even if exceptions are thrown (Tim Perry)
 * Reverse matching order for fake server (Gordon L. Hempton)
 * Fix restoring globals on another frame fails on Firefox (Burak Yiğit Kaya)
-* Handle stubbing falsey properties (Tim Perry)
+* Handle stubbing falsy properties (Tim Perry)
 * Set returnValues correctly when the spied function is called as a constructor (Tim Perry)
 * When creating a sandbox, do not overwrite existing properties when inject
   properties into an object (Sergio Cinos)
