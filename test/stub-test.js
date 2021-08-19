@@ -720,7 +720,7 @@ describe("stub", function () {
             );
         });
 
-        it("should be reset by .resetBeahvior", function () {
+        it("should be reset by .resetBehavior", function () {
             var stub = createStub();
 
             stub.throwsArg(0);
