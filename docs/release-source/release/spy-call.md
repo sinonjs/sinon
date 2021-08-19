@@ -6,7 +6,7 @@ breadcrumb: spy-call
 
 ## Spy call
 
-A spy call is an object representation of an invididual call to a _spied_ function, which could be a [fake](../fakes), [spy](../spies), [stub](../stubs) or [mock method](../mocks).
+A spy call is an object representation of an individual call to a _spied_ function, which could be a [fake](../fakes), [spy](../spies), [stub](../stubs) or [mock method](../mocks).
 
 ### `var spyCall = spy.getCall(n)`
 
