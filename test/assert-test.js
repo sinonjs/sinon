@@ -105,7 +105,7 @@ describe("assert", function () {
                 assert(sinonAssert.fail.calledOnce);
             });
 
-            it("passes when argumens match", function () {
+            it("passes when arguments match", function () {
                 sinonAssert.match("foo", "foo");
                 assert(sinonAssert.pass.calledOnce);
             });
