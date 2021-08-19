@@ -318,7 +318,7 @@ describe("issues", function () {
                 ); //backup val
                 Object.defineProperty(window, "innerHeight", {
                     value: 10,
-                    configureable: true,
+                    configurable: true,
                     writeable: true,
                 });
                 Object.defineProperty(window, "innerHeight", preDescriptor); //restore
