@@ -3,7 +3,7 @@
 ## 11.1.2
 
 - Upgrade @sinonjs/fake-timers to latest, see https://github.com/sinonjs/fake-timers/blob/master/CHANGELOG.md#712--2021-05-28
-- Copy over acessor properties to target object #2387
+- Copy over accessor properties to target object #2387
 
 ## 11.1.1
 

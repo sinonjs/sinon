@@ -78,7 +78,7 @@ describe("extend", function () {
         assert.equals(result, expected);
     });
 
-    it("copies acessor properties into the target", function () {
+    it("copies accessor properties into the target", function () {
         var target = {
             hello: "hello",
         };
