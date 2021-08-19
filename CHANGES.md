@@ -843,7 +843,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 - Add support for es6 Symbol to wrapMethod method
 - Convert values to strings with toString instead of String()
 - Add typeOf matcher for symbol type
-- Make expectetation fail as expected when called with wrong Symbol
+- Make expectation fail as expected when called with wrong Symbol
 - Make mock report expected TypeError when expecting number and given symbol
 - Add support for es6 Symbol to match.has method
 - Make error message when failing to stub method support es6 symbol
@@ -1251,7 +1251,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 - Ensure window.Image can be stubbed. (Adrian Phinney)
 - Fix spy() in IE 8 (Scott Andrews)
 - Fix sinon base in IE 8 (Scott Andrews)
-- Format arguments ouput when mock excpetation is not met (kbackowski)
+- Format arguments ouput when mock expectation is not met (kbackowski)
 - Calling spy.reset directly from stub.reset (Thomas Meyer)
 
 ## 1.5.0
