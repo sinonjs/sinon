@@ -1279,7 +1279,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 
 ## 1.4.0
 
-- Argument matchers (Maximillian Antoni)
+- Argument matchers (Maximilian Antoni)
   sinon.match.{any, same, typeOf, instanceOf, has, hasOwn, defined, truthy,
   falsy} as well as typeOf shortcuts for boolean, number, string, object,
   function, array, regexp and date. The result of a call can be used with

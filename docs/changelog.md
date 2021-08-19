@@ -1398,7 +1398,7 @@ v2.0.0-pre.5 / 2016-12-31
   (which provides a shim process object)
 
 == 1.4.0 / 2012-07-09
-* Argument matchers (Maximillian Antoni)
+* Argument matchers (Maximilian Antoni)
   sinon.match.{any, same, typeOf, instanceOf, has, hasOwn, defined, truthy,
   falsy} as well as typeOf shortcuts for boolean, number, string, object,
   function, array, regexp and date. The result of a call can be used with
