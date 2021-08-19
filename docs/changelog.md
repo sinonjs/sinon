@@ -1526,7 +1526,7 @@ v2.0.0-pre.5 / 2016-12-31
   yieldsTo can invoke callbacks in object "options" arguments.
 * Allow sandboxes/collections to stub any property so long as the object
   has the property as an own property
-* Significantly improve error reporting from failed mock expecations. Now prints
+* Significantly improve error reporting from failed mock expectations. Now prints
   all met and unmet expectations with expected and received arguments
 * Allow mock expectations to be consumed in any order
 * Add pretty printing of all calls when assertions fail

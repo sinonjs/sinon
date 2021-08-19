@@ -1413,7 +1413,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
   yieldsTo can invoke callbacks in object "options" arguments.
 - Allow sandboxes/collections to stub any property so long as the object
   has the property as an own property
-- Significantly improve error reporting from failed mock expecations. Now prints
+- Significantly improve error reporting from failed mock expectations. Now prints
   all met and unmet expectations with expected and received arguments
 - Allow mock expectations to be consumed in any order
 - Add pretty printing of all calls when assertions fail
