@@ -289,7 +289,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 
 ## 5.1.1
 
-- Remove ES2015 'module' field for 5x branch (fix in seperate branch - see tag)
+- Remove ES2015 'module' field for 5x branch (fix in separate branch - see tag)
 
 ## 5.1.0
 
