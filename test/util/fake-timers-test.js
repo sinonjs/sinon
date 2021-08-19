@@ -186,7 +186,7 @@ describe("fakeTimers.clock", function () {
                 assert(stub.calledWithExactly("value1", 2));
             });
         } else {
-            it("shouldn't install setImmedate", function () {
+            it("shouldn't install setImmediate", function () {
                 refute.isFunction(this.clock.setImmediate);
             });
         }
@@ -208,7 +208,7 @@ describe("fakeTimers.clock", function () {
                 assert.isFalse(callback.called);
             });
         } else {
-            it("shouldn't install clearImmedate", function () {
+            it("shouldn't install clearImmediate", function () {
                 refute.isFunction(this.clock.clearImmediate);
             });
         }

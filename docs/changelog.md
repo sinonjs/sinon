@@ -1146,7 +1146,7 @@ v2.0.0-pre.5 / 2016-12-31
 1.17.0 / 2015-09-22
 ==================
 
-  * Fix #821 where Sinon.JS would leak a setImmdiate into global scope
+  * Fix #821 where Sinon.JS would leak a setImmediate into global scope
   * Removed sinon-timers from the build. refs #811
   * Added flag that, when set to true, makes sinon.logError throw errors synchronously.
   * Fix #777: Support non-enumerable props when stubbing objects
