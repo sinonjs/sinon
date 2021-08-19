@@ -78,7 +78,7 @@ describe("issues", function () {
         });
     });
 
-    describe("#852 - createStubInstance on intherited constructors", function () {
+    describe("#852 - createStubInstance on inherited constructors", function () {
         it("must not throw error", function () {
             var A = function () {
                 return;
