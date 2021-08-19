@@ -526,7 +526,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 
 ## 2.3.1
 
-- Make calledAfter symetric with calledBefore (#1407)
+- Make calledAfter symmetric with calledBefore (#1407)
 
 ## 2.3.0
 
