@@ -1128,7 +1128,7 @@ v2.0.0-pre.5 / 2016-12-31
   * cleaning up left over blank lines
   * CommonJS-ified *some* of the things
   * updated readyStateChange to align to the w3c spec (somewhat)
-  * cleaned up a few unreleated tests
+  * cleaned up a few unrelated tests
   * updated tests to reflect reality
   * added some additional progress event verification
   * added a test to ensure load is not fired before abort
