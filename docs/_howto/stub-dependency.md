@@ -3,7 +3,7 @@ layout: page
 title: How to stub a dependency of a module
 ---
 
-Sinon is a stubbing library, not a module interception library. Stubbing dependencies is highly dependant on your enviroment and the implementation. For Node environments, we usually recommend solutions targetting [link seams](../link-seams-commonjs/) or explicit dependency injection. Though in some more basic cases, you can get away with only using Sinon by modifying the module exports of the dependency.
+Sinon is a stubbing library, not a module interception library. Stubbing dependencies is highly dependant on your enviroment and the implementation. For Node environments, we usually recommend solutions targeting [link seams](../link-seams-commonjs/) or explicit dependency injection. Though in some more basic cases, you can get away with only using Sinon by modifying the module exports of the dependency.
 
 To stub a dependency (imported module) of a module under test you have to import it explicitly in your test and stub the desired method. For the stubbing to work, the stubbed method cannot be [destructured](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), neither in the module under test nor in the test.
 
