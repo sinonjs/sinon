@@ -1251,7 +1251,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 - Ensure window.Image can be stubbed. (Adrian Phinney)
 - Fix spy() in IE 8 (Scott Andrews)
 - Fix sinon base in IE 8 (Scott Andrews)
-- Format arguments ouput when mock expectation is not met (kbackowski)
+- Format arguments output when mock expectation is not met (kbackowski)
 - Calling spy.reset directly from stub.reset (Thomas Meyer)
 
 ## 1.5.0
