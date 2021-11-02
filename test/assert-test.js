@@ -2172,7 +2172,7 @@ describe("assert", function () {
                     "expected doSomething to be called once and with exact arguments \n" +
                     "Call 1:\n"
                 }${color.red("4")}\n${color.red("3")}\n${color.red(
-                    inspect(JSON.stringify('"bob"'))
+                    inspect('"bob"')
                 )}\nCall 2:`
             );
         });
