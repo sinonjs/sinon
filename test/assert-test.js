@@ -2188,6 +2188,18 @@ describe("assert", function () {
             );
         });
 
+        it("assert.calledWith message is idempotent", function () {
+            this.obj.doSomething("hey");
+
+            this.message("calledWith", this.obj.doSomething, "");
+            this.message("calledWith", this.obj.doSomething, "");
+            this.message("calledWith", this.obj.doSomething, "");
+            assert.contains(
+                this.message("calledWith", this.obj.doSomething, ""),
+                '"hey"'
+            );
+        });
+
         it("assert.alwaysCalledWithExactly exception message", function () {
             this.obj.doSomething(1, 3, "hey");
             this.obj.doSomething(1, 3);
