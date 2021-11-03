@@ -1,5 +1,27 @@
 # Changes
 
+## 12.0.0
+
+- [`b20ef9e4`](https://github.com/sinonjs/sinon/commit/b20ef9e4940e9384a6d0707b917a38e7bbfcd816)
+  Upgrade to fake-timers@8 (Carl-Erik Kopseng). This is potentially breaking, but should not be,
+  as the breaking change deals with the Node timer object created by fake timers.
+- [`eba42cc3`](https://github.com/sinonjs/sinon/commit/eba42cc38dbaf5417178a12cec11e35014e335ea)
+  Enable esm named exports (#2382) (Julian Grinblat)
+- [`b0cf5448`](https://github.com/sinonjs/sinon/commit/b0cf5448993c2ace607cdf430b7e389d02c2f296)
+  Spelling (#2398) (Josh Soref)
+- [`e78a6706`](https://github.com/sinonjs/sinon/commit/e78a670611682c7e35cf7d27887b409d6397d27c)
+  Make calledWith() assertions idempotent (#2407) (Joel Bradshaw)
+- [`2814c0a2`](https://github.com/sinonjs/sinon/commit/2814c0a212ab6b79c7251e4b0a1bebc9918257d4)
+  Generate CHANGES.md using @studio/changes (Morgan Roderick)
+    >
+    > This will bring us closer to having the same release process as the
+    > other `@sinonjs` packages.
+    >
+- [`2d5d6ad4`](https://github.com/sinonjs/sinon/commit/2d5d6ad4cd89c2063834991da5073f7640d0d722)
+  Run tests in Node 16 in GitHub Actions (Morgan Roderick)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2021-11-03._
+
 ## 11.1.2
 
 - Upgrade @sinonjs/fake-timers to latest, see https://github.com/sinonjs/fake-timers/blob/master/CHANGELOG.md#712--2021-05-28
