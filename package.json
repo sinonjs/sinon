@@ -43,10 +43,10 @@
     "test-runnable-examples": "docs/release-source/release/examples/run-test.sh",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker && npm run test-esm",
     "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
-    "build": "node ./build.js",
+    "build": "node ./build.cjs",
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
-    "lint": "eslint '**/*.{js,mjs}'",
+    "lint": "eslint '**/*.{js,cjs,mjs}'",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-bundle",
@@ -117,6 +117,11 @@
   "browser": "./lib/sinon.js",
   "main": "./lib/sinon.js",
   "module": "./pkg/sinon-esm.js",
+  "exports": {
+    "require": "./pkg/sinon.cjs",
+    "import": "./pkg/sinon-esm.js"
+  },
+  "type": "module",
   "cdn": "./pkg/sinon.js",
   "jsdelivr": "./pkg/sinon.js",
   "esm": {
