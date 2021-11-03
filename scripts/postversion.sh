@@ -12,7 +12,7 @@ echo 'update changelog'
 ./scripts/update-changelog-page.sh
 
 echo 'build new package'
-node ./build.js
+node ./build.cjs
 
 echo 'copy new version'
 cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
