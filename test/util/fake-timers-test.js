@@ -53,16 +53,12 @@ describe("fakeTimers.clock", function () {
             });
         });
 
-        it("returns numeric id or object with numeric id", function () {
+        it("returns a timer id whose primitive representation is a number", function () {
             // eslint-disable-next-line no-empty-function
             var noop = function () {};
             var result = this.clock.setTimeout(noop);
 
-            if (typeof result === "object") {
-                assert.isNumber(result.id);
-            } else {
-                assert.isNumber(result);
-            }
+            assert.isNumber(Number(result));
         });
 
         it("returns unique id", function () {
@@ -135,16 +131,12 @@ describe("fakeTimers.clock", function () {
         });
 
         if (typeof setImmediate === "function") {
-            it("returns numeric id or object with numeric id", function () {
+            it("returns a timer whose primitive representation is a number", function () {
                 var result = this.clock.setImmediate(function () {
                     return;
                 });
 
-                if (typeof result === "object") {
-                    assert.isNumber(result.id);
-                } else {
-                    assert.isNumber(result);
-                }
+                assert.isNumber(Number(result));
             });
 
             it("calls the given callback immediately", function () {
@@ -602,16 +594,12 @@ describe("fakeTimers.clock", function () {
             });
         });
 
-        it("returns numeric id or object with numeric id", function () {
+        it("returns a timer whose primitive representation is a number", function () {
             // eslint-disable-next-line no-empty-function
             var noop = function () {};
             var result = this.clock.setInterval(noop);
 
-            if (typeof result === "object") {
-                assert.isNumber(result.id);
-            } else {
-                assert.isNumber(result);
-            }
+            assert.isNumber(Number(result));
         });
 
         it("returns unique id", function () {
@@ -911,23 +899,12 @@ describe("fakeTimers.clock", function () {
             assert(stub.called);
         });
 
-        it("global fake setTimeout should return id", function () {
+        it("returns a timer whose primitive representation is a number", function () {
             this.clock = fakeTimers.useFakeTimers();
-            var stub = sinonStub();
+            const stub = sinonStub();
+            const to = setTimeout(stub, 1000);
 
-            var to = setTimeout(stub, 1000);
-
-            if (
-                typeof setTimeout(function () {
-                    return;
-                }, 0) === "object"
-            ) {
-                assert.isNumber(to.id);
-                assert.isFunction(to.ref);
-                assert.isFunction(to.unref);
-            } else {
-                assert.isNumber(to);
-            }
+            assert.isNumber(Number(to));
         });
 
         it("replaces global clearTimeout", function () {
