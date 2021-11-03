@@ -23,11 +23,13 @@
 <a href="CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg" alt="Contributor Covenant" /></a>
 </p>
 
+<!-- Shows an outdated badge. Will not be fixed until https://github.com/sinonjs/fake-timers/pull/395 ships.
 <p align=center>
 <a href="https://app.saucelabs.com/u/sinonjs">
   <img src="https://app.saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"/>
 </a> 
 </p>
+-->
 
 ## Compatibility
 
