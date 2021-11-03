@@ -6,7 +6,7 @@ echo 'postversion tasks'
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
 
 echo 'set new current/next release id in documentation'
-node ./scripts/set-release-id-in-config-yml.js
+node ./scripts/set-release-id-in-config-yml.cjs
 
 echo 'update changelog'
 ./scripts/update-changelog-page.sh
