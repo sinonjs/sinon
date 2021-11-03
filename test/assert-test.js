@@ -2172,7 +2172,7 @@ describe("assert", function () {
                     "expected doSomething to be called once and with exact arguments \n" +
                     "Call 1:\n"
                 }${color.red("4")}\n${color.red("3")}\n${color.red(
-                    inspect(JSON.stringify('"bob"'))
+                    inspect('"bob"')
                 )}\nCall 2:`
             );
         });
@@ -2185,6 +2185,18 @@ describe("assert", function () {
                 `expected doSomething to be called with arguments \n${color.red(
                     1234
                 )} ${color.green(inspect('"1234"'))} `
+            );
+        });
+
+        it("assert.calledWith message is idempotent", function () {
+            this.obj.doSomething("hey");
+
+            this.message("calledWith", this.obj.doSomething, "");
+            this.message("calledWith", this.obj.doSomething, "");
+            this.message("calledWith", this.obj.doSomething, "");
+            assert.contains(
+                this.message("calledWith", this.obj.doSomething, ""),
+                '"hey"'
             );
         });
 
