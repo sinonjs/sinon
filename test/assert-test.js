@@ -1438,7 +1438,8 @@ describe("assert", function () {
                         [].slice.call(arguments, 1)
                     );
                 } catch (e) {
-                    // Strip off the stack frames we append
+                    // We sometimes append stack frames to the message and they
+                    // make assertions messy, so strip those off here
                     return e.message.replace(/( at.*\(.*\)$)+/gm, "");
                 }
             };
