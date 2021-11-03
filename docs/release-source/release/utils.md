@@ -10,7 +10,7 @@ Sinon.JS has a few utilities used internally in `lib/sinon.js`. Unless the metho
 
 #### `sinon.createStubInstance(constructor);`
 
-Creates a new object with the given function as the protoype and stubs all implemented functions.
+Creates a new object with the given function as the prototype and stubs all implemented functions.
 
 ```javascript
 class Container {

@@ -78,7 +78,7 @@ describe("issues", function () {
         });
     });
 
-    describe("#852 - createStubInstance on intherited constructors", function () {
+    describe("#852 - createStubInstance on inherited constructors", function () {
         it("must not throw error", function () {
             var A = function () {
                 return;
@@ -318,7 +318,7 @@ describe("issues", function () {
                 ); //backup val
                 Object.defineProperty(window, "innerHeight", {
                     value: 10,
-                    configureable: true,
+                    configurable: true,
                     writeable: true,
                 });
                 Object.defineProperty(window, "innerHeight", preDescriptor); //restore

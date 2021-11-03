@@ -279,7 +279,7 @@ describe("stub", function () {
 
         it("supersedes previous rejects", function () {
             var stub = createStub();
-            stub.rejects(Error("should be superseeded")).resolves(1);
+            stub.rejects(Error("should be superseded")).resolves(1);
 
             return stub().then();
         });
@@ -546,7 +546,7 @@ describe("stub", function () {
 
         it("supersedes previous rejects", function () {
             var stub = createStub();
-            stub.rejects(Error("should be superseeded")).resolvesArg(1);
+            stub.rejects(Error("should be superseded")).resolvesArg(1);
 
             return stub("zero", "one").then(function (actual) {
                 assert.same(actual, "one");
@@ -720,7 +720,7 @@ describe("stub", function () {
             );
         });
 
-        it("should be reset by .resetBeahvior", function () {
+        it("should be reset by .resetBehavior", function () {
             var stub = createStub();
 
             stub.throwsArg(0);

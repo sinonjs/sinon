@@ -9,7 +9,7 @@ permalink: /releases/changelog
 ==================
 
   * Upgrade @sinonjs/fake-timers to latest, see https://github.com/sinonjs/fake-timers/blob/master/CHANGELOG.md#712--2021-05-28
-  * Copy over acessor properties to target object #2387
+  * Copy over accessor properties to target object #2387
 
 11.1.1 / 2021-05-26
 ==================
@@ -351,7 +351,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 5.1.1 / 2018-06-07
 ==================
 
-  * Remove ES2015 'module' field for 5x branch (fix in seperate branch - see tag)
+  * Remove ES2015 'module' field for 5x branch (fix in separate branch - see tag)
 
 5.1.0 / 2018-06-06
 ==================
@@ -640,7 +640,7 @@ The major release is caused by removing old mistakes and upgrading dependencies 
 2.3.1 / 2017-05-23
 ==================
 
-  * Make calledAfter symetric with calledBefore (#1407)
+  * Make calledAfter symmetric with calledBefore (#1407)
 
 2.3.0 / 2017-05-22
 ==================
@@ -972,7 +972,7 @@ v2.0.0-pre.5 / 2016-12-31
   * Add support for es6 Symbol to wrapMethod method
   * Convert values to strings with toString instead of String()
   * Add typeOf matcher for symbol type
-  * Make expectetation fail as expected when called with wrong Symbol
+  * Make expectation fail as expected when called with wrong Symbol
   * Make mock report expected TypeError when expecting number and given symbol
   * Add support for es6 Symbol to match.has method
   * Make error message when failing to stub method support es6 symbol
@@ -1128,7 +1128,7 @@ v2.0.0-pre.5 / 2016-12-31
   * cleaning up left over blank lines
   * CommonJS-ified *some* of the things
   * updated readyStateChange to align to the w3c spec (somewhat)
-  * cleaned up a few unreleated tests
+  * cleaned up a few unrelated tests
   * updated tests to reflect reality
   * added some additional progress event verification
   * added a test to ensure load is not fired before abort
@@ -1146,7 +1146,7 @@ v2.0.0-pre.5 / 2016-12-31
 1.17.0 / 2015-09-22
 ==================
 
-  * Fix #821 where Sinon.JS would leak a setImmdiate into global scope
+  * Fix #821 where Sinon.JS would leak a setImmediate into global scope
   * Removed sinon-timers from the build. refs #811
   * Added flag that, when set to true, makes sinon.logError throw errors synchronously.
   * Fix #777: Support non-enumerable props when stubbing objects
@@ -1309,7 +1309,7 @@ v2.0.0-pre.5 / 2016-12-31
 * Update call properties even if exceptions are thrown (Tim Perry)
 * Reverse matching order for fake server (Gordon L. Hempton)
 * Fix restoring globals on another frame fails on Firefox (Burak Yiğit Kaya)
-* Handle stubbing falsey properties (Tim Perry)
+* Handle stubbing falsy properties (Tim Perry)
 * Set returnValues correctly when the spied function is called as a constructor (Tim Perry)
 * When creating a sandbox, do not overwrite existing properties when inject
   properties into an object (Sergio Cinos)
@@ -1374,7 +1374,7 @@ v2.0.0-pre.5 / 2016-12-31
 * Ensure window.Image can be stubbed. (Adrian Phinney)
 * Fix spy() in IE 8 (Scott Andrews)
 * Fix sinon base in IE 8 (Scott Andrews)
-* Format arguments ouput when mock excpetation is not met (kbackowski)
+* Format arguments output when mock expectation is not met (kbackowski)
 * Calling spy.reset directly from stub.reset (Thomas Meyer)
 
 == 1.5.0 / 2012-10-19
@@ -1398,7 +1398,7 @@ v2.0.0-pre.5 / 2016-12-31
   (which provides a shim process object)
 
 == 1.4.0 / 2012-07-09
-* Argument matchers (Maximillian Antoni)
+* Argument matchers (Maximilian Antoni)
   sinon.match.{any, same, typeOf, instanceOf, has, hasOwn, defined, truthy,
   falsy} as well as typeOf shortcuts for boolean, number, string, object,
   function, array, regexp and date. The result of a call can be used with
@@ -1526,7 +1526,7 @@ v2.0.0-pre.5 / 2016-12-31
   yieldsTo can invoke callbacks in object "options" arguments.
 * Allow sandboxes/collections to stub any property so long as the object
   has the property as an own property
-* Significantly improve error reporting from failed mock expecations. Now prints
+* Significantly improve error reporting from failed mock expectations. Now prints
   all met and unmet expectations with expected and received arguments
 * Allow mock expectations to be consumed in any order
 * Add pretty printing of all calls when assertions fail

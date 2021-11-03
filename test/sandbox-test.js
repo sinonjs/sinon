@@ -1501,7 +1501,7 @@ describe("Sandbox", function () {
             assert.same(setTimeout, originalSetTimeout, "fakeTimers restored");
         });
 
-        it("restores spied fake timers when then sanddox is restored", function () {
+        it("restores spied fake timers when the sandbox is restored", function () {
             var originalSetTimeout = setTimeout;
 
             this.sandbox.useFakeTimers();

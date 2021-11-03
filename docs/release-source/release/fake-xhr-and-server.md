@@ -284,7 +284,7 @@ Causes all queued asynchronous requests to receive a response.
 
 If none of the responses added through `respondWith()` match, the default response is `[404, {}, ""]`.
 
-Synchronous requests are responded to immediately so make sure to call `respondWith()` to configure the server response before calling `respond()`. If not, you will recieve the default `404 NOT FOUND` response.
+Synchronous requests are responded to immediately so make sure to call `respondWith()` to configure the server response before calling `respond()`. If not, you will receive the default `404 NOT FOUND` response.
 
 If called with arguments, `respondWith()` will be called with those arguments before responding to requests.
 
