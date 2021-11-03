@@ -1570,6 +1570,15 @@ describe("assert", function () {
             );
         });
 
+        it("assert.callCount exception message with non-numeric argument", function () {
+            this.obj.doSomething();
+
+            assert.equals(
+                this.message("callCount", this.obj.doSomething, "3"),
+                "expected '3' to be a number but was of type string"
+            );
+        });
+
         it("assert.calledOnce exception message", function () {
             this.obj.doSomething();
             this.obj.doSomething();
