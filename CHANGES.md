@@ -13,10 +13,8 @@
   Make calledWith() assertions idempotent (#2407) (Joel Bradshaw)
 - [`2814c0a2`](https://github.com/sinonjs/sinon/commit/2814c0a212ab6b79c7251e4b0a1bebc9918257d4)
   Generate CHANGES.md using @studio/changes (Morgan Roderick)
-    >
-    > This will bring us closer to having the same release process as the
-    > other `@sinonjs` packages.
-    >
+  > This will bring us closer to having the same release process as the
+  > other `@sinonjs` packages.
 - [`2d5d6ad4`](https://github.com/sinonjs/sinon/commit/2d5d6ad4cd89c2063834991da5073f7640d0d722)
   Run tests in Node 16 in GitHub Actions (Morgan Roderick)
 
