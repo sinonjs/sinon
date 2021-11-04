@@ -44,7 +44,6 @@ makeBundle(
     },
     function (bundle) {
         var script = preamble + bundle;
-        fs.writeFileSync("pkg/sinon.cjs", script);
         fs.writeFileSync("pkg/sinon.js", script); // WebWorker can only load js files
     }
 );
