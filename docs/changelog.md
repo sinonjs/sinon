@@ -6,6 +6,22 @@ permalink: /releases/changelog
 # Changelog
 # Changes
 
+## 12.0.1
+
+- [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
+  Fix issue with npm unlink for npm version > 6 (Carl-Erik Kopseng)
+    >
+    > 'npm unlink' would implicitly unlink the current dir
+    > until version 7, which requires an argument
+    >
+- [`51417a38`](https://github.com/sinonjs/sinon/commit/51417a38111eeeb7cd14338bfb762cc2df487e1b)
+  Fix bundling of cjs module (#2412) (Julian Grinblat)
+    >
+    > * Fix bundling of cjs module    >
+    > * Run prettier
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2021-11-04._
+
 ## 12.0.0
 
 - [`b20ef9e4`](https://github.com/sinonjs/sinon/commit/b20ef9e4940e9384a6d0707b917a38e7bbfcd816)
@@ -19,10 +35,8 @@ permalink: /releases/changelog
   Make calledWith() assertions idempotent (#2407) (Joel Bradshaw)
 - [`2814c0a2`](https://github.com/sinonjs/sinon/commit/2814c0a212ab6b79c7251e4b0a1bebc9918257d4)
   Generate CHANGES.md using @studio/changes (Morgan Roderick)
-    >
-    > This will bring us closer to having the same release process as the
-    > other `@sinonjs` packages.
-    >
+  > This will bring us closer to having the same release process as the
+  > other `@sinonjs` packages.
 - [`2d5d6ad4`](https://github.com/sinonjs/sinon/commit/2d5d6ad4cd89c2063834991da5073f7640d0d722)
   Run tests in Node 16 in GitHub Actions (Morgan Roderick)
 
