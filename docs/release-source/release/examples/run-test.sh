@@ -27,4 +27,4 @@ npm unlink sinon
 git checkout -- package.json
 npm install --ignore-scripts
 cd "$SCRIPT_DIR/.."
-npm unlink
+npm unlink .
