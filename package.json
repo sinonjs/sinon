@@ -118,7 +118,7 @@
   "main": "./lib/sinon.js",
   "module": "./pkg/sinon-esm.js",
   "exports": {
-    "require": "./pkg/sinon.cjs",
+    "require": "./lib/sinon.js",
     "import": "./pkg/sinon-esm.js"
   },
   "type": "module",
