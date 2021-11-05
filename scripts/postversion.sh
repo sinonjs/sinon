@@ -3,6 +3,7 @@ set -e
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
 
 echo 'postversion tasks'
+prettier --write CHANGES.md # after manually hand-editing this might need fixes
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
 
 echo 'set new current/next release id in documentation'
