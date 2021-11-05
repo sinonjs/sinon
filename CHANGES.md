@@ -4,13 +4,8 @@
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
   Fix issue with npm unlink for npm version > 6 (Carl-Erik Kopseng)
-  > 'npm unlink' would implicitly unlink the current dir
-  > until version 7, which requires an argument
 - [`51417a38`](https://github.com/sinonjs/sinon/commit/51417a38111eeeb7cd14338bfb762cc2df487e1b)
   Fix bundling of cjs module (#2412) (Julian Grinblat)
-  > - Fix bundling of cjs module
-  >
-  > - Run prettier
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2021-11-04._
 
