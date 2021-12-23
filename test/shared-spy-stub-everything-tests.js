@@ -151,4 +151,51 @@ module.exports = function shared(createSpyOrStub) {
 
         assert.isUndefined(myObj.ouch);
     });
+
+    it("throw on data property descriptors that are not writable or configurable", function () {
+        var myObj = {};
+        Object.defineProperty(myObj, 'ignoreme', {
+            writable: false,
+            configurable: false
+        });
+
+        assert.exception(function () {
+                createSpyOrStub(myObj, "ignoreme");
+            }, 
+            new TypeError('Descriptor for property ignoreme is non-configurable and non-writable')
+        );
+    });
+
+    it("throw on accessor property descriptors that are not configurable", function () {
+        var myObj = {};
+        Object.defineProperty(myObj, 'ignoreme', {
+            get: function(key) {
+                return this[key];
+            },
+            set: function(key, val) {
+                this[key] = val;
+            },
+            configurable: false
+        });
+
+        assert.exception(function () {
+                createSpyOrStub(myObj, "ignoreme");
+            },
+            new TypeError('Descriptor for accessor property ignoreme is non-configurable')
+        );
+    });
+
+    it("throw on data descriptors that are not stubbable", function () {
+        var myObj = {};
+        Object.defineProperty(myObj, 'ignoreme', {
+            writable: false,
+            configurable: false
+        });
+
+        assert.exception(function () {
+                createSpyOrStub(myObj, "ignoreme");
+            }, 
+            new TypeError('Descriptor for data property ignoreme is non-writable')
+        );
+    });
 };
