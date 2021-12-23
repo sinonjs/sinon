@@ -152,7 +152,7 @@ module.exports = function shared(createSpyOrStub) {
         assert.isUndefined(myObj.ouch);
     });
 
-    it("throw on data property descriptors that are not writable or configurable", function () {
+    it("throws on data property descriptors that are not writable or configurable", function () {
         var myObj = {};
         Object.defineProperty(myObj, 'ignoreme', {
             writable: false,
@@ -166,7 +166,7 @@ module.exports = function shared(createSpyOrStub) {
         );
     });
 
-    it("throw on accessor property descriptors that are not configurable", function () {
+    it("throws on accessor property descriptors that are not configurable", function () {
         var myObj = {};
         Object.defineProperty(myObj, 'ignoreme', {
             get: function(key) {
@@ -185,7 +185,7 @@ module.exports = function shared(createSpyOrStub) {
         );
     });
 
-    it("throw on data descriptors that are not stubbable", function () {
+    it("throws on data descriptors that are not stubbable", function () {
         var myObj = {};
         Object.defineProperty(myObj, 'ignoreme', {
             writable: false,
