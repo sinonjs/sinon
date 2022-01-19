@@ -15,6 +15,9 @@ echo 'update changelog'
 echo 'build new package'
 node ./build.cjs
 
+echo 'copying latest sinon to webpage assets'
+cp pkg/sinon.js ./docs/assets/js/
+
 echo 'copy new version'
 cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
 
