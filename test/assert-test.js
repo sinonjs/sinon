@@ -1438,7 +1438,9 @@ describe("assert", function () {
                         [].slice.call(arguments, 1)
                     );
                 } catch (e) {
-                    return e.message;
+                    // We sometimes append stack frames to the message and they
+                    // make assertions messy, so strip those off here
+                    return e.message.replace(/( at.*\(.*\)$)+/gm, "");
                 }
             };
         });
@@ -1454,10 +1456,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("notCalled", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("notCalled", this.obj.doSomething),
                 "expected doSomething to not have been called but was called once\n    doSomething()"
             );
         });
@@ -1469,10 +1468,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("notCalled", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("notCalled", this.obj.doSomething),
                 "expected doSomething to not have been called " +
                     "but was called 4 times\n    doSomething()\n    " +
                     "doSomething()\n    doSomething()\n    doSomething()"
@@ -1486,10 +1482,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("notCalled", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("notCalled", this.obj.doSomething),
                 "expected doSomething to not have been called " +
                     "but was called 4 times\n    doSomething()\n    " +
                     "doSomething(3)\n    doSomething(42, 1)\n    doSomething()"
@@ -1573,11 +1566,17 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("callCount", this.obj.doSomething, 3).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("callCount", this.obj.doSomething, 3),
                 "expected doSomething to be called thrice but was called once\n    doSomething()"
+            );
+        });
+
+        it("assert.callCount exception message with non-numeric argument", function () {
+            this.obj.doSomething();
+
+            assert.equals(
+                this.message("callCount", this.obj.doSomething, "3"),
+                "expected '3' to be a number but was of type string"
             );
         });
 
@@ -1586,20 +1585,14 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledOnce", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledOnce", this.obj.doSomething),
                 "expected doSomething to be called once but was called twice\n    doSomething()\n    doSomething()"
             );
 
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledOnce", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledOnce", this.obj.doSomething),
                 "expected doSomething to be called once but was called " +
                     "thrice\n    doSomething()\n    doSomething()\n    doSomething()"
             );
@@ -1609,10 +1602,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledTwice", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledTwice", this.obj.doSomething),
                 "expected doSomething to be called twice but was called once\n    doSomething()"
             );
         });
@@ -1624,10 +1614,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message("calledThrice", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledThrice", this.obj.doSomething),
                 "expected doSomething to be called thrice but was called 4 times\n" +
                     "    doSomething()\n    doSomething()\n    doSomething()\n    doSomething()"
             );
@@ -1715,13 +1702,7 @@ describe("assert", function () {
             this.obj.doSomething(4, 3, "hey");
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    1,
-                    3,
-                    "hey"
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, 1, 3, "hey"),
                 `expected doSomething to be called with arguments \n${color.red(
                     "4"
                 )} ${color.green("1")} \n3\n${inspect('"hey"')}`
@@ -1733,13 +1714,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 3, "not");
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    1,
-                    3,
-                    "hey"
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, 1, 3, "hey"),
                 `${
                     "expected doSomething to be called with arguments \n" +
                     "Call 1:\n"
@@ -1825,10 +1800,7 @@ describe("assert", function () {
             this.obj.doSomething(4);
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, 1, 3).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledWith", this.obj.doSomething, 1, 3),
                 `expected doSomething to be called with arguments \n${color.red(
                     "4"
                 )} ${color.green("1")} \n${color.green("3")}`
@@ -1839,10 +1811,7 @@ describe("assert", function () {
             this.obj.doSomething(4, 3);
 
             assert.equals(
-                this.message("calledWith", this.obj.doSomething, 1).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("calledWith", this.obj.doSomething, 1),
                 `expected doSomething to be called with arguments \n${color.red(
                     "4"
                 )} ${color.green("1")} \n${color.red("3")}`
@@ -1858,7 +1827,7 @@ describe("assert", function () {
                     this.obj.doSomething,
                     match.any,
                     false
-                ).replace(/ at.*/g, ""),
+                ),
                 `${
                     "expected doSomething to be called with arguments \n" +
                     "true any\n"
@@ -1870,11 +1839,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match.defined
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.defined),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "defined"
                 )}`
@@ -1885,11 +1850,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match.truthy
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.truthy),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "truthy"
                 )}`
@@ -1900,11 +1861,7 @@ describe("assert", function () {
             this.obj.doSomething(true);
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match.falsy
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.falsy),
                 `expected doSomething to be called with arguments \n${color.green(
                     "true"
                 )} ${color.red("falsy")}`
@@ -1915,11 +1872,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match.same(1)
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match.same(1)),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "same(1)"
                 )}`
@@ -1931,11 +1884,7 @@ describe("assert", function () {
             var matcher = match.typeOf("string");
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    matcher
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, matcher),
                 `expected doSomething to be called with arguments \n ${color.red(
                     'typeOf("string")'
                 )}`
@@ -1949,11 +1898,7 @@ describe("assert", function () {
             });
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    matcher
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, matcher),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "instanceOf(CustomType)"
                 )}`
@@ -1965,11 +1910,7 @@ describe("assert", function () {
             var matcher = match({ some: "value", and: 123 });
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    matcher
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, matcher),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "match(some: value, and: 123)"
                 )}`
@@ -1980,11 +1921,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match(true)
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match(true)),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "match(true)"
                 )}`
@@ -1995,11 +1932,7 @@ describe("assert", function () {
             this.obj.doSomething();
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    match(123)
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, match(123)),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "match(123)"
                 )}`
@@ -2011,11 +1944,7 @@ describe("assert", function () {
             var matcher = match("Sinon");
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    matcher
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, matcher),
                 `expected doSomething to be called with arguments \n ${color.red(
                     'match("Sinon")'
                 )}`
@@ -2030,7 +1959,7 @@ describe("assert", function () {
                     "calledWith",
                     this.obj.doSomething,
                     match(/[a-z]+/)
-                ).replace(/ at.*/g, ""),
+                ),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "match(/[a-z]+/)"
                 )}`
@@ -2046,11 +1975,7 @@ describe("assert", function () {
             });
 
             assert.equals(
-                this.message(
-                    "calledWith",
-                    this.obj.doSomething,
-                    matcher
-                ).replace(/ at.*/g, ""),
+                this.message("calledWith", this.obj.doSomething, matcher),
                 `expected doSomething to be called with arguments \n ${color.red(
                     "match(custom)"
                 )}`
@@ -2067,7 +1992,7 @@ describe("assert", function () {
                     4,
                     3,
                     "hey"
-                ).replace(/ at.*/g, ""),
+                ),
                 `expected doSomething to be called with match \n${color.red(
                     "1"
                 )} ${color.green("4")} \n3\n${inspect('"hey"')}`
@@ -2084,7 +2009,7 @@ describe("assert", function () {
                     this.obj.doSomething,
                     1,
                     "hey"
-                ).replace(/ at.*/g, ""),
+                ),
                 `${
                     "expected doSomething to always be called with arguments \n" +
                     "Call 1:\n" +
@@ -2107,7 +2032,7 @@ describe("assert", function () {
                     this.obj.doSomething,
                     1,
                     "hey"
-                ).replace(/ at.*/g, ""),
+                ),
                 `${
                     "expected doSomething to always be called with match \n" +
                     "Call 1:\n" +
@@ -2124,12 +2049,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 3, "hey");
 
             assert.equals(
-                this.message(
-                    "calledWithExactly",
-                    this.obj.doSomething,
-                    1,
-                    3
-                ).replace(/ at.*/g, ""),
+                this.message("calledWithExactly", this.obj.doSomething, 1, 3),
                 `expected doSomething to be called with exact arguments \n1\n3\n${color.red(
                     inspect('"hey"')
                 )}`
@@ -2144,7 +2064,7 @@ describe("assert", function () {
                     1,
                     3,
                     "bob"
-                ).replace(/ at.*/g, ""),
+                ),
                 "expected doSomething to be called once and with exact arguments "
             );
 
@@ -2156,7 +2076,7 @@ describe("assert", function () {
                     1,
                     3,
                     "bob"
-                ).replace(/ at.*/g, ""),
+                ),
                 `expected doSomething to be called once and with exact arguments \n${color.red(
                     "4"
                 )} ${color.green("1")} \n3\n${inspect('"bob"')}`
@@ -2164,10 +2084,7 @@ describe("assert", function () {
 
             this.obj.doSomething();
             assert.equals(
-                this.message(
-                    "calledOnceWithExactly",
-                    this.obj.doSomething
-                ).replace(/ at.*/g, ""),
+                this.message("calledOnceWithExactly", this.obj.doSomething),
                 `${
                     "expected doSomething to be called once and with exact arguments \n" +
                     "Call 1:\n"
@@ -2210,7 +2127,7 @@ describe("assert", function () {
                     this.obj.doSomething,
                     1,
                     3
-                ).replace(/ at.*/g, ""),
+                ),
                 `${
                     "expected doSomething to always be called with exact arguments \n" +
                     "Call 1:\n" +
@@ -2227,12 +2144,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 2, 3);
 
             assert.equals(
-                this.message(
-                    "neverCalledWith",
-                    this.obj.doSomething,
-                    1,
-                    2
-                ).replace(/ at.*/g, ""),
+                this.message("neverCalledWith", this.obj.doSomething, 1, 2),
                 "expected doSomething to never be called with arguments 1, 2\n    doSomething(1, 2, 3)"
             );
         });
@@ -2246,7 +2158,7 @@ describe("assert", function () {
                     this.obj.doSomething,
                     1,
                     2
-                ).replace(/ at.*/g, ""),
+                ),
                 "expected doSomething to never be called with match 1, 2\n    doSomething(1, 2, 3)"
             );
         });
@@ -2256,10 +2168,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 3);
 
             assert.equals(
-                this.message("threw", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("threw", this.obj.doSomething),
                 "doSomething did not throw exception\n    doSomething(1, 3, 'hey')\n    doSomething(1, 3)"
             );
         });
@@ -2269,10 +2178,7 @@ describe("assert", function () {
             this.obj.doSomething(1, 3);
 
             assert.equals(
-                this.message("alwaysThrew", this.obj.doSomething).replace(
-                    / at.*/g,
-                    ""
-                ),
+                this.message("alwaysThrew", this.obj.doSomething),
                 "doSomething did not always throw exception\n    doSomething(1, 3, 'hey')\n    doSomething(1, 3)"
             );
         });

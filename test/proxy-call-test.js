@@ -1176,7 +1176,7 @@ describe("sinonSpy.call", function () {
 
         // https://github.com/sinonjs/sinon/issues/1066
         /* eslint-disable consistent-return */
-        it("does not throw when the call stack is empty", function (done) {
+        it("does not throw when the call stack is empty", async function () {
             if (typeof Promise === "undefined") {
                 this.skip();
             }
@@ -1184,21 +1184,36 @@ describe("sinonSpy.call", function () {
             var stub1 = sinonStub().resolves(1);
             var stub2 = sinonStub().returns(1);
 
-            function run() {
-                return stub1().then(stub2);
-            }
+            await stub2(await stub1());
 
-            run()
-                .then(function () {
-                    assert.equals(
-                        stub2.getCall(0).toString().replace(/ at.*/g, ""),
-                        "stub(1) => 1"
-                    );
-                    done();
-                })
-                .catch(done);
+            assert.equals(
+                stub2.getCall(0).toString().replace(/ at.*/g, ""),
+                "stub(1) => 1"
+            );
         });
         /* eslint-enable consistent-return */
+
+        it("includes first stack entry from end-user code", function () {
+            /* We find the first stack frame that points to end-user code and
+             * add it to the error message. We do this by chopping off a
+             * constant number of stack frames, so if this test fails, you
+             * probably need to chop off a different number of frames
+             */
+            if (typeof __filename === "undefined") {
+                this.skip();
+            }
+
+            var object = { doIt: sinonSpy() };
+            object.doIt();
+
+            const [name, stackFrame] = object.doIt
+                .getCall(0)
+                .toString()
+                .split(" at ");
+
+            assert.equals(name, "doIt()");
+            assert.contains(stackFrame, __filename);
+        });
     });
 
     describe("constructor", function () {
