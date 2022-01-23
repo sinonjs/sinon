@@ -1440,15 +1440,18 @@ describe("assert", function () {
                 } catch (e) {
                     // We sometimes append stack frames to the message and they
                     // make assertions messy, so strip those off here
-                    return e.message.replace(/( at.*\(.*\)$)+/gm, "");
+                    return e.message.replace(/ at.*/g, "");
                 }
             };
         });
 
         it("assert.called exception message", function () {
+            // The actual message here is "...called at least once but was
+            // never called" but everything after "at" gets stripped out
+            // becuase of how we strip off stack traces for comparison's sake
             assert.equals(
                 this.message("called", this.obj.doSomething),
-                "expected doSomething to have been called at least once but was never called"
+                "expected doSomething to have been called"
             );
         });
 
