@@ -5,6 +5,8 @@ tmp/
 .sass-cache
 docs/_site/
 docs/js/
+docs/releases/
+docs/_releases/
 docs/assets/js/
 CHANGELOG.md
 docs/changelog.md

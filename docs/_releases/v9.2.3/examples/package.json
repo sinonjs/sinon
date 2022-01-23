@@ -1,0 +1,22 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Simulate running the Sinon runnable examples in RunKit",
+  "scripts": {
+    "test": "./run-test.sh"
+  },
+  "license": "ISC",
+  "// dependencies": "We use 'latest' for the versions, as that is what RunKit will use",
+  "dependencies": {
+    "@fatso83/mini-mocha": "latest",
+    "@sinonjs/referee": "latest",
+    "bluebird": "latest",
+    "jquery": "latest",
+    "jsdom": "latest",
+    "pubsub-js": "latest",
+    "sinon": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
