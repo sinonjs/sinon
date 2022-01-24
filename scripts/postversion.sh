@@ -8,7 +8,8 @@ echo 'postversion tasks'
 
 # npm publish will generate the pkg/sinon.js that we use below
 echo 'publish to npm'
-git push --follow-tags && npm publish
+git push --follow-tags
+npm publish
 
 # Now update the releases branch and archive the new release
 git checkout $ARCHIVE_BRANCH
@@ -25,4 +26,5 @@ cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
 git add "docs/releases/sinon-$PACKAGE_VERSION.js"
 git commit -n -m "Add version $PACKAGE_VERSION to releases"
 
-git push && git checkout $SOURCE_BRANCH
+git push
+git checkout $SOURCE_BRANCH
