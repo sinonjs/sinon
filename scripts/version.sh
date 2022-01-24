@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 echo 'update CHANGES.md'
 changes --commits --footer
 
