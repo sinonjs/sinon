@@ -12,7 +12,7 @@ git push --follow-tags && npm publish
 
 # Now update the releases branch and archive the new release
 git checkout $ARCHIVE_BRANCH
-git merge $SOURCE_BRANCH
+git merge --no-edit -m "Merge version $PACKAGE_VERSION" $SOURCE_BRANCH
 
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
 
