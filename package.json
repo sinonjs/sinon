@@ -49,7 +49,6 @@
     "lint": "eslint '**/*.{js,cjs,mjs}'",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
-    "postbuild": "npm run test-esm-bundle",
     "prebuild-docs": "./scripts/update-compatibility.js",
     "prepublishOnly": "npm run build",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
