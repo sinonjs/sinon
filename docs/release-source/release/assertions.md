@@ -119,6 +119,12 @@ This behaves the same way as `sinon.assert.calledWith(spy, sinon.match(arg1), si
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWithMatch(spy.secondCall, arg1, arg2, ...);`.
 
+#### `sinon.assert.calledOnceWithMatch(spyOrSpyCall, arg1, arg2, ...)`
+
+Passes if `spy` was called once and only once with matching arguments.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.calledOnceWithMatch(spy.secondCall, arg1, arg2, ...);`.
+
 #### `sinon.assert.alwaysCalledWithMatch(spy, arg1, arg2, ...)`
 
 Passes if `spy` was always called with matching arguments.
