@@ -5,24 +5,27 @@
  * They do not assert how code that has been transpiled into ES5 using Babel
  * and similar will behave.
  */
-import * as aModule from "./a-module";
+import * as aModule from "./a-module.mjs";
 
 // Usually one would import the default module, but one can make a form of wrapper like this
 /* eslint-disable no-unused-vars */
-import functionModule, * as functionModuleAlternative from "./a-function-module";
+import functionModule, * as functionModuleAlternative from "./a-function-module.mjs";
 
-import aModuleWithDefaultExport from "./a-module-with-default";
-import aModuleWithToStringTag from "./a-module-with-to-string-tag";
+import aModuleWithDefaultExport from "./a-module-with-default.mjs";
+import aModuleWithToStringTag from "./a-module-with-to-string-tag.mjs";
 import referee from "@sinonjs/referee";
-import sinon from "../../lib/sinon";
+import sinon from "../../pkg/sinon-esm.js";
 
 const { assert, refute } = referee;
 
+/**
+ * @param action
+ */
 function createTestSuite(action) {
     var stub;
     var errorRegEx = /TypeError: ES Modules cannot be (stubbed|spied)/;
 
-    describe("sinon." + action + "()", function () {
+    describe(`sinon.${action}()`, function () {
         afterEach(function () {
             if (stub && stub.restore) {
                 stub.restore();
