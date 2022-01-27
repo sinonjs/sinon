@@ -1,5 +1,9 @@
 # Changes
 
+## 12.0.2
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-01-27._
+
 ## 12.0.1
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
