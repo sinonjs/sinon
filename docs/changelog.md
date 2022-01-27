@@ -4,21 +4,193 @@ title: Changelog
 permalink: /releases/changelog
 ---
 # Changelog
-# Changes
+
+## 12.0.43
+
+- [`d0c9052e`](https://github.com/sinonjs/sinon/commit/d0c9052ec57516bc5c6f14508ee41f5db92092cf)
+  Temporary commit to make publish a dry-run (Joel Bradshaw)
+  > This makes the script work on my machine, since I of course can't
+  > actually publish to sinon's npm package
+  >
+  > Also skip postbuild because chrome tests aren't working on my machine
+  > and `npm install` doesn't fix it
+- [`d1a3c4af`](https://github.com/sinonjs/sinon/commit/d1a3c4af46acc2c81c233c647bb9549e1de35086)
+  Don't defeat set -e (Joel Bradshaw)
+  > Stringing commands together like this makes it so if the push doesn't
+  > work, we keep going, which we don't want!
+- [`34a83240`](https://github.com/sinonjs/sinon/commit/34a83240c47d6838df2faca9399e562bce84ce98)
+  Clean up copied directories (Joel Bradshaw)
+  > Otherwise when we switch back to the source branch we'll have these
+  > files left dangling, which was what we were trying to avoid in the first
+  > place
+- [`614f084b`](https://github.com/sinonjs/sinon/commit/614f084b9408d0064697fb1197a6ba5787a19fcf)
+  Fail if we cancel CHANGES.md (Joel Bradshaw)
+  > Also make version.sh a bash script like the others - this would have
+  > fixed the update-change-log-page script, in retrospect, but I think it's
+  > worth getting rid of the double header anyway.
+- [`8677abfb`](https://github.com/sinonjs/sinon/commit/8677abfb9dc8c79308f2422d5fda89af1bfc364e)
+  Tweak changelog.md generation to be more compatible (Joel Bradshaw)
+  > $(<CHANGES.md) wasn't working on my machine, I think because it's a
+  > bash-ism, and my machine was running it under sh. I also took the chance
+  > to do something more useful than just `cat` by removing the double
+  > header that was previously on this page.
+- [`571c957c`](https://github.com/sinonjs/sinon/commit/571c957cbf84158824c0d47821b434781340a43f)
+  Merge silently into the archive branch (Joel Bradshaw)
+  > We shouldn't ever have conflicts here, so we can just auto-merge
+- [`176142e7`](https://github.com/sinonjs/sinon/commit/176142e767126b8441f4ba5c209f8ccc1284c0da)
+  Don't ignore changelogs in prettier (Joel Bradshaw)
+  > We were manually running prettier on CHANGELOG.md during release but
+  > ignoring it in .prettierrc - this may have been a holdover from before
+  > Prettier had the proseWrap option, which would have wreacked havoc with
+  > the changelog, but the current version handles things just fine.
+- [`63e19261`](https://github.com/sinonjs/sinon/commit/63e19261ae9424ebed2db71ce2b19630d8157d2e)
+  Move changelog updates into version script (Joel Bradshaw)
+  > Previously we were updating the changelog and doing other auxiliary
+  > version bumps in the post-version script, which meant they weren't
+  > included in the tagged release commit, and required a followup commit.
+  >
+  > This moves the version-bumping changes into a new `version.sh` script,
+  > so that those changes show up in the tagged version commit.
+- [`05341dcf`](https://github.com/sinonjs/sinon/commit/05341dcf92ddca4a1d4c90966b1fcdc7039cff18)
+  Update npm version scripts to manage new releases branch (Joel Bradshaw)
+  > This updates the `postversion.sh` script to merge master into the new
+  > `releases` branch and then copy and commit the version archives there,
+  > instead of into master, so that the archives aren't cluttering up the
+  > master branch unnecessarily.
+- [`fe658261`](https://github.com/sinonjs/sinon/commit/fe65826171db69ed2986a1060db77944dbc98a6d)
+  Remove release archives from master (Joel Bradshaw)
+  > These archives made it difficult to find things in the GitHub interface,
+  > and take up a lot of space in a checked-out repo for something that is
+  > not useful to most people checking out the repository.
+  >
+  > The main purpose of these archives is to make old versions and
+  > documentation available on the Sinon website that is run out of this
+  > repo. This can be supported by using a separate branch for website
+  > releases, and to maintain the archives.
+  >
+  > Following this commit, the `npm version` scripts will be updated to
+  > automatically handle archiving the releases in the new releases branch
+  > and keeping it up to date with master.
+  >
+  > Also remove the directories we removed from .prettierignore, since they
+  > don't exist any more.
+- [`56b06129`](https://github.com/sinonjs/sinon/commit/56b06129e223eae690265c37b1113067e2b31bdc)
+  Check call count type (#2410) (Joel Bradshaw)
+  > - Strip stack frames in `this.message`
+  >
+  > This saves us from having to do it every time, and makes things much
+  >
+  > nicer. Also use a little bit more specific regex, to avoid issues with
+  >
+  > messages that happen to contain the word "at"
+  >
+  > - Check type of callCount argument and error accordingly
+  >
+  > This is to fixes #2408, which could result in error messages like
+  >
+  > "expected spy to be called 10 times but was called 10 times".
+  >
+  > Now we will instead say "expected '10' to be a number, but was of type
+  >
+  > string", which is much clearer!
+  >
+  > - A little more explanatory comment
+  >
+  > - Edit the comment about appending stack frames
+  >
+  > What's actually happening here is that we want to add a frame of context
+  >
+  > to `callStr`, but the first two stack frames will be within Sinon code
+  >
+  > and thus probably not helpful to the end-user.
+  >
+  > So, we skip the first two stack frames, and append the third stack
+  >
+  > frame, which should contain a meaningful location to the end-user.
+  >
+  > - Add test for adding stack traces to error message
+  >
+  > This ensures that if at some point we end up with another Sinon layer in
+  >
+  > the stack at some point, we'll catch it and hopefully adjust accordingly
+  >
+  > For reference, as of this commit, the Sinon portion of the stack is:
+  >
+  > lib/sinon/proxy-invoke.js:65:15
+  >
+  > lib/sinon/proxy.js:265:26
+  >
+  > Also convert a neighboring test to async while we're at it
+- [`7863e2df`](https://github.com/sinonjs/sinon/commit/7863e2dfdbda79e0a32e42af09e6539fc2f2b80f)
+  Fix #2414: make Sinon available on homepage (Carl-Erik Kopseng)
+- [`fabaabdd`](https://github.com/sinonjs/sinon/commit/fabaabdda82f39a7f5b75b55bd56cf77b1cd4a8f)
+  Bump nokogiri from 1.11.4 to 1.13.1 (#2423) (dependabot[bot])
+  > Bumps [nokogiri](https://github.com/sparklemotion/nokogiri) from 1.11.4 to 1.13.1.
+  >
+  > - [Release notes](https://github.com/sparklemotion/nokogiri/releases)
+  >
+  > - [Changelog](https://github.com/sparklemotion/nokogiri/blob/main/CHANGELOG.md)
+  >
+  > - [Commits](https://github.com/sparklemotion/nokogiri/compare/v1.11.4...v1.13.1)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: nokogiri
+  >
+  >   dependency-type: indirect
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- [`dbc0fbd2`](https://github.com/sinonjs/sinon/commit/dbc0fbd263c8419fa47f9c3b20cf47890a242d21)
+  Bump shelljs from 0.8.4 to 0.8.5 (#2422) (dependabot[bot])
+  > Bumps [shelljs](https://github.com/shelljs/shelljs) from 0.8.4 to 0.8.5.
+  >
+  > - [Release notes](https://github.com/shelljs/shelljs/releases)
+  >
+  > - [Changelog](https://github.com/shelljs/shelljs/blob/master/CHANGELOG.md)
+  >
+  > - [Commits](https://github.com/shelljs/shelljs/compare/v0.8.4...v0.8.5)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: shelljs
+  >
+  >   dependency-type: direct:development
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- [`fb8b3d72`](https://github.com/sinonjs/sinon/commit/fb8b3d72a85dc8fb0547f859baf3f03a22a039f7)
+  Run Prettier (Carl-Erik Kopseng)
+- [`12a45939`](https://github.com/sinonjs/sinon/commit/12a45939e9b047b6d3663fe55f2eb383ec63c4e1)
+  Fix 2377: Throw error when trying to stub non-configurable or non-writable properties (#2417) (Stuart Dotson)
+  > Fixes issue #2377 by throwing an error when trying to stub non-configurable or non-writable properties
+- [`27df9cba`](https://github.com/sinonjs/sinon/commit/27df9cba736144e138dbb987817ecfa5ee8e4fa8)
+  Trim dead weight (Carl-Erik Kopseng)
+- [`415764ec`](https://github.com/sinonjs/sinon/commit/415764eca9687fb79159359f2792265b8faadf46)
+  Avoid build breaking post release due to CHANGES.md (Carl-Erik Kopseng)
+- [`c8987c87`](https://github.com/sinonjs/sinon/commit/c8987c875cb2d7b3aed407bfa9c28c5dffded79f)
+  Update docs/changelog.md and set new release id in docs/\_config.yml (Carl-Erik Kopseng)
+- [`834e97b8`](https://github.com/sinonjs/sinon/commit/834e97b8437a15032e9d7b0855fbe6ac8b65921b)
+  Add release documentation for v12.0.1 (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-01-27._
 
 ## 12.0.1
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
   Fix issue with npm unlink for npm version > 6 (Carl-Erik Kopseng)
-    >
-    > 'npm unlink' would implicitly unlink the current dir
-    > until version 7, which requires an argument
-    >
 - [`51417a38`](https://github.com/sinonjs/sinon/commit/51417a38111eeeb7cd14338bfb762cc2df487e1b)
   Fix bundling of cjs module (#2412) (Julian Grinblat)
-    >
-    > * Fix bundling of cjs module    >
-    > * Run prettier
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2021-11-04._
 
