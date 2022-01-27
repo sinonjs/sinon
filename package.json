@@ -73,16 +73,16 @@
   "dependencies": {
     "@sinonjs/commons": "^1.8.3",
     "@sinonjs/fake-timers": "^8.1.0",
-    "@sinonjs/samsam": "^6.0.2",
+    "@sinonjs/samsam": "^6.1.0",
     "diff": "^5.0.0",
     "nise": "^5.1.0",
     "supports-color": "^7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
-    "@sinonjs/eslint-config": "^4.0.2",
+    "@sinonjs/eslint-config": "^4.0.4",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
-    "@sinonjs/referee": "^8.0.2",
+    "@sinonjs/referee": "^9.1.1",
     "@studio/changes": "^2.2.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babelify": "^10.0.0",
