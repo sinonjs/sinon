@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
-ARCHIVE_BRANCH="releases"
+ARCHIVE_BRANCH=${ARCHIVE_BRANCH:-releases}
 SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 echo 'postversion tasks'
@@ -16,6 +16,7 @@ else
 fi
 
 # Now update the releases branch and archive the new release
+echo "archiving release from $SOURCE_BRANCH to $ARCHIVE_BRANCH"
 git checkout $ARCHIVE_BRANCH
 git merge --no-edit -m "Merge version $PACKAGE_VERSION" $SOURCE_BRANCH
 
