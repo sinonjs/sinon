@@ -1,29 +1,30 @@
 #!/bin/bash
 set -e
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
+ARCHIVE_BRANCH="releases"
+SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 echo 'postversion tasks'
-prettier --write CHANGES.md # after manually hand-editing this might need fixes
+
+# npm publish will generate the pkg/sinon.js that we use below
+echo 'publish to npm'
+git push --follow-tags
+npm publish --dry-run
+
+# Now update the releases branch and archive the new release
+git checkout $ARCHIVE_BRANCH
+git merge --no-edit -m "Merge version $PACKAGE_VERSION" $SOURCE_BRANCH
+
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
 
-echo 'set new current/next release id in documentation'
-node ./scripts/set-release-id-in-config-yml.cjs
+echo 'copying new version to webpage assets'
+cp "./pkg/sinon.js" "./docs/assets/js/"
 
-echo 'update changelog'
-./scripts/update-changelog-page.sh
-
-echo 'build new package'
-node ./build.cjs
-
-echo 'copying latest sinon to webpage assets'
-cp pkg/sinon.js ./docs/assets/js/
-
-echo 'copy new version'
+echo 'copy new version to release archive'
 cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
 
 git add "docs/releases/sinon-$PACKAGE_VERSION.js"
-git add docs/changelog.md
-git add docs/_config.yml
-git commit -n -m "Update docs/changelog.md and set new release id in docs/_config.yml"
+git commit -n -m "Add version $PACKAGE_VERSION to releases"
 
-git push --follow-tags && npm publish
+git push
+git checkout $SOURCE_BRANCH

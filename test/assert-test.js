@@ -1438,9 +1438,15 @@ describe("assert", function () {
                         [].slice.call(arguments, 1)
                     );
                 } catch (e) {
-                    // We sometimes append stack frames to the message and they
-                    // make assertions messy, so strip those off here
-                    return e.message.replace(/( at.*\(.*\)$)+/gm, "");
+                    /* We sometimes append stack frames to the message and they
+                     * make assertions messy, so strip those off here
+                     *
+                     * In the regex we assume that a stack frame will have at
+                     * least one "special character" (not a word or space) and
+                     * use that to make sure we don't strip off the end of
+                     * legitimate messages that end with "at least once..."
+                     */
+                    return e.message.replace(/ at.*?[^\w\s].*/g, "");
                 }
             };
         });

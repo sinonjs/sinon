@@ -5,7 +5,11 @@ description: >-
 url: 'https://sinonjs.org'
 github_username: sinonjs
 sinon:
+<<<<<<< HEAD
+  current_release: v13.0.0
+=======
   current_release: v12.0.1
+>>>>>>> parent of 41710467 (Adjust deploy scripts to archive old releases in a separate branch, move existing releases out of master (#2426))
 markdown: kramdown
 kramdown:
   input: GFM
