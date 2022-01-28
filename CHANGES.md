@@ -1,5 +1,6 @@
 # Changes
 
+<<<<<<< HEAD
 ## 13.0.0
 
 - [`cf3d6c0c`](https://github.com/sinonjs/sinon/commit/cf3d6c0cd9689c0ee673b3daa8bf9abd70304392)
@@ -201,6 +202,8 @@
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-01-28._
 
+=======
+>>>>>>> parent of 41710467 (Adjust deploy scripts to archive old releases in a separate branch, move existing releases out of master (#2426))
 ## 12.0.1
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)

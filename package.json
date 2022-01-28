@@ -55,7 +55,7 @@
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
-    "version": "./scripts/version.sh",
+    "version": "changes --commits --footer",
     "postversion": "./scripts/postversion.sh"
   },
   "nyc": {
