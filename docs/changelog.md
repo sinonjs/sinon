@@ -3,6 +3,7 @@ layout: default
 title: Changelog
 permalink: /releases/changelog
 ---
+
 # Changelog
 
 ## 12.0.2
