@@ -7,7 +7,7 @@ if [[ $# != 1 ]]; then
     exit 1
 fi
 
-RELEASE_VERSION="v$1"
+RELEASE_VERSION=$(node -p "require('semver').major('$1')")
 SOURCE_PATH='docs/release-source/'
 
 function copy_source_to(){
@@ -46,7 +46,7 @@ function copy_source_to(){
     git add "$FILE_PATH"
 }
 
-copy_source_to "$RELEASE_VERSION"
+copy_source_to "v$RELEASE_VERSION"
 rm -r "docs/_releases/latest" \
     "docs/_releases/latest.md" 2>/dev/null
 copy_source_to "latest"

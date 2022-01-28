@@ -12,7 +12,7 @@
 
     {% comment %}
     To make all documentation pages, regardless of version, lead search traffic to the latest version,
-    we need to point all the pages under /releases/v*/ to their latest version
+    we need to point all the pages under /releases/v*/ to the latest version
     {% endcomment %}
 
     {% assign url_parts = page.url | split: "/" %}
@@ -20,11 +20,11 @@
     {% if page.url contains "/releases/v" } %}
         {% assign canonical_page_url = "/releases/latest/" | append: url_parts[3] %}
 
-        {% if url_parts[2] != {site.sinon.current_release} %}
-            <script>
-                site.showBanner = true; // cannot dynamically create a globally available Liquid variable
-            </script>
-        {% endif %}
+        <script>
+            const releaseVersionWithPrefix = "{{ url_parts[2]}}";
+            const majorVersion = "{{site.sinon.current_major_version}}"
+            site.showBanner = releaseVersionWithPrefix != `v${majorVersion}`; // cannot dynamically create a globally available Liquid variable
+        </script>
     {% else %}
         {% assign canonical_page_url = page.url | replace:'index.html','' %}
     {% endif %}

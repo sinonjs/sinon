@@ -18,7 +18,7 @@ redirect_from:
 
 <div class="in-content releases">
     <ul>
-        {% assign sorted_releases = site.releases | sort | reverse %}
+        {% assign sorted_releases = site.releases | sort: "release_id" | reverse %}
         {% for release in sorted_releases %}
             {% assign url_parts = release.url | split: "/" %}
 
@@ -65,3 +65,7 @@ redirect_from:
         would download the latest browser bundle of Sinon 3.
     </p>
 </div>
+
+{% comment %}
+vim: ft=liquid
+{%endcomment %}
