@@ -1,28 +1,10 @@
 # Changes
 
-<<<<<<< HEAD
 ## 13.0.0
 
 - [`cf3d6c0c`](https://github.com/sinonjs/sinon/commit/cf3d6c0cd9689c0ee673b3daa8bf9abd70304392)
   Upgrade packages (#2431) (Carl-Erik Kopseng)
   > - Update all @sinonjs/ packages
-  >
-  > $ npx npm-check-updates -u /@sinonjs/ && npm i
-  >
-  > @sinonjs/samsam ^6.0.2 → ^6.1.0
-  >
-  > @sinonjs/eslint-config ^4.0.2 → ^4.0.4
-  >
-  > @sinonjs/referee ^8.0.2 → ^9.1.1
-  >
-  > - Upgrade Mocha and Puppeteer
-  >
-  > - Make ESM support test run without 'esm' module
-  >
-  > - Upgrade lint-staged and some minor/patch versions
-  >
-  > - Upgrade eslint-config to fix \*.mjs issue
-  >
   > - Upgrade to fake-timers 9
   >
   > - chore: ensure always using latest LTS release
@@ -40,170 +22,22 @@
   Add documentation for assert.calledOnceWithMatch (#2424) (Mathias Schreck)
 - [`1d5ab86b`](https://github.com/sinonjs/sinon/commit/1d5ab86ba60e50dd69593ffed2bffd4b8faa0d38)
   Be more general in stripping off stack frames to fix Firefox tests (#2425) (Joel Bradshaw)
-  > - Revert breaking change to stack-stripping regex
-  >
-  > This regex was made more specific in an attempt to avoid incorrectly
-  >
-  > stripping off parts of messages - we strip off anything after " at",
-  >
-  > which means "to have been called at least once" becomes "to have been
-  >
-  > called".
-  >
-  > However, the new regex was too specific and made faulty assumptions
-  >
-  > about stack traces - namely, that they'll always have parentheses after
-  >
-  > the at. Firefox's stack traces, however, look like so:
-  >
-  > func() at callFn@about:blank line 2 > injectedScript:47353:21
-  >
-  > So, we could try to come up with a better regex that matches all
-  >
-  > browsers that we test with, or perhaps add some sort of indicator when
-  >
-  > we're appending the stack traces, but since this change is breaking the
-  >
-  > tests for everyone right now, for expedience we'll just revert to how we
-  >
-  > were stripping things before.
-  >
-  > This means changing one of the asserts back to how it was before, where
-  >
-  > it was asserting against a partial message due to the over-eager
-  >
-  > stripping, so add a comment about that as well.
-  >
-  > - Update with a more general regex
-  >
-  > This should match any stack frame format that has at least one non-word,
-  >
-  > non-space character in it, which should be a pretty safe assumption, and
-  >
-  > holds for the three browsers we test in anyway.
-  >
-  > This gets us back to not trimming messages improperly, while also not
-  >
-  > breaking firefox, and I think is reasonable as far as regexes go.
-  >
-  > This seems like a reasonable enough regex - the original fixed one was
-  >
-  > overly complicated because it tried to remove an arbitrary number of
-  >
-  > stack frames, which was unnecessary because we only append one.
 - [`56b06129`](https://github.com/sinonjs/sinon/commit/56b06129e223eae690265c37b1113067e2b31bdc)
   Check call count type (#2410) (Joel Bradshaw)
-  > - Strip stack frames in `this.message`
-  >
-  > This saves us from having to do it every time, and makes things much
-  >
-  > nicer. Also use a little bit more specific regex, to avoid issues with
-  >
-  > messages that happen to contain the word "at"
-  >
-  > - Check type of callCount argument and error accordingly
-  >
-  > This is to fixes #2408, which could result in error messages like
-  >
-  > "expected spy to be called 10 times but was called 10 times".
-  >
-  > Now we will instead say "expected '10' to be a number, but was of type
-  >
-  > string", which is much clearer!
-  >
-  > - A little more explanatory comment
-  >
-  > - Edit the comment about appending stack frames
-  >
-  > What's actually happening here is that we want to add a frame of context
-  >
-  > to `callStr`, but the first two stack frames will be within Sinon code
-  >
-  > and thus probably not helpful to the end-user.
-  >
-  > So, we skip the first two stack frames, and append the third stack
-  >
-  > frame, which should contain a meaningful location to the end-user.
-  >
-  > - Add test for adding stack traces to error message
-  >
-  > This ensures that if at some point we end up with another Sinon layer in
-  >
-  > the stack at some point, we'll catch it and hopefully adjust accordingly
-  >
-  > For reference, as of this commit, the Sinon portion of the stack is:
-  >
-  > lib/sinon/proxy-invoke.js:65:15
-  >
-  > lib/sinon/proxy.js:265:26
-  >
-  > Also convert a neighboring test to async while we're at it
 - [`7863e2df`](https://github.com/sinonjs/sinon/commit/7863e2dfdbda79e0a32e42af09e6539fc2f2b80f)
   Fix #2414: make Sinon available on homepage (Carl-Erik Kopseng)
 - [`fabaabdd`](https://github.com/sinonjs/sinon/commit/fabaabdda82f39a7f5b75b55bd56cf77b1cd4a8f)
   Bump nokogiri from 1.11.4 to 1.13.1 (#2423) (dependabot[bot])
-  > Bumps [nokogiri](https://github.com/sparklemotion/nokogiri) from 1.11.4 to 1.13.1.
-  >
-  > - [Release notes](https://github.com/sparklemotion/nokogiri/releases)
-  >
-  > - [Changelog](https://github.com/sparklemotion/nokogiri/blob/main/CHANGELOG.md)
-  >
-  > - [Commits](https://github.com/sparklemotion/nokogiri/compare/v1.11.4...v1.13.1)
-  >
-  > ***
-  >
-  > updated-dependencies:
-  >
-  > - dependency-name: nokogiri
-  >
-  >   dependency-type: indirect
-  >
-  > ...
-  >
-  > Signed-off-by: dependabot[bot] <support@github.com>
-  >
-  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
 - [`dbc0fbd2`](https://github.com/sinonjs/sinon/commit/dbc0fbd263c8419fa47f9c3b20cf47890a242d21)
   Bump shelljs from 0.8.4 to 0.8.5 (#2422) (dependabot[bot])
-  > Bumps [shelljs](https://github.com/shelljs/shelljs) from 0.8.4 to 0.8.5.
-  >
-  > - [Release notes](https://github.com/shelljs/shelljs/releases)
-  >
-  > - [Changelog](https://github.com/shelljs/shelljs/blob/master/CHANGELOG.md)
-  >
-  > - [Commits](https://github.com/shelljs/shelljs/compare/v0.8.4...v0.8.5)
-  >
-  > ***
-  >
-  > updated-dependencies:
-  >
-  > - dependency-name: shelljs
-  >
-  >   dependency-type: direct:development
-  >
-  > ...
-  >
-  > Signed-off-by: dependabot[bot] <support@github.com>
-  >
-  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
 - [`fb8b3d72`](https://github.com/sinonjs/sinon/commit/fb8b3d72a85dc8fb0547f859baf3f03a22a039f7)
   Run Prettier (Carl-Erik Kopseng)
 - [`12a45939`](https://github.com/sinonjs/sinon/commit/12a45939e9b047b6d3663fe55f2eb383ec63c4e1)
   Fix 2377: Throw error when trying to stub non-configurable or non-writable properties (#2417) (Stuart Dotson)
   > Fixes issue #2377 by throwing an error when trying to stub non-configurable or non-writable properties
-- [`27df9cba`](https://github.com/sinonjs/sinon/commit/27df9cba736144e138dbb987817ecfa5ee8e4fa8)
-  Trim dead weight (Carl-Erik Kopseng)
-- [`415764ec`](https://github.com/sinonjs/sinon/commit/415764eca9687fb79159359f2792265b8faadf46)
-  Avoid build breaking post release due to CHANGES.md (Carl-Erik Kopseng)
-- [`c8987c87`](https://github.com/sinonjs/sinon/commit/c8987c875cb2d7b3aed407bfa9c28c5dffded79f)
-  Update docs/changelog.md and set new release id in docs/\_config.yml (Carl-Erik Kopseng)
-- [`834e97b8`](https://github.com/sinonjs/sinon/commit/834e97b8437a15032e9d7b0855fbe6ac8b65921b)
-  Add release documentation for v12.0.1 (Carl-Erik Kopseng)
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-01-28._
 
-=======
->>>>>>> parent of 41710467 (Adjust deploy scripts to archive old releases in a separate branch, move existing releases out of master (#2426))
 ## 12.0.1
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
