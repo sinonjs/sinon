@@ -32,6 +32,11 @@ function copy_source_to(){
     cp -r "$SOURCE_PATH/release/"* "$DIR"
     cp "$SOURCE_PATH/release.md" "$FILE_PATH"
 
+    # Remove .gitignore'd files from copies
+    # Otherwise they will remain on the local filesytem
+    rm -r "$DIR/examples/node_modules"
+    rm "$DIR/examples/package-lock.json"
+
     # replace `release_id: master` with `release_id: $RELEASE_VERSION` in
     # $FILE_PATH
     sed -i.bak "s/release_id: master/release_id: $RELEASE_VERSION/g" "$FILE_PATH"
