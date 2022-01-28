@@ -18,10 +18,11 @@ git merge --no-edit -m "Merge version $PACKAGE_VERSION" $SOURCE_BRANCH
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
 
 echo 'copying new version to webpage assets'
-cp "./pkg/sinon.js" "./docs/assets/js/"
+cp "pkg/sinon.js" "./docs/assets/js/"
+git add "docs/assets/js/"
 
 echo 'copy new version to release archive'
-cp "./pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
+cp "pkg/sinon.js" "./docs/releases/sinon-$PACKAGE_VERSION.js"
 
 git add "docs/releases/sinon-$PACKAGE_VERSION.js"
 git commit -n -m "Add version $PACKAGE_VERSION to releases"
