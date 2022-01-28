@@ -3,6 +3,7 @@ layout: page
 title: API documentation - Sinon.JS
 skip_ad: true
 release_id: master
+sort_id: master
 ---
 
 # {{page.title}} - `{{page.release_id}}`
