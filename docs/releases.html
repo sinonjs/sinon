@@ -18,7 +18,7 @@ redirect_from:
 
 <div class="in-content releases">
     <ul>
-        {% assign sorted_releases = site.releases | sort: "release_id" | reverse %}
+        {% assign sorted_releases = site.releases | sort: "sort_id" | reverse %}
         {% for release in sorted_releases %}
             {% assign url_parts = release.url | split: "/" %}
 
