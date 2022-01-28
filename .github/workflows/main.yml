@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "lts/*"
       - name: Cache modules
         uses: actions/cache@v2
         with:
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "lts/*"
       - name: Cache modules
         uses: actions/cache@v2
         with:
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "lts/*"
       - name: Cache npm
         uses: actions/cache@v2
         with:
@@ -84,7 +84,7 @@ jobs:
 
           npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
           npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-          npm run test-esm-bundle
+          npm run check-esm-bundle-runs-in-browser
       - name: Upload coverage report
         run: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
 
@@ -95,7 +95,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "lts/*"
       - name: Cache npm
         uses: actions/cache@v2
         with:
