@@ -18,11 +18,14 @@ redirect_from:
 
 <div class="in-content releases">
     <ul>
-        {% assign sorted_releases = site.releases | sort | reverse %} {% for
-        release in sorted_releases %} {% assign url_parts = release.url | split:
-        "/" %} {% comment %} Weird as hell, but .size == 3 means there are 2
-        elements ... {% endcomment %} {% if url_parts.size == 3 and url_parts[2]
-        != "latest" %}
+        {% assign sorted_releases = site.releases | sort | reverse %}
+        {% for release in sorted_releases %}
+            {% assign url_parts = release.url | split: "/" %}
+
+            {% comment %} Weird as hell, but .size == 3 means there are 2 elements ...
+            {% endcomment %}
+
+            {% if url_parts.size == 3 and url_parts[2] != "latest" %}
         <li>
             <p>
                 <span class="ver">{{ release.release_id }}</span>
@@ -40,7 +43,8 @@ redirect_from:
                 </span>
             </p>
         </li>
-        {% endif %} {% endfor %}
+            {% endif %}
+        {% endfor %}
     </ul>
 </div>
 

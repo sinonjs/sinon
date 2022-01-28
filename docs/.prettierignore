@@ -1,0 +1,4 @@
+
+# Ignore all HTML files, as they contain Liquid templating language
+
+*.html
