@@ -101,6 +101,7 @@
     "proxyquireify": "^3.2.1",
     "puppeteer": "^13.1.2",
     "rimraf": "^3.0.2",
+    "semver": "^7.3.5",
     "shelljs": "^0.8.4"
   },
   "files": [

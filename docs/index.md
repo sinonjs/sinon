@@ -4,6 +4,7 @@
 ---
 
 {% assign current_release = site.sinon.current_release %}
+{% assign current_major = site.sinon.current_major_version %}
 
 ## Get Started
 
@@ -284,9 +285,9 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 
 Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
 
-[fakes]: /releases/{{current_release}}/fakes
-[fakexhr]: /releases/{{current_release}}/fake-xhr-and-server
-[fakeserver]: /releases/{{current_release}}/fake-xhr-and-server#fake-server
-[clock]: /releases/{{current_release}}/fake-timers
-[api-docs]: /releases/{{current_release}}
+[fakes]: /releases/v{{current_major}}/fakes
+[fakexhr]: /releases/v{{current_major}}/fake-xhr-and-server
+[fakeserver]: /releases/v{{current_major}}/fake-xhr-and-server#fake-server
+[clock]: /releases/v{{current_major}}/fake-timers
+[api-docs]: /releases/v{{current_major}}
 [tddjs]: http://tddjs.com/
