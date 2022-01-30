@@ -3,8 +3,8 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-    it("should create a fake that 'returns'", function () {
-        const fake = sinon.fake.returns("apple pie");
+it("should create a fake that 'returns'", function () {
+    const fake = sinon.fake.returns("apple pie");
 
-        assert.equals(fake(), "apple pie");
-    });
+    assert.equals(fake(), "apple pie");
+});

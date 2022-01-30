@@ -3,10 +3,10 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-    it("should create fake without behaviour", function () {
-        // create a basic fake, with no behavior
-        const fake = sinon.fake();
+it("should create fake without behaviour", function () {
+    // create a basic fake, with no behavior
+    const fake = sinon.fake();
 
-        assert.isUndefined(fake()); // by default returns undefined
-        assert.equals(fake.callCount, 1); // saves call information
-    });
+    assert.isUndefined(fake()); // by default returns undefined
+    assert.equals(fake.callCount, 1); // saves call information
+});
