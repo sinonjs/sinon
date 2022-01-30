@@ -3,7 +3,6 @@ const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
-describe("FakeTest", function () {
     it("should be able to be added to the system under test", function () {
         const fake = sinon.fake.returns("42");
 
@@ -17,4 +16,3 @@ describe("FakeTest", function () {
         assert.isUndefined(console.log("apple pie"));
         assert.equals(fake.callCount, 1);
     });
-});
