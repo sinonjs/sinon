@@ -15,6 +15,8 @@ it("should create a fake that 'yields asynchronously'", function () {
         assert.equals(data, "file content");
         // since yields is asynchronous, anotherFake is called first
         assert.isTrue(anotherFake.called);
+
+        sinon.restore();
     });
 
     anotherFake();
