@@ -9,12 +9,12 @@ describe("FakeTest", function () {
 
         sinon.replace(console, "log", fake);
 
-        assert.equals(console.log("apple pie"), 42);
+        assert.equals(console.log("apple pie"), "42");
 
         // restores all replaced properties set by sinon methods (replace, spy, stub)
         sinon.restore();
 
-        assert.equals(console.log("apple pie"), undefined);
+        assert.isUndefined(console.log("apple pie"));
         assert.equals(fake.callCount, 1);
     });
 });
