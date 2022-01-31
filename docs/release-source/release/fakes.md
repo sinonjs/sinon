@@ -3,15 +3,15 @@ layout: page
 title: Fakes - Sinon.JS
 breadcrumb: fakes
 examples:
-  - fakes-1-using-fakes-instead-of-spies
-  - fakes-2-using-fakes-instead-of-stubs
-  - fakes-3-creating-without-behaviour
-  - fakes-4-creating-with-custom-behaviour
-  - fakes-5-returns
-  - fakes-6-throws
-  - fakes-7-yields
-  - fakes-8-yields-async
-  - fakes-9-callback
+  - fakes-01-using-fakes-instead-of-spies
+  - fakes-02-using-fakes-instead-of-stubs
+  - fakes-03-creating-without-behaviour
+  - fakes-04-creating-with-custom-behaviour
+  - fakes-05-returns
+  - fakes-06-throws
+  - fakes-07-yields
+  - fakes-08-yields-async
+  - fakes-09-callback
   - fakes-10-firstArg
   - fakes-11-lastArg
   - fakes-12-adding-fake-to-system-under-test
@@ -37,11 +37,11 @@ The created `fake` `Function`, with or without behavior has the same API as a (`
 
 #### Using fakes instead of spies
 
-<div data-example-id="fakes-1-using-fakes-instead-of-spies"></div>
+<div data-example-id="fakes-01-using-fakes-instead-of-spies"></div>
 
 #### Using fakes instead of stubs
 
-<div data-example-id="fakes-2-using-fakes-instead-of-stubs"></div>
+<div data-example-id="fakes-02-using-fakes-instead-of-stubs"></div>
 
 ### Creating a fake
 
@@ -49,11 +49,11 @@ Create a `fake` `Function` with or without [behavior](#fakes-with-behavior). The
 
 #### Creating a fake without behavior
 
-<div data-example-id="fakes-3-creating-without-behaviour"></div>
+<div data-example-id="fakes-03-creating-without-behaviour"></div>
 
 #### Creating a fake with custom behaviour
 
-<div data-example-id="fakes-4-creating-with-custom-behaviour"></div>
+<div data-example-id="fakes-04-creating-with-custom-behaviour"></div>
 
 ### Fakes with behavior
 
@@ -63,7 +63,7 @@ Fakes cannot change once created with behaviour.
 
 Creates a fake that returns the `value` argument.
 
-<div data-example-id="fakes-5-returns"></div>
+<div data-example-id="fakes-05-returns"></div>
 
 #### `sinon.fake.throws(value);`
 
@@ -71,7 +71,7 @@ Creates a fake that throws an `Error` with the provided value as the `message` p
 
 If an `Error` is passed as the `value` argument, then that will be the thrown value. If any other value is passed, then that will be used for the `message` property of the thrown `Error`.
 
-<div data-example-id="fakes-6-throws"></div>
+<div data-example-id="fakes-06-throws"></div>
 
 #### `sinon.fake.resolves(value);`
 
@@ -89,7 +89,7 @@ If an `Error` is passed as the `value` argument, then that will be the value of 
 
 In code example below, the '[readFile](https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback)' function of the 'fs' module is replaced with a fake function created by `sinon.fake.yields`. When the fake function is called, it always calls the last argument it received, which is expected to be a callback, with the values that the `yields` function previously took.
 
-<div data-example-id="fakes-7-yields"></div>
+<div data-example-id="fakes-07-yields"></div>
 
 #### `sinon.fake.yieldsAsync([value1, ..., valueN]);`
 
@@ -97,7 +97,7 @@ Similar to `yields`, `yieldsAsync` also returns a function that when invoked, th
 
 Compare the code example below with the code example above for `yields` to see the difference.
 
-<div data-example-id="fakes-8-yields-async"></div>
+<div data-example-id="fakes-08-yields-async"></div>
 
 #### `sinon.fake(func);`
 
@@ -116,7 +116,7 @@ The instance properties are the same as those of a [`sinon.spy`][spies]. The fol
 This property is a convenience to get a reference to the last callback passed in the last to the fake.
 The same convenience has been added to [spy calls](../spy-call#spycallcallback).
 
-<div data-example-id="fakes-9-callback"></div>
+<div data-example-id="fakes-09-callback"></div>
 
 #### `f.firstArg`
 
