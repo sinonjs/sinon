@@ -1,0 +1,8 @@
+{
+  "entry": ["lib/sinon.js", "lib/sinon-esm.js"],
+  "extensions": [".js"],
+  "ignorePatterns": ["**/node_modules/**"],
+  "ignoreUnresolved": [],
+  "ignoreUnimported": ["docs/**", "pkg/**", "test/**"],
+  "ignoreUnused": []
+}
