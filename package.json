@@ -47,6 +47,7 @@
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
     "lint": "eslint '**/*.{js,cjs,mjs}'",
+    "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-support && npm run check-esm-bundle-runs-in-browser",
@@ -102,7 +103,8 @@
     "puppeteer": "^13.1.2",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "unimported": "^1.19.1"
   },
   "files": [
     "lib",
