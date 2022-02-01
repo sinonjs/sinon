@@ -14,7 +14,7 @@ var createSandbox = require("../lib/sinon/create-sandbox");
 var sinonFake = require("../lib/sinon/fake");
 var sinonSpy = require("../lib/sinon/spy");
 var sinonStub = require("../lib/sinon/stub");
-var sinonConfig = require("../lib/sinon/util/core/get-config");
+var sinonConfig = require("./get-config");
 var sinonClock = require("../lib/sinon/util/fake-timers");
 
 var supportsAjax =

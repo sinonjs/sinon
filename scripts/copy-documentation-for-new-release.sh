@@ -2,6 +2,9 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.."
 
+#exit on error
+set -e
+
 if [[ $# != 1 ]]; then
     echo "Usage: $0 <commitish>"
     exit 1
@@ -17,14 +20,12 @@ function copy_source_to(){
     local FILE_PATH="${DIR}.md"
 
     if [ -e "$DIR" ]; then
-            echo "$DIR already exists, cannot continue"
-            exit 1
+        echo "$DIR already exists, removing it for update"
+        rm -r "$DIR"
     fi
 
-    if [ -e "$FILE_PATH" ]
-        then
-            echo "$FILE_PATH already exists, cannot continue"
-            exit 1
+    if [ -e "$FILE_PATH" ]; then
+            rm -r "$FILE_PATH"
     fi
 
     echo "Copy $SOURCE_PATH to $DIR"

@@ -1,6 +1,6 @@
 "use strict";
 
-var defaultConfig = require("./default-config");
+var defaultConfig = require("../lib/sinon/util/core/default-config");
 var hasOwnProperty =
     require("@sinonjs/commons").prototypes.object.hasOwnProperty;
 

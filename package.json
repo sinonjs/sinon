@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "13.0.0",
+  "version": "13.0.1",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -47,6 +47,7 @@
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
     "lint": "eslint '**/*.{js,cjs,mjs}'",
+    "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-support && npm run check-esm-bundle-runs-in-browser",
@@ -55,7 +56,7 @@
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
-    "version": "changes --commits --footer",
+    "version": "./scripts/version.sh",
     "postversion": "./scripts/postversion.sh"
   },
   "nyc": {
@@ -76,7 +77,7 @@
     "@sinonjs/fake-timers": "^9.0.0",
     "@sinonjs/samsam": "^6.1.1",
     "diff": "^5.0.0",
-    "nise": "^5.1.0",
+    "nise": "^5.1.1",
     "supports-color": "^7.2.0"
   },
   "devDependencies": {
@@ -102,7 +103,8 @@
     "puppeteer": "^13.1.2",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "unimported": "^1.19.1"
   },
   "files": [
     "lib",
