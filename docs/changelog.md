@@ -6,6 +6,45 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 13.0.1
+
+- [`ec4223f9`](https://github.com/sinonjs/sinon/commit/ec4223f94076d809483e3c6a7536cfc1278dd3c9)
+  Bump nise to fix sinonjs/nise#193 (Carl-Erik Kopseng)
+- [`f329a010`](https://github.com/sinonjs/sinon/commit/f329a01040bfa5a79e039419220b21eda56935d6)
+  Add unimported to workflow (#2441) (Morgan Roderick)
+- [`7f16cec9`](https://github.com/sinonjs/sinon/commit/7f16cec968c3c8d4e580267fb00195916d6f827d)
+  Enable updates to same major version (Carl-Erik Kopseng)
+- [`f784d7ad`](https://github.com/sinonjs/sinon/commit/f784d7ad2c86be0fc65477d69f8bdafca846ef2c)
+  Re-introduce new version.sh script to version hook (Joel Bradshaw)
+  > This was inadvertently removed during merge conflicts, and is required
+  > for any of the new release process stuff to work
+- [`51c508ab`](https://github.com/sinonjs/sinon/commit/51c508ab77cf0f9fb8c5305ff626f6a2eada178f)
+  Add dry run mode to `npm version` (#2436) (Joel Bradshaw)
+  > - Add DRY_RUN flag to skip publish/push
+  >
+  > - Allow overriding branch names for testing
+- [`05341dcf`](https://github.com/sinonjs/sinon/commit/05341dcf92ddca4a1d4c90966b1fcdc7039cff18)
+  Update npm version scripts to manage new releases branch (Joel Bradshaw)
+- [`fe658261`](https://github.com/sinonjs/sinon/commit/fe65826171db69ed2986a1060db77944dbc98a6d)
+  Remove release archives from master (Joel Bradshaw)
+  > These archives made it difficult to find things in the GitHub interface,
+  > and take up a lot of space in a checked-out repo for something that is
+  > not useful to most people checking out the repository.
+  >
+  > The main purpose of these archives is to make old versions and
+  > documentation available on the Sinon website that is run out of this
+  > repo. This can be supported by using a separate branch for website
+  > releases, and to maintain the archives.
+  >
+  > Following this commit, the `npm version` scripts will be updated to
+  > automatically handle archiving the releases in the new releases branch
+  > and keeping it up to date with master.
+  >
+  > Also remove the directories we removed from .prettierignore, since they
+  > don't exist any more.
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-02-01._
+
 ## 13.0.0
 
 - [`cf3d6c0c`](https://github.com/sinonjs/sinon/commit/cf3d6c0cd9689c0ee673b3daa8bf9abd70304392)
@@ -48,13 +87,8 @@ _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-01-28._
 
 - [`3f598221`](https://github.com/sinonjs/sinon/commit/3f598221045904681f2b3b3ba1df617ed5e230e3)
   Fix issue with npm unlink for npm version > 6 (Carl-Erik Kopseng)
-  > 'npm unlink' would implicitly unlink the current dir
-  > until version 7, which requires an argument
 - [`51417a38`](https://github.com/sinonjs/sinon/commit/51417a38111eeeb7cd14338bfb762cc2df487e1b)
   Fix bundling of cjs module (#2412) (Julian Grinblat)
-  > - Fix bundling of cjs module
-  >
-  > - Run prettier
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2021-11-04._
 
