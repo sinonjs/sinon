@@ -1,5 +1,24 @@
 # Changes
 
+## 14.0.0
+
+- [`c2bbd826`](https://github.com/sinonjs/sinon/commit/c2bbd82641444eb5b32822489ae40f185afbbf00)
+  Drop node 12 (Morgan Roderick)
+  > And embrace Node 18
+  >
+  > See https://nodejs.org/en/about/releases/
+
+_Released by Morgan Roderick on 2022-05-07._
+
+## 13.0.2
+
+- [`bddb631a`](https://github.com/sinonjs/sinon/commit/bddb631aab6afc3e663a5db847c675ea96c90970)
+  Update fake-timers (Carl-Erik Kopseng)
+- [`eaed0eb2`](https://github.com/sinonjs/sinon/commit/eaed0eb24bd8f42b0484b8861a5ff066001da5d5)
+  Bump nokogiri from 1.13.3 to 1.13.4 (#2451) (dependabot[bot])
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-04-14._
+
 ## 13.0.1
 
 - [`ec4223f9`](https://github.com/sinonjs/sinon/commit/ec4223f94076d809483e3c6a7536cfc1278dd3c9)
