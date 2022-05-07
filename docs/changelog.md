@@ -6,6 +6,16 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 14.0.0
+
+- [`c2bbd826`](https://github.com/sinonjs/sinon/commit/c2bbd82641444eb5b32822489ae40f185afbbf00)
+  Drop node 12 (Morgan Roderick)
+  > And embrace Node 18
+  >
+  > See https://nodejs.org/en/about/releases/
+
+_Released by Morgan Roderick on 2022-05-07._
+
 ## 13.0.2
 
 - [`bddb631a`](https://github.com/sinonjs/sinon/commit/bddb631aab6afc3e663a5db847c675ea96c90970)
