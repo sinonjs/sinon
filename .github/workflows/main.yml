@@ -8,6 +8,9 @@ on:
     branches:
       - "**"
 
+permissions:
+  contents: read
+
 jobs:
   prettier:
     runs-on: ubuntu-latest
