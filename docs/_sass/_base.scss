@@ -80,13 +80,13 @@ a {
         margin-top: 15px !important;
         margin-bottom: 30px !important;
     }
-    blockquote {
+    .container > blockquote {
         border: none;
         font-size: 24px;
         text-align: center;
         margin-bottom: 5px;
     }
-    em {
+    blockquote + p em {
         a {
             font-size: 16px;
             font-style: normal;
