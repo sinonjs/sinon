@@ -1,5 +1,13 @@
 # Changes
 
+## 14.0.1
+
+- [`6c4753ef`](https://github.com/sinonjs/sinon/commit/6c4753ef243880f5cdf1ea9c88b569780f9dc013)
+  Fixed CSS selectors in `_base.scss` and changed blockquote default size to 16px. (Jose Lupianez)
+- A bunch of dependency updates
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-10-03._
+
 ## 14.0.0
 
 - [`c2bbd826`](https://github.com/sinonjs/sinon/commit/c2bbd82641444eb5b32822489ae40f185afbbf00)
