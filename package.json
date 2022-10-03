@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "14.0.0",
+  "version": "14.0.1",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -104,7 +104,7 @@
     "rimraf": "^3.0.2",
     "semver": "^7.3.5",
     "shelljs": "^0.8.4",
-    "unimported": "^1.19.1"
+    "unimported": "^1.20.0"
   },
   "files": [
     "lib",
