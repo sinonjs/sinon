@@ -2,7 +2,7 @@
 layout: page
 title: API documentation - Sinon.JS
 skip_ad: true
-release_id: v14.0.0
+release_id: v14.0.1
 sort_id: v14
 ---
 
