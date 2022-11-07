@@ -6,6 +6,18 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 14.0.2
+
+- [`4d70f6e0`](https://github.com/sinonjs/sinon/commit/4d70f6e0965b82e387cd632fbe54ed58a8fcf601)
+  Upgrade nise to latest (Morgan Roderick)
+- [`96a0d756`](https://github.com/sinonjs/sinon/commit/96a0d756b553c38154f442785c34c6092d1ac572)
+  Update @sinonjs/samsam to latest (Morgan Roderick)
+- [`babb4736`](https://github.com/sinonjs/sinon/commit/babb4736d7f0080e25dce34fc8ce72879e86792e)
+  Prefer @sinonjs/commons@2 (Morgan Roderick)
+  > That makes ES2017 support explicit
+
+_Released by Morgan Roderick on 2022-11-07._
+
 ## 14.0.1
 
 - [`6c4753ef`](https://github.com/sinonjs/sinon/commit/6c4753ef243880f5cdf1ea9c88b569780f9dc013)
