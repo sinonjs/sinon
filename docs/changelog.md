@@ -6,6 +6,17 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 15.0.0
+
+- [`b75fbfa9`](https://github.com/sinonjs/sinon/commit/b75fbfa9e57ba9b9c1b639b68646b1d054e0a7e3)
+  Fix 2448: remove custom formatter (Morgan Roderick)
+  > Remove option to pass a custom formatter.
+  >
+  > The sub libraries of Sinon has long moved on to use `util.inspect` from
+  > Node. By using that in Sinon itself, we align all the libraries.
+
+_Released by Morgan Roderick on 2022-11-28._
+
 ## 14.0.2
 
 - [`4d70f6e0`](https://github.com/sinonjs/sinon/commit/4d70f6e0965b82e387cd632fbe54ed58a8fcf601)

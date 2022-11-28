@@ -188,7 +188,7 @@ Learn more about [fake XMLHttpRequest][fakexhr].
 
 ### Fake server
 
-The preceding example shows how flexible this API is. If it looks too laborous, you may like the fake server:
+The preceding example shows how flexible this API is. If it looks too laborious, you may like the fake server:
 
 ```javascript
 var server;
