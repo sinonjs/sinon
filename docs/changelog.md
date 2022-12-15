@@ -6,6 +6,16 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 15.0.1
+
+- [`aa493da4`](https://github.com/sinonjs/sinon/commit/aa493da47d788025c0d512696651072973f301ec)
+  Upgrade to fake-timers v10.0.2 (Carl-Erik Kopseng)
+  > Contains several fixes
+- [`b3ee0aa5`](https://github.com/sinonjs/sinon/commit/b3ee0aa5c84e7c0f5203591e1507bd1015208925)
+  Use Node version 18 in Runkit examples (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-12-15._
+
 ## 15.0.0
 
 - [`b75fbfa9`](https://github.com/sinonjs/sinon/commit/b75fbfa9e57ba9b9c1b639b68646b1d054e0a7e3)

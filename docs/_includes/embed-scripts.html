@@ -24,7 +24,9 @@
                 element: element,
                 // specify the source of the notebook
                 source: javascriptAsString,
-                theme: "untilted-c3qcs6lijfuc"
+                theme: "untilted-c3qcs6lijfuc",
+                // some examples use ES2015 syntax not supported by the default Node 10
+                nodeVersion: "18.x.x"
             });
         })(); // IIFE - to avoid leaking variables
     </script>
