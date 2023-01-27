@@ -391,6 +391,25 @@ describe("Sandbox", function () {
                 { message: "Cannot stub foo. Property does not exist!" }
             );
         });
+
+        it("restores an instance where every function of the prototype has been replaced by a no-op (#2477)", function () {
+            const sandbox = this.sandbox;
+
+            class SystemUnderTest {
+                constructor() {
+                    this.privateGetter = () => 42;
+                }
+                getValue() {
+                    return this.privateGetter();
+                }
+            }
+
+            sandbox.createStubInstance(SystemUnderTest);
+            sandbox.restore();
+
+            refute.exception(sandbox.getValue);
+            assert.isUndefined(sandbox.getValue());
+        });
     });
 
     describe(".stub", function () {
