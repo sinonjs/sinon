@@ -42,7 +42,7 @@
     "test-docker-image": "docker-compose up",
     "test-runnable-examples": "docs/release-source/release/examples/run-test.sh",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
-    "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
+    "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm --ignore-module util",
     "build": "node ./build.cjs",
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
@@ -78,7 +78,8 @@
     "@sinonjs/samsam": "^7.0.1",
     "diff": "^5.0.0",
     "nise": "^5.1.2",
-    "supports-color": "^7.2.0"
+    "supports-color": "^7.2.0",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
