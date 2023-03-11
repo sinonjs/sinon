@@ -1407,6 +1407,28 @@ describe("stub", function () {
             refute(fakeFn.called);
             assert(returned === 3);
         });
+
+        it("supersedes previous throws(error)", function () {
+            var fakeFn = createStub().returns(5);
+            this.stub = createStub(this.object, "method");
+
+            this.stub.throws(new Error("error")).callsFake(fakeFn);
+            var returned = this.object.method(1, 2);
+
+            assert(fakeFn.called);
+            assert(returned === 5);
+        });
+
+        it("supersedes previous throws()", function () {
+            var fakeFn = createStub().returns(5);
+            this.stub = createStub(this.object, "method");
+
+            this.stub.throws().callsFake(fakeFn);
+            var returned = this.object.method(1, 2);
+
+            assert(fakeFn.called);
+            assert(returned === 5);
+        });
     });
 
     describe(".objectMethod", function () {
