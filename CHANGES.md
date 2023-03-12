@@ -1,5 +1,23 @@
 # Changes
 
+## 15.0.2
+
+- [`19bd99f3`](https://github.com/sinonjs/sinon/commit/19bd99f364ab44f0e2715571e5deab580d9aa7fd)
+  Use no-op for every function when restoring instances (#2499) (Carl-Erik Kopseng)
+- [`8663ffa0`](https://github.com/sinonjs/sinon/commit/8663ffa056d3c58e82fa203801d58d3fce3c14a7)
+  Upgrade deps (#2498) (Carl-Erik Kopseng)
+  > Browserify, supports-color, husky had to be held back.
+- [`e01275bb`](https://github.com/sinonjs/sinon/commit/e01275bb10d868a064d0cb27a6ae11ffa3d91ac2)
+  Un-pin @sinonjs/fake-timers (#2495) (Jordan Hawker)
+  > The commit upgrading from v9 to v10 appears to have accidentally dropped the caret from the version range
+- [`6cbde9b0`](https://github.com/sinonjs/sinon/commit/6cbde9b08259efd98b2c52b81ca3b5e84dcf97b1)
+  fix throws().callsFake() precedence (#2497) (Eduardo Diaz)
+  > This makes sure an unconditional `callsFake()` invoked on the same stub that was previously setup to throw will overwrite the previous behavior. This aligns it with the other behaviors.
+- [`45be60f3`](https://github.com/sinonjs/sinon/commit/45be60f3c6afc350eacbceed77539f437a9bbbce)
+  Replace probot/stale with official stale action (Morgan Roderick)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-03-12._
+
 ## 15.0.1
 
 - [`aa493da4`](https://github.com/sinonjs/sinon/commit/aa493da47d788025c0d512696651072973f301ec)
