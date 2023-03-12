@@ -44,7 +44,10 @@ describe("restore-object", function () {
                     meh: "okay",
                 });
             },
-            { message: "Expected to restore methods on object but found none" }
+            {
+                message:
+                    "Found no methods on object to which we could apply mutations",
+            }
         );
     });
 
