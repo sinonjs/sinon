@@ -404,11 +404,11 @@ describe("Sandbox", function () {
                 }
             }
 
-            sandbox.createStubInstance(SystemUnderTest);
+            const stubInstance = sandbox.createStubInstance(SystemUnderTest);
             sandbox.restore();
 
-            refute.exception(sandbox.getValue);
-            assert.isUndefined(sandbox.getValue());
+            refute.exception(stubInstance.getValue);
+            assert.isUndefined(stubInstance.getValue());
         });
     });
 
