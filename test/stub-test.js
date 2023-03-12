@@ -3140,7 +3140,10 @@ describe("stub", function () {
                 function () {
                     createStubInstance(Class);
                 },
-                { message: "Expected to stub methods on object but found none" }
+                {
+                    message:
+                        "Found no methods on object to which we could apply mutations",
+                }
             );
         });
 

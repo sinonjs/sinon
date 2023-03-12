@@ -46,7 +46,7 @@ describe("util/core/walk-object", function () {
                 },
                 {
                     message:
-                        "Expected to fnWithNoName methods on object but found none",
+                        "Found no methods on object to which we could apply mutations",
                 }
             );
         });
@@ -65,7 +65,7 @@ describe("util/core/walk-object", function () {
                 },
                 {
                     message:
-                        "Expected to undefined methods on object but found none",
+                        "Found no methods on object to which we could apply mutations",
                 }
             );
         });
