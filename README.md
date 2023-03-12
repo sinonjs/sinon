@@ -12,8 +12,6 @@
 
 <p align=center>
 <a href="https://www.npmjs.com/package/sinon"><img src="https://img.shields.io/npm/v/sinon.svg?style=flat" alt="npm version"></a>
-<a href="https://gitter.im/sinonjs/sinon?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/sinonjs/sinon"></a>
-<a href="http://travis-ci.org/sinonjs/sinon"><img src="https://secure.travis-ci.org/sinonjs/sinon.svg?branch=master" alt="Build status"></a>
 <a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/buildstatus/sinonjs" alt="Sauce Test Status"/></a>
 <a href="https://codecov.io/gh/sinonjs/sinon"><img src="https://codecov.io/gh/sinonjs/sinon/branch/master/graph/badge.svg" alt="Codecov status"></a>
 <a href="#backers"><img src="https://opencollective.com/sinon/backers/badge.svg" alt="OpenCollective"></a>
