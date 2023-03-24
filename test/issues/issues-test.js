@@ -805,4 +805,21 @@ describe("issues", function () {
             assert.isUndefined(restoredPropertyDescriptor);
         });
     });
+
+    describe("#2501 - createStubInstance stubs are not able to call through to the underlying function on the prototype", function () {
+        it("should be able call through to the underlying function on the prototype", function () {
+            class Foo {
+                testMethod() {
+                    this.wasCalled = true;
+                    return 42;
+                }
+            }
+
+            const fooStubInstance = this.sandbox.createStubInstance(Foo);
+            fooStubInstance.testMethod.callThrough();
+            // const fooStubInstance = new Foo()
+            fooStubInstance.testMethod();
+            // assert.isTrue(fooStubInstance.wasCalled);
+        });
+    });
 });
