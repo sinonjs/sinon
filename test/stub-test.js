@@ -2,7 +2,7 @@
 
 var referee = require("@sinonjs/referee");
 var createStub = require("../lib/sinon/stub");
-var createStubInstance = require("../lib/sinon/stub").createStubInstance;
+var createStubInstance = require("../lib/sinon/create-stub-instance")
 var createSpy = require("../lib/sinon/spy");
 var createProxy = require("../lib/sinon/proxy");
 var match = require("@sinonjs/samsam").createMatcher;
