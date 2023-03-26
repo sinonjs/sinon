@@ -1,5 +1,17 @@
 # Changes
 
+## 15.0.3
+
+- [`b775f1b4`](https://github.com/sinonjs/sinon/commit/b775f1b4174c5a92fa7fa8f70fbf3f4b5466a39e)
+  Avoid tampering with globals and other modules' exports in tests (#2504) (Carl-Erik Kopseng)
+- [`477064b6`](https://github.com/sinonjs/sinon/commit/477064b628c65220ce9d0ac16cd33ab9b1da93da)
+  fix: make it possible to call through to underlying stub in stub instance (#2503) (Carl-Erik Kopseng)
+  > closes #2501
+- [`6e19746e`](https://github.com/sinonjs/sinon/commit/6e19746e255dfa0fcf78af076e49d5db0eb11c07)
+  Remove dead Travis and Gitter references (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-03-26._
+
 ## 15.0.2
 
 - [`19bd99f3`](https://github.com/sinonjs/sinon/commit/19bd99f364ab44f0e2715571e5deab580d9aa7fd)
