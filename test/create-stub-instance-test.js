@@ -2,7 +2,7 @@
 
 var referee = require("@sinonjs/referee");
 var createStub = require("../lib/sinon/stub");
-var createStubInstance = require("../lib/sinon/create-stub-instance")
+var createStubInstance = require("../lib/sinon/create-stub-instance");
 var assert = referee.assert;
 var refute = referee.refute;
 
@@ -155,4 +155,4 @@ describe("createStubInstance", function () {
             { message: "Cannot stub foo. Property does not exist!" }
         );
     });
-})
+});
