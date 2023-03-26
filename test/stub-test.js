@@ -173,6 +173,7 @@ describe("stub", function () {
                 test: func,
             };
             func.aProp = 42;
+
             createStub(object, "test");
 
             assert.equals(object.test.aProp, 42);
@@ -1535,14 +1536,14 @@ describe("stub", function () {
         });
 
         it("stubs methods of function", function () {
-            var func = function () {
-                return;
-            };
+            class FunctionType extends Function {
+                func2() {
+                    return 42;
+                }
+            }
+
+            var func = new FunctionType();
             func.func1 = function () {
-                return;
-            };
-            // eslint-disable-next-line no-proto
-            func.__proto__.func2 = function () {
                 return;
             };
 
