@@ -816,10 +816,10 @@ describe("issues", function () {
             }
 
             const fooStubInstance = this.sandbox.createStubInstance(Foo);
+            assert.isUndefined(fooStubInstance.wasCalled);
             fooStubInstance.testMethod.callThrough();
-            // const fooStubInstance = new Foo()
             fooStubInstance.testMethod();
-            // assert.isTrue(fooStubInstance.wasCalled);
+            assert.isTrue(fooStubInstance.wasCalled);
         });
     });
 });
