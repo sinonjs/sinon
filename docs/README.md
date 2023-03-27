@@ -4,21 +4,17 @@ published: false
 
 # Docs
 
-This folder structure contains the markdown files that becomes the Sinon.JS documentation site published to GitHub Pages. Eventually this will replace the current site at https://sinonjs.org.
+This folder structure contains the markdown files that is the Sinon.JS documentation site published to GitHub Pages.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing documentation to Sinon.JS. This file also lists how to run the site locally.
 
 ## Documentation release process
 
-Whenever a new release is created using `npm version`, the tree from `release-source/release/` is copied into its own folder under `releases/` with an appropriate name.
-
+Whenever a new release is created using `npm version`, the tree from `release-source/release/` is copied into a folder under `releases/` with an appropriate name.
 Likewise, the `_releases/release.md` file is copied into a file matching the release name.
 
-### Example
+Currently, we keep a single folder per major release.
 
-Let's say that we're making a new `v2.0.3` release.
-
-- `release-source/release/` is copied into a new folder `_releases/v2.0.3/`
-- `release-source/release.md` is copied into a new file `_releases/v2.0.3.md`
+See `scripts/postversion.sh` for details on the exact process, as it changes over time.
 
 The release is packaged, tagged and pushed to GitHub. GitHub Pages will build a new site in a few minutes, and replace the old one.
