@@ -68,7 +68,6 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 
 <a href="https://opencollective.com/sinon#backers" target="_blank"><img src="https://opencollective.com/sinon/backers.svg?width=890"></a>
 
-
 ## Sponsors
 
 Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/sinon#sponsor)]
