@@ -46,7 +46,7 @@
     "build": "node ./build.cjs",
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
-    "lint": "eslint '**/*.{js,cjs,mjs}'",
+    "lint": "eslint --max-warnings 99 '**/*.{js,cjs,mjs}'",
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",

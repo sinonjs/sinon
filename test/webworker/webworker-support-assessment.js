@@ -26,7 +26,7 @@ if (typeof Worker !== "undefined") {
              * @see https://html.spec.whatwg.org/multipage/webappapis.html#errorevent
              */
             function onError(ev) {
-                const error = ev.error;
+                let error = ev.error;
                 const msg = `An error happened at line ${[
                     ev.lineno,
                     ev.colno,
