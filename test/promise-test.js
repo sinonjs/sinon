@@ -1,11 +1,11 @@
 "use strict";
 
-var sinon = require("../lib/sinon.js");
-var { assert, refute } = require("@sinonjs/referee");
+const sinon = require("../lib/sinon.js");
+const { assert, refute } = require("@sinonjs/referee");
 
 async function getPromiseStatus(promise) {
-    var status = "pending";
-    var value = null;
+    let status = "pending";
+    let value = null;
     promise
         .then(function (val) {
             status = "resolved";
@@ -24,9 +24,9 @@ async function getPromiseStatus(promise) {
 describe("promise", function () {
     context("with default executor", function () {
         it("returns an unresolved promise", async function () {
-            var promise = sinon.promise();
+            const promise = sinon.promise();
 
-            var { status, value } = await getPromiseStatus(promise);
+            const { status, value } = await getPromiseStatus(promise);
             assert.equals(promise.toString(), "[object Promise]");
             assert.equals(status, "pending");
             assert.isNull(value);
@@ -36,12 +36,12 @@ describe("promise", function () {
         });
 
         it("resolves the promise", async function () {
-            var result = Symbol("promise result");
-            var promise = sinon.promise();
+            const result = Symbol("promise result");
+            const promise = sinon.promise();
 
-            var returnValue = promise.resolve(result);
+            const returnValue = promise.resolve(result);
 
-            var { status, value } = await getPromiseStatus(promise);
+            const { status, value } = await getPromiseStatus(promise);
             assert.equals(status, "resolved");
             assert.same(value, result);
             assert.equals(promise.status, status);
@@ -51,12 +51,12 @@ describe("promise", function () {
         });
 
         it("rejects the promise", async function () {
-            var error = new Error("promise error");
-            var promise = sinon.promise();
+            const error = new Error("promise error");
+            const promise = sinon.promise();
 
-            var returnValue = promise.reject(error);
+            const returnValue = promise.reject(error);
 
-            var { status, value } = await getPromiseStatus(promise);
+            const { status, value } = await getPromiseStatus(promise);
             assert.equals(status, "rejected");
             assert.same(value, error);
             assert.equals(promise.status, status);
@@ -68,7 +68,7 @@ describe("promise", function () {
         });
 
         context("with resolved promise", function () {
-            var promise;
+            let promise;
 
             beforeEach(function () {
                 promise = sinon.promise();
@@ -101,7 +101,7 @@ describe("promise", function () {
         });
 
         context("with rejected promise", function () {
-            var promise;
+            let promise;
 
             beforeEach(function () {
                 promise = sinon.promise();
@@ -136,7 +136,7 @@ describe("promise", function () {
 
     context("with custom executor", function () {
         it("accepts a fake as the custom executor", function () {
-            var executor = sinon.fake();
+            const executor = sinon.fake();
 
             sinon.promise(executor);
 
@@ -147,7 +147,7 @@ describe("promise", function () {
         });
 
         it("accepts a stub as the custom executor", function () {
-            var executor = sinon.stub();
+            const executor = sinon.stub();
 
             sinon.promise(executor);
 
@@ -158,7 +158,7 @@ describe("promise", function () {
         });
 
         it("accepts a function as the custom executor", function () {
-            var args;
+            let args;
             function executor(resolve, reject) {
                 args = [resolve, reject];
             }
@@ -171,12 +171,12 @@ describe("promise", function () {
         });
 
         it("sets resolvedValue when custom executor resolves", async function () {
-            var result = Symbol("executor result");
+            const result = Symbol("executor result");
             function executor(resolve) {
                 resolve(result);
             }
 
-            var promise = sinon.promise(executor);
+            const promise = sinon.promise(executor);
 
             await assert.resolves(promise, result);
             assert.equals(promise.status, "resolved");
@@ -185,12 +185,12 @@ describe("promise", function () {
         });
 
         it("sets rejectedValue when custom executor fails", async function () {
-            var reason = new Error("executor failure");
+            const reason = new Error("executor failure");
             function executor(resolve, reject) {
                 reject(reason);
             }
 
-            var promise = sinon.promise(executor);
+            const promise = sinon.promise(executor);
 
             await assert.rejects(promise, reason);
             assert.equals(promise.status, "rejected");
@@ -199,8 +199,8 @@ describe("promise", function () {
         });
 
         it("resolves the promise", async function () {
-            var result = Symbol("promise result");
-            var promise = sinon.promise(sinon.fake());
+            const result = Symbol("promise result");
+            const promise = sinon.promise(sinon.fake());
 
             promise.resolve(result);
 
@@ -211,8 +211,8 @@ describe("promise", function () {
         });
 
         it("rejects the promise", async function () {
-            var error = new Error("promise error");
-            var promise = sinon.promise(sinon.fake());
+            const error = new Error("promise error");
+            const promise = sinon.promise(sinon.fake());
 
             promise.reject(error);
 

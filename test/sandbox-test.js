@@ -1,29 +1,29 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var samsam = require("@sinonjs/samsam");
-var assert = referee.assert;
-var deprecated = require("@sinonjs/commons").deprecated;
-var refute = referee.refute;
-var fakeXhr = require("nise").fakeXhr;
-var fakeServerWithClock = require("nise").fakeServerWithClock;
-var fakeServer = require("nise").fakeServer;
-var match = require("@sinonjs/samsam").createMatcher;
-var Sandbox = require("../lib/sinon/sandbox");
-var createSandbox = require("../lib/sinon/create-sandbox");
-var sinonFake = require("../lib/sinon/fake");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
-var sinonConfig = require("./get-config");
-var sinonClock = require("../lib/sinon/util/fake-timers");
+const referee = require("@sinonjs/referee");
+const samsam = require("@sinonjs/samsam");
+const assert = referee.assert;
+const deprecated = require("@sinonjs/commons").deprecated;
+const refute = referee.refute;
+const fakeXhr = require("nise").fakeXhr;
+const fakeServerWithClock = require("nise").fakeServerWithClock;
+const fakeServer = require("nise").fakeServer;
+const match = require("@sinonjs/samsam").createMatcher;
+const Sandbox = require("../lib/sinon/sandbox");
+const createSandbox = require("../lib/sinon/create-sandbox");
+const sinonFake = require("../lib/sinon/fake");
+const sinonSpy = require("../lib/sinon/spy");
+const sinonStub = require("../lib/sinon/stub");
+const sinonConfig = require("./get-config");
+const sinonClock = require("../lib/sinon/util/fake-timers");
 
-var supportsAjax =
+const supportsAjax =
     typeof XMLHttpRequest !== "undefined" ||
     typeof ActiveXObject !== "undefined";
-var supportPromise = typeof Promise !== "undefined";
-var globalContext = typeof global !== "undefined" ? global : window;
-var globalXHR = globalContext.XMLHttpRequest;
-var globalAXO = globalContext.ActiveXObject;
+const supportPromise = typeof Promise !== "undefined";
+const globalContext = typeof global !== "undefined" ? global : window;
+const globalXHR = globalContext.XMLHttpRequest;
+const globalAXO = globalContext.ActiveXObject;
 
 if (!assert.stub) {
     require("./test-helper");
@@ -46,20 +46,20 @@ describe("Sandbox", function () {
     }
 
     it("exposes match", function () {
-        var sandbox = new Sandbox();
+        const sandbox = new Sandbox();
 
         assert.same(sandbox.match, match);
     });
 
     it("can be reset without failing when pre-configured to use a fake server", function () {
-        var sandbox = createSandbox({ useFakeServer: true });
+        const sandbox = createSandbox({ useFakeServer: true });
         refute.exception(function () {
             sandbox.reset();
         });
     });
 
     it("can be reset without failing when configured to use a fake server", function () {
-        var sandbox = new Sandbox();
+        const sandbox = new Sandbox();
         sandbox.useFakeServer();
         refute.exception(function () {
             sandbox.reset();
@@ -72,13 +72,13 @@ describe("Sandbox", function () {
         });
 
         it("returns a mock", function () {
-            var object = {
+            const object = {
                 method: function () {
                     return;
                 },
             };
 
-            var actual = this.sandbox.mock(object);
+            const actual = this.sandbox.mock(object);
             actual.expects("method");
 
             assert.equals(typeof actual.verify, "function");
@@ -86,19 +86,19 @@ describe("Sandbox", function () {
         });
 
         it("adds mock to fake array", function () {
-            var fakes = this.sandbox.getFakes();
-            var object = {
+            const fakes = this.sandbox.getFakes();
+            const object = {
                 method: function () {
                     return;
                 },
             };
-            var expected = this.sandbox.mock(object);
+            const expected = this.sandbox.mock(object);
 
             assert(fakes.indexOf(expected) !== -1);
         });
 
         it("appends mocks to fake array", function () {
-            var fakes = this.sandbox.getFakes();
+            const fakes = this.sandbox.getFakes();
 
             this.sandbox.mock({});
             this.sandbox.mock({});
@@ -113,7 +113,7 @@ describe("Sandbox", function () {
         });
 
         it("appends mocks and stubs to fake array", function () {
-            var fakes = this.sandbox.getFakes();
+            const fakes = this.sandbox.getFakes();
 
             this.sandbox.mock(
                 {
@@ -136,7 +136,7 @@ describe("Sandbox", function () {
         });
 
         describe("warns of potential leak when", function () {
-            var warn;
+            let warn;
 
             beforeEach(function () {
                 warn = this.sandbox.stub(deprecated, "printWarning");
@@ -174,7 +174,7 @@ describe("Sandbox", function () {
             });
 
             function createTooManyFakes(sandbox) {
-                for (var i = 0; i < sandbox.leakThreshold; i++) {
+                for (let i = 0; i < sandbox.leakThreshold; i++) {
                     sandbox.spy();
                 }
             }
@@ -183,19 +183,18 @@ describe("Sandbox", function () {
 
     describe(".spy", function () {
         it("should return a spy", function () {
-            var sandbox = createSandbox();
-            var spy = sandbox.spy();
+            const sandbox = createSandbox();
+            const spy = sandbox.spy();
 
             assert.isFunction(spy);
             assert.equals(spy.displayName, "spy");
         });
 
         it("should add a spy to the internal collection", function () {
-            var sandbox = createSandbox();
-            var fakes = sandbox.getFakes();
-            var expected;
+            const sandbox = createSandbox();
+            const fakes = sandbox.getFakes();
 
-            expected = sandbox.spy();
+            const expected = sandbox.spy();
 
             assert.isTrue(fakes.indexOf(expected) !== -1);
         });
@@ -207,20 +206,20 @@ describe("Sandbox", function () {
         });
 
         it("stubs existing methods", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             stub.method.returns(3);
             assert.equals(3, stub.method());
         });
 
         it("should require a function", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -234,7 +233,7 @@ describe("Sandbox", function () {
         });
 
         it("resets all stub methods on reset()", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method1 = function () {
@@ -247,7 +246,7 @@ describe("Sandbox", function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             stub.method1.returns(1);
             stub.method2.returns(2);
             stub.method3.returns(3);
@@ -261,64 +260,64 @@ describe("Sandbox", function () {
         });
 
         it("doesn't stub fake methods", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.noop = noop;
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             assert.exception(function () {
                 stub.method.returns(3);
             });
         });
 
         it("doesn't call the constructor", function () {
-            var Class = function (a, b) {
-                var c = a + b;
+            const Class = function (a, b) {
+                const c = a + b;
                 throw c;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             refute.exception(function () {
                 stub.method(3);
             });
         });
 
         it("retains non function values", function () {
-            var TYPE = "some-value";
-            var Class = function () {
+            const TYPE = "some-value";
+            const Class = function () {
                 return;
             };
             Class.prototype.noop = noop;
             Class.prototype.type = TYPE;
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             assert.equals(TYPE, stub.type);
         });
 
         it("has no side effects on the prototype", function () {
-            var proto = {
+            const proto = {
                 method: function () {
                     throw new Error("error");
                 },
             };
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype = proto;
 
-            var stub = this.sandbox.createStubInstance(Class);
+            const stub = this.sandbox.createStubInstance(Class);
             refute.exception(stub.method);
             assert.exception(proto.method);
         });
 
         it("throws exception for non function params", function () {
-            var types = [{}, 3, "hi!"];
+            const types = [{}, 3, "hi!"];
 
-            for (var i = 0; i < types.length; i++) {
+            for (let i = 0; i < types.length; i++) {
                 // yes, it's silly to create functions in a loop, it's also a test
                 /* eslint-disable-next-line no-loop-func */
                 assert.exception(function () {
@@ -328,14 +327,14 @@ describe("Sandbox", function () {
         });
 
         it("allows providing optional overrides", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class, {
+            const stub = this.sandbox.createStubInstance(Class, {
                 method: sinonStub().returns(3),
             });
 
@@ -343,14 +342,14 @@ describe("Sandbox", function () {
         });
 
         it("allows providing optional returned values", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class, {
+            const stub = this.sandbox.createStubInstance(Class, {
                 method: 3,
             });
 
@@ -358,14 +357,14 @@ describe("Sandbox", function () {
         });
 
         it("allows providing null as a return value", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var stub = this.sandbox.createStubInstance(Class, {
+            const stub = this.sandbox.createStubInstance(Class, {
                 method: null,
             });
 
@@ -373,14 +372,14 @@ describe("Sandbox", function () {
         });
 
         it("throws an exception when trying to override non-existing property", function () {
-            var Class = function () {
+            const Class = function () {
                 return;
             };
             Class.prototype.method = function () {
                 return;
             };
 
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -418,7 +417,7 @@ describe("Sandbox", function () {
         });
 
         it("fails if stubbing property on null", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -432,7 +431,7 @@ describe("Sandbox", function () {
 
         it("fails if stubbing symbol on null", function () {
             if (typeof Symbol === "function") {
-                var sandbox = this.sandbox;
+                const sandbox = this.sandbox;
 
                 assert.exception(
                     function () {
@@ -447,7 +446,7 @@ describe("Sandbox", function () {
         });
 
         it("creates a stub", function () {
-            var object = {
+            const object = {
                 method: function () {
                     return;
                 },
@@ -459,19 +458,19 @@ describe("Sandbox", function () {
         });
 
         it("adds stub to fake array", function () {
-            var fakes = this.sandbox.getFakes();
-            var object = {
+            const fakes = this.sandbox.getFakes();
+            const object = {
                 method: function () {
                     return;
                 },
             };
-            var stub = this.sandbox.stub(object, "method");
+            const stub = this.sandbox.stub(object, "method");
 
             assert.isTrue(fakes.indexOf(stub) !== -1);
         });
 
         it("appends stubs to fake array", function () {
-            var fakes = this.sandbox.getFakes();
+            const fakes = this.sandbox.getFakes();
 
             this.sandbox.stub(
                 {
@@ -494,8 +493,8 @@ describe("Sandbox", function () {
         });
 
         it("adds all object methods to fake array", function () {
-            var fakes = this.sandbox.getFakes();
-            var object = {
+            const fakes = this.sandbox.getFakes();
+            const object = {
                 method: function () {
                     return;
                 },
@@ -520,7 +519,7 @@ describe("Sandbox", function () {
         });
 
         it("returns a stubbed object", function () {
-            var object = {
+            const object = {
                 method: function () {
                     return;
                 },
@@ -529,7 +528,7 @@ describe("Sandbox", function () {
         });
 
         it("returns a stubbed method", function () {
-            var object = {
+            const object = {
                 method: function () {
                     return;
                 },
@@ -549,7 +548,7 @@ describe("Sandbox", function () {
             });
 
             it("stubs environment property", function () {
-                var originalPrintWarning = deprecated.printWarning;
+                const originalPrintWarning = deprecated.printWarning;
                 deprecated.printWarning = function () {
                     return;
                 };
@@ -569,7 +568,7 @@ describe("Sandbox", function () {
         });
 
         it("stubs number property", function () {
-            var originalPrintWarning = deprecated.printWarning;
+            const originalPrintWarning = deprecated.printWarning;
             deprecated.printWarning = function () {
                 return;
             };
@@ -582,7 +581,7 @@ describe("Sandbox", function () {
         });
 
         it("restores number property", function () {
-            var originalPrintWarning = deprecated.printWarning;
+            const originalPrintWarning = deprecated.printWarning;
             deprecated.printWarning = function () {
                 return;
             };
@@ -596,13 +595,13 @@ describe("Sandbox", function () {
         });
 
         it("fails if property does not exist", function () {
-            var originalPrintWarning = deprecated.printWarning;
+            const originalPrintWarning = deprecated.printWarning;
             deprecated.printWarning = function () {
                 return;
             };
 
-            var sandbox = this.sandbox;
-            var object = {};
+            const sandbox = this.sandbox;
+            const object = {};
 
             assert.exception(function () {
                 sandbox.stub(object, "prop", 1);
@@ -613,10 +612,10 @@ describe("Sandbox", function () {
 
         it("fails if Symbol does not exist", function () {
             if (typeof Symbol === "function") {
-                var sandbox = this.sandbox;
-                var object = {};
+                const sandbox = this.sandbox;
+                const object = {};
 
-                var originalPrintWarning = deprecated.printWarning;
+                const originalPrintWarning = deprecated.printWarning;
                 deprecated.printWarning = function () {
                     return;
                 };
@@ -639,38 +638,36 @@ describe("Sandbox", function () {
 
     describe(".fake", function () {
         it("should return a fake", function () {
-            var sandbox = createSandbox();
-            var fake = sandbox.fake();
+            const sandbox = createSandbox();
+            const fake = sandbox.fake();
 
             assert.isFunction(fake);
             assert.equals(fake.displayName, "fake");
         });
 
         it("should add a fake to the internal collection", function () {
-            var sandbox = createSandbox();
-            var fakes = sandbox.getFakes();
-            var expected;
+            const sandbox = createSandbox();
+            const fakes = sandbox.getFakes();
 
-            expected = sandbox.fake();
+            const expected = sandbox.fake();
 
             assert.isTrue(fakes.indexOf(expected) !== -1);
         });
 
         describe(".returns", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.returns();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.returns();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.returns();
+                const expected = sandbox.fake.returns();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -678,19 +675,18 @@ describe("Sandbox", function () {
 
         describe(".throws", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.throws();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.throws();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.throws();
+                const expected = sandbox.fake.throws();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -698,19 +694,18 @@ describe("Sandbox", function () {
 
         describe(".resolves", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.resolves();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.resolves();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.resolves();
+                const expected = sandbox.fake.resolves();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -718,19 +713,18 @@ describe("Sandbox", function () {
 
         describe(".rejects", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.rejects();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.rejects();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.rejects();
+                const expected = sandbox.fake.rejects();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -738,19 +732,18 @@ describe("Sandbox", function () {
 
         describe(".yields", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.yields();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.yields();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.yields();
+                const expected = sandbox.fake.yields();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -758,19 +751,18 @@ describe("Sandbox", function () {
 
         describe(".yieldsAsync", function () {
             it("should return a fake behavior", function () {
-                var sandbox = createSandbox();
-                var fake = sandbox.fake.yieldsAsync();
+                const sandbox = createSandbox();
+                const fake = sandbox.fake.yieldsAsync();
 
                 assert.isFunction(fake);
                 assert.equals(fake.displayName, "fake");
             });
 
             it("should add a fake behavior to the internal collection", function () {
-                var sandbox = createSandbox();
-                var fakes = sandbox.getFakes();
-                var expected;
+                const sandbox = createSandbox();
+                const fakes = sandbox.getFakes();
 
-                expected = sandbox.fake.yieldsAsync();
+                const expected = sandbox.fake.yieldsAsync();
 
                 assert.isTrue(fakes.indexOf(expected) !== -1);
             });
@@ -802,7 +794,7 @@ describe("Sandbox", function () {
         });
 
         it("calls restore when restore throws", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             sandbox.verify = sinonSpy();
             sandbox.restore = sinonStub().throws();
@@ -821,13 +813,13 @@ describe("Sandbox", function () {
         });
 
         it("should replace a function property", function () {
-            var replacement = function replacement() {
+            const replacement = function replacement() {
                 return;
             };
-            var existing = function existing() {
+            const existing = function existing() {
                 return;
             };
-            var object = {
+            const object = {
                 property: existing,
             };
 
@@ -841,9 +833,9 @@ describe("Sandbox", function () {
         });
 
         it("should replace a non-function property", function () {
-            var replacement = "replacement";
-            var existing = "existing";
-            var object = {
+            const replacement = "replacement";
+            const existing = "existing";
+            const object = {
                 property: existing,
             };
 
@@ -857,9 +849,9 @@ describe("Sandbox", function () {
         });
 
         it("should replace an inherited property", function () {
-            var replacement = "replacement";
-            var existing = "existing";
-            var object = Object.create({
+            const replacement = "replacement";
+            const existing = "existing";
+            const object = Object.create({
                 property: existing,
             });
 
@@ -873,7 +865,7 @@ describe("Sandbox", function () {
         });
 
         it("should error on missing descriptor", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -888,8 +880,8 @@ describe("Sandbox", function () {
         });
 
         it("should error on missing replacement", function () {
-            var sandbox = this.sandbox;
-            var object = Object.create({
+            const sandbox = this.sandbox;
+            const object = Object.create({
                 property: "catpants",
             });
 
@@ -905,12 +897,12 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a non-function with a function", function () {
-            var sandbox = this.sandbox;
-            var replacement = function () {
+            const sandbox = this.sandbox;
+            const replacement = function () {
                 return "replacement";
             };
-            var existing = "existing";
-            var object = {
+            const existing = "existing";
+            const object = {
                 property: existing,
             };
 
@@ -923,9 +915,9 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a function with a non-function", function () {
-            var sandbox = this.sandbox;
-            var replacement = "replacement";
-            var object = {
+            const sandbox = this.sandbox;
+            const replacement = "replacement";
+            const object = {
                 property: function () {
                     return "apple pie";
                 },
@@ -940,8 +932,8 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a fake twice", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 property: function () {
                     return "apple pie";
                 },
@@ -961,8 +953,8 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a string twice", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 property: "original",
             };
 
@@ -980,21 +972,25 @@ describe("Sandbox", function () {
         });
 
         it("should return the replacement argument", function () {
-            var replacement = "replacement";
-            var existing = "existing";
-            var object = {
+            const replacement = "replacement";
+            const existing = "existing";
+            const object = {
                 property: existing,
             };
 
-            var actual = this.sandbox.replace(object, "property", replacement);
+            const actual = this.sandbox.replace(
+                object,
+                "property",
+                replacement
+            );
 
             assert.equals(actual, replacement);
         });
 
         describe("when asked to replace a getter", function () {
             it("should throw an Error", function () {
-                var sandbox = this.sandbox;
-                var object = {
+                const sandbox = this.sandbox;
+                const object = {
                     get foo() {
                         return "bar";
                     },
@@ -1014,8 +1010,8 @@ describe("Sandbox", function () {
 
         describe("when asked to replace a setter", function () {
             it("should throw an Error", function () {
-                var sandbox = this.sandbox;
-                var object = {
+                const sandbox = this.sandbox;
+                const object = {
                     // eslint-disable-next-line accessor-pairs
                     set foo(value) {
                         this.prop = value;
@@ -1041,8 +1037,8 @@ describe("Sandbox", function () {
         });
 
         it("should replace getters", function () {
-            var expected = "baz";
-            var object = {
+            const expected = "baz";
+            const object = {
                 get foo() {
                     return "bar";
                 },
@@ -1058,23 +1054,27 @@ describe("Sandbox", function () {
         });
 
         it("should return replacement", function () {
-            var replacement = sinonFake.returns("baz");
-            var object = {
+            const replacement = sinonFake.returns("baz");
+            const object = {
                 get foo() {
                     return "bar";
                 },
             };
 
-            var actual = this.sandbox.replaceGetter(object, "foo", replacement);
+            const actual = this.sandbox.replaceGetter(
+                object,
+                "foo",
+                replacement
+            );
 
             assert.equals(actual, replacement);
         });
 
         it("should replace an inherited property", function () {
-            var expected = "baz";
-            var replacement = sinonFake.returns(expected);
-            var existing = "existing";
-            var object = Object.create({
+            const expected = "baz";
+            const replacement = sinonFake.returns(expected);
+            const existing = "existing";
+            const object = Object.create({
                 get foo() {
                     return existing;
                 },
@@ -1090,7 +1090,7 @@ describe("Sandbox", function () {
         });
 
         it("should error on missing descriptor", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -1105,8 +1105,8 @@ describe("Sandbox", function () {
         });
 
         it("should error when descriptor has no getter", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 // eslint-disable-next-line accessor-pairs
                 set catpants(_) {
                     return;
@@ -1126,9 +1126,9 @@ describe("Sandbox", function () {
 
         describe("when called with a non-function replacement argument", function () {
             it("should throw a TypeError", function () {
-                var sandbox = this.sandbox;
-                var expected = "baz";
-                var object = {
+                const sandbox = this.sandbox;
+                const expected = "baz";
+                const object = {
                     get foo() {
                         return "bar";
                     },
@@ -1147,8 +1147,8 @@ describe("Sandbox", function () {
         });
 
         it("allows restoring getters", function () {
-            var expected = "baz";
-            var object = {
+            const expected = "baz";
+            const object = {
                 get foo() {
                     return "bar";
                 },
@@ -1166,8 +1166,8 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a getter twice", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 get foo() {
                     return "bar";
                 },
@@ -1197,7 +1197,7 @@ describe("Sandbox", function () {
         });
 
         it("should replace setter", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
@@ -1215,30 +1215,34 @@ describe("Sandbox", function () {
         });
 
         it("should return replacement", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
                 prop: "bar",
             };
-            var replacement = function (val) {
+            const replacement = function (val) {
                 this.prop = `${val}bla`;
             };
-            var actual = this.sandbox.replaceSetter(object, "foo", replacement);
+            const actual = this.sandbox.replaceSetter(
+                object,
+                "foo",
+                replacement
+            );
 
             assert.equals(actual, replacement);
         });
 
         it("should replace an inherited property", function () {
-            var object = Object.create({
+            const object = Object.create({
                 // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
                 },
                 prop: "bar",
             });
-            var replacement = function (value) {
+            const replacement = function (value) {
                 this.prop = `${value}blabla`;
             };
 
@@ -1252,7 +1256,7 @@ describe("Sandbox", function () {
         });
 
         it("should error on missing descriptor", function () {
-            var sandbox = this.sandbox;
+            const sandbox = this.sandbox;
 
             assert.exception(
                 function () {
@@ -1267,8 +1271,8 @@ describe("Sandbox", function () {
         });
 
         it("should error when descriptor has no setter", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 get catpants() {
                     return;
                 },
@@ -1287,8 +1291,8 @@ describe("Sandbox", function () {
 
         describe("when called with a non-function replacement argument", function () {
             it("should throw a TypeError", function () {
-                var sandbox = this.sandbox;
-                var object = {
+                const sandbox = this.sandbox;
+                const object = {
                     // eslint-disable-next-line accessor-pairs
                     set foo(value) {
                         this.prop = value;
@@ -1309,7 +1313,7 @@ describe("Sandbox", function () {
         });
 
         it("allows restoring setters", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     this.prop = value;
@@ -1329,8 +1333,8 @@ describe("Sandbox", function () {
         });
 
         it("should refuse to replace a setter twice", function () {
-            var sandbox = this.sandbox;
-            var object = {
+            const sandbox = this.sandbox;
+            const object = {
                 // eslint-disable-next-line accessor-pairs
                 set foo(value) {
                     return;
@@ -1357,8 +1361,8 @@ describe("Sandbox", function () {
 
     describe(".reset", function () {
         beforeEach(function () {
-            var sandbox = (this.sandbox = createSandbox());
-            var fakes = sandbox.getFakes();
+            const sandbox = (this.sandbox = createSandbox());
+            const fakes = sandbox.getFakes();
 
             fakes.push({
                 reset: sinonSpy(),
@@ -1371,8 +1375,8 @@ describe("Sandbox", function () {
         });
 
         it("calls reset on all fakes", function () {
-            var fake0 = this.sandbox.getFakes()[0];
-            var fake1 = this.sandbox.getFakes()[1];
+            const fake0 = this.sandbox.getFakes()[0];
+            const fake1 = this.sandbox.getFakes()[1];
 
             this.sandbox.reset();
 
@@ -1381,8 +1385,8 @@ describe("Sandbox", function () {
         });
 
         it("calls resetHistory on all fakes", function () {
-            var fake0 = this.sandbox.getFakes()[0];
-            var fake1 = this.sandbox.getFakes()[1];
+            const fake0 = this.sandbox.getFakes()[0];
+            const fake1 = this.sandbox.getFakes()[1];
 
             this.sandbox.reset();
 
@@ -1391,7 +1395,7 @@ describe("Sandbox", function () {
         });
 
         it("resets fake behaviours", function () {
-            var fake = this.sandbox.fake();
+            const fake = this.sandbox.fake();
             fake(1234);
 
             this.sandbox.reset();
@@ -1402,16 +1406,16 @@ describe("Sandbox", function () {
 
     describe(".resetBehavior", function () {
         beforeEach(function () {
-            var sandbox = (this.sandbox = createSandbox());
-            var fakes = sandbox.getFakes();
+            const sandbox = (this.sandbox = createSandbox());
+            const fakes = sandbox.getFakes();
 
             fakes.push({ resetBehavior: sinonSpy() });
             fakes.push({ resetBehavior: sinonSpy() });
         });
 
         it("calls resetBehavior on all fakes", function () {
-            var fake0 = this.sandbox.getFakes()[0];
-            var fake1 = this.sandbox.getFakes()[1];
+            const fake0 = this.sandbox.getFakes()[0];
+            const fake1 = this.sandbox.getFakes()[1];
 
             this.sandbox.resetBehavior();
 
@@ -1422,21 +1426,21 @@ describe("Sandbox", function () {
 
     describe(".resetHistory", function () {
         beforeEach(function () {
-            var sandbox = (this.sandbox = createSandbox());
-            var fakes = (this.fakes = sandbox.getFakes());
+            const sandbox = (this.sandbox = createSandbox());
+            const fakes = (this.fakes = sandbox.getFakes());
 
-            var spy1 = sinonSpy();
+            const spy1 = sinonSpy();
             spy1();
             fakes.push(spy1);
 
-            var spy2 = sinonSpy();
+            const spy2 = sinonSpy();
             spy2();
             fakes.push(spy2);
         });
 
         it("resets the history on all fakes", function () {
-            var fake0 = this.fakes[0];
-            var fake1 = this.fakes[1];
+            const fake0 = this.fakes[0];
+            const fake1 = this.fakes[1];
 
             this.sandbox.resetHistory();
 
@@ -1467,7 +1471,7 @@ describe("Sandbox", function () {
         });
 
         it("returns clock object", function () {
-            var clock = this.sandbox.useFakeTimers();
+            const clock = this.sandbox.useFakeTimers();
 
             assert.isObject(clock);
             assert.isFunction(clock.tick);
@@ -1487,7 +1491,7 @@ describe("Sandbox", function () {
         });
 
         it("passes arguments to sinon.useFakeTimers", function () {
-            var useFakeTimersStub = sinonStub(
+            const useFakeTimersStub = sinonStub(
                 sinonClock,
                 "useFakeTimers"
             ).returns({});
@@ -1510,7 +1514,7 @@ describe("Sandbox", function () {
         });
 
         it("restores the fakeTimer clock created by the sandbox when the sandbox is restored", function () {
-            var originalSetTimeout = setTimeout;
+            const originalSetTimeout = setTimeout;
 
             this.sandbox.useFakeTimers();
             refute.same(setTimeout, originalSetTimeout, "fakeTimers installed");
@@ -1521,7 +1525,7 @@ describe("Sandbox", function () {
         });
 
         it("restores spied fake timers when the sandbox is restored", function () {
-            var originalSetTimeout = setTimeout;
+            const originalSetTimeout = setTimeout;
 
             this.sandbox.useFakeTimers();
             this.sandbox.spy(globalContext, "setTimeout");
@@ -1550,9 +1554,9 @@ describe("Sandbox", function () {
         });
 
         it("must return the sandbox", function () {
-            var mockPromise = {};
+            const mockPromise = {};
 
-            var actual = this.sandbox.usingPromise(mockPromise);
+            const actual = this.sandbox.usingPromise(mockPromise);
 
             assert.same(actual, this.sandbox);
         });
@@ -1562,13 +1566,13 @@ describe("Sandbox", function () {
                 return this.skip();
             }
 
-            var resolveValue = {};
-            var mockPromise = {
+            const resolveValue = {};
+            const mockPromise = {
                 resolve: sinonStub().resolves(resolveValue),
             };
 
             this.sandbox.usingPromise(mockPromise);
-            var stub = this.sandbox.stub().resolves();
+            const stub = this.sandbox.stub().resolves();
 
             return stub().then(function (action) {
                 assert.same(resolveValue, action);
@@ -1582,11 +1586,11 @@ describe("Sandbox", function () {
                 return this.skip();
             }
 
-            var resolveValue = {};
-            var mockPromise = {
+            const resolveValue = {};
+            const mockPromise = {
                 resolve: sinonStub().resolves(resolveValue),
             };
-            var stubbedObject = {
+            const stubbedObject = {
                 stubbedMethod: function () {
                     return;
                 },
@@ -1607,18 +1611,18 @@ describe("Sandbox", function () {
                 return this.skip();
             }
 
-            var resolveValue = {};
-            var mockPromise = {
+            const resolveValue = {};
+            const mockPromise = {
                 resolve: sinonStub().resolves(resolveValue),
             };
-            var mockedObject = {
+            const mockedObject = {
                 mockedMethod: function () {
                     return;
                 },
             };
 
             this.sandbox.usingPromise(mockPromise);
-            var mock = this.sandbox.mock(mockedObject);
+            const mock = this.sandbox.mock(mockedObject);
             mock.expects("mockedMethod").resolves({});
 
             return mockedObject.mockedMethod().then(function (action) {
@@ -1641,7 +1645,7 @@ describe("Sandbox", function () {
                 });
 
                 it("calls sinon.useFakeXMLHttpRequest", function () {
-                    var stubXhr = {
+                    const stubXhr = {
                         restore: function () {
                             return;
                         },
@@ -1650,7 +1654,7 @@ describe("Sandbox", function () {
                     this.sandbox
                         .stub(fakeXhr, "useFakeXMLHttpRequest")
                         .returns(stubXhr);
-                    var returnedXhr = this.sandbox.useFakeXMLHttpRequest();
+                    const returnedXhr = this.sandbox.useFakeXMLHttpRequest();
 
                     assert(fakeXhr.useFakeXMLHttpRequest.called);
                     assert.equals(stubXhr, returnedXhr);
@@ -1699,33 +1703,33 @@ describe("Sandbox", function () {
                 });
 
                 it("returns server", function () {
-                    var server = this.sandbox.useFakeServer();
+                    const server = this.sandbox.useFakeServer();
 
                     assert.isObject(server);
                     assert.isFunction(server.restore);
                 });
 
                 it("exposes server property", function () {
-                    var server = this.sandbox.useFakeServer();
+                    const server = this.sandbox.useFakeServer();
 
                     assert.same(this.sandbox.server, server);
                 });
 
                 it("creates server", function () {
-                    var server = this.sandbox.useFakeServer();
+                    const server = this.sandbox.useFakeServer();
 
                     assert(fakeServer.isPrototypeOf(server));
                 });
 
                 it("creates server without clock by default", function () {
-                    var server = this.sandbox.useFakeServer();
+                    const server = this.sandbox.useFakeServer();
 
                     refute(fakeServerWithClock.isPrototypeOf(server));
                 });
 
                 it("creates server with clock", function () {
                     this.sandbox.serverPrototype = fakeServerWithClock;
-                    var server = this.sandbox.useFakeServer();
+                    const server = this.sandbox.useFakeServer();
 
                     assert(fakeServerWithClock.isPrototypeOf(server));
                 });
@@ -1768,7 +1772,7 @@ describe("Sandbox", function () {
             /* eslint-disable no-empty-function, accessor-pairs */
             this.sandbox.inject(this.obj);
 
-            var myObj = { a: function () {} };
+            const myObj = { a: function () {} };
             function MyClass() {}
             MyClass.prototype.method1 = noop;
             Object.defineProperty(myObj, "b", {
@@ -1785,7 +1789,7 @@ describe("Sandbox", function () {
             refute.exception(
                 function () {
                     this.obj.createStubInstance(MyClass);
-                    var fake = this.obj.fake();
+                    const fake = this.obj.fake();
                     this.obj.replace(myObj, "a", fake);
                     this.obj.replaceGetter(myObj, "b", fake);
                     this.obj.replaceSetter(myObj, "c", fake);
@@ -1814,7 +1818,7 @@ describe("Sandbox", function () {
         });
 
         it("should return object", function () {
-            var injected = this.sandbox.inject({});
+            const injected = this.sandbox.inject({});
 
             assert.isObject(injected);
             assert.isFunction(injected.spy);
@@ -1839,12 +1843,12 @@ describe("Sandbox", function () {
                     this.sandbox.useFakeTimers();
                     this.sandbox.inject(this.obj);
 
-                    var spy = sinonSpy();
+                    const spy = sinonSpy();
                     setTimeout(spy, 10);
 
                     this.sandbox.clock.tick(10);
 
-                    var xhr = window.XMLHttpRequest
+                    const xhr = window.XMLHttpRequest
                         ? new XMLHttpRequest()
                         : new ActiveXObject("Microsoft.XMLHTTP"); //eslint-disable-line no-undef
 
@@ -1861,8 +1865,8 @@ describe("Sandbox", function () {
 
     describe(".verify", function () {
         it("calls verify on all fakes", function () {
-            var sandbox = createSandbox();
-            var fakes = sandbox.getFakes();
+            const sandbox = createSandbox();
+            const fakes = sandbox.getFakes();
 
             fakes.push({ verify: sinonSpy() });
             fakes.push({ verify: sinonSpy() });
@@ -1877,7 +1881,7 @@ describe("Sandbox", function () {
 
     describe(".restore", function () {
         it("throws when passed arguments", function () {
-            var sandbox = new Sandbox();
+            const sandbox = new Sandbox();
 
             assert.exception(
                 function () {
@@ -1892,8 +1896,8 @@ describe("Sandbox", function () {
 
         // https://github.com/sinonjs/sinon/issues/2192
         it("restores all fields of a spied object", function () {
-            var sandbox = new Sandbox();
-            var o = {
+            const sandbox = new Sandbox();
+            const o = {
                 foo: function () {
                     return 42;
                 },
@@ -1906,8 +1910,8 @@ describe("Sandbox", function () {
         });
 
         it("restores all fields of a stubbed object", function () {
-            var sandbox = new Sandbox();
-            var o = {
+            const sandbox = new Sandbox();
+            const o = {
                 foo: function () {
                     return 42;
                 },
@@ -1935,7 +1939,7 @@ describe("Sandbox", function () {
         });
 
         it("yields stub, mock as arguments", function () {
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["stub", "mock"],
                 })
@@ -1949,7 +1953,7 @@ describe("Sandbox", function () {
         });
 
         it("yields spy, stub, mock as arguments", function () {
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["spy", "stub", "mock"],
                 })
@@ -1963,7 +1967,7 @@ describe("Sandbox", function () {
         });
 
         it("does not yield server when not faking xhr", function () {
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["server", "stub", "mock"],
                     useFakeServer: false,
@@ -1978,13 +1982,13 @@ describe("Sandbox", function () {
         });
 
         it("does not inject properties if they are already present", function () {
-            var server = function () {
+            const server = function () {
                 return;
             };
-            var clock = {};
-            var spy = false;
-            var object = { server: server, clock: clock, spy: spy };
-            var sandbox = createSandbox(
+            const clock = {};
+            const spy = false;
+            const object = { server: server, clock: clock, spy: spy };
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["server", "clock", "spy"],
                     injectInto: object,
@@ -2001,7 +2005,7 @@ describe("Sandbox", function () {
         if (supportsAjax) {
             describe("ajax options", function () {
                 it("yields server when faking xhr", function () {
-                    var sandbox = createSandbox(
+                    const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server", "stub", "mock"],
                         })
@@ -2016,7 +2020,7 @@ describe("Sandbox", function () {
                 });
 
                 it("uses serverWithClock when faking xhr", function () {
-                    var sandbox = createSandbox(
+                    const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server"],
                             useFakeServer: fakeServerWithClock,
@@ -2032,13 +2036,13 @@ describe("Sandbox", function () {
                 });
 
                 it("uses fakeServer as the serverPrototype by default", function () {
-                    var sandbox = createSandbox();
+                    const sandbox = createSandbox();
 
                     assert.same(sandbox.serverPrototype, fakeServer);
                 });
 
                 it("uses configured implementation as the serverPrototype", function () {
-                    var sandbox = createSandbox({
+                    const sandbox = createSandbox({
                         useFakeServer: fakeServerWithClock,
                     });
 
@@ -2046,7 +2050,7 @@ describe("Sandbox", function () {
                 });
 
                 it("yields clock when faking timers", function () {
-                    var sandbox = createSandbox(
+                    const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server", "clock"],
                         })
@@ -2059,9 +2063,9 @@ describe("Sandbox", function () {
                 });
 
                 it("injects properties into object", function () {
-                    var object = {};
+                    const object = {};
 
-                    var sandbox = createSandbox(
+                    const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server", "clock"],
                             injectInto: object,
@@ -2080,9 +2084,9 @@ describe("Sandbox", function () {
                 });
 
                 it("should inject server and clock when only enabling them", function () {
-                    var object = {};
+                    const object = {};
 
-                    var sandbox = createSandbox(
+                    const sandbox = createSandbox(
                         sinonConfig({
                             injectInto: object,
                             useFakeTimers: true,
@@ -2107,7 +2111,7 @@ describe("Sandbox", function () {
         // This is currently testing the internals of useFakeTimers, we could possibly change it to be based on
         // behavior.
         it("fakes specified timers", function () {
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["clock"],
                     useFakeTimers: { toFake: ["Date", "setTimeout"] },
@@ -2124,9 +2128,9 @@ describe("Sandbox", function () {
         });
 
         it("injects sandbox", function () {
-            var object = {};
+            const object = {};
 
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["sandbox", "spy"],
                     injectInto: object,
@@ -2141,9 +2145,9 @@ describe("Sandbox", function () {
         });
 
         it("injects match", function () {
-            var object = {};
+            const object = {};
 
-            var sandbox = createSandbox(
+            const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["match"],
                     injectInto: object,
@@ -2158,11 +2162,11 @@ describe("Sandbox", function () {
 
     describe("getters and setters", function () {
         it("allows stubbing getters", function () {
-            var object = {
+            const object = {
                 foo: "bar",
             };
 
-            var sandbox = new Sandbox();
+            const sandbox = new Sandbox();
             sandbox.stub(object, "foo").get(function () {
                 return "baz";
             });
@@ -2171,11 +2175,11 @@ describe("Sandbox", function () {
         });
 
         it("allows restoring getters", function () {
-            var object = {
+            const object = {
                 foo: "bar",
             };
 
-            var sandbox = new Sandbox();
+            const sandbox = new Sandbox();
             sandbox.stub(object, "foo").get(function () {
                 return "baz";
             });
@@ -2186,12 +2190,12 @@ describe("Sandbox", function () {
         });
 
         it("allows stubbing setters", function () {
-            var object = {
+            const object = {
                 foo: undefined,
                 prop: "bar",
             };
 
-            var sandbox = new Sandbox();
+            const sandbox = new Sandbox();
             sandbox.stub(object, "foo").set(function (val) {
                 object.prop = `${val}bla`;
             });
@@ -2202,11 +2206,11 @@ describe("Sandbox", function () {
         });
 
         it("allows restoring setters", function () {
-            var object = {
+            const object = {
                 prop: "bar",
             };
 
-            var sandbox = new Sandbox();
+            const sandbox = new Sandbox();
             sandbox.stub(object, "prop").set(function setterFn(val) {
                 object.prop = `${val}bla`;
             });
@@ -2221,8 +2225,8 @@ describe("Sandbox", function () {
 
     describe(".assert", function () {
         it("allows rebinding of .fail on a per-sandbox level", function () {
-            var sandboxA = createSandbox();
-            var sandboxB = createSandbox();
+            const sandboxA = createSandbox();
+            const sandboxB = createSandbox();
 
             sandboxA.assert.failException = "CustomErrorA";
             sandboxB.assert.failException = "CustomErrorB";

@@ -2,14 +2,14 @@
 /* eslint-disable jsdoc/require-jsdoc */
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
 
 if (typeof Worker !== "undefined") {
     describe("WebWorker support", function () {
-        var sentMessage = "whatever";
+        const sentMessage = "whatever";
         it("should not crash", function (done) {
-            var worker = new Worker("/test/webworker/webworker-script.js");
+            const worker = new Worker("/test/webworker/webworker-script.js");
 
             worker.onmessage = function (msg) {
                 // eslint-disable-next-line no-restricted-syntax
@@ -26,8 +26,8 @@ if (typeof Worker !== "undefined") {
              * @see https://html.spec.whatwg.org/multipage/webappapis.html#errorevent
              */
             function onError(ev) {
-                var error = ev.error;
-                var msg = `An error happened at line ${[
+                const error = ev.error;
+                const msg = `An error happened at line ${[
                     ev.lineno,
                     ev.colno,
                 ].join(":")} in file ${ev.filename}:  ${ev.message}`;

@@ -1,12 +1,12 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var createSpy = require("../lib/sinon/spy");
-var createProxy = require("../lib/sinon/proxy");
-var match = require("@sinonjs/samsam").createMatcher;
-var globalContext = typeof global !== "undefined" ? global : window;
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const createSpy = require("../lib/sinon/spy");
+const createProxy = require("../lib/sinon/proxy");
+const match = require("@sinonjs/samsam").createMatcher;
+const globalContext = typeof global !== "undefined" ? global : window;
+const assert = referee.assert;
+const refute = referee.refute;
 
 function spyCalledTests(method) {
     return function () {
@@ -78,8 +78,8 @@ function spyCalledTests(method) {
         // a hasOwnProperty function.
         describe("when called with an Object without a prototype", function () {
             it("must not throw", function () {
-                var spy = this.spy;
-                var objectWithoutPrototype = Object.create(null);
+                const spy = this.spy;
+                const objectWithoutPrototype = Object.create(null);
 
                 objectWithoutPrototype.something = 2;
 
@@ -210,7 +210,7 @@ function spyNeverCalledTests(method) {
 }
 
 function verifyFunctionName(func, expectedName) {
-    var descriptor = Object.getOwnPropertyDescriptor(func, "name");
+    const descriptor = Object.getOwnPropertyDescriptor(func, "name");
     if (descriptor && descriptor.configurable) {
         // IE 11 functions don't have a name.
         // Safari 9 has names that are not configurable.
@@ -228,7 +228,7 @@ describe("spy", function () {
     });
 
     it("does not throw when calling anonymous spy", function () {
-        var spy = createSpy();
+        const spy = createSpy();
 
         refute.exception(spy);
 
@@ -236,43 +236,43 @@ describe("spy", function () {
     });
 
     it("returns spy function", function () {
-        var func = function () {
+        const func = function () {
             return;
         };
-        var spy = createSpy(func);
+        const spy = createSpy(func);
 
         assert.isFunction(spy);
         refute.same(func, spy);
     });
 
     it("mirrors custom properties on function", function () {
-        var func = function () {
+        const func = function () {
             return;
         };
         func.myProp = 42;
-        var spy = createSpy(func);
+        const spy = createSpy(func);
 
         assert.equals(spy.myProp, func.myProp);
     });
 
     it("does not define create method", function () {
-        var spy = createSpy();
+        const spy = createSpy();
 
         assert.isUndefined(spy.create);
     });
 
     it("does not overwrite original create property", function () {
-        var func = function () {
+        const func = function () {
             return;
         };
-        var object = (func.create = {});
-        var spy = createSpy(func);
+        const object = (func.create = {});
+        const spy = createSpy(func);
 
         assert.same(spy.create, object);
     });
 
     it("sets up logging arrays", function () {
-        var spy = createSpy();
+        const spy = createSpy();
 
         assert.isArray(spy.args);
         assert.isArray(spy.returnValues);
@@ -281,19 +281,19 @@ describe("spy", function () {
     });
 
     it("works with getters", function () {
-        var object = {
+        const object = {
             get property() {
                 return 42;
             },
         };
-        var spy = createSpy(object, "property", ["get"]);
+        const spy = createSpy(object, "property", ["get"]);
 
         assert.equals(object.property, 42);
         assert(spy.get.calledOnce);
     });
 
     it("works with setters", function () {
-        var object = {
+        const object = {
             get test() {
                 return this.property;
             },
@@ -301,7 +301,7 @@ describe("spy", function () {
                 this.property = value * 2;
             },
         };
-        var spy = createSpy(object, "test", ["set"]);
+        const spy = createSpy(object, "test", ["set"]);
 
         object.test = 42;
         assert(spy.set.calledOnce);
@@ -312,7 +312,7 @@ describe("spy", function () {
     });
 
     it("works with setters and getters combined", function () {
-        var object = {
+        const object = {
             get test() {
                 return this.property;
             },
@@ -320,7 +320,7 @@ describe("spy", function () {
                 this.property = value * 2;
             },
         };
-        var spy = createSpy(object, "test", ["get", "set"]);
+        const spy = createSpy(object, "test", ["get", "set"]);
 
         object.test = 42;
         assert(spy.set.calledOnce);
@@ -330,7 +330,7 @@ describe("spy", function () {
     });
 
     it("sets wrappedMethod on getter and setter", function () {
-        var object = {
+        const object = {
             get test() {
                 return this.property;
             },
@@ -339,9 +339,9 @@ describe("spy", function () {
             },
         };
 
-        var descriptor1 = Object.getOwnPropertyDescriptor(object, "test");
-        var spy = createSpy(object, "test", ["get", "set"]);
-        var descriptor2 = Object.getOwnPropertyDescriptor(object, "test");
+        const descriptor1 = Object.getOwnPropertyDescriptor(object, "test");
+        const spy = createSpy(object, "test", ["get", "set"]);
+        const descriptor2 = Object.getOwnPropertyDescriptor(object, "test");
 
         refute.equals(descriptor1, descriptor2);
 
@@ -355,7 +355,7 @@ describe("spy", function () {
         spy.get.restore();
         spy.set.restore();
 
-        var descriptor3 = Object.getOwnPropertyDescriptor(object, "test");
+        const descriptor3 = Object.getOwnPropertyDescriptor(object, "test");
         assert.equals(descriptor1, descriptor3);
     });
 
@@ -462,7 +462,7 @@ describe("spy", function () {
             );
         }
 
-        var object = {
+        const object = {
             f1: function () {
                 return;
             },
@@ -472,7 +472,7 @@ describe("spy", function () {
         };
 
         // f1: the order of withArgs(1), withArgs(1, 1)
-        var spy1 = createSpy(object, "f1");
+        const spy1 = createSpy(object, "f1");
         assert.equals(spy1.callCount, 0);
         assert.equals(spy1.withArgs(1).callCount, 0);
         assert.equals(spy1.withArgs(1, 1).callCount, 0);
@@ -488,7 +488,7 @@ describe("spy", function () {
         assertSpy(spy1);
 
         // f2: the order of withArgs(1, 1), withArgs(1)
-        var spy2 = createSpy(object, "f2");
+        const spy2 = createSpy(object, "f2");
         assert.equals(spy2.callCount, 0);
         assert.equals(spy2.withArgs(1, 1).callCount, 0);
         assert.equals(spy2.withArgs(1).callCount, 0);
@@ -506,8 +506,8 @@ describe("spy", function () {
 
     describe(".named", function () {
         it("sets name and displayName", function () {
-            var spy = createSpy();
-            var retval = spy.named("beep");
+            const spy = createSpy();
+            const retval = spy.named("beep");
             assert.equals(spy.displayName, "beep");
             verifyFunctionName(spy, "beep");
             assert.same(spy, retval);
@@ -516,9 +516,9 @@ describe("spy", function () {
 
     describe("call", function () {
         it("calls underlying function", function () {
-            var called = false;
+            let called = false;
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 called = true;
             });
 
@@ -532,57 +532,57 @@ describe("spy", function () {
                 return;
             }
 
-            var SpyClass = createSpy(TestClass);
+            const SpyClass = createSpy(TestClass);
 
-            var instance = new SpyClass();
+            const instance = new SpyClass();
 
             assert(instance instanceof TestClass);
         });
 
         it("passs arguments to function", function () {
-            var actualArgs;
+            let actualArgs;
 
-            var func = function (a, b, c, d) {
+            const func = function (a, b, c, d) {
                 actualArgs = [a, b, c, d];
             };
 
-            var args = [1, {}, [], ""];
-            var spy = createSpy(func);
+            const args = [1, {}, [], ""];
+            const spy = createSpy(func);
             spy(args[0], args[1], args[2], args[3]);
 
             assert.equals(actualArgs, args);
         });
 
         it("maintains this binding", function () {
-            var actualThis;
+            let actualThis;
 
-            var func = function () {
+            const func = function () {
                 actualThis = this;
             };
 
-            var object = {};
-            var spy = createSpy(func);
+            const object = {};
+            const spy = createSpy(func);
             spy.call(object);
 
             assert.same(actualThis, object);
         });
 
         it("returns function's return value", function () {
-            var object = {};
+            const object = {};
 
-            var func = function () {
+            const func = function () {
                 return object;
             };
 
-            var spy = createSpy(func);
-            var actualReturn = spy();
+            const spy = createSpy(func);
+            const actualReturn = spy();
 
             assert.same(actualReturn, object);
         });
 
         it("throws if function throws", function () {
-            var err = new Error();
-            var spy = createSpy(function () {
+            const err = new Error();
+            const spy = createSpy(function () {
                 throw err;
             });
 
@@ -594,14 +594,14 @@ describe("spy", function () {
                 return;
             }
 
-            var spy = createSpy(test);
+            const spy = createSpy(test);
 
             assert.equals(spy.displayName, "test");
             verifyFunctionName(spy, "test");
         });
 
         it("retains function length 0", function () {
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 return;
             });
 
@@ -610,7 +610,7 @@ describe("spy", function () {
 
         it("retains function length 1", function () {
             // eslint-disable-next-line no-unused-vars
-            var spy = createSpy(function (a) {
+            const spy = createSpy(function (a) {
                 return;
             });
 
@@ -619,7 +619,7 @@ describe("spy", function () {
 
         it("retains function length 2", function () {
             // eslint-disable-next-line no-unused-vars
-            var spy = createSpy(function (a, b) {
+            const spy = createSpy(function (a, b) {
                 return;
             });
 
@@ -628,7 +628,7 @@ describe("spy", function () {
 
         it("retains function length 3", function () {
             // eslint-disable-next-line no-unused-vars
-            var spy = createSpy(function (a, b, c) {
+            const spy = createSpy(function (a, b, c) {
                 return;
             });
 
@@ -637,7 +637,7 @@ describe("spy", function () {
 
         it("retains function length 4", function () {
             // eslint-disable-next-line no-unused-vars
-            var spy = createSpy(function (a, b, c, d) {
+            const spy = createSpy(function (a, b, c, d) {
                 return;
             });
 
@@ -646,10 +646,10 @@ describe("spy", function () {
 
         it("retains function length 12", function () {
             // eslint-disable-next-line no-unused-vars
-            var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {
+            const func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {
                 return;
             };
-            var spy = createSpy(func12Args);
+            const spy = createSpy(func12Args);
 
             assert.equals(spy.length, 12);
         });
@@ -824,7 +824,7 @@ describe("spy", function () {
         });
 
         it("is true if called with thisValue", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
 
             assert(this.spy.calledOn(object));
@@ -838,7 +838,7 @@ describe("spy", function () {
             });
 
             it("is true if called on object at least once", function () {
-                var object = {};
+                const object = {};
                 this.spy();
                 this.spy.call({});
                 this.spy.call(object);
@@ -849,7 +849,7 @@ describe("spy", function () {
         });
 
         it("returns false if not called on object", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
             this.spy();
 
@@ -857,7 +857,7 @@ describe("spy", function () {
         });
 
         it("is true if called with matcher that returns true", function () {
-            var matcher = match(function () {
+            const matcher = match(function () {
                 return true;
             });
             this.spy();
@@ -866,7 +866,7 @@ describe("spy", function () {
         });
 
         it("is false if called with matcher that returns false", function () {
-            var matcher = match(function () {
+            const matcher = match(function () {
                 return false;
             });
             this.spy();
@@ -875,8 +875,8 @@ describe("spy", function () {
         });
 
         it("invokes matcher.test with given object", function () {
-            var expected = {};
-            var actual;
+            const expected = {};
+            let actual;
             this.spy.call(expected);
 
             this.spy.calledOn(
@@ -899,14 +899,14 @@ describe("spy", function () {
         });
 
         it("is true if called with thisValue once", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
 
             assert(this.spy.alwaysCalledOn(object));
         });
 
         it("is true if called with thisValue many times", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
             this.spy.call(object);
             this.spy.call(object);
@@ -916,7 +916,7 @@ describe("spy", function () {
         });
 
         it("is false if called with another object atleast once", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
             this.spy.call(object);
             this.spy.call(object);
@@ -927,7 +927,7 @@ describe("spy", function () {
         });
 
         it("is false if never called with expected object", function () {
-            var object = {};
+            const object = {};
             this.spy();
             this.spy();
             this.spy();
@@ -946,7 +946,7 @@ describe("spy", function () {
         });
 
         it("is true if called with new", function () {
-            var result = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
+            const result = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
 
             assert(this.spy.calledWithNew());
         });
@@ -956,10 +956,10 @@ describe("spy", function () {
                 return;
             }
             MyThing.prototype = {};
-            var ns = { MyThing: MyThing };
+            const ns = { MyThing: MyThing };
             createSpy(ns, "MyThing");
 
-            var result = new ns.MyThing(); // eslint-disable-line no-unused-vars
+            const result = new ns.MyThing(); // eslint-disable-line no-unused-vars
             assert(ns.MyThing.calledWithNew());
         });
 
@@ -977,9 +977,9 @@ describe("spy", function () {
             });
 
             it("is true if called with new at least once", function () {
-                var object = {};
+                const object = {};
                 this.spy();
-                var a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
+                const a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
                 this.spy(object);
                 this.spy(window);
 
@@ -991,10 +991,10 @@ describe("spy", function () {
             function MyThing() {
                 return {};
             }
-            var object = { MyThing: MyThing };
+            const object = { MyThing: MyThing };
             createSpy(object, "MyThing");
 
-            var result = new object.MyThing(); // eslint-disable-line no-unused-vars
+            const result = new object.MyThing(); // eslint-disable-line no-unused-vars
 
             assert(object.MyThing.calledWithNew());
         });
@@ -1011,7 +1011,7 @@ describe("spy", function () {
             });
 
             it("is false when called on spied native function", function () {
-                var log = { info: console.log }; // eslint-disable-line no-console
+                const log = { info: console.log }; // eslint-disable-line no-console
                 createSpy(log, "info");
 
                 // by logging an empty string, we're not polluting the test console output
@@ -1033,9 +1033,9 @@ describe("spy", function () {
 
         it("is true if always called with new", function () {
             /*eslint-disable no-unused-vars, new-cap*/
-            var result = new this.spy();
-            var result2 = new this.spy();
-            var result3 = new this.spy();
+            const result = new this.spy();
+            const result2 = new this.spy();
+            const result3 = new this.spy();
             /*eslint-enable no-unused-vars, new-cap*/
 
             assert(this.spy.alwaysCalledWithNew());
@@ -1043,8 +1043,8 @@ describe("spy", function () {
 
         it("is false if called as function once", function () {
             /*eslint-disable no-unused-vars, new-cap*/
-            var result = new this.spy();
-            var result2 = new this.spy();
+            const result = new this.spy();
+            const result2 = new this.spy();
             /*eslint-enable no-unused-vars, new-cap*/
             this.spy();
 
@@ -1058,7 +1058,7 @@ describe("spy", function () {
         });
 
         it("contains one object", function () {
-            var object = {};
+            const object = {};
             this.spy.call(object);
 
             assert.equals(this.spy.thisValues, [object]);
@@ -1068,7 +1068,7 @@ describe("spy", function () {
             function MyConstructor() {
                 return;
             }
-            var objects = [{}, [], new MyConstructor(), { id: 243 }];
+            const objects = [{}, [], new MyConstructor(), { id: 243 }];
             this.spy();
             this.spy.call(objects[0]);
             this.spy.call(objects[1]);
@@ -1230,7 +1230,7 @@ describe("spy", function () {
         });
 
         it("stacks up arguments in nested array", function () {
-            var objects = [{}, [], { id: 324 }];
+            const objects = [{}, [], { id: 324 }];
             this.spy(1, objects[0], 3);
             this.spy(1, 2, objects[1]);
             this.spy(objects[2], 2, 3);
@@ -1273,8 +1273,8 @@ describe("spy", function () {
         });
 
         it("returns true for one exact match", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
             this.spy({}, []);
             this.spy(object, []);
             this.spy(object, array);
@@ -1467,8 +1467,8 @@ describe("spy", function () {
         });
 
         it("returns false for one exact match", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
             this.spy({}, []);
             this.spy(object, []);
             this.spy(object, array);
@@ -1477,8 +1477,8 @@ describe("spy", function () {
         });
 
         it("returns true for only exact matches", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
 
             this.spy(object, array);
             this.spy(object, array);
@@ -1488,8 +1488,8 @@ describe("spy", function () {
         });
 
         it("returns false for no exact matches", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
 
             this.spy(object, array, null);
             this.spy(object, array, undefined);
@@ -1514,9 +1514,9 @@ describe("spy", function () {
         });
 
         it("returns exception thrown by function", function () {
-            var err = new Error();
+            const err = new Error();
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 throw err;
             });
 
@@ -1578,9 +1578,9 @@ describe("spy", function () {
         });
 
         it("returns true when spy threw", function () {
-            var err = new Error();
+            const err = new Error();
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 throw err;
             });
 
@@ -1620,7 +1620,7 @@ describe("spy", function () {
         });
 
         it("returns false if some calls did not throw", function () {
-            var callCount = 0;
+            let callCount = 0;
 
             this.spy = createSpy(function () {
                 callCount += 1;
@@ -1656,7 +1656,7 @@ describe("spy", function () {
     describe(".exceptions", function () {
         beforeEach(function () {
             this.spy = createSpy();
-            var error = (this.error = {});
+            const error = (this.error = {});
 
             this.spyWithTypeError = createSpy(function () {
                 throw error;
@@ -1677,10 +1677,10 @@ describe("spy", function () {
         });
 
         it("stacks up exceptions and undefined", function () {
-            var calls = 0;
-            var err = this.error;
+            let calls = 0;
+            const err = this.error;
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -1709,21 +1709,21 @@ describe("spy", function () {
 
     describe(".returned", function () {
         it("returns true when no argument", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert(spy.returned());
         });
 
         it("returns true for undefined when no explicit return", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert(spy.returned(undefined));
         });
 
         it("returns true when returned value once", function () {
-            var values = [
+            const values = [
                 {},
                 2,
                 "hey",
@@ -1731,7 +1731,7 @@ describe("spy", function () {
                     return;
                 },
             ];
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 return values[spy.callCount];
             });
 
@@ -1744,7 +1744,7 @@ describe("spy", function () {
         });
 
         it("returns false when value is never returned", function () {
-            var values = [
+            const values = [
                 {},
                 2,
                 "hey",
@@ -1752,7 +1752,7 @@ describe("spy", function () {
                     return;
                 },
             ];
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 return values[spy.callCount];
             });
 
@@ -1765,8 +1765,8 @@ describe("spy", function () {
         });
 
         it("returns true when value is returned several times", function () {
-            var object = { id: 42 };
-            var spy = createSpy(function () {
+            const object = { id: 42 };
+            const spy = createSpy(function () {
                 return object;
             });
 
@@ -1778,8 +1778,8 @@ describe("spy", function () {
         });
 
         it("compares values deeply", function () {
-            var object = { deep: { id: 42 } };
-            var spy = createSpy(function () {
+            const object = { deep: { id: 42 } };
+            const spy = createSpy(function () {
                 return object;
             });
 
@@ -1789,8 +1789,8 @@ describe("spy", function () {
         });
 
         it("compares values strictly using match.same", function () {
-            var object = { id: 42 };
-            var spy = createSpy(function () {
+            const object = { id: 42 };
+            const spy = createSpy(function () {
                 return object;
             });
 
@@ -1803,7 +1803,7 @@ describe("spy", function () {
 
     describe(".returnValues", function () {
         it("contains undefined when function does not return explicitly", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert.equals(spy.returnValues.length, 1);
@@ -1811,9 +1811,9 @@ describe("spy", function () {
         });
 
         it("contains return value", function () {
-            var object = { id: 42 };
+            const object = { id: 42 };
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 return object;
             });
 
@@ -1823,7 +1823,7 @@ describe("spy", function () {
         });
 
         it("contains undefined when function throws", function () {
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 throw new Error();
             });
 
@@ -1834,42 +1834,42 @@ describe("spy", function () {
         });
 
         it("contains the created object for spied constructors", function () {
-            var Spy = createSpy(function () {
+            const Spy = createSpy(function () {
                 return;
             });
 
-            var result = new Spy();
+            const result = new Spy();
 
             assert.equals(Spy.returnValues[0], result);
         });
 
         it("contains the return value for spied constructors that explicitly return objects", function () {
-            var Spy = createSpy(function () {
+            const Spy = createSpy(function () {
                 return { isExplicitlyCreatedValue: true };
             });
 
-            var result = new Spy();
+            const result = new Spy();
 
             assert.isTrue(result.isExplicitlyCreatedValue);
             assert.equals(Spy.returnValues[0], result);
         });
 
         it("contains the created object for spied constructors that explicitly return primitive values", function () {
-            var Spy = createSpy(function () {
+            const Spy = createSpy(function () {
                 return 10;
             });
 
-            var result = new Spy();
+            const result = new Spy();
 
             refute.equals(result, 10);
             assert.equals(Spy.returnValues[0], result);
         });
 
         it("stacks up return values", function () {
-            var calls = 0;
+            let calls = 0;
 
             /*eslint consistent-return: "off"*/
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -2100,37 +2100,36 @@ describe("spy", function () {
 
     describe(".firstCall", function () {
         it("is undefined by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isNull(spy.firstCall);
         });
 
         it("is equal to getCall(0) result after first call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
 
-            var call0 = spy.getCall(0);
+            const call0 = spy.getCall(0);
             assert.equals(spy.firstCall.callId, call0.callId);
             assert.same(spy.firstCall.spy, call0.spy);
         });
 
         it("is equal to getCall(0) after first call when control flow has continued after invocation", function () {
-            var spy;
+            // eslint-disable-next-line
+            const spy = createSpy(runAsserts);
 
             function runAsserts() {
-                var call0 = spy.getCall(0);
+                const call0 = spy.getCall(0);
                 assert.equals(spy.firstCall.callId, call0.callId);
                 assert.same(spy.firstCall.spy, call0.spy);
             }
-
-            spy = createSpy(runAsserts);
 
             spy();
         });
 
         it("is tracked even if exceptions are thrown", function () {
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 throw new Error("an exception");
             });
 
@@ -2140,7 +2139,7 @@ describe("spy", function () {
         });
 
         it("has correct returnValue", function () {
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 return 42;
             });
 
@@ -2151,8 +2150,8 @@ describe("spy", function () {
         });
 
         it("has correct exception", function () {
-            var err = new Error();
-            var spy = createSpy(function () {
+            const err = new Error();
+            const spy = createSpy(function () {
                 throw err;
             });
 
@@ -2165,25 +2164,25 @@ describe("spy", function () {
 
     describe(".secondCall", function () {
         it("is null by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isNull(spy.secondCall);
         });
 
         it("stills be null after first call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert.isNull(spy.secondCall);
         });
 
         it("is equal to getCall(1) result after second call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
 
-            var call1 = spy.getCall(1);
+            const call1 = spy.getCall(1);
             assert.equals(spy.secondCall.callId, call1.callId);
             assert.same(spy.secondCall.spy, call1.spy);
         });
@@ -2191,13 +2190,13 @@ describe("spy", function () {
 
     describe(".thirdCall", function () {
         it("is undefined by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isNull(spy.thirdCall);
         });
 
         it("stills be undefined after second call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
             spy();
 
@@ -2205,13 +2204,13 @@ describe("spy", function () {
         });
 
         it("is equal to getCall(1) result after second call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
             spy();
 
-            var call2 = spy.getCall(2);
+            const call2 = spy.getCall(2);
             assert.equals(spy.thirdCall.callId, call2.callId);
             assert.same(spy.thirdCall.spy, call2.spy);
         });
@@ -2219,7 +2218,7 @@ describe("spy", function () {
 
     describe(".getCall", function () {
         it("is null for indexes >= length", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
 
@@ -2228,7 +2227,7 @@ describe("spy", function () {
         });
 
         it("is null for indexes < -length", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
 
@@ -2237,7 +2236,7 @@ describe("spy", function () {
         });
 
         it("is same as last call when passed index -1", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2248,7 +2247,7 @@ describe("spy", function () {
         });
 
         it("is same as n-1th call when passed index -2", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2261,13 +2260,13 @@ describe("spy", function () {
 
     describe(".lastCall", function () {
         it("is undefined by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isNull(spy.lastCall);
         });
 
         it("is same as firstCall after first call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
 
@@ -2276,7 +2275,7 @@ describe("spy", function () {
         });
 
         it("is same as secondCall after second call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2286,7 +2285,7 @@ describe("spy", function () {
         });
 
         it("is same as thirdCall after third call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2297,20 +2296,20 @@ describe("spy", function () {
         });
 
         it("is equal to getCall(3) result after fourth call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
             spy();
             spy();
 
-            var call3 = spy.getCall(3);
+            const call3 = spy.getCall(3);
             assert.equals(spy.lastCall.callId, call3.callId);
             assert.same(spy.lastCall.spy, call3.spy);
         });
 
         it("is equal to getCall(4) result after fifth call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2318,7 +2317,7 @@ describe("spy", function () {
             spy();
             spy();
 
-            var call4 = spy.getCall(4);
+            const call4 = spy.getCall(4);
             assert.equals(spy.lastCall.callId, call4.callId);
             assert.same(spy.lastCall.spy, call4.spy);
         });
@@ -2326,14 +2325,14 @@ describe("spy", function () {
 
     describe(".getCalls", function () {
         it("returns an empty Array by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isArray(spy.getCalls());
             assert.equals(spy.getCalls().length, 0);
         });
 
         it("is analogous to using getCall(n)", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy();
             spy();
@@ -2344,14 +2343,14 @@ describe("spy", function () {
 
     describe(".callArg", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.callArg);
         });
 
         it("invokes argument at index for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
+            const spy = createSpy();
+            const callback = createSpy();
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -2362,7 +2361,7 @@ describe("spy", function () {
         });
 
         it("throws if argument at index is not a function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert.exception(
@@ -2374,7 +2373,7 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.exception(
                 function () {
@@ -2388,12 +2387,12 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
+            const spy = createSpy(api, "someMethod");
 
             assert.exception(
                 function () {
@@ -2407,7 +2406,7 @@ describe("spy", function () {
         });
 
         it("throws if index is not a number", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             spy();
 
             assert.exception(
@@ -2419,10 +2418,10 @@ describe("spy", function () {
         });
 
         it("passs additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
             spy(callback);
 
             spy.callArg(0, "abc", 123, array, object);
@@ -2431,16 +2430,16 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
             spy(1, 2, callback);
             spy(3, 4, callback);
 
-            var returnValues = spy.callArg(2);
+            const returnValues = spy.callArg(2);
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2448,15 +2447,15 @@ describe("spy", function () {
 
     describe(".callArgOn", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.callArgOn);
         });
 
         it("invokes argument at index for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -2468,8 +2467,8 @@ describe("spy", function () {
         });
 
         it("throws if argument at index is not a function", function () {
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             spy();
 
             assert.exception(
@@ -2481,8 +2480,8 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2496,13 +2495,13 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy(api, "someMethod");
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2516,8 +2515,8 @@ describe("spy", function () {
         });
 
         it("throws if index is not a number", function () {
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             spy();
 
             assert.exception(
@@ -2529,11 +2528,11 @@ describe("spy", function () {
         });
 
         it("pass additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(callback);
 
             spy.callArgOn(0, thisObj, "abc", 123, array, object);
@@ -2543,17 +2542,17 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
 
-            var returnValues = spy.callArgOn(2, thisObj);
+            const returnValues = spy.callArgOn(2, thisObj);
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2561,7 +2560,7 @@ describe("spy", function () {
 
     describe(".callArgWith", function () {
         it("is alias for callArg", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.same(spy.callArgWith, spy.callArg);
         });
@@ -2569,7 +2568,7 @@ describe("spy", function () {
 
     describe(".callArgOnWith", function () {
         it("is alias for callArgOn", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.same(spy.callArgOnWith, spy.callArgOn);
         });
@@ -2577,14 +2576,14 @@ describe("spy", function () {
 
     describe(".yield", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.yield);
         });
 
         it("invokes first function arg for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
+            const spy = createSpy();
+            const callback = createSpy();
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -2595,7 +2594,7 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.exception(
                 function () {
@@ -2608,12 +2607,12 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
+            const spy = createSpy(api, "someMethod");
 
             assert.exception(
                 function () {
@@ -2627,10 +2626,10 @@ describe("spy", function () {
         });
 
         it("passs additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
             spy(callback);
 
             spy.yield("abc", 123, array, object);
@@ -2639,16 +2638,16 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
             spy(1, 2, callback);
             spy(3, 4, callback);
 
-            var returnValues = spy.yield();
+            const returnValues = spy.yield();
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2656,7 +2655,7 @@ describe("spy", function () {
 
     describe(".invokeCallback", function () {
         it("is alias for yield", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.same(spy.invokeCallback, spy.yield);
         });
@@ -2664,15 +2663,15 @@ describe("spy", function () {
 
     describe(".yieldOn", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.yieldOn);
         });
 
         it("invokes first function arg for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
 
@@ -2684,8 +2683,8 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2698,13 +2697,13 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy(api, "someMethod");
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2718,11 +2717,11 @@ describe("spy", function () {
         });
 
         it("pass additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(callback);
 
             spy.yieldOn(thisObj, "abc", 123, array, object);
@@ -2732,17 +2731,17 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, callback);
             spy(3, 4, callback);
 
-            var returnValues = spy.yieldOn(thisObj);
+            const returnValues = spy.yieldOn(thisObj);
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2750,14 +2749,14 @@ describe("spy", function () {
 
     describe(".yieldTo", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.yieldTo);
         });
 
         it("invokes first function arg for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
+            const spy = createSpy();
+            const callback = createSpy();
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
 
@@ -2768,7 +2767,7 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.exception(
                 function () {
@@ -2782,12 +2781,12 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
+            const spy = createSpy(api, "someMethod");
 
             assert.exception(
                 function () {
@@ -2805,7 +2804,7 @@ describe("spy", function () {
                 this.skip();
             }
 
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.exception(
                 function () {
@@ -2819,10 +2818,10 @@ describe("spy", function () {
         });
 
         it("pass additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
             spy({ test: callback });
 
             spy.yieldTo("test", "abc", 123, array, object);
@@ -2831,16 +2830,16 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
 
-            var returnValues = spy.yieldTo("success");
+            const returnValues = spy.yieldTo("success");
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2848,15 +2847,15 @@ describe("spy", function () {
 
     describe(".yieldToOn", function () {
         it("is function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.yieldToOn);
         });
 
         it("invokes first function arg for all calls", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
 
@@ -2868,8 +2867,8 @@ describe("spy", function () {
         });
 
         it("throws if spy was not yet invoked", function () {
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2883,13 +2882,13 @@ describe("spy", function () {
         });
 
         it("includes spy name in error message", function () {
-            var api = {
+            const api = {
                 someMethod: function () {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy(api, "someMethod");
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2907,8 +2906,8 @@ describe("spy", function () {
                 this.skip();
             }
 
-            var spy = createSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -2922,11 +2921,11 @@ describe("spy", function () {
         });
 
         it("pass additional arguments", function () {
-            var spy = createSpy();
-            var callback = createSpy();
-            var array = [];
-            var object = {};
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = createSpy();
+            const callback = createSpy();
+            const array = [];
+            const object = {};
+            const thisObj = { name1: "value1", name2: "value2" };
             spy({ test: callback });
 
             spy.yieldToOn("test", thisObj, "abc", 123, array, object);
@@ -2936,17 +2935,17 @@ describe("spy", function () {
         });
 
         it("returns callbacks return values for all calls", function () {
-            var spy = createSpy();
-            var i = 0;
-            var callback = createSpy(function () {
+            const spy = createSpy();
+            let i = 0;
+            const callback = createSpy(function () {
                 i++;
                 return `useful value ${i}`;
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             spy(1, 2, { success: callback });
             spy(3, 4, { success: callback });
 
-            var returnValues = spy.yieldToOn("success", thisObj);
+            const returnValues = spy.yieldToOn("success", thisObj);
 
             assert.equals(returnValues, ["useful value 1", "useful value 2"]);
         });
@@ -2954,13 +2953,13 @@ describe("spy", function () {
 
     describe(".throwArg", function () {
         it("should be a function", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.isFunction(spy.throwArg);
         });
 
         it("should throw if spy hasn't been called", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.exception(
                 function () {
@@ -2976,7 +2975,7 @@ describe("spy", function () {
         });
 
         it("should throw if there aren't enough arguments in the previous spy call", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             spy("only", "four", "arguments", "here");
 
@@ -2994,8 +2993,8 @@ describe("spy", function () {
         });
 
         it("should throw specified argument", function () {
-            var spy = createSpy();
-            var expectedError = new TypeError("catpants");
+            const spy = createSpy();
+            const expectedError = new TypeError("catpants");
 
             spy(true, false, null, expectedError, "meh");
             assert.exception(
@@ -3014,14 +3013,14 @@ describe("spy", function () {
 
     describe(".resetHistory", function () {
         it("return same object", function () {
-            var spy = createSpy();
-            var reset = spy.resetHistory();
+            const spy = createSpy();
+            const reset = spy.resetHistory();
 
             assert(reset === spy);
         });
 
         it("throws if called during spy invocation", function () {
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 spy.resetHistory();
             });
 
@@ -3031,19 +3030,19 @@ describe("spy", function () {
 
     describe(".length", function () {
         it("is zero by default", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             assert.equals(spy.length, 0);
         });
 
         it("matches the function length", function () {
-            var api = {
+            const api = {
                 // eslint-disable-next-line no-unused-vars
                 someMethod: function (a, b, c) {
                     return;
                 },
             };
-            var spy = createSpy(api, "someMethod");
+            const spy = createSpy(api, "someMethod");
 
             assert.equals(spy.length, 3);
         });
@@ -3088,7 +3087,7 @@ describe("spy", function () {
 
     describe(".id", function () {
         it("should start with 'spy#'", function () {
-            for (var i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 assert.isTrue(createSpy().id.indexOf("spy#") === 0);
             }
         });
@@ -3096,7 +3095,7 @@ describe("spy", function () {
 
     describe("non enumerable properties", function () {
         it("create and call spy apis", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             assert.equals(Object.keys(spy), []);
 
             // call spy and verify no enumerable properties are added
@@ -3127,11 +3126,11 @@ describe("spy", function () {
         });
 
         it("create spy from function", function () {
-            var func = function () {
+            const func = function () {
                 throw new Error("aError");
             };
             func.aProp = 42;
-            var spy = createSpy(func);
+            const spy = createSpy(func);
 
             assert.equals(spy.aProp, 42);
             assert.equals(Object.keys(spy), Object.keys(func));
@@ -3149,12 +3148,12 @@ describe("spy", function () {
 
     describe(".printf", function () {
         it("is delegated to proxy", function () {
-            var f = function () {
+            const f = function () {
                 throw new Error("aError");
             };
 
-            var spy = createSpy();
-            var proxy = createProxy(f, f);
+            const spy = createSpy();
+            const proxy = createProxy(f, f);
 
             assert.same(spy.printf, proxy.printf);
         });

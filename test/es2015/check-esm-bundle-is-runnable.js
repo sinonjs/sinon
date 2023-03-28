@@ -55,7 +55,7 @@ async function evaluatePageContent() {
 
     // our "assertion framework" :)
     page.on("console", function (msg) {
-        var text = msg.text();
+        const text = msg.text();
 
         if (text.startsWith("sinon-result:works")) {
             browser.close();

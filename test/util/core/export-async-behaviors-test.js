@@ -1,13 +1,13 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
-var exportAsyncBehaviors = require("../../../lib/sinon/util/core/export-async-behaviors");
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
+const exportAsyncBehaviors = require("../../../lib/sinon/util/core/export-async-behaviors");
 
 describe("util/core/exportAsyncBehaviors", function () {
     describe("for methods with names starting with 'callsArg' or 'yields'", function () {
         it("should create an async version", function () {
-            var methods = {
+            const methods = {
                 yieldsOn: function yieldsOn() {
                     return "2";
                 },
@@ -24,7 +24,7 @@ describe("util/core/exportAsyncBehaviors", function () {
 
     describe("for methods with names not starting with 'callsArg' or 'yields'", function () {
         it("should not add any new methods", function () {
-            var methods = {
+            const methods = {
                 callsFake: function callsFake() {
                     return "1";
                 },
