@@ -1,6 +1,6 @@
 # This project uses Prettier defaults, the config file is present in
 # order to trigger editor plugins to allow format on save behaviour
 overrides:
-  - files: "*.html"
-    options:
-      tabWidth: 2
+    - files: "*.html"
+      options:
+          tabWidth: 2
