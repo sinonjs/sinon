@@ -1,11 +1,11 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var proxyCall = require("../lib/sinon/proxy-call");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const proxyCall = require("../lib/sinon/proxy-call");
+const sinonSpy = require("../lib/sinon/spy");
+const sinonStub = require("../lib/sinon/stub");
+const assert = referee.assert;
+const refute = referee.refute;
 
 function spyCallSetUp() {
     this.thisValue = {};
@@ -37,19 +37,19 @@ function spyCallCalledTests(method) {
         beforeEach(spyCallSetUp);
 
         it("returns true if all args match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(this.call[method](args[0], args[1], args[2]));
         });
 
         it("returns true if first args match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(this.call[method](args[0], args[1]));
         });
 
         it("returns true if first arg match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(this.call[method](args[0]));
         });
@@ -59,7 +59,7 @@ function spyCallCalledTests(method) {
         });
 
         it("returns false for too many args", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(
                 this.call[method](args[0], args[1], args[2], args[3], {})
@@ -67,7 +67,7 @@ function spyCallCalledTests(method) {
         });
 
         it("returns false for wrong arg", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(this.call[method](args[0], args[2]));
         });
@@ -80,19 +80,19 @@ function spyCallNotCalledTests(method) {
         beforeEach(spyCallSetUp);
 
         it("returns false if all args match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(this.call[method](args[0], args[1], args[2]));
         });
 
         it("returns false if first args match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(this.call[method](args[0], args[1]));
         });
 
         it("returns false if first arg match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(this.call[method](args[0]));
         });
@@ -102,13 +102,13 @@ function spyCallNotCalledTests(method) {
         });
 
         it("returns true for too many args", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(this.call[method](args[0], args[1], args[2], args[3], {}));
         });
 
         it("returns true for wrong arg", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(this.call[method](args[0], args[2]));
         });
@@ -120,9 +120,9 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallSetUp);
 
         it("gets call object", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy();
-            var firstCall = spy.getCall(0);
+            const firstCall = spy.getCall(0);
 
             assert.isFunction(firstCall.calledOn);
             assert.isFunction(firstCall.calledWith);
@@ -130,7 +130,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("stores given call id", function () {
-            var call = proxyCall(
+            const call = proxyCall(
                 function () {
                     return;
                 },
@@ -158,27 +158,27 @@ describe("sinonSpy.call", function () {
 
         // This is actually a spy test:
         it("records ascending call id's", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy();
 
             assert(this.call.callId < spy.getCall(0).callId);
         });
 
         it("exposes thisValue property", function () {
-            var spy = sinonSpy();
-            var obj = {};
+            const spy = sinonSpy();
+            const obj = {};
             spy.call(obj);
 
             assert.same(spy.getCall(0).thisValue, obj);
         });
 
         it("has methods to test relative ordering", function () {
-            var spy = sinonSpy();
-            for (var i = 0; i < 4; i++) {
+            const spy = sinonSpy();
+            for (let i = 0; i < 4; i++) {
                 spy.call({});
             }
 
-            var calls = [0, 1, 2, 3].map(function (idx) {
+            const calls = [0, 1, 2, 3].map(function (idx) {
                 return spy.getCall(idx);
             });
 
@@ -226,7 +226,7 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallSetUp);
 
         it("returns true when all args match", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert(
                 this.call.calledWithExactly(args[0], args[1], args[2], args[3])
@@ -234,7 +234,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns false for too many args", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(
                 this.call.calledWithExactly(
@@ -248,13 +248,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns false for too few args", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(this.call.calledWithExactly(args[0], args[1]));
         });
 
         it("returns false for unmatching args", function () {
-            var args = this.args;
+            const args = this.args;
 
             assert.isFalse(
                 this.call.calledWithExactly(args[0], args[1], args[1])
@@ -262,7 +262,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns true for no arguments", function () {
-            var call = proxyCall(
+            const call = proxyCall(
                 function () {
                     return;
                 },
@@ -277,7 +277,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns false when called with no args but matching one", function () {
-            var call = proxyCall(
+            const call = proxyCall(
                 function () {
                     return;
                 },
@@ -296,7 +296,7 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("calls argument at specified index", function () {
-            var callback = sinonSpy();
+            const callback = sinonSpy();
             this.args.push(1, 2, callback);
 
             this.call.callArg(2);
@@ -306,7 +306,7 @@ describe("sinonSpy.call", function () {
 
         it("throws if argument at specified index is not callable", function () {
             this.args.push(1);
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -320,7 +320,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if no index is specified", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -331,18 +331,18 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var callback = sinonSpy(function () {
+            const callback = sinonSpy(function () {
                 return "useful value";
             });
             this.args.push(1, 2, callback);
 
-            var returnValue = this.call.callArg(2);
+            const returnValue = this.call.callArg(2);
 
             assert.equals(returnValue, "useful value");
         });
 
         it("throws if index is not number", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -357,8 +357,8 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("calls argument at specified index", function () {
-            var callback = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1, 2, callback);
 
             this.call.callArgOn(2, thisObj);
@@ -368,9 +368,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if argument at specified index is not callable", function () {
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1);
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -384,20 +384,20 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var callback = sinonSpy(function () {
+            const callback = sinonSpy(function () {
                 return "useful value";
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1, 2, callback);
 
-            var returnValue = this.call.callArgOn(2, thisObj);
+            const returnValue = this.call.callArgOn(2, thisObj);
 
             assert.equals(returnValue, "useful value");
         });
 
         it("throws if index is not number", function () {
-            var thisObj = { name1: "value1", name2: "value2" };
-            var call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -412,8 +412,8 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("calls argument at specified index with provided args", function () {
-            var object = {};
-            var callback = sinonSpy();
+            const object = {};
+            const callback = sinonSpy();
             this.args.push(1, callback);
 
             this.call.callArgWith(1, object);
@@ -422,7 +422,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("calls callback without args", function () {
-            var callback = sinonSpy();
+            const callback = sinonSpy();
             this.args.push(1, callback);
 
             this.call.callArgWith(1);
@@ -431,9 +431,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("calls callback wit multiple args", function () {
-            var object = {};
-            var array = [];
-            var callback = sinonSpy();
+            const object = {};
+            const array = [];
+            const callback = sinonSpy();
             this.args.push(1, 2, callback);
 
             this.call.callArgWith(2, object, array);
@@ -442,19 +442,19 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var object = {};
-            var callback = sinonSpy(function () {
+            const object = {};
+            const callback = sinonSpy(function () {
                 return "useful value";
             });
             this.args.push(1, callback);
 
-            var returnValue = this.call.callArgWith(1, object);
+            const returnValue = this.call.callArgWith(1, object);
 
             assert.equals(returnValue, "useful value");
         });
 
         it("throws if no index is specified", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -465,7 +465,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if index is not number", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -480,9 +480,9 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("calls argument at specified index with provided args", function () {
-            var object = {};
-            var thisObj = { name1: "value1", name2: "value2" };
-            var callback = sinonSpy();
+            const object = {};
+            const thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
             this.args.push(1, callback);
 
             this.call.callArgOnWith(1, thisObj, object);
@@ -492,8 +492,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("calls callback without args", function () {
-            var callback = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1, callback);
 
             this.call.callArgOnWith(1, thisObj);
@@ -503,10 +503,10 @@ describe("sinonSpy.call", function () {
         });
 
         it("calls callback with multiple args", function () {
-            var object = {};
-            var array = [];
-            var thisObj = { name1: "value1", name2: "value2" };
-            var callback = sinonSpy();
+            const object = {};
+            const array = [];
+            const thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
             this.args.push(1, 2, callback);
 
             this.call.callArgOnWith(2, thisObj, object, array);
@@ -516,22 +516,22 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var object = {};
-            var thisObj = { name1: "value1", name2: "value2" };
-            var callback = sinonSpy(function () {
+            const object = {};
+            const thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy(function () {
                 return "useful value";
             });
             this.args.push(1, callback);
 
-            var returnValue = this.call.callArgOnWith(1, thisObj, object);
+            const returnValue = this.call.callArgOnWith(1, thisObj, object);
 
             assert.equals(returnValue, "useful value");
         });
 
         it("throws if argument at specified index is not callable", function () {
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1, 2, 1);
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -545,8 +545,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if index is not number", function () {
-            var thisObj = { name1: "value1", name2: "value2" };
-            var call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -559,11 +559,11 @@ describe("sinonSpy.call", function () {
 
     describe(".callback", function () {
         it("it should be a reference for the callback", function () {
-            var spy = sinonSpy();
-            var callback1 = function () {
+            const spy = sinonSpy();
+            const callback1 = function () {
                 return;
             };
-            var callback2 = function () {
+            const callback2 = function () {
                 return;
             };
 
@@ -580,7 +580,7 @@ describe("sinonSpy.call", function () {
 
     describe(".firstArg", function () {
         it("should be the first argument from the call", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
 
             spy(41, 42, 43);
             assert.equals(spy.getCall(0).firstArg, 41);
@@ -598,7 +598,7 @@ describe("sinonSpy.call", function () {
 
     describe(".lastArg", function () {
         it("should be the last argument from the call", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
 
             spy(41, 42, 43);
             assert.equals(spy.getCall(0).lastArg, 43);
@@ -618,7 +618,7 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("invokes only argument as callback", function () {
-            var callback = sinonSpy();
+            const callback = sinonSpy();
             this.args.push(callback);
 
             this.call.yield();
@@ -628,7 +628,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -643,7 +643,7 @@ describe("sinonSpy.call", function () {
         it("includes stub name and actual arguments in error", function () {
             this.proxy.displayName = "somethingAwesome";
             this.args.push(23, 42);
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -657,7 +657,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes last argument as callback", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             this.args.push(24, {}, spy);
 
             this.call.yield();
@@ -667,8 +667,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes first of two callbacks", function () {
-            var spy = sinonSpy();
-            var spy2 = sinonSpy();
+            const spy = sinonSpy();
+            const spy2 = sinonSpy();
             this.args.push(24, {}, spy, spy2);
 
             this.call.yield();
@@ -678,8 +678,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var spy = sinonSpy();
+            const obj = { id: 42 };
+            const spy = sinonSpy();
             this.args.push(spy);
 
             this.call.yield(obj, "Crazy");
@@ -688,12 +688,12 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var spy = sinonSpy(function () {
+            const spy = sinonSpy(function () {
                 return "useful value";
             });
             this.args.push(24, {}, spy);
 
-            var returnValue = this.call.yield();
+            const returnValue = this.call.yield();
 
             assert.equals(returnValue, "useful value");
         });
@@ -702,7 +702,7 @@ describe("sinonSpy.call", function () {
             this.args.push(function () {
                 throw new Error("d'oh!");
             });
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(function () {
                 call.yield();
@@ -712,7 +712,7 @@ describe("sinonSpy.call", function () {
 
     describe("call.invokeCallback", function () {
         it("is alias for yield", function () {
-            var call = proxyCall(
+            const call = proxyCall(
                 function () {
                     return;
                 },
@@ -731,8 +731,8 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("invokes only argument as callback", function () {
-            var callback = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(callback);
 
             this.call.yieldOn(thisObj);
@@ -743,8 +743,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -759,8 +759,8 @@ describe("sinonSpy.call", function () {
         it("includes stub name and actual arguments in error", function () {
             this.proxy.displayName = "somethingAwesome";
             this.args.push(23, 42);
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -774,8 +774,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes last argument as callback", function () {
-            var spy = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, spy);
 
             this.call.yieldOn(thisObj);
@@ -786,9 +786,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes first of two callbacks", function () {
-            var spy = sinonSpy();
-            var spy2 = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = sinonSpy();
+            const spy2 = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, spy, spy2);
 
             this.call.yieldOn(thisObj);
@@ -799,9 +799,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var spy = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const obj = { id: 42 };
+            const spy = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(spy);
 
             this.call.yieldOn(thisObj, obj, "Crazy");
@@ -811,13 +811,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var spy = sinonSpy(function () {
+            const spy = sinonSpy(function () {
                 return "useful value";
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, spy);
 
-            var returnValue = this.call.yieldOn(thisObj);
+            const returnValue = this.call.yieldOn(thisObj);
 
             assert.equals(returnValue, "useful value");
         });
@@ -826,8 +826,8 @@ describe("sinonSpy.call", function () {
             this.args.push(function () {
                 throw new Error("d'oh!");
             });
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(function () {
                 call.yieldOn(thisObj);
@@ -839,7 +839,7 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("invokes only argument as callback", function () {
-            var callback = sinonSpy();
+            const callback = sinonSpy();
             this.args.push({
                 success: callback,
             });
@@ -851,7 +851,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -867,7 +867,7 @@ describe("sinonSpy.call", function () {
         it("includes stub name and actual arguments in error", function () {
             this.proxy.displayName = "somethingAwesome";
             this.args.push(23, 42);
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(
                 function () {
@@ -882,7 +882,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes property on last argument as callback", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             this.args.push(24, {}, { success: spy });
 
             this.call.yieldTo("success");
@@ -892,8 +892,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes first of two possible callbacks", function () {
-            var spy = sinonSpy();
-            var spy2 = sinonSpy();
+            const spy = sinonSpy();
+            const spy2 = sinonSpy();
             this.args.push(24, {}, { error: spy }, { error: spy2 });
 
             this.call.yieldTo("error");
@@ -903,8 +903,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var spy = sinonSpy();
+            const obj = { id: 42 };
+            const spy = sinonSpy();
             this.args.push({ success: spy });
 
             this.call.yieldTo("success", obj, "Crazy");
@@ -913,12 +913,12 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var spy = sinonSpy(function () {
+            const spy = sinonSpy(function () {
                 return "useful value";
             });
             this.args.push(24, {}, { success: spy });
 
-            var returnValue = this.call.yieldTo("success");
+            const returnValue = this.call.yieldTo("success");
 
             assert.equals(returnValue, "useful value");
         });
@@ -929,7 +929,7 @@ describe("sinonSpy.call", function () {
                     throw new Error("d'oh!");
                 },
             });
-            var call = this.call;
+            const call = this.call;
 
             assert.exception(function () {
                 call.yieldTo("success");
@@ -941,8 +941,8 @@ describe("sinonSpy.call", function () {
         beforeEach(spyCallCallSetup);
 
         it("invokes only argument as callback", function () {
-            var callback = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const callback = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push({
                 success: callback,
             });
@@ -955,8 +955,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -971,8 +971,8 @@ describe("sinonSpy.call", function () {
 
         it("throws understandable error if symbol prop is not found", function () {
             if (typeof Symbol === "function") {
-                var call = this.call;
-                var symbol = Symbol("apple pie");
+                const call = this.call;
+                const symbol = Symbol("apple pie");
 
                 assert.exception(
                     function () {
@@ -989,8 +989,8 @@ describe("sinonSpy.call", function () {
         it("includes stub name and actual arguments in error", function () {
             this.proxy.displayName = "somethingAwesome";
             this.args.push(23, 42);
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
                 function () {
@@ -1005,8 +1005,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes property on last argument as callback", function () {
-            var spy = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, { success: spy });
 
             this.call.yieldToOn("success", thisObj);
@@ -1017,9 +1017,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes first of two possible callbacks", function () {
-            var spy = sinonSpy();
-            var spy2 = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const spy = sinonSpy();
+            const spy2 = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, { error: spy }, { error: spy2 });
 
             this.call.yieldToOn("error", thisObj);
@@ -1030,9 +1030,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var spy = sinonSpy();
-            var thisObj = { name1: "value1", name2: "value2" };
+            const obj = { id: 42 };
+            const spy = sinonSpy();
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push({ success: spy });
 
             this.call.yieldToOn("success", thisObj, obj, "Crazy");
@@ -1042,13 +1042,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            var spy = sinonSpy(function () {
+            const spy = sinonSpy(function () {
                 return "useful value";
             });
-            var thisObj = { name1: "value1", name2: "value2" };
+            const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, { success: spy });
 
-            var returnValue = this.call.yieldToOn("success", thisObj);
+            const returnValue = this.call.yieldToOn("success", thisObj);
 
             assert.equals(returnValue, "useful value");
         });
@@ -1059,8 +1059,8 @@ describe("sinonSpy.call", function () {
                     throw new Error("d'oh!");
                 },
             });
-            var call = this.call;
-            var thisObj = { name1: "value1", name2: "value2" };
+            const call = this.call;
+            const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(function () {
                 call.yieldToOn("success", thisObj);
@@ -1076,7 +1076,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes spy name", function () {
-            var object = { doIt: sinonSpy() };
+            const object = { doIt: sinonSpy() };
             object.doIt();
 
             assert.equals(
@@ -1086,7 +1086,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes single argument", function () {
-            var object = { doIt: sinonSpy() };
+            const object = { doIt: sinonSpy() };
             object.doIt(42);
 
             assert.equals(
@@ -1096,7 +1096,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes all arguments", function () {
-            var object = { doIt: sinonSpy() };
+            const object = { doIt: sinonSpy() };
             object.doIt(42, "Hey");
 
             assert.equals(
@@ -1106,7 +1106,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes explicit return value", function () {
-            var object = { doIt: sinonStub().returns(42) };
+            const object = { doIt: sinonStub().returns(42) };
             object.doIt(42, "Hey");
 
             assert.equals(
@@ -1116,7 +1116,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes empty string return value", function () {
-            var object = { doIt: sinonStub().returns("") };
+            const object = { doIt: sinonStub().returns("") };
             object.doIt(42, "Hey");
 
             assert.equals(
@@ -1126,7 +1126,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes exception", function () {
-            var object = { doIt: sinonStub().throws("TypeError") };
+            const object = { doIt: sinonStub().throws("TypeError") };
 
             assert.exception(function () {
                 object.doIt();
@@ -1139,7 +1139,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes exception message if any", function () {
-            var object = { doIt: sinonStub().throws("TypeError", "Oh noes!") };
+            const object = {
+                doIt: sinonStub().throws("TypeError", "Oh noes!"),
+            };
 
             assert.exception(function () {
                 object.doIt();
@@ -1153,7 +1155,7 @@ describe("sinonSpy.call", function () {
 
         // these tests are ensuring that call.toString is handled by sinonFormat
         it("formats arguments with sinonFormat", function () {
-            var object = { doIt: sinonSpy() };
+            const object = { doIt: sinonSpy() };
 
             object.doIt(42);
 
@@ -1164,7 +1166,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("formats return value with sinonFormat", function () {
-            var object = { doIt: sinonStub().returns(42) };
+            const object = { doIt: sinonStub().returns(42) };
 
             object.doIt();
 
@@ -1181,8 +1183,8 @@ describe("sinonSpy.call", function () {
                 this.skip();
             }
 
-            var stub1 = sinonStub().resolves(1);
-            var stub2 = sinonStub().returns(1);
+            const stub1 = sinonStub().resolves(1);
+            const stub2 = sinonStub().returns(1);
 
             await stub2(await stub1());
 
@@ -1203,7 +1205,7 @@ describe("sinonSpy.call", function () {
                 this.skip();
             }
 
-            var object = { doIt: sinonSpy() };
+            const object = { doIt: sinonSpy() };
             object.doIt();
 
             const [name, stackFrame] = object.doIt
@@ -1226,19 +1228,19 @@ describe("sinonSpy.call", function () {
         });
 
         it("creates original object", function () {
-            var myInstance = new this.CustomConstructor();
+            const myInstance = new this.CustomConstructor();
 
             assert(this.customPrototype.isPrototypeOf(myInstance));
         });
 
         it("does not interfere with instanceof", function () {
-            var myInstance = new this.CustomConstructor();
+            const myInstance = new this.CustomConstructor();
 
             assert(myInstance instanceof this.CustomConstructor);
         });
 
         it("records usage", function () {
-            var myInstance = new this.CustomConstructor(); // eslint-disable-line no-unused-vars
+            const myInstance = new this.CustomConstructor(); // eslint-disable-line no-unused-vars
 
             assert(this.CustomConstructor.called);
         });
@@ -1246,7 +1248,7 @@ describe("sinonSpy.call", function () {
 
     describe("functions", function () {
         it("throws if spying on non-existent property", function () {
-            var myObj = {};
+            const myObj = {};
 
             assert.exception(function () {
                 sinonSpy(myObj, "ouch");
@@ -1262,7 +1264,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("haves toString method", function () {
-            var obj = {
+            const obj = {
                 meth: function () {
                     return;
                 },
@@ -1273,7 +1275,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("toString should say 'spy' when unable to infer name", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
 
             assert.equals(spy.toString(), "spy");
         });
@@ -1282,7 +1284,7 @@ describe("sinonSpy.call", function () {
             function myTestFunc() {
                 return;
             }
-            var spy = sinonSpy(myTestFunc);
+            const spy = sinonSpy(myTestFunc);
 
             assert.equals(spy.toString(), "myTestFunc");
         });
@@ -1292,13 +1294,13 @@ describe("sinonSpy.call", function () {
                 return;
             }
             myTestFunc.displayName = "My custom method";
-            var spy = sinonSpy(myTestFunc);
+            const spy = sinonSpy(myTestFunc);
 
             assert.equals(spy.toString(), "My custom method");
         });
 
         it("toString should prefer property name if possible", function () {
-            var obj = {};
+            const obj = {};
             obj.meth = sinonSpy();
             obj.meth();
 
@@ -1321,7 +1323,7 @@ describe("sinonSpy.call", function () {
         }
 
         it("resets spy state", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy();
 
             spy.resetHistory();
@@ -1330,7 +1332,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("resets call order state", function () {
-            var spies = [sinonSpy(), sinonSpy()];
+            const spies = [sinonSpy(), sinonSpy()];
             spies[0]();
             spies[1]();
 
@@ -1340,13 +1342,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("resets fakes returned by withArgs", function () {
-            var spy = sinonSpy();
-            var fakeA = spy.withArgs("a");
-            var fakeB = spy.withArgs("b");
+            const spy = sinonSpy();
+            const fakeA = spy.withArgs("a");
+            const fakeB = spy.withArgs("b");
             spy("a");
             spy("b");
             spy("c");
-            var fakeC = spy.withArgs("c");
+            const fakeC = spy.withArgs("c");
 
             spy.resetHistory();
 
@@ -1358,21 +1360,21 @@ describe("sinonSpy.call", function () {
 
     describe(".withArgs", function () {
         it("defines withArgs method", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
 
             assert.isFunction(spy.withArgs);
         });
 
         it("records single call", function () {
-            var spy = sinonSpy().withArgs(1);
+            const spy = sinonSpy().withArgs(1);
             spy(1);
 
             assert.equals(spy.callCount, 1);
         });
 
         it("records non-matching call on original spy", function () {
-            var spy = sinonSpy();
-            var argSpy = spy.withArgs(1);
+            const spy = sinonSpy();
+            const argSpy = spy.withArgs(1);
             spy(1);
             spy(2);
 
@@ -1381,8 +1383,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("records non-matching call with several arguments separately", function () {
-            var spy = sinonSpy();
-            var argSpy = spy.withArgs(1, "str", {});
+            const spy = sinonSpy();
+            const argSpy = spy.withArgs(1, "str", {});
             spy(1);
             spy(1, "str", {});
 
@@ -1391,8 +1393,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("records for partial argument match", function () {
-            var spy = sinonSpy();
-            var argSpy = spy.withArgs(1, "str", {});
+            const spy = sinonSpy();
+            const argSpy = spy.withArgs(1, "str", {});
             spy(1);
             spy(1, "str", {});
             spy(1, "str", {}, []);
@@ -1402,11 +1404,11 @@ describe("sinonSpy.call", function () {
         });
 
         it("records filtered spy when original throws", function () {
-            var spy = sinonSpy(function () {
+            const spy = sinonSpy(function () {
                 throw new Error("Oops");
             });
 
-            var argSpy = spy.withArgs({}, []);
+            const argSpy = spy.withArgs({}, []);
 
             assert.exception(function () {
                 spy(1);
@@ -1421,9 +1423,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns existing override for arguments", function () {
-            var spy = sinonSpy();
-            var argSpy = spy.withArgs({}, []);
-            var another = spy.withArgs({}, []);
+            const spy = sinonSpy();
+            const argSpy = spy.withArgs({}, []);
+            const another = spy.withArgs({}, []);
             spy();
             spy({}, []);
             spy({}, [], 2);
@@ -1435,8 +1437,8 @@ describe("sinonSpy.call", function () {
         });
 
         it("chains withArgs calls on original spy", function () {
-            var spy = sinonSpy();
-            var numArgSpy = spy.withArgs({}, []).withArgs(3);
+            const spy = sinonSpy();
+            const numArgSpy = spy.withArgs({}, []).withArgs(3);
             spy();
             spy({}, []);
             spy(3);
@@ -1447,7 +1449,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with callCount", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy("a");
             spy("b");
             spy("b");
@@ -1455,9 +1457,9 @@ describe("sinonSpy.call", function () {
             spy("c");
             spy("c");
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
-            var argSpy3 = spy.withArgs("c");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
+            const argSpy3 = spy.withArgs("c");
 
             assert.equals(argSpy1.callCount, 1);
             assert.equals(argSpy2.callCount, 2);
@@ -1471,14 +1473,14 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with first, second, third and last call", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy("a", 1);
             spy("b", 2);
             spy("b", 3);
             spy("b", 4);
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy1.firstCall.calledWithExactly("a", 1));
             assert(argSpy1.lastCall.calledWithExactly("a", 1));
@@ -1489,13 +1491,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with arguments", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy("a");
             spy("b");
             spy("b", "c", "d");
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy1.getCall(0).calledWithExactly("a"));
             assert(argSpy2.getCall(0).calledWithExactly("b"));
@@ -1503,16 +1505,16 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with thisValues", function () {
-            var spy = sinonSpy();
-            var thisValue1 = {};
-            var thisValue2 = {};
-            var thisValue3 = {};
+            const spy = sinonSpy();
+            const thisValue1 = {};
+            const thisValue2 = {};
+            const thisValue3 = {};
             spy.call(thisValue1, "a");
             spy.call(thisValue2, "b");
             spy.call(thisValue3, "b");
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy1.getCall(0).calledOn(thisValue1));
             assert(argSpy2.getCall(0).calledOn(thisValue2));
@@ -1520,15 +1522,15 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with return values", function () {
-            var spy = sinonSpy(function (value) {
+            const spy = sinonSpy(function (value) {
                 return value;
             });
             spy("a");
             spy("b");
             spy("b");
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy1.getCall(0).returned("a"));
             assert(argSpy2.getCall(0).returned("b"));
@@ -1536,21 +1538,21 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with call order", function () {
-            var spy = sinonSpy();
+            const spy = sinonSpy();
             spy("a");
             spy("b");
             spy("b");
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy2.getCall(0).calledAfter(argSpy1.getCall(0)));
             assert(argSpy2.getCall(1).calledAfter(argSpy1.getCall(0)));
         });
 
         it("initializes filtered spy with exceptions", function () {
-            var spy = sinonSpy(function (x, y) {
-                var error = new Error();
+            const spy = sinonSpy(function (x, y) {
+                const error = new Error();
                 error.name = y;
                 throw error;
             });
@@ -1565,8 +1567,8 @@ describe("sinonSpy.call", function () {
                 spy("b", "3");
             });
 
-            var argSpy1 = spy.withArgs("a");
-            var argSpy2 = spy.withArgs("b");
+            const argSpy1 = spy.withArgs("a");
+            const argSpy2 = spy.withArgs("b");
 
             assert(argSpy1.getCall(0).threw("1"));
             assert(argSpy2.getCall(0).threw("2"));
@@ -1575,7 +1577,7 @@ describe("sinonSpy.call", function () {
     });
 
     it("captures a stack trace", function () {
-        var spy = sinonSpy();
+        const spy = sinonSpy();
         spy();
         assert.isString(spy.getCall(0).stack);
     });

@@ -1,12 +1,12 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var nextTick = require("../../../lib/sinon/util/core/next-tick");
-var assert = referee.assert;
+const referee = require("@sinonjs/referee");
+const nextTick = require("../../../lib/sinon/util/core/next-tick");
+const assert = referee.assert;
 
-var hasNextTick =
+const hasNextTick =
     typeof process === "object" && typeof process.nextTick === "function";
-var hasSetImmediate = typeof setImmediate === "function";
+const hasSetImmediate = typeof setImmediate === "function";
 
 describe("util/core/next-tick", function () {
     describe("browser environment", function () {

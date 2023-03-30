@@ -1,6 +1,6 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
+const referee = require("@sinonjs/referee");
 
 referee.add("spy", {
     assert: function (obj) {

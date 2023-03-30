@@ -1,15 +1,15 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var walk = require("../../../lib/sinon/util/core/walk");
-var createSpy = require("../../../lib/sinon/spy");
-var assert = referee.assert;
+const referee = require("@sinonjs/referee");
+const walk = require("../../../lib/sinon/util/core/walk");
+const createSpy = require("../../../lib/sinon/spy");
+const assert = referee.assert;
 
 describe("util/core/walk", function () {
     it("should call iterator with value, key, and obj, with context as the receiver", function () {
-        var target = Object.create(null);
-        var rcvr = {};
-        var iterator = createSpy();
+        const target = Object.create(null);
+        const rcvr = {};
+        const iterator = createSpy();
 
         target.hello = "world";
         target.foo = 15;
@@ -23,8 +23,8 @@ describe("util/core/walk", function () {
     });
 
     it("should work with non-enumerable properties", function () {
-        var target = Object.create(null);
-        var iterator = createSpy();
+        const target = Object.create(null);
+        const iterator = createSpy();
 
         target.hello = "world";
         Object.defineProperty(target, "foo", {
@@ -39,9 +39,7 @@ describe("util/core/walk", function () {
     });
 
     it("should walk the prototype chain of an object", function () {
-        var parentProto, proto, target, iterator;
-
-        parentProto = Object.create(null, {
+        const parentProto = Object.create(null, {
             nonEnumerableParentProp: {
                 value: "non-enumerable parent prop",
             },
@@ -51,7 +49,7 @@ describe("util/core/walk", function () {
             },
         });
 
-        proto = Object.create(parentProto, {
+        const proto = Object.create(parentProto, {
             nonEnumerableProp: {
                 value: "non-enumerable prop",
             },
@@ -61,7 +59,7 @@ describe("util/core/walk", function () {
             },
         });
 
-        target = Object.create(proto, {
+        const target = Object.create(proto, {
             nonEnumerableOwnProp: {
                 value: "non-enumerable own prop",
             },
@@ -71,7 +69,7 @@ describe("util/core/walk", function () {
             },
         });
 
-        iterator = createSpy();
+        const iterator = createSpy();
 
         walk(target, iterator);
 
@@ -85,16 +83,16 @@ describe("util/core/walk", function () {
     });
 
     it("should not invoke getters on the original receiving object", function () {
-        var Target = function Target() {
+        const Target = function Target() {
             return;
         };
-        var getter = createSpy();
+        const getter = createSpy();
         Object.defineProperty(Target.prototype, "computedFoo", {
             enumerable: true,
             get: getter,
         });
-        var target = new Target();
-        var iterator = createSpy();
+        const target = new Target();
+        const iterator = createSpy();
 
         walk(target, iterator);
 
@@ -103,16 +101,16 @@ describe("util/core/walk", function () {
     });
 
     it("should fall back to for..in if getOwnPropertyNames is not available", function () {
-        var getOwnPropertyNames = Object.getOwnPropertyNames;
-        var Target = function Target() {
+        const getOwnPropertyNames = Object.getOwnPropertyNames;
+        const Target = function Target() {
             this.hello = "world";
         };
-        var target = new Target();
-        var rcvr = {};
-        var iterator = createSpy();
-        var err = null;
-        var numCalls = 0;
-        var placeholder;
+        const target = new Target();
+        const rcvr = {};
+        const iterator = createSpy();
+        let err = null;
+        let numCalls = 0;
+        let placeholder;
 
         Target.prototype.foo = 15;
         Object.getOwnPropertyNames = null;
@@ -146,20 +144,20 @@ describe("util/core/walk", function () {
     });
 
     it("does not walk the same property twice", function () {
-        var parent = {
+        const parent = {
             func: function parentFunc() {
                 return;
             },
         };
-        var child = Object.create(parent);
+        const child = Object.create(parent);
         child.func = function childFunc() {
             return;
         };
-        var iterator = createSpy();
+        const iterator = createSpy();
 
         walk(child, iterator);
 
-        var propertyNames = iterator.args.map(function (call) {
+        const propertyNames = iterator.args.map(function (call) {
             return call[0];
         });
 

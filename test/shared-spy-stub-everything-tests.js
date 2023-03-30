@@ -2,13 +2,13 @@
 /* eslint-disable jsdoc/require-jsdoc */
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
+const refute = referee.refute;
 
 module.exports = function shared(createSpyOrStub) {
     it("replaces all methods of an object when no property is given", function () {
-        var obj = {
+        const obj = {
             func1: function () {
                 return;
             },
@@ -34,7 +34,7 @@ module.exports = function shared(createSpyOrStub) {
         Obj.prototype.func1 = function () {
             return;
         };
-        var obj = new Obj();
+        const obj = new Obj();
 
         createSpyOrStub(obj);
 
@@ -42,7 +42,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("returns object", function () {
-        var object = {
+        const object = {
             func1: function () {
                 return;
             },
@@ -52,7 +52,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("only replaces functions", function () {
-        var object = {
+        const object = {
             foo: "bar",
             baz: function () {
                 return;
@@ -65,7 +65,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("handles non-enumerable properties", function () {
-        var obj = {
+        const obj = {
             func1: function () {
                 return;
             },
@@ -101,7 +101,7 @@ module.exports = function shared(createSpyOrStub) {
             configurable: true,
         });
 
-        var obj = new Obj();
+        const obj = new Obj();
 
         createSpyOrStub(obj);
 
@@ -109,7 +109,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("does not replace non-enumerable properties from Object.prototype", function () {
-        var obj = {
+        const obj = {
             noop: function () {
                 return;
             },
@@ -123,12 +123,12 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("does not fail on overrides", function () {
-        var parent = {
+        const parent = {
             func: function () {
                 return;
             },
         };
-        var child = Object.create(parent);
+        const child = Object.create(parent);
         child.func = function () {
             return;
         };
@@ -139,7 +139,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("throws on non-existent property", function () {
-        var myObj = {
+        const myObj = {
             ignoreme: function () {
                 return;
             },
@@ -153,7 +153,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("throws on data property descriptors that are not writable or configurable", function () {
-        var myObj = {};
+        const myObj = {};
         Object.defineProperty(myObj, "ignoreme", {
             writable: false,
             configurable: false,
@@ -167,7 +167,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("throws on accessor property descriptors that are not configurable", function () {
-        var myObj = {};
+        const myObj = {};
         Object.defineProperty(myObj, "ignoreme", {
             get: function (key) {
                 return this[key];
@@ -186,7 +186,7 @@ module.exports = function shared(createSpyOrStub) {
     });
 
     it("throws on data descriptors that are not stubbable", function () {
-        var myObj = {};
+        const myObj = {};
         Object.defineProperty(myObj, "ignoreme", {
             writable: false,
             configurable: false,

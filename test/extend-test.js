@@ -1,12 +1,12 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var extend = require("../lib/sinon/util/core/extend");
-var assert = referee.assert;
+const referee = require("@sinonjs/referee");
+const extend = require("../lib/sinon/util/core/extend");
+const assert = referee.assert;
 
 describe("extend", function () {
     it("should return unaltered target when only one argument", function () {
-        var target = { hello: "world" };
+        const target = { hello: "world" };
 
         extend(target);
 
@@ -14,7 +14,7 @@ describe("extend", function () {
     });
 
     it("should copy all (own) properties into first argument, from all subsequent arguments", function () {
-        var target = { hello: "world" };
+        const target = { hello: "world" };
 
         extend(target, { a: "a" }, { b: "b" });
 
@@ -24,13 +24,13 @@ describe("extend", function () {
     });
 
     it("should copy toString method into target", function () {
-        var target = {
+        const target = {
             hello: "world",
             toString: function () {
                 return "hello world";
             },
         };
-        var source = {
+        const source = {
             toString: function () {
                 return "hello source";
             },
@@ -42,10 +42,10 @@ describe("extend", function () {
     });
 
     it("must copy the last occurring property into the target", function () {
-        var target = { a: 0, b: 0, c: 0, d: 0 };
-        var source1 = { a: 1, b: 1, c: 1 };
-        var source2 = { a: 2, b: 2 };
-        var source3 = { a: 3 };
+        const target = { a: 0, b: 0, c: 0, d: 0 };
+        const source1 = { a: 1, b: 1, c: 1 };
+        const source2 = { a: 2, b: 2 };
+        const source3 = { a: 3 };
 
         extend(target, source1, source2, source3);
 
@@ -56,19 +56,19 @@ describe("extend", function () {
     });
 
     it("copies all properties", function () {
-        var object1 = {
+        const object1 = {
             prop1: null,
             prop2: false,
         };
 
-        var object2 = {
+        const object2 = {
             prop3: "hey",
             prop4: 4,
         };
 
-        var result = extend({}, object1, object2);
+        const result = extend({}, object1, object2);
 
-        var expected = {
+        const expected = {
             prop1: null,
             prop2: false,
             prop3: "hey",
@@ -79,7 +79,7 @@ describe("extend", function () {
     });
 
     it("copies accessor properties into the target", function () {
-        var target = {
+        const target = {
             hello: "hello",
         };
         const obj = {
@@ -132,7 +132,7 @@ describe("extend", function () {
 
     context("when 'name' property is not writable", function () {
         it("does not attempt to write to the property", function () {
-            var object1 = { prop1: null };
+            const object1 = { prop1: null };
 
             Object.defineProperty(object1, "name", {
                 configurable: false,
@@ -141,14 +141,14 @@ describe("extend", function () {
                 writable: false,
             });
 
-            var object2 = {
+            const object2 = {
                 prop2: "hey",
                 name: "write-attempt",
             };
 
-            var result = extend(object1, object2);
+            const result = extend(object1, object2);
 
-            var expected = {
+            const expected = {
                 prop1: null,
                 prop2: "hey",
                 name: "not-writable",

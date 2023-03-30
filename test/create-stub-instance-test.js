@@ -1,27 +1,27 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var createStub = require("../lib/sinon/stub");
-var createStubInstance = require("../lib/sinon/create-stub-instance");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const createStub = require("../lib/sinon/stub");
+const createStubInstance = require("../lib/sinon/create-stub-instance");
+const assert = referee.assert;
+const refute = referee.refute;
 
 describe("createStubInstance", function () {
     it("stubs existing methods", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
             return;
         };
 
-        var stub = createStubInstance(Class);
+        const stub = createStubInstance(Class);
         stub.method.returns(3);
         assert.equals(3, stub.method());
     });
 
     it("throws with no methods to stub", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
 
@@ -37,23 +37,23 @@ describe("createStubInstance", function () {
     });
 
     it("doesn't call the constructor", function () {
-        var Class = function (a, b) {
-            var c = a + b;
+        const Class = function (a, b) {
+            const c = a + b;
             throw c;
         };
         Class.prototype.method = function () {
             return;
         };
 
-        var stub = createStubInstance(Class);
+        const stub = createStubInstance(Class);
         refute.exception(function () {
             stub.method(3);
         });
     });
 
     it("retains non function values", function () {
-        var TYPE = "some-value";
-        var Class = function () {
+        const TYPE = "some-value";
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
@@ -61,30 +61,30 @@ describe("createStubInstance", function () {
         };
         Class.prototype.type = TYPE;
 
-        var stub = createStubInstance(Class);
+        const stub = createStubInstance(Class);
         assert.equals(TYPE, stub.type);
     });
 
     it("has no side effects on the prototype", function () {
-        var proto = {
+        const proto = {
             method: function () {
                 throw new Error("error");
             },
         };
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype = proto;
 
-        var stub = createStubInstance(Class);
+        const stub = createStubInstance(Class);
         refute.exception(stub.method);
         assert.exception(proto.method);
     });
 
     it("throws exception for non function params", function () {
-        var types = [{}, 3, "hi!"];
+        const types = [{}, 3, "hi!"];
 
-        for (var i = 0; i < types.length; i++) {
+        for (let i = 0; i < types.length; i++) {
             // yes, it's silly to create functions in a loop, it's also a test
             // eslint-disable-next-line no-loop-func
             assert.exception(function () {
@@ -94,14 +94,14 @@ describe("createStubInstance", function () {
     });
 
     it("allows providing optional overrides", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
             return;
         };
 
-        var stub = createStubInstance(Class, {
+        const stub = createStubInstance(Class, {
             method: createStub().returns(3),
         });
 
@@ -109,14 +109,14 @@ describe("createStubInstance", function () {
     });
 
     it("allows providing optional returned values", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
             return;
         };
 
-        var stub = createStubInstance(Class, {
+        const stub = createStubInstance(Class, {
             method: 3,
         });
 
@@ -124,14 +124,14 @@ describe("createStubInstance", function () {
     });
 
     it("allows providing null as a return value", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
             return;
         };
 
-        var stub = createStubInstance(Class, {
+        const stub = createStubInstance(Class, {
             method: null,
         });
 
@@ -139,7 +139,7 @@ describe("createStubInstance", function () {
     });
 
     it("throws an exception when trying to override non-existing property", function () {
-        var Class = function () {
+        const Class = function () {
             return;
         };
         Class.prototype.method = function () {
