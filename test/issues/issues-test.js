@@ -822,4 +822,25 @@ describe("issues", function () {
             assert.isTrue(fooStubInstance.wasCalled);
         });
     });
+
+    describe("#2491 - unable to restore stubs on an instance where the prototype has an unconfigurable property descriptor", function () {
+        it("should ensure object descriptors are always configurable", function () {
+            class BaseClass {}
+            Object.defineProperty(BaseClass.prototype, "aMethod", {
+                value: function () {
+                    return 42;
+                },
+            });
+
+            // anchor
+            const instance = new BaseClass();
+            assert.isFunction(instance.aMethod);
+            assert.equals(instance.aMethod(), 42);
+            this.sandbox.spy(instance, "aMethod")
+
+            refute.exception(() => {
+                this.sandbox.restore(); // #2491: this throws "TypeError: Cannot assign to read only property 'myMethod' of object '#<BaseClass>'"
+           });
+        });
+    });
 });
