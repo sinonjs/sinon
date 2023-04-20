@@ -823,9 +823,11 @@ describe("issues", function () {
         });
     });
 
-    describe("#2491 - unable to restore stubs on an instance where the prototype has an unconfigurable property descriptor", function () {
-        it("should ensure object descriptors are always configurable", function () {
-            class BaseClass {}
+    describe("#2491 - unable to restore spies on an instance where the prototype has an unconfigurable property descriptor", function () {
+        function createInstanceFromClassWithReadOnlyPropertyDescriptor() {
+            class BaseClass {
+                instanceProperty = 1;
+            }
             Object.defineProperty(BaseClass.prototype, "aMethod", {
                 value: function () {
                     return 42;
@@ -834,13 +836,55 @@ describe("issues", function () {
 
             // anchor
             const instance = new BaseClass();
-            assert.isFunction(instance.aMethod);
             assert.equals(instance.aMethod(), 42);
-            this.sandbox.spy(instance, "aMethod")
+
+            return instance;
+        }
+
+        it("should ensure copied object descriptors are always configurable for spies", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+            this.sandbox.spy(instance, "aMethod");
 
             refute.exception(() => {
-                this.sandbox.restore(); // #2491: this throws "TypeError: Cannot assign to read only property 'myMethod' of object '#<BaseClass>'"
-           });
+                this.sandbox.restore(); // #2491: this throws TypeError: Cannot assign to read only property 'myMethod' of object '#<BaseClass>'
+            });
+        });
+
+        it("should not throw if the unconfigurable object descriptor to be used for a Stub is on the prototype", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+
+            // per #2491 this throws 'TypeError: Descriptor for property aMethod is non-configurable and non-writable'
+            // that makes sense for descriptors taken from the object, but not its prototype, as we are free to change
+            // the latter when setting it
+            refute.exception(() => {
+                this.sandbox.stub(instance, "aMethod").returns("a stub");
+            });
+        });
+
+        it("should not throw if the unconfigurable object descriptor to be used for a Mock is on the prototype", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+
+            const mock = this.sandbox.mock(instance);
+
+            // per #2491 this throws 'TypeError: Attempted to wrap undefined property myMethod as function
+            refute.exception(() => {
+                mock.expects("aMethod").once();
+            });
+        });
+
+        it("should not throw if the unconfigurable object descriptor to be used for a Fake is on the prototype", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+
+            // per #2491 this throws "TypeError: Cannot assign to read only property 'aMethod' of object '#<BaseClass>'"
+            // that makes sense for descriptors taken from the object, but not its prototype, as we are free to change
+            // the latter when setting it
+            refute.exception(() => {
+                this.sandbox.replace(instance, "aMethod", sinon.fake());
+            });
         });
     });
 });
