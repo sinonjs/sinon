@@ -18,6 +18,7 @@ fi
 # Now update the releases branch and archive the new release
 echo "archiving release from $SOURCE_BRANCH to $ARCHIVE_BRANCH"
 git checkout $ARCHIVE_BRANCH
+git pull # get latest to avoid conflicts!
 git merge --no-edit -m "Merge version $PACKAGE_VERSION" $SOURCE_BRANCH
 
 ./scripts/copy-documentation-for-new-release.sh $PACKAGE_VERSION
