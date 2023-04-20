@@ -825,9 +825,7 @@ describe("issues", function () {
 
     describe("#2491 - unable to restore spies on an instance where the prototype has an unconfigurable property descriptor", function () {
         function createInstanceFromClassWithReadOnlyPropertyDescriptor() {
-            class BaseClass {
-                instanceProperty = 1;
-            }
+            class BaseClass {}
             Object.defineProperty(BaseClass.prototype, "aMethod", {
                 value: function () {
                     return 42;
