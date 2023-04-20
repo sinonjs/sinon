@@ -1,5 +1,20 @@
 # Changes
 
+## 15.0.4
+
+- [`e9042c4f`](https://github.com/sinonjs/sinon/commit/e9042c4f18f4aa3e36e13652196c746b759aa1a5)
+  Handling non-configurable object descriptors on the prototype (#2508) (Carl-Erik Kopseng)
+  > This should essentially make decorated methods stubbable again (see #2491)
+- [`430c9a60`](https://github.com/sinonjs/sinon/commit/430c9a604f5509ca6d7e11e3edaaa8553a77ae93)
+  Remove uses of `var` (#2506) (Carl-Erik Kopseng)
+  > Replace var with const where possible in /lib and /test.
+  >
+  > Modified the let codemod to be a codemod.
+  >
+  > Took about half an hour with --watch running
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-04-20._
+
 ## 15.0.3
 
 - [`b775f1b4`](https://github.com/sinonjs/sinon/commit/b775f1b4174c5a92fa7fa8f70fbf3f4b5466a39e)
