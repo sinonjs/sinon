@@ -1,11 +1,11 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
-var createSpy = require("../../../lib/sinon/spy");
-var createStub = require("../../../lib/sinon/stub");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
+const createSpy = require("../../../lib/sinon/spy");
+const createStub = require("../../../lib/sinon/stub");
+const assert = referee.assert;
+const refute = referee.refute;
 
 describe("util/core/wrapMethod", function () {
     beforeEach(function () {
@@ -41,7 +41,7 @@ describe("util/core/wrapMethod", function () {
 
     it("throws if object defines property but is not function", function () {
         this.object.prop = 42;
-        var object = this.object;
+        const object = this.object;
 
         assert.exception(
             function () {
@@ -58,8 +58,8 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol("apple pie");
-        var object = {};
+        const symbol = Symbol("apple pie");
+        const object = {};
         object[symbol] = 42;
 
         assert.exception(
@@ -78,7 +78,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if object does not define property", function () {
-        var object = this.object;
+        const object = this.object;
 
         assert.exception(function () {
             wrapMethod(object, "prop", function () {
@@ -99,7 +99,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if third argument is missing", function () {
-        var object = this.object;
+        const object = this.object;
 
         assert.exception(
             function () {
@@ -110,7 +110,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if third argument is not a function or a property descriptor", function () {
-        var object = this.object;
+        const object = this.object;
 
         assert.exception(
             function () {
@@ -182,8 +182,8 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol("apple pie");
-        var object = {};
+        const symbol = Symbol("apple pie");
+        const object = {};
         object[symbol] = function () {
             return;
         };
@@ -226,7 +226,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("throws if method is already a spy", function () {
-        var object = { method: createSpy() };
+        const object = { method: createSpy() };
 
         assert.exception(
             function () {
@@ -243,8 +243,8 @@ describe("util/core/wrapMethod", function () {
             this.skip();
         }
 
-        var symbol = Symbol("apple pie");
-        var object = {};
+        const symbol = Symbol("apple pie");
+        const object = {};
         object[symbol] = createSpy();
 
         assert.exception(
@@ -267,7 +267,7 @@ describe("util/core/wrapMethod", function () {
             this.oldError = Error;
             this.oldTypeError = TypeError;
 
-            var i = 0;
+            let i = 0;
 
             // eslint-disable-next-line no-global-assign, no-native-reassign
             Error = TypeError = function () {
@@ -283,7 +283,7 @@ describe("util/core/wrapMethod", function () {
         });
 
         it("throws with stack trace showing original wrapMethod call", function () {
-            var object = {
+            const object = {
                 method: function () {
                     return;
                 },
@@ -325,7 +325,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("mirrors function properties", function () {
-        var object = {
+        const object = {
             method: function () {
                 return;
             },
@@ -340,7 +340,7 @@ describe("util/core/wrapMethod", function () {
     });
 
     it("does not mirror and overwrite existing properties", function () {
-        var object = {
+        const object = {
             method: function () {
                 return;
             },
@@ -369,7 +369,7 @@ describe("util/core/wrapMethod", function () {
         });
 
         it("returns wrapper", function () {
-            var wrapper = wrapMethod(this.object, "method", function () {
+            const wrapper = wrapMethod(this.object, "method", function () {
                 return;
             });
 
@@ -399,7 +399,7 @@ describe("util/core/wrapMethod", function () {
         });
 
         it("wrap adds owned property", function () {
-            var wrapper = wrapMethod(this.object, "method", function () {
+            const wrapper = wrapMethod(this.object, "method", function () {
                 return;
             });
 

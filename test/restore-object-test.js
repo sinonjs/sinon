@@ -1,12 +1,12 @@
 "use strict";
 /* eslint-disable no-empty-function */
 
-var referee = require("@sinonjs/referee");
-var sinonSpy = require("../lib/sinon/spy");
-var sinonStub = require("../lib/sinon/stub");
-var restoreObject = require("../lib/sinon/restore-object.js");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const sinonSpy = require("../lib/sinon/spy");
+const sinonStub = require("../lib/sinon/stub");
+const restoreObject = require("../lib/sinon/restore-object.js");
+const assert = referee.assert;
+const refute = referee.refute;
 
 describe("restore-object", function () {
     it("is defined", function () {
@@ -44,12 +44,15 @@ describe("restore-object", function () {
                     meh: "okay",
                 });
             },
-            { message: "Expected to restore methods on object but found none" }
+            {
+                message:
+                    "Found no methods on object to which we could apply mutations",
+            }
         );
     });
 
     it("works with mixed spies and stubs", function () {
-        var object = {
+        let object = {
             who: function () {},
             what: function () {},
             when: function () {},
@@ -69,7 +72,7 @@ describe("restore-object", function () {
     });
 
     it("restores entire spied object", function () {
-        var object = sinonSpy({
+        let object = sinonSpy({
             foo: function () {},
             bar: function () {},
         });
@@ -81,7 +84,7 @@ describe("restore-object", function () {
     });
 
     it("restores entire stubbed object", function () {
-        var object = sinonStub({
+        let object = sinonStub({
             foo: function () {},
             bar: function () {},
         });

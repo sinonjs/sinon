@@ -1,13 +1,13 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var sinon = require("../../lib/sinon");
-var createStub = require("../../lib/sinon/stub");
-var assert = referee.assert;
-var refute = referee.refute;
-var globalContext = typeof global !== "undefined" ? global : window;
-var globalXHR = globalContext.XMLHttpRequest;
-var globalAXO = globalContext.ActiveXObject;
+const referee = require("@sinonjs/referee");
+const sinon = require("../../lib/sinon");
+const createStub = require("../../lib/sinon/stub");
+const assert = referee.assert;
+const refute = referee.refute;
+const globalContext = typeof global !== "undefined" ? global : window;
+const globalXHR = globalContext.XMLHttpRequest;
+const globalAXO = globalContext.ActiveXObject;
 
 describe("issues", function () {
     beforeEach(function () {
@@ -20,10 +20,10 @@ describe("issues", function () {
 
     it("#283", function () {
         function testSinonFakeTimersWith(interval, ticks) {
-            var clock = sinon.useFakeTimers();
+            const clock = sinon.useFakeTimers();
 
-            var spy = sinon.spy();
-            var id = setInterval(spy, interval);
+            const spy = sinon.spy();
+            const id = setInterval(spy, interval);
             assert(!spy.calledOnce);
             clock.tick(ticks);
             assert(spy.callCount === Math.floor(ticks / interval));
@@ -49,8 +49,8 @@ describe("issues", function () {
             });
 
             it("stub out fs.readFileSync", function () {
-                var fs = require("fs");
-                var testCase = this;
+                const fs = require("fs");
+                const testCase = this;
 
                 refute.exception(function () {
                     testCase.sandbox.stub(fs, "readFileSync");
@@ -65,7 +65,7 @@ describe("issues", function () {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now
             // This test verifies that it's working, at least for Date.now
-            var clock;
+            let clock;
 
             clock = sinon.useFakeTimers(new Date("2014-12-29").getTime());
             assert.equals(clock.now, Date.now());
@@ -80,10 +80,10 @@ describe("issues", function () {
 
     describe("#852 - createStubInstance on inherited constructors", function () {
         it("must not throw error", function () {
-            var A = function () {
+            const A = function () {
                 return;
             };
-            var B = function () {
+            const B = function () {
                 return;
             };
 
@@ -101,7 +101,7 @@ describe("issues", function () {
 
     describe("#852(2) - createStubInstance should on same constructor", function () {
         it("must be idempotent", function () {
-            var A = function () {
+            const A = function () {
                 return;
             };
             A.prototype.meth = function () {
@@ -128,14 +128,14 @@ describe("issues", function () {
         });
 
         it("should not rename spies", function () {
-            var nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
-            var expectedName =
+            const nameDescriptor = Object.getOwnPropertyDescriptor(bob, "name");
+            const expectedName =
                 nameDescriptor && nameDescriptor.configurable ? "bob" : "proxy";
-            var spy = sinon.spy(bob);
+            const spy = sinon.spy(bob);
 
             assert.equals(spy.name, expectedName);
 
-            var obj = { methodName: spy };
+            const obj = { methodName: spy };
             assert.equals(spy.name, expectedName);
 
             spy();
@@ -164,7 +164,7 @@ describe("issues", function () {
                 }
             }
 
-            var oldWatch;
+            let oldWatch;
 
             // eslint-disable-next-line no-restricted-syntax
             try {
@@ -177,7 +177,7 @@ describe("issues", function () {
                     };
                 }
 
-                var stubbedObject = sinon.stub({
+                const stubbedObject = sinon.stub({
                     watch: function () {
                         return;
                     },
@@ -197,9 +197,9 @@ describe("issues", function () {
 
     describe("#1154", function () {
         it("Ensures different matchers will not be tested against each other", function () {
-            var match = sinon.match;
-            var stub = sinon.stub;
-            var readFile = stub();
+            const match = sinon.match;
+            const stub = sinon.stub;
+            const readFile = stub();
 
             function endsWith(str, suffix) {
                 return str.indexOf(suffix) + suffix.length === str.length;
@@ -213,12 +213,12 @@ describe("issues", function () {
                 return endsWith(fileName, "suffixb");
             }
 
-            var argsA = match(suffixA);
-            var argsB = match(suffixB);
+            const argsA = match(suffixA);
+            const argsB = match(suffixB);
 
-            var firstFake = readFile.withArgs(argsA);
+            const firstFake = readFile.withArgs(argsA);
 
-            var secondFake = readFile.withArgs(argsB);
+            const secondFake = readFile.withArgs(argsB);
 
             assert(firstFake !== secondFake);
         });
@@ -226,7 +226,7 @@ describe("issues", function () {
 
     describe("#1372 - sandbox.resetHistory", function () {
         it("should reset spies", function () {
-            var spy = this.sandbox.spy();
+            const spy = this.sandbox.spy();
 
             spy();
             assert.equals(spy.callCount, 1);
@@ -243,8 +243,8 @@ describe("issues", function () {
 
     describe("#1398", function () {
         it("Call order takes into account both calledBefore and callCount", function () {
-            var s1 = sinon.spy();
-            var s2 = sinon.spy();
+            const s1 = sinon.spy();
+            const s2 = sinon.spy();
 
             s1();
             s2();
@@ -257,7 +257,7 @@ describe("issues", function () {
     });
 
     describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
-        var stub;
+        let stub;
 
         function makeAssertions(fake, expected) {
             assert.isFunction(fake.then);
@@ -273,9 +273,9 @@ describe("issues", function () {
         });
 
         beforeEach(function () {
-            var promiseLib = {
+            const promiseLib = {
                 resolve: function (value) {
-                    var promise = Promise.resolve(value);
+                    const promise = Promise.resolve(value);
                     promise.tap = function () {
                         return `tap ${value}`;
                     };
@@ -307,12 +307,12 @@ describe("issues", function () {
     });
 
     describe("#1456", function () {
-        var sandbox;
+        let sandbox;
 
         function throwsOnUnconfigurableProperty() {
             /* eslint-disable no-restricted-syntax */
             try {
-                var preDescriptor = Object.getOwnPropertyDescriptor(
+                const preDescriptor = Object.getOwnPropertyDescriptor(
                     window,
                     "innerHeight"
                 ); //backup val
@@ -376,7 +376,7 @@ describe("issues", function () {
     });
 
     describe("#1512 - sandbox.stub(obj,protoMethod)", function () {
-        var sandbox;
+        let sandbox;
 
         beforeEach(function () {
             sandbox = sinon.createSandbox();
@@ -387,21 +387,21 @@ describe("issues", function () {
         });
 
         it("can stub methods on the prototype", function () {
-            var proto = {
+            const proto = {
                 someFunction: function () {
                     return;
                 },
             };
-            var instance = Object.create(proto);
+            const instance = Object.create(proto);
 
-            var stub = sandbox.stub(instance, "someFunction");
+            const stub = sandbox.stub(instance, "someFunction");
             instance.someFunction();
             assert(stub.called);
         });
     });
 
     describe("#1521 - stubbing Array.prototype.filter", function () {
-        var orgFilter;
+        let orgFilter;
 
         before(function () {
             orgFilter = Array.prototype.filter;
@@ -413,7 +413,7 @@ describe("issues", function () {
         });
 
         it("should be possible stub filter", function () {
-            var stub = sinon.stub(Array.prototype, "filter");
+            const stub = sinon.stub(Array.prototype, "filter");
             [1, 2, 3].filter(function () {
                 return false;
             });
@@ -437,13 +437,13 @@ describe("issues", function () {
 
     describe("#1442 - callThrough with a mock expectation", function () {
         it("should call original method", function () {
-            var foo = {
+            const foo = {
                 bar: function () {
                     return;
                 },
             };
 
-            var mock = this.sandbox.mock(foo);
+            const mock = this.sandbox.mock(foo);
             mock.expects("bar").callThrough();
 
             foo.bar();
@@ -454,7 +454,7 @@ describe("issues", function () {
 
     describe("#1648 - resetHistory ", function () {
         it("should reset property spies", function () {
-            var obj = {
+            const obj = {
                 func: function () {
                     return;
                 },
@@ -463,9 +463,9 @@ describe("issues", function () {
                 },
             };
 
-            var sandbox = sinon.createSandbox();
-            var spyFunc = sandbox.spy(obj, "func");
-            var spyProp = sandbox.spy(obj, "prop", ["get"]);
+            const sandbox = sinon.createSandbox();
+            const spyFunc = sandbox.spy(obj, "func");
+            const spyProp = sandbox.spy(obj, "prop", ["get"]);
 
             refute.isTrue(spyFunc.called);
             refute.isTrue(spyProp.get.called);
@@ -488,7 +488,7 @@ describe("issues", function () {
     // and thus were not restorable
     describe("#1775 - sinon.restore", function () {
         it("should restore all stubs", function () {
-            var myApi = {
+            const myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
                     console.log("test method!");
@@ -502,7 +502,7 @@ describe("issues", function () {
         });
 
         it("should restore all spies", function () {
-            var myApi = {
+            const myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
                     console.log("test method!");
@@ -516,7 +516,7 @@ describe("issues", function () {
         });
 
         it("should restore all mocks", function () {
-            var myApi = {
+            const myApi = {
                 someMethod: function someMethod() {
                     // eslint-disable-next-line no-console
                     console.log("test method!");
@@ -532,7 +532,7 @@ describe("issues", function () {
 
     describe("#1801 - sinon.restore spied fakeTimers", function () {
         it("should restore spied fake timers", function () {
-            var originalSetTimeout = setTimeout;
+            const originalSetTimeout = setTimeout;
 
             sinon.useFakeTimers();
             sinon.spy(globalContext, "setTimeout");
@@ -559,12 +559,12 @@ describe("issues", function () {
 
     describe("#1709 - deepEqual fails on cyclic references", function () {
         it("should not blow up", function () {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
 
-            var firstObj = {};
+            const firstObj = {};
             firstObj.aKeyName = firstObj;
 
-            var secondObj = {};
+            const secondObj = {};
             secondObj.aKeyName = secondObj;
 
             spy(firstObj);
@@ -575,7 +575,7 @@ describe("issues", function () {
 
     describe("#1796 - cannot stub Array.prototype.sort", function () {
         it("it should not fail with RangeError", function () {
-            var stub = sinon.stub(Array.prototype, "sort");
+            const stub = sinon.stub(Array.prototype, "sort");
 
             refute.exception(function () {
                 [1, 2, 3].sort();
@@ -587,13 +587,13 @@ describe("issues", function () {
 
     describe("#1900 - calledWith returns false positive", function () {
         it("should return false when call args don't match", function () {
-            var spy = sinon.spy();
-            var dateOne = new Date("2018-07-01");
-            var dateTwo = new Date("2018-07-31");
+            const spy = sinon.spy();
+            const dateOne = new Date("2018-07-01");
+            const dateTwo = new Date("2018-07-31");
 
             spy(dateOne);
 
-            var calledWith = spy.calledWith(dateTwo);
+            const calledWith = spy.calledWith(dateTwo);
             assert.same(calledWith, false);
         });
     });
@@ -611,18 +611,18 @@ describe("issues", function () {
             ClassWithoutProps.prototype.constructor = ClassWithoutProps;
             AnotherClassWithoutProps.prototype.constructor =
                 AnotherClassWithoutProps;
-            var arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
-            var arg2 = new AnotherClassWithoutProps(); //arg2.constructor.name === Object
-            var stub = sinon.stub();
+            const arg1 = new ClassWithoutProps(); //arg1.constructor.name === ClassWithoutProps
+            const arg2 = new AnotherClassWithoutProps(); //arg2.constructor.name === Object
+            const stub = sinon.stub();
             stub.withArgs(arg1).returns(5);
-            var result = stub(arg2);
+            const result = stub(arg2);
             assert.same(result, undefined); //[ERR_ASSERTION]: 5 === undefined
         });
     });
 
     describe("#1887", function () {
         it("should not break stub behavior using multiple `match.any`", function () {
-            var stub = sinon.stub();
+            const stub = sinon.stub();
 
             stub.withArgs(
                 sinon.match.any,
@@ -642,7 +642,7 @@ describe("issues", function () {
 
     describe("#1986", function () {
         it("should not set `lastArg` to undefined when last argument is `false`", function () {
-            var fake = sinon.fake();
+            const fake = sinon.fake();
 
             fake(99, false);
 
@@ -652,16 +652,16 @@ describe("issues", function () {
 
     describe("#1964", function () {
         it("should allow callThrough on a withArgs fake", function () {
-            var calledThrough = false;
-            var obj = {
+            let calledThrough = false;
+            const obj = {
                 method: function () {
                     calledThrough = true;
                 },
             };
 
-            var baseStub = sinon.stub(obj, "method");
+            const baseStub = sinon.stub(obj, "method");
             baseStub.throws("Should always hit the withArgs fake");
-            var argsStub = baseStub.withArgs("foo").callThrough();
+            const argsStub = baseStub.withArgs("foo").callThrough();
 
             obj.method("foo");
 
@@ -680,7 +680,7 @@ describe("issues", function () {
             return;
         };
 
-        var sandbox;
+        let sandbox;
         beforeEach(function () {
             sandbox = sinon.createStubInstance(Foo);
         });
@@ -721,14 +721,14 @@ describe("issues", function () {
         };
 
         it("should override the method", function () {
-            var thing = sinon.createStubInstance(Foo, {
+            const thing = sinon.createStubInstance(Foo, {
                 testMethod: sinon.stub().returns(2),
             });
             assert.equals(thing.testMethod(), 2);
         });
 
         it("should support calling without object binding", function () {
-            var createStubInstance = sinon.createStubInstance;
+            const createStubInstance = sinon.createStubInstance;
             refute.exception(function () {
                 createStubInstance(Foo);
             });
@@ -737,8 +737,8 @@ describe("issues", function () {
 
     describe("#2065", function () {
         it("should restore the state of lastArg on the stub when resetting the sandbox", function () {
-            var sandbox = sinon.createSandbox();
-            var fake = sandbox.fake();
+            const sandbox = sinon.createSandbox();
+            const fake = sandbox.fake();
             fake(1, 2, 3);
             assert.equals(fake.lastArg, 3);
             sandbox.reset();
@@ -748,8 +748,8 @@ describe("issues", function () {
 
     describe("#2226 - props on prototype are not restored correctly", function () {
         function createObjectWithPropFromPrototype() {
-            var proto = {};
-            var obj = {};
+            const proto = {};
+            const obj = {};
 
             Object.setPrototypeOf(obj, proto);
             Object.defineProperty(proto, "test", { writable: true, value: 1 });
@@ -757,21 +757,21 @@ describe("issues", function () {
         }
 
         it("should restore fakes shadowing prototype props correctly", function () {
-            var obj = createObjectWithPropFromPrototype();
+            const obj = createObjectWithPropFromPrototype();
 
-            var originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
 
             sinon.replace(obj, "test", 2);
-            var replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
 
             sinon.restore();
-            var restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
@@ -782,20 +782,20 @@ describe("issues", function () {
         });
 
         it("should restore stubs shadowing prototype props correctly", function () {
-            var obj = createObjectWithPropFromPrototype();
-            var originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const obj = createObjectWithPropFromPrototype();
+            const originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
 
             sinon.stub(obj, "test").value(2);
-            var replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
 
             sinon.restore();
-            var restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
+            const restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
                 "test"
             );
@@ -803,6 +803,74 @@ describe("issues", function () {
             assert.isUndefined(originalPropertyDescriptor);
             refute.isUndefined(replacedPropertyDescriptor);
             assert.isUndefined(restoredPropertyDescriptor);
+        });
+    });
+
+    describe("#2501 - createStubInstance stubs are not able to call through to the underlying function on the prototype", function () {
+        it("should be able call through to the underlying function on the prototype", function () {
+            class Foo {
+                testMethod() {
+                    this.wasCalled = true;
+                    return 42;
+                }
+            }
+
+            const fooStubInstance = this.sandbox.createStubInstance(Foo);
+            assert.isUndefined(fooStubInstance.wasCalled);
+            fooStubInstance.testMethod.callThrough();
+            fooStubInstance.testMethod();
+            assert.isTrue(fooStubInstance.wasCalled);
+        });
+    });
+
+    describe("#2491 - unable to restore spies on an instance where the prototype has an unconfigurable property descriptor", function () {
+        function createInstanceFromClassWithReadOnlyPropertyDescriptor() {
+            class BaseClass {}
+            Object.defineProperty(BaseClass.prototype, "aMethod", {
+                value: function () {
+                    return 42;
+                },
+            });
+
+            // anchor
+            const instance = new BaseClass();
+            assert.equals(instance.aMethod(), 42);
+
+            return instance;
+        }
+
+        it("should ensure copied object descriptors are always configurable for spies", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+            this.sandbox.spy(instance, "aMethod");
+
+            refute.exception(() => {
+                this.sandbox.restore(); // #2491: this throws TypeError: Cannot assign to read only property 'myMethod' of object '#<BaseClass>'
+            });
+        });
+
+        it("should not throw if the unconfigurable object descriptor to be used for a Stub is on the prototype", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+
+            // per #2491 this throws 'TypeError: Descriptor for property aMethod is non-configurable and non-writable'
+            // that makes sense for descriptors taken from the object, but not its prototype, as we are free to change
+            // the latter when setting it
+            refute.exception(() => {
+                this.sandbox.stub(instance, "aMethod").returns("a stub");
+            });
+        });
+
+        it("should not throw if the unconfigurable object descriptor to be used for a Mock is on the prototype", function () {
+            const instance =
+                createInstanceFromClassWithReadOnlyPropertyDescriptor();
+
+            const mock = this.sandbox.mock(instance);
+
+            // per #2491 this throws 'TypeError: Attempted to wrap undefined property myMethod as function
+            refute.exception(() => {
+                mock.expects("aMethod").once();
+            });
         });
     });
 });

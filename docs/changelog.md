@@ -6,6 +6,51 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 15.0.4
+
+- [`e9042c4f`](https://github.com/sinonjs/sinon/commit/e9042c4f18f4aa3e36e13652196c746b759aa1a5)
+  Handling non-configurable object descriptors on the prototype (#2508) (Carl-Erik Kopseng)
+  > This should essentially make decorated methods stubbable again (see #2491)
+- [`430c9a60`](https://github.com/sinonjs/sinon/commit/430c9a604f5509ca6d7e11e3edaaa8553a77ae93)
+  Remove uses of `var` (#2506) (Carl-Erik Kopseng)
+  > Replace var with const where possible in /lib and /test.
+  >
+  > Modified the let codemod to be a codemod.
+  >
+  > Took about half an hour with --watch running
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-04-20._
+
+## 15.0.3
+
+- [`b775f1b4`](https://github.com/sinonjs/sinon/commit/b775f1b4174c5a92fa7fa8f70fbf3f4b5466a39e)
+  Avoid tampering with globals and other modules' exports in tests (#2504) (Carl-Erik Kopseng)
+- [`477064b6`](https://github.com/sinonjs/sinon/commit/477064b628c65220ce9d0ac16cd33ab9b1da93da)
+  fix: make it possible to call through to underlying stub in stub instance (#2503) (Carl-Erik Kopseng)
+  > closes #2501
+- [`6e19746e`](https://github.com/sinonjs/sinon/commit/6e19746e255dfa0fcf78af076e49d5db0eb11c07)
+  Remove dead Travis and Gitter references (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-03-26._
+
+## 15.0.2
+
+- [`19bd99f3`](https://github.com/sinonjs/sinon/commit/19bd99f364ab44f0e2715571e5deab580d9aa7fd)
+  Use no-op for every function when restoring instances (#2499) (Carl-Erik Kopseng)
+- [`8663ffa0`](https://github.com/sinonjs/sinon/commit/8663ffa056d3c58e82fa203801d58d3fce3c14a7)
+  Upgrade deps (#2498) (Carl-Erik Kopseng)
+  > Browserify, supports-color, husky had to be held back.
+- [`e01275bb`](https://github.com/sinonjs/sinon/commit/e01275bb10d868a064d0cb27a6ae11ffa3d91ac2)
+  Un-pin @sinonjs/fake-timers (#2495) (Jordan Hawker)
+  > The commit upgrading from v9 to v10 appears to have accidentally dropped the caret from the version range
+- [`6cbde9b0`](https://github.com/sinonjs/sinon/commit/6cbde9b08259efd98b2c52b81ca3b5e84dcf97b1)
+  fix throws().callsFake() precedence (#2497) (Eduardo Diaz)
+  > This makes sure an unconditional `callsFake()` invoked on the same stub that was previously setup to throw will overwrite the previous behavior. This aligns it with the other behaviors.
+- [`45be60f3`](https://github.com/sinonjs/sinon/commit/45be60f3c6afc350eacbceed77539f437a9bbbce)
+  Replace probot/stale with official stale action (Morgan Roderick)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-03-12._
+
 ## 15.0.1
 
 - [`aa493da4`](https://github.com/sinonjs/sinon/commit/aa493da47d788025c0d512696651072973f301ec)

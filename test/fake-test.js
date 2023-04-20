@@ -1,11 +1,11 @@
 "use strict";
 
-var sinon = require("../lib/sinon.js");
-var createProxy = require("../lib/sinon/proxy");
-var fake = sinon.fake;
-var referee = require("@sinonjs/referee");
-var assert = referee.assert;
-var refute = referee.refute;
+const sinon = require("../lib/sinon.js");
+const createProxy = require("../lib/sinon/proxy");
+const fake = sinon.fake;
+const referee = require("@sinonjs/referee");
+const assert = referee.assert;
+const refute = referee.refute;
 
 referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
@@ -26,7 +26,7 @@ referee.add("isProxy", {
 
 function verifyProxy(func, argument) {
     it("should return a Sinon proxy", function () {
-        var actual = argument ? func(argument) : func();
+        const actual = argument ? func(argument) : func();
 
         assert.isProxy(actual);
     });
@@ -42,7 +42,7 @@ function requirePromiseSupport() {
     }
 }
 
-var hasFunctionNameSupport = noop.name === "noop";
+const hasFunctionNameSupport = noop.name === "noop";
 
 describe("fake", function () {
     describe("module", function () {
@@ -64,10 +64,10 @@ describe("fake", function () {
             function method() {
                 return this.foo;
             }
-            var o = { foo: 42 };
-            var fakeMethod = fake(method);
+            const o = { foo: 42 };
+            const fakeMethod = fake(method);
 
-            var result = fakeMethod.call(o);
+            const result = fakeMethod.call(o);
 
             assert.equals(fakeMethod.callCount, 1);
             assert.equals(result, 42);
@@ -80,7 +80,16 @@ describe("fake", function () {
     });
 
     it("should reject non-Function argument", function () {
-        var nonFuncs = ["", 123, new Date(), {}, false, undefined, true, null];
+        const nonFuncs = [
+            "",
+            123,
+            new Date(),
+            {},
+            false,
+            undefined,
+            true,
+            null,
+        ];
 
         nonFuncs.forEach(function (nf) {
             assert.exception(function () {
@@ -91,11 +100,11 @@ describe("fake", function () {
 
     describe(".callback", function () {
         it("it should be a reference for the callback in the last call", function () {
-            var f = fake();
-            var callback1 = function () {
+            const f = fake();
+            const callback1 = function () {
                 return;
             };
-            var callback2 = function () {
+            const callback2 = function () {
                 return;
             };
 
@@ -112,7 +121,7 @@ describe("fake", function () {
 
     describe(".displayName", function () {
         it("should be 'fake'", function () {
-            var fakes = [
+            const fakes = [
                 fake(),
                 fake.returns(42),
                 fake.throws(new Error()),
@@ -130,7 +139,7 @@ describe("fake", function () {
 
     describe(".id", function () {
         it("should start with 'fake#'", function () {
-            for (var i = 0; i < 100; i++) {
+            for (let i = 0; i < 100; i++) {
                 assert.isTrue(fake().id.indexOf("fake#") === 0);
             }
         });
@@ -138,7 +147,7 @@ describe("fake", function () {
 
     describe(".firstArg", function () {
         it("should be the first argument from the last call", function () {
-            var f = fake();
+            const f = fake();
             f(41, 42, 43);
             assert.equals(f.firstArg, 41);
 
@@ -167,7 +176,7 @@ describe("fake", function () {
 
     describe(".lastArg", function () {
         it("should be the last argument from the last call", function () {
-            var f = fake();
+            const f = fake();
             f(41, 42, 43);
             assert.equals(f.lastArg, 43);
 
@@ -196,9 +205,9 @@ describe("fake", function () {
 
     describe(".returns", function () {
         it("should return a function that returns the argument", function () {
-            var expected = 42;
-            var myFake = fake.returns(expected);
-            var actual = myFake();
+            const expected = 42;
+            const myFake = fake.returns(expected);
+            const actual = myFake();
 
             assert.equals(actual, expected);
         });
@@ -209,8 +218,8 @@ describe("fake", function () {
 
     describe(".throws", function () {
         it("should return a function that throws an Error, that is the argument", function () {
-            var expectedMessage = "42";
-            var myFake = fake.throws(expectedMessage);
+            const expectedMessage = "42";
+            const myFake = fake.throws(expectedMessage);
 
             assert.exception(function () {
                 myFake();
@@ -229,8 +238,8 @@ describe("fake", function () {
         verifyProxy(fake.throws, "42");
 
         it("should return the same error type as it is passed", function () {
-            var expected = new TypeError("hello sailor");
-            var myFake = fake.throws(expected);
+            const expected = new TypeError("hello sailor");
+            const myFake = fake.throws(expected);
 
             /* eslint-disable no-restricted-syntax */
             try {
@@ -243,8 +252,8 @@ describe("fake", function () {
 
         describe("when passed a String", function () {
             it("should throw an Error", function () {
-                var expected = "lorem ipsum";
-                var myFake = fake.throws(expected);
+                const expected = "lorem ipsum";
+                const myFake = fake.throws(expected);
 
                 /* eslint-disable no-restricted-syntax */
                 try {
@@ -261,8 +270,8 @@ describe("fake", function () {
         before(requirePromiseSupport);
 
         it("should return a function that resolves to the argument", function () {
-            var expected = 42;
-            var myFake = fake.resolves(expected);
+            const expected = 42;
+            const myFake = fake.resolves(expected);
 
             return myFake().then(function (actual) {
                 assert.equals(actual, expected);
@@ -277,8 +286,8 @@ describe("fake", function () {
         before(requirePromiseSupport);
 
         it("should return a function that rejects to the argument", function () {
-            var expectedMessage = "42";
-            var myFake = fake.rejects(expectedMessage);
+            const expectedMessage = "42";
+            const myFake = fake.rejects(expectedMessage);
 
             return myFake().catch(function (actual) {
                 assert.equals(actual.message, expectedMessage);
@@ -289,8 +298,8 @@ describe("fake", function () {
         verifyProxy(fake.rejects, "42");
 
         it("should return the same error type as it is passed", function () {
-            var expected = new TypeError("hello world");
-            var myFake = fake.rejects(expected);
+            const expected = new TypeError("hello world");
+            const myFake = fake.rejects(expected);
 
             return myFake().catch(function (actual) {
                 assert.isTrue(actual instanceof TypeError);
@@ -298,8 +307,8 @@ describe("fake", function () {
         });
 
         it("should reject with an Error when passed a String", function () {
-            var expected = "lorem ipsum";
-            var myFake = fake.rejects(expected);
+            const expected = "lorem ipsum";
+            const myFake = fake.rejects(expected);
 
             return myFake().catch(function (actual) {
                 assert.isTrue(actual instanceof Error);
@@ -312,8 +321,8 @@ describe("fake", function () {
         verifyProxy(fake.yields, noop, "42", "43");
 
         it("should call a callback with the provided values", function () {
-            var callback = sinon.spy();
-            var myFake = fake.yields("one", "two", "three");
+            const callback = sinon.spy();
+            const myFake = fake.yields("one", "two", "three");
 
             myFake(callback);
 
@@ -322,8 +331,8 @@ describe("fake", function () {
         });
 
         it("should call the last function argument", function () {
-            var callback = sinon.spy();
-            var myFake = fake.yields();
+            const callback = sinon.spy();
+            const myFake = fake.yields();
 
             myFake(function () {
                 return;
@@ -333,7 +342,7 @@ describe("fake", function () {
         });
 
         it("should throw if the last argument is not a function", function () {
-            var myFake = fake.yields();
+            const myFake = fake.yields();
 
             assert.exception(function () {
                 myFake(function () {
@@ -348,8 +357,8 @@ describe("fake", function () {
         verifyProxy(fake.yieldsAsync, noop, "42", "43");
 
         it("should call the callback asynchronously with the provided values", function (done) {
-            var callback = sinon.spy();
-            var myFake = fake.yieldsAsync("one", "two", "three");
+            const callback = sinon.spy();
+            const myFake = fake.yieldsAsync("one", "two", "three");
 
             myFake(callback);
 
@@ -364,8 +373,8 @@ describe("fake", function () {
         });
 
         it("should call the last function argument", function (done) {
-            var callback = sinon.spy();
-            var myFake = fake.yieldsAsync();
+            const callback = sinon.spy();
+            const myFake = fake.yieldsAsync();
 
             myFake(function () {
                 return;
@@ -381,7 +390,7 @@ describe("fake", function () {
         });
 
         it("should throw if the last argument is not a function", function () {
-            var myFake = fake.yieldsAsync();
+            const myFake = fake.yieldsAsync();
 
             assert.exception(function () {
                 myFake(function () {
@@ -393,22 +402,22 @@ describe("fake", function () {
 
     describe(".named", function () {
         before(function beforeFunc() {
-            var desc = Object.getOwnPropertyDescriptor(beforeFunc, "name");
+            const desc = Object.getOwnPropertyDescriptor(beforeFunc, "name");
             if (!desc || !desc.configurable) {
                 this.skip();
             }
         });
 
         it("should set the name of the fake to the given string", function () {
-            var myFake = fake().named("something");
+            const myFake = fake().named("something");
 
             assert.equals(myFake.name, "something");
         });
     });
 
     describe(".calledBefore/After", function () {
-        var fakeA;
-        var fakeB;
+        let fakeA;
+        let fakeB;
 
         beforeEach(function () {
             fakeA = fake();
@@ -470,8 +479,8 @@ describe("fake", function () {
 
     describe(".printf", function () {
         it("is delegated to proxy", function () {
-            var myFake = fake();
-            var proxy = createProxy(noop, noop);
+            const myFake = fake();
+            const proxy = createProxy(noop, noop);
 
             assert.same(myFake.printf, proxy.printf);
         });
@@ -486,14 +495,14 @@ describe("fake", function () {
         });
 
         it("should set the promise used by resolve", function () {
-            var promise = {
+            const promise = {
                 resolve: function (value) {
                     return Promise.resolve(value);
                 },
             };
-            var object = {};
+            const object = {};
 
-            var myFake = fake.usingPromise(promise).resolves(object);
+            const myFake = fake.usingPromise(promise).resolves(object);
 
             return myFake().then(function (actual) {
                 assert.same(actual, object, "Same object resolved");
@@ -501,14 +510,14 @@ describe("fake", function () {
         });
 
         it("should set the promise used by reject", function () {
-            var promise = {
+            const promise = {
                 reject: function (err) {
                     return Promise.reject(err);
                 },
             };
-            var reason = new Error();
+            const reason = new Error();
 
-            var myFake = fake.usingPromise(promise).rejects(reason);
+            const myFake = fake.usingPromise(promise).rejects(reason);
 
             return myFake()
                 .then(function () {

@@ -1,10 +1,10 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
+const referee = require("@sinonjs/referee");
 
-var walkObject = require("../../../lib/sinon/util/core/walk-object");
+const walkObject = require("../../../lib/sinon/util/core/walk-object");
 
-var assert = referee.assert;
+const assert = referee.assert;
 
 describe("util/core/walk-object", function () {
     // IE11
@@ -12,7 +12,7 @@ describe("util/core/walk-object", function () {
         function fnWithNoName() {
             return;
         }
-        var anonymousFn = function () {
+        const anonymousFn = function () {
             return;
         };
 
@@ -26,7 +26,7 @@ describe("util/core/walk-object", function () {
                 this.skip();
             }
 
-            var descriptor = { value: undefined };
+            const descriptor = { value: undefined };
 
             Object.defineProperty(anonymousFn, "name", descriptor);
             Object.defineProperty(fnWithNoName, "name", descriptor);
@@ -46,7 +46,7 @@ describe("util/core/walk-object", function () {
                 },
                 {
                     message:
-                        "Expected to fnWithNoName methods on object but found none",
+                        "Found no methods on object to which we could apply mutations",
                 }
             );
         });
@@ -65,7 +65,7 @@ describe("util/core/walk-object", function () {
                 },
                 {
                     message:
-                        "Expected to undefined methods on object but found none",
+                        "Found no methods on object to which we could apply mutations",
                 }
             );
         });

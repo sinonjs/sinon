@@ -1,18 +1,17 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var createStub = require("../lib/sinon/stub");
-var createStubInstance = require("../lib/sinon/stub").createStubInstance;
-var createSpy = require("../lib/sinon/spy");
-var createProxy = require("../lib/sinon/proxy");
-var match = require("@sinonjs/samsam").createMatcher;
-var assert = referee.assert;
-var refute = referee.refute;
-var fail = referee.fail;
-var globalContext = typeof global !== "undefined" ? global : window;
+const referee = require("@sinonjs/referee");
+const createStub = require("../lib/sinon/stub");
+const createSpy = require("../lib/sinon/spy");
+const createProxy = require("../lib/sinon/proxy");
+const match = require("@sinonjs/samsam").createMatcher;
+const assert = referee.assert;
+const refute = referee.refute;
+const fail = referee.fail;
+const globalContext = typeof global !== "undefined" ? global : window;
 
 function verifyFunctionName(func, expectedName) {
-    var descriptor = Object.getOwnPropertyDescriptor(func, "name");
+    const descriptor = Object.getOwnPropertyDescriptor(func, "name");
     if (descriptor && descriptor.configurable) {
         // IE 11 functions don't have a name.
         // Safari 9 has names that are not configurable.
@@ -23,7 +22,7 @@ function verifyFunctionName(func, expectedName) {
 
 describe("stub", function () {
     it("is spy", function () {
-        var stub = createStub();
+        const stub = createStub();
 
         assert.isFalse(stub.called);
         assert.isFunction(stub.calledWith);
@@ -31,7 +30,7 @@ describe("stub", function () {
     });
 
     it("does not define create method", function () {
-        var stub = createStub();
+        const stub = createStub();
 
         assert.isUndefined(stub.create);
     });
@@ -63,12 +62,12 @@ describe("stub", function () {
     });
 
     it("should contain asynchronous versions of callsArg*, and yields* methods", function () {
-        var stub = createStub();
+        const stub = createStub();
 
-        var syncVersions = 0;
-        var asyncVersions = 0;
+        let syncVersions = 0;
+        let asyncVersions = 0;
 
-        for (var method in stub) {
+        for (const method in stub) {
             if (
                 stub.hasOwnProperty(method) &&
                 method.match(/^(callsArg|yields)/)
@@ -89,8 +88,8 @@ describe("stub", function () {
     });
 
     it("should allow overriding async behavior with sync behavior", function () {
-        var stub = createStub();
-        var callback = createSpy();
+        const stub = createStub();
+        const callback = createSpy();
 
         stub.callsArgAsync(1);
         stub.callsArg(1);
@@ -100,7 +99,7 @@ describe("stub", function () {
     });
 
     it("should works with combination of withArgs arguments", function () {
-        var stub = createStub();
+        const stub = createStub();
         stub.returns(0);
         stub.withArgs(1, 1).returns(2);
         stub.withArgs(1).returns(1);
@@ -113,7 +112,7 @@ describe("stub", function () {
     });
 
     it("should work with combination of withArgs arguments", function () {
-        var stub = createStub();
+        const stub = createStub();
 
         stub.withArgs(1).returns(42);
         stub(1);
@@ -122,13 +121,13 @@ describe("stub", function () {
     });
 
     it("retains function name", function () {
-        var object = {
+        const object = {
             test: function test() {
                 return;
             },
         };
 
-        var stub = createStub(object, "test");
+        const stub = createStub(object, "test");
 
         assert.equals(stub.displayName, "test");
         verifyFunctionName(stub, "test");
@@ -136,7 +135,7 @@ describe("stub", function () {
 
     describe("non enumerable properties", function () {
         it("create and call spy apis", function () {
-            var stub = createStub();
+            const stub = createStub();
             assert.equals(Object.keys(stub), []);
 
             // call spy and verify no enumerable properties are added
@@ -167,13 +166,14 @@ describe("stub", function () {
         });
 
         it("create stub from function on object", function () {
-            var func = function () {
+            const func = function () {
                 throw new Error("aError");
             };
-            var object = {
+            const object = {
                 test: func,
             };
             func.aProp = 42;
+
             createStub(object, "test");
 
             assert.equals(object.test.aProp, 42);
@@ -189,27 +189,27 @@ describe("stub", function () {
 
     describe(".returns", function () {
         it("returns specified value", function () {
-            var stub = createStub();
-            var object = {};
+            const stub = createStub();
+            const object = {};
             stub.returns(object);
 
             assert.same(stub(), object);
         });
 
         it("returns should return stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.returns(""), stub);
         });
 
         it("returns undefined", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.isUndefined(stub());
         });
 
         it("supersedes previous throws", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws().returns(1);
 
             refute.exception(function () {
@@ -218,15 +218,15 @@ describe("stub", function () {
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().returns(2);
-            var stub = createStub().callsFake(fakeFn).returns(1);
+            const fakeFn = createStub().returns(2);
+            const stub = createStub().callsFake(fakeFn).returns(1);
 
             assert.equals(stub(), 1);
             refute(fakeFn.called);
         });
 
         it("throws only on the first call", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.returns("no exception");
             stub.onFirstCall().throws();
 
@@ -253,8 +253,8 @@ describe("stub", function () {
         });
 
         it("returns a promise to the specified value", function () {
-            var stub = createStub();
-            var object = {};
+            const stub = createStub();
+            const object = {};
             stub.resolves(object);
 
             return stub().then(function (actual) {
@@ -263,13 +263,13 @@ describe("stub", function () {
         });
 
         it("should return the same stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.resolves(""), stub);
         });
 
         it("supersedes previous throws", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws().resolves(1);
 
             refute.exception(function () {
@@ -278,15 +278,15 @@ describe("stub", function () {
         });
 
         it("supersedes previous rejects", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.rejects(Error("should be superseded")).resolves(1);
 
             return stub().then();
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().resolves(2);
-            var stub = createStub().callsFake(fakeFn).resolves(1);
+            const fakeFn = createStub().resolves(2);
+            const stub = createStub().callsFake(fakeFn).resolves(1);
 
             return stub().then(function (actual) {
                 assert.same(actual, 1);
@@ -295,15 +295,15 @@ describe("stub", function () {
         });
 
         it("can be superseded by returns", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.resolves(2).returns(1);
 
             assert.equals(stub(), 1);
         });
 
         it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
-            var resolveSpy = createSpy(Promise, "resolve");
-            var stub = createStub();
+            const resolveSpy = createSpy(Promise, "resolve");
+            const stub = createStub();
             stub.resolves(2);
 
             assert.equals(resolveSpy.callCount, 0);
@@ -324,8 +324,8 @@ describe("stub", function () {
         });
 
         it("returns a promise which rejects for the specified reason", function () {
-            var stub = createStub();
-            var reason = new Error();
+            const stub = createStub();
+            const reason = new Error();
             stub.rejects(reason);
 
             return stub()
@@ -338,14 +338,14 @@ describe("stub", function () {
         });
 
         it("should return the same stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.rejects({}), stub);
         });
 
         it("specifies exception message", function () {
-            var stub = createStub();
-            var message = "Oh no!";
+            const stub = createStub();
+            const message = "Oh no!";
             stub.rejects("Error", message);
 
             return stub()
@@ -358,7 +358,7 @@ describe("stub", function () {
         });
 
         it("does not specify exception message if not provided", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.rejects("Error");
 
             return stub()
@@ -371,7 +371,7 @@ describe("stub", function () {
         });
 
         it("rejects for a generic reason", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.rejects();
 
             return stub()
@@ -384,16 +384,16 @@ describe("stub", function () {
         });
 
         it("can be superseded by returns", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.rejects(2).returns(1);
 
             assert.equals(stub(), 1);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().resolves(2);
-            var reason = new Error();
-            var stub = createStub().callsFake(fakeFn).rejects(reason);
+            const fakeFn = createStub().resolves(2);
+            const reason = new Error();
+            const stub = createStub().callsFake(fakeFn).rejects(reason);
 
             return stub()
                 .then(function () {
@@ -406,8 +406,8 @@ describe("stub", function () {
         });
 
         it("does not invoke Promise.reject when the behavior is added to the stub", function () {
-            var rejectSpy = createSpy(Promise, "reject");
-            var stub = createStub();
+            const rejectSpy = createSpy(Promise, "reject");
+            const stub = createStub();
             stub.rejects(2);
 
             assert.equals(rejectSpy.callCount, 0);
@@ -428,7 +428,7 @@ describe("stub", function () {
         });
 
         it("returns a promise resolved with this", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub();
             instance.stub.resolvesThis();
 
@@ -438,9 +438,9 @@ describe("stub", function () {
         });
 
         it("returns a promise resolved with the context bound with stub#call", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.resolvesThis();
-            var object = {};
+            const object = {};
 
             return stub.call(object).then(function (actual) {
                 assert.same(actual, object);
@@ -448,9 +448,9 @@ describe("stub", function () {
         });
 
         it("returns a promise resolved with the context bound with stub#apply", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.resolvesThis();
-            var object = {};
+            const object = {};
 
             return stub.apply(object).then(function (actual) {
                 assert.same(actual, object);
@@ -458,13 +458,13 @@ describe("stub", function () {
         });
 
         it("returns the stub itself, allowing to chain function calls", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.resolvesThis(), stub);
         });
 
         it("overrides throws behavior for error objects", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub().throws(new Error()).resolvesThis();
 
             return instance.stub().then(function (actual) {
@@ -473,7 +473,7 @@ describe("stub", function () {
         });
 
         it("overrides throws behavior for dynamically created errors", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub().throws().resolvesThis();
 
             return instance.stub().then(function (actual) {
@@ -482,9 +482,9 @@ describe("stub", function () {
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeInstance = {};
-            var fakeFn = createStub().resolves(fakeInstance);
-            var instance = {};
+            const fakeInstance = {};
+            const fakeFn = createStub().resolves(fakeInstance);
+            const instance = {};
             instance.stub = createStub().callsFake(fakeFn).resolvesThis();
 
             return instance.stub().then(function (actual) {
@@ -508,8 +508,8 @@ describe("stub", function () {
         });
 
         it("returns a promise to the argument at specified index", function () {
-            var stub = createStub();
-            var object = {};
+            const stub = createStub();
+            const object = {};
             stub.resolvesArg(0);
 
             return stub(object).then(function (actual) {
@@ -518,8 +518,8 @@ describe("stub", function () {
         });
 
         it("returns a promise to the argument at another specified index", function () {
-            var stub = createStub();
-            var object = {};
+            const stub = createStub();
+            const object = {};
             stub.resolvesArg(2);
 
             return stub("ignored", "ignored again", object).then(function (
@@ -530,13 +530,13 @@ describe("stub", function () {
         });
 
         it("should return the same stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.resolvesArg(1), stub);
         });
 
         it("supersedes previous throws", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws().resolvesArg(1);
 
             refute.exception(function () {
@@ -545,7 +545,7 @@ describe("stub", function () {
         });
 
         it("supersedes previous rejects", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.rejects(Error("should be superseded")).resolvesArg(1);
 
             return stub("zero", "one").then(function (actual) {
@@ -554,8 +554,8 @@ describe("stub", function () {
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().resolves("fake");
-            var stub = createStub().callsFake(fakeFn).resolvesArg(1);
+            const fakeFn = createStub().resolves("fake");
+            const stub = createStub().callsFake(fakeFn).resolvesArg(1);
 
             return stub("zero", "one").then(function (actual) {
                 assert.same(actual, "one");
@@ -564,15 +564,15 @@ describe("stub", function () {
         });
 
         it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
-            var resolveSpy = createSpy(Promise, "resolve");
-            var stub = createStub();
+            const resolveSpy = createSpy(Promise, "resolve");
+            const stub = createStub();
             stub.resolvesArg(2);
 
             assert(resolveSpy.notCalled);
         });
 
         it("throws if index is not a number", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.exception(
                 function () {
@@ -583,7 +583,7 @@ describe("stub", function () {
         });
 
         it("throws without enough arguments", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.resolvesArg(3);
 
             assert.exception(
@@ -601,29 +601,29 @@ describe("stub", function () {
 
     describe(".returnsArg", function () {
         it("returns argument at specified index", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.returnsArg(0);
-            var object = {};
+            const object = {};
 
             assert.same(stub(object), object);
         });
 
         it("returns stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.returnsArg(0), stub);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().returns("fake");
-            var stub = createStub().callsFake(fakeFn).returnsArg(0);
+            const fakeFn = createStub().returns("fake");
+            const stub = createStub().callsFake(fakeFn).returnsArg(0);
 
             assert.equals(stub("myarg"), "myarg");
             refute(fakeFn.called);
         });
 
         it("throws if no index is specified", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.exception(
                 function () {
@@ -634,7 +634,7 @@ describe("stub", function () {
         });
 
         it("should throw without enough arguments", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.returnsArg(3);
 
             assert.exception(
@@ -652,9 +652,9 @@ describe("stub", function () {
 
     describe(".throwsArg", function () {
         it("throws argument at specified index", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throwsArg(0);
-            var expectedError = new Error("The expected error message");
+            const expectedError = new Error("The expected error message");
 
             assert.exception(
                 function () {
@@ -667,13 +667,13 @@ describe("stub", function () {
         });
 
         it("returns stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.throwsArg(0), stub);
         });
 
         it("throws TypeError if no index is specified", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.exception(
                 function () {
@@ -684,7 +684,7 @@ describe("stub", function () {
         });
 
         it("should throw without enough arguments", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throwsArg(3);
 
             assert.exception(
@@ -700,8 +700,8 @@ describe("stub", function () {
         });
 
         it("should work with call-based behavior", function () {
-            var stub = createStub();
-            var expectedError = new Error("catpants");
+            const stub = createStub();
+            const expectedError = new Error("catpants");
 
             stub.returns(1);
             stub.onSecondCall().throwsArg(1);
@@ -721,7 +721,7 @@ describe("stub", function () {
         });
 
         it("should be reset by .resetBehavior", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             stub.throwsArg(0);
             stub.resetBehavior();
@@ -732,9 +732,9 @@ describe("stub", function () {
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub();
-            var stub = createStub().callsFake(fakeFn).throwsArg(1);
-            var expectedError = new Error("catpants");
+            const fakeFn = createStub();
+            const stub = createStub().callsFake(fakeFn).throwsArg(1);
+            const expectedError = new Error("catpants");
 
             assert.exception(
                 function () {
@@ -751,7 +751,7 @@ describe("stub", function () {
 
     describe(".returnsThis", function () {
         it("stub returns this", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub();
             instance.stub.returnsThis();
 
@@ -759,7 +759,7 @@ describe("stub", function () {
         });
 
         it("stub returns undefined when detached", function () {
-            var thisValue = (function () {
+            const thisValue = (function () {
                 return this;
             })();
 
@@ -767,7 +767,7 @@ describe("stub", function () {
                 this.skip();
             }
 
-            var stub = createStub();
+            const stub = createStub();
             stub.returnsThis();
 
             // Due to strict mode, would be `global` otherwise
@@ -775,25 +775,25 @@ describe("stub", function () {
         });
 
         it("stub respects call/apply", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.returnsThis();
-            var object = {};
+            const object = {};
 
             assert.same(stub.call(object), object);
             assert.same(stub.apply(object), object);
         });
 
         it("returns stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.returnsThis(), stub);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeInstance = {};
-            var fakeFn = createStub().returns(fakeInstance);
+            const fakeInstance = {};
+            const fakeFn = createStub().returns(fakeInstance);
 
-            var instance = {};
+            const instance = {};
             instance.stub = createStub();
             instance.stub.callsFake(fakeFn).returnsThis();
 
@@ -810,26 +810,26 @@ describe("stub", function () {
         });
 
         it("should exist and be a function", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert(stub.usingPromise);
             assert.isFunction(stub.usingPromise);
         });
 
         it("should return the current stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.usingPromise(Promise), stub);
         });
 
         it("should set the promise used by resolve", function () {
-            var stub = createStub();
-            var promise = {
+            const stub = createStub();
+            const promise = {
                 resolve: createStub().callsFake(function (value) {
                     return Promise.resolve(value);
                 }),
             };
-            var object = {};
+            const object = {};
 
             stub.usingPromise(promise).resolves(object);
 
@@ -847,13 +847,13 @@ describe("stub", function () {
         });
 
         it("should set the promise used by reject", function () {
-            var stub = createStub();
-            var promise = {
+            const stub = createStub();
+            const promise = {
                 reject: createStub().callsFake(function (err) {
                     return Promise.reject(err);
                 }),
             };
-            var reason = new Error();
+            const reason = new Error();
 
             stub.usingPromise(promise).rejects(reason);
 
@@ -877,22 +877,22 @@ describe("stub", function () {
 
     describe(".throws", function () {
         it("throws specified exception", function () {
-            var stub = createStub();
-            var error = new Error();
+            const stub = createStub();
+            const error = new Error();
             stub.throws(error);
 
             assert.exception(stub, error);
         });
 
         it("returns stub", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.same(stub.throws({}), stub);
         });
 
         it("sets type of exception to throw", function () {
-            var stub = createStub();
-            var exceptionType = "TypeError";
+            const stub = createStub();
+            const exceptionType = "TypeError";
             stub.throws(exceptionType);
 
             assert.exception(function () {
@@ -901,8 +901,8 @@ describe("stub", function () {
         });
 
         it("specifies exception message", function () {
-            var stub = createStub();
-            var message = "Oh no!";
+            const stub = createStub();
+            const message = "Oh no!";
             stub.throws("Error", message);
 
             assert.exception(stub, {
@@ -911,7 +911,7 @@ describe("stub", function () {
         });
 
         it("does not specify exception message if not provided", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws("Error");
 
             assert.exception(stub, {
@@ -920,14 +920,14 @@ describe("stub", function () {
         });
 
         it("throws generic error", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws();
 
             assert.exception(stub, "Error");
         });
 
         it("throws an exception created using a function", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             stub.throws(function () {
                 return new Error("not implemented");
@@ -941,7 +941,7 @@ describe("stub", function () {
         });
 
         describe("lazy instantiation of exceptions", function () {
-            var errorSpy;
+            let errorSpy;
             beforeEach(function () {
                 this.originalError = globalContext.Error;
                 errorSpy = createSpy(globalContext, "Error");
@@ -955,7 +955,7 @@ describe("stub", function () {
             });
 
             it("uses a lazily created exception for the generic error", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub.throws();
 
                 assert.isFalse(errorSpy.called);
@@ -964,7 +964,7 @@ describe("stub", function () {
             });
 
             it("uses a lazily created exception for the named error", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub.throws("Named Error", "error message");
 
                 assert.isFalse(errorSpy.called);
@@ -976,7 +976,7 @@ describe("stub", function () {
             });
 
             it("uses a lazily created exception provided by a function", function () {
-                var stub = createStub();
+                const stub = createStub();
 
                 stub.throws(function () {
                     return new Error("not implemented");
@@ -990,8 +990,8 @@ describe("stub", function () {
             });
 
             it("does not use a lazily created exception if the error object is provided", function () {
-                var stub = createStub();
-                var exception = new Error();
+                const stub = createStub();
+                const exception = new Error();
                 stub.throws(exception);
 
                 assert.same(errorSpy.callCount, 1);
@@ -1001,7 +1001,7 @@ describe("stub", function () {
         });
 
         it("resets 'invoking' flag", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.throws();
 
             assert.exception(stub);
@@ -1010,9 +1010,9 @@ describe("stub", function () {
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub();
-            var expectedError = new Error("error");
-            var stub = createStub().callsFake(fakeFn).throws(expectedError);
+            const fakeFn = createStub();
+            const expectedError = new Error("error");
+            const stub = createStub().callsFake(fakeFn).throws(expectedError);
 
             assert.exception(stub, {
                 message: expectedError.message,
@@ -1028,7 +1028,7 @@ describe("stub", function () {
 
         it("calls argument at specified index", function () {
             this.stub.callsArg(2);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -1051,7 +1051,7 @@ describe("stub", function () {
         });
 
         it("throws if no index is specified", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1062,7 +1062,7 @@ describe("stub", function () {
         });
 
         it("throws if index is not number", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1073,7 +1073,7 @@ describe("stub", function () {
         });
 
         it("should throw without enough arguments", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.callsArg(3);
 
             assert.exception(
@@ -1089,8 +1089,8 @@ describe("stub", function () {
         });
 
         it("returns result of invocant", function () {
-            var stub = this.stub.callsArg(0);
-            var callback = createStub().returns("return value");
+            const stub = this.stub.callsArg(0);
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
@@ -1103,9 +1103,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgWith(1, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1113,14 +1113,14 @@ describe("stub", function () {
         });
 
         it("returns function", function () {
-            var stub = this.stub.callsArgWith(2, 3);
+            const stub = this.stub.callsArgWith(2, 3);
 
             assert.isFunction(stub);
         });
 
         it("calls callback without args", function () {
             this.stub.callsArgWith(1);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1128,10 +1128,10 @@ describe("stub", function () {
         });
 
         it("calls callback with multiple args", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
             this.stub.callsArgWith(1, object, array);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1139,7 +1139,7 @@ describe("stub", function () {
         });
 
         it("throws if no index is specified", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1150,7 +1150,7 @@ describe("stub", function () {
         });
 
         it("throws if index is not number", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1161,8 +1161,8 @@ describe("stub", function () {
         });
 
         it("returns result of invocant", function () {
-            var stub = this.stub.callsArgWith(0, "test");
-            var callback = createStub().returns("return value");
+            const stub = this.stub.callsArgWith(0, "test");
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
@@ -1179,7 +1179,7 @@ describe("stub", function () {
 
         it("calls argument at specified index", function () {
             this.stub.callsArgOn(2, this.fakeContext);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -1189,7 +1189,7 @@ describe("stub", function () {
 
         it("calls argument at specified index with undefined context", function () {
             this.stub.callsArgOn(2, undefined);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -1199,7 +1199,7 @@ describe("stub", function () {
 
         it("calls argument at specified index with number context", function () {
             this.stub.callsArgOn(2, 5);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, 2, callback);
 
@@ -1208,7 +1208,7 @@ describe("stub", function () {
         });
 
         it("returns stub", function () {
-            var stub = this.stub.callsArgOn(2, this.fakeContext);
+            const stub = this.stub.callsArgOn(2, this.fakeContext);
 
             assert.isFunction(stub);
         });
@@ -1225,7 +1225,7 @@ describe("stub", function () {
         });
 
         it("throws if no index is specified", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1236,7 +1236,7 @@ describe("stub", function () {
         });
 
         it("throws if index is not number", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1247,8 +1247,8 @@ describe("stub", function () {
         });
 
         it("returns result of invocant", function () {
-            var stub = this.stub.callsArgOn(0, this.fakeContext);
-            var callback = createStub().returns("return value");
+            const stub = this.stub.callsArgOn(0, this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
@@ -1263,9 +1263,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgOnWith(1, this.fakeContext, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1274,9 +1274,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args and undefined context", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1285,9 +1285,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args and number context", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1296,9 +1296,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args with undefined context", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgOnWith(1, undefined, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1307,9 +1307,9 @@ describe("stub", function () {
         });
 
         it("calls argument at specified index with provided args with number context", function () {
-            var object = {};
+            const object = {};
             this.stub.callsArgOnWith(1, 5, object);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1318,14 +1318,14 @@ describe("stub", function () {
         });
 
         it("returns function", function () {
-            var stub = this.stub.callsArgOnWith(2, this.fakeContext, 3);
+            const stub = this.stub.callsArgOnWith(2, this.fakeContext, 3);
 
             assert.isFunction(stub);
         });
 
         it("calls callback without args", function () {
             this.stub.callsArgOnWith(1, this.fakeContext);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1334,10 +1334,10 @@ describe("stub", function () {
         });
 
         it("calls callback with multiple args", function () {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
             this.stub.callsArgOnWith(1, this.fakeContext, object, array);
-            var callback = createStub();
+            const callback = createStub();
 
             this.stub(1, callback);
 
@@ -1346,7 +1346,7 @@ describe("stub", function () {
         });
 
         it("throws if no index is specified", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1357,7 +1357,7 @@ describe("stub", function () {
         });
 
         it("throws if index is not number", function () {
-            var stub = this.stub;
+            const stub = this.stub;
 
             assert.exception(
                 function () {
@@ -1368,9 +1368,9 @@ describe("stub", function () {
         });
 
         it("returns result of invocant", function () {
-            var object = {};
-            var stub = this.stub.callsArgOnWith(0, this.fakeContext, object);
-            var callback = createStub().returns("return value");
+            const object = {};
+            const stub = this.stub.callsArgOnWith(0, this.fakeContext, object);
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
@@ -1387,7 +1387,7 @@ describe("stub", function () {
         });
 
         it("uses provided function as stub", function () {
-            var fakeFn = createStub();
+            const fakeFn = createStub();
             this.stub = createStub(this.object, "method");
 
             this.stub.callsFake(fakeFn);
@@ -1398,14 +1398,36 @@ describe("stub", function () {
         });
 
         it("is overwritten by subsequent stub behavior", function () {
-            var fakeFn = createStub();
+            const fakeFn = createStub();
             this.stub = createStub(this.object, "method");
 
             this.stub.callsFake(fakeFn).returns(3);
-            var returned = this.object.method(1, 2);
+            const returned = this.object.method(1, 2);
 
             refute(fakeFn.called);
             assert(returned === 3);
+        });
+
+        it("supersedes previous throws(error)", function () {
+            const fakeFn = createStub().returns(5);
+            this.stub = createStub(this.object, "method");
+
+            this.stub.throws(new Error("error")).callsFake(fakeFn);
+            const returned = this.object.method(1, 2);
+
+            assert(fakeFn.called);
+            assert(returned === 5);
+        });
+
+        it("supersedes previous throws()", function () {
+            const fakeFn = createStub().returns(5);
+            this.stub = createStub(this.object, "method");
+
+            this.stub.throws().callsFake(fakeFn);
+            const returned = this.object.method(1, 2);
+
+            assert(fakeFn.called);
+            assert(returned === 5);
         });
     });
 
@@ -1424,7 +1446,7 @@ describe("stub", function () {
         });
 
         it("throws when third argument is provided", function () {
-            var object = this.object;
+            const object = this.object;
 
             assert.exception(
                 function () {
@@ -1439,14 +1461,14 @@ describe("stub", function () {
         });
 
         it("stubbed method should be proper stub", function () {
-            var stub = createStub(this.object, "method");
+            const stub = createStub(this.object, "method");
 
             assert.isFunction(stub.returns);
             assert.isFunction(stub.throws);
         });
 
         it("stub should be spy", function () {
-            var stub = createStub(this.object, "method");
+            const stub = createStub(this.object, "method");
             this.object.method();
 
             assert(stub.called);
@@ -1454,7 +1476,7 @@ describe("stub", function () {
         });
 
         it("stub should affect spy", function () {
-            var stub = createStub(this.object, "method");
+            const stub = createStub(this.object, "method");
             stub.throws("TypeError");
 
             assert.exception(this.object.method);
@@ -1463,7 +1485,7 @@ describe("stub", function () {
         });
 
         it("handles threw properly for lazily instantiated Errors", function () {
-            var stub = createStub(this.object, "method");
+            const stub = createStub(this.object, "method");
             stub.throws(function () {
                 return new TypeError();
             });
@@ -1474,14 +1496,14 @@ describe("stub", function () {
         });
 
         it("returns standalone stub without arguments", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.isFunction(stub);
             assert.isFalse(stub.called);
         });
 
         it("successfully stubs falsy properties", function () {
-            var obj = {
+            const obj = {
                 0: function () {
                     return;
                 },
@@ -1506,7 +1528,7 @@ describe("stub", function () {
         require("./shared-spy-stub-everything-tests")(createStub);
 
         it("returns function", function () {
-            var func = function () {
+            const func = function () {
                 return;
             };
 
@@ -1514,14 +1536,14 @@ describe("stub", function () {
         });
 
         it("stubs methods of function", function () {
-            var func = function () {
-                return;
-            };
+            class FunctionType extends Function {
+                func2() {
+                    return 42;
+                }
+            }
+
+            const func = new FunctionType();
             func.func1 = function () {
-                return;
-            };
-            // eslint-disable-next-line no-proto
-            func.__proto__.func2 = function () {
                 return;
             };
 
@@ -1532,14 +1554,14 @@ describe("stub", function () {
         });
 
         it("does not call getter during restore", function () {
-            var obj = {
+            const obj = {
                 get prop() {
                     fail("should not call getter");
                     return;
                 },
             };
 
-            var stub = createStub(obj, "prop").get(function () {
+            const stub = createStub(obj, "prop").get(function () {
                 return 43;
             });
             assert.equals(obj.prop, 43);
@@ -1550,7 +1572,7 @@ describe("stub", function () {
 
     describe("stubbed function", function () {
         it("has toString method", function () {
-            var obj = {
+            const obj = {
                 meth: function () {
                     return;
                 },
@@ -1561,13 +1583,13 @@ describe("stub", function () {
         });
 
         it("toString should say 'stub' when unable to infer name", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.equals(stub.toString(), "stub");
         });
 
         it("toString should prefer property name if possible", function () {
-            var obj = {};
+            const obj = {};
             obj.meth = createStub();
             obj.meth();
 
@@ -1577,8 +1599,8 @@ describe("stub", function () {
 
     describe(".yields", function () {
         it("invokes only argument as callback", function () {
-            var stub = createStub().yields();
-            var spy = createSpy();
+            const stub = createStub().yields();
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
@@ -1586,7 +1608,7 @@ describe("stub", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var stub = createStub().yields();
+            const stub = createStub().yields();
 
             assert.exception(stub, {
                 message: "stub expected to yield, but no callback was passed.",
@@ -1594,12 +1616,12 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = {
+            const myObj = {
                 somethingAwesome: function () {
                     return;
                 },
             };
-            var stub = createStub(myObj, "somethingAwesome").yields();
+            const stub = createStub(myObj, "somethingAwesome").yields();
 
             assert.exception(
                 function () {
@@ -1613,8 +1635,8 @@ describe("stub", function () {
         });
 
         it("invokes last argument as callback", function () {
-            var stub = createStub().yields();
-            var spy = createSpy();
+            const stub = createStub().yields();
+            const spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
@@ -1622,9 +1644,9 @@ describe("stub", function () {
         });
 
         it("invokes first of two callbacks", function () {
-            var stub = createStub().yields();
-            var spy = createSpy();
-            var spy2 = createSpy();
+            const stub = createStub().yields();
+            const spy = createSpy();
+            const spy2 = createSpy();
             stub(24, {}, spy, spy2);
 
             assert(spy.calledOnce);
@@ -1632,18 +1654,18 @@ describe("stub", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yields(obj, "Crazy");
-            var spy = createSpy();
+            const obj = { id: 42 };
+            const stub = createStub().yields(obj, "Crazy");
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
         });
 
         it("throws if callback throws", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yields(obj, "Crazy");
-            var callback = createStub().throws();
+            const obj = { id: 42 };
+            const stub = createStub().yields(obj, "Crazy");
+            const callback = createStub().throws();
 
             assert.exception(function () {
                 stub(callback);
@@ -1651,8 +1673,8 @@ describe("stub", function () {
         });
 
         it("throws takes precedent over yielded return value", function () {
-            var stub = createStub().throws().yields();
-            var callback = createStub().returns("return value");
+            const stub = createStub().throws().yields();
+            const callback = createStub().returns("return value");
 
             assert.exception(function () {
                 stub(callback);
@@ -1661,43 +1683,43 @@ describe("stub", function () {
         });
 
         it("returns takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returns(obj).yields();
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returns(obj).yields();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returnsArg takes precedent over yielded return value", function () {
-            var stub = createStub().returnsArg(0).yields();
-            var callback = createStub().returns("return value");
+            const stub = createStub().returnsArg(0).yields();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
 
         it("returnsThis takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returnsThis().yields();
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returnsThis().yields();
+            const callback = createStub().returns("return value");
 
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returns the result of the yielded callback", function () {
-            var stub = createStub().yields();
-            var callback = createStub().returns("return value");
+            const stub = createStub().yields();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().yields(1);
-            var stub = createStub().callsFake(fakeFn).yields(2);
-            var spy = createSpy();
+            const fakeFn = createStub().yields(1);
+            const stub = createStub().callsFake(fakeFn).yields(2);
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith, 2);
@@ -1707,8 +1729,8 @@ describe("stub", function () {
 
     describe(".yieldsRight", function () {
         it("invokes only argument as callback", function () {
-            var stub = createStub().yieldsRight();
-            var spy = createSpy();
+            const stub = createStub().yieldsRight();
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledOnce);
@@ -1716,7 +1738,7 @@ describe("stub", function () {
         });
 
         it("throws understandable error if no callback is passed", function () {
-            var stub = createStub().yieldsRight();
+            const stub = createStub().yieldsRight();
 
             assert.exception(stub, {
                 message: "stub expected to yield, but no callback was passed.",
@@ -1724,12 +1746,12 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = {
+            const myObj = {
                 somethingAwesome: function () {
                     return;
                 },
             };
-            var stub = createStub(myObj, "somethingAwesome").yieldsRight();
+            const stub = createStub(myObj, "somethingAwesome").yieldsRight();
 
             assert.exception(
                 function () {
@@ -1743,8 +1765,8 @@ describe("stub", function () {
         });
 
         it("invokes last argument as callback", function () {
-            var stub = createStub().yieldsRight();
-            var spy = createSpy();
+            const stub = createStub().yieldsRight();
+            const spy = createSpy();
             stub(24, {}, spy);
 
             assert(spy.calledOnce);
@@ -1752,9 +1774,9 @@ describe("stub", function () {
         });
 
         it("invokes the last of two callbacks", function () {
-            var stub = createStub().yieldsRight();
-            var spy = createSpy();
-            var spy2 = createSpy();
+            const stub = createStub().yieldsRight();
+            const spy = createSpy();
+            const spy2 = createSpy();
             stub(24, {}, spy, spy2);
 
             assert(!spy.called);
@@ -1762,18 +1784,18 @@ describe("stub", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yieldsRight(obj, "Crazy");
-            var spy = createSpy();
+            const obj = { id: 42 };
+            const stub = createStub().yieldsRight(obj, "Crazy");
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith(obj, "Crazy"));
         });
 
         it("throws if callback throws", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yieldsRight(obj, "Crazy");
-            var callback = createStub().throws();
+            const obj = { id: 42 };
+            const stub = createStub().yieldsRight(obj, "Crazy");
+            const callback = createStub().throws();
 
             assert.exception(function () {
                 stub(callback);
@@ -1781,8 +1803,8 @@ describe("stub", function () {
         });
 
         it("throws takes precedent over yielded return value", function () {
-            var stub = createStub().yieldsRight().throws();
-            var callback = createStub().returns("return value");
+            const stub = createStub().yieldsRight().throws();
+            const callback = createStub().returns("return value");
 
             assert.exception(function () {
                 stub(callback);
@@ -1791,43 +1813,43 @@ describe("stub", function () {
         });
 
         it("returns takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returns(obj).yieldsRight();
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returns(obj).yieldsRight();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returnsArg takes precedent over yielded return value", function () {
-            var stub = createStub().returnsArg(0).yieldsRight();
-            var callback = createStub().returns("return value");
+            const stub = createStub().returnsArg(0).yieldsRight();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
 
         it("returnsThis takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returnsThis().yieldsRight();
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returnsThis().yieldsRight();
+            const callback = createStub().returns("return value");
 
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returns the result of the yielded callback", function () {
-            var stub = createStub().yields();
-            var callback = createStub().returns("return value");
+            const stub = createStub().yields();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().yieldsRight(1);
-            var stub = createStub().callsFake(fakeFn).yieldsRight(2);
-            var spy = createSpy();
+            const fakeFn = createStub().yieldsRight(1);
+            const stub = createStub().callsFake(fakeFn).yieldsRight(2);
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith, 2);
@@ -1842,7 +1864,7 @@ describe("stub", function () {
         });
 
         it("invokes only argument as callback", function () {
-            var spy = createSpy();
+            const spy = createSpy();
 
             this.stub.yieldsOn(this.fakeContext);
             this.stub(spy);
@@ -1870,12 +1892,12 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = {
+            const myObj = {
                 somethingAwesome: function () {
                     return;
                 },
             };
-            var stub = createStub(myObj, "somethingAwesome").yieldsOn(
+            const stub = createStub(myObj, "somethingAwesome").yieldsOn(
                 this.fakeContext
             );
 
@@ -1891,7 +1913,7 @@ describe("stub", function () {
         });
 
         it("invokes last argument as callback", function () {
-            var spy = createSpy();
+            const spy = createSpy();
             this.stub.yieldsOn(this.fakeContext);
 
             this.stub(24, {}, spy);
@@ -1902,8 +1924,8 @@ describe("stub", function () {
         });
 
         it("invokes first of two callbacks", function () {
-            var spy = createSpy();
-            var spy2 = createSpy();
+            const spy = createSpy();
+            const spy2 = createSpy();
 
             this.stub.yieldsOn(this.fakeContext);
             this.stub(24, {}, spy, spy2);
@@ -1914,8 +1936,8 @@ describe("stub", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var spy = createSpy();
+            const obj = { id: 42 };
+            const spy = createSpy();
 
             this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
             this.stub(spy);
@@ -1925,8 +1947,8 @@ describe("stub", function () {
         });
 
         it("throws if callback throws", function () {
-            var obj = { id: 42 };
-            var callback = createStub().throws();
+            const obj = { id: 42 };
+            const callback = createStub().throws();
 
             this.stub.yieldsOn(this.fakeContext, obj, "Crazy");
 
@@ -1936,8 +1958,8 @@ describe("stub", function () {
         });
 
         it("throws takes precedent over yielded return value", function () {
-            var stub = this.stub.throws().yieldsOn(this.fakeContext);
-            var callback = createStub().returns("return value");
+            const stub = this.stub.throws().yieldsOn(this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.exception(function () {
                 stub(callback);
@@ -1946,45 +1968,45 @@ describe("stub", function () {
         });
 
         it("returns takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = this.stub.returns(obj).yieldsOn(this.fakeContext);
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = this.stub.returns(obj).yieldsOn(this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returnsArg takes precedent over yielded return value", function () {
-            var stub = this.stub.returnsArg(0).yieldsOn();
-            var callback = createStub().returns("return value");
+            const stub = this.stub.returnsArg(0).yieldsOn();
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), callback);
             assert(callback.calledOnce);
         });
 
         it("returnsThis takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = this.stub.returnsThis().yieldsOn(this.fakeContext);
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = this.stub.returnsThis().yieldsOn(this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.same(stub.call(obj, callback), obj);
             assert(callback.calledOnce);
         });
 
         it("returns the result of the yielded callback", function () {
-            var stub = this.stub.yieldsOn(this.fakeContext);
-            var callback = createStub().returns("return value");
+            const stub = this.stub.yieldsOn(this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().yieldsOn(this.fakeContext, 1);
-            var stub = createStub()
+            const fakeFn = createStub().yieldsOn(this.fakeContext, 1);
+            const stub = createStub()
                 .callsFake(fakeFn)
                 .yieldsOn(this.fakeContext, 2);
-            var spy = createSpy();
+            const spy = createSpy();
             stub(spy);
 
             assert(spy.calledWith, 2);
@@ -1994,8 +2016,8 @@ describe("stub", function () {
 
     describe(".yieldsTo", function () {
         it("yields to property of object argument", function () {
-            var stub = createStub().yieldsTo("success");
-            var callback = createSpy();
+            const stub = createStub().yieldsTo("success");
+            const callback = createSpy();
 
             stub({ success: callback });
 
@@ -2004,7 +2026,7 @@ describe("stub", function () {
         });
 
         it("throws understandable error if no object with callback is passed", function () {
-            var stub = createStub().yieldsTo("success");
+            const stub = createStub().yieldsTo("success");
 
             assert.exception(stub, {
                 message:
@@ -2017,9 +2039,9 @@ describe("stub", function () {
                 this.skip();
             }
 
-            var symbol = Symbol("apple pie");
+            const symbol = Symbol("apple pie");
 
-            var stub = createStub().yieldsTo(symbol);
+            const stub = createStub().yieldsTo(symbol);
 
             assert.exception(stub, {
                 message:
@@ -2028,12 +2050,12 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = {
+            const myObj = {
                 somethingAwesome: function () {
                     return;
                 },
             };
-            var stub = createStub(myObj, "somethingAwesome").yieldsTo(
+            const stub = createStub(myObj, "somethingAwesome").yieldsTo(
                 "success"
             );
 
@@ -2051,8 +2073,8 @@ describe("stub", function () {
         });
 
         it("invokes property on last argument as callback", function () {
-            var stub = createStub().yieldsTo("success");
-            var callback = createSpy();
+            const stub = createStub().yieldsTo("success");
+            const callback = createSpy();
             stub(24, {}, { success: callback });
 
             assert(callback.calledOnce);
@@ -2060,9 +2082,9 @@ describe("stub", function () {
         });
 
         it("invokes first of two possible callbacks", function () {
-            var stub = createStub().yieldsTo("error");
-            var callback = createSpy();
-            var callback2 = createSpy();
+            const stub = createStub().yieldsTo("error");
+            const callback = createSpy();
+            const callback2 = createSpy();
             stub(24, {}, { error: callback }, { error: callback2 });
 
             assert(callback.calledOnce);
@@ -2070,18 +2092,18 @@ describe("stub", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yieldsTo("success", obj, "Crazy");
-            var callback = createSpy();
+            const obj = { id: 42 };
+            const stub = createStub().yieldsTo("success", obj, "Crazy");
+            const callback = createSpy();
             stub({ success: callback });
 
             assert(callback.calledWith(obj, "Crazy"));
         });
 
         it("throws if callback throws", function () {
-            var obj = { id: 42 };
-            var stub = createStub().yieldsTo("error", obj, "Crazy");
-            var callback = createStub().throws();
+            const obj = { id: 42 };
+            const stub = createStub().yieldsTo("error", obj, "Crazy");
+            const callback = createStub().throws();
 
             assert.exception(function () {
                 stub({ error: callback });
@@ -2089,8 +2111,8 @@ describe("stub", function () {
         });
 
         it("throws takes precedent over yielded return value", function () {
-            var stub = createStub().throws().yieldsTo("success");
-            var callback = createStub().returns("return value");
+            const stub = createStub().throws().yieldsTo("success");
+            const callback = createStub().returns("return value");
 
             assert.exception(function () {
                 stub({ success: callback });
@@ -2099,43 +2121,43 @@ describe("stub", function () {
         });
 
         it("returns takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returns(obj).yieldsTo("success");
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returns(obj).yieldsTo("success");
+            const callback = createStub().returns("return value");
 
             assert.same(stub({ success: callback }), obj);
             assert(callback.calledOnce);
         });
 
         it("returnsArg takes precedent over yielded return value", function () {
-            var stub = createStub().returnsArg(0).yieldsTo("success");
-            var callback = createStub().returns("return value");
+            const stub = createStub().returnsArg(0).yieldsTo("success");
+            const callback = createStub().returns("return value");
 
             assert.equals(stub({ success: callback }), { success: callback });
             assert(callback.calledOnce);
         });
 
         it("returnsThis takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = createStub().returnsThis().yieldsTo("success");
-            var callback = createStub().returns("return value");
+            const obj = {};
+            const stub = createStub().returnsThis().yieldsTo("success");
+            const callback = createStub().returns("return value");
 
             assert.same(stub.call(obj, { success: callback }), obj);
             assert(callback.calledOnce);
         });
 
         it("returns the result of the yielded callback", function () {
-            var stub = createStub().yieldsTo("success");
-            var callback = createStub().returns("return value");
+            const stub = createStub().yieldsTo("success");
+            const callback = createStub().returns("return value");
 
             assert.same(stub({ success: callback }), "return value");
             assert(callback.calledOnce);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().yieldsTo("success", 1);
-            var stub = createStub().callsFake(fakeFn).yieldsTo("success", 2);
-            var callback = createSpy();
+            const fakeFn = createStub().yieldsTo("success", 1);
+            const stub = createStub().callsFake(fakeFn).yieldsTo("success", 2);
+            const callback = createSpy();
             stub({ success: callback });
 
             assert(callback.calledWith(2));
@@ -2151,7 +2173,7 @@ describe("stub", function () {
 
         it("yields to property of object argument", function () {
             this.stub.yieldsToOn("success", this.fakeContext);
-            var callback = createSpy();
+            const callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -2162,7 +2184,7 @@ describe("stub", function () {
 
         it("yields to property of object argument with undefined context", function () {
             this.stub.yieldsToOn("success", undefined);
-            var callback = createSpy();
+            const callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -2173,7 +2195,7 @@ describe("stub", function () {
 
         it("yields to property of object argument with number context", function () {
             this.stub.yieldsToOn("success", 5);
-            var callback = createSpy();
+            const callback = createSpy();
 
             this.stub({ success: callback });
 
@@ -2192,12 +2214,12 @@ describe("stub", function () {
         });
 
         it("includes stub name and actual arguments in error", function () {
-            var myObj = {
+            const myObj = {
                 somethingAwesome: function () {
                     return;
                 },
             };
-            var stub = createStub(myObj, "somethingAwesome").yieldsToOn(
+            const stub = createStub(myObj, "somethingAwesome").yieldsToOn(
                 "success",
                 this.fakeContext
             );
@@ -2216,7 +2238,7 @@ describe("stub", function () {
         });
 
         it("invokes property on last argument as callback", function () {
-            var callback = createSpy();
+            const callback = createSpy();
 
             this.stub.yieldsToOn("success", this.fakeContext);
             this.stub(24, {}, { success: callback });
@@ -2227,8 +2249,8 @@ describe("stub", function () {
         });
 
         it("invokes first of two possible callbacks", function () {
-            var callback = createSpy();
-            var callback2 = createSpy();
+            const callback = createSpy();
+            const callback2 = createSpy();
 
             this.stub.yieldsToOn("error", this.fakeContext);
             this.stub(24, {}, { error: callback }, { error: callback2 });
@@ -2239,8 +2261,8 @@ describe("stub", function () {
         });
 
         it("invokes callback with arguments", function () {
-            var obj = { id: 42 };
-            var callback = createSpy();
+            const obj = { id: 42 };
+            const callback = createSpy();
 
             this.stub.yieldsToOn("success", this.fakeContext, obj, "Crazy");
             this.stub({ success: callback });
@@ -2250,8 +2272,8 @@ describe("stub", function () {
         });
 
         it("throws if callback throws", function () {
-            var obj = { id: 42 };
-            var callback = createStub().throws();
+            const obj = { id: 42 };
+            const callback = createStub().throws();
 
             this.stub.yieldsToOn("error", this.fakeContext, obj, "Crazy");
 
@@ -2261,10 +2283,10 @@ describe("stub", function () {
         });
 
         it("throws takes precedent over yielded return value", function () {
-            var stub = this.stub
+            const stub = this.stub
                 .throws()
                 .yieldsToOn("success", this.fakeContext);
-            var callback = createStub().returns("return value");
+            const callback = createStub().returns("return value");
 
             assert.exception(function () {
                 stub({ success: callback });
@@ -2273,55 +2295,55 @@ describe("stub", function () {
         });
 
         it("returns takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = this.stub
+            const obj = {};
+            const stub = this.stub
                 .returns(obj)
                 .yieldsToOn("success", this.fakeContext);
-            var callback = createStub().returns("return value");
+            const callback = createStub().returns("return value");
 
             assert.same(stub({ success: callback }), obj);
             assert(callback.calledOnce);
         });
 
         it("returnsArg takes precedent over yielded return value", function () {
-            var stub = this.stub
+            const stub = this.stub
                 .returnsArg(0)
                 .yieldsToOn("success", this.fakeContext);
-            var callback = createStub().returns("return value");
+            const callback = createStub().returns("return value");
 
             assert.equals(stub({ success: callback }), { success: callback });
             assert(callback.calledOnce);
         });
 
         it("returnsThis takes precedent over yielded return value", function () {
-            var obj = {};
-            var stub = this.stub
+            const obj = {};
+            const stub = this.stub
                 .returnsThis()
                 .yieldsToOn("success", this.fakeContext);
-            var callback = createStub().returns("return value");
+            const callback = createStub().returns("return value");
 
             assert.same(stub.call(obj, { success: callback }), obj);
             assert(callback.calledOnce);
         });
 
         it("returns the result of the yielded callback", function () {
-            var stub = this.stub.yieldsToOn("success", this.fakeContext);
-            var callback = createStub().returns("return value");
+            const stub = this.stub.yieldsToOn("success", this.fakeContext);
+            const callback = createStub().returns("return value");
 
             assert.same(stub({ success: callback }), "return value");
             assert(callback.calledOnce);
         });
 
         it("supersedes previous callsFake", function () {
-            var fakeFn = createStub().yieldsToOn(
+            const fakeFn = createStub().yieldsToOn(
                 "success",
                 this.fakeContext,
                 1
             );
-            var stub = createStub()
+            const stub = createStub()
                 .callsFake(fakeFn)
                 .yieldsToOn("success", this.fakeContext, 2);
-            var callback = createSpy();
+            const callback = createSpy();
             stub({ success: callback });
 
             assert(callback.calledWith(2));
@@ -2331,14 +2353,14 @@ describe("stub", function () {
 
     describe(".withArgs", function () {
         it("defines withArgs method", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.isFunction(stub.withArgs);
         });
 
         it("creates filtered stub", function () {
-            var stub = createStub();
-            var other = stub.withArgs(23);
+            const stub = createStub();
+            const other = stub.withArgs(23);
 
             refute.same(other, stub);
             assert.isFunction(stub.returns);
@@ -2346,7 +2368,7 @@ describe("stub", function () {
         });
 
         it("filters return values based on arguments", function () {
-            var stub = createStub().returns(23);
+            const stub = createStub().returns(23);
             stub.withArgs(42).returns(99);
 
             assert.equals(stub(), 23);
@@ -2354,7 +2376,7 @@ describe("stub", function () {
         });
 
         it("filters exceptions based on arguments", function () {
-            var stub = createStub().returns(23);
+            const stub = createStub().returns(23);
             stub.withArgs(42).throws();
 
             refute.exception(stub);
@@ -2364,7 +2386,7 @@ describe("stub", function () {
         });
 
         it("ensure stub recognizes samsam match fuzzy arguments", function () {
-            var stub = createStub().returns(23);
+            const stub = createStub().returns(23);
             stub.withArgs(match({ foo: "bar" })).returns(99);
 
             assert.equals(stub(), 23);
@@ -2372,12 +2394,12 @@ describe("stub", function () {
         });
 
         it("ensure stub uses last matching arguments", function () {
-            var unmatchedValue = "d3ada6a0-8dac-4136-956d-033b5f23eadf";
-            var firstMatchedValue = "68128619-a639-4b32-a4a0-6519165bf301";
-            var secondMatchedValue = "4ac2dc8f-3f3f-4648-9838-a2825fd94c9a";
-            var expectedArgument = "3e1ed1ec-c377-4432-a33e-3c937f1406d1";
+            const unmatchedValue = "d3ada6a0-8dac-4136-956d-033b5f23eadf";
+            const firstMatchedValue = "68128619-a639-4b32-a4a0-6519165bf301";
+            const secondMatchedValue = "4ac2dc8f-3f3f-4648-9838-a2825fd94c9a";
+            const expectedArgument = "3e1ed1ec-c377-4432-a33e-3c937f1406d1";
 
-            var stub = createStub().returns(unmatchedValue);
+            const stub = createStub().returns(unmatchedValue);
 
             stub.withArgs(expectedArgument).returns(firstMatchedValue);
             stub.withArgs(expectedArgument).returns(secondMatchedValue);
@@ -2387,12 +2409,12 @@ describe("stub", function () {
         });
 
         it("ensure stub uses last matching samsam match arguments", function () {
-            var unmatchedValue = "0aa66a7d-3c50-49ef-8365-bdcab637b2dd";
-            var firstMatchedValue = "1ab2c601-7602-4658-9377-3346f6814caa";
-            var secondMatchedValue = "e2e31518-c4c4-4012-a61f-31942f603ffa";
-            var expectedArgument = "90dc4a22-ef53-4c62-8e05-4cf4b4bf42fa";
+            const unmatchedValue = "0aa66a7d-3c50-49ef-8365-bdcab637b2dd";
+            const firstMatchedValue = "1ab2c601-7602-4658-9377-3346f6814caa";
+            const secondMatchedValue = "e2e31518-c4c4-4012-a61f-31942f603ffa";
+            const expectedArgument = "90dc4a22-ef53-4c62-8e05-4cf4b4bf42fa";
 
-            var stub = createStub().returns(unmatchedValue);
+            const stub = createStub().returns(unmatchedValue);
             stub.withArgs(expectedArgument).returns(firstMatchedValue);
             stub.withArgs(match(expectedArgument)).returns(secondMatchedValue);
 
@@ -2408,7 +2430,7 @@ describe("stub", function () {
 
         it("asynchronously calls argument at specified index", function (done) {
             this.stub.callsArgAsync(2);
-            var callback = createSpy(done);
+            const callback = createSpy(done);
 
             this.stub(1, 2, callback);
 
@@ -2422,11 +2444,11 @@ describe("stub", function () {
         });
 
         it("asynchronously calls callback at specified index with multiple args", function (done) {
-            var object = {};
-            var array = [];
+            const object = {};
+            const array = [];
             this.stub.callsArgWithAsync(1, object, array);
 
-            var callback = createSpy(function () {
+            const callback = createSpy(function () {
                 assert(callback.calledWith(object, array));
                 done();
             });
@@ -2446,10 +2468,10 @@ describe("stub", function () {
         });
 
         it("asynchronously calls argument at specified index with specified context", function (done) {
-            var context = this.fakeContext;
+            const context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
 
-            var callback = createSpy(function () {
+            const callback = createSpy(function () {
                 assert(callback.calledOn(context));
                 done();
             });
@@ -2467,11 +2489,11 @@ describe("stub", function () {
         });
 
         it("asynchronously calls argument at specified index with provided context and args", function (done) {
-            var object = {};
-            var context = this.fakeContext;
+            const object = {};
+            const context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
 
-            var callback = createSpy(function () {
+            const callback = createSpy(function () {
                 assert(callback.calledOn(context));
                 assert(callback.calledWith(object));
                 done();
@@ -2485,9 +2507,9 @@ describe("stub", function () {
 
     describe(".yieldsAsync", function () {
         it("asynchronously invokes only argument as callback", function (done) {
-            var stub = createStub().yieldsAsync();
+            const stub = createStub().yieldsAsync();
 
-            var spy = createSpy(done);
+            const spy = createSpy(done);
 
             stub(spy);
 
@@ -2502,10 +2524,10 @@ describe("stub", function () {
         });
 
         it("asynchronously invokes only argument as callback with given context", function (done) {
-            var context = this.fakeContext;
+            const context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            var spy = createSpy(function () {
+            const spy = createSpy(function () {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
@@ -2520,9 +2542,9 @@ describe("stub", function () {
 
     describe(".yieldsToAsync", function () {
         it("asynchronously yields to property of object argument", function (done) {
-            var stub = createStub().yieldsToAsync("success");
+            const stub = createStub().yieldsToAsync("success");
 
-            var callback = createSpy(function () {
+            const callback = createSpy(function () {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
                 done();
@@ -2541,10 +2563,10 @@ describe("stub", function () {
         });
 
         it("asynchronously yields to property of object argument with given context", function (done) {
-            var context = this.fakeContext;
+            const context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
 
-            var callback = createSpy(function () {
+            const callback = createSpy(function () {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
@@ -2558,7 +2580,7 @@ describe("stub", function () {
 
     describe(".onCall", function () {
         it("can be used with returns to produce sequence", function () {
-            var stub = createStub().returns(3);
+            const stub = createStub().returns(3);
             stub.onFirstCall().returns(1).onCall(2).returns(2);
 
             assert.same(stub(), 1);
@@ -2568,7 +2590,7 @@ describe("stub", function () {
         });
 
         it("can be used with returnsArg to produce sequence", function () {
-            var stub = createStub().returns("default");
+            const stub = createStub().returns("default");
             stub.onSecondCall().returnsArg(0);
 
             assert.same(stub(1), "default");
@@ -2577,7 +2599,7 @@ describe("stub", function () {
         });
 
         it("can be used with returnsThis to produce sequence", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub().returns("default");
             instance.stub.onSecondCall().returnsThis();
 
@@ -2587,8 +2609,8 @@ describe("stub", function () {
         });
 
         it("can be used with throwsException to produce sequence", function () {
-            var stub = createStub();
-            var error = new Error();
+            const stub = createStub();
+            const error = new Error();
             stub.onSecondCall().throwsException(error);
 
             stub();
@@ -2599,7 +2621,7 @@ describe("stub", function () {
         });
 
         it("supports chained declaration of behavior", function () {
-            var stub = createStub()
+            const stub = createStub()
                 .onCall(0)
                 .returns(1)
                 .onCall(1)
@@ -2614,7 +2636,7 @@ describe("stub", function () {
 
         describe("in combination with withArgs", function () {
             it("can produce a sequence for a fake", function () {
-                var stub = createStub().returns(0);
+                const stub = createStub().returns(0);
                 stub.withArgs(5)
                     .returns(-1)
                     .onFirstCall()
@@ -2630,7 +2652,7 @@ describe("stub", function () {
             });
 
             it("falls back to stub default behaviour if fake does not have its own default behaviour", function () {
-                var stub = createStub().returns(0);
+                const stub = createStub().returns(0);
                 stub.withArgs(5).onFirstCall().returns(1);
 
                 assert.same(stub(5), 1);
@@ -2638,7 +2660,7 @@ describe("stub", function () {
             });
 
             it("falls back to stub behaviour for call if fake does not have its own behaviour for call", function () {
-                var stub = createStub().returns(0);
+                const stub = createStub().returns(0);
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.onSecondCall().returns(2);
 
@@ -2648,7 +2670,7 @@ describe("stub", function () {
             });
 
             it("defaults to undefined behaviour once no more calls have been defined", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub.withArgs(5)
                     .onFirstCall()
                     .returns(1)
@@ -2661,14 +2683,14 @@ describe("stub", function () {
             });
 
             it("does not create undefined behaviour just by calling onCall", function () {
-                var stub = createStub().returns(2);
+                const stub = createStub().returns(2);
                 stub.onFirstCall();
 
                 assert.same(stub(6), 2);
             });
 
             it("works with fakes and reset", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub.withArgs(5).onFirstCall().returns(1);
                 stub.withArgs(5).onSecondCall().returns(2);
 
@@ -2696,10 +2718,10 @@ describe("stub", function () {
         });
 
         it("can be used with yields* to produce a sequence", function () {
-            var context = { foo: "bar" };
-            var obj = { method1: createSpy(), method2: createSpy() };
-            var obj2 = { method2: createSpy() };
-            var stub = createStub().yieldsToOn("method2", context, 7, 8);
+            const context = { foo: "bar" };
+            const obj = { method1: createSpy(), method2: createSpy() };
+            const obj2 = { method2: createSpy() };
+            const stub = createStub().yieldsToOn("method2", context, 7, 8);
             stub.onFirstCall()
                 .yields(1, 2)
                 .onSecondCall()
@@ -2709,8 +2731,8 @@ describe("stub", function () {
                 .onCall(3)
                 .yieldsToOn("method2", context, 7, 8);
 
-            var spy1 = createSpy();
-            var spy2 = createSpy();
+            const spy1 = createSpy();
+            const spy2 = createSpy();
 
             stub(spy1);
             stub(spy2);
@@ -2742,15 +2764,15 @@ describe("stub", function () {
         });
 
         it("can be used with callsArg* to produce a sequence", function () {
-            var spy1 = createSpy();
-            var spy2 = createSpy();
-            var spy3 = createSpy();
-            var spy4 = createSpy();
-            var spy5 = createSpy();
-            var decoy = createSpy();
-            var context = { foo: "bar" };
+            const spy1 = createSpy();
+            const spy2 = createSpy();
+            const spy3 = createSpy();
+            const spy4 = createSpy();
+            const spy5 = createSpy();
+            const decoy = createSpy();
+            const context = { foo: "bar" };
 
-            var stub = createStub().callsArgOnWith(3, context, "c", "d");
+            const stub = createStub().callsArgOnWith(3, context, "c", "d");
             stub.onFirstCall()
                 .callsArg(0)
                 .onSecondCall()
@@ -2790,7 +2812,7 @@ describe("stub", function () {
         });
 
         it("can be used with yields* and callsArg* in combination to produce a sequence", function () {
-            var stub = createStub().yields(1, 2);
+            const stub = createStub().yields(1, 2);
             stub.onSecondCall()
                 .callsArg(1)
                 .onThirdCall()
@@ -2798,11 +2820,11 @@ describe("stub", function () {
                 .onCall(3)
                 .callsArgWith(2, "a", "b");
 
-            var obj = { method: createSpy() };
-            var spy1 = createSpy();
-            var spy2 = createSpy();
-            var spy3 = createSpy();
-            var decoy = createSpy();
+            const obj = { method: createSpy() };
+            const spy1 = createSpy();
+            const spy2 = createSpy();
+            const spy3 = createSpy();
+            const decoy = createSpy();
 
             stub(spy1);
             stub(decoy, spy2);
@@ -2825,8 +2847,8 @@ describe("stub", function () {
         });
 
         it("should interact correctly with assertions (GH-231)", function () {
-            var stub = createStub();
-            var spy = createSpy();
+            const stub = createStub();
+            const spy = createSpy();
 
             stub.callsArgWith(0, "a");
 
@@ -2845,12 +2867,12 @@ describe("stub", function () {
 
     describe(".reset", function () {
         it("resets behavior", function () {
-            var obj = {
+            const obj = {
                 a: function () {
                     return;
                 },
             };
-            var spy = createSpy();
+            const spy = createSpy();
             createStub(obj, "a").callsArg(1);
 
             obj.a(null, spy);
@@ -2861,7 +2883,7 @@ describe("stub", function () {
         });
 
         it("resets call history", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             stub(1);
             stub.reset();
@@ -2874,7 +2896,7 @@ describe("stub", function () {
 
     describe(".resetHistory", function () {
         it("resets history", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             stub(1);
             stub.reset();
@@ -2885,7 +2907,7 @@ describe("stub", function () {
         });
 
         it("doesn't reset behavior defined using withArgs", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.withArgs("test").returns(10);
 
             stub.resetHistory();
@@ -2894,7 +2916,7 @@ describe("stub", function () {
         });
 
         it("doesn't reset behavior", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.returns(10);
 
             stub.resetHistory();
@@ -2905,12 +2927,12 @@ describe("stub", function () {
 
     describe(".resetBehavior", function () {
         it("clears yields* and callsArg* sequence", function () {
-            var stub = createStub().yields(1);
+            const stub = createStub().yields(1);
             stub.onFirstCall().callsArg(1);
             stub.resetBehavior();
             stub.yields(3);
-            var spyWanted = createSpy();
-            var spyNotWanted = createSpy();
+            const spyWanted = createSpy();
+            const spyNotWanted = createSpy();
 
             stub(spyWanted, spyNotWanted);
 
@@ -2920,7 +2942,7 @@ describe("stub", function () {
         });
 
         it("cleans 'returns' behavior", function () {
-            var stub = createStub().returns(1);
+            const stub = createStub().returns(1);
 
             stub.resetBehavior();
 
@@ -2928,7 +2950,7 @@ describe("stub", function () {
         });
 
         it("cleans behavior of fakes returned by withArgs", function () {
-            var stub = createStub();
+            const stub = createStub();
             stub.withArgs("lolz").returns(2);
 
             stub.resetBehavior();
@@ -2937,8 +2959,8 @@ describe("stub", function () {
         });
 
         it("does not clean parents' behavior when called on a fake returned by withArgs", function () {
-            var parentStub = createStub().returns(false);
-            var childStub = parentStub.withArgs("lolz").returns(true);
+            const parentStub = createStub().returns(false);
+            const childStub = parentStub.withArgs("lolz").returns(true);
 
             childStub.resetBehavior();
 
@@ -2947,7 +2969,7 @@ describe("stub", function () {
         });
 
         it("cleans 'returnsArg' behavior", function () {
-            var stub = createStub().returnsArg(0);
+            const stub = createStub().returnsArg(0);
 
             stub.resetBehavior();
 
@@ -2955,7 +2977,7 @@ describe("stub", function () {
         });
 
         it("cleans 'returnsThis' behavior", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub();
             instance.stub.returnsThis();
 
@@ -2965,7 +2987,7 @@ describe("stub", function () {
         });
 
         it("cleans 'resolvesThis' behavior, so the stub does not resolve nor returns anything", function () {
-            var instance = {};
+            const instance = {};
             instance.stub = createStub();
             instance.stub.resolvesThis();
 
@@ -2976,7 +2998,7 @@ describe("stub", function () {
 
         describe("does not touch properties that are reset by 'reset'", function () {
             it(".calledOnce", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub(1);
 
                 stub.resetBehavior();
@@ -2985,7 +3007,7 @@ describe("stub", function () {
             });
 
             it("called multiple times", function () {
-                var stub = createStub();
+                const stub = createStub();
                 stub(1);
                 stub(2);
                 stub(3);
@@ -3004,7 +3026,7 @@ describe("stub", function () {
             });
 
             it("call order state", function () {
-                var stubs = [createStub(), createStub()];
+                const stubs = [createStub(), createStub()];
                 stubs[0]();
                 stubs[1]();
 
@@ -3014,13 +3036,13 @@ describe("stub", function () {
             });
 
             it("fakes returned by withArgs", function () {
-                var stub = createStub();
-                var fakeA = stub.withArgs("a");
-                var fakeB = stub.withArgs("b");
+                const stub = createStub();
+                const fakeA = stub.withArgs("a");
+                const fakeB = stub.withArgs("b");
                 stub("a");
                 stub("b");
                 stub("c");
-                var fakeC = stub.withArgs("c");
+                const fakeC = stub.withArgs("c");
 
                 stub.resetBehavior();
 
@@ -3033,255 +3055,107 @@ describe("stub", function () {
 
     describe(".length", function () {
         it("is zero by default", function () {
-            var stub = createStub();
+            const stub = createStub();
 
             assert.equals(stub.length, 0);
         });
 
         it("retains function length 0", function () {
-            var object = {
+            const object = {
                 test: function () {
                     return;
                 },
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 0);
         });
 
         it("retains function length 1", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line no-unused-vars
                 test: function (a) {
                     return;
                 },
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 1);
         });
 
         it("retains function length 2", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line no-unused-vars
                 test: function (a, b) {
                     return;
                 },
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 2);
         });
 
         it("retains function length 3", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line no-unused-vars
                 test: function (a, b, c) {
                     return;
                 },
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 3);
         });
 
         it("retains function length 4", function () {
-            var object = {
+            const object = {
                 // eslint-disable-next-line no-unused-vars
                 test: function (a, b, c, d) {
                     return;
                 },
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 4);
         });
 
         it("retains function length 12", function () {
             // eslint-disable-next-line no-unused-vars
-            var func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {
+            const func12Args = function (a, b, c, d, e, f, g, h, i, j, k, l) {
                 return;
             };
-            var object = {
+            const object = {
                 test: func12Args,
             };
 
-            var stub = createStub(object, "test");
+            const stub = createStub(object, "test");
 
             assert.equals(stub.length, 12);
-        });
-    });
-
-    describe(".createStubInstance", function () {
-        it("stubs existing methods", function () {
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            var stub = createStubInstance(Class);
-            stub.method.returns(3);
-            assert.equals(3, stub.method());
-        });
-
-        it("throws with no methods to stub", function () {
-            var Class = function () {
-                return;
-            };
-
-            assert.exception(
-                function () {
-                    createStubInstance(Class);
-                },
-                { message: "Expected to stub methods on object but found none" }
-            );
-        });
-
-        it("doesn't call the constructor", function () {
-            var Class = function (a, b) {
-                var c = a + b;
-                throw c;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            var stub = createStubInstance(Class);
-            refute.exception(function () {
-                stub.method(3);
-            });
-        });
-
-        it("retains non function values", function () {
-            var TYPE = "some-value";
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-            Class.prototype.type = TYPE;
-
-            var stub = createStubInstance(Class);
-            assert.equals(TYPE, stub.type);
-        });
-
-        it("has no side effects on the prototype", function () {
-            var proto = {
-                method: function () {
-                    throw new Error("error");
-                },
-            };
-            var Class = function () {
-                return;
-            };
-            Class.prototype = proto;
-
-            var stub = createStubInstance(Class);
-            refute.exception(stub.method);
-            assert.exception(proto.method);
-        });
-
-        it("throws exception for non function params", function () {
-            var types = [{}, 3, "hi!"];
-
-            for (var i = 0; i < types.length; i++) {
-                // yes, it's silly to create functions in a loop, it's also a test
-                // eslint-disable-next-line no-loop-func
-                assert.exception(function () {
-                    createStubInstance(types[i]);
-                });
-            }
-        });
-
-        it("allows providing optional overrides", function () {
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            var stub = createStubInstance(Class, {
-                method: createStub().returns(3),
-            });
-
-            assert.equals(3, stub.method());
-        });
-
-        it("allows providing optional returned values", function () {
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            var stub = createStubInstance(Class, {
-                method: 3,
-            });
-
-            assert.equals(3, stub.method());
-        });
-
-        it("allows providing null as a return value", function () {
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            var stub = createStubInstance(Class, {
-                method: null,
-            });
-
-            assert.equals(null, stub.method());
-        });
-
-        it("throws an exception when trying to override non-existing property", function () {
-            var Class = function () {
-                return;
-            };
-            Class.prototype.method = function () {
-                return;
-            };
-
-            assert.exception(
-                function () {
-                    createStubInstance(Class, {
-                        foo: createStub().returns(3),
-                    });
-                },
-                { message: "Cannot stub foo. Property does not exist!" }
-            );
         });
     });
 
     describe(".callThrough", function () {
         it("does not call original function when arguments match conditional stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
-            var callCount = 0;
-            var originalFunc = function increaseCallCount() {
+            let callCount = 0;
+            const originalFunc = function increaseCallCount() {
                 callCount++;
             };
 
-            var myObj = {
+            const myObj = {
                 prop: originalFunc,
             };
 
-            var propStub = createStub(myObj, "prop");
+            const propStub = createStub(myObj, "prop");
             propStub.withArgs("foo").returns("bar");
             propStub.callThrough();
 
-            var result = myObj.prop("foo");
+            const result = myObj.prop("foo");
 
             assert.equals(result, "bar");
             assert.equals(callCount, 0);
@@ -3289,22 +3163,22 @@ describe("stub", function () {
 
         it("calls original function when arguments do not match conditional stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
-            var callCount = 0;
+            let callCount = 0;
 
-            var originalFunc = function increaseCallCount() {
+            const originalFunc = function increaseCallCount() {
                 callCount++;
                 return 1337;
             };
 
-            var myObj = {
+            const myObj = {
                 prop: originalFunc,
             };
 
-            var propStub = createStub(myObj, "prop");
+            const propStub = createStub(myObj, "prop");
             propStub.withArgs("foo").returns("bar");
             propStub.callThrough(propStub);
 
-            var result = myObj.prop("not foo");
+            const result = myObj.prop("not foo");
 
             assert.equals(result, 1337);
             assert.equals(callCount, 1);
@@ -3312,17 +3186,17 @@ describe("stub", function () {
 
         it("calls original function with same arguments when call does not match conditional stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
-            var callArgs = [];
+            let callArgs = [];
 
-            var originalFunc = function increaseCallCount() {
+            const originalFunc = function increaseCallCount() {
                 callArgs = arguments;
             };
 
-            var myObj = {
+            const myObj = {
                 prop: originalFunc,
             };
 
-            var propStub = createStub(myObj, "prop");
+            const propStub = createStub(myObj, "prop");
             propStub.withArgs("foo").returns("bar");
             propStub.callThrough();
 
@@ -3334,17 +3208,17 @@ describe("stub", function () {
 
         it("calls original function with same `this` reference when call does not match conditional stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
-            var reference = {};
+            let reference = {};
 
-            var originalFunc = function increaseCallCount() {
+            const originalFunc = function increaseCallCount() {
                 reference = this;
             };
 
-            var myObj = {
+            const myObj = {
                 prop: originalFunc,
             };
 
-            var propStub = createStub(myObj, "prop");
+            const propStub = createStub(myObj, "prop");
             propStub.withArgs("foo").returns("bar");
             propStub.callThrough();
 
@@ -3357,21 +3231,21 @@ describe("stub", function () {
     describe(".callThroughWithNew", function () {
         it("does not call original function with new when arguments match conditional stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
-            var callCount = 0;
-            var OriginalClass = function SomeClass() {
+            let callCount = 0;
+            const OriginalClass = function SomeClass() {
                 this.foo = "bar";
                 callCount++;
             };
 
-            var myObj = {
+            const myObj = {
                 MyClass: OriginalClass,
             };
 
-            var propStub = createStub(myObj, "MyClass");
+            const propStub = createStub(myObj, "MyClass");
             propStub.withArgs("foo").returns({ foo: "bar" });
             propStub.callThroughWithNew(propStub);
 
-            var result = new myObj.MyClass("foo");
+            const result = new myObj.MyClass("foo");
 
             assert.equals(result.foo, "bar");
             assert.equals(callCount, 0);
@@ -3380,22 +3254,22 @@ describe("stub", function () {
         context("when call does not match conditional stub", function () {
             it("calls original function with new with same arguments", function () {
                 // We need a function here because we can't wrap properties that are already stubs
-                var callArgs = [];
+                let callArgs = [];
 
                 function OriginalClass() {
                     callArgs = arguments;
                     this.foo = "baz";
                 }
 
-                var myObj = {
+                const myObj = {
                     MyClass: OriginalClass,
                 };
 
-                var propStub = createStub(myObj, "MyClass");
+                const propStub = createStub(myObj, "MyClass");
                 propStub.withArgs("foo").returns({ foo: "bar" });
                 propStub.callThroughWithNew(propStub);
 
-                var result = new myObj.MyClass("not foo", [
+                const result = new myObj.MyClass("not foo", [
                     "definitely",
                     "not",
                     "foo",
@@ -3409,7 +3283,7 @@ describe("stub", function () {
 
     describe(".get", function () {
         it("allows users to stub getter functions for properties", function () {
-            var myObj = {
+            const myObj = {
                 prop: "foo",
             };
 
@@ -3421,7 +3295,7 @@ describe("stub", function () {
         });
 
         it("allows users to stub getter functions for functions", function () {
-            var myObj = {
+            const myObj = {
                 prop: function propGetter() {
                     return "foo";
                 },
@@ -3435,7 +3309,7 @@ describe("stub", function () {
         });
 
         it("replaces old getters", function () {
-            var myObj = {
+            const myObj = {
                 get prop() {
                     fail("should not call the old getter");
                     return;
@@ -3450,15 +3324,15 @@ describe("stub", function () {
         });
 
         it("can restore stubbed setters for functions", function () {
-            var propFn = function propFn() {
+            const propFn = function propFn() {
                 return "bar";
             };
 
-            var myObj = {
+            const myObj = {
                 prop: propFn,
             };
 
-            var stub = createStub(myObj, "prop");
+            const stub = createStub(myObj, "prop");
 
             stub.get(function getterFn() {
                 return "baz";
@@ -3470,13 +3344,13 @@ describe("stub", function () {
         });
 
         it("can restore stubbed getters for properties", function () {
-            var myObj = {
+            const myObj = {
                 get prop() {
                     return "bar";
                 },
             };
 
-            var stub = createStub(myObj, "prop");
+            const stub = createStub(myObj, "prop");
 
             stub.get(function getterFn() {
                 return "baz";
@@ -3490,7 +3364,7 @@ describe("stub", function () {
 
     describe(".set", function () {
         it("allows users to stub setter functions for properties", function () {
-            var myObj = {
+            const myObj = {
                 prop: "foo",
             };
 
@@ -3504,7 +3378,7 @@ describe("stub", function () {
         });
 
         it("allows users to stub setter functions for functions", function () {
-            var myObj = {
+            const myObj = {
                 prop: function propSetter() {
                     return "foo";
                 },
@@ -3520,7 +3394,7 @@ describe("stub", function () {
         });
 
         it("replaces old setters", function () {
-            var myObj = {
+            const myObj = {
                 // eslint-disable-next-line accessor-pairs
                 set prop(val) {
                     fail("should not call the old setter");
@@ -3537,15 +3411,15 @@ describe("stub", function () {
         });
 
         it("can restore stubbed setters for functions", function () {
-            var propFn = function propFn() {
+            const propFn = function propFn() {
                 return "bar";
             };
 
-            var myObj = {
+            const myObj = {
                 prop: propFn,
             };
 
-            var stub = createStub(myObj, "prop");
+            const stub = createStub(myObj, "prop");
 
             stub.set(function setterFn() {
                 myObj.otherProp = "baz";
@@ -3557,14 +3431,14 @@ describe("stub", function () {
         });
 
         it("can restore stubbed setters for properties", function () {
-            var myObj = {
+            const myObj = {
                 // eslint-disable-next-line accessor-pairs
                 set prop(val) {
                     this.otherProp = "bar";
                 },
             };
 
-            var stub = createStub(myObj, "prop");
+            const stub = createStub(myObj, "prop");
 
             stub.set(function setterFn() {
                 myObj.otherProp = "baz";
@@ -3579,7 +3453,7 @@ describe("stub", function () {
 
     describe(".value", function () {
         it("allows stubbing property descriptor values", function () {
-            var myObj = {
+            const myObj = {
                 prop: "rawString",
             };
 
@@ -3588,18 +3462,18 @@ describe("stub", function () {
         });
 
         it("allows restoring stubbed property descriptor values", function () {
-            var myObj = {
+            const myObj = {
                 prop: "rawString",
             };
 
-            var stub = createStub(myObj, "prop").value("newString");
+            const stub = createStub(myObj, "prop").value("newString");
             stub.restore();
 
             assert.equals(myObj.prop, "rawString");
         });
 
         it("allows stubbing function static properties", function () {
-            var myFunc = function () {
+            const myFunc = function () {
                 return;
             };
             myFunc.prop = "rawString";
@@ -3609,19 +3483,19 @@ describe("stub", function () {
         });
 
         it("allows restoring function static properties", function () {
-            var myFunc = function () {
+            const myFunc = function () {
                 return;
             };
             myFunc.prop = "rawString";
 
-            var stub = createStub(myFunc, "prop").value("newString");
+            const stub = createStub(myFunc, "prop").value("newString");
             stub.restore();
 
             assert.equals(myFunc.prop, "rawString");
         });
 
         it("allows stubbing object props with configurable false", function () {
-            var myObj = {};
+            const myObj = {};
             Object.defineProperty(myObj, "prop", {
                 configurable: false,
                 enumerable: true,
@@ -3636,7 +3510,7 @@ describe("stub", function () {
 
     describe(".id", function () {
         it("should start with 'stub#'", function () {
-            for (var i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 assert.isTrue(createStub().id.indexOf("stub#") === 0);
             }
         });
@@ -3644,12 +3518,12 @@ describe("stub", function () {
 
     describe(".printf", function () {
         it("is delegated to proxy", function () {
-            var f = function () {
+            const f = function () {
                 throw new Error("aError");
             };
 
-            var stub = createStub();
-            var proxy = createProxy(f, f);
+            const stub = createStub();
+            const proxy = createProxy(f, f);
 
             assert.same(stub.printf, proxy.printf);
         });
@@ -3657,10 +3531,10 @@ describe("stub", function () {
 
     describe(".wrappedMethod", function () {
         it("should return the original method being stubbed", function () {
-            var myFn = function () {
+            const myFn = function () {
                 return "foo";
             };
-            var myObj = {
+            const myObj = {
                 fn: myFn,
             };
             createStub(myObj, "fn");
@@ -3668,7 +3542,7 @@ describe("stub", function () {
         });
 
         it("should not exist for accessors", function () {
-            var myObj = {
+            const myObj = {
                 get prop() {
                     return "foo";
                 },

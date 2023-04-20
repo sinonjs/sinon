@@ -1,13 +1,13 @@
 "use strict";
 
-var defaultConfig = require("../lib/sinon/util/core/default-config");
-var hasOwnProperty =
+const defaultConfig = require("../lib/sinon/util/core/default-config");
+const hasOwnProperty =
     require("@sinonjs/commons").prototypes.object.hasOwnProperty;
 
 module.exports = function getConfig(custom) {
-    var config = {};
-    var prop;
-    var kustom = custom || {};
+    const config = {};
+    let prop;
+    const kustom = custom || {};
 
     for (prop in defaultConfig) {
         if (hasOwnProperty(defaultConfig, prop)) {

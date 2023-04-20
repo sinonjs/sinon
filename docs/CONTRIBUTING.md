@@ -22,7 +22,7 @@ cd docs
 gem install bundler
 
 # install all dependencies
-bundle install
+bundle install --path vendor/bundle
 
 # build the site
 bundle exec jekyll serve

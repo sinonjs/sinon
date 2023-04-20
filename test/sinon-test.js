@@ -1,12 +1,12 @@
 "use strict";
 
-var assert = require("@sinonjs/referee").assert;
-var functionName = require("@sinonjs/commons").functionName;
-var Sandbox = require("../lib/sinon/sandbox");
-var proxyquire = require("proxyquire");
+const assert = require("@sinonjs/referee").assert;
+const functionName = require("@sinonjs/commons").functionName;
+const Sandbox = require("../lib/sinon/sandbox");
+const proxyquire = require("proxyquire");
 
 describe("sinon module", function () {
-    var sinon, fakeNise;
+    let sinon, fakeNise;
 
     before(function () {
         if (typeof Promise !== "function") {
@@ -110,7 +110,7 @@ describe("sinon module", function () {
         });
 
         describe("useFakeXMLHttpRequest", function () {
-            var nise;
+            let nise;
 
             beforeEach(function () {
                 // use full sinon for this test as it compares sinon instance

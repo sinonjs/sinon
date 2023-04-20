@@ -1,15 +1,15 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var getConfig = require("../../get-config");
-var defaultConfig = require("../../../lib/sinon/util/core/default-config");
-var assert = referee.assert;
-var refute = referee.refute;
+const referee = require("@sinonjs/referee");
+const getConfig = require("../../get-config");
+const defaultConfig = require("../../../lib/sinon/util/core/default-config");
+const assert = referee.assert;
+const refute = referee.refute;
 
 describe("core/util/getConfig", function () {
     describe(".getConfig", function () {
         it("gets copy of default config", function () {
-            var config = getConfig();
+            const config = getConfig();
 
             refute.same(config, defaultConfig);
             assert.equals(config.injectInto, defaultConfig.injectInto);
@@ -19,7 +19,7 @@ describe("core/util/getConfig", function () {
         });
 
         it("should override specified properties", function () {
-            var config = getConfig({
+            const config = getConfig({
                 properties: ["stub", "mock"],
                 useFakeServer: false,
             });

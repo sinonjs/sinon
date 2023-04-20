@@ -1,13 +1,13 @@
 "use strict";
 
-var referee = require("@sinonjs/referee");
-var createSpy = require("../../../lib/sinon/spy");
-var functionToString = require("../../../lib/sinon/util/core/function-to-string");
-var assert = referee.assert;
+const referee = require("@sinonjs/referee");
+const createSpy = require("../../../lib/sinon/spy");
+const functionToString = require("../../../lib/sinon/util/core/function-to-string");
+const assert = referee.assert;
 
 describe("util/core/functionToString", function () {
     it("returns function's displayName property", function () {
-        var fn = function () {
+        const fn = function () {
             return;
         };
         fn.displayName = "Larry";
@@ -16,7 +16,7 @@ describe("util/core/functionToString", function () {
     });
 
     it("guesses name from last call's this object", function () {
-        var obj = {};
+        const obj = {};
         obj.doStuff = createSpy();
         obj.doStuff.call({});
         obj.doStuff();
@@ -25,8 +25,8 @@ describe("util/core/functionToString", function () {
     });
 
     it("guesses name from any call where property can be located", function () {
-        var obj = {};
-        var otherObj = { id: 42 };
+        const obj = {};
+        const otherObj = { id: 42 };
 
         obj.doStuff = createSpy();
         obj.doStuff.call({});
@@ -38,7 +38,7 @@ describe("util/core/functionToString", function () {
 
     // https://github.com/sinonjs/sinon/issues/2215
     it("ignores errors thrown by property accessors on thisValue", function () {
-        var obj = {};
+        const obj = {};
 
         Object.defineProperty(obj, "foo", {
             enumerable: true,
@@ -53,11 +53,11 @@ describe("util/core/functionToString", function () {
         };
 
         // validate that the keys are in the expected order that will cause the bug
-        var keys = Object.keys(obj);
+        const keys = Object.keys(obj);
         assert.equals(keys[0], "foo");
         assert.equals(keys[1], "fn");
 
-        var spy = createSpy(obj, "fn");
+        const spy = createSpy(obj, "fn");
 
         obj.fn();
 
