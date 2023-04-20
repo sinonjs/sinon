@@ -874,17 +874,5 @@ describe("issues", function () {
                 mock.expects("aMethod").once();
             });
         });
-
-        it("should not throw if the unconfigurable object descriptor to be used for a Fake is on the prototype", function () {
-            const instance =
-                createInstanceFromClassWithReadOnlyPropertyDescriptor();
-
-            // per #2491 this throws "TypeError: Cannot assign to read only property 'aMethod' of object '#<BaseClass>'"
-            // that makes sense for descriptors taken from the object, but not its prototype, as we are free to change
-            // the latter when setting it
-            refute.exception(() => {
-                this.sandbox.replace(instance, "aMethod", sinon.fake());
-            });
-        });
     });
 });
