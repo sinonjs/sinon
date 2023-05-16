@@ -873,4 +873,30 @@ describe("issues", function () {
             });
         });
     });
+
+    describe("#2514 (regression from fixing #2491) - writable object descriptors that are unconfigurable should be assignable", function () {
+        function createInstanceWithWritableUconfigurablePropertyDescriptor() {
+            const instance = {};
+            Object.defineProperty(instance, "aMethod", {
+                writable: true,
+                configurable: false,
+                value: function () {
+                    return 42;
+                },
+            });
+
+            return instance;
+        }
+
+        it("should be able to assign and restore unconfigurable descriptors that are writable", function () {
+            const o =
+                createInstanceWithWritableUconfigurablePropertyDescriptor();
+
+            refute.exception(() =>
+                this.sandbox.stub(o, "aMethod").returns("stubbed")
+            );
+            assert.equals("stubbed", o.aMethod());
+            this.sandbox.restore();
+        });
+    });
 });
