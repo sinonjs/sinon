@@ -150,6 +150,13 @@ Causes all timers scheduled within the affected time range to be called. `time` 
 
 The `tickAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
 
+#### `clock.jump(time);`
+
+Advance the clock by jumping forward in time, firing callbacks at most once.
+`time` takes the same formats as [`clock.tick`](#clockticktime--await-clocktickasynctime).
+
+This can be used to simulate the JS engine (such as a browser) being put to sleep and resumed later, skipping intermediary timers.
+
 #### `clock.next();` / `await clock.nextAsync()`
 
 Advances the clock to the the moment of the first scheduled timer, firing it.

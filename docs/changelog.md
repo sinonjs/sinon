@@ -6,6 +6,17 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 15.1.0
+
+- [`79e719f2`](https://github.com/sinonjs/sinon/commit/79e719f21ecafd13130f0801231b5dd96ea0fb07)
+  Ensure we use a fake-timers version with clock.jump (Carl-Erik Kopseng)
+- [`b2a4df5a`](https://github.com/sinonjs/sinon/commit/b2a4df5a841bfce85b9beb0741a8d9afe86ab492)
+  Add docs for clock.jump method (#2512) (Jason O'Neill)
+- [`f096abff`](https://github.com/sinonjs/sinon/commit/f096abffa6add8ea29a99822c3b4d2710014d453)
+  fix (#2514): only force new or inherited descriptors to be configurable (#2515) (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-05-18._
+
 ## 15.0.4
 
 - [`e9042c4f`](https://github.com/sinonjs/sinon/commit/e9042c4f18f4aa3e36e13652196c746b759aa1a5)
