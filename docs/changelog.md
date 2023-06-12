@@ -6,6 +6,13 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 15.1.2
+
+- [`02b73aed`](https://github.com/sinonjs/sinon/commit/02b73aed2d3d7dee071767fdf79073aa1dd673b6)
+  Update lock file after removing node_modules ... (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-06-12._
+
 ## 15.1.1
 
 - [`194fc2ef`](https://github.com/sinonjs/sinon/commit/194fc2ef726aba1cfd5753316414934d2551e18c)
