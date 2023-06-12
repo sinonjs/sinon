@@ -1,5 +1,42 @@
 # Changes
 
+## 15.1.1
+
+- [`194fc2ef`](https://github.com/sinonjs/sinon/commit/194fc2ef726aba1cfd5753316414934d2551e18c)
+  Change fake-timers version to specifically target the one containing the 'jump' feature (Carl-Erik Kopseng)
+  > Instead of the later (breaking) version. See [#470](https://github.com/sinonjs/fake-timers/issues/470)
+- [`05f05ac3`](https://github.com/sinonjs/sinon/commit/05f05ac30b1cb95c57dde3e30a4952679afb309a)
+  docs: Remove threw(obj) from docs (#2513) (Morgan Roderick)
+  > Since the introduction of threw in
+  >
+  > 0feec9ffba0da6bc2996cefa0c6e71872e8bedb2, no one have reported that
+  >
+  > `threw(obj)` doesn't work as the documentation states.
+  >
+  > ```js
+  > const sinon = require("sinon");
+  >
+  > const o = { pie: "apple" };
+  >
+  > const f = sinon.fake.throws(o);
+  >
+  > f();
+  >
+  > // this is supposed to return true
+  >
+  > f.threw(o);
+  >
+  > // => false
+  > ```
+  >
+  > Since it has been 12+ years without an error report, it's safe to assume
+  >
+  > that no one uses the `threw` method in this way. Let's remove it from
+  >
+  > the documentation.
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-06-12._
+
 ## 15.1.0
 
 - [`79e719f2`](https://github.com/sinonjs/sinon/commit/79e719f21ecafd13130f0801231b5dd96ea0fb07)
