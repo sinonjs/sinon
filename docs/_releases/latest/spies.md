@@ -282,10 +282,6 @@ Returns `true` if spy threw an exception at least once.
 
 Returns `true` if spy threw an exception of the provided type at least once.
 
-#### `spy.threw(obj);`
-
-Returns `true` if spy threw the provided exception object at least once.
-
 #### `spy.alwaysThrew();`
 
 Returns `true` if spy always threw an exception.
@@ -293,10 +289,6 @@ Returns `true` if spy always threw an exception.
 #### `spy.alwaysThrew("TypeError");`
 
 Returns `true` if spy always threw an exception of the provided type.
-
-#### `spy.alwaysThrew(obj);`
-
-Returns `true` if spy always threw the provided exception object.
 
 #### `spy.returned(obj);`
 
