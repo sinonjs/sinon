@@ -36,6 +36,7 @@ async function evaluatePageContent() {
         args: ["--no-sandbox"],
         // allow overriding chrome path
         executablePath: process.env.SINON_CHROME_BIN || null,
+        headless: "new",
     });
     const page = await browser.newPage();
 
