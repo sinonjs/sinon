@@ -1,5 +1,40 @@
 # Changes
 
+## 15.2.0
+
+- [`66b0081e`](https://github.com/sinonjs/sinon/commit/66b0081e1f9673b14277882faa10aaa1e3b564ff)
+  Use fake-timers v10.1.0 re-released as v10.3.0 (Carl-Erik Kopseng)
+  > Version 10.2.0 of fake-timers had an unexpected breaking
+  > change. We re-released 10.1.0 as 10.3.0 to force users
+  > into jumping over the deprecated version.
+  >
+  > v10.2.0 was re-released as v11.0.0 and will be part of
+  > the next Sinon major
+- [`a79ccaeb`](https://github.com/sinonjs/sinon/commit/a79ccaeb20bbb558902ae77b20bd026719de3004)
+  Support callable instances (#2517) (bojavou)
+  > - Support callable instances
+  >
+  > - Clean prettier lint
+  >
+  > ***
+  >
+  > Co-authored-by: - <->
+- [`d220c995`](https://github.com/sinonjs/sinon/commit/d220c99516ddb644d3702b4736bdfd311a2b05ec)
+  fix: bundling compatibility with webpack@5 (#2519) (Avi Vahl)
+  > - fix: bundling compatibility with webpack@5
+  >
+  > when using webpack v5 to bundle code that calls `require('sinon')` (cjs) , it would have defaulted to "exports->require" and fail with multiple node-api requirements (util, timers, etc.)
+  >
+  > this patch ensures that anyone who bundles sinon for browser gets the (browser-compatible) esm version.
+  >
+  > tested on both webpack v5 and v4. should be noted that v4 worked even without this patch, as it automatically injected polyfills. v5 no longer does so. with this PR, people using webpack@4 to bundle sinon at least see size improvement, as the polyfills are no longer required.
+  >
+  > - fix: revert change for package.json -> "browser"
+  >
+  > browserify doesn't seem to like esm. leave that entry point alone, and ensure "exports" -> "browser" (which webpack@5 uses) is esm.
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-06-20._
+
 ## 15.1.2
 
 - [`02b73aed`](https://github.com/sinonjs/sinon/commit/02b73aed2d3d7dee071767fdf79073aa1dd673b6)

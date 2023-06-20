@@ -1246,6 +1246,48 @@ describe("sinonSpy.call", function () {
         });
     });
 
+    describe("constructor return", function () {
+        it("preserves returned object", function () {
+            const customReturn = {};
+            function CustomConstructor() {
+                return customReturn;
+            }
+            const SpiedCustomConstructor = sinonSpy(CustomConstructor);
+            const myInstance = new SpiedCustomConstructor();
+
+            assert(myInstance === customReturn);
+        });
+
+        it("allows explicit returned object", function () {
+            const StubConstructor = sinonStub();
+            const customReturn = {};
+            StubConstructor.returns(customReturn);
+            const myInstance = new StubConstructor();
+
+            assert(myInstance === customReturn);
+        });
+
+        it("preserves returned function", function () {
+            function customReturn() {} // eslint-disable-line no-empty-function
+            function CustomConstructor() {
+                return customReturn;
+            }
+            const SpiedCustomConstructor = sinonSpy(CustomConstructor);
+            const myInstance = new SpiedCustomConstructor();
+
+            assert(myInstance === customReturn);
+        });
+
+        it("allows explicit returned function", function () {
+            const StubConstructor = sinonStub();
+            function customReturn() {} // eslint-disable-line no-empty-function
+            StubConstructor.returns(customReturn);
+            const myInstance = new StubConstructor();
+
+            assert(myInstance === customReturn);
+        });
+    });
+
     describe("functions", function () {
         it("throws if spying on non-existent property", function () {
             const myObj = {};
