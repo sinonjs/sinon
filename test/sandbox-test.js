@@ -52,7 +52,7 @@ describe("Sandbox", function () {
     });
 
     it("can be reset without failing when pre-configured to use a fake server", function () {
-        const sandbox = createSandbox({ useFakeServer: true });
+        const sandbox = createSandbox({useFakeServer: true});
         refute.exception(function () {
             sandbox.reset();
         });
@@ -387,7 +387,7 @@ describe("Sandbox", function () {
                         foo: sinonStub().returns(3),
                     });
                 },
-                { message: "Cannot stub foo. Property does not exist!" }
+                {message: "Cannot stub foo. Property does not exist!"}
             );
         });
 
@@ -398,6 +398,7 @@ describe("Sandbox", function () {
                 constructor() {
                     this.privateGetter = () => 42;
                 }
+
                 getValue() {
                     return this.privateGetter();
                 }
@@ -563,7 +564,7 @@ describe("Sandbox", function () {
 
     describe("stub anything", function () {
         beforeEach(function () {
-            this.object = { property: 42 };
+            this.object = {property: 42};
             this.sandbox = new Sandbox();
         });
 
@@ -995,7 +996,7 @@ describe("Sandbox", function () {
                 function () {
                     sandbox.replace(object, "property", replacement);
                 },
-                { message: "Cannot replace string with function" }
+                {message: "Cannot replace string with function"}
             );
         });
 
@@ -1012,7 +1013,7 @@ describe("Sandbox", function () {
                 function () {
                     sandbox.replace(object, "property", replacement);
                 },
-                { message: "Cannot replace function with string" }
+                {message: "Cannot replace function with string"}
             );
         });
 
@@ -1072,8 +1073,8 @@ describe("Sandbox", function () {
             assert.equals(actual, replacement);
         });
 
-        describe("when asked to replace a getter", function () {
-            it("should throw an Error", function () {
+        describe("when asked to replace a property with a getter", function () {
+            it("should throw an Error by default that informs of replaceGetter", function () {
                 const sandbox = this.sandbox;
                 const object = {
                     get foo() {
@@ -1093,7 +1094,7 @@ describe("Sandbox", function () {
             });
         });
 
-        describe("when asked to replace a setter", function () {
+        describe("when asked to replace a property with a setter", function () {
             it("should throw an Error", function () {
                 const sandbox = this.sandbox;
                 const object = {
@@ -1113,6 +1114,26 @@ describe("Sandbox", function () {
                     }
                 );
             });
+
+            it("should allow forcing assignment", function () {
+                const sandbox = this.sandbox;
+                let hiddenFoo = () => 'original';
+                const object = {
+                    // eslint-disable-next-line accessor-pairs
+                    get foo(){
+                        return hiddenFoo;
+                    },
+                    set foo(value) {
+                        hiddenFoo = value;
+                    },
+                };
+
+                assert.equals(object.foo(),'original')
+                sandbox.replace(object, "foo", sinonFake.returns('fake'), {forceAssignment: true});
+                assert.equals(object.foo(),'fake')
+                sandbox.restore()
+                assert.equals(object.foo(),'original');
+            })
         });
     });
 
@@ -1494,8 +1515,8 @@ describe("Sandbox", function () {
             const sandbox = (this.sandbox = createSandbox());
             const fakes = sandbox.getFakes();
 
-            fakes.push({ resetBehavior: sinonSpy() });
-            fakes.push({ resetBehavior: sinonSpy() });
+            fakes.push({resetBehavior: sinonSpy()});
+            fakes.push({resetBehavior: sinonSpy()});
         });
 
         it("calls resetBehavior on all fakes", function () {
@@ -1581,13 +1602,13 @@ describe("Sandbox", function () {
                 "useFakeTimers"
             ).returns({});
 
-            this.sandbox.useFakeTimers({ toFake: ["Date", "setTimeout"] });
+            this.sandbox.useFakeTimers({toFake: ["Date", "setTimeout"]});
             this.sandbox.useFakeTimers({
                 toFake: ["setTimeout", "clearTimeout", "setInterval"],
             });
 
             assert(
-                useFakeTimersStub.calledWith({ toFake: ["Date", "setTimeout"] })
+                useFakeTimersStub.calledWith({toFake: ["Date", "setTimeout"]})
             );
             assert(
                 useFakeTimersStub.calledWith({
@@ -1857,8 +1878,14 @@ describe("Sandbox", function () {
             /* eslint-disable no-empty-function, accessor-pairs */
             this.sandbox.inject(this.obj);
 
-            const myObj = { a: function () {} };
-            function MyClass() {}
+            const myObj = {
+                a: function () {
+                }
+            };
+
+            function MyClass() {
+            }
+
             MyClass.prototype.method1 = noop;
             Object.defineProperty(myObj, "b", {
                 get: function () {
@@ -1867,7 +1894,8 @@ describe("Sandbox", function () {
                 configurable: true,
             });
             Object.defineProperty(myObj, "c", {
-                set: function () {},
+                set: function () {
+                },
                 configurable: true,
             });
 
@@ -1953,8 +1981,8 @@ describe("Sandbox", function () {
             const sandbox = createSandbox();
             const fakes = sandbox.getFakes();
 
-            fakes.push({ verify: sinonSpy() });
-            fakes.push({ verify: sinonSpy() });
+            fakes.push({verify: sinonSpy()});
+            fakes.push({verify: sinonSpy()});
 
             sandbox.verify();
 
@@ -2012,7 +2040,7 @@ describe("Sandbox", function () {
     describe("configurable sandbox", function () {
         beforeEach(function () {
             this.requests = [];
-            this.fakeServer = { requests: this.requests };
+            this.fakeServer = {requests: this.requests};
 
             this.useFakeTimersSpy = sinonSpy(sinonClock, "useFakeTimers");
             sinonStub(fakeServer, "create").returns(this.fakeServer);
@@ -2072,7 +2100,7 @@ describe("Sandbox", function () {
             };
             const clock = {};
             const spy = false;
-            const object = { server: server, clock: clock, spy: spy };
+            const object = {server: server, clock: clock, spy: spy};
             const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["server", "clock", "spy"],
@@ -2199,7 +2227,7 @@ describe("Sandbox", function () {
             const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["clock"],
-                    useFakeTimers: { toFake: ["Date", "setTimeout"] },
+                    useFakeTimers: {toFake: ["Date", "setTimeout"]},
                 })
             );
 
@@ -2351,14 +2379,14 @@ describe("Sandbox", function () {
                 function () {
                     sandboxA.assert.fail("Some message");
                 },
-                { name: "CustomErrorA" }
+                {name: "CustomErrorA"}
             );
 
             assert.exception(
                 function () {
                     sandboxB.assert.fail("Some message");
                 },
-                { name: "CustomErrorB" }
+                {name: "CustomErrorB"}
             );
 
             sandboxA.restore();
