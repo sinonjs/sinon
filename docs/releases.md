@@ -8,6 +8,7 @@ redirect_from:
     - /download
     - /download/
     - /releases/download/
+    - /guides
 ---
 
 <div class="head-page">
@@ -19,6 +20,7 @@ redirect_from:
     You can see the full log of changes for each release on our separate <a href="./changelog">changelog page</a>.
 </div>
 
+{% include docs/migration-guides.md %}
 
 <div class="in-content releases">
     <ul>
