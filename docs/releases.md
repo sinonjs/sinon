@@ -8,6 +8,7 @@ redirect_from:
     - /download
     - /download/
     - /releases/download/
+    - /guides
 ---
 
 <div class="head-page">
@@ -15,6 +16,8 @@ redirect_from:
     In addition to our download page, you can also
     <a href="#npm-cdns">use a NPM based CDN</a> for your convenience.
 </div>
+
+{% include docs/migration-guides.md %}
 
 <div class="in-content releases">
     <ul>
