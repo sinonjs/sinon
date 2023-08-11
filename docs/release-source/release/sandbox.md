@@ -181,13 +181,13 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 _Since `sinon@2.0.0`_
 
-#### `sandbox.replace(object, property, replacement);`
+#### `sandbox.replace(object, property, replacement, options);`
 
 Replaces `property` on `object` with `replacement` argument. Attempts to replace an already replaced value cause an exception. Returns the `replacement`.
 
 `replacement` can be any value, including `spies`, `stubs` and `fakes`.
 
-This method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
+By default, this method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
 
 ```js
 var myObject = {
@@ -203,6 +203,8 @@ sandbox.replace(myObject, "myMethod", function () {
 console.log(myObject.myMethod());
 // strawberry
 ```
+
+You _can_ pass the option `{forceAssignment: boolean}` to avoid throwing on encountering a setter. This will pass the replacement into setter function and vice-versa use the getter to get the value used for restoring later on. One use case can be to do ESM module stubbing without resorting to external machinery such as module loaders (see [#2403](https://github.com/sinonjs/sinon/issues/2403)).
 
 #### `sandbox.replaceGetter();`
 
