@@ -899,4 +899,17 @@ describe("issues", function () {
             this.sandbox.restore();
         });
     });
+
+    it("#2534 - spies on accessors are not being cleaned up", function() {
+        const object = {
+            get prop(){ return "bar"},
+        };
+        const spy = sinon.spy(object, "prop", ["get"]);
+        /* eslint-disable no-unused-expressions */
+        object.prop;
+        assert.equals(spy.get.callCount,1);
+        sinon.restore();
+        object.prop;
+        assert.equals(spy.get.callCount,1); // should remain unchanged
+    })
 });

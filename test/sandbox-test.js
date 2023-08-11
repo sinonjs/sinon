@@ -2205,7 +2205,7 @@ describe("Sandbox", function () {
             assert.equals(object.prop, "blabla");
         });
 
-        it("allows restoring setters", function () {
+        it("allows putting setters on fields and subsequently restoring them", function () {
             const object = {
                 prop: "bar",
             };
@@ -2220,6 +2220,34 @@ describe("Sandbox", function () {
             object.prop = "bla";
 
             assert.equals(object.prop, "bla");
+        })
+
+        it("allows replacing setters on fields and subsequently restoring them", function () {
+            const object = {
+                get prop(){ return "bar"},
+            };
+
+            const sandbox = new Sandbox();
+            const getter = sandbox.spy(() => "foobar");
+            sandbox.stub(object, "prop").get(getter);
+            assert.equals(object.prop, "foobar");
+            assert.equals(getter.callCount,1);
+
+
+            sandbox.restore();
+            assert.equals(object.prop, "bar");
+        });
+
+        it("allows spying on accessors and subsequently restoring them", function () {
+            const object = {
+                get prop(){ return "bar"},
+            };
+            const sandbox = new Sandbox();
+            const spy = sandbox.spy(object, "prop", ["get"]);
+            sandbox.restore();
+            const descriptor = Object.getOwnPropertyDescriptor(object, "prop");
+            const getter = descriptor.get
+            refute.equals(getter,spy.get);
         });
     });
 
