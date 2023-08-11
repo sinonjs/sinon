@@ -807,6 +807,83 @@ describe("Sandbox", function () {
         });
     });
 
+    describe(".define", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        afterEach(function () {
+            this.sandbox.restore();
+        });
+
+        it("should define a function property", function () {
+            function newFunction() {
+                return;
+            }
+
+            const object = {};
+
+            this.sandbox.define(object, "property", newFunction);
+
+            assert.equals(object.property, newFunction);
+
+            this.sandbox.restore();
+
+            assert.isUndefined(object.property);
+        });
+
+        it("should define a non-function property", function () {
+            const newValue = "some-new-value";
+            const object = {};
+
+            this.sandbox.define(object, "property", newValue);
+
+            assert.equals(object.property, newValue);
+
+            this.sandbox.restore();
+
+            assert.isUndefined(object.property);
+        });
+
+        it("should error on existing descriptor", function () {
+            const sandbox = this.sandbox;
+
+            const existingValue = "123";
+            const existingFunction = () => "abcd";
+
+            const object = {
+                existingValue: existingValue,
+                existingFunction: existingFunction
+            };
+
+            assert.exception(
+                function () {
+                    sandbox.define(object, "existingValue", "new value");
+                },
+                {
+                    message:
+                        "Cannot define the already existing property existingValue",
+                    name: "TypeError",
+                }
+            );
+
+            assert.exception(
+                function () {
+                    sandbox.define(object, "existingFunction", () => "new function");
+                },
+                {
+                    message:
+                        "Cannot define the already existing property existingFunction",
+                    name: "TypeError",
+                }
+            );
+
+            // Verify that the methods above, even though they failed, did not replace the values
+            assert.equals(object.existingValue, existingValue);
+            assert.equals(object.existingFunction, existingFunction);
+        });
+    });
+
     describe(".replace", function () {
         beforeEach(function () {
             this.sandbox = createSandbox();
