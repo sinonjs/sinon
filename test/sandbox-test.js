@@ -812,6 +812,10 @@ describe("Sandbox", function () {
             this.sandbox = createSandbox();
         });
 
+        afterEach(function () {
+            this.sandbox.restore();
+        });
+
         it("should replace a function property", function () {
             const replacement = function replacement() {
                 return;
