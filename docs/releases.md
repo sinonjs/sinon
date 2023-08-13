@@ -3,12 +3,12 @@ layout: default
 title: Releases - Sinon.JS
 permalink: /releases/index.html
 redirect_from:
-    - /docs
-    - /docs/
-    - /download
-    - /download/
-    - /releases/download/
-    - /guides
+  - /docs
+  - /docs/
+  - /download
+  - /download/
+  - /releases/download/
+  - /guides
 ---
 
 <div class="head-page">
@@ -52,6 +52,7 @@ redirect_from:
             {% endif %}
         {% endfor %}
     </ul>
+
 </div>
 
 <div>
