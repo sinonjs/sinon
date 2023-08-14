@@ -954,7 +954,7 @@ describe("Sandbox", function () {
                 },
                 {
                     message:
-                        "Cannot replace non-existent property i-dont-exist",
+                        "Cannot replace non-existent property i-dont-exist. Perhaps you meant sandbox.define()?",
                     name: "TypeError",
                 }
             );
