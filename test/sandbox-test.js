@@ -862,7 +862,7 @@ describe("Sandbox", function () {
                 },
                 {
                     message:
-                        "Cannot define the already existing property existingValue",
+                        "Cannot define the already existing property existingValue. Perhaps you meant sandbox.replace()?",
                     name: "TypeError",
                 }
             );
@@ -873,7 +873,7 @@ describe("Sandbox", function () {
                 },
                 {
                     message:
-                        "Cannot define the already existing property existingFunction",
+                        "Cannot define the already existing property existingFunction. Perhaps you meant sandbox.replace()?",
                     name: "TypeError",
                 }
             );
