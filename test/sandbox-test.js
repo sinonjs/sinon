@@ -853,7 +853,7 @@ describe("Sandbox", function () {
 
             const object = {
                 existingValue: existingValue,
-                existingFunction: existingFunction
+                existingFunction: existingFunction,
             };
 
             assert.exception(
@@ -869,7 +869,11 @@ describe("Sandbox", function () {
 
             assert.exception(
                 function () {
-                    sandbox.define(object, "existingFunction", () => "new function");
+                    sandbox.define(
+                        object,
+                        "existingFunction",
+                        () => "new function"
+                    );
                 },
                 {
                     message:

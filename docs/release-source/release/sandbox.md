@@ -191,7 +191,7 @@ Defines the `property` on `object` with the value `value`. Attempts to define an
 var myObject = {};
 
 sandbox.define(myObject, "myValue", function () {
-    return "blackberry";
+  return "blackberry";
 });
 
 sandbox.define(myObject, "myMethod", function () {
