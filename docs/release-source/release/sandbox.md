@@ -4,7 +4,7 @@ title: Sandboxes - Sinon.JS
 breadcrumb: sandbox
 ---
 
-Sandboxes removes the need to keep track of every fake created, which greatly simplifies cleanup.
+Sandboxes remove the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
 var sandbox = require("sinon").createSandbox();
@@ -180,6 +180,40 @@ var sandbox = sinon.createSandbox({
 A convenience reference for [`sinon.assert`](./assertions)
 
 _Since `sinon@2.0.0`_
+
+#### `sandbox.define(object, property, value);`
+
+Defines the `property` on `object` with the value `value`. Attempts to define an already defined value cause an exception.
+
+`value` can be any value except `undefined`, including `spies`, `stubs` and `fakes`.
+
+```js
+var myObject = {};
+
+sandbox.define(myObject, "myValue", function () {
+  return "blackberry";
+});
+
+sandbox.define(myObject, "myMethod", function () {
+  return "strawberry";
+});
+
+console.log(myObject.myValue);
+// blackberry
+
+console.log(myObject.myMethod());
+// strawberry
+
+sandbox.restore();
+
+console.log(myObject.myValue);
+// undefined
+
+console.log(myObject.myMethod);
+// undefined
+```
+
+_Since `sinon@15.3.0`_
 
 #### `sandbox.replace(object, property, replacement);`
 
