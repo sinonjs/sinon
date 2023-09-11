@@ -940,6 +940,18 @@ describe("stub", function () {
             assert.contains(stub.firstCall.toString(), "not implemented");
         });
 
+        it("creates a non empty error message when error is a string and no message is passed", function () {
+            const stub = createStub()
+
+            stub.withArgs(1).throws("apple pie")
+
+            assert.exception(function () {
+                stub(1)
+            }, {
+                message: "apple pie"
+            })
+        })
+
         describe("lazy instantiation of exceptions", function () {
             let errorSpy;
             beforeEach(function () {
