@@ -1134,7 +1134,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt() !TypeError"
+                "doIt() !TypeError(Sinon-provided TypeError)"
             );
         });
 

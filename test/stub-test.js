@@ -948,7 +948,7 @@ describe("stub", function () {
             assert.exception(function () {
                 stub(1)
             }, {
-                message: "apple pie"
+                message: "Sinon-provided apple pie"
             })
         })
 
