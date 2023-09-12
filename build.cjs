@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 "use strict";
 /* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
-var fs = require("fs");
-var browserify = require("browserify");
-var pkg = require("./package.json");
-var sinon = require("./lib/sinon");
+const fs = require("fs");
+const browserify = require("browserify");
+const pkg = require("./package.json");
+const sinon = require("./lib/sinon");
 
 // YYYY-MM-DD
-var date = new Date().toISOString().split("T")[0];
+const date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
+const preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
 
 try {
     fs.mkdirSync("pkg");
