@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 "use strict";
 /* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
-var fs = require("fs");
-var browserify = require("browserify");
-var pkg = require("./package.json");
-var sinon = require("./lib/sinon");
+let fs = require("fs");
+let browserify = require("browserify");
+let pkg = require("./package.json");
+let sinon = require("./lib/sinon");
 
 // YYYY-MM-DD
-var date = new Date().toISOString().split("T")[0];
+let date = new Date().toISOString().split("T")[0];
 
 // Keep the preamble on one line to retain source maps
-var preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
+let preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
 
 try {
     fs.mkdirSync("pkg");
@@ -43,7 +43,7 @@ makeBundle(
         detectGlobals: false,
     },
     function (bundle) {
-        var script = preamble + bundle;
+        let script = preamble + bundle;
         fs.writeFileSync("pkg/sinon.js", script); // WebWorker can only load js files
     }
 );
@@ -57,7 +57,7 @@ makeBundle(
         detectGlobals: false,
     },
     function (bundle) {
-        var script = preamble + bundle;
+        let script = preamble + bundle;
         fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", script);
     }
 );
@@ -69,14 +69,14 @@ makeBundle(
         detectGlobals: false,
     },
     function (bundle) {
-        var intro = "let sinon;";
-        var outro = `\nexport default sinon;\n${Object.keys(sinon)
+        let intro = "let sinon;";
+        let outro = `\nexport default sinon;\n${Object.keys(sinon)
             .map(function (key) {
                 return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
             })
             .join("\n")}`;
 
-        var script = preamble + intro + bundle + outro;
+        let script = preamble + intro + bundle + outro;
         fs.writeFileSync("pkg/sinon-esm.js", script);
     }
 );
