@@ -943,12 +943,12 @@ describe("stub", function () {
         it("creates a non empty error message when error is a string and no message is passed", function () {
             const stub = createStub()
 
-            stub.withArgs(1).throws("apple pie")
+            stub.withArgs(1).throws("TypeError")
 
             assert.exception(function () {
                 stub(1)
             }, {
-                message: "Sinon-provided apple pie"
+                message: "Sinon-provided TypeError"
             })
         })
 
