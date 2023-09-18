@@ -133,4 +133,4 @@ Build requires Node. Under the hood [Browserify](http://browserify.org/) is used
 
 To build run
 
-    $ node build.js
+    $ node build.cjs
