@@ -37,10 +37,9 @@ _Released by Morgan Roderick on 2023-09-13._
   > - Support callable instances
   >
   > - Clean prettier lint
-  >
-  > ***
-  >
-  > Co-authored-by: - <->
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-06-20._
+
 - [`d220c995`](https://github.com/sinonjs/sinon/commit/d220c99516ddb644d3702b4736bdfd311a2b05ec)
   fix: bundling compatibility with webpack@5 (#2519) (Avi Vahl)
   > - fix: bundling compatibility with webpack@5
