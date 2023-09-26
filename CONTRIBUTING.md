@@ -104,6 +104,22 @@ $ npm run prettier:write
 
 To ensure consistent reporting of lint warnings, you should use the same versions of ESLint and Prettier as defined in `package.json` (which is what the CI servers use).
 
+### Tooling
+
+To transparently handle all issues with different tool versions we recommend using [_ASDF: The Multiple Runtime Manager_][asdf]. You would then need the Ruby and Node plugins.
+
+<details>
+
+```
+asdf plugin add ruby
+asdf plugin add nodejs
+asdf install
+```
+
+</details>
+
+[asdf]: https://asdf-vm.com
+
 ### Run the tests
 
 Following command runs unit tests in PhantomJS, Node and WebWorker
@@ -133,4 +149,4 @@ Build requires Node. Under the hood [Browserify](http://browserify.org/) is used
 
 To build run
 
-    $ node build.js
+    $ node build.cjs
