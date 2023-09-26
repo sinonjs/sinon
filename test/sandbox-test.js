@@ -807,9 +807,94 @@ describe("Sandbox", function () {
         });
     });
 
+    describe(".define", function () {
+        beforeEach(function () {
+            this.sandbox = createSandbox();
+        });
+
+        afterEach(function () {
+            this.sandbox.restore();
+        });
+
+        it("should define a function property", function () {
+            function newFunction() {
+                return;
+            }
+
+            const object = {};
+
+            this.sandbox.define(object, "property", newFunction);
+
+            assert.equals(object.property, newFunction);
+
+            this.sandbox.restore();
+
+            assert.isUndefined(object.property);
+        });
+
+        it("should define a non-function property", function () {
+            const newValue = "some-new-value";
+            const object = {};
+
+            this.sandbox.define(object, "property", newValue);
+
+            assert.equals(object.property, newValue);
+
+            this.sandbox.restore();
+
+            assert.isUndefined(object.property);
+        });
+
+        it("should error on existing descriptor", function () {
+            const sandbox = this.sandbox;
+
+            const existingValue = "123";
+            const existingFunction = () => "abcd";
+
+            const object = {
+                existingValue: existingValue,
+                existingFunction: existingFunction,
+            };
+
+            assert.exception(
+                function () {
+                    sandbox.define(object, "existingValue", "new value");
+                },
+                {
+                    message:
+                        "Cannot define the already existing property existingValue. Perhaps you meant sandbox.replace()?",
+                    name: "TypeError",
+                }
+            );
+
+            assert.exception(
+                function () {
+                    sandbox.define(
+                        object,
+                        "existingFunction",
+                        () => "new function"
+                    );
+                },
+                {
+                    message:
+                        "Cannot define the already existing property existingFunction. Perhaps you meant sandbox.replace()?",
+                    name: "TypeError",
+                }
+            );
+
+            // Verify that the methods above, even though they failed, did not replace the values
+            assert.equals(object.existingValue, existingValue);
+            assert.equals(object.existingFunction, existingFunction);
+        });
+    });
+
     describe(".replace", function () {
         beforeEach(function () {
             this.sandbox = createSandbox();
+        });
+
+        afterEach(function () {
+            this.sandbox.restore();
         });
 
         it("should replace a function property", function () {
@@ -873,7 +958,7 @@ describe("Sandbox", function () {
                 },
                 {
                     message:
-                        "Cannot replace non-existent property i-dont-exist",
+                        "Cannot replace non-existent property i-dont-exist. Perhaps you meant sandbox.define()?",
                     name: "TypeError",
                 }
             );
@@ -2205,7 +2290,7 @@ describe("Sandbox", function () {
             assert.equals(object.prop, "blabla");
         });
 
-        it("allows restoring setters", function () {
+        it("allows putting setters on fields and subsequently restoring them", function () {
             const object = {
                 prop: "bar",
             };
@@ -2220,6 +2305,37 @@ describe("Sandbox", function () {
             object.prop = "bla";
 
             assert.equals(object.prop, "bla");
+        });
+
+        it("allows replacing setters on fields and subsequently restoring them", function () {
+            const object = {
+                get prop() {
+                    return "bar";
+                },
+            };
+
+            const sandbox = new Sandbox();
+            const getter = sandbox.spy(() => "foobar");
+            sandbox.stub(object, "prop").get(getter);
+            assert.equals(object.prop, "foobar");
+            assert.equals(getter.callCount, 1);
+
+            sandbox.restore();
+            assert.equals(object.prop, "bar");
+        });
+
+        it("allows spying on accessors and subsequently restoring them", function () {
+            const object = {
+                get prop() {
+                    return "bar";
+                },
+            };
+            const sandbox = new Sandbox();
+            const spy = sandbox.spy(object, "prop", ["get"]);
+            sandbox.restore();
+            const descriptor = Object.getOwnPropertyDescriptor(object, "prop");
+            const getter = descriptor.get;
+            refute.equals(getter, spy.get);
         });
     });
 

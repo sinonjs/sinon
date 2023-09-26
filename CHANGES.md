@@ -1,5 +1,21 @@
 # Changes
 
+## 16.0.0
+
+- [`c3396058`](https://github.com/sinonjs/sinon/commit/c339605834f6fd7ba3afdd179fff3a8544e62bd7)
+  fix(2525): ensure non empty message when error of type string is passed, but no message (#2544) (Mark de Dios)
+- [`baa1aee9`](https://github.com/sinonjs/sinon/commit/baa1aee9e5766ff1bfcbc62d81ddaf3138174c54)
+  .define method (#2539) (Konstantin Gukov)
+  > - .define method for temporarily defining new properties during the tests
+- [`fe799e78`](https://github.com/sinonjs/sinon/commit/fe799e78967cafcdfa29ef1d7cd00c420704b926)
+  Fix issue 2534: spies are not restored (#2535) (Carl-Erik Kopseng)
+- [`305fb6cc`](https://github.com/sinonjs/sinon/commit/305fb6ccb823a4a6059d8440d93c8032bef2afeb)
+  fix: actaully reset 'injectedKeys' (#2456) (Morgan Roderick)
+- [`de2635dd`](https://github.com/sinonjs/sinon/commit/de2635dd4293f21bd1e5a8b3e14d14d4f6e1f1da)
+  Bump LTS version one notch: 20 (#2529) (Carl-Erik Kopseng)
+
+_Released by Morgan Roderick on 2023-09-13._
+
 ## 15.2.0
 
 - [`66b0081e`](https://github.com/sinonjs/sinon/commit/66b0081e1f9673b14277882faa10aaa1e3b564ff)

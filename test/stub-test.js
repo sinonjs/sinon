@@ -940,6 +940,21 @@ describe("stub", function () {
             assert.contains(stub.firstCall.toString(), "not implemented");
         });
 
+        it("creates a non empty error message when error is a string and no message is passed", function () {
+            const stub = createStub();
+
+            stub.withArgs(1).throws("TypeError");
+
+            assert.exception(
+                function () {
+                    stub(1);
+                },
+                {
+                    message: "Sinon-provided TypeError",
+                }
+            );
+        });
+
         describe("lazy instantiation of exceptions", function () {
             let errorSpy;
             beforeEach(function () {

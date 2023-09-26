@@ -7,3 +7,4 @@ coverage/
 .sass_cache
 _site
 docs/vendor/
+vendor/
