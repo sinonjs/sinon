@@ -45,7 +45,7 @@
     "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
     "build": "node ./build.cjs",
     "build-docs": "cd docs; bundle exec jekyll build",
-    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
+    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose --livereload",
     "lint": "eslint --max-warnings 99 '**/*.{js,cjs,mjs}'",
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
