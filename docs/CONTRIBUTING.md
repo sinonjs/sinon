@@ -27,15 +27,15 @@ gem install bundler
 # install all dependencies
 bundle install --path vendor/bundle
 
-# build the site
-bundle exec jekyll serve
+# build, serve and live-reload the site
+npm run dev-docs
 ```
 
 After that you can access the site at http://localhost:4000/
 
-Unfortunately, you will not see the full `release-source` without a little
-fiddling, as the site is excluded from Jekyll. So just supply a little symbolic
-link like this from the `./docs` dir: `mkdir releases && ln -s $PWD/release-source releases/latest`
+Unfortunately, you will not see the full `release-source`, as the site is excluded from
+Jekyll, but we made a little hack to expose the currently worked-on version.
+You can check out the currently worked on release docs under [`/releases/dev/release`](http://localhost:4000/releases/dev/release).
 
 ## Linting of Markdown
 

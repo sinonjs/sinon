@@ -44,6 +44,7 @@
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
     "build": "node ./build.cjs",
+    "dev-docs": "cd docs; cp -rl release-source releases/dev; npm run serve-docs",
     "build-docs": "cd docs; bundle exec jekyll build",
     "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose --livereload",
     "lint": "eslint --max-warnings 99 '**/*.{js,cjs,mjs}'",
