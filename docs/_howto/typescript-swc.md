@@ -154,11 +154,11 @@ Let us take a closer look.
 
 SWC transforms the imports on the form `import * as Other from './other'` into objects where the individual exports are exposed through immutable accessors (_getters_).
 
-We can attack this issue in mainly 3 ways:
+We can address this issue in mainly 3 ways:
 
 1. somehow reconfigure SWC to produce different output when running tests that we can work with, either making writable values or configurable getters
 2. use pure dependency injection, opening up `./other.ts` to be changed from the inside
-3. attack how modules are loaded, injecting [an additional `require` "hook"](https://levelup.gitconnected.com/how-to-add-hooks-to-node-js-require-function-dee7acd12698)
+3. address how modules are loaded, injecting [an additional `require` "hook"](https://levelup.gitconnected.com/how-to-add-hooks-to-node-js-require-function-dee7acd12698)
 
 # Solutions
 
