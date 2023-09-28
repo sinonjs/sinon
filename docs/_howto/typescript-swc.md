@@ -185,7 +185,7 @@ sandbox.replaceGetter(Other, "toBeMocked", () => stub)
 
 > [Working code][pure-di]
 
-This technique works regardless of language, module systems, bundlers and tool chains, but requires slight modifications of the SUT to allow modifying it. You also do not get help from Sinon in automatically resetting state.
+This technique works regardless of language, module systems, bundlers and tool chains, but requires slight modifications of the SUT to allow modifying it. Sinon cannot help with resetting state automatically in this scenario.
 
 **other.ts**
 
