@@ -53,7 +53,6 @@ export function main() {
 ```typescript
 export function toBeMocked() {
   return "I am the original function";
-  ing;
 }
 ```
 
