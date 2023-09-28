@@ -77,11 +77,13 @@ describe("main", () => {
 });
 ```
 
-Additionally, both the `.swcrc` file used by SWC and the `tsconfig.json` file used by `ts-node` is setup to produce modules of the CommonJS form, not ES Modules.
+Additionally, both the `.swcrc` file used by SWC and the `tsconfig.json` file used by `ts-node` is configured to produce modules of the CommonJS form, not ES Modules.
 
 ### Brief Analysis
 
-The error message indicates the resulting output of transpilation is different from that of `ts-node`, as this is Sinon telling us that it is unable to do anything with the property of an object if the [property descriptor][descriptor] is essentially immutable. Let's sprinkle some debugging statements to figure out what the differences between the two tools are. First we will add these some debugging output to the beginning of the test, for instance just after `it("should mock", () => {`, to see what the state is _before_ we attempt to do any modifications:
+The error message indicates the resulting output of transpilation is different from that of `ts-node`, as this is Sinon telling us that it is unable to do anything with the property of an object, when the [property descriptor][descriptor] is essentially immutable. 
+
+Let's sprinkle some debugging statements to figure out what the differences between the two tools are. First we will add these some debugging output to the beginning of the test, for instance just after `it("should mock", () => {`, to see what the state is _before_ we attempt to do any modifications:
 
 ```javascript
 console.log("Other", Other);
