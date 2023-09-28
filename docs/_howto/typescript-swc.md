@@ -81,9 +81,9 @@ Additionally, both the `.swcrc` file used by SWC and the `tsconfig.json` file us
 
 ### Brief Analysis
 
-The error message indicates the resulting output of transpilation is different from that of `ts-node`, as this is Sinon telling us that it is unable to do anything with the property of an object, when the [property descriptor][descriptor] is essentially immutable. 
+The error message indicates the resulting output of transpilation is different from that of `ts-node`, as this is Sinon telling us that it is unable to do anything with the property of an object, when the [property descriptor][descriptor] is essentially immutable.
 
-Let's sprinkle some debugging statements to figure out what the differences between the two tools are. First we will add these some debugging output to the beginning of the test, for instance just after `it("should mock", () => {`, to see what the state is _before_ we attempt to do any modifications:
+Let us sprinkle some debugging statements to figure out what the differences between the two tools are. First we will add these some debugging output to the beginning of the test, for instance just after `it("should mock", () => {`, to see what the state is _before_ we attempt to do any modifications:
 
 ```javascript
 console.log("Other", Other);
@@ -148,7 +148,7 @@ mocked
 
 The important difference to note about the object `Other` is that the property `toBeMocked` is a simple writable _value_ in the case of `ts-node` and a non-configurable _getter_ in the case of SWC. It being a getter is not a problem for Sinon, as we have a multitude of options for replacing those, but if `configurable` is set to `false` Sinon cannot really do anything about it.
 
-If we take a look at
+Let us take a closer look.
 
 #### Conclusion of analysis
 
