@@ -176,7 +176,7 @@ If we can just flip the `configurable` flag to `true` during transpilation, Sino
 
 A getter _is_ different from a value, so you need to change your testcode slightly to replace the getter:
 
-```
+```js
 const stub = sandbox.fake.returns("mocked")
 sandbox.replaceGetter(Other, "toBeMocked", () => stub)
 ```
