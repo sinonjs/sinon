@@ -148,7 +148,7 @@ mocked
 
 The important difference to note about the object `Other` is that the property `toBeMocked` is a simple writable _value_ in the case of `ts-node` and a non-configurable _getter_ in the case of SWC. It being a getter is not a problem for Sinon, as we have a multitude of options for replacing those, but if `configurable` is set to `false` Sinon cannot really do anything about it.
 
-If we take a look at
+Let's take a closer look.
 
 #### Conclusion of analysis
 
