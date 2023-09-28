@@ -13,7 +13,7 @@ This guide targets the CommonJS module system, made popular by NodeJS. There are
 
 ## Hooking into `require`
 
-For us to replace the underlying calls done by `require` we need a tool to hook into the process. There are many tools that can do this: rewire, proxyquire, the newcomer [Quibble][quibble], etc. This example will be using [proxyquire][proxyquire] to construct our _seams_ (i.e. replace the modules), but the actual mechanics will be very similar for the other tools.
+For us to replace the underlying calls done by `require` we need a tool to hook into the process. There are many tools that can do this: rewire, proxyquire, [Quibble][quibble], etc. This example will be using [proxyquire][proxyquire] to construct our _seams_ (i.e. replace the modules), but the actual mechanics will be very similar for the other tools.
 
 Read it?
 
