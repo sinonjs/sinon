@@ -21,7 +21,7 @@ All code and working setups described in this guide are on [Github][master-branc
 - Sinon: library for creating and injecting test doubles (stubs, mocks, spies and fakes)
 - Module system: CommonJS
 
-### Wanted outcome
+### Desired outcome
 
 Being able to replace exports on the dependency `./other` with a Sinon created test double in `main.ts` when running tests (see code below).
 
