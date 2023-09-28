@@ -166,7 +166,7 @@ We can address this issue in mainly 3 ways:
 
 > [Working code][swc-mutable-export]
 
-If we can just flip the `configurable` flag to `true` during transpilation, Sinon could be instructed to replace the getter. Turns out, there is a SWC _plugin_ that does just that: [swc_mut_cjs_exports](https://www.npmjs.com/package/swc_mut_cjs_exports). By installing that and adding the following under the `jsc` key in `.swcrc`, you know get a configurable property descriptor.
+If we can just flip the `configurable` flag to `true` during transpilation, Sinon could be instructed to replace the getter. It turns out, there is a SWC _plugin_ that does just that: [swc_mut_cjs_exports](https://www.npmjs.com/package/swc_mut_cjs_exports). By installing that and adding the following under the `jsc` key in `.swcrc`, you know get a configurable property descriptor.
 
 ```json
 "experimental": {
