@@ -1114,26 +1114,28 @@ describe("Sandbox", function () {
                     }
                 );
             });
+        });
+    });
 
-            it("should allow using assignment when replacing a value", function () {
-                const sandbox = this.sandbox;
-                let hiddenFoo = () => "original";
-                const object = {
-                    // eslint-disable-next-line accessor-pairs
-                    get foo() {
-                        return hiddenFoo;
-                    },
-                    set foo(value) {
-                        hiddenFoo = value;
-                    },
-                };
+    describe(".replace.usingAccessor", function () {
+        it("should allow using assignment when replacing a value", function () {
+            const sandbox = createSandbox();
+            let quaziPrivateStateOfObject = "original";
+            const object = {
+                // eslint-disable-next-line accessor-pairs
+                get foo() {
+                    return quaziPrivateStateOfObject;
+                },
+                set foo(value) {
+                    quaziPrivateStateOfObject = value;
+                },
+            };
 
-                assert.equals(object.foo(), "original");
-                sandbox.replace.usingAccessor(object, "foo", sinonFake.returns("fake"));
-                assert.equals(object.foo(), "fake");
-                sandbox.restore();
-                assert.equals(object.foo(), "original");
-            });
+            assert.equals(object.foo, "original");
+            sandbox.replace.usingAccessor(object, "foo", "fake");
+            assert.equals(object.foo, "fake");
+            sandbox.restore();
+            assert.equals(object.foo, "original");
         });
     });
 

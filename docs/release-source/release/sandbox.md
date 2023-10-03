@@ -241,6 +241,7 @@ console.log(myObject.myMethod());
 Usually one intends to _replace_ the value or getter of a field, but there are use cases where one actually wants to _assign_ a value to a property using an existing setter. `#replace.usingAccessor(object, property, value)` will do just that; pass the value into setter function and vice-versa use the getter to get the value used for restoring later on.
 
 ##### Use case: no-frills dependency injection in ESM with cleanup
+
 One use case can be to conveniently allow ESM module stubbing using pure dependency injection, having Sinon help you with the cleanup, without resorting to external machinery such as module loaders or require hooks (see [#2403](https://github.com/sinonjs/sinon/issues/2403)). This would then work regardless of bundler, browser or server environment.
 
 #### `sandbox.replaceGetter(object, property, replacementFunction);`
