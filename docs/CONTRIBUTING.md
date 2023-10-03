@@ -9,6 +9,7 @@ When you're contributing documentation changes for code in `main` branch, then d
 If you're contributing documentation for an existing release, then your documentation changes should go into the documentation for that release in `_releases/` folder, and possibly several of the following releases also.
 
 ### Where are all the _releases_?
+
 All the files that used to be under `_releases` in the `main` can be found in the `releases` branch. The `main` branch now only keeps the latest version. That means, to fix the docs of published releases you need to checkout the _relases branch_ and supply a PR against that.
 
 ## Running the documentation site locally
