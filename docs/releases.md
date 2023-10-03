@@ -3,11 +3,12 @@ layout: default
 title: Releases - Sinon.JS
 permalink: /releases/index.html
 redirect_from:
-    - /docs
-    - /docs/
-    - /download
-    - /download/
-    - /releases/download/
+  - /docs
+  - /docs/
+  - /download
+  - /download/
+  - /releases/download/
+  - /guides
 ---
 
 <div class="head-page">
@@ -17,8 +18,10 @@ redirect_from:
 
     <h2>Changelog</h2>
     You can see the full log of changes for each release on our separate <a href="./changelog">changelog page</a>.
+
 </div>
 
+{% include docs/migration-guides.md %}
 
 <div class="in-content releases">
     <ul>
@@ -50,6 +53,7 @@ redirect_from:
             {% endif %}
         {% endfor %}
     </ul>
+
 </div>
 
 <div>
