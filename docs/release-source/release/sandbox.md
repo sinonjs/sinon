@@ -181,7 +181,6 @@ A convenience reference for [`sinon.assert`](./assertions)
 
 _Since `sinon@2.0.0`_
 
-<<<<<<< HEAD
 #### `sandbox.define(object, property, value);`
 
 Defines the `property` on `object` with the value `value`. Attempts to define an already defined value cause an exception.
@@ -220,7 +219,7 @@ Replaces `property` on `object` with `replacement` argument. Attempts to replace
 
 `replacement` can be any value, including `spies`, `stubs` and `fakes`.
 
-By default, this method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
+This method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
 
 ```js
 var myObject = {
@@ -239,11 +238,14 @@ console.log(myObject.myMethod());
 
 #### `sandbox.replace.usingAccessor(obj, property, value);`
 
-The usual `replace` will throw on encountering a setter, but this will not. Instead, this method allows for the rather special case where we will pass a value to the setter function and vice-versa use the getter to get the value used for restoring later on. One use case is to allow a simple pattern for DI based ESM module stubbing without resorting to external/fancy machinery such as module loaders (see [#2403](https://github.com/sinonjs/sinon/issues/2403) for background).
+Usually one intends to _replace_ the value or getter of a field, but there are use cases where one actually wants to _assign_ a value to a property using an existing setter. `#replace.usingAccessor(object, property, value)` will do just that; pass the value into setter function and vice-versa use the getter to get the value used for restoring later on.
 
-#### `sandbox.replaceGetter(object, property, replacement);`
+##### Use case: no-frills dependency injection in ESM with cleanup
+One use case can be to conveniently allow ESM module stubbing using pure dependency injection, having Sinon help you with the cleanup, without resorting to external machinery such as module loaders or require hooks (see [#2403](https://github.com/sinonjs/sinon/issues/2403)). This would then work regardless of bundler, browser or server environment.
 
-Replaces an existing getter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced getter cause an exception.
+#### `sandbox.replaceGetter(object, property, replacementFunction);`
+
+Replaces an existing getter for `property` on `object` with the `replacementFunction` argument. Attempts to replace an already replaced getter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
@@ -262,9 +264,9 @@ console.log(myObject.myProperty);
 // strawberry
 ```
 
-#### `sandbox.replaceSetter(object, property, replacement);`
+#### `sandbox.replaceSetter(object, property, replacementFunction);`
 
-Replaces setter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced setter cause an exception.
+Replaces an existing setter for `property` on `object` with the `replacementFunction` argument. Attempts to replace an already replaced setter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
