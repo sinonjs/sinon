@@ -1115,7 +1115,7 @@ describe("Sandbox", function () {
                 );
             });
 
-            it("should allow forcing assignment", function () {
+            it("should allow using assignment when replacing a value", function () {
                 const sandbox = this.sandbox;
                 let hiddenFoo = () => "original";
                 const object = {
@@ -1129,9 +1129,7 @@ describe("Sandbox", function () {
                 };
 
                 assert.equals(object.foo(), "original");
-                sandbox.replace(object, "foo", sinonFake.returns("fake"), {
-                    forceAssignment: true,
-                });
+                sandbox.replace.usingAccessor(object, "foo", sinonFake.returns("fake"));
                 assert.equals(object.foo(), "fake");
                 sandbox.restore();
                 assert.equals(object.foo(), "original");
