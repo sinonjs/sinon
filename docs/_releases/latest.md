@@ -2,7 +2,7 @@
 layout: page
 title: API documentation - Sinon.JS
 skip_ad: true
-release_id: v16.0.0
+release_id: v16.1.0
 sort_id: v16
 ---
 
@@ -36,5 +36,5 @@ If you need to support old runtimes you can try [Sinon 9][compat-doc-v9].
 
 {% include docs/contribute.md %}
 
-[compat-doc]: https://github.com/sinonjs/sinon/COMPATIBILITY.md
+[compat-doc]: https://github.com/sinonjs/sinon/blob/main/COMPATIBILITY.md
 [compat-doc-v9]: https://github.com/sinonjs/sinon/blob/v9.2.4/COMPATIBILITY.md

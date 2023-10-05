@@ -236,9 +236,17 @@ console.log(myObject.myMethod());
 // strawberry
 ```
 
-#### `sandbox.replaceGetter();`
+#### `sandbox.replace.usingAccessor(object, property, value);`
 
-Replaces getter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced getter cause an exception.
+Usually one intends to _replace_ the value or getter of a field, but there are use cases where one actually wants to _assign_ a value to a property using an existing setter. `#replace.usingAccessor(object, property, value)` will do just that; pass the value into setter function and vice-versa use the getter to get the value used for restoring later on.
+
+##### Use case: no-frills dependency injection in ESM with cleanup
+
+One use case can be to conveniently allow ESM module stubbing using pure dependency injection, having Sinon help you with the cleanup, without resorting to external machinery such as module loaders or require hooks (see [#2403](https://github.com/sinonjs/sinon/issues/2403)). This would then work regardless of bundler, browser or server environment.
+
+#### `sandbox.replaceGetter(object, property, replacementFunction);`
+
+Replaces an existing getter for `property` on `object` with the `replacementFunction` argument. Attempts to replace an already replaced getter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
@@ -257,9 +265,9 @@ console.log(myObject.myProperty);
 // strawberry
 ```
 
-#### `sandbox.replaceSetter();`
+#### `sandbox.replaceSetter(object, property, replacementFunction);`
 
-Replaces setter for `property` on `object` with `replacement` argument. Attempts to replace an already replaced setter cause an exception.
+Replaces an existing setter for `property` on `object` with the `replacementFunction` argument. Attempts to replace an already replaced setter cause an exception.
 
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
