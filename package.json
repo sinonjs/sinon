@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "16.0.0",
+  "version": "16.1.0",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -44,9 +44,10 @@
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
     "check-dependencies": "dependency-check package.json --no-dev --ignore-module esm",
     "build": "node ./build.cjs",
+    "dev-docs": "cd docs; cp -rl release-source releases/dev; npm run serve-docs",
     "build-docs": "cd docs; bundle exec jekyll build",
-    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose",
-    "lint": "eslint --max-warnings 99 '**/*.{js,cjs,mjs}'",
+    "serve-docs": "cd docs; bundle exec jekyll serve --incremental --verbose --livereload",
+    "lint": "eslint --max-warnings 101 '**/*.{js,cjs,mjs}'",
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",

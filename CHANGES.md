@@ -1,5 +1,24 @@
 # Changes
 
+## 16.1.0
+
+- [`cac5184b`](https://github.com/sinonjs/sinon/commit/cac5184b2a5c395e7e8775192ebcab234b6c180f)
+  Enable use of assignment in the presence of accessors (#2538) (Carl-Erik Kopseng)
+- [`f8c20e54`](https://github.com/sinonjs/sinon/commit/f8c20e5414464cf36a1dd48845ff57bf4e87d158)
+  New article: making Sinon work with complex setups (#2540) (Carl-Erik Kopseng)
+  > Co-authored-by: Morgan Roderick <morgan@roderick.dk> >
+- [`cb5b9621`](https://github.com/sinonjs/sinon/commit/cb5b96214891dcff0890f07d01fe6b7d1627e8cb)
+  Add NPM script 'dev-docs' and document its usage (Carl-Erik Kopseng)
+- [`dd7c6091`](https://github.com/sinonjs/sinon/commit/dd7c6091f415f1f0129cb9673f79ad3e44eecd21)
+  Add a little update to contributing (Carl-Erik Kopseng)
+- [`79acdf38`](https://github.com/sinonjs/sinon/commit/79acdf380af52a34847a4861e637f5738c4b39eb)
+  Move tool versions into single file at root (Carl-Erik Kopseng)
+- [`03b1db50`](https://github.com/sinonjs/sinon/commit/03b1db50a1114b0e7ee5a26b0c813eda3fc54e07)
+  Expose Changelog page (#2550) (Carl-Erik Kopseng)
+- [`e1c3dad2`](https://github.com/sinonjs/sinon/commit/e1c3dad21d3d7c18f23f014bd952b5e4136687cb)
+  Add section on tooling and recommend using ASDF for tool versioning (#2547) (Carl-Erik Kopseng)
+  _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-05._
+
 ## 16.0.0
 
 - [`c3396058`](https://github.com/sinonjs/sinon/commit/c339605834f6fd7ba3afdd179fff3a8544e62bd7)

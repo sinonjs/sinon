@@ -8,6 +8,7 @@ docs/releases/
 docs/_releases/
 docs/assets/js/
 docs/vendor
+vendor/
 
 # has linting of its own
 docs/release-source/release/examples

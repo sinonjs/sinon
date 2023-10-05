@@ -398,6 +398,7 @@ describe("Sandbox", function () {
                 constructor() {
                     this.privateGetter = () => 42;
                 }
+
                 getValue() {
                     return this.privateGetter();
                 }
@@ -1072,8 +1073,8 @@ describe("Sandbox", function () {
             assert.equals(actual, replacement);
         });
 
-        describe("when asked to replace a getter", function () {
-            it("should throw an Error", function () {
+        describe("when asked to replace a property with a getter", function () {
+            it("should throw an Error by default that informs of replaceGetter", function () {
                 const sandbox = this.sandbox;
                 const object = {
                     get foo() {
@@ -1093,7 +1094,7 @@ describe("Sandbox", function () {
             });
         });
 
-        describe("when asked to replace a setter", function () {
+        describe("when asked to replace a property with a setter", function () {
             it("should throw an Error", function () {
                 const sandbox = this.sandbox;
                 const object = {
@@ -1113,6 +1114,28 @@ describe("Sandbox", function () {
                     }
                 );
             });
+        });
+    });
+
+    describe(".replace.usingAccessor", function () {
+        it("should allow using assignment when replacing a value", function () {
+            const sandbox = createSandbox();
+            let quaziPrivateStateOfObject = "original";
+            const object = {
+                // eslint-disable-next-line accessor-pairs
+                get foo() {
+                    return quaziPrivateStateOfObject;
+                },
+                set foo(value) {
+                    quaziPrivateStateOfObject = value;
+                },
+            };
+
+            assert.equals(object.foo, "original");
+            sandbox.replace.usingAccessor(object, "foo", "fake");
+            assert.equals(object.foo, "fake");
+            sandbox.restore();
+            assert.equals(object.foo, "original");
         });
     });
 
@@ -1857,8 +1880,12 @@ describe("Sandbox", function () {
             /* eslint-disable no-empty-function, accessor-pairs */
             this.sandbox.inject(this.obj);
 
-            const myObj = { a: function () {} };
+            const myObj = {
+                a: function () {},
+            };
+
             function MyClass() {}
+
             MyClass.prototype.method1 = noop;
             Object.defineProperty(myObj, "b", {
                 get: function () {

@@ -1,3 +1,6 @@
 _site
 .sass-cache
 .jekyll-metadata
+
+# for the `npm run dev-docs` hack that creates a hard linked tree of release-source
+releases/dev
