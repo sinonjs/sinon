@@ -236,7 +236,7 @@ console.log(myObject.myMethod());
 // strawberry
 ```
 
-#### `sandbox.replace.usingAccessor(obj, property, value);`
+#### `sandbox.replace.usingAccessor(object, property, value);`
 
 Usually one intends to _replace_ the value or getter of a field, but there are use cases where one actually wants to _assign_ a value to a property using an existing setter. `#replace.usingAccessor(object, property, value)` will do just that; pass the value into setter function and vice-versa use the getter to get the value used for restoring later on.
 
