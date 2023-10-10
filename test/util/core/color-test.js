@@ -1,5 +1,10 @@
 "use strict";
 
+// proxyquire doesn't work with bun, so for now, let's skip this file
+if (process.versions.bun) {
+    return;
+}
+
 const assert = require("@sinonjs/referee").assert;
 const proxyquire = require("proxyquire");
 

@@ -168,3 +168,12 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
       - name: npm test
         run: npm run test-node
+
+  test-bun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: |
+          bun install
+          bun run test-bun
