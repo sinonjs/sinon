@@ -195,6 +195,10 @@ body {
 // Content
 .content {
     padding: 60px 0px;
+
+    & h5 {
+        font-weight: 600; // make h5 visible: otherwise no difference is shown
+    }
 }
 
 // Pages
