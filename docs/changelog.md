@@ -6,6 +6,16 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 16.1.1
+
+- [`ff0e993d`](https://github.com/sinonjs/sinon/commit/ff0e993df2adac356995bbc12d1d520a819360bd)
+  Showcase #replace.usingAccessor for DI in the typescript case study (#2556) (Carl-Erik Kopseng)
+- [`c47a4bee`](https://github.com/sinonjs/sinon/commit/c47a4beeba98a5138d5b7a4a8a36ed7a8bf00861)
+  Bump @babel/traverse from 7.22.5 to 7.23.2 (#2555) (dependabot[bot])
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-18._
+
 ## 16.1.0
 
 - [`cac5184b`](https://github.com/sinonjs/sinon/commit/cac5184b2a5c395e7e8775192ebcab234b6c180f)
