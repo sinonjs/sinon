@@ -17,6 +17,7 @@ plugins:
   - jekyll-feed
   - jekyll-redirect-from
   - jekyll-sitemap
+  - jekyll-toc
 keep_files:
   - assets
   - releases
