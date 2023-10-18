@@ -249,8 +249,10 @@ export const myMocks = {
   set toBeMocked(mockImplementation) {
     toBeMocked = mockImplementation;
   },
-  get toBeMocked(){ return _toBeMocked; }
-}
+  get toBeMocked() {
+    return _toBeMocked;
+  },
+};
 ```
 
 **main.spec.ts**
@@ -272,7 +274,7 @@ describe("main", () => {
 
 > [Working code][cjs-mocking]
 
-This is what [the article on _targetting the link seams_][link-seams-cjs] is about. The only difference here is using Quibble instead of Proxyquire. Quibble is slightly terser and also supports being used as a ESM _loader_, making it a bit more modern and useful. The end result:
+This is what [the article on _targetting the link seams_][link-seams-cjs] is about. The only difference here is using Quibble instead of Proxyquire. Quibble is slightly terser and also supports being used as a ESM _loader_, making it a bit more modern and useful. The end result looks like this:
 
 ```typescript
 describe("main module", () => {
