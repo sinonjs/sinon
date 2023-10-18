@@ -8,3 +8,4 @@ coverage/
 _site
 docs/vendor/
 vendor/
+.bundle

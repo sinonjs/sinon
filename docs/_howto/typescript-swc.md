@@ -190,9 +190,11 @@ sandbox.replaceGetter(Other, "toBeMocked", () => stub);
 
 ## Use pure dependency injection
 
+### Version 1 : full manual mode
+
 > [Working code][pure-di]
 
-This technique works regardless of language, module systems, bundlers and tool chains, but requires slight modifications of the SUT to allow modifying it. Sinon cannot help with resetting state automatically in this scenario.
+This technique works regardless of language, module systems, bundlers and tool chains, but requires slight modifications of the SUT to allow modifying it. Sinon does not help in resetting state automatically in this scenario.
 
 **other.ts**
 
@@ -220,6 +222,47 @@ describe("main", () => {
   it("should mock", () => {
     mocked = sandbox.stub().returns("mocked");
     Other._setToBeMocked(mocked)
+    main();
+    expect(mocked.called).to.be.true;
+  });
+```
+
+### Version 2: using Sinon's auto-cleanup
+
+> [Working code][pure-di-with-auto-cleanup]
+
+This is a slight variation of the fully manual dependency injection version, but with a twist to
+make it nicer. Sinon 16.1 gained the ability to assign and restore values that were defined
+using _accessors_. That means, that if you expose an object with setters and getters for props
+you would like to replace, you can get Sinon to clean up after you. The example above becomes much nicer:
+
+**other.ts**
+
+```typescript
+function _toBeMocked() {
+  return "I am the original function";
+}
+
+export let toBeMocked = _toBeMocked;
+
+export const myMocks = {
+  set toBeMocked(mockImplementation) {
+    toBeMocked = mockImplementation;
+  },
+  get toBeMocked(){ return _toBeMocked; }
+}
+```
+
+**main.spec.ts**
+
+```typescript
+describe("main", () => {
+
+  after(() => sandbox.restore())
+
+  it("should mock", () => {
+    mocked = sandbox.fake.returns("mocked");
+    sandbox.replace.usingAccessor(Other.myMocks, 'toBeMocked', mocked)
     main();
     expect(mocked.called).to.be.true;
   });
@@ -261,5 +304,5 @@ As can be seen, there are lots of different paths to walk in order to achieve th
 [sut]: http://xunitpatterns.com/SUT.html
 [require-hook]: https://levelup.gitconnected.com/how-to-add-hooks-to-node-js-require-function-dee7acd12698
 [swc-mutable-export]: https://github.com/fatso83/sinon-swc-bug/tree/swc-with-mutable-exports
-[pure-di]: https://github.com/fatso83/sinon-swc-bug/tree/pure-di
+[pure-di-with-auto-cleanup]: https://github.com/fatso83/sinon-swc-bug/tree/auto-cleanup-di
 [cjs-mocking]: https://github.com/fatso83/sinon-swc-bug/tree/cjs-mocking
