@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "Case study: real world dependency stubbing"
+toc: true
 ---
 
 Sinon is a simple tool that only tries to do a few things and do them well: creating and injecting test doubles (spies, fakes, stubs) into objects. Unfortunately, in todays world of build pipelines, complex tooling, transpilers and different module systems, doing the simple thing quickly becomes difficult.
