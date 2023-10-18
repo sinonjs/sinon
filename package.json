@@ -58,7 +58,8 @@
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
     "version": "./scripts/version.sh",
-    "postversion": "./scripts/postversion.sh"
+    "postversion": "./scripts/postversion.sh",
+    "postinstall": "git config --replace-all core.hooksPath scripts/hooks"
   },
   "nyc": {
     "instrument": false,
@@ -69,7 +70,7 @@
     ]
   },
   "lint-staged": {
-    "*.{js,css,md}": "prettier --check",
+    "**/*.{js,css,md}": "prettier --write",
     "*.js": "eslint --quiet",
     "*.mjs": "eslint --quiet --ext mjs --parser-options=sourceType:module"
   },
@@ -92,7 +93,6 @@
     "browserify": "^16.5.2",
     "debug": "^4.3.4",
     "dependency-check": "^4.1.0",
-    "husky": "^6.0.0",
     "lint-staged": "^13.2.0",
     "mocha": "^10.2.0",
     "mochify": "^9.2.0",
@@ -137,10 +137,5 @@
       "cache": true
     },
     "mode": "auto"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
