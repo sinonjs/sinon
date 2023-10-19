@@ -6,22 +6,12 @@ permalink: /releases/changelog
 
 # Changelog
 
-## 16.1.2
+## 16.1.3
 
-- [`9ea3d5b2`](https://github.com/sinonjs/sinon/commit/9ea3d5b27389064856469f0e4dd2b6ea6f175708)
-  Fix hooks-install (Carl-Erik Kopseng)
+- [`93e8aa93`](https://github.com/sinonjs/sinon/commit/93e8aa93c56c2d9d1ff783263adbd93de2603803)
+  Remove postinstall script as it causes issues for consumers (Carl-Erik Kopseng)
 
 _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-19._
-
-## 16.1.1
-
-- [`ff0e993d`](https://github.com/sinonjs/sinon/commit/ff0e993df2adac356995bbc12d1d520a819360bd)
-  Showcase #replace.usingAccessor for DI in the typescript case study (#2556) (Carl-Erik Kopseng)
-- [`c47a4bee`](https://github.com/sinonjs/sinon/commit/c47a4beeba98a5138d5b7a4a8a36ed7a8bf00861)
-  Bump @babel/traverse from 7.22.5 to 7.23.2 (#2555) (dependabot[bot])
-  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
-
-_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-18._
 
 ## 16.1.0
 

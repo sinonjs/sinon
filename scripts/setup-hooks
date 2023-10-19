@@ -6,6 +6,4 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.."
 
 # only install git hooks for people developing Sinon
-if basename $PWD > /dev/null && [[ -e .git/config ]] ; then
-    git config --replace-all core.hooksPath scripts/hooks
-fi
+git config --replace-all core.hooksPath scripts/hooks

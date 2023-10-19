@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "16.1.2",
+  "version": "16.1.3",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -58,8 +58,7 @@
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
     "preversion": "./scripts/preversion.sh",
     "version": "./scripts/version.sh",
-    "postversion": "./scripts/postversion.sh",
-    "postinstall": "./scripts/setup-hooks"
+    "postversion": "./scripts/postversion.sh"
   },
   "nyc": {
     "instrument": false,
