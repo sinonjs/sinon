@@ -6,6 +6,13 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 16.1.2
+
+- [`9ea3d5b2`](https://github.com/sinonjs/sinon/commit/9ea3d5b27389064856469f0e4dd2b6ea6f175708)
+  Fix hooks-install (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-19._
+
 ## 16.1.1
 
 - [`ff0e993d`](https://github.com/sinonjs/sinon/commit/ff0e993df2adac356995bbc12d1d520a819360bd)
