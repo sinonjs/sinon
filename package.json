@@ -59,7 +59,7 @@
     "preversion": "./scripts/preversion.sh",
     "version": "./scripts/version.sh",
     "postversion": "./scripts/postversion.sh",
-    "postinstall": "git config --replace-all core.hooksPath scripts/hooks"
+    "postinstall": "./scripts/setup-hooks"
   },
   "nyc": {
     "instrument": false,
