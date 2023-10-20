@@ -1,6 +1,7 @@
 "use strict";
 
-const color = require("../lib/sinon/color");
+const Colorizer = require("../lib/sinon/color");
+const color = new Colorizer();
 const referee = require("@sinonjs/referee");
 const sinonStub = require("../lib/sinon/stub");
 const sinonSpy = require("../lib/sinon/spy");
