@@ -4,7 +4,8 @@ const assert = require("@sinonjs/referee").assert;
 const extend = require("../lib/sinon/util/core/extend");
 const createProxy = require("../lib/sinon/proxy");
 
-const color = require("../lib/sinon/color");
+const Colorizer = require("../lib/sinon/color");
+const color = new Colorizer();
 const sinonSpy = require("../lib/sinon/spy");
 const sinonStub = require("../lib/sinon/stub");
 const functionName = require("@sinonjs/commons").functionName;
@@ -79,7 +80,7 @@ describe("proxy", function () {
                     faux(arg);
                     assert.equals(
                         faux.printf("%C").replace(/ at.*/g, ""),
-                        `\n    ${expected}`
+                        `\n    ${expected}`,
                     );
                 }
 
@@ -105,7 +106,7 @@ describe("proxy", function () {
 
                 assert.equals(
                     faux.printf("%C").replace(/ at.*/g, ""),
-                    "\n    faux('faux\\ntest')\n    faux('faux\\ntest')\n    faux('faux\\ntest')"
+                    "\n    faux('faux\\ntest')\n    faux('faux\\ntest')\n    faux('faux\\ntest')",
                 );
 
                 faux.resetHistory();
@@ -116,7 +117,7 @@ describe("proxy", function () {
 
                 assert.equals(
                     faux.printf("%C").replace(/ at.*/g, ""),
-                    "\n    faux('test')\n    faux('faux\\ntest')\n    faux('faux\\ntest')"
+                    "\n    faux('test')\n    faux('faux\\ntest')\n    faux('faux\\ntest')",
                 );
             });
         });
@@ -142,7 +143,7 @@ describe("proxy", function () {
 
             assert.equals(
                 faux.printf("%*", 1.4567, "a", true, {}, [], undefined, null),
-                "1.4567, 'a', true, {}, [], undefined, null"
+                "1.4567, 'a', true, {}, [], undefined, null",
             );
             assert.equals(faux.printf("%*", "a", "b", "c"), "'a', 'b', 'c'");
         });
@@ -162,10 +163,10 @@ describe("proxy", function () {
                 assert.equals(
                     faux.printf("%D"),
                     `\n${color.red("1")}\n${color.red("'\"a\"'")}\n${color.red(
-                        "true"
+                        "true",
                     )}\n${color.red("false")}\n${color.red("[]")}\n${color.red(
-                        "{}"
-                    )}\n${color.red("null")}\n${color.red("undefined")}`
+                        "{}",
+                    )}\n${color.red("null")}\n${color.red("undefined")}`,
                 );
             });
 
@@ -187,12 +188,12 @@ describe("proxy", function () {
                 assert.equals(
                     faux.printf("%D"),
                     `${"\nCall 1:\n"}${color.red("1")}\n${color.red(
-                        "'\"a\"'"
+                        "'\"a\"'",
                     )}\n${color.red("true")}\nCall 2:` +
                         `\n${color.red("false")}\n${color.red(
-                            "[]"
+                            "[]",
                         )}\n${color.red("{}")}\nCall 3:` +
-                        `\n${color.red("null")}\n${color.red("undefined")}`
+                        `\n${color.red("null")}\n${color.red("undefined")}`,
                 );
             });
 

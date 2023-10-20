@@ -37,7 +37,7 @@ describe("util/core/walk-object", function () {
                 function () {
                     walkObject(fnWithNoName, false);
                 },
-                { message: "Trying to fnWithNoName object but received false" }
+                { message: "Trying to fnWithNoName object but received false" },
             );
 
             assert.exception(
@@ -47,7 +47,7 @@ describe("util/core/walk-object", function () {
                 {
                     message:
                         "Found no methods on object to which we could apply mutations",
-                }
+                },
             );
         });
 
@@ -56,7 +56,7 @@ describe("util/core/walk-object", function () {
                 function () {
                     walkObject(anonymousFn, false);
                 },
-                { message: "Trying to undefined object but received false" }
+                { message: "Trying to undefined object but received false" },
             );
 
             assert.exception(
@@ -66,7 +66,7 @@ describe("util/core/walk-object", function () {
                 {
                     message:
                         "Found no methods on object to which we could apply mutations",
-                }
+                },
             );
         });
     });

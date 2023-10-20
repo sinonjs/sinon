@@ -208,7 +208,7 @@ it("calls callback with deserialized data", function () {
   server.requests[0].respond(
     200,
     { "Content-Type": "application/json" },
-    JSON.stringify([{ id: 1, text: "Provide examples", done: true }])
+    JSON.stringify([{ id: 1, text: "Provide examples", done: true }]),
   );
 
   assert(callback.calledOnce);

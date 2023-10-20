@@ -6,6 +6,17 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 17.0.0
+
+- [`11a8e3f2`](https://github.com/sinonjs/sinon/commit/11a8e3f24ccec981a280dbe63df316d1fbde4ddd)
+  Remove Proxyquire as it did not handle newer syntax (Carl-Erik Kopseng)
+- [`ec37d634`](https://github.com/sinonjs/sinon/commit/ec37d6346fd51dd9b9ccf95d41c3339a0c88f539)
+  Drop Node 16, as it is out of maintenance (Carl-Erik Kopseng)
+- [`75e2b691`](https://github.com/sinonjs/sinon/commit/75e2b6910ca40ee5f3a39295ec654e124a6a325b)
+  Upgrade fake-timers@11.2.2: new Intl mirroring and bugfixes (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-20._
+
 ## 16.1.3
 
 - [`93e8aa93`](https://github.com/sinonjs/sinon/commit/93e8aa93c56c2d9d1ff783263adbd93de2603803)
@@ -61,7 +72,6 @@ _Released by Morgan Roderick on 2023-09-13._
 - [`a79ccaeb`](https://github.com/sinonjs/sinon/commit/a79ccaeb20bbb558902ae77b20bd026719de3004)
   Support callable instances (#2517) (bojavou)
   > - Support callable instances
-  >
   > - Clean prettier lint
   >
   > ***
@@ -258,7 +268,6 @@ _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-04-14._
 - [`51c508ab`](https://github.com/sinonjs/sinon/commit/51c508ab77cf0f9fb8c5305ff626f6a2eada178f)
   Add dry run mode to `npm version` (#2436) (Joel Bradshaw)
   > - Add DRY_RUN flag to skip publish/push
-  >
   > - Allow overriding branch names for testing
 - [`05341dcf`](https://github.com/sinonjs/sinon/commit/05341dcf92ddca4a1d4c90966b1fcdc7039cff18)
   Update npm version scripts to manage new releases branch (Joel Bradshaw)
@@ -288,7 +297,6 @@ _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-02-01._
   Upgrade packages (#2431) (Carl-Erik Kopseng)
   > - Update all @sinonjs/ packages
   > - Upgrade to fake-timers 9
-  >
   > - chore: ensure always using latest LTS release
 - [`41710467`](https://github.com/sinonjs/sinon/commit/417104670d575e96a1b645ea40ce763afa76fb1b)
   Adjust deploy scripts to archive old releases in a separate branch, move existing releases out of master (#2426) (Joel Bradshaw)

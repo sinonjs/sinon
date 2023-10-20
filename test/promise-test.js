@@ -83,7 +83,7 @@ describe("promise", function () {
                     {
                         name: "Error",
                         message: "Promise already resolved",
-                    }
+                    },
                 );
             });
 
@@ -95,7 +95,7 @@ describe("promise", function () {
                     {
                         name: "Error",
                         message: "Promise already resolved",
-                    }
+                    },
                 );
             });
         });
@@ -116,7 +116,7 @@ describe("promise", function () {
                     {
                         name: "Error",
                         message: "Promise already rejected",
-                    }
+                    },
                 );
             });
 
@@ -128,7 +128,7 @@ describe("promise", function () {
                     {
                         name: "Error",
                         message: "Promise already rejected",
-                    }
+                    },
                 );
             });
         });

@@ -18,21 +18,21 @@ describe("restore-object", function () {
             function () {
                 restoreObject(false);
             },
-            { message: "Trying to restore object but received false" }
+            { message: "Trying to restore object but received false" },
         );
 
         assert.exception(
             function () {
                 restoreObject(null);
             },
-            { message: "Trying to restore object but received null" }
+            { message: "Trying to restore object but received null" },
         );
 
         assert.exception(
             function () {
                 restoreObject();
             },
-            { message: "Trying to restore object but received undefined" }
+            { message: "Trying to restore object but received undefined" },
         );
     });
 
@@ -47,7 +47,7 @@ describe("restore-object", function () {
             {
                 message:
                     "Found no methods on object to which we could apply mutations",
-            }
+            },
         );
     });
 

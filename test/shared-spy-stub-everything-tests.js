@@ -161,9 +161,7 @@ module.exports = function shared(createSpyOrStub) {
 
         assert.exception(function () {
             createSpyOrStub(myObj, "ignoreme");
-        }, new TypeError(
-            "Descriptor for property ignoreme is non-configurable and non-writable"
-        ));
+        }, new TypeError("Descriptor for property ignoreme is non-configurable and non-writable"));
     });
 
     it("throws on accessor property descriptors that are not configurable", function () {
@@ -180,9 +178,7 @@ module.exports = function shared(createSpyOrStub) {
 
         assert.exception(function () {
             createSpyOrStub(myObj, "ignoreme");
-        }, new TypeError(
-            "Descriptor for accessor property ignoreme is non-configurable"
-        ));
+        }, new TypeError("Descriptor for accessor property ignoreme is non-configurable"));
     });
 
     it("throws on data descriptors that are not stubbable", function () {
@@ -194,8 +190,6 @@ module.exports = function shared(createSpyOrStub) {
 
         assert.exception(function () {
             createSpyOrStub(myObj, "ignoreme");
-        }, new TypeError(
-            "Descriptor for data property ignoreme is non-writable"
-        ));
+        }, new TypeError("Descriptor for data property ignoreme is non-writable"));
     });
 };

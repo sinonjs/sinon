@@ -139,7 +139,7 @@ describe("util/core/walk", function () {
 
         assert.isNull(
             err,
-            `walk tests failed with message '${err && err.message}'`
+            `walk tests failed with message '${err && err.message}'`,
         );
     });
 

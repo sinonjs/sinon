@@ -96,7 +96,7 @@ Let us sprinkle some debugging statements to figure out what the differences bet
 console.log("Other", Other);
 console.log(
   "Other property descriptors",
-  Object.getOwnPropertyDescriptors(Other)
+  Object.getOwnPropertyDescriptors(Other),
 );
 ```
 

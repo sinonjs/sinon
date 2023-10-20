@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require("@sinonjs/referee").assert;
-const proxyquire = require("proxyquire");
+const Colorizer = require("../../../lib/sinon/color");
 
 const colors = [
     { name: "bold", code: 1 },
@@ -16,10 +16,8 @@ describe("color", function () {
         let color;
 
         beforeEach(function () {
-            color = proxyquire("../../../lib/sinon/color", {
-                "supports-color": {
-                    stdout: true,
-                },
+            color = new Colorizer({
+                stdout: true,
             });
         });
 
@@ -41,10 +39,8 @@ describe("color", function () {
         let color;
 
         beforeEach(function () {
-            color = proxyquire("../../../lib/sinon/color", {
-                "supports-color": {
-                    stdout: false,
-                },
+            color = new Colorizer({
+                stdout: false,
             });
         });
 

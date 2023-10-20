@@ -314,7 +314,7 @@ describe("issues", function () {
             try {
                 const preDescriptor = Object.getOwnPropertyDescriptor(
                     window,
-                    "innerHeight"
+                    "innerHeight",
                 ); //backup val
                 Object.defineProperty(window, "innerHeight", {
                     value: 10,
@@ -363,14 +363,14 @@ describe("issues", function () {
         it("sets correct firstCall.returnValue", function () {
             assert.equals(
                 this.stub.withArgs("arg").firstCall.returnValue,
-                "return value"
+                "return value",
             );
         });
 
         it("sets correct lastCall.returnValue", function () {
             assert.equals(
                 this.stub.withArgs("arg").lastCall.returnValue,
-                "return value"
+                "return value",
             );
         });
     });
@@ -542,7 +542,7 @@ describe("issues", function () {
             assert.same(
                 originalSetTimeout,
                 globalContext.setTimeout,
-                "fakeTimers restored"
+                "fakeTimers restored",
             );
         });
     });
@@ -627,12 +627,12 @@ describe("issues", function () {
             stub.withArgs(
                 sinon.match.any,
                 sinon.match.any,
-                sinon.match("a")
+                sinon.match("a"),
             ).returns("a");
             stub.withArgs(
                 sinon.match.any,
                 sinon.match.any,
-                sinon.match("b")
+                sinon.match("b"),
             ).returns("b");
 
             assert.equals(stub({}, [], "a"), "a");
@@ -761,19 +761,19 @@ describe("issues", function () {
 
             const originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             sinon.replace(obj, "test", 2);
             const replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             sinon.restore();
             const restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             assert.isUndefined(originalPropertyDescriptor);
@@ -785,19 +785,19 @@ describe("issues", function () {
             const obj = createObjectWithPropFromPrototype();
             const originalPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             sinon.stub(obj, "test").value(2);
             const replacedPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             sinon.restore();
             const restoredPropertyDescriptor = Object.getOwnPropertyDescriptor(
                 obj,
-                "test"
+                "test",
             );
 
             assert.isUndefined(originalPropertyDescriptor);
@@ -893,7 +893,7 @@ describe("issues", function () {
                 createInstanceWithWritableUconfigurablePropertyDescriptor();
 
             refute.exception(() =>
-                this.sandbox.stub(o, "aMethod").returns("stubbed")
+                this.sandbox.stub(o, "aMethod").returns("stubbed"),
             );
             assert.equals("stubbed", o.aMethod());
             this.sandbox.restore();

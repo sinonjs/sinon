@@ -11,7 +11,7 @@ referee.add("isProxy", {
     assert: function assertIsProxy(actual) {
         if (typeof actual !== "function") {
             throw new TypeError(
-                "isProxy expects 'actual' argument to be a Function"
+                "isProxy expects 'actual' argument to be a Function",
             );
         }
 
@@ -456,7 +456,7 @@ describe("fake", function () {
                 },
                 {
                     name: "AssertError",
-                }
+                },
             );
         });
 

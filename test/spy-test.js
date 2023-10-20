@@ -396,25 +396,25 @@ describe("spy", function () {
             ["args", "callId"].forEach(function (propName) {
                 assert.equals(
                     spy.withArgs(1).getCall(0)[propName],
-                    spy.getCall(1)[propName]
+                    spy.getCall(1)[propName],
                 );
                 assert.equals(
                     spy.withArgs(1).getCall(1)[propName],
-                    spy.getCall(2)[propName]
+                    spy.getCall(2)[propName],
                 );
                 assert.equals(
                     spy.withArgs(1).getCall(2)[propName],
-                    spy.getCall(3)[propName]
+                    spy.getCall(3)[propName],
                 );
                 assert.isNull(spy.withArgs(1).getCall(3));
                 assert.equals(
                     spy.withArgs(1, 1).getCall(0)[propName],
-                    spy.getCall(2)[propName]
+                    spy.getCall(2)[propName],
                 );
                 assert.isNull(spy.withArgs(1, 1).getCall(1));
                 assert.equals(
                     spy.withArgs(1, 2).getCall(0)[propName],
-                    spy.getCall(3)[propName]
+                    spy.getCall(3)[propName],
                 );
                 assert.isNull(spy.withArgs(1, 2).getCall(1));
             });
@@ -426,39 +426,39 @@ describe("spy", function () {
             assert.equals(spy.lastCall.callId, spy.getCall(3).callId);
             assert.equals(
                 spy.withArgs(1).firstCall.callId,
-                spy.withArgs(1).getCall(0).callId
+                spy.withArgs(1).getCall(0).callId,
             );
             assert.equals(
                 spy.withArgs(1).secondCall.callId,
-                spy.withArgs(1).getCall(1).callId
+                spy.withArgs(1).getCall(1).callId,
             );
             assert.equals(
                 spy.withArgs(1).thirdCall.callId,
-                spy.withArgs(1).getCall(2).callId
+                spy.withArgs(1).getCall(2).callId,
             );
             assert.equals(
                 spy.withArgs(1).lastCall.callId,
-                spy.withArgs(1).getCall(2).callId
+                spy.withArgs(1).getCall(2).callId,
             );
             assert.equals(
                 spy.withArgs(1, 1).firstCall.callId,
-                spy.withArgs(1, 1).getCall(0).callId
+                spy.withArgs(1, 1).getCall(0).callId,
             );
             assert.isNull(spy.withArgs(1, 1).secondCall);
             assert.isNull(spy.withArgs(1, 1).thirdCall);
             assert.equals(
                 spy.withArgs(1, 1).lastCall.callId,
-                spy.withArgs(1, 1).getCall(0).callId
+                spy.withArgs(1, 1).getCall(0).callId,
             );
             assert.equals(
                 spy.withArgs(1, 2).firstCall.callId,
-                spy.withArgs(1, 2).getCall(0).callId
+                spy.withArgs(1, 2).getCall(0).callId,
             );
             assert.isNull(spy.withArgs(1, 2).secondCall);
             assert.isNull(spy.withArgs(1, 2).thirdCall);
             assert.equals(
                 spy.withArgs(1, 2).lastCall.callId,
-                spy.withArgs(1, 2).getCall(0).callId
+                spy.withArgs(1, 2).getCall(0).callId,
             );
         }
 
@@ -882,7 +882,7 @@ describe("spy", function () {
             this.spy.calledOn(
                 match(function (value) {
                     actual = value;
-                })
+                }),
             );
 
             assert.same(actual, expected);
@@ -1116,7 +1116,7 @@ describe("spy", function () {
     describe(
         ".alwaysCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe
-        spyAlwaysCalledTests("alwaysCalledWithMatch")
+        spyAlwaysCalledTests("alwaysCalledWithMatch"),
     );
 
     describe(".alwaysCalledWithMatchSpecial", function () {
@@ -1171,7 +1171,7 @@ describe("spy", function () {
     describe(
         ".neverCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe
-        spyNeverCalledTests("neverCalledWithMatch")
+        spyNeverCalledTests("neverCalledWithMatch"),
     );
 
     describe(".neverCalledWithMatchSpecial", function () {
@@ -1292,7 +1292,7 @@ describe("spy", function () {
             this.spy({ a: 1, b: 2, c: 3 });
 
             assert.isFalse(
-                this.spy.calledWithExactly({ a: 1, b: 2, c: undefined })
+                this.spy.calledWithExactly({ a: 1, b: 2, c: undefined }),
             );
         });
 
@@ -1300,7 +1300,7 @@ describe("spy", function () {
             this.spy({ a: 1, b: 2, c: 3 });
 
             assert.isFalse(
-                this.spy.calledWithExactly({ a: 1, b: 2, c: "blah" })
+                this.spy.calledWithExactly({ a: 1, b: 2, c: "blah" }),
             );
         });
 
@@ -1308,7 +1308,7 @@ describe("spy", function () {
             this.spy({ a: 1, b: 2, c: 3 });
 
             assert.isFalse(
-                this.spy.calledWithExactly({ a: 1, b: 2, foo: "blah" })
+                this.spy.calledWithExactly({ a: 1, b: 2, foo: "blah" }),
             );
         });
 
@@ -1316,7 +1316,7 @@ describe("spy", function () {
             this.spy({ a: 1, b: 2, c: 3 });
 
             assert.isFalse(
-                this.spy.calledWithExactly({ a: 1, b: 2, foo: undefined })
+                this.spy.calledWithExactly({ a: 1, b: 2, foo: undefined }),
             );
         });
 
@@ -1330,7 +1330,7 @@ describe("spy", function () {
             this.spy({ a: 1, b: 2, c: 3 });
 
             assert.isFalse(
-                this.spy.calledWithExactly({ a: 1, b: 2, c: 3, d: 4 })
+                this.spy.calledWithExactly({ a: 1, b: 2, c: 3, d: 4 }),
             );
         });
     });
@@ -2007,7 +2007,7 @@ describe("spy", function () {
             assert(
                 this.spyA
                     .getCall(0)
-                    .calledImmediatelyAfter(this.spyB.getCall(0))
+                    .calledImmediatelyAfter(this.spyB.getCall(0)),
             );
         });
 
@@ -2065,7 +2065,7 @@ describe("spy", function () {
             assert(
                 this.spyB
                     .getCall(0)
-                    .calledImmediatelyBefore(this.spyA.getCall(0))
+                    .calledImmediatelyBefore(this.spyA.getCall(0)),
             );
         });
 
@@ -2368,7 +2368,7 @@ describe("spy", function () {
                 function () {
                     spy.callArg(1);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -2382,7 +2382,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot call arg since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2401,7 +2401,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot call arg since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2413,7 +2413,7 @@ describe("spy", function () {
                 function () {
                     spy.callArg("");
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -2475,7 +2475,7 @@ describe("spy", function () {
                 function () {
                     spy.callArgOn(1, thisObj);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -2490,7 +2490,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot call arg since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2510,7 +2510,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot call arg since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2523,7 +2523,7 @@ describe("spy", function () {
                 function () {
                     spy.callArg("", thisObj);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -2602,7 +2602,7 @@ describe("spy", function () {
                 },
                 {
                     message: "spy cannot yield since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2621,7 +2621,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot yield since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2692,7 +2692,7 @@ describe("spy", function () {
                 },
                 {
                     message: "spy cannot yield since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2712,7 +2712,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot yield since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2776,7 +2776,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot yield to 'success' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2795,7 +2795,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot yield to 'success' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2813,7 +2813,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot yield to 'Symbol(apple pie)' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2877,7 +2877,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot yield to 'success' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2897,7 +2897,7 @@ describe("spy", function () {
                 {
                     message:
                         "someMethod cannot yield to 'success' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2916,7 +2916,7 @@ describe("spy", function () {
                 {
                     message:
                         "spy cannot yield to 'Symbol(apple pie)' since it was not yet invoked.",
-                }
+                },
             );
         });
 
@@ -2970,7 +2970,7 @@ describe("spy", function () {
                         error.message ===
                         "spy cannot throw arg since it was not yet invoked."
                     );
-                }
+                },
             );
         });
 
@@ -2988,7 +2988,7 @@ describe("spy", function () {
                         error.message ===
                         "Not enough arguments: 7 required but only 4 present"
                     );
-                }
+                },
             );
         });
 
@@ -3006,7 +3006,7 @@ describe("spy", function () {
                         error instanceof TypeError &&
                         error.message === expectedError.message
                     );
-                }
+                },
             );
         });
     });

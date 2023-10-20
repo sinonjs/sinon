@@ -3,7 +3,6 @@
 const assert = require("@sinonjs/referee").assert;
 const functionName = require("@sinonjs/commons").functionName;
 const Sandbox = require("../lib/sinon/sandbox");
-const proxyquire = require("proxyquire");
 
 describe("sinon module", function () {
     let sinon, fakeNise;
@@ -32,17 +31,14 @@ describe("sinon module", function () {
                 useFakeXMLHttpRequest: "ba8bd609-c921-4a62-a1b9-49336bd426a4",
             },
         };
-        sinon = proxyquire("../lib/sinon", {
-            nise: fakeNise,
+        sinon = require("../lib/sinon").createApi({
+            sinonXhrLib: fakeNise,
         });
     });
 
     describe("exports", function () {
         describe("default sandbox", function () {
             it("should be an instance of Sandbox", function () {
-                // use full sinon for this test as it compares sinon instance
-                // proxyquire changes the instance, so `actual instanceof Sandbox` returns `false`
-                // see https://github.com/sinonjs/sinon/pull/1586#issuecomment-354457231
                 sinon = require("../lib/sinon");
 
                 assert.hasPrototype(sinon, Sandbox.prototype);
@@ -56,7 +52,7 @@ describe("sinon module", function () {
                 // Use helper because IE 11 doesn't support the `name` property:
                 assert.equals(
                     functionName(sinon.createSandbox),
-                    "createSandbox"
+                    "createSandbox",
                 );
             });
         });
@@ -71,7 +67,7 @@ describe("sinon module", function () {
             it("should be fakeServer.create from nise", function () {
                 assert.equals(
                     sinon.createFakeServer(),
-                    fakeNise.fakeServer.create()
+                    fakeNise.fakeServer.create(),
                 );
             });
         });
@@ -80,7 +76,7 @@ describe("sinon module", function () {
             it("should be the fakeServerWithClock export from nise", function () {
                 assert.same(
                     sinon.fakeServerWithClock,
-                    fakeNise.fakeServerWithClock
+                    fakeNise.fakeServerWithClock,
                 );
             });
         });
@@ -89,7 +85,7 @@ describe("sinon module", function () {
             it("should be fakeServerWithClock.create from nise", function () {
                 assert.equals(
                     sinon.createFakeServerWithClock(),
-                    fakeNise.fakeServerWithClock.create()
+                    fakeNise.fakeServerWithClock.create(),
                 );
             });
         });
@@ -104,7 +100,7 @@ describe("sinon module", function () {
             it("should be the fakeXhr.FakeXMLHttpRequest export from nise", function () {
                 assert.equals(
                     sinon.FakeXMLHttpRequest,
-                    fakeNise.fakeXhr.FakeXMLHttpRequest
+                    fakeNise.fakeXhr.FakeXMLHttpRequest,
                 );
             });
         });
@@ -113,11 +109,7 @@ describe("sinon module", function () {
             let nise;
 
             beforeEach(function () {
-                // use full sinon for this test as it compares sinon instance
-                // proxyquire changes the instance, so `actual instanceof Sandbox` returns `false`
-                // see https://github.com/sinonjs/sinon/pull/1586#issuecomment-354457231
                 sinon = require("../lib/sinon");
-
                 nise = require("nise");
             });
 
