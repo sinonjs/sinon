@@ -56,7 +56,7 @@ describe("sinon module", function () {
                 // Use helper because IE 11 doesn't support the `name` property:
                 assert.equals(
                     functionName(sinon.createSandbox),
-                    "createSandbox"
+                    "createSandbox",
                 );
             });
         });
@@ -71,7 +71,7 @@ describe("sinon module", function () {
             it("should be fakeServer.create from nise", function () {
                 assert.equals(
                     sinon.createFakeServer(),
-                    fakeNise.fakeServer.create()
+                    fakeNise.fakeServer.create(),
                 );
             });
         });
@@ -80,7 +80,7 @@ describe("sinon module", function () {
             it("should be the fakeServerWithClock export from nise", function () {
                 assert.same(
                     sinon.fakeServerWithClock,
-                    fakeNise.fakeServerWithClock
+                    fakeNise.fakeServerWithClock,
                 );
             });
         });
@@ -89,7 +89,7 @@ describe("sinon module", function () {
             it("should be fakeServerWithClock.create from nise", function () {
                 assert.equals(
                     sinon.createFakeServerWithClock(),
-                    fakeNise.fakeServerWithClock.create()
+                    fakeNise.fakeServerWithClock.create(),
                 );
             });
         });
@@ -104,7 +104,7 @@ describe("sinon module", function () {
             it("should be the fakeXhr.FakeXMLHttpRequest export from nise", function () {
                 assert.equals(
                     sinon.FakeXMLHttpRequest,
-                    fakeNise.fakeXhr.FakeXMLHttpRequest
+                    fakeNise.fakeXhr.FakeXMLHttpRequest,
                 );
             });
         });

@@ -269,7 +269,7 @@ server.respondWith(/\/todo-items\/(\d+)/, function (xhr, id) {
   xhr.respond(
     200,
     { "Content-Type": "application/json" },
-    '[{ "id": ' + id + " }]"
+    '[{ "id": ' + id + " }]",
   );
 });
 ```

@@ -61,7 +61,6 @@ _Released by Morgan Roderick on 2023-09-13._
 - [`a79ccaeb`](https://github.com/sinonjs/sinon/commit/a79ccaeb20bbb558902ae77b20bd026719de3004)
   Support callable instances (#2517) (bojavou)
   > - Support callable instances
-  >
   > - Clean prettier lint
   >
   > ***
@@ -258,7 +257,6 @@ _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-04-14._
 - [`51c508ab`](https://github.com/sinonjs/sinon/commit/51c508ab77cf0f9fb8c5305ff626f6a2eada178f)
   Add dry run mode to `npm version` (#2436) (Joel Bradshaw)
   > - Add DRY_RUN flag to skip publish/push
-  >
   > - Allow overriding branch names for testing
 - [`05341dcf`](https://github.com/sinonjs/sinon/commit/05341dcf92ddca4a1d4c90966b1fcdc7039cff18)
   Update npm version scripts to manage new releases branch (Joel Bradshaw)
@@ -288,7 +286,6 @@ _Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2022-02-01._
   Upgrade packages (#2431) (Carl-Erik Kopseng)
   > - Update all @sinonjs/ packages
   > - Upgrade to fake-timers 9
-  >
   > - chore: ensure always using latest LTS release
 - [`41710467`](https://github.com/sinonjs/sinon/commit/417104670d575e96a1b645ea40ce763afa76fb1b)
   Adjust deploy scripts to archive old releases in a separate branch, move existing releases out of master (#2426) (Joel Bradshaw)

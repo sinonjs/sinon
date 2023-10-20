@@ -32,7 +32,7 @@ describe("createStubInstance", function () {
             {
                 message:
                     "Found no methods on object to which we could apply mutations",
-            }
+            },
         );
     });
 
@@ -152,7 +152,7 @@ describe("createStubInstance", function () {
                     foo: createStub().returns(3),
                 });
             },
-            { message: "Cannot stub foo. Property does not exist!" }
+            { message: "Cannot stub foo. Property does not exist!" },
         );
     });
 });

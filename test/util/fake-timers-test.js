@@ -94,7 +94,7 @@ describe("fakeTimers.clock", function () {
                     {
                         message:
                             "[ERR_INVALID_CALLBACK]: Callback must be a function. Received apple pie of type string",
-                    }
+                    },
                 );
             });
         }
@@ -694,7 +694,7 @@ describe("fakeTimers.clock", function () {
 
             assert.same(
                 date.constructor.prototype,
-                realDate.constructor.prototype
+                realDate.constructor.prototype,
             );
         });
 
@@ -804,7 +804,7 @@ describe("fakeTimers.clock", function () {
         it("mirrors toUTCString method", function () {
             assert.same(
                 this.clock.Date.prototype.toUTCString,
-                Date.prototype.toUTCString
+                Date.prototype.toUTCString,
             );
         });
 
@@ -1184,7 +1184,7 @@ describe("fakeTimers.clock", function () {
                     this.clock.restore();
                     done();
                 }.bind(this),
-                10
+                10,
             );
         });
 
@@ -1201,7 +1201,7 @@ describe("fakeTimers.clock", function () {
                     this.clock.restore();
                     done();
                 }.bind(this),
-                10
+                10,
             );
         });
 
@@ -1215,7 +1215,7 @@ describe("fakeTimers.clock", function () {
                 function () {
                     this.clock.restore();
                     done();
-                }.bind(this)
+                }.bind(this),
             );
         });
 
@@ -1227,21 +1227,21 @@ describe("fakeTimers.clock", function () {
                 function () {
                     fakeTimers.useFakeTimers("setImmediate");
                 },
-                { name: "TypeError", message: expectedError }
+                { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
                 function () {
                     fakeTimers.useFakeTimers("setImmediate", "Date");
                 },
-                { name: "TypeError", message: expectedError }
+                { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
                 function () {
                     fakeTimers.useFakeTimers(1000, "setImmediate", "Date");
                 },
-                { name: "TypeError", message: expectedError }
+                { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
@@ -1249,10 +1249,10 @@ describe("fakeTimers.clock", function () {
                     fakeTimers.useFakeTimers(
                         new Date(10000000),
                         "setImmediate",
-                        "Date"
+                        "Date",
                     );
                 },
-                { name: "TypeError", message: expectedError }
+                { name: "TypeError", message: expectedError },
             );
         });
 

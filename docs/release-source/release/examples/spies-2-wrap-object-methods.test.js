@@ -34,11 +34,11 @@ describe("Wrap all object methods", function () {
         assert(myExternalLibrary._doNetworkCall.calledOnce);
         assert.equals(
             url,
-            myExternalLibrary._doNetworkCall.getCall(0).args[0].url
+            myExternalLibrary._doNetworkCall.getCall(0).args[0].url,
         );
         assert.equals(
             "json",
-            myExternalLibrary._doNetworkCall.getCall(0).args[0].dataType
+            myExternalLibrary._doNetworkCall.getCall(0).args[0].dataType,
         );
     });
 });

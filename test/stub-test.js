@@ -42,7 +42,7 @@ describe("stub", function () {
             },
             {
                 message: "Trying to stub property 'prop' of null",
-            }
+            },
         );
     });
 
@@ -57,7 +57,7 @@ describe("stub", function () {
             },
             {
                 message: "Trying to stub property 'Symbol(apple pie)' of null",
-            }
+            },
         );
     });
 
@@ -83,7 +83,7 @@ describe("stub", function () {
         assert.same(
             syncVersions,
             asyncVersions,
-            "Stub prototype should contain same amount of synchronous and asynchronous methods"
+            "Stub prototype should contain same amount of synchronous and asynchronous methods",
         );
     });
 
@@ -522,11 +522,11 @@ describe("stub", function () {
             const object = {};
             stub.resolvesArg(2);
 
-            return stub("ignored", "ignored again", object).then(function (
-                actual
-            ) {
-                assert.same(actual, object);
-            });
+            return stub("ignored", "ignored again", object).then(
+                function (actual) {
+                    assert.same(actual, object);
+                },
+            );
         });
 
         it("should return the same stub", function () {
@@ -578,7 +578,7 @@ describe("stub", function () {
                 function () {
                     stub.resolvesArg();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -594,7 +594,7 @@ describe("stub", function () {
                     name: "TypeError",
                     message:
                         "resolvesArg failed: 4 arguments required but only 3 present",
-                }
+                },
             );
         });
     });
@@ -629,7 +629,7 @@ describe("stub", function () {
                 function () {
                     stub.returnsArg();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -645,7 +645,7 @@ describe("stub", function () {
                     name: "TypeError",
                     message:
                         "returnsArg failed: 4 arguments required but only 2 present",
-                }
+                },
             );
         });
     });
@@ -662,7 +662,7 @@ describe("stub", function () {
                 },
                 function (err) {
                     return err.message === expectedError.message;
-                }
+                },
             );
         });
 
@@ -679,7 +679,7 @@ describe("stub", function () {
                 function () {
                     stub.throwsArg();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -695,7 +695,7 @@ describe("stub", function () {
                     name: "TypeError",
                     message:
                         "throwsArg failed: 4 arguments required but only 2 present",
-                }
+                },
             );
         });
 
@@ -716,7 +716,7 @@ describe("stub", function () {
                 },
                 function (error) {
                     return error.message === expectedError.message;
-                }
+                },
             );
         });
 
@@ -742,7 +742,7 @@ describe("stub", function () {
                 },
                 function (error) {
                     return error.message === expectedError.message;
-                }
+                },
             );
 
             refute(fakeFn.called);
@@ -837,11 +837,11 @@ describe("stub", function () {
                 assert.same(actual, object, "Same object resolved");
                 assert.isTrue(
                     promise.resolve.calledOnce,
-                    "Custom promise resolve called once"
+                    "Custom promise resolve called once",
                 );
                 assert.isTrue(
                     promise.resolve.calledWith(object),
-                    "Custom promise resolve called once with expected"
+                    "Custom promise resolve called once with expected",
                 );
             });
         });
@@ -865,11 +865,11 @@ describe("stub", function () {
                     assert.same(actual, reason, "Same object resolved");
                     assert.isTrue(
                         promise.reject.calledOnce,
-                        "Custom promise reject called once"
+                        "Custom promise reject called once",
                     );
                     assert.isTrue(
                         promise.reject.calledWith(reason),
-                        "Custom promise reject called once with expected"
+                        "Custom promise reject called once with expected",
                     );
                 });
         });
@@ -951,7 +951,7 @@ describe("stub", function () {
                 },
                 {
                     message: "Sinon-provided TypeError",
-                }
+                },
             );
         });
 
@@ -1061,7 +1061,7 @@ describe("stub", function () {
                 function () {
                     this.stub(1);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1072,7 +1072,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArg();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1083,7 +1083,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArg({});
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1099,7 +1099,7 @@ describe("stub", function () {
                     name: "TypeError",
                     message:
                         "callsArg failed: 4 arguments required but only 2 present",
-                }
+                },
             );
         });
 
@@ -1160,7 +1160,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgWith();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1171,7 +1171,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgWith({});
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1235,7 +1235,7 @@ describe("stub", function () {
                 function () {
                     this.stub(1);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1246,7 +1246,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgOn();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1257,7 +1257,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgOn(this.fakeContext, 2);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1367,7 +1367,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgOnWith();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1378,7 +1378,7 @@ describe("stub", function () {
                 function () {
                     stub.callsArgOnWith({});
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1471,7 +1471,7 @@ describe("stub", function () {
                     message:
                         "stub(obj, 'meth', fn) has been removed, see documentation",
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1645,7 +1645,7 @@ describe("stub", function () {
                 {
                     message:
                         "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -1775,7 +1775,7 @@ describe("stub", function () {
                 {
                     message:
                         "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -1894,7 +1894,7 @@ describe("stub", function () {
                 function () {
                     this.stub.yieldsOn();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -1913,7 +1913,7 @@ describe("stub", function () {
                 },
             };
             const stub = createStub(myObj, "somethingAwesome").yieldsOn(
-                this.fakeContext
+                this.fakeContext,
             );
 
             assert.exception(
@@ -1923,7 +1923,7 @@ describe("stub", function () {
                 {
                     message:
                         "somethingAwesome expected to yield, but no callback was passed. Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -2071,7 +2071,7 @@ describe("stub", function () {
                 },
             };
             const stub = createStub(myObj, "somethingAwesome").yieldsTo(
-                "success"
+                "success",
             );
 
             assert.exception(
@@ -2083,7 +2083,7 @@ describe("stub", function () {
                         "somethingAwesome expected to yield to 'success', but " +
                         "no object with such a property was passed. " +
                         "Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -2236,7 +2236,7 @@ describe("stub", function () {
             };
             const stub = createStub(myObj, "somethingAwesome").yieldsToOn(
                 "success",
-                this.fakeContext
+                this.fakeContext,
             );
 
             assert.exception(
@@ -2248,7 +2248,7 @@ describe("stub", function () {
                         "somethingAwesome expected to yield to 'success', but " +
                         "no object with such a property was passed. " +
                         "Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -2353,7 +2353,7 @@ describe("stub", function () {
             const fakeFn = createStub().yieldsToOn(
                 "success",
                 this.fakeContext,
-                1
+                1,
             );
             const stub = createStub()
                 .callsFake(fakeFn)
@@ -2727,7 +2727,7 @@ describe("stub", function () {
                     },
                     {
                         message: /not supported/,
-                    }
+                    },
                 );
             });
         });

@@ -35,7 +35,7 @@ describe("util/core/wrapMethod", function () {
             function () {
                 wrapMethod();
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -49,7 +49,7 @@ describe("util/core/wrapMethod", function () {
                     return;
                 });
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -73,7 +73,7 @@ describe("util/core/wrapMethod", function () {
                     err.message ===
                     "Attempted to wrap number property Symbol(apple pie) as function"
                 );
-            }
+            },
         );
     });
 
@@ -94,7 +94,7 @@ describe("util/core/wrapMethod", function () {
             },
             {
                 message: /Attempted to wrap .* property .* as function/,
-            }
+            },
         );
     });
 
@@ -105,7 +105,7 @@ describe("util/core/wrapMethod", function () {
             function () {
                 wrapMethod(object, "method");
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -116,7 +116,7 @@ describe("util/core/wrapMethod", function () {
             function () {
                 wrapMethod(object, "method", 1);
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -138,10 +138,10 @@ describe("util/core/wrapMethod", function () {
 
         refute.same(
             this.getter,
-            Object.getOwnPropertyDescriptor(this.object, "property").get
+            Object.getOwnPropertyDescriptor(this.object, "property").get,
         );
         assert.isFunction(
-            Object.getOwnPropertyDescriptor(this.object, "property").get
+            Object.getOwnPropertyDescriptor(this.object, "property").get,
         );
     });
 
@@ -155,10 +155,10 @@ describe("util/core/wrapMethod", function () {
 
         refute.same(
             this.setter,
-            Object.getOwnPropertyDescriptor(this.object, "property").set
+            Object.getOwnPropertyDescriptor(this.object, "property").set,
         );
         assert.isFunction(
-            Object.getOwnPropertyDescriptor(this.object, "property").set
+            Object.getOwnPropertyDescriptor(this.object, "property").set,
         );
     });
 
@@ -173,7 +173,7 @@ describe("util/core/wrapMethod", function () {
                     return;
                 });
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -202,7 +202,7 @@ describe("util/core/wrapMethod", function () {
                     err.message ===
                     "Attempted to wrap Symbol(apple pie) which is already wrapped"
                 );
-            }
+            },
         );
     });
 
@@ -221,7 +221,7 @@ describe("util/core/wrapMethod", function () {
                     },
                 });
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -234,7 +234,7 @@ describe("util/core/wrapMethod", function () {
                     return;
                 });
             },
-            { name: "TypeError" }
+            { name: "TypeError" },
         );
     });
 
@@ -258,7 +258,7 @@ describe("util/core/wrapMethod", function () {
                     err.message ===
                     "Attempted to wrap Symbol(apple pie) which is already spied on"
                 );
-            }
+            },
         );
     });
 
@@ -300,7 +300,7 @@ describe("util/core/wrapMethod", function () {
                 },
                 {
                     stack: ":STACK2:\n--------------\n:STACK1:",
-                }
+                },
             );
         });
     });

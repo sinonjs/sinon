@@ -32,7 +32,7 @@ describe("sinonMock", function () {
                 function () {
                     sinonMock.create();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
     });
@@ -53,7 +53,7 @@ describe("sinonMock", function () {
                 function () {
                     mock.expects();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -96,7 +96,7 @@ describe("sinonMock", function () {
                 },
                 {
                     message: "anonymous mock expectation",
-                }
+                },
             );
         });
 
@@ -142,7 +142,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -165,7 +165,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -184,7 +184,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -204,7 +204,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -225,7 +225,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -245,7 +245,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -260,7 +260,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.exactly();
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -271,7 +271,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.exactly("12");
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -288,7 +288,7 @@ describe("sinonMock", function () {
                                 err.message ===
                                 "'Symbol(apple pie)' is not a number"
                             );
-                        }
+                        },
                     );
                 }
             });
@@ -302,7 +302,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.atLeast();
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -313,7 +313,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.atLeast({});
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -330,7 +330,7 @@ describe("sinonMock", function () {
                                 err.message ===
                                 "'Symbol(apple pie)' is not number"
                             );
-                        }
+                        },
                     );
                 }
             });
@@ -419,7 +419,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.atMost();
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -430,7 +430,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.atMost({});
                     },
-                    { name: "TypeError" }
+                    { name: "TypeError" },
                 );
             });
 
@@ -447,7 +447,7 @@ describe("sinonMock", function () {
                                 err.message ===
                                 "'Symbol(apple pie)' is not number"
                             );
-                        }
+                        },
                     );
                 }
             });
@@ -490,7 +490,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
 
                 assert.isFalse(this.expectation.met());
@@ -534,7 +534,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
         });
@@ -591,7 +591,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -603,7 +603,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation(1, 2);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -645,7 +645,7 @@ describe("sinonMock", function () {
                 this.expectation.withArgs(
                     match.number,
                     match.string,
-                    match.func
+                    match.func,
                 );
                 this.expectation(1, "test", function () {
                     return;
@@ -660,13 +660,13 @@ describe("sinonMock", function () {
                 this.expectation.withArgs(
                     match.number,
                     match.string,
-                    match.func
+                    match.func,
                 );
                 assert.exception(
                     function () {
                         expectation(1, 2, 3);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -689,7 +689,7 @@ describe("sinonMock", function () {
             it("returns expectation for chaining", function () {
                 assert.same(
                     this.expectation.withExactArgs(1),
-                    this.expectation
+                    this.expectation,
                 );
             });
 
@@ -708,7 +708,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -720,7 +720,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation(1, 2);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -732,7 +732,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation(2, 2, 3);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -744,7 +744,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation(1, 2, 3, 4);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -763,7 +763,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation(1, 2, 3);
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
         });
@@ -788,7 +788,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -806,7 +806,7 @@ describe("sinonMock", function () {
                                 err.message ===
                                 "method called with Symbol(pear pie) as thisValue, expected Symbol(apple pie)"
                             );
-                        }
+                        },
                     );
                 }
             });
@@ -831,7 +831,7 @@ describe("sinonMock", function () {
                     function () {
                         expectation.verify();
                     },
-                    { name: "ExpectationError" }
+                    { name: "ExpectationError" },
                 );
             });
 
@@ -844,7 +844,7 @@ describe("sinonMock", function () {
                     },
                     {
                         message: "Expected myMeth('[...]') once (never called)",
-                    }
+                    },
                 );
             });
         });
@@ -886,7 +886,7 @@ describe("sinonMock", function () {
                 function () {
                     mock.verify();
                 },
-                { name: "ExpectationError" }
+                { name: "ExpectationError" },
             );
 
             assert.same(this.object.method, this.method);
@@ -905,7 +905,7 @@ describe("sinonMock", function () {
                     message:
                         "Expected method('[...]') thrice (never called)\n" +
                         "Expected method(42, '[...]') once (never called)",
-                }
+                },
             );
         });
 
@@ -919,7 +919,7 @@ describe("sinonMock", function () {
                 },
                 {
                     message: "Expected method(42) once (never called)",
-                }
+                },
             );
         });
 
@@ -934,7 +934,7 @@ describe("sinonMock", function () {
                 },
                 {
                     message: "Expected method(42) thrice (called once)",
-                }
+                },
             );
         });
 
@@ -951,7 +951,7 @@ describe("sinonMock", function () {
                 {
                     message:
                         "Unexpected call: method()\n    Expected method(42) thrice (never called)",
-                }
+                },
             );
         });
 
@@ -972,7 +972,7 @@ describe("sinonMock", function () {
                         "Unexpected call: method()\n" +
                         "    Expectation met: method(1, '[...]') once\n" +
                         "    Expected method(42) thrice (never called)",
-                }
+                },
             );
         });
 
@@ -990,7 +990,7 @@ describe("sinonMock", function () {
                 {
                     message:
                         "Expected method(42) thrice (never called)\nExpectation met: method(1, '[...]') once",
-                }
+                },
             );
         });
 
@@ -1005,7 +1005,7 @@ describe("sinonMock", function () {
                 {
                     message:
                         "Expected method('[...]') at least once (never called)",
-                }
+                },
             );
         });
 
@@ -1024,7 +1024,7 @@ describe("sinonMock", function () {
                 {
                     message:
                         "Unexpected call: method()\n    Expectation met: method('[...]') at most twice",
-                }
+                },
             );
         });
 
@@ -1046,7 +1046,7 @@ describe("sinonMock", function () {
                         "Unexpected call: method(2)\n" +
                         "    Expectation met: method('[...]') at least once\n" +
                         "    Expectation met: method(2, '[...]') once",
-                }
+                },
             );
         });
 
@@ -1061,7 +1061,7 @@ describe("sinonMock", function () {
                 {
                     message:
                         "Expected method('[...]') at least once and at most twice (never called)",
-                }
+                },
             );
         });
 
@@ -1081,7 +1081,7 @@ describe("sinonMock", function () {
                 function () {
                     mock.verify();
                 },
-                { name: "ExpectationError" }
+                { name: "ExpectationError" },
             );
         });
 
@@ -1196,7 +1196,7 @@ describe("sinonMock", function () {
                 function () {
                     assert(mock.verify());
                 },
-                { name: "ExpectationError" }
+                { name: "ExpectationError" },
             );
         });
     });
@@ -1229,7 +1229,7 @@ describe("sinonMock", function () {
                 function () {
                     object.method();
                 },
-                { name: "ExpectationError" }
+                { name: "ExpectationError" },
             );
         });
 
@@ -1242,7 +1242,7 @@ describe("sinonMock", function () {
                 function () {
                     object.method();
                 },
-                { name: "ExpectationError" }
+                { name: "ExpectationError" },
             );
         });
 

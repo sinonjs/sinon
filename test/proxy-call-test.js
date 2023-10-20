@@ -21,7 +21,7 @@ function spyCallSetUp() {
         this.args,
         this.returnValue,
         null,
-        0
+        0,
     );
 }
 
@@ -62,7 +62,7 @@ function spyCallCalledTests(method) {
             const args = this.args;
 
             assert.isFalse(
-                this.call[method](args[0], args[1], args[2], args[3], {})
+                this.call[method](args[0], args[1], args[2], args[3], {}),
             );
         });
 
@@ -138,7 +138,7 @@ describe("sinonSpy.call", function () {
                 [],
                 null,
                 null,
-                42
+                42,
             );
 
             assert.same(call.callId, 42);
@@ -151,7 +151,7 @@ describe("sinonSpy.call", function () {
                         return;
                     },
                     {},
-                    []
+                    [],
                 );
             });
         });
@@ -219,7 +219,7 @@ describe("sinonSpy.call", function () {
     describe(
         "call.notCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe
-        spyCallNotCalledTests("notCalledWithMatch")
+        spyCallNotCalledTests("notCalledWithMatch"),
     );
 
     describe("call.calledWithExactly", function () {
@@ -229,7 +229,7 @@ describe("sinonSpy.call", function () {
             const args = this.args;
 
             assert(
-                this.call.calledWithExactly(args[0], args[1], args[2], args[3])
+                this.call.calledWithExactly(args[0], args[1], args[2], args[3]),
             );
         });
 
@@ -242,8 +242,8 @@ describe("sinonSpy.call", function () {
                     args[1],
                     args[2],
                     args[3],
-                    {}
-                )
+                    {},
+                ),
             );
         });
 
@@ -257,7 +257,7 @@ describe("sinonSpy.call", function () {
             const args = this.args;
 
             assert.isFalse(
-                this.call.calledWithExactly(args[0], args[1], args[1])
+                this.call.calledWithExactly(args[0], args[1], args[1]),
             );
         });
 
@@ -270,7 +270,7 @@ describe("sinonSpy.call", function () {
                 [],
                 null,
                 null,
-                0
+                0,
             );
 
             assert(call.calledWithExactly());
@@ -285,7 +285,7 @@ describe("sinonSpy.call", function () {
                 [],
                 null,
                 null,
-                0
+                0,
             );
 
             assert.isFalse(call.calledWithExactly({}));
@@ -315,7 +315,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "Expected argument at position 0 to be a Function, but was number",
-                }
+                },
             );
         });
 
@@ -326,7 +326,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArg();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -348,7 +348,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArg({});
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
     });
@@ -379,7 +379,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "Expected argument at position 0 to be a Function, but was number",
-                }
+                },
             );
         });
 
@@ -403,7 +403,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArgOn({}, thisObj);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
     });
@@ -460,7 +460,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArgWith();
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
 
@@ -471,7 +471,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArgWith({});
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
     });
@@ -540,7 +540,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "Expected argument at position 2 to be a Function, but was number",
-                }
+                },
             );
         });
 
@@ -552,7 +552,7 @@ describe("sinonSpy.call", function () {
                 function () {
                     call.callArgOnWith({}, thisObj);
                 },
-                { name: "TypeError" }
+                { name: "TypeError" },
             );
         });
     });
@@ -636,7 +636,7 @@ describe("sinonSpy.call", function () {
                 },
                 {
                     message: "spy cannot yield since no callback was passed.",
-                }
+                },
             );
         });
 
@@ -652,7 +652,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "somethingAwesome cannot yield since no callback was passed. Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -720,7 +720,7 @@ describe("sinonSpy.call", function () {
                 [],
                 null,
                 null,
-                0
+                0,
             );
 
             assert.same(call.yield, call.invokeCallback);
@@ -752,7 +752,7 @@ describe("sinonSpy.call", function () {
                 },
                 {
                     message: "spy cannot yield since no callback was passed.",
-                }
+                },
             );
         });
 
@@ -769,7 +769,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "somethingAwesome cannot yield since no callback was passed. Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -860,7 +860,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "spy cannot yield to 'success' since no callback was passed.",
-                }
+                },
             );
         });
 
@@ -877,7 +877,7 @@ describe("sinonSpy.call", function () {
                     message:
                         "somethingAwesome cannot yield to 'success' since no callback was passed. " +
                         "Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -965,7 +965,7 @@ describe("sinonSpy.call", function () {
                 {
                     message:
                         "spy cannot yield to 'success' since no callback was passed.",
-                }
+                },
             );
         });
 
@@ -981,7 +981,7 @@ describe("sinonSpy.call", function () {
                     {
                         message:
                             "spy cannot yield to 'Symbol(apple pie)' since no callback was passed.",
-                    }
+                    },
                 );
             }
         });
@@ -1000,7 +1000,7 @@ describe("sinonSpy.call", function () {
                     message:
                         "somethingAwesome cannot yield to 'success' since no callback was passed. " +
                         "Received [23, 42]",
-                }
+                },
             );
         });
 
@@ -1081,7 +1081,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt()"
+                "doIt()",
             );
         });
 
@@ -1091,7 +1091,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt(42)"
+                "doIt(42)",
             );
         });
 
@@ -1101,7 +1101,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt(42, 'Hey')"
+                "doIt(42, 'Hey')",
             );
         });
 
@@ -1111,7 +1111,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt(42, 'Hey') => 42"
+                "doIt(42, 'Hey') => 42",
             );
         });
 
@@ -1121,7 +1121,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt(42, 'Hey') => ''"
+                "doIt(42, 'Hey') => ''",
             );
         });
 
@@ -1134,7 +1134,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt() !TypeError(Sinon-provided TypeError)"
+                "doIt() !TypeError(Sinon-provided TypeError)",
             );
         });
 
@@ -1149,7 +1149,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt() !TypeError(Oh noes!)"
+                "doIt() !TypeError(Oh noes!)",
             );
         });
 
@@ -1161,7 +1161,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt(42)"
+                "doIt(42)",
             );
         });
 
@@ -1172,7 +1172,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt() => 42"
+                "doIt() => 42",
             );
         });
 
@@ -1190,7 +1190,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 stub2.getCall(0).toString().replace(/ at.*/g, ""),
-                "stub(1) => 1"
+                "stub(1) => 1",
             );
         });
         /* eslint-enable consistent-return */

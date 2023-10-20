@@ -121,7 +121,7 @@ describe("Sandbox", function () {
                         return;
                     },
                 },
-                "method"
+                "method",
             );
             this.sandbox.stub(
                 {
@@ -129,7 +129,7 @@ describe("Sandbox", function () {
                         return;
                     },
                 },
-                "method"
+                "method",
             );
 
             assert.equals(fakes.length, 2);
@@ -228,7 +228,7 @@ describe("Sandbox", function () {
                 {
                     name: "TypeError",
                     message: "The constructor should be a function.",
-                }
+                },
             );
         });
 
@@ -387,7 +387,7 @@ describe("Sandbox", function () {
                         foo: sinonStub().returns(3),
                     });
                 },
-                { message: "Cannot stub foo. Property does not exist!" }
+                { message: "Cannot stub foo. Property does not exist!" },
             );
         });
 
@@ -426,7 +426,7 @@ describe("Sandbox", function () {
                 },
                 {
                     message: "Trying to stub property 'prop' of null",
-                }
+                },
             );
         });
 
@@ -441,7 +441,7 @@ describe("Sandbox", function () {
                     {
                         message:
                             "Trying to stub property 'Symbol(apple pie)' of null",
-                    }
+                    },
                 );
             }
         });
@@ -479,7 +479,7 @@ describe("Sandbox", function () {
                         return;
                     },
                 },
-                "method"
+                "method",
             );
             this.sandbox.stub(
                 {
@@ -487,7 +487,7 @@ describe("Sandbox", function () {
                         return;
                     },
                 },
-                "method"
+                "method",
             );
 
             assert.equals(fakes.length, 2);
@@ -629,7 +629,7 @@ describe("Sandbox", function () {
                         message:
                             "Cannot stub non-existent property Symbol(apple pie)",
                     },
-                    TypeError
+                    TypeError,
                 );
 
                 deprecated.printWarning = originalPrintWarning;
@@ -865,7 +865,7 @@ describe("Sandbox", function () {
                     message:
                         "Cannot define the already existing property existingValue. Perhaps you meant sandbox.replace()?",
                     name: "TypeError",
-                }
+                },
             );
 
             assert.exception(
@@ -873,14 +873,14 @@ describe("Sandbox", function () {
                     sandbox.define(
                         object,
                         "existingFunction",
-                        () => "new function"
+                        () => "new function",
                     );
                 },
                 {
                     message:
                         "Cannot define the already existing property existingFunction. Perhaps you meant sandbox.replace()?",
                     name: "TypeError",
-                }
+                },
             );
 
             // Verify that the methods above, even though they failed, did not replace the values
@@ -961,7 +961,7 @@ describe("Sandbox", function () {
                     message:
                         "Cannot replace non-existent property i-dont-exist. Perhaps you meant sandbox.define()?",
                     name: "TypeError",
-                }
+                },
             );
         });
 
@@ -978,7 +978,7 @@ describe("Sandbox", function () {
                 {
                     message: "Expected replacement argument to be defined",
                     name: "TypeError",
-                }
+                },
             );
         });
 
@@ -996,7 +996,7 @@ describe("Sandbox", function () {
                 function () {
                     sandbox.replace(object, "property", replacement);
                 },
-                { message: "Cannot replace string with function" }
+                { message: "Cannot replace string with function" },
             );
         });
 
@@ -1013,7 +1013,7 @@ describe("Sandbox", function () {
                 function () {
                     sandbox.replace(object, "property", replacement);
                 },
-                { message: "Cannot replace function with string" }
+                { message: "Cannot replace function with string" },
             );
         });
 
@@ -1034,7 +1034,7 @@ describe("Sandbox", function () {
                 {
                     message:
                         "Attempted to replace property which is already replaced",
-                }
+                },
             );
         });
 
@@ -1053,7 +1053,7 @@ describe("Sandbox", function () {
                 {
                     message:
                         "Attempted to replace property which is already replaced",
-                }
+                },
             );
         });
 
@@ -1067,7 +1067,7 @@ describe("Sandbox", function () {
             const actual = this.sandbox.replace(
                 object,
                 "property",
-                replacement
+                replacement,
             );
 
             assert.equals(actual, replacement);
@@ -1089,7 +1089,7 @@ describe("Sandbox", function () {
                     {
                         message:
                             "Use sandbox.replaceGetter for replacing getters",
-                    }
+                    },
                 );
             });
         });
@@ -1111,7 +1111,7 @@ describe("Sandbox", function () {
                     {
                         message:
                             "Use sandbox.replaceSetter for replacing setters",
-                    }
+                    },
                 );
             });
         });
@@ -1155,7 +1155,7 @@ describe("Sandbox", function () {
             this.sandbox.replaceGetter(
                 object,
                 "foo",
-                sinonFake.returns(expected)
+                sinonFake.returns(expected),
             );
 
             assert.equals(object.foo, expected);
@@ -1172,7 +1172,7 @@ describe("Sandbox", function () {
             const actual = this.sandbox.replaceGetter(
                 object,
                 "foo",
-                replacement
+                replacement,
             );
 
             assert.equals(actual, replacement);
@@ -1208,7 +1208,7 @@ describe("Sandbox", function () {
                     message:
                         "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError",
-                }
+                },
             );
         });
 
@@ -1228,7 +1228,7 @@ describe("Sandbox", function () {
                 {
                     message: "`object.property` is not a getter",
                     name: "Error",
-                }
+                },
             );
         });
 
@@ -1249,7 +1249,7 @@ describe("Sandbox", function () {
                     {
                         message:
                             "Expected replacement argument to be a function",
-                    }
+                    },
                 );
             });
         });
@@ -1265,7 +1265,7 @@ describe("Sandbox", function () {
             this.sandbox.replaceGetter(
                 object,
                 "foo",
-                sinonFake.returns(expected)
+                sinonFake.returns(expected),
             );
 
             this.sandbox.restore();
@@ -1288,13 +1288,13 @@ describe("Sandbox", function () {
                     sandbox.replaceGetter(
                         object,
                         "foo",
-                        sinonFake.returns("two")
+                        sinonFake.returns("two"),
                     );
                 },
                 {
                     message:
                         "Attempted to replace foo which is already replaced",
-                }
+                },
             );
         });
     });
@@ -1336,7 +1336,7 @@ describe("Sandbox", function () {
             const actual = this.sandbox.replaceSetter(
                 object,
                 "foo",
-                replacement
+                replacement,
             );
 
             assert.equals(actual, replacement);
@@ -1374,7 +1374,7 @@ describe("Sandbox", function () {
                     message:
                         "Cannot replace non-existent property i-dont-exist",
                     name: "TypeError",
-                }
+                },
             );
         });
 
@@ -1393,7 +1393,7 @@ describe("Sandbox", function () {
                 {
                     message: "`object.property` is not a setter",
                     name: "Error",
-                }
+                },
             );
         });
 
@@ -1415,7 +1415,7 @@ describe("Sandbox", function () {
                     {
                         message:
                             "Expected replacement argument to be a function",
-                    }
+                    },
                 );
             });
         });
@@ -1456,13 +1456,13 @@ describe("Sandbox", function () {
                     sandbox.replaceSetter(
                         object,
                         "foo",
-                        sinonFake.returns("two")
+                        sinonFake.returns("two"),
                     );
                 },
                 {
                     message:
                         "Attempted to replace foo which is already replaced",
-                }
+                },
             );
         });
     });
@@ -1601,7 +1601,7 @@ describe("Sandbox", function () {
         it("passes arguments to sinon.useFakeTimers", function () {
             const useFakeTimersStub = sinonStub(
                 sinonClock,
-                "useFakeTimers"
+                "useFakeTimers",
             ).returns({});
 
             this.sandbox.useFakeTimers({ toFake: ["Date", "setTimeout"] });
@@ -1610,12 +1610,14 @@ describe("Sandbox", function () {
             });
 
             assert(
-                useFakeTimersStub.calledWith({ toFake: ["Date", "setTimeout"] })
+                useFakeTimersStub.calledWith({
+                    toFake: ["Date", "setTimeout"],
+                }),
             );
             assert(
                 useFakeTimersStub.calledWith({
                     toFake: ["setTimeout", "clearTimeout", "setInterval"],
-                })
+                }),
             );
 
             useFakeTimersStub.restore();
@@ -1643,7 +1645,7 @@ describe("Sandbox", function () {
             assert.same(
                 originalSetTimeout,
                 globalContext.setTimeout,
-                "fakeTimers restored"
+                "fakeTimers restored",
             );
         });
     });
@@ -1905,7 +1907,7 @@ describe("Sandbox", function () {
                     this.obj.replace(myObj, "a", fake);
                     this.obj.replaceGetter(myObj, "b", fake);
                     this.obj.replaceSetter(myObj, "c", fake);
-                }.bind(this)
+                }.bind(this),
             );
         });
 
@@ -2002,7 +2004,7 @@ describe("Sandbox", function () {
                 {
                     message:
                         "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()",
-                }
+                },
             );
         });
 
@@ -2054,7 +2056,7 @@ describe("Sandbox", function () {
             const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["stub", "mock"],
-                })
+                }),
             );
 
             assert.equals(sandbox.args.length, 2);
@@ -2068,7 +2070,7 @@ describe("Sandbox", function () {
             const sandbox = createSandbox(
                 sinonConfig({
                     properties: ["spy", "stub", "mock"],
-                })
+                }),
             );
 
             assert.spy(sandbox.args[0]());
@@ -2083,7 +2085,7 @@ describe("Sandbox", function () {
                 sinonConfig({
                     properties: ["server", "stub", "mock"],
                     useFakeServer: false,
-                })
+                }),
             );
 
             assert.equals(sandbox.args.length, 2);
@@ -2104,7 +2106,7 @@ describe("Sandbox", function () {
                 sinonConfig({
                     properties: ["server", "clock", "spy"],
                     injectInto: object,
-                })
+                }),
             );
 
             assert.same(object.server, server);
@@ -2120,7 +2122,7 @@ describe("Sandbox", function () {
                     const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server", "stub", "mock"],
-                        })
+                        }),
                     );
 
                     assert.equals(sandbox.args.length, 3);
@@ -2136,12 +2138,12 @@ describe("Sandbox", function () {
                         sinonConfig({
                             properties: ["server"],
                             useFakeServer: fakeServerWithClock,
-                        })
+                        }),
                     );
 
                     assert.fakeServerWithClock(
                         sandbox.args[0],
-                        this.fakeServer
+                        this.fakeServer,
                     );
 
                     sandbox.restore();
@@ -2165,7 +2167,7 @@ describe("Sandbox", function () {
                     const sandbox = createSandbox(
                         sinonConfig({
                             properties: ["server", "clock"],
-                        })
+                        }),
                     );
 
                     assert.same(sandbox.args[0], this.fakeServer);
@@ -2181,7 +2183,7 @@ describe("Sandbox", function () {
                         sinonConfig({
                             properties: ["server", "clock"],
                             injectInto: object,
-                        })
+                        }),
                     );
 
                     assert.equals(sandbox.args.length, 0);
@@ -2203,7 +2205,7 @@ describe("Sandbox", function () {
                             injectInto: object,
                             useFakeTimers: true,
                             useFakeServer: true,
-                        })
+                        }),
                     );
 
                     assert.equals(sandbox.args.length, 0);
@@ -2227,13 +2229,13 @@ describe("Sandbox", function () {
                 sinonConfig({
                     properties: ["clock"],
                     useFakeTimers: { toFake: ["Date", "setTimeout"] },
-                })
+                }),
             );
 
             assert(
                 this.useFakeTimersSpy.calledWith({
                     toFake: ["Date", "setTimeout"],
-                })
+                }),
             );
 
             sandbox.restore();
@@ -2246,7 +2248,7 @@ describe("Sandbox", function () {
                 sinonConfig({
                     properties: ["sandbox", "spy"],
                     injectInto: object,
-                })
+                }),
             );
 
             assert.equals(sandbox.args.length, 0);
@@ -2263,7 +2265,7 @@ describe("Sandbox", function () {
                 sinonConfig({
                     properties: ["match"],
                     injectInto: object,
-                })
+                }),
             );
 
             assert.same(object.match, match);
@@ -2378,14 +2380,14 @@ describe("Sandbox", function () {
                 function () {
                     sandboxA.assert.fail("Some message");
                 },
-                { name: "CustomErrorA" }
+                { name: "CustomErrorA" },
             );
 
             assert.exception(
                 function () {
                     sandboxB.assert.fail("Some message");
                 },
-                { name: "CustomErrorB" }
+                { name: "CustomErrorB" },
             );
 
             sandboxA.restore();
