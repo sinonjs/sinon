@@ -6,3 +6,6 @@ plugins:
 
 rules:
   "@sinonjs/no-prototype-methods/no-prototype-methods": error
+  "jsdoc/require-param-type": off
+  "jsdoc/require-jsdoc": off
+  "jsdoc/tag-lines": off
