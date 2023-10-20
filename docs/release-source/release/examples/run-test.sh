@@ -13,7 +13,7 @@ npm install --ignore-scripts
 npm link sinon
 
 # Lint
-$(npm bin)/eslint .
+npx eslint .
 
 # Make sure all examples are still runnable
 set -e
