@@ -6,6 +6,17 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 17.0.0
+
+- [`11a8e3f2`](https://github.com/sinonjs/sinon/commit/11a8e3f24ccec981a280dbe63df316d1fbde4ddd)
+  Remove Proxyquire as it did not handle newer syntax (Carl-Erik Kopseng)
+- [`ec37d634`](https://github.com/sinonjs/sinon/commit/ec37d6346fd51dd9b9ccf95d41c3339a0c88f539)
+  Drop Node 16, as it is out of maintenance (Carl-Erik Kopseng)
+- [`75e2b691`](https://github.com/sinonjs/sinon/commit/75e2b6910ca40ee5f3a39295ec654e124a6a325b)
+  Upgrade fake-timers@11.2.2: new Intl mirroring and bugfixes (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-10-20._
+
 ## 16.1.3
 
 - [`93e8aa93`](https://github.com/sinonjs/sinon/commit/93e8aa93c56c2d9d1ff783263adbd93de2603803)
