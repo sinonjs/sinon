@@ -4,7 +4,7 @@ const assert = require("@sinonjs/referee").assert;
 const extend = require("../lib/sinon/util/core/extend");
 const createProxy = require("../lib/sinon/proxy");
 
-const Colorizer = require("../lib/sinon/color");
+const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();
 const sinonSpy = require("../lib/sinon/spy");
 const sinonStub = require("../lib/sinon/stub");
