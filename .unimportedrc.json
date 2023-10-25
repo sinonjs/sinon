@@ -1,8 +1,23 @@
 {
-  "entry": ["lib/sinon.js", "lib/sinon-esm.js"],
-  "extensions": [".js"],
-  "ignorePatterns": ["**/node_modules/**"],
+  "entry": [
+    "lib/sinon.js",
+    "lib/sinon-esm.js",
+    "test/**/*-test.js",
+    "test/webworker/webworker-script.js",
+    "test/webworker/webworker-support-assessment.js"
+  ],
+  "extensions": [
+    ".js"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**"
+  ],
   "ignoreUnresolved": [],
-  "ignoreUnimported": ["docs/**", "pkg/**", "test/**"],
+  "ignoreUnimported": [
+    "docs/**",
+    "pkg/**",
+    "vendor/**/*",
+    "test/es2015/check-esm-bundle-is-runnable.js"
+  ],
   "ignoreUnused": []
 }
