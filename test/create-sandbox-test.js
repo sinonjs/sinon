@@ -8,7 +8,7 @@ describe("create-sandbox", function () {
         // Arrange
         const sb = createSandbox();
         const spy = sb.spy();
-        sb.replace.usingAccessor(sinonAssert.mock, "createAssertObject", spy);
+        sb.replace(sinonAssert, "createAssertObject", spy);
 
         // Act
         createSandbox({
