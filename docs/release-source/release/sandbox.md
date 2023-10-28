@@ -7,8 +7,8 @@ breadcrumb: sandbox
 Sandboxes remove the need to keep track of every fake created, which greatly simplifies cleanup.
 
 ```javascript
-var sandbox = require("sinon").createSandbox();
-var myAPI = { hello: function () {} };
+const sandbox = require("sinon").createSandbox();
+const myAPI = { hello: function () {} };
 
 describe("myAPI.hello method", function () {
   beforeEach(function () {
@@ -34,11 +34,11 @@ describe("myAPI.hello method", function () {
 });
 ```
 
-## Sandbox API
+## Default sandbox
 
-#### Default sandbox
+Since Sinon 5, the `sinon` object is a default sandbox in itself! Unless you have a very advanced setup or need a special configuration, you probably only need to use that one in your tests for easy cleanup.
 
-Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to only use that one.
+This also means all of the sandbox API is exposed on the default `sinon` instance.
 
 ```javascript
 const myObject = {
@@ -55,52 +55,22 @@ console.log(myObject.hello);
 // world
 ```
 
-#### `var sandbox = sinon.createSandbox();`
+## Sandbox API
+
+#### `const sandbox = sinon.createSandbox();`
 
 Creates a new sandbox object with spies, stubs, and mocks.
 
-#### `var sandbox = sinon.createSandbox(config);`
+#### `const sandbox = sinon.createSandbox(config);`
 
 The `sinon.createSandbox(config)` method is often an integration feature, and can be used for scenarios including a global object to coordinate all fakes through.
 
-Sandboxes are partially configured by default such that calling:
+The default sandbox config has faking of XHR and timers turned off.
+
+To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, you explicitly enable the additional features:
 
 ```javascript
-var sandbox = sinon.createSandbox({});
-```
-
-will merge in extra defaults analogous to:
-
-```javascript
-var sandbox = sinon.createSandbox({
-  // ...
-  injectInto: null,
-  properties: ["spy", "stub", "mock"],
-  useFakeTimers: false,
-  useFakeServer: false,
-});
-```
-
-The `useFakeTimers` and `useFakeServers` are **false** as opposed to the [defaults in `sinon.defaultConfig`](https://github.com/sinonjs/sinon/blob/master/lib/sinon/util/core/default-config.js):
-
-```javascript
-sinon.defaultConfig = {
-  // ...
-  injectInto: null,
-  properties: ["spy", "stub", "mock", "clock", "server", "requests"],
-  useFakeTimers: true,
-  useFakeServer: true,
-};
-```
-
-To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, you can call:
-
-```javascript
-// Inject the sinon defaults explicitly.
-var sandbox = sinon.createSandbox(sinon.defaultConfig);
-
-// (OR) Add the extra properties that differ from the sinon defaults.
-var sandbox = sinon.createSandbox({
+const sandbox = sinon.createSandbox({
   useFakeTimers: true,
   useFakeServer: true,
 });
@@ -109,21 +79,17 @@ var sandbox = sinon.createSandbox({
 ##### `injectInto`
 
 The sandbox's methods can be injected into another object for convenience. The
-`injectInto` configuration option can name an object to add properties to.
+`injectInto` configuration option can name an object to add properties to. See the example further down the page.
 
 ##### `properties`
 
-What properties to inject. Note that only naming "server" here is not
-sufficient to have a `server` property show up in the target object, you also
-have to set `useFakeServer` to `true`.
+Which properties to inject into the facade object. Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
 
 The list of properties that can be injected are the ones exposed by the object
-returned by the function `inject`, namely:
+returned by the function `inject`:
 
 ```javascript
-{
-  //...
-  properties: [
+console.log(Object.keys(sinon.inject(obj)))
     "spy",
     "stub",
     "mock",
@@ -132,12 +98,27 @@ returned by the function `inject`, namely:
     "replace",
     "replaceSetter",
     "replaceGetter",
+    "match",
+    // If enabled:
+    // sinon.useFakeTimers();
     "clock",
+    // sinon.useFakeServer();
     "server",
     "requests",
-    "match",
-  ];
-}
+```
+
+##### `assertOptions`
+
+You can override the default behavior and limit the amount of
+characters if the error strings should somehow be overwhelming
+and overflow your display.
+
+```javascript
+@property {boolean} shouldLimitAssertionLogs
+@property {number}  assertionLogLimit
+```
+
+<div data-example-id="sandbox-configuration"></div>
 ```
 
 ##### `useFakeTimers`
@@ -154,22 +135,22 @@ but if you're using jQuery 1.3.x or some other library that does not set the XHR
 `onreadystatechange` handler, you might want to do:
 
 ```javascript
-sinon.config = {
+sinon.createSandbox({
   useFakeServer: sinon.fakeServerWithClock,
-};
+});
 ```
 
-##### exposing sandbox example
+##### Exposing sandbox example
 
 To create an object `sandboxFacade` which gets the method `spy` injected, you
 can code:
 
 ```javascript
 // object that will have the spy method injected into it
-var sandboxFacade = {};
+const sandboxFacade = {};
 
 // create sandbox and inject properties (in this case spy) into sandboxFacade
-var sandbox = sinon.createSandbox({
+const sandbox = sinon.createSandbox({
   injectInto: sandboxFacade,
   properties: ["spy"],
 });
@@ -188,7 +169,7 @@ Defines the `property` on `object` with the value `value`. Attempts to define an
 `value` can be any value except `undefined`, including `spies`, `stubs` and `fakes`.
 
 ```js
-var myObject = {};
+const myObject = {};
 
 sandbox.define(myObject, "myValue", "blackberry");
 
@@ -222,7 +203,7 @@ Replaces `property` on `object` with `replacement` argument. Attempts to replace
 This method only works on non-accessor properties, for replacing accessors, use `sandbox.replaceGetter()` and `sandbox.replaceSetter()`.
 
 ```js
-var myObject = {
+const myObject = {
   myMethod: function () {
     return "apple pie";
   },
@@ -251,7 +232,7 @@ Replaces an existing getter for `property` on `object` with the `replacementFunc
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
 ```js
-var myObject = {
+const myObject = {
     get myProperty: function() {
         return 'apple pie';
     }
@@ -272,7 +253,7 @@ Replaces an existing setter for `property` on `object` with the `replacementFunc
 `replacement` must be a `Function`, and can be instances of `spies`, `stubs` and `fakes`.
 
 ```js
-var object = {
+const object = {
   set myProperty(value) {
     this.prop = value;
   },
