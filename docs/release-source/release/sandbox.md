@@ -107,6 +107,20 @@ console.log(Object.keys(sinon.inject(obj)))
     "requests",
 ```
 
+##### `assertOptions`
+
+You can override the default behavior and limit the amount of
+characters if the error strings should somehow be overwhelming
+and overflow your display.
+
+```javascript
+@property {boolean} shouldLimitAssertionLogs
+@property {number}  assertionLogLimit
+```
+
+<div data-example-id="sandbox-configuration"></div>
+```
+
 ##### `useFakeTimers`
 
 If set to `true`, the sandbox will have a `clock` property. You can optionally pass
