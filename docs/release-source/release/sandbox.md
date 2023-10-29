@@ -79,11 +79,13 @@ const sandbox = sinon.createSandbox({
 ##### `injectInto`
 
 The sandbox's methods can be injected into another object for convenience. The
-`injectInto` configuration option can name an object to add properties to. See the example further down the page.
+`injectInto` configuration option can name an object to add properties to. Note that you explicitly need to specify all the properties you want to expose using the `properties` field.
+
+See the example further down the page.
 
 ##### `properties`
 
-Which properties to inject into the facade object. Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
+Which properties to inject into the facade object. By default empty! Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
 
 The list of properties that can be injected are the ones exposed by the object
 returned by the function `inject`:
