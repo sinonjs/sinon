@@ -2111,6 +2111,7 @@ describe("Sandbox", function () {
             describe("ajax options", function () {
                 it("yields server when faking xhr", function () {
                     const sandbox = createSandbox({
+                        useFakeServer: true,
                         properties: ["server", "stub", "mock"],
                     });
 
@@ -2153,6 +2154,8 @@ describe("Sandbox", function () {
                 it("yields clock when faking timers", function () {
                     const sandbox = createSandbox({
                         properties: ["server", "clock"],
+                        useFakeServer: true,
+                        useFakeTimers: true,
                     });
 
                     assert.same(sandbox.args[0], this.fakeServer);
@@ -2161,30 +2164,12 @@ describe("Sandbox", function () {
                     sandbox.restore();
                 });
 
-                it("injects properties into object", function () {
-                    const object = {};
-
-                    const sandbox = createSandbox({
-                        properties: ["server", "clock"],
-                        injectInto: object,
-                    });
-
-                    assert.equals(sandbox.args.length, 0);
-                    assert.equals(object.server, this.fakeServer);
-                    assert.clock(object.clock);
-                    assert.isUndefined(object.spy);
-                    assert.isUndefined(object.stub);
-                    assert.isUndefined(object.mock);
-                    assert.isUndefined(object.requests);
-
-                    sandbox.restore();
-                });
-
-                it("should inject server and clock when only enabling them", function () {
+                it("should inject server and clock when enabling them", function () {
                     const object = {};
 
                     const sandbox = createSandbox({
                         injectInto: object,
+                        properties: ["clock", "server", "requests"],
                         useFakeTimers: true,
                         useFakeServer: true,
                     });
@@ -2192,11 +2177,24 @@ describe("Sandbox", function () {
                     assert.equals(sandbox.args.length, 0);
                     assert.equals(object.server, this.fakeServer);
                     assert.clock(object.clock);
-                    assert.isFunction(object.spy);
-                    assert.isFunction(object.stub);
-                    assert.isFunction(object.mock);
                     assert.isArray(object.requests);
+
+                    sandbox.restore();
+                });
+
+                it("should not inject server and clock if not enabled, even if the props are whitelisted", function () {
+                    const object = {};
+
+                    const sandbox = createSandbox({
+                        injectInto: object,
+                        properties: ["clock", "server", "requests"],
+                        useFakeTimers: false,
+                        useFakeServer: false,
+                    });
+
+                    assert.isUndefined(object.requests);
                     assert.isUndefined(object.sandbox);
+                    assert.isUndefined(object.clock);
 
                     sandbox.restore();
                 });
@@ -2246,6 +2244,16 @@ describe("Sandbox", function () {
             assert.same(object.match, match);
 
             sandbox.restore();
+        });
+
+        it("does not inject any properties by default", function () {
+            const object = {};
+
+            createSandbox({
+                injectInto: object,
+            });
+
+            assert.equals(Object.keys(object), []);
         });
     });
 
