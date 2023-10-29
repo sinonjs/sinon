@@ -119,7 +119,11 @@ and overflow your display.
 ```
 
 <div data-example-id="sandbox-configuration"></div>
-```
+
+#### `inject(facadeObject)`
+
+This is injects all the properties of the sandbox into the facade object.
+This is equivalent to specifying all the available properties in `properties` when you create a sandbox with `injectInto`.
 
 ##### `useFakeTimers`
 
@@ -154,6 +158,12 @@ const sandbox = sinon.createSandbox({
   injectInto: sandboxFacade,
   properties: ["spy"],
 });
+```
+
+Alternatively you can use the `sandbox.inject({})` method, which will inject all the sandbox methods by default, which is _usually_ what you want.
+
+```javascript
+const myFacade = sandbox.inject({});
 ```
 
 #### `sandbox.assert();`
