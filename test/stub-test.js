@@ -225,6 +225,17 @@ describe("stub", function () {
             refute(fakeFn.called);
         });
 
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            }
+            const stub = createStub(obj, 'fn').callThrough().returns(2);
+
+            assert.equals(stub(), 2);
+        });
+
         it("throws only on the first call", function () {
             const stub = createStub();
             stub.returns("no exception");
@@ -282,6 +293,20 @@ describe("stub", function () {
             stub.rejects(Error("should be superseded")).resolves(1);
 
             return stub().then();
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return Promise.resolve(1);
+                }
+            }
+            const stub = createStub(obj, 'fn').callThrough().resolves(2);
+
+            return stub()
+                .then(function (actual) {
+                    assert.equals(actual, 2);
+                });
         });
 
         it("supersedes previous callsFake", function () {
@@ -405,6 +430,24 @@ describe("stub", function () {
                 });
         });
 
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return Promise.resolve(1);
+                }
+            };
+            const reason = new Error();
+            const stub = createStub(obj, 'fn').callThrough().rejects(reason);
+
+            return stub()
+                .then(function () {
+                    referee.fail("this should not resolve");
+                })
+                .catch(function (actual) {
+                    assert.same(actual, reason);
+                });
+        });
+
         it("does not invoke Promise.reject when the behavior is added to the stub", function () {
             const rejectSpy = createSpy(Promise, "reject");
             const stub = createStub();
@@ -479,6 +522,20 @@ describe("stub", function () {
             return instance.stub().then(function (actual) {
                 assert.same(actual, instance);
             });
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return Promise.resolve(1);
+                }
+            };
+            createStub(obj, 'fn').callThrough().resolvesThis();
+
+            return obj.fn()
+                .then(function (actual) {
+                    assert.same(actual, obj);
+                });
         });
 
         it("supersedes previous callsFake", function () {
@@ -563,6 +620,20 @@ describe("stub", function () {
             });
         });
 
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return Promise.resolve('nooooo');
+                }
+            };
+            createStub(obj, 'fn').callThrough().resolvesArg(1);
+
+            return obj.fn('zero', 'one')
+                .then(function (actual) {
+                    assert.same(actual, "one");
+                });
+        });
+
         it("does not invoke Promise.resolve when the behavior is added to the stub", function () {
             const resolveSpy = createSpy(Promise, "resolve");
             const stub = createStub();
@@ -620,6 +691,17 @@ describe("stub", function () {
 
             assert.equals(stub("myarg"), "myarg");
             refute(fakeFn.called);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+            createStub(obj, 'fn').callThrough().returnsArg(0);
+
+            assert.equals(obj.fn("myarg"), "myarg");
         });
 
         it("throws if no index is specified", function () {
@@ -747,6 +829,25 @@ describe("stub", function () {
 
             refute(fakeFn.called);
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+            createStub(obj, 'fn').callThrough().throwsArg(1);
+            const expectedError = new Error("catpants");
+
+            assert.exception(
+                function () {
+                    obj.fn(null, expectedError);
+                },
+                function (error) {
+                    return error.message === expectedError.message;
+                },
+            );
+        });
     });
 
     describe(".returnsThis", function () {
@@ -799,6 +900,17 @@ describe("stub", function () {
 
             assert.same(instance.stub(), instance);
             refute(fakeFn.called);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return'nooooo';
+                }
+            };
+            createStub(obj, 'fn').callThrough().returnsThis();
+
+            assert.same(obj.fn(), obj);
         });
     });
 
@@ -1034,6 +1146,20 @@ describe("stub", function () {
             });
             refute(fakeFn.called);
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+            const expectedError = new Error("catpants");
+            createStub(obj, 'fn').callThrough().throws(expectedError);
+
+            assert.exception(obj.fn, {
+                message: expectedError.message,
+            });
+        });
     });
 
     describe(".callsArg", function () {
@@ -1110,6 +1236,20 @@ describe("stub", function () {
             assert.same(stub(callback), "return value");
             assert(callback.calledOnce);
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return'nooooo';
+                }
+            };
+            const stub = createStub(obj, 'fn').callThrough().callsArg(0);
+
+            const callback = createStub().returns("return value");
+
+            assert.same(stub(callback), "return value");
+            assert(callback.calledOnce);
+        });
     });
 
     describe(".callsArgWith", function () {
@@ -1177,6 +1317,19 @@ describe("stub", function () {
 
         it("returns result of invocant", function () {
             const stub = this.stub.callsArgWith(0, "test");
+            const callback = createStub().returns("return value");
+
+            assert.same(stub(callback), "return value");
+            assert(callback.calledOnce);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return'nooooo';
+                }
+            };
+            const stub = createStub(obj, 'fn').callThrough().callsArgWith(0, 'test');
             const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
