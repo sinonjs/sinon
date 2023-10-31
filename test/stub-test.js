@@ -905,7 +905,7 @@ describe("stub", function () {
         it("supersedes previous callThrough", function () {
             const obj = {
                 fn() {
-                    return'nooooo';
+                    return 'nooooo';
                 }
             };
             createStub(obj, 'fn').callThrough().returnsThis();
@@ -1240,7 +1240,7 @@ describe("stub", function () {
         it("supersedes previous callThrough", function () {
             const obj = {
                 fn() {
-                    return'nooooo';
+                    return 'nooooo';
                 }
             };
             const stub = createStub(obj, 'fn').callThrough().callsArg(0);
@@ -1326,7 +1326,7 @@ describe("stub", function () {
         it("supersedes previous callThrough", function () {
             const obj = {
                 fn() {
-                    return'nooooo';
+                    return 'nooooo';
                 }
             };
             const stub = createStub(obj, 'fn').callThrough().callsArgWith(0, 'test');
@@ -1419,6 +1419,20 @@ describe("stub", function () {
             const callback = createStub().returns("return value");
 
             assert.same(stub(callback), "return value");
+            assert(callback.calledOnce);
+            assert(callback.calledOn(this.fakeContext));
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+            createStub(obj, 'fn').callThrough().callsArgOn(0, this.fakeContext);
+            const callback = createStub().returns("return value");
+
+            assert.same(obj.fn(callback), "return value");
             assert(callback.calledOnce);
             assert(callback.calledOn(this.fakeContext));
         });
@@ -1544,6 +1558,23 @@ describe("stub", function () {
             assert(callback.calledOnce);
             assert(callback.calledWith(object));
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+
+            const arg = 'hello';
+            createStub(obj, 'fn').callThrough().callsArgOnWith(1, this.fakeContext, arg);
+            const callback = createStub();
+
+            obj.fn(1, callback);
+
+            assert(callback.calledWith(arg));
+            assert(callback.calledOn(this.fakeContext));
+        });
     });
 
     describe(".callsFake", function () {
@@ -1596,6 +1627,18 @@ describe("stub", function () {
 
             assert(fakeFn.called);
             assert(returned === 5);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 'nooooo';
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().callsFake(() => 'yeees');
+
+            assert.same(obj.fn(), 'yeees');
         });
     });
 
@@ -1893,6 +1936,20 @@ describe("stub", function () {
             assert(spy.calledWith, 2);
             refute(fakeFn.called);
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().yields(2);
+            const spy = createSpy();
+            obj.fn(spy);
+
+            assert(spy.calledWith, 2);
+        });
     });
 
     describe(".yieldsRight", function () {
@@ -2022,6 +2079,20 @@ describe("stub", function () {
 
             assert(spy.calledWith, 2);
             refute(fakeFn.called);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().yieldsRight(2);
+            const spy = createSpy();
+            obj.fn(spy);
+
+            assert(spy.calledWith, 2);
         });
     });
 
@@ -2180,6 +2251,20 @@ describe("stub", function () {
             assert(spy.calledWith, 2);
             refute(fakeFn.called);
         });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().yieldsOn(this.fakeContext, 2);
+            const spy = createSpy();
+            obj.fn(spy);
+
+            assert(spy.calledWith, 2);
+        });
     });
 
     describe(".yieldsTo", function () {
@@ -2330,6 +2415,20 @@ describe("stub", function () {
 
             assert(callback.calledWith(2));
             refute(fakeFn.called);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().yieldsTo("success", 2);
+            const callback = createSpy();
+            obj.fn({ success: callback });
+
+            assert(callback.calledWith, 2);
         });
     });
 
@@ -2516,6 +2615,20 @@ describe("stub", function () {
 
             assert(callback.calledWith(2));
             refute(fakeFn.called);
+        });
+
+        it("supersedes previous callThrough", function () {
+            const obj = {
+                fn() {
+                    return 1;
+                }
+            };
+
+            createStub(obj, 'fn').callThrough().yieldsToOn("success", this.fakeContext, 2);
+            const callback = createSpy();
+            obj.fn({ success: callback });
+
+            assert(callback.calledWith(2));
         });
     });
 
