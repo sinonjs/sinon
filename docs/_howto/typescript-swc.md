@@ -306,5 +306,6 @@ As can be seen, there are lots of different paths to walk in order to achieve th
 [sut]: http://xunitpatterns.com/SUT.html
 [require-hook]: https://levelup.gitconnected.com/how-to-add-hooks-to-node-js-require-function-dee7acd12698
 [swc-mutable-export]: https://github.com/fatso83/sinon-swc-bug/tree/swc-with-mutable-exports
+[pure-di]: https://github.com/fatso83/sinon-swc-bug/tree/pure-di
 [pure-di-with-auto-cleanup]: https://github.com/fatso83/sinon-swc-bug/tree/auto-cleanup-di
 [cjs-mocking]: https://github.com/fatso83/sinon-swc-bug/tree/cjs-mocking
