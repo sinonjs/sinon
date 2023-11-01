@@ -1,6 +1,6 @@
 "use strict";
 
-const Colorizer = require("../lib/sinon/color");
+const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();
 const referee = require("@sinonjs/referee");
 const sinonStub = require("../lib/sinon/stub");
@@ -63,6 +63,18 @@ describe("assert", function () {
 
         afterEach(function () {
             sinonAssert.failException = this.exceptionName;
+        });
+
+        it("can be configured to limit the error message length", function () {
+            const customAssert = sinonAssert.createAssertObject({
+                shouldLimitAssertionLogs: true,
+                assertionLogLimit: 10,
+            });
+
+            assert.exception(
+                () => customAssert.fail("1234567890--THIS SHOULD NOT SHOW--"),
+                { message: "1234567890" },
+            );
         });
 
         it("throws exception", function () {

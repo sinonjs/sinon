@@ -31,7 +31,7 @@ describe("sinon module", function () {
                 useFakeXMLHttpRequest: "ba8bd609-c921-4a62-a1b9-49336bd426a4",
             },
         };
-        sinon = require("../lib/sinon").createApi({
+        sinon = require("../lib/create-sinon-api")({
             sinonXhrLib: fakeNise,
         });
     });
