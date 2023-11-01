@@ -6,6 +6,19 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 17.0.1
+
+- [`5fde5aeb`](https://github.com/sinonjs/sinon/commit/5fde5aebc74dec12bacd84d00a2f22906a7ebcc0)
+  fix returns does not override call through (#2567) (Raz Luvaton)
+- [`b5fc3671`](https://github.com/sinonjs/sinon/commit/b5fc3671fff2481ab9b66486242f2c2ceb8d08e5)
+  Documentation for assertion options for the sandbox (#2564) (Carl-Erik Kopseng)
+- [`f7d180cc`](https://github.com/sinonjs/sinon/commit/f7d180ccc15b8dce958c08a780d384044d39bb2b)
+  fix: assertion log limit (#2485) (Spencer Goossens)
+- [`4f538e3e`](https://github.com/sinonjs/sinon/commit/4f538e3e74580a44e9b0cfcfdec9ca5f76d16fad)
+  Fix mochify breaking on node:assert (#2559) (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2023-11-01._
+
 ## 17.0.0
 
 - [`11a8e3f2`](https://github.com/sinonjs/sinon/commit/11a8e3f24ccec981a280dbe63df316d1fbde4ddd)
