@@ -349,7 +349,7 @@ describe("stub", function () {
 
         it("returns a promise which rejects for the specified reason", function () {
             const stub = createStub();
-            const reason = new Error();
+            const reason = "the reason";
             stub.rejects(reason);
 
             return stub()
@@ -367,7 +367,7 @@ describe("stub", function () {
             assert.same(stub.rejects({}), stub);
         });
 
-        it("specifies exception message", function () {
+        it("specifies error type and exception message", function () {
             const stub = createStub();
             const message = "Oh no!";
             stub.rejects("Error", message);
@@ -378,19 +378,6 @@ describe("stub", function () {
                 })
                 .catch(function (reason) {
                     assert.equals(reason.message, message);
-                });
-        });
-
-        it("does not specify exception message if not provided", function () {
-            const stub = createStub();
-            stub.rejects("Error");
-
-            return stub()
-                .then(function () {
-                    referee.fail("Expected stub to reject");
-                })
-                .catch(function (reason) {
-                    assert.equals(reason.message, "");
                 });
         });
 
