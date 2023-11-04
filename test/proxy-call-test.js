@@ -1126,7 +1126,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("includes exception", function () {
-            const object = { doIt: sinonStub().throws("TypeError") };
+            const object = {
+                doIt: sinonStub().throws("TypeError", "some message"),
+            };
 
             assert.exception(function () {
                 object.doIt();
@@ -1134,7 +1136,7 @@ describe("sinonSpy.call", function () {
 
             assert.equals(
                 object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
-                "doIt() !TypeError(Sinon-provided TypeError)",
+                "doIt() !TypeError(some message)",
             );
         });
 

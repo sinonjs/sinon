@@ -986,14 +986,15 @@ describe("stub", function () {
             assert.same(stub.throws({}), stub);
         });
 
-        it("sets type of exception to throw", function () {
+        it("can throw a string", function () {
             const stub = createStub();
-            const exceptionType = "TypeError";
-            stub.throws(exceptionType);
+            stub.throws("a reason");
 
-            assert.exception(function () {
+            try {
                 stub();
-            }, exceptionType);
+            } catch (reason) {
+                assert.equals(reason, "a reason");
+            }
         });
 
         it("specifies exception message", function () {
@@ -1003,15 +1004,6 @@ describe("stub", function () {
 
             assert.exception(stub, {
                 message: message,
-            });
-        });
-
-        it("does not specify exception message if not provided", function () {
-            const stub = createStub();
-            stub.throws("Error");
-
-            assert.exception(stub, {
-                message: "",
             });
         });
 
@@ -1036,19 +1028,16 @@ describe("stub", function () {
             assert.contains(stub.firstCall.toString(), "not implemented");
         });
 
-        it("creates a non empty error message when error is a string and no message is passed", function () {
+        it("throws a string when the error is a string and no message is passed", function () {
             const stub = createStub();
 
-            stub.withArgs(1).throws("TypeError");
+            stub.withArgs(1).throws("something happened");
 
-            assert.exception(
-                function () {
-                    stub(1);
-                },
-                {
-                    message: "Sinon-provided TypeError",
-                },
-            );
+            try {
+                stub(1);
+            } catch (err) {
+                assert.equals(err, "something happened");
+            }
         });
 
         describe("lazy instantiation of exceptions", function () {
