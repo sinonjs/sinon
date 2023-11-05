@@ -6,10 +6,12 @@ breadcrumb: fake timers
 
 Fake timers are synchronous implementations of `setTimeout` and friends that
 Sinon.JS can overwrite the global functions with to allow you to more easily
-test code using them.
+test code using them. It also has utilities for working with `async`/Promise code.
 
 Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects created through either `new Date();`
 or `Date.now();` (if supported by the browser).
+
+> The separate Fake Timers project is constantly being added to and updated, and we have a hard time keeping these docs in sync! Therefore it might be better to just refer directly to the [fake-timer API reference][api reference], as that shows all it has to offer. The `clock` object is not wrapped, so everything `fake-timers` has to offer can be used through it.
 
 For standalone usage of fake timers it is recommended to use [fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
 set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
@@ -38,6 +40,8 @@ set of features (Sinon uses it under the hood) and was previously extracted from
 ```
 
 ## Fake timers API
+
+> This is just the most important subset of the available methods. Refer to the [Fake Timers API reference][api reference] for the full _smørgåsbord_ of available methods.
 
 #### `var clock = sinon.useFakeTimers();`
 
@@ -176,3 +180,5 @@ The `runAllAsync()` will also break the event loop, allowing any scheduled promi
 Restore the faked methods.
 
 Call in e.g. `tearDown`.
+
+[api reference]: https://github.com/sinonjs/fake-timers#api-reference
