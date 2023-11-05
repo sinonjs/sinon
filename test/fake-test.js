@@ -229,7 +229,7 @@ describe("fake", function () {
             try {
                 myFake();
             } catch (error) {
-                assert.equals(error.message, expectedMessage);
+                assert.equals(error, expectedMessage);
             }
             /* eslint-disable no-restricted-syntax */
         });
@@ -248,21 +248,6 @@ describe("fake", function () {
                 assert.isTrue(actual instanceof TypeError);
             }
             /* eslint-disable no-restricted-syntax */
-        });
-
-        describe("when passed a String", function () {
-            it("should throw an Error", function () {
-                const expected = "lorem ipsum";
-                const myFake = fake.throws(expected);
-
-                /* eslint-disable no-restricted-syntax */
-                try {
-                    myFake();
-                } catch (actual) {
-                    assert.isTrue(actual instanceof Error);
-                }
-                /* eslint-disable no-restricted-syntax */
-            });
         });
     });
 
@@ -290,28 +275,19 @@ describe("fake", function () {
             const myFake = fake.rejects(expectedMessage);
 
             return myFake().catch(function (actual) {
-                assert.equals(actual.message, expectedMessage);
+                assert.equals(actual, expectedMessage);
             });
         });
 
         // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake.rejects, "42");
 
-        it("should return the same error type as it is passed", function () {
+        it("should return the same reason as it is passed", function () {
             const expected = new TypeError("hello world");
             const myFake = fake.rejects(expected);
 
             return myFake().catch(function (actual) {
                 assert.isTrue(actual instanceof TypeError);
-            });
-        });
-
-        it("should reject with an Error when passed a String", function () {
-            const expected = "lorem ipsum";
-            const myFake = fake.rejects(expected);
-
-            return myFake().catch(function (actual) {
-                assert.isTrue(actual instanceof Error);
             });
         });
     });
