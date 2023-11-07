@@ -32,7 +32,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
-    "test-dev": "npm run test-node -- --watch -R min",
+    "test-dev": "npm run test-node --  -n watch -n  watch-path=test --node-option watch-path=lib -R min",
     "test-headless": "mochify --no-detect-globals --recursive -R dot --grep WebWorker --invert  \"test/**/*-test.js\"",
     "test-coverage": "nyc npm run test-headless -- --transform [ babelify --ignore [ test ] --plugins [ babel-plugin-istanbul ] ]",
     "test-cloud": "npm run test-headless -- --wd",
