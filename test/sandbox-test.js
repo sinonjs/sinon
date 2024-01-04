@@ -2401,7 +2401,7 @@ describe("Sandbox", function () {
             }
 
             const fn = async () => {
-                const sinonSandbox = sinon.createSandbox();
+                const sinonSandbox = createSandbox();
 
                 const f = new F();
 
@@ -2422,7 +2422,7 @@ describe("Sandbox", function () {
                 assert(b.calledImmediatelyBefore(c));
             };
 
-            await Promise.all([fn, fn, fn]);
+            await Promise.all([fn(), fn(), fn(), fn()]);
         });
     });
 });
