@@ -2377,4 +2377,52 @@ describe("Sandbox", function () {
             sandboxB.restore();
         });
     });
+    describe("concurrency safe", function () {
+        it("spy", async function () {
+            class F {
+                constructor() {
+                    this.first = [];
+                    this.second = [];
+                    this.third = [];
+                }
+                async run() {
+                    await this.execute("first");
+                    await Promise.resolve();
+                    await this.execute("second");
+                    await Promise.resolve();
+                    await this.execute("third");
+                }
+
+                async execute(s) {
+                    for (const f of this[s]) {
+                        await f();
+                    }
+                }
+            }
+
+            const fn = async () => {
+                const sinonSandbox = sinon.createSandbox();
+
+                const f = new F();
+
+                const a = sinonSandbox.spy();
+                const b = sinonSandbox.spy();
+                const c = sinonSandbox.spy();
+
+                f.first.push(a);
+                f.second.push(b);
+                f.third.push(c);
+
+                await f.run();
+
+                assert(a.calledBefore(b));
+                assert(b.calledBefore(c));
+
+                assert(a.calledImmediatelyBefore(b));
+                assert(b.calledImmediatelyBefore(c));
+            };
+
+            await Promise.all([fn, fn, fn]);
+        });
+    });
 });
