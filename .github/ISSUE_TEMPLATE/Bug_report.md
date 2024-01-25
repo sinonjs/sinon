@@ -25,6 +25,7 @@ If applicable, add screenshots to help explain your problem.
 **Context (please complete the following information):**
 
 - Sinon version : _please verify that the bug exists in the latest Sinon release_
+- Runtime: (i.e. Safari 18, Chrome 110.221.1, Node 23, etc)
 - Output of `npx envinfo --browsers --binaries`:
 
 ```
