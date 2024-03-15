@@ -148,7 +148,7 @@ An `expectation` instance only holds onto a single set of arguments specified wi
 
 #### `expectation.on(obj);`
 
-Expect the method to be called with `obj` as `this`."}
+Expect the method to be called with `obj` as `this`.
 
 #### `expectation.verify();`
 
