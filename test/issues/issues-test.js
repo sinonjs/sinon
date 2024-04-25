@@ -914,4 +914,16 @@ describe("issues", function () {
         object.prop;
         assert.equals(spy.get.callCount, 1); // should remain unchanged
     });
+
+    it("#2572 - returns clear callArgAt", function () {
+        const stub = sinon.stub();
+        stub.callsArgWith(0, "Hello").returns("World");
+
+        const cb = sinon.stub();
+        const ret = stub(cb);
+
+        assert.equals(ret, "World");
+        assert(cb.calledOnce);
+        assert.equals(cb.firstCall.args, ["Hello"]);
+    });
 });
