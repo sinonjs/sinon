@@ -1296,6 +1296,20 @@ describe("Sandbox", function () {
                 },
             );
         });
+
+        it("do not call getter whilst replacing getter", function () {
+            const sandbox = this.sandbox;
+            const fake = sandbox.fake.returns("bar");
+            const object = {
+                get foo() {
+                    return fake();
+                },
+            };
+
+            sandbox.replaceGetter(object, "foo", () => "replacement");
+
+            refute(fake.called);
+        });
     });
 
     describe(".replaceSetter", function () {
