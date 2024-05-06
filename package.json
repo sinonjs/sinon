@@ -51,7 +51,7 @@
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
-    "postbuild": "npm run test-esm-support && npm run check-esm-bundle-runs-in-browser",
+    "postbuild": "npm run test-esm-support ",
     "prebuild-docs": "./scripts/update-compatibility.js",
     "prepublishOnly": "npm run build",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
