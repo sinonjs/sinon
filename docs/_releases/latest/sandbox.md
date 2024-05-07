@@ -79,11 +79,13 @@ const sandbox = sinon.createSandbox({
 ##### `injectInto`
 
 The sandbox's methods can be injected into another object for convenience. The
-`injectInto` configuration option can name an object to add properties to. See the example further down the page.
+`injectInto` configuration option can name an object to add properties to. Note that you explicitly need to specify all the properties you want to expose using the `properties` field.
+
+See the example further down the page.
 
 ##### `properties`
 
-Which properties to inject into the facade object. Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
+Which properties to inject into the facade object. By default empty! Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
 
 The list of properties that can be injected are the ones exposed by the object
 returned by the function `inject`:
@@ -119,7 +121,11 @@ and overflow your display.
 ```
 
 <div data-example-id="sandbox-configuration"></div>
-```
+
+#### `inject(facadeObject)`
+
+This is injects all the properties of the sandbox into the facade object.
+This is equivalent to specifying all the available properties in `properties` when you create a sandbox with `injectInto`.
 
 ##### `useFakeTimers`
 
@@ -154,6 +160,12 @@ const sandbox = sinon.createSandbox({
   injectInto: sandboxFacade,
   properties: ["spy"],
 });
+```
+
+Alternatively you can use the `sandbox.inject({})` method, which will inject all the sandbox methods by default, which is _usually_ what you want.
+
+```javascript
+const myFacade = sandbox.inject({});
 ```
 
 #### `sandbox.assert();`

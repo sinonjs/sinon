@@ -126,6 +126,8 @@ var stub = sinon.createStubInstance(MyConstructor);
 stub.foo.returns(3);
 ```
 
+See the [Utilities API](../utils) for more information.
+
 #### `stub.withArgs(arg1[, arg2, ...]);`
 
 Stubs the method only for the provided arguments.
