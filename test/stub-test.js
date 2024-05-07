@@ -1066,6 +1066,7 @@ describe("stub", function () {
 
         describe("lazy instantiation of exceptions", function () {
             let errorSpy;
+
             beforeEach(function () {
                 this.originalError = globalContext.Error;
                 errorSpy = createSpy(globalContext, "Error");
