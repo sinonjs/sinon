@@ -89,7 +89,7 @@
     "@studio/changes": "^3.0.0",
     "babel-plugin-istanbul": "^6.1.1",
     "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
+    "browserify": "^16.5.2",
     "debug": "^4.3.4",
     "dependency-check": "^4.1.0",
     "lint-staged": "^15.2.2",
