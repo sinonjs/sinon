@@ -681,6 +681,7 @@ describe("issues", function () {
         };
 
         let sandbox;
+
         beforeEach(function () {
             sandbox = sinon.createStubInstance(Foo);
         });
@@ -913,5 +914,29 @@ describe("issues", function () {
         sinon.restore();
         object.prop;
         assert.equals(spy.get.callCount, 1); // should remain unchanged
+    });
+
+    it("#2572 - returns should not clear callsArgWith", function () {
+        const stub = sinon.stub();
+        stub.callsArgWith(0, "Hello").returns("World");
+
+        const cb = sinon.stub();
+        const ret = stub(cb);
+
+        assert.equals(ret, "World");
+        assert(cb.calledOnce);
+        assert.equals(cb.firstCall.args, ["Hello"]);
+    });
+
+    it("#2572 - callsArgWith should not clear returns", function () {
+        const stub = sinon.stub();
+        stub.returns("World").callsArgWith(0, "Hello");
+
+        const cb = sinon.stub();
+        const ret = stub(cb);
+
+        assert.equals(ret, "World");
+        assert(cb.calledOnce);
+        assert.equals(cb.firstCall.args, ["Hello"]);
     });
 });

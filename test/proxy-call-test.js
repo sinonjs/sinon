@@ -216,6 +216,7 @@ describe("sinonSpy.call", function () {
     describe("call.calledWithMatch", spyCallCalledTests("calledWithMatch"));
     // eslint-disable-next-line mocha/no-setup-in-describe
     describe("call.notCalledWith", spyCallNotCalledTests("notCalledWith"));
+
     describe(
         "call.notCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe

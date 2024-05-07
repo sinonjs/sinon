@@ -19,7 +19,7 @@ import sinon from "../../pkg/sinon-esm.js";
 const { assert, refute } = referee;
 
 /**
- * @param action
+ * @param action {string} the export on the `sinon` namespace to test
  */
 function createTestSuite(action) {
     var stub;

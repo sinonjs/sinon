@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "17.0.1",
+  "version": "17.0.2",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -32,7 +32,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
-    "test-dev": "npm run test-node -- --watch -R min",
+    "test-dev": "npm run test-node --  -n watch -n  watch-path=test --node-option watch-path=lib -R min",
     "test-headless": "mochify --no-detect-globals --recursive -R dot --grep WebWorker --invert  \"test/**/*-test.js\"",
     "test-coverage": "nyc npm run test-headless -- --transform [ babelify --ignore [ test ] --plugins [ babel-plugin-istanbul ] ]",
     "test-cloud": "npm run test-headless -- --wd",
@@ -51,7 +51,7 @@
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
-    "postbuild": "npm run test-esm-support && npm run check-esm-bundle-runs-in-browser",
+    "postbuild": "npm run test-esm-support ",
     "prebuild-docs": "./scripts/update-compatibility.js",
     "prepublishOnly": "npm run build",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
@@ -74,34 +74,34 @@
     "*.mjs": "eslint --quiet --ext mjs --parser-options=sourceType:module"
   },
   "dependencies": {
-    "@sinonjs/commons": "^3.0.0",
+    "@sinonjs/commons": "^3.0.1",
     "@sinonjs/fake-timers": "^11.2.2",
     "@sinonjs/samsam": "^8.0.0",
-    "diff": "^5.1.0",
-    "nise": "^5.1.5",
-    "supports-color": "^7.2.0"
+    "diff": "^5.2.0",
+    "nise": "^5.1.9",
+    "supports-color": "^7"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@sinonjs/eslint-config": "^4.1.0",
+    "@babel/core": "^7.24.4",
+    "@sinonjs/eslint-config": "^5.0.3",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
-    "@sinonjs/referee": "^10.0.1",
-    "@studio/changes": "^2.2.0",
+    "@sinonjs/referee": "^11.0.1",
+    "@studio/changes": "^3.0.0",
     "babel-plugin-istanbul": "^6.1.1",
     "babelify": "^10.0.0",
     "browserify": "^16.5.2",
     "debug": "^4.3.4",
     "dependency-check": "^4.1.0",
-    "lint-staged": "^15.0.2",
-    "mocha": "^10.2.0",
+    "lint-staged": "^15.2.2",
+    "mocha": "^10.4.0",
     "mochify": "^9.2.0",
     "nyc": "^15.1.0",
-    "prettier": "^3.0.3",
-    "puppeteer": "^21.4.0",
+    "prettier": "^3.2.5",
+    "puppeteer": "^22.7.1",
     "rimraf": "^5.0.5",
-    "semver": "^7.5.4",
+    "semver": "^7.6.0",
     "shelljs": "^0.8.5",
-    "unimported": "^1.30.0"
+    "unimported": "^1.31.0"
   },
   "files": [
     "lib",

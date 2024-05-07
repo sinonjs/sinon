@@ -1,6 +1,8 @@
 ---
 name: Bug report
+description: Create a report to help us improve
 about: Create a report to help us improve
+labels: Bug,Unverified
 ---
 
 **Describe the bug**
@@ -22,10 +24,17 @@ If applicable, add screenshots to help explain your problem.
 
 **Context (please complete the following information):**
 
-- Library version: _please verify that the bug exists in the latest release_
-- Environment:
-- Example URL:
+- Sinon version : _please verify that the bug exists in the latest Sinon release_
+- Runtime: (i.e. Safari 18, Chrome 110.221.1, Node 23, etc)
+- Output of `npx envinfo --browsers --binaries`:
+
+```
+
+```
+
+- Other relevant environmental info:
 - Other libraries you are using:
+- Example URL: <!-- if applicable, for instance a demo on RunKit or Code Sandbox -->
 
 **Additional context**
 Add any other context about the problem here.
