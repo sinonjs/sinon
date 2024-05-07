@@ -43,6 +43,7 @@ describe("proxy", function () {
                 });
                 assert.equals(named.printf("%n"), "cool");
             });
+
             it("anon", function () {
                 const anon = sinonSpy(function () {
                     return;

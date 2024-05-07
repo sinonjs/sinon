@@ -681,6 +681,7 @@ describe("issues", function () {
         };
 
         let sandbox;
+
         beforeEach(function () {
             sandbox = sinon.createStubInstance(Foo);
         });

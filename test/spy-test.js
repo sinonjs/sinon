@@ -1113,6 +1113,7 @@ describe("spy", function () {
 
     // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".alwaysCalledWith", spyAlwaysCalledTests("alwaysCalledWith"));
+
     describe(
         ".alwaysCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe
@@ -1168,6 +1169,7 @@ describe("spy", function () {
 
     // eslint-disable-next-line mocha/no-setup-in-describe
     describe(".neverCalledWith", spyNeverCalledTests("neverCalledWith"));
+
     describe(
         ".neverCalledWithMatch",
         // eslint-disable-next-line mocha/no-setup-in-describe
