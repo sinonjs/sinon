@@ -6,6 +6,61 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 17.0.2
+
+- [`f6dca0ba`](https://github.com/sinonjs/sinon/commit/f6dca0bac3f228fa917165eca8815d5e2b8a6793)
+  upgrade packages (#2595) (Carl-Erik Kopseng)
+- [`5025d001`](https://github.com/sinonjs/sinon/commit/5025d001401091fd2086cfa2ec69e40cc0da9b65)
+  Avoid return and callArg\* clearing each other's state (#2593) (Carl-Erik Kopseng)
+  > - Partially revert "fix returns does not override call through (#2567)"
+  >
+  > * revert to the old manual clearing of props
+- [`ed068a88`](https://github.com/sinonjs/sinon/commit/ed068a886fa37cbd5f886d355824debd69aa1b16)
+  Bump ip from 1.1.8 to 1.1.9 (#2587) (dependabot[bot])
+- [`ec4d592e`](https://github.com/sinonjs/sinon/commit/ec4d592ee4faf87d7e592c4b99b3e6fec99105c8)
+  fix #2589: avoid invoking getter as side-effect (#2592) (Carl-Erik Kopseng)
+- [`9972e1e3`](https://github.com/sinonjs/sinon/commit/9972e1e3997198ff7f403ca5c000187f890f1699)
+  Fix typo in mocks documentation (#2591) (Eduardo de la Cruz Palacios)
+- [`52e6e4c5`](https://github.com/sinonjs/sinon/commit/52e6e4c540d8d0b95727c9bbde8328f6692a6675)
+  chore: prefer cache option of setup-node (Morgan Roderick)
+- [`08da1235`](https://github.com/sinonjs/sinon/commit/08da123555dc4ee4866720c925215dca4d3c799b)
+  Bump actions/cache from 3 to 4 (dependabot[bot])
+- [`404ef47e`](https://github.com/sinonjs/sinon/commit/404ef47e1119c7b8229e9d6a3c6ae9a912305d1f)
+  Bump nokogiri from 1.14.3 to 1.16.2 (dependabot[bot])
+- [`fd79612c`](https://github.com/sinonjs/sinon/commit/fd79612c3324bf3264533baa7159bb1722dd9788)
+  Update Bug_report.md (Carl-Erik Kopseng)
+- [`1fbc812a`](https://github.com/sinonjs/sinon/commit/1fbc812a9f3351f55a06758bdc8b1a053135d826)
+  Re-add about (Carl-Erik Kopseng)
+- [`fc8f6c3e`](https://github.com/sinonjs/sinon/commit/fc8f6c3e111473fcb53b2338eb8654b256c06e01)
+  Fix formatting :clown: (Carl-Erik Kopseng)
+- [`c57e38ae`](https://github.com/sinonjs/sinon/commit/c57e38ae2ec6c466f83c4e38e85d3d324f72bb13)
+  Remove old template (Carl-Erik Kopseng)
+- [`754bf7a9`](https://github.com/sinonjs/sinon/commit/754bf7a98b54a01472677772c7a34859f483adeb)
+  Update Bug_report.md (Carl-Erik Kopseng)
+- [`87eed9d2`](https://github.com/sinonjs/sinon/commit/87eed9d255e9493b981494188abd12a9e1d95bf0)
+  Fix some typos at code comments (#2581) (EliyahuMachluf)
+- [`cbae6997`](https://github.com/sinonjs/sinon/commit/cbae69978c29d0420fa39d11496bb29b180361b0)
+  Link to createStubInstance util.md docs in stubs.md (#2577) (Daniel Kaplan)
+- [`adcf936d`](https://github.com/sinonjs/sinon/commit/adcf936de0e946e2b72a513436c0469319f3da79)
+  Fix Mocha watch task by delegating to Node (#2573) (Carl-Erik Kopseng)
+- [`30ad2372`](https://github.com/sinonjs/sinon/commit/30ad23729568d70f865a5e6d323109fd06c7913e)
+  prettier:write (Carl-Erik Kopseng)
+- [`45c4d6b9`](https://github.com/sinonjs/sinon/commit/45c4d6b9b80841947d6ebc4af5046a11b216d598)
+  Remove outdated info from README (#2571) (Carl-Erik Kopseng)
+- [`6c9f5c2a`](https://github.com/sinonjs/sinon/commit/6c9f5c2ade9befeadd6fd7d10232883c147a9f1d)
+  Add a notice that the Fake Timers API doc is incomplete (#2570) (Carl-Erik Kopseng)
+- [`93db3ef3`](https://github.com/sinonjs/sinon/commit/93db3ef3b0b49458954eb6e7ed765aa1ea34b21d)
+  breaking: Remove sinon.defaultConfig and related modules (#2565) (Carl-Erik Kopseng)
+  > - breaking: Remove sinon.defaultConfig and related modules
+  >
+  > default-config and get-config are leftovers from when Sinon
+  >
+  > shipped with sinon.test (now the independent NPM module
+  >
+  > 'sinon-test').
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-05-07._
+
 ## 17.0.1
 
 - [`5fde5aeb`](https://github.com/sinonjs/sinon/commit/5fde5aebc74dec12bacd84d00a2f22906a7ebcc0)
