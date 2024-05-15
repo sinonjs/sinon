@@ -1,5 +1,20 @@
 # Changes
 
+## 18.0.0
+
+This is what 17.0.2 should have been, as that contained two breaking changes. After updating
+Nise we are down to one breaking change, which only affects sinon-test (which has been updated),
+so most people are not affected. The legacyRoutes flag that is currently enabled in Nise by default
+will at some later version be disabled. We will then issue a little migration note.
+
+- [`01d45312`](https://github.com/sinonjs/sinon/commit/01d45312e82bbd0b2f435f16bd4a834b98d08e11)
+  Use Nise 6 with legacyRoutes flag enabled (Carl-Erik Kopseng)
+  > This should be disabled in a future Sinon version by default.
+- [`c618edc5`](https://github.com/sinonjs/sinon/commit/c618edc51e0302f047914e121cb788ac9cc43382)
+  fix #2594: remove needless sandbox creation (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-05-15._
+
 ## 17.0.2
 
 - [`f6dca0ba`](https://github.com/sinonjs/sinon/commit/f6dca0bac3f228fa917165eca8815d5e2b8a6793)
