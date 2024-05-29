@@ -539,7 +539,7 @@ describe("spy", function () {
             assert(instance instanceof TestClass);
         });
 
-        it("passs arguments to function", function () {
+        it("passes arguments to function", function () {
             let actualArgs;
 
             const func = function (a, b, c, d) {
@@ -2419,7 +2419,7 @@ describe("spy", function () {
             );
         });
 
-        it("passs additional arguments", function () {
+        it("passes additional arguments", function () {
             const spy = createSpy();
             const callback = createSpy();
             const array = [];
@@ -2627,7 +2627,7 @@ describe("spy", function () {
             );
         });
 
-        it("passs additional arguments", function () {
+        it("passes additional arguments", function () {
             const spy = createSpy();
             const callback = createSpy();
             const array = [];
