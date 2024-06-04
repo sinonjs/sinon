@@ -16,14 +16,12 @@ const myExternalLibrary = {
 };
 
 describe("Wrap all object methods", function () {
-    const sandbox = sinon.createSandbox();
-
     beforeEach(function () {
-        sandbox.spy(myExternalLibrary);
+        sinon.spy(myExternalLibrary);
     });
 
     afterEach(function () {
-        sandbox.restore();
+        sinon.restore();
     });
 
     it("should inspect the external lib's usage of its internal methods", function () {

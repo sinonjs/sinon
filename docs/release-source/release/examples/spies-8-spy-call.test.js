@@ -11,14 +11,12 @@ const jQuery = require("jquery")(window);
 global.document = document;
 
 describe("Return nth call", function () {
-    const sandbox = sinon.createSandbox();
-
     beforeEach(function () {
-        sandbox.spy(jQuery, "ajax");
+        sinon.spy(jQuery, "ajax");
     });
 
     afterEach(function () {
-        sandbox.restore();
+        sinon.restore();
     });
 
     it("should inspect jQuery.getJSON's usage of jQuery.ajax", function () {

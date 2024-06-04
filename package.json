@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "17.0.2",
+  "version": "18.0.0",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -78,7 +78,7 @@
     "@sinonjs/fake-timers": "^11.2.2",
     "@sinonjs/samsam": "^8.0.0",
     "diff": "^5.2.0",
-    "nise": "^5.1.9",
+    "nise": "^6.0.0",
     "supports-color": "^7"
   },
   "devDependencies": {
