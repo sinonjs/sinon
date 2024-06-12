@@ -90,6 +90,8 @@ Note that it's usually better practice to stub individual methods, particularly 
 
 Stubbing individual methods tests intent more precisely and is less susceptible to unexpected behavior as the object's code evolves.
 
+#### `var stubInstance = sinon.createStubInstance(MyConstructor, overrides);`
+
 If you want to create a stub object of `MyConstructor`, but don't want the constructor to be invoked, use this utility function.
 
 ```javascript
