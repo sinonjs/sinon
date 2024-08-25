@@ -58,19 +58,23 @@ You can also pass in a Date object, and its `getTime()` will be used for the sta
 
 As above, but allows further configuration options.
 
-- `config.now` - _Number/Date_ - installs lolex with the specified unix epoch (default: 0)
-- `config.toFake` - _String[ ]_ - an array with explicit function names to fake. By default lolex will automatically fake all methods _except_ `process.nextTick`. You could, however, still fake `nextTick` by providing it explicitly
-- `config.shouldAdvanceTime` - _Boolean_ - tells lolex to increment mocked time automatically based on the real system time shift (default: false). When used in conjunction with `config.toFake`, it will only work if `'setInterval'` is included in `config.toFake`.
+- `config.now` - _Number/Date_ - installs FakeTimers with the specified unix epoch (default: 0)
+- `config.toFake` - _String[ ]_ - an array with explicit function names to fake. By default FakeTimers will automatically fake all methods (changed as of Sinon 19)
+- `config.shouldAdvanceTime` - _Boolean_ - tells FakeTimers to increment mocked time automatically based on the real system time shift (default: false). When used in conjunction with `config.toFake`, it will only work if `'setInterval'` is included in `config.toFake`.
 - **`config.global`** - _Object_ - use `global` instead of the usual global object. This is useful if you use JSDOM along with Node.
 
 The options are basically all of those supported by the `install()` method of our `fake-timers` library, with the sole exception of `global`.
 Please refer to the `fakeTimers.install` [documentation](https://github.com/sinonjs/fake-timers/#var-clock--faketimersinstallconfig) for the full set of features available and more elaborate explanations.
 
-_Since `sinon@3.0.0`_
+_Since `sinon@3`_
 
 `var clock = sinon.useFakeTimers([now, ]prop1, prop2, ...)` is no longer supported. To define which methods to fake, please use `config.toFake`.
 
-**Important note:** when faking `nextTick`, normal calls to `process.nextTick()` would not execute automatically as they would during normal event-loop phases. You would have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [lolex](https://github.com/sinonjs/lolex) documentation for more information.
+_Since `sinon@19/FakeTimers@13`_
+
+Before Sinon 19 `queueMicroTask` and `nextTick` were not faked by default. This has now changed and code relying on this will have to take note of the below note, which might affect use Promise libraries such as Bluejay.
+
+**Important note:** when faking `nextTick`, normal calls to `process.nextTick()` will not execute automatically as they would during normal event-loop phases. You will have to call either `clock.next()`, `clock.tick()`, `clock.runAll()` or `clock.runToLast()` (see example below). Please refer to the [FakeTimers](https://github.com/sinonjs/fake-timers) documentation for more information.
 
 #### Examples
 
