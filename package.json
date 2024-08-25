@@ -52,7 +52,7 @@
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
     "postbuild": "npm run test-esm-support && npm run test-esm-browser-build",
-    "prebuild-docs": "./scripts/update-compatibility.js",
+    "prebuild-docs": "./scripts/update-compatibility.cjs",
     "prepublishOnly": "npm run build",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
     "prettier:write": "prettier --write '**/*.{js,css,md}'",
