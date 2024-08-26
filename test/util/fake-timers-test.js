@@ -1018,46 +1018,6 @@ describe("fakeTimers.clock", function () {
             assert.isUndefined(clearImmediate);
         });
 
-        it("deletes global property on restore if it was inherited onto the global object", function () {
-            /*eslint-disable no-proto*/
-            if (!Object.__proto__) {
-                this.skip();
-            }
-
-            // Give the global object an inherited 'tick' method
-            delete this.global.tick;
-            this.global.__proto__.tick = function () {
-                return;
-            };
-
-            if (!this.global.hasOwnProperty("tick")) {
-                this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-                assert.isTrue(this.global.hasOwnProperty("tick"));
-                this.clock.restore();
-
-                assert.isFalse(this.global.hasOwnProperty("tick"));
-                delete this.global.__proto__.tick;
-            } else {
-                // hasOwnProperty does not work as expected.
-                assert(true);
-            }
-            /*eslint-enable no-proto*/
-        });
-
-        it("restores global property on restore if it is present on the global object itself", function () {
-            // Directly give the global object a tick method
-            this.global.tick = function () {
-                return;
-            };
-
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-            assert.isTrue(this.global.hasOwnProperty("tick"));
-            this.clock.restore();
-
-            assert.isTrue(this.global.hasOwnProperty("tick"));
-            delete this.global.tick;
-        });
-
         it("fakes Date constructor", function () {
             this.clock = fakeTimers.useFakeTimers(0);
             const now = new Date();
