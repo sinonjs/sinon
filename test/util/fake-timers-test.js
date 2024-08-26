@@ -1203,7 +1203,10 @@ describe("fakeTimers.clock", function () {
                 setTimeout: stub,
                 clearTimeout: sinonStub(),
             };
-            this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
+            this.clock = fakeTimers.useFakeTimers({
+                global: globalCtx,
+                ignoreMissingTimers: true,
+            });
             assert.isUndefined(this.clock.performance);
             assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
             this.clock.restore();
