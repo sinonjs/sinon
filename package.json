@@ -73,6 +73,13 @@
     "*.js": "eslint --quiet",
     "*.mjs": "eslint --quiet --ext mjs --parser-options=sourceType:module"
   },
+  "mochify": {
+    "reporter": "dot",
+    "timeout": 10000,
+    "bundle": "esbuild --bundle --sourcemap=inline --define:process.env.NODE_DEBUG=\"\"",
+    "bundle_stdin": "require",
+    "spec": "test/**/*-test.js"
+  },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
     "@sinonjs/fake-timers": "11.2.2",
@@ -96,6 +103,7 @@
     "browserify": "^16.5.2",
     "debug": "^4.3.4",
     "dependency-check": "^4.1.0",
+    "esbuild": "^0.23.1",
     "lint-staged": "^15.2.2",
     "mocha": "^10.4.0",
     "nyc": "^15.1.0",
