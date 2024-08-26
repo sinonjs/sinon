@@ -18,3 +18,15 @@ if you are affected by this change, you can choose to explicitly install the tim
 instead of relying on the defaults.
 
 Example: `FakeTimers.install({ toFake: ["setTimeout","clearTimeout"]}`
+
+Another breaking change is that FakeTimers no longer accepts passing timers that do not exist:
+you cannot create "myFoobarTimer" and pass it in the `toFake` array. We only stub actual timers.
+
+Related to this is that trying to configure (either by default or using `config.toFake`) FakeTimers into faking a timer that is not present on the global that was passed in will throw an error. If you are using custom globals where you have removed `setTimeout`, `setInterval` and friends and are now getting errors, try passing in `custom.ignoreMissing`:
+
+```javascript
+FakeTimers.withGlobal({ Date }).install({
+  ignoreMissingTimers: true,
+  toFake: [timer],
+});
+```
