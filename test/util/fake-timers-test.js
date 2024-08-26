@@ -1046,7 +1046,7 @@ describe("fakeTimers.clock", function () {
             this.global.Date.now = null;
             this.clock = fakeTimers.useFakeTimers(0);
 
-            assert.isUndefined(Date.now);
+            assert.isNull(Date.now);
         });
 
         it("mirrors custom Date properties", function () {
