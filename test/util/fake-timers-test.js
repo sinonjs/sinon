@@ -1105,19 +1105,8 @@ describe("fakeTimers.clock", function () {
                 }
             });
 
-            it("installs by default without nextTick", function () {
-                this.clock = fakeTimers.useFakeTimers();
-                let called = false;
-                process.nextTick(function () {
-                    called = true;
-                });
-                this.clock.runAll();
-                assert(!called);
-                this.clock.restore();
-            });
-
             it("installs with nextTick", function () {
-                this.clock = fakeTimers.useFakeTimers({ toFake: ["nextTick"] });
+                this.clock = fakeTimers.useFakeTimers();
                 let called = false;
                 process.nextTick(function () {
                     called = true;
