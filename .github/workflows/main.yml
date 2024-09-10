@@ -86,7 +86,7 @@ jobs:
 
           npm run test-headless -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
           npm run test-webworker -- --chrome $SINON_CHROME_BIN --allow-chrome-as-root
-          npm run check-esm-bundle-runs-in-browser
+          npm run test-esm-browser-build
       - name: Upload coverage report
         run: bash <(curl -s https://codecov.io/bash) -F unit -s coverage/lcov.info
 
