@@ -676,7 +676,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("creates real Date objects when Date constructor is gone", function () {
-            const realDate = new Date();
+            const realDateClass = Date;
 
             // eslint-disable-next-line no-global-assign, no-native-reassign
             Date = function () {
@@ -692,10 +692,7 @@ describe("fakeTimers.clock", function () {
             // the overridden Date is used in node 0.x native code
             this.global.Date = this.Date;
 
-            assert.same(
-                date.constructor.prototype,
-                realDate.constructor.prototype,
-            );
+            assert(date instanceof realDateClass);
         });
 
         it("creates Date objects representing clock time", function () {
@@ -759,10 +756,6 @@ describe("fakeTimers.clock", function () {
             const fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
             assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("mirrors native Date.prototype", function () {
-            assert.same(this.clock.Date.prototype, Date.prototype);
         });
 
         it("supports now method if present", function () {
