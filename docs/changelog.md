@@ -6,6 +6,95 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 18.0.1
+
+Basically a patch release to update a transitive dependency in Nise.
+
+- [`03e33ec6`](https://github.com/sinonjs/sinon/commit/03e33ec6475d7e7acfe62676af63eb2344cd6db0)
+  Pin fake-timers@11.2.2 to avoid breaking change (Carl-Erik Kopseng)
+- [`5a7924ad`](https://github.com/sinonjs/sinon/commit/5a7924ad94f37b9985899fc8a1dbfd29cbdd7967)
+  Add createStubInstance header in stubs.md (Daniel Kaplan)
+- [`ad6804cd`](https://github.com/sinonjs/sinon/commit/ad6804cd4143eaaaa8f989dae20dbf7295444893)
+  Bump elliptic from 6.5.5 to 6.5.7 (#2608) (dependabot[bot])
+- [`033287bd`](https://github.com/sinonjs/sinon/commit/033287bded8dfce16653b33292ef2fef9ed487b0)
+  Bump path-to-regexp and nise (#2611) (dependabot[bot])
+  > Bumps [path-to-regexp](https://github.com/pillarjs/path-to-regexp) to 8.1.0 and updates ancestor dependency [nise](https://github.com/sinonjs/nise). These dependencies need to be updated together.
+  >
+  > Updates `path-to-regexp` from 6.2.2 to 8.1.0
+  >
+  > - [Release notes](https://github.com/pillarjs/path-to-regexp/releases)
+  > - [Changelog](https://github.com/pillarjs/path-to-regexp/blob/master/History.md)
+  > - [Commits](https://github.com/pillarjs/path-to-regexp/compare/v6.2.2...v8.1.0)
+  >
+  > Updates `nise` from 6.0.0 to 6.0.1
+  >
+  > - [Changelog](https://github.com/sinonjs/nise/blob/main/History.md)
+  > - [Commits](https://github.com/sinonjs/nise/commits)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: path-to-regexp
+  >
+  >   dependency-type: indirect
+  >
+  > - dependency-name: nise
+  >
+  >   dependency-type: direct:production
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- [`0c609f95`](https://github.com/sinonjs/sinon/commit/0c609f95b1f4f18e02896b5a87bbc59f5787093e)
+  re-add testing of esm browser builds (Carl-Erik Kopseng)
+  > It seems unclear why it was removed in the first place: I have tested extensively that it
+  > does work and it does fail the build if changing any assertion in the script
+- [`da4230a0`](https://github.com/sinonjs/sinon/commit/da4230a00c929f56738d272da469a5ecb9d40da7)
+  Bump braces from 3.0.2 to 3.0.3 (#2605) (dependabot[bot])
+  > Bumps [braces](https://github.com/micromatch/braces) from 3.0.2 to 3.0.3.
+  >
+  > - [Changelog](https://github.com/micromatch/braces/blob/master/CHANGELOG.md)
+  > - [Commits](https://github.com/micromatch/braces/compare/3.0.2...3.0.3)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: braces
+  >
+  >   dependency-type: indirect
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- [`02542370`](https://github.com/sinonjs/sinon/commit/02542370a4d92ef12270638f97db29ca4f1cca66)
+  feat(ci): add node v22 (#2600) (Rotzbua)
+- [`794cb81a`](https://github.com/sinonjs/sinon/commit/794cb81a3bf639c8fb0880f4509a5a1a42066b6e)
+  fix(tests): typo (#2603) (Rotzbua)
+- [`1eb2a254`](https://github.com/sinonjs/sinon/commit/1eb2a25486564ff6b834cfe0a62329dd8bd455fe)
+  Use NodeJS 22.2.0 as base development version (Carl-Erik Kopseng)
+- [`1aa713fd`](https://github.com/sinonjs/sinon/commit/1aa713fd413e1b34645fddff1871da99c6d263f8)
+  Bump rexml from 3.2.5 to 3.2.8 (#2599) (dependabot[bot])
+  > Bumps [rexml](https://github.com/ruby/rexml) from 3.2.5 to 3.2.8. >
+  >
+  > - [Release notes](https://github.com/ruby/rexml/releases) >
+  > - [Changelog](https://github.com/ruby/rexml/blob/master/NEWS.md) >
+  > - [Commits](https://github.com/ruby/rexml/compare/v3.2.5...v3.2.8) > >
+  >   --- >
+  >   updated-dependencies: >
+  > - dependency-name: rexml >
+  >   dependency-type: indirect >
+  >   ... > >
+  >   Signed-off-by: dependabot[bot] <support@github.com> >
+  >   Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-09-10._
+
 ## 18.0.0
 
 This is what 17.0.2 should have been, as that contained two breaking changes. After updating

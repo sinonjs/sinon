@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "18.0.0",
+  "version": "18.0.1",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -38,7 +38,7 @@
     "test-cloud": "npm run test-headless -- --wd",
     "test-webworker": "mochify --no-detect-globals --https-server 0 --no-request-interception test/webworker/webworker-support-assessment.js",
     "test-esm-support": "mocha test/es2015/module-support-assessment-test.mjs",
-    "check-esm-bundle-runs-in-browser": "node test/es2015/check-esm-bundle-is-runnable.js",
+    "test-esm-browser-build": "node test/es2015/check-esm-bundle-is-runnable.js",
     "test-docker-image": "docker-compose up",
     "test-runnable-examples": "docs/release-source/release/examples/run-test.sh",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",
@@ -51,7 +51,7 @@
     "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies",
-    "postbuild": "npm run test-esm-support ",
+    "postbuild": "npm run test-esm-support && npm run test-esm-browser-build",
     "prebuild-docs": "./scripts/update-compatibility.js",
     "prepublishOnly": "npm run build",
     "prettier:check": "prettier --check '**/*.{js,css,md}'",
@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
-    "@sinonjs/fake-timers": "^11.2.2",
+    "@sinonjs/fake-timers": "11.2.2",
     "@sinonjs/samsam": "^8.0.0",
     "diff": "^5.2.0",
     "nise": "^6.0.0",
