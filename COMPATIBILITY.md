@@ -50,7 +50,7 @@ The following table serves as an orientation if support for an older unsupported
 |    12    |    12, 14, 16     |
 |    11    |    10, 12, 14     |
 |    10    |    10, 12, 14     |
-|    9     |     8, 10, 12     |
+|    9     |     10, 12     |
 |    8     |     8, 10, 12     |
 
 [es5]: http://www.ecma-international.org/ecma-262/5.1/
