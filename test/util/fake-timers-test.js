@@ -676,7 +676,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("creates real Date objects when Date constructor is gone", function () {
-            const realDateClass = Date;
+            const OriginalDateClass = Date;
 
             // eslint-disable-next-line no-global-assign, no-native-reassign
             Date = function () {
@@ -688,11 +688,7 @@ describe("fakeTimers.clock", function () {
 
             const date = new this.clock.Date();
 
-            // restore directly after use, because tearDown is async in buster-next and
-            // the overridden Date is used in node 0.x native code
-            this.global.Date = this.Date;
-
-            assert(date instanceof realDateClass);
+            assert(date instanceof OriginalDateClass);
         });
 
         it("creates Date objects representing clock time", function () {
@@ -1090,7 +1086,7 @@ describe("fakeTimers.clock", function () {
             this.global.Date.now = null;
             this.clock = fakeTimers.useFakeTimers(0);
 
-            assert.isUndefined(Date.now);
+            assert.isNull(Date.now);
         });
 
         it("mirrors custom Date properties", function () {
@@ -1247,7 +1243,10 @@ describe("fakeTimers.clock", function () {
                 setTimeout: stub,
                 clearTimeout: sinonStub(),
             };
-            this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
+            this.clock = fakeTimers.useFakeTimers({
+                global: globalCtx,
+                toFake: Object.keys(globalCtx),
+            });
             assert.isUndefined(this.clock.performance);
             assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
             this.clock.restore();
