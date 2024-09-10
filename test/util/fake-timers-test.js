@@ -1020,9 +1020,9 @@ describe("fakeTimers.clock", function () {
             assert.isUndefined(clearImmediate);
         });
 
-        it("deletes global property on restore if it was inherited onto the global object", function () {
+        it("deletes global timer on restore if it was inherited onto the global object", function () {
             const globalProto = {
-                Date: this.global.Date,
+                Date: class SomeDate {},
                 setTimeout() {
                     return 42;
                 },
@@ -1039,18 +1039,27 @@ describe("fakeTimers.clock", function () {
             refute(global.hasOwnProperty("setTimeout"));
         });
 
-        it("restores global property on restore if it is present on the global object itself", function () {
+        it("restores global timer on restore if it is present on the global object itself", function () {
             // Directly give the global object a tick method
-            this.global.tick = function () {
-                return;
+            function originalSetTimeout() {
+                return 42;
+            }
+
+            const global = {
+                Date: class SomeDate {},
+                setTimeout: originalSetTimeout,
             };
 
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-            assert.isTrue(this.global.hasOwnProperty("tick"));
+            this.clock = fakeTimers.useFakeTimers({
+                global,
+                toFake: ["setTimeout"],
+            });
+            assert(global.hasOwnProperty("setTimeout"));
+            refute.equals(global.setTimeout, originalSetTimeout);
             this.clock.restore();
 
-            assert.isTrue(this.global.hasOwnProperty("tick"));
-            delete this.global.tick;
+            assert(global.hasOwnProperty("setTimeout"));
+            assert.equals(global.setTimeout, originalSetTimeout);
         });
 
         it("fakes Date constructor", function () {
