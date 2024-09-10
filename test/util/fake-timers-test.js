@@ -1021,29 +1021,22 @@ describe("fakeTimers.clock", function () {
         });
 
         it("deletes global property on restore if it was inherited onto the global object", function () {
-            /*eslint-disable no-proto*/
-            if (!Object.__proto__) {
-                this.skip();
-            }
-
-            // Give the global object an inherited 'tick' method
-            delete this.global.tick;
-            this.global.__proto__.tick = function () {
-                return;
+            const globalProto = {
+                Date: this.global.Date,
+                setTimeout() {
+                    return 42;
+                },
             };
+            const global = Object.create(globalProto);
 
-            if (!this.global.hasOwnProperty("tick")) {
-                this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-                assert.isTrue(this.global.hasOwnProperty("tick"));
-                this.clock.restore();
+            this.clock = fakeTimers.useFakeTimers({
+                global,
+                toFake: ["setTimeout"],
+            });
+            assert(global.hasOwnProperty("setTimeout"));
+            this.clock.restore();
 
-                assert.isFalse(this.global.hasOwnProperty("tick"));
-                delete this.global.__proto__.tick;
-            } else {
-                // hasOwnProperty does not work as expected.
-                assert(true);
-            }
-            /*eslint-enable no-proto*/
+            refute(global.hasOwnProperty("setTimeout"));
         });
 
         it("restores global property on restore if it is present on the global object itself", function () {
