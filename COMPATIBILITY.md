@@ -35,6 +35,24 @@ To see what that means in practice, you can use https://browserslist.dev
 <a href="https://saucelabs.com/u/sinonjs"><img src="https://saucelabs.com/browser-matrix/sinonjs.svg" alt="Sauce Test Status"></a>
 </p>
 
+## Previous supported Node.js
+
+The following table serves as an orientation if support for an older unsupported Node.js version is required.
+
+| Sinon.JS | supported Node.js |
+| :------: | :---------------: |
+|    18    |    18, 20, 22     |
+|    17    |      18, 20       |
+|    16    |    16, 18, 20     |
+|    15    |    14, 16, 18     |
+|    14    |    14, 16, 18     |
+|    13    |    12, 14, 16     |
+|    12    |    12, 14, 16     |
+|    11    |      12, 14       |
+|    10    |    10, 12, 14     |
+|    9     |      10, 12       |
+|    8     |     8, 10, 12     |
+
 [es5]: http://www.ecma-international.org/ecma-262/5.1/
 [es2017]: https://262.ecma-international.org/8.0/
 [shared-config]: https://github.com/sinonjs/eslint-config
