@@ -1,4 +1,9 @@
 "use strict";
+const assert = require("node:assert");
+
+assert(process.env.BROWSER_NAME);
+assert(process.env.SAUCE_USERNAME);
+assert(process.env.SAUCE_ACCESS_KEY);
 
 module.exports = {
     driver: "webdriver",
