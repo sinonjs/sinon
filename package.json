@@ -96,7 +96,6 @@
     "@sinonjs/eslint-config": "^5.0.3",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^11.0.1",
-    "@sinonjs/referee-sinon": "12.0.0",
     "@studio/changes": "^3.0.0",
     "babel-plugin-istanbul": "^7.0.0",
     "babelify": "^10.0.0",
