@@ -83,9 +83,9 @@
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
     "@sinonjs/fake-timers": "13.0.1",
-    "@sinonjs/samsam": "^8.0.0",
+    "@sinonjs/samsam": "^8.0.1",
     "diff": "^7.0.0",
-    "nise": "^6.0.1",
+    "nise": "^6.1.0",
     "supports-color": "^7.2.0"
   },
   "devDependencies": {
