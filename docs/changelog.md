@@ -6,6 +6,15 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 19.0.2
+
+- [`4eb4c4bc`](https://github.com/sinonjs/sinon/commit/4eb4c4bc0266d90d1624e5067029599ed57f7fb2)
+  Use fix 13.0.2 version of fake-timers to get Date to pass instanceof checks (Carl-Erik Kopseng)
+- [`a5b03db3`](https://github.com/sinonjs/sinon/commit/a5b03db3af8948fe57c9f6818d7ae51fdef7ab52)
+  Add links to code that is affected by the breaking changes (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-09-13._
+
 ## 19.0.1
 
 - [`037ec2d2`](https://github.com/sinonjs/sinon/commit/037ec2d2a995fb1f84f7b63ed00e632316648612)

@@ -15,7 +15,7 @@
     "xhr",
     "assert"
   ],
-  "version": "19.0.1",
+  "version": "19.0.2",
   "homepage": "https://sinonjs.org/",
   "author": "Christian Johansen",
   "repository": {
@@ -81,7 +81,7 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
-    "@sinonjs/fake-timers": "13.0.1",
+    "@sinonjs/fake-timers": "^13.0.2",
     "@sinonjs/samsam": "^8.0.1",
     "diff": "^7.0.0",
     "nise": "^6.1.1",
