@@ -21,7 +21,10 @@ redirect_from:
 
 </div>
 
-{% include docs/migration-guides.md %}
+### Migration guide
+
+We cover some cases of what to think about when migrating to a new majorj version
+in the [migration guide](/guides/migration-guide)
 
 <div class="in-content releases">
     <ul>
