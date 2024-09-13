@@ -7,13 +7,21 @@ breadcrumb: migrating
 ## Sinon 19
 
 A breaking change is that Fake Timers 13 now fake all timers by default. Previously
-a couple of timers were explicitly ignored, but this no longer applies.
-If you want the old behavior, specify the `toFake` option and leave the name
-of the timers giving you trouble.
+Node's `nextTick()` and `Window#queueMicroTask()` were explicitly skipped, which
+was quite confusing to some. This typically might affect `async` tests where
+you rely on some Node function that invokes `nextTick` under the hood. See
+[issue #2619](https://github.com/sinonjs/sinon/issues/2619) for such an example
+and [a suggestion on how one could employ `clock#runToLastAsync()`](https://github.com/fatso83/usefaketimers-bug-reproduction/commit/54c812d)
+in asynchronous tests that stopped resolving in Sinon 19.
+
+_If you want the old behavior, specify the timers you want to fake in the `toFake`
+option and leave out the name of the timers giving you trouble_.
 
 The new version of fake-timers also no longer creating dates using the original Date
-class, but a subclass (proxy). This should not matter unless you are doing some kind
-of identity checks on the constructor: functionally they are the same.
+class, but a _subclass_ (proxy). This should not matter unless you are doing some kind
+of identity checks on the constructor: functionally they are the same, but if you
+creating Date objects before installing the fake timers, `instanceof` checks
+will not pass ([fake-timers#504](https://github.com/sinonjs/fake-timers/issues/504)).
 
 Removal of `legacyRoutes` option that was enabled in a previous `nise` version as the
 underlying library, `path-to-regexp`, had a fundamental change to its parsing that
