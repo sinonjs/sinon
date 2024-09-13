@@ -15,6 +15,10 @@ The new version of fake-timers also no longer creating dates using the original 
 class, but a subclass (proxy). This should not matter unless you are doing some kind
 of identity checks on the constructor: functionally they are the same.
 
+Removal of `legacyRoutes` option that was enabled in a previous `nise` version as the
+underlying library, `path-to-regexp`, had a fundamental change to its parsing that
+made the option a no-op.
+
 ## Sinon 18
 
 Mostly removal of some deprecated exports related to `sinon-test`, such as
