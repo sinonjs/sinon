@@ -24,7 +24,7 @@ stubContainer.contains.returns(false);
 stubContainer.contains.withArgs("item").returns(true);
 ```
 
-The given constructor function is not invoked. See also the [stub API](../stubs).
+The given constructor function is not invoked. See also the [stub API](../stubs/).
 
 ### `sinon.restoreObject(object);`
 

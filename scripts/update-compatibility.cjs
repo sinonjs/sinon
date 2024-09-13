@@ -1,4 +1,3 @@
-#!/usr/bin/env nodejs
 /*
  * Purpose: update/align our docs and our .browserlistrc file
  *      so that we do not spread out-of-date information
@@ -16,12 +15,12 @@ const compatibilityPath = `${root}/COMPATIBILITY.md`;
 const debug = require("debug")("update-compatibility");
 
 debug(
-    "Copy browserslistrc file to root for running our own linting using compat/compat"
+    "Copy browserslistrc file to root for running our own linting using compat/compat",
 );
 shell.cp(sourceFile, root);
 
 debug(
-    `Inline browserslistrc file into ${compatibilityPath} to keep contents in-sync`
+    `Inline browserslistrc file into ${compatibilityPath} to keep contents in-sync`,
 );
 const rl = readline.createInterface({
     input: fs.createReadStream(compatibilityPath),
@@ -50,7 +49,7 @@ const processLine = (() => {
                 state = STATES.AFTER;
                 // newlines following Prettier's formatting
                 return `\n\`\`\`\n${fs.readFileSync(
-                    sourceFile
+                    sourceFile,
                 )}\`\`\`\n\n${line}`;
             }
             return NOOP;
