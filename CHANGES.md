@@ -1,5 +1,12 @@
 # Changes
 
+## 19.0.1
+
+- [`037ec2d2`](https://github.com/sinonjs/sinon/commit/037ec2d2a995fb1f84f7b63ed00e632316648612)
+  Update migration docs (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-09-13._
+
 ## 19.0.0
 
 - [`3534ab4f`](https://github.com/sinonjs/sinon/commit/3534ab4fb02803173d9ca34f6020c3701d82abc9)
