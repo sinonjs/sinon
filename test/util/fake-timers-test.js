@@ -676,7 +676,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("creates real Date objects when Date constructor is gone", function () {
-            const realDate = new Date();
+            const OriginalDateClass = Date;
 
             // eslint-disable-next-line no-global-assign, no-native-reassign
             Date = function () {
@@ -688,14 +688,7 @@ describe("fakeTimers.clock", function () {
 
             const date = new this.clock.Date();
 
-            // restore directly after use, because tearDown is async in buster-next and
-            // the overridden Date is used in node 0.x native code
-            this.global.Date = this.Date;
-
-            assert.same(
-                date.constructor.prototype,
-                realDate.constructor.prototype,
-            );
+            assert(date instanceof OriginalDateClass);
         });
 
         it("creates Date objects representing clock time", function () {
@@ -759,10 +752,6 @@ describe("fakeTimers.clock", function () {
             const fakeDate = new this.clock.Date(2010, 4, 2, 12, 42, 53, 498);
 
             assert.equals(fakeDate.getTime(), date.getTime());
-        });
-
-        it("mirrors native Date.prototype", function () {
-            assert.same(this.clock.Date.prototype, Date.prototype);
         });
 
         it("supports now method if present", function () {
@@ -1027,44 +1016,46 @@ describe("fakeTimers.clock", function () {
             assert.isUndefined(clearImmediate);
         });
 
-        it("deletes global property on restore if it was inherited onto the global object", function () {
-            /*eslint-disable no-proto*/
-            if (!Object.__proto__) {
-                this.skip();
-            }
-
-            // Give the global object an inherited 'tick' method
-            delete this.global.tick;
-            this.global.__proto__.tick = function () {
-                return;
+        it("deletes global timer on restore if it was inherited onto the global object", function () {
+            const globalProto = {
+                Date: class SomeDate {},
+                setTimeout() {
+                    return 42;
+                },
             };
+            const global = Object.create(globalProto);
 
-            if (!this.global.hasOwnProperty("tick")) {
-                this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-                assert.isTrue(this.global.hasOwnProperty("tick"));
-                this.clock.restore();
-
-                assert.isFalse(this.global.hasOwnProperty("tick"));
-                delete this.global.__proto__.tick;
-            } else {
-                // hasOwnProperty does not work as expected.
-                assert(true);
-            }
-            /*eslint-enable no-proto*/
-        });
-
-        it("restores global property on restore if it is present on the global object itself", function () {
-            // Directly give the global object a tick method
-            this.global.tick = function () {
-                return;
-            };
-
-            this.clock = fakeTimers.useFakeTimers({ toFake: ["tick"] });
-            assert.isTrue(this.global.hasOwnProperty("tick"));
+            this.clock = fakeTimers.useFakeTimers({
+                global,
+                toFake: ["setTimeout"],
+            });
+            assert(global.hasOwnProperty("setTimeout"));
             this.clock.restore();
 
-            assert.isTrue(this.global.hasOwnProperty("tick"));
-            delete this.global.tick;
+            refute(global.hasOwnProperty("setTimeout"));
+        });
+
+        it("restores global timer on restore if it is present on the global object itself", function () {
+            // Directly give the global object a tick method
+            function originalSetTimeout() {
+                return 42;
+            }
+
+            const global = {
+                Date: class SomeDate {},
+                setTimeout: originalSetTimeout,
+            };
+
+            this.clock = fakeTimers.useFakeTimers({
+                global,
+                toFake: ["setTimeout"],
+            });
+            assert(global.hasOwnProperty("setTimeout"));
+            refute.equals(global.setTimeout, originalSetTimeout);
+            this.clock.restore();
+
+            assert(global.hasOwnProperty("setTimeout"));
+            assert.equals(global.setTimeout, originalSetTimeout);
         });
 
         it("fakes Date constructor", function () {
@@ -1095,7 +1086,7 @@ describe("fakeTimers.clock", function () {
             this.global.Date.now = null;
             this.clock = fakeTimers.useFakeTimers(0);
 
-            assert.isUndefined(Date.now);
+            assert.isNull(Date.now);
         });
 
         it("mirrors custom Date properties", function () {
@@ -1154,19 +1145,8 @@ describe("fakeTimers.clock", function () {
                 }
             });
 
-            it("installs by default without nextTick", function () {
+            it("installs nextTick by default", function () {
                 this.clock = fakeTimers.useFakeTimers();
-                let called = false;
-                process.nextTick(function () {
-                    called = true;
-                });
-                this.clock.runAll();
-                assert(!called);
-                this.clock.restore();
-            });
-
-            it("installs with nextTick", function () {
-                this.clock = fakeTimers.useFakeTimers({ toFake: ["nextTick"] });
                 let called = false;
                 process.nextTick(function () {
                     called = true;
@@ -1263,7 +1243,10 @@ describe("fakeTimers.clock", function () {
                 setTimeout: stub,
                 clearTimeout: sinonStub(),
             };
-            this.clock = fakeTimers.useFakeTimers({ global: globalCtx });
+            this.clock = fakeTimers.useFakeTimers({
+                global: globalCtx,
+                toFake: Object.keys(globalCtx),
+            });
             assert.isUndefined(this.clock.performance);
             assert.same(this.clock._setTimeout, stub); // eslint-disable-line no-underscore-dangle
             this.clock.restore();

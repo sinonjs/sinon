@@ -24,12 +24,15 @@ try {
  * @param done
  */
 function makeBundle(entryPoint, config, done) {
-    browserify(entryPoint, config).bundle(function (err, buffer) {
-        if (err) {
-            throw err;
-        }
-        done(buffer.toString());
-    });
+    browserify(entryPoint, config)
+        .exclude("timers")
+        .exclude("timers/promises")
+        .bundle(function (err, buffer) {
+            if (err) {
+                throw err;
+            }
+            done(buffer.toString());
+        });
 }
 
 makeBundle(
@@ -45,7 +48,7 @@ makeBundle(
     function (bundle) {
         var script = preamble + bundle;
         fs.writeFileSync("pkg/sinon.js", script); // WebWorker can only load js files
-    }
+    },
 );
 
 makeBundle(
@@ -59,7 +62,7 @@ makeBundle(
     function (bundle) {
         var script = preamble + bundle;
         fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", script);
-    }
+    },
 );
 
 makeBundle(
@@ -78,5 +81,5 @@ makeBundle(
 
         var script = preamble + intro + bundle + outro;
         fs.writeFileSync("pkg/sinon-esm.js", script);
-    }
+    },
 );

@@ -43,7 +43,9 @@ describe("issues", function () {
     describe("#458", function () {
         describe("on node", function () {
             beforeEach(function () {
-                if (typeof require("fs").readFileSync !== "function") {
+                try {
+                    require("fs");
+                } catch (_) {
                     this.skip();
                 }
             });

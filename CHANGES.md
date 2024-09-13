@@ -1,5 +1,20 @@
 # Changes
 
+## 19.0.0
+
+- [`3534ab4f`](https://github.com/sinonjs/sinon/commit/3534ab4fb02803173d9ca34f6020c3701d82abc9)
+  Bump samsam and nise to latest versions (#2617) (Carl-Erik Kopseng)
+  > Ensures consistency and less breakage when there are "circular" dependencies.
+- [`912c568d`](https://github.com/sinonjs/sinon/commit/912c568d3038dc0bea0e8a7b25e4298087c7c99c)
+  upgrade fake timers and others (#2612) (Carl-Erik Kopseng)
+  > - Upgrade dependencies (includes breaking API in Fake Timers)
+  > - fake-timers: no longer creating dates using the original Date class, but a subclass (proxy)
+- [`9715798e`](https://github.com/sinonjs/sinon/commit/9715798e30e59b110a1349cd0bd087b0fa5f9af2)
+  Use newer @mochify/\* packages (#2609) (Carl-Erik Kopseng)
+  > Co-authored-by: Maximilian Antoni <mail@maxantoni.de>
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2024-09-13._
+
 ## 18.0.1
 
 Basically a patch release to update a transitive dependency in Nise.
