@@ -21,7 +21,13 @@ redirect_from:
 
 </div>
 
-{% include docs/migration-guides.md %}
+### Migration guide
+
+The [migration guide](/guides/migration-guide) covers what to think about
+when migrating to a new major version. Mostly, you should not really be
+practically affected by most of the major version jumps: it's mostly trivial
+stuff like dropping support for a version of Node or some very minute
+detail of an implementation some people _might_ depend upon.
 
 <div class="in-content releases">
     <ul>

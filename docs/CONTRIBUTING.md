@@ -23,13 +23,11 @@ However, if you're going to contribute changes that alter the overall structure 
 cd docs
 
 # ensure you have bundler
-gem install bundler
 
 # install all dependencies
-bundle install --path vendor/bundle
 
 # build, serve and live-reload the site
-npm run dev-docs
+npm run serve-docs
 ```
 
 After that you can access the site at http://localhost:4000/
