@@ -6,10 +6,27 @@ breadcrumb: migrating
 
 ## Sinon 19
 
-A breaking change is that Fake Timers now fake all timers by default. Previously
+A breaking change is that Fake Timers 13 now fake all timers by default. Previously
 a couple of timers were explicitly ignored, but this no longer applies.
 If you want the old behavior, specify the `toFake` option and leave the name
 of the timers giving you trouble.
+
+The new version of fake-timers also no longer creating dates using the original Date
+class, but a subclass (proxy). This should not matter unless you are doing some kind
+of identity checks on the constructor: functionally they are the same.
+
+## Sinon 18
+
+Mostly removal of some deprecated exports related to `sinon-test`, such as
+sinon.defaultConfig and related modules.
+
+## Sinon 17
+
+Drops support for Node 16
+
+## Sinon 15
+
+Removes option to pass a custom formatter.
 
 ## Sinon 7
 
