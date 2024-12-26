@@ -65,7 +65,7 @@ jobs:
           npm run unimported
 
   browser-test:
-    runs-on: puppeteer/puppeteer:latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
