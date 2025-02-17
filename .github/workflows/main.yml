@@ -60,9 +60,6 @@ jobs:
           npm ci
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
-      - name: Find unused files
-        run: |
-          npm run unimported
 
   browser-test:
     runs-on: ubuntu-latest

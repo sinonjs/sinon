@@ -48,7 +48,6 @@
     "build-docs": "cd docs; make build",
     "serve-docs": "cd docs; make livereload",
     "lint": "eslint --max-warnings 0 '**/*.{js,cjs,mjs}'",
-    "unimported": "unimported .",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies && npm run update-compatibility",
     "postbuild": "npm run test-esm-support && npm run test-esm-browser-build",
@@ -81,7 +80,7 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
-    "@sinonjs/fake-timers": "^13.0.2",
+    "@sinonjs/fake-timers": "^13.0.5",
     "@sinonjs/samsam": "^8.0.1",
     "diff": "^7.0.0",
     "nise": "^6.1.1",
@@ -111,8 +110,7 @@
     "puppeteer": "^23.3.0",
     "rimraf": "^6.0.1",
     "semver": "^7.6.3",
-    "shelljs": "^0.8.5",
-    "unimported": "^1.31.1"
+    "shelljs": "^0.8.5"
   },
   "files": [
     "lib",
