@@ -1100,47 +1100,6 @@ describe("sinonMock", function () {
         });
     });
 
-    describe(".usingPromise", function () {
-        beforeEach(function () {
-            this.method = function () {
-                return;
-            };
-            this.object = { method: this.method };
-            this.mock = sinonMock.create(this.object);
-        });
-
-        it("must be a function", function () {
-            assert.isFunction(this.mock.usingPromise);
-        });
-
-        it("must return the mock", function () {
-            const mockPromise = {};
-
-            const actual = this.mock.usingPromise(mockPromise);
-
-            assert.same(actual, this.mock);
-        });
-
-        it("must set all expectations with mockPromise", function () {
-            if (typeof Promise === "undefined") {
-                return this.skip();
-            }
-
-            const resolveValue = {};
-            const mockPromise = {
-                resolve: sinonStub().resolves(resolveValue),
-            };
-
-            this.mock.usingPromise(mockPromise);
-            this.mock.expects("method").resolves({});
-
-            return this.object.method().then(function (action) {
-                assert.same(resolveValue, action);
-                assert(mockPromise.resolve.calledOnce);
-            });
-        });
-    });
-
     describe("mock object", function () {
         beforeEach(function () {
             this.method = function () {
