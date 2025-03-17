@@ -12,7 +12,6 @@ const sinonSpy = require("../lib/sinon/spy");
 const sinonStub = require("../lib/sinon/stub");
 const sinonClock = require("../lib/sinon/util/fake-timers");
 
-const supportPromise = typeof Promise !== "undefined";
 const globalContext = typeof global !== "undefined" ? global : window;
 
 if (!assert.stub) {
@@ -1625,98 +1624,6 @@ describe("Sandbox", function () {
                 globalContext.setTimeout,
                 "fakeTimers restored",
             );
-        });
-    });
-
-    describe(".usingPromise", function () {
-        beforeEach(function () {
-            this.sandbox = new Sandbox();
-        });
-
-        afterEach(function () {
-            this.sandbox.restore();
-        });
-
-        it("must be a function", function () {
-            assert.isFunction(this.sandbox.usingPromise);
-        });
-
-        it("must return the sandbox", function () {
-            const mockPromise = {};
-
-            const actual = this.sandbox.usingPromise(mockPromise);
-
-            assert.same(actual, this.sandbox);
-        });
-
-        it("must set all stubs created from sandbox with mockPromise", function () {
-            if (!supportPromise) {
-                return this.skip();
-            }
-
-            const resolveValue = {};
-            const mockPromise = {
-                resolve: sinonStub().resolves(resolveValue),
-            };
-
-            this.sandbox.usingPromise(mockPromise);
-            const stub = this.sandbox.stub().resolves();
-
-            return stub().then(function (action) {
-                assert.same(resolveValue, action);
-                assert(mockPromise.resolve.calledOnce);
-            });
-        });
-
-        // eslint-disable-next-line mocha/no-identical-title
-        it("must set all stubs created from sandbox with mockPromise", function () {
-            if (!supportPromise) {
-                return this.skip();
-            }
-
-            const resolveValue = {};
-            const mockPromise = {
-                resolve: sinonStub().resolves(resolveValue),
-            };
-            const stubbedObject = {
-                stubbedMethod: function () {
-                    return;
-                },
-            };
-
-            this.sandbox.usingPromise(mockPromise);
-            this.sandbox.stub(stubbedObject);
-            stubbedObject.stubbedMethod.resolves({});
-
-            return stubbedObject.stubbedMethod().then(function (action) {
-                assert.same(resolveValue, action);
-                assert(mockPromise.resolve.calledOnce);
-            });
-        });
-
-        it("must set all mocks created from sandbox with mockPromise", function () {
-            if (!supportPromise) {
-                return this.skip();
-            }
-
-            const resolveValue = {};
-            const mockPromise = {
-                resolve: sinonStub().resolves(resolveValue),
-            };
-            const mockedObject = {
-                mockedMethod: function () {
-                    return;
-                },
-            };
-
-            this.sandbox.usingPromise(mockPromise);
-            const mock = this.sandbox.mock(mockedObject);
-            mock.expects("mockedMethod").resolves({});
-
-            return mockedObject.mockedMethod().then(function (action) {
-                assert.same(resolveValue, action);
-                assert(mockPromise.resolve.calledOnce);
-            });
         });
     });
 
