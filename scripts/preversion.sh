@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for package in $(npm outdated --parseable nise @sinonjs/fake-timers @sinonjs/samsam)
+for package in $(npm outdated --parseable @sinonjs/fake-timers @sinonjs/samsam)
 do
     wanted="$(cut -d: -f2 <<< "$package")"
     current="$(cut -d: -f3 <<< "$package")"

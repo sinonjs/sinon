@@ -156,67 +156,6 @@ it("makes a GET request for todo items", function () {
 });
 ```
 
-### Fake XMLHttpRequest
-
-While the preceding test shows off some nifty Sinon.JS tricks, it is too tightly coupled to the implementation. When testing Ajax, it is better to use Sinon.JS' [fake XMLHttpRequest][fakexhr]:
-
-```javascript
-var xhr, requests;
-
-before(function () {
-  xhr = sinon.useFakeXMLHttpRequest();
-  requests = [];
-  xhr.onCreate = function (req) {
-    requests.push(req);
-  };
-});
-
-after(function () {
-  // Like before we must clean up when tampering with globals.
-  xhr.restore();
-});
-
-it("makes a GET request for todo items", function () {
-  getTodos(42, sinon.fake());
-
-  assert.equals(requests.length, 1);
-  assert.match(requests[0].url, "/todo/42/items");
-});
-```
-
-Learn more about [fake XMLHttpRequest][fakexhr].
-
-### Fake server
-
-The preceding example shows how flexible this API is. If it looks too laborious, you may like the fake server:
-
-```javascript
-var server;
-
-before(function () {
-  server = sinon.fakeServer.create();
-});
-after(function () {
-  server.restore();
-});
-
-it("calls callback with deserialized data", function () {
-  var callback = sinon.fake();
-  getTodos(42, callback);
-
-  // This is part of the FakeXMLHttpRequest API
-  server.requests[0].respond(
-    200,
-    { "Content-Type": "application/json" },
-    JSON.stringify([{ id: 1, text: "Provide examples", done: true }]),
-  );
-
-  assert(callback.calledOnce);
-});
-```
-
-Test framework integration can typically reduce boilerplate further. [Learn more about the fake server][fakeserver].
-
 ### Faking time
 
 > "I don't always bend time and space in unit tests, but when I do, I use Buster.JS + Sinon.JS"
@@ -281,13 +220,10 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 ### Sinon.JS elsewhere
 
 - [Testing Backbone applications with Jasmine and Sinon](https://tinnedfruit.com/writing/testing-backbone-apps-with-jasmine-sinon.html)
-- [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
 
 Sinon's "father", Christian Johansen, wrote the book on [Test-Driven JavaScript Development][tddjs], which covers some of the design philosophy and initial sketches for Sinon.JS.
 
 [fakes]: /releases/v{{current_major}}/fakes
-[fakexhr]: /releases/v{{current_major}}/fake-xhr-and-server
-[fakeserver]: /releases/v{{current_major}}/fake-xhr-and-server#fake-server
 [clock]: /releases/v{{current_major}}/fake-timers
 [api-docs]: /releases/v{{current_major}}
 [tddjs]: https://www.oreilly.com/library/view/test-driven-javascript-development/9780321684097/
