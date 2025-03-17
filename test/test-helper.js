@@ -36,18 +36,6 @@ referee.add("mock", {
     refuteMessage: "Expected object ${0} not to be a mock",
 });
 
-referee.add("fakeServer", {
-    assert: function (obj) {
-        return (
-            obj !== null &&
-            Object.prototype.toString.call(obj.requests) === "[object Array]" &&
-            typeof obj.respondWith === "function"
-        );
-    },
-    assertMessage: "Expected object ${0} to be a fake server",
-    refuteMessage: "Expected object ${0} not to be a fake server",
-});
-
 referee.add("clock", {
     assert: function (obj) {
         return (
