@@ -303,14 +303,6 @@ Fakes timers and binds the `clock` object to the sandbox such that it too is res
 
 Access through `sandbox.clock`.
 
-#### `sandbox.usingPromise(promiseLibrary);`
-
-Causes all stubs and mocks created from the sandbox to return promises using a specific
-Promise library instead of the global one when using `stub.rejects` or
-`stub.resolves`. Returns the stub to allow chaining.
-
-_Since `sinon@2.0.0`_
-
 #### `sandbox.restore();`
 
 Restores all fakes created through sandbox.

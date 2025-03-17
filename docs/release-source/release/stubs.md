@@ -12,7 +12,6 @@ examples:
   - stubs-7-call-fake
   - stubs-8-call-through
   - stubs-9-call-through-with-new
-  - stubs-10-use-promise-library
   - stubs-12-yield-to
   - stubs-14-add-behavior
   - stubs-15-replace-getter
@@ -232,7 +231,6 @@ Causes the stub to return a Promise which resolves to the provided value.
 
 When constructing the Promise, sinon uses the `Promise.resolve` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
-The Promise library can be overwritten using the `usingPromise` method.
 
 _Since `sinon@2.0.0`_
 
@@ -283,7 +281,6 @@ Causes the stub to return a Promise which rejects with an exception (`Error`).
 
 When constructing the Promise, sinon uses the `Promise.reject` method. You are
 responsible for providing a polyfill in environments which do not provide `Promise`.
-The Promise library can be overwritten using the `usingPromise` method.
 
 _Since `sinon@2.0.0`_
 
@@ -331,16 +328,6 @@ Like `callsArg`, but with arguments to pass to the callback.
 #### `stub.callsArgOnWith(index, context, arg1, arg2, ...);`
 
 Like above but with an additional parameter to pass the `this` context.
-
-#### `stub.usingPromise(promiseLibrary);`
-
-Causes the stub to return promises using a specific Promise library instead of
-the global one when using `stub.rejects` or `stub.resolves`. Returns the stub
-to allow chaining.
-
-<div data-example-id="stubs-10-use-promise-library"></div>
-
-_Since `sinon@2.0.0`_
 
 #### `stub.yields([arg1, arg2, ...])`
 

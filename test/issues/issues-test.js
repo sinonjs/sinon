@@ -256,56 +256,6 @@ describe("issues", function () {
         });
     });
 
-    describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
-        let stub;
-
-        function makeAssertions(fake, expected) {
-            assert.isFunction(fake.then);
-            assert.isFunction(fake.tap);
-
-            assert.equals(fake.tap(), expected);
-        }
-
-        before(function () {
-            if (typeof Promise === "undefined") {
-                this.skip();
-            }
-        });
-
-        beforeEach(function () {
-            const promiseLib = {
-                resolve: function (value) {
-                    const promise = Promise.resolve(value);
-                    promise.tap = function () {
-                        return `tap ${value}`;
-                    };
-
-                    return promise;
-                },
-            };
-
-            stub = sinon.stub().usingPromise(promiseLib);
-
-            stub.resolves("resolved");
-        });
-
-        it("stub.onCall", function () {
-            stub.onSecondCall().resolves("resolved again");
-
-            makeAssertions(stub(), "tap resolved");
-            makeAssertions(stub(), "tap resolved again");
-        });
-
-        it("stub.withArgs", function () {
-            stub.withArgs(42).resolves("resolved again");
-            stub.withArgs(true).resolves("okay");
-
-            makeAssertions(stub(), "tap resolved");
-            makeAssertions(stub(42), "tap resolved again");
-            makeAssertions(stub(true), "tap okay");
-        });
-    });
-
     describe("#1456", function () {
         let sandbox;
 
