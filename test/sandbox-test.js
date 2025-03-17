@@ -1,13 +1,9 @@
 "use strict";
 
 const referee = require("@sinonjs/referee");
-const samsam = require("@sinonjs/samsam");
 const assert = referee.assert;
 const deprecated = require("@sinonjs/commons").deprecated;
 const refute = referee.refute;
-const fakeXhr = require("nise").fakeXhr;
-const fakeServerWithClock = require("nise").fakeServerWithClock;
-const fakeServer = require("nise").fakeServer;
 const match = require("@sinonjs/samsam").createMatcher;
 const Sandbox = require("../lib/sinon/sandbox");
 const createSandbox = require("../lib/sinon/create-sandbox");
@@ -16,28 +12,12 @@ const sinonSpy = require("../lib/sinon/spy");
 const sinonStub = require("../lib/sinon/stub");
 const sinonClock = require("../lib/sinon/util/fake-timers");
 
-const supportsAjax =
-    typeof XMLHttpRequest !== "undefined" ||
-    typeof ActiveXObject !== "undefined";
 const supportPromise = typeof Promise !== "undefined";
 const globalContext = typeof global !== "undefined" ? global : window;
-const globalXHR = globalContext.XMLHttpRequest;
-const globalAXO = globalContext.ActiveXObject;
 
 if (!assert.stub) {
     require("./test-helper");
 }
-
-referee.add("fakeServerWithClock", {
-    assert: function (obj, expected) {
-        return (
-            samsam.deepEqual(obj, expected) &&
-            fakeServer.create.calledOn(fakeServerWithClock)
-        );
-    },
-    assertMessage: "Expected object ${0} to be a fake server with clock",
-    refuteMessage: "Expected object ${0} not to be a fake server with clock",
-});
 
 describe("Sandbox", function () {
     function noop() {
@@ -48,21 +28,6 @@ describe("Sandbox", function () {
         const sandbox = new Sandbox();
 
         assert.same(sandbox.match, match);
-    });
-
-    it("can be reset without failing when pre-configured to use a fake server", function () {
-        const sandbox = createSandbox({ useFakeServer: true });
-        refute.exception(function () {
-            sandbox.reset();
-        });
-    });
-
-    it("can be reset without failing when configured to use a fake server", function () {
-        const sandbox = new Sandbox();
-        sandbox.useFakeServer();
-        refute.exception(function () {
-            sandbox.reset();
-        });
     });
 
     describe(".mock", function () {
@@ -1755,119 +1720,6 @@ describe("Sandbox", function () {
         });
     });
 
-    // These were not run in browsers before, as we were only testing in node
-    if (typeof window !== "undefined") {
-        describe("fake XHR/server", function () {
-            describe(".useFakeXMLHttpRequest", function () {
-                beforeEach(function () {
-                    this.sandbox = new Sandbox();
-                });
-
-                afterEach(function () {
-                    this.sandbox.restore();
-                });
-
-                it("calls sinon.useFakeXMLHttpRequest", function () {
-                    const stubXhr = {
-                        restore: function () {
-                            return;
-                        },
-                    };
-
-                    this.sandbox
-                        .stub(fakeXhr, "useFakeXMLHttpRequest")
-                        .returns(stubXhr);
-                    const returnedXhr = this.sandbox.useFakeXMLHttpRequest();
-
-                    assert(fakeXhr.useFakeXMLHttpRequest.called);
-                    assert.equals(stubXhr, returnedXhr);
-                });
-
-                it("returns fake xhr object created by nise", function () {
-                    this.sandbox
-                        .stub(fakeXhr, "useFakeXMLHttpRequest")
-                        .returns({
-                            restore: function () {
-                                return;
-                            },
-                        });
-                    this.sandbox.useFakeXMLHttpRequest();
-
-                    assert(fakeXhr.useFakeXMLHttpRequest.called);
-                });
-
-                it("doesn't secretly use useFakeServer", function () {
-                    this.sandbox.stub(fakeServer, "create").returns({
-                        restore: function () {
-                            return;
-                        },
-                    });
-                    this.sandbox.useFakeXMLHttpRequest();
-
-                    assert(fakeServer.create.notCalled);
-                });
-
-                it("adds fake xhr to fake collection", function () {
-                    this.sandbox.useFakeXMLHttpRequest();
-                    this.sandbox.restore();
-
-                    assert.same(globalContext.XMLHttpRequest, globalXHR);
-                    assert.same(globalContext.ActiveXObject, globalAXO);
-                });
-            });
-
-            describe(".useFakeServer", function () {
-                beforeEach(function () {
-                    this.sandbox = new Sandbox();
-                });
-
-                afterEach(function () {
-                    this.sandbox.restore();
-                });
-
-                it("returns server", function () {
-                    const server = this.sandbox.useFakeServer();
-
-                    assert.isObject(server);
-                    assert.isFunction(server.restore);
-                });
-
-                it("exposes server property", function () {
-                    const server = this.sandbox.useFakeServer();
-
-                    assert.same(this.sandbox.server, server);
-                });
-
-                it("creates server", function () {
-                    const server = this.sandbox.useFakeServer();
-
-                    assert(fakeServer.isPrototypeOf(server));
-                });
-
-                it("creates server without clock by default", function () {
-                    const server = this.sandbox.useFakeServer();
-
-                    refute(fakeServerWithClock.isPrototypeOf(server));
-                });
-
-                it("creates server with clock", function () {
-                    this.sandbox.serverPrototype = fakeServerWithClock;
-                    const server = this.sandbox.useFakeServer();
-
-                    assert(fakeServerWithClock.isPrototypeOf(server));
-                });
-
-                it("adds server to fake collection", function () {
-                    this.sandbox.useFakeServer();
-                    this.sandbox.restore();
-
-                    assert.same(globalContext.XMLHttpRequest, globalXHR);
-                    assert.same(globalContext.ActiveXObject, globalAXO);
-                });
-            });
-        });
-    }
-
     describe(".inject", function () {
         beforeEach(function () {
             this.obj = {};
@@ -1924,12 +1776,10 @@ describe("Sandbox", function () {
             );
         });
 
-        it("does not define clock, server and requests objects", function () {
+        it("does not define clock object", function () {
             this.sandbox.inject(this.obj);
 
             assert.isFalse("clock" in this.obj);
-            assert.isFalse("server" in this.obj);
-            assert.isFalse("requests" in this.obj);
         });
 
         it("defines clock when using fake time", function () {
@@ -1940,8 +1790,6 @@ describe("Sandbox", function () {
             assert.isFunction(this.obj.stub);
             assert.isFunction(this.obj.mock);
             assert.isObject(this.obj.clock);
-            assert.isFalse("server" in this.obj);
-            assert.isFalse("requests" in this.obj);
         });
 
         it("should return object", function () {
@@ -1950,44 +1798,6 @@ describe("Sandbox", function () {
             assert.isObject(injected);
             assert.isFunction(injected.spy);
         });
-
-        if (supportsAjax) {
-            describe("ajax options", function () {
-                it("defines server and requests when using fake time", function () {
-                    this.sandbox.useFakeServer();
-                    this.sandbox.inject(this.obj);
-
-                    assert.isFunction(this.obj.spy);
-                    assert.isFunction(this.obj.stub);
-                    assert.isFunction(this.obj.mock);
-                    assert.isFalse("clock" in this.obj);
-                    assert.isObject(this.obj.server);
-                    assert.equals(this.obj.requests, []);
-                });
-
-                it("should define all possible fakes", function () {
-                    this.sandbox.useFakeServer();
-                    this.sandbox.useFakeTimers();
-                    this.sandbox.inject(this.obj);
-
-                    const spy = sinonSpy();
-                    setTimeout(spy, 10);
-
-                    this.sandbox.clock.tick(10);
-
-                    const xhr = window.XMLHttpRequest
-                        ? new XMLHttpRequest()
-                        : new ActiveXObject("Microsoft.XMLHTTP"); //eslint-disable-line no-undef
-
-                    assert.isFunction(this.obj.spy);
-                    assert.isFunction(this.obj.stub);
-                    assert.isFunction(this.obj.mock);
-                    assert(spy.called);
-                    assert.isObject(this.obj.server);
-                    assert.equals(this.obj.requests, [xhr]);
-                });
-            });
-        }
     });
 
     describe(".verify", function () {
@@ -2053,16 +1863,11 @@ describe("Sandbox", function () {
 
     describe("configurable sandbox", function () {
         beforeEach(function () {
-            this.requests = [];
-            this.fakeServer = { requests: this.requests };
-
             this.useFakeTimersSpy = sinonSpy(sinonClock, "useFakeTimers");
-            sinonStub(fakeServer, "create").returns(this.fakeServer);
         });
 
         afterEach(function () {
             this.useFakeTimersSpy.restore();
-            fakeServer.create.restore();
         });
 
         it("yields stub, mock as arguments", function () {
@@ -2089,131 +1894,20 @@ describe("Sandbox", function () {
             sandbox.restore();
         });
 
-        it("does not yield server when not faking xhr", function () {
-            const sandbox = createSandbox({
-                properties: ["server", "stub", "mock"],
-                useFakeServer: false,
-            });
-
-            assert.equals(sandbox.args.length, 2);
-            assert.stub(sandbox.args[0]());
-            assert.mock(sandbox.args[1]({}));
-
-            sandbox.restore();
-        });
-
         it("does not inject properties if they are already present", function () {
-            const server = function () {
-                return;
-            };
             const clock = {};
             const spy = false;
-            const object = { server: server, clock: clock, spy: spy };
+            const object = { clock: clock, spy: spy };
             const sandbox = createSandbox({
-                properties: ["server", "clock", "spy"],
+                properties: ["clock", "spy"],
                 injectInto: object,
             });
 
-            assert.same(object.server, server);
             assert.same(object.clock, clock);
             assert.same(object.spy, spy);
 
             sandbox.restore();
         });
-
-        if (supportsAjax) {
-            describe("ajax options", function () {
-                it("yields server when faking xhr", function () {
-                    const sandbox = createSandbox({
-                        useFakeServer: true,
-                        properties: ["server", "stub", "mock"],
-                    });
-
-                    assert.equals(sandbox.args.length, 3);
-                    assert.equals(sandbox.args[0], this.fakeServer);
-                    assert.stub(sandbox.args[1]());
-                    assert.mock(sandbox.args[2]({}));
-
-                    sandbox.restore();
-                });
-
-                it("uses serverWithClock when faking xhr", function () {
-                    const sandbox = createSandbox({
-                        properties: ["server"],
-                        useFakeServer: fakeServerWithClock,
-                    });
-
-                    assert.fakeServerWithClock(
-                        sandbox.args[0],
-                        this.fakeServer,
-                    );
-
-                    sandbox.restore();
-                });
-
-                it("uses fakeServer as the serverPrototype by default", function () {
-                    const sandbox = createSandbox();
-
-                    assert.same(sandbox.serverPrototype, fakeServer);
-                });
-
-                it("uses configured implementation as the serverPrototype", function () {
-                    const sandbox = createSandbox({
-                        useFakeServer: fakeServerWithClock,
-                    });
-
-                    assert.same(sandbox.serverPrototype, fakeServerWithClock);
-                });
-
-                it("yields clock when faking timers", function () {
-                    const sandbox = createSandbox({
-                        properties: ["server", "clock"],
-                        useFakeServer: true,
-                        useFakeTimers: true,
-                    });
-
-                    assert.same(sandbox.args[0], this.fakeServer);
-                    assert.clock(sandbox.args[1]);
-
-                    sandbox.restore();
-                });
-
-                it("should inject server and clock when enabling them", function () {
-                    const object = {};
-
-                    const sandbox = createSandbox({
-                        injectInto: object,
-                        properties: ["clock", "server", "requests"],
-                        useFakeTimers: true,
-                        useFakeServer: true,
-                    });
-
-                    assert.equals(sandbox.args.length, 0);
-                    assert.equals(object.server, this.fakeServer);
-                    assert.clock(object.clock);
-                    assert.isArray(object.requests);
-
-                    sandbox.restore();
-                });
-
-                it("should not inject server and clock if not enabled, even if the props are whitelisted", function () {
-                    const object = {};
-
-                    const sandbox = createSandbox({
-                        injectInto: object,
-                        properties: ["clock", "server", "requests"],
-                        useFakeTimers: false,
-                        useFakeServer: false,
-                    });
-
-                    assert.isUndefined(object.requests);
-                    assert.isUndefined(object.sandbox);
-                    assert.isUndefined(object.clock);
-
-                    sandbox.restore();
-                });
-            });
-        }
 
         // This is currently testing the internals of useFakeTimers, we could possibly change it to be based on
         // behavior.
