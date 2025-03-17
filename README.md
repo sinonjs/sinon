@@ -55,7 +55,7 @@ If you have questions that are not covered by the documentation, you can [check 
 - Require minimal “integration”
 - Easy to embed seamlessly with any testing framework
 - Easily fake any interface
-- Ship with ready-to-use fakes for XMLHttpRequest, timers and more
+- Ship with ready-to-use fakes for timers
 
 ## Contribute?
 

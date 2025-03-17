@@ -6,7 +6,7 @@ breadcrumb: JSON-P
 
 # JSON-P
 
-JSON-P doesn't use `XHR` requests, which is what the fake server is concerned with. A JSON-P request creates a script element and inserts it into the document.
+A JSON-P request creates a script element and inserts it into the document.
 
 There is no sufficiently unobtrusive way to fake this automatically. The best option is to stub jQuery in this case:
 
@@ -14,5 +14,3 @@ There is no sufficiently unobtrusive way to fake this automatically. The best op
 sinon.stub(jQuery, "ajax");
 sinon.assert.calledOnce(jQuery.ajax);
 ```
-
-We could potentially have had the fake server detect `jQuery` and fake any calls to `jQuery.ajax` when JSON-P is used, but that felt like a compromise in the focus of the Sinon project compared to only documenting the above practice.

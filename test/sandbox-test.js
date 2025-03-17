@@ -1776,12 +1776,10 @@ describe("Sandbox", function () {
             );
         });
 
-        it("does not define clock, server and requests objects", function () {
+        it("does not define clock object", function () {
             this.sandbox.inject(this.obj);
 
             assert.isFalse("clock" in this.obj);
-            assert.isFalse("server" in this.obj);
-            assert.isFalse("requests" in this.obj);
         });
 
         it("defines clock when using fake time", function () {
@@ -1792,8 +1790,6 @@ describe("Sandbox", function () {
             assert.isFunction(this.obj.stub);
             assert.isFunction(this.obj.mock);
             assert.isObject(this.obj.clock);
-            assert.isFalse("server" in this.obj);
-            assert.isFalse("requests" in this.obj);
         });
 
         it("should return object", function () {
@@ -1899,18 +1895,14 @@ describe("Sandbox", function () {
         });
 
         it("does not inject properties if they are already present", function () {
-            const server = function () {
-                return;
-            };
             const clock = {};
             const spy = false;
-            const object = { server: server, clock: clock, spy: spy };
+            const object = { clock: clock, spy: spy };
             const sandbox = createSandbox({
-                properties: ["server", "clock", "spy"],
+                properties: ["clock", "spy"],
                 injectInto: object,
             });
 
-            assert.same(object.server, server);
             assert.same(object.clock, clock);
             assert.same(object.spy, spy);
 
