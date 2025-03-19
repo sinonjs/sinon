@@ -177,7 +177,6 @@ When `autoRespond` is `true`, respond to requests after this number of milliseco
 
 High-level API to manipulate `FakeXMLHttpRequest` instances.
 
-For help with handling JSON-P please refer to our [notes below](#json-p)
 
 ```javascript
 {
