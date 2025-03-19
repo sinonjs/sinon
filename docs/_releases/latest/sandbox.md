@@ -170,7 +170,7 @@ const myFacade = sandbox.inject({});
 
 #### `sandbox.assert();`
 
-A convenience reference for [`sinon.assert`](./assertions)
+A convenience reference for [`sinon.assert`](../assertions)
 
 _Since `sinon@2.0.0`_
 
