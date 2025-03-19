@@ -122,7 +122,7 @@ sinon.config = {
 
 #### `sandbox.assert();`
 
-A convenience reference for [`sinon.assert`](./assertions)
+A convenience reference for [`sinon.assert`](../assertions)
 
 *Since `sinon@2.0.0`*
 
