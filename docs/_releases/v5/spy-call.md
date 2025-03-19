@@ -10,7 +10,7 @@ A spy call is an object representation of an invididual call to a *spied* functi
 
 ### `var spyCall = spy.getCall(n)`
 
-Returns the *nth* [call](#spycall). Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
+Returns the *nth* [call](#spy-call). Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 
 ```javascript
 sinon.spy(jQuery, "ajax");
