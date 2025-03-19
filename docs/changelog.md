@@ -6,6 +6,117 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 19.0.4
+
+The release script failed half-way in 19.0.3, so re-releasing.
+
+- [`da67311a`](https://github.com/sinonjs/sinon/commit/da67311a3eeff7df47ac13af21a7331e523b433a)
+  Revert "Add version 19.0.3 to releases" (Carl-Erik Kopseng)
+- [`84d5c82a`](https://github.com/sinonjs/sinon/commit/84d5c82a67218f12745e018c930bb3b988f41f25)
+  Add version 19.0.3 to releases (Carl-Erik Kopseng)
+
+_Released by Carl-Erik Kopseng on 2025-03-19._
+
+## 19.0.3
+
+Basically just documentation updates
+
+- [`1f1d3706`](https://github.com/sinonjs/sinon/commit/1f1d3706c07e70fc29b111844025c74e48f83284)
+  Verifying links procedure (Carl-Erik Kopseng)
+- [`37623efc`](https://github.com/sinonjs/sinon/commit/37623efc5118f1eeb9a7df28694997412bcd38b1)
+  Catch latest two missing redirects (Carl-Erik Kopseng)
+- [`2404a45f`](https://github.com/sinonjs/sinon/commit/2404a45feeae904a286b3d6321d22ef2cdb08e93)
+  Ignore ancient deadlinks to Sinon child projects in previous releases (Carl-Erik Kopseng)
+- [`fba6f877`](https://github.com/sinonjs/sinon/commit/fba6f877b04a1ced5533c050724ecc4e9aba9df6)
+  Ignore historic links in changelog (Carl-Erik Kopseng)
+- [`e3950d9b`](https://github.com/sinonjs/sinon/commit/e3950d9b391b26e684a1add77da2f70fdd1cdc6d)
+  Fix external link (Carl-Erik Kopseng)
+- [`0be40825`](https://github.com/sinonjs/sinon/commit/0be4082548f206e0e6f2b02b84b190e04e137fd1)
+  Fix the missing redirects to the migration guide (Carl-Erik Kopseng)
+- [`108fbca0`](https://github.com/sinonjs/sinon/commit/108fbca09ccccac6521ba48fd4030a762d498e11)
+  Fix internal ../assertions link in source (Carl-Erik Kopseng)
+- [`bb10e53a`](https://github.com/sinonjs/sinon/commit/bb10e53a905a60cca2d2ec59d2205e8453214899)
+  Fix spy-call reference in source (Carl-Erik Kopseng)
+- [`ef582e31`](https://github.com/sinonjs/sinon/commit/ef582e319a89ced90c5c259657900aa4cf2c88b5)
+  Remove bash-ism from Makefile (use POSIX) (Carl-Erik Kopseng)
+- [`7af1d235`](https://github.com/sinonjs/sinon/commit/7af1d23581d2c8c7625e248a9bdfb2767f12ef98)
+  chore: remove .unimportedrc.json (Morgan Roderick)
+- [`dfcad710`](https://github.com/sinonjs/sinon/commit/dfcad71008a751f151063d7a739590e847a338d9)
+  chore: fix codecov upload (Morgan Roderick)
+  > We are seeing errors uploading coverage reports to codecov:
+  >
+  > ```
+  > Rate limit reached. Please upload with the Codecov repository upload token to resolve issue
+  > ```
+  >
+  > I've added a repository token, as instructed in https://docs.codecov.com/docs/adding-the-codecov-token.
+  >
+  > This changeset should fix the upload issue.
+- [`0ca2e49e`](https://github.com/sinonjs/sinon/commit/0ca2e49e857ec6b10ed4134944cdf591a0065965)
+  fix: browser-test job fails in ubuntu-latest (Morgan Roderick)
+- [`e9eb2eb2`](https://github.com/sinonjs/sinon/commit/e9eb2eb26e873f106a9996610a142d25d917d9e8)
+  chore: remove unused unused job (Morgan Roderick)
+  > This crucial part of this workflow was removed in
+  > 278e667e095cd1a666c3ab2dc4268379a5754598, we should have removed the entire job.
+- [`278e667e`](https://github.com/sinonjs/sinon/commit/278e667e095cd1a666c3ab2dc4268379a5754598)
+  chore: remove unimported (Morgan Roderick)
+  > The repository has been archived. See https://github.com/smeijer/unimported
+- [`9e30835b`](https://github.com/sinonjs/sinon/commit/9e30835bb7c7bb550ed299a4102fdd53a23b083f)
+  npm audit (Morgan Roderick)
+- [`a74301cf`](https://github.com/sinonjs/sinon/commit/a74301cff8e7fb42ebb164c91d059ab391741473)
+  chore: remove RunKit (Morgan Roderick)
+  > This service is dead.
+- [`80bc1d96`](https://github.com/sinonjs/sinon/commit/80bc1d96371580a8b2dad39122db46933e7f5884)
+  Fix out-of-date fake-timers docs (#2628) (Carl-Erik Kopseng)
+  > - Fix documentation issue for fake-timers mentioned in #2625
+  >
+  > The docs were out of sync with the fake-timers docs.
+  >
+  > - Update dependencies before new patch version
+- [`527568cc`](https://github.com/sinonjs/sinon/commit/527568cc60a3c30359732bbb02806cee47a33d02)
+  Bump rexml from 3.3.7 to 3.3.9 (#2626) (dependabot[bot])
+  > Bumps [rexml](https://github.com/ruby/rexml) from 3.3.7 to 3.3.9.
+  >
+  > - [Release notes](https://github.com/ruby/rexml/releases)
+  > - [Changelog](https://github.com/ruby/rexml/blob/master/NEWS.md)
+  > - [Commits](https://github.com/ruby/rexml/compare/v3.3.7...v3.3.9)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: rexml
+  >
+  >   dependency-type: indirect
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+- [`ed029725`](https://github.com/sinonjs/sinon/commit/ed0297257413b728bc31515ac0a87e738e069961)
+  Bump webrick from 1.8.1 to 1.8.2 (#2623) (dependabot[bot])
+  > Bumps [webrick](https://github.com/ruby/webrick) from 1.8.1 to 1.8.2.
+  >
+  > - [Release notes](https://github.com/ruby/webrick/releases)
+  > - [Commits](https://github.com/ruby/webrick/compare/v1.8.1...v1.8.2)
+  >
+  > ***
+  >
+  > updated-dependencies:
+  >
+  > - dependency-name: webrick
+  >
+  >   dependency-type: indirect
+  >
+  > ...
+  >
+  > Signed-off-by: dependabot[bot] <support@github.com>
+  >
+  > Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+
+_Released by Carl-Erik Kopseng on 2025-03-19._
+
 ## 19.0.2
 
 - [`4eb4c4bc`](https://github.com/sinonjs/sinon/commit/4eb4c4bc0266d90d1624e5067029599ed57f7fb2)

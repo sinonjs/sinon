@@ -18,3 +18,17 @@ Currently, we keep a single folder per major release.
 See `scripts/postversion.sh` for details on the exact process, as it changes over time.
 
 The release is packaged, tagged and pushed to GitHub. GitHub Pages will build a new site in a few minutes, and replace the old one.
+
+## Verifying links
+
+This has yet to be automated (requires some Rubys setup), but you can use the Makefile target `check-links` to verify internal
+and external links, which were all verified per March 2025.
+
+```bash
+git checkout releases
+make install
+make build
+make check-links
+```
+
+You might need to fiddle a bit around with locally merging in changes from whatever branch you are on to check those changes, but it's quite doable.
