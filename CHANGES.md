@@ -1,5 +1,16 @@
 # Changes
 
+## 19.0.4
+
+The release script failed half-way in 19.0.3, so re-releasing.
+
+- [`da67311a`](https://github.com/sinonjs/sinon/commit/da67311a3eeff7df47ac13af21a7331e523b433a)
+  Revert "Add version 19.0.3 to releases" (Carl-Erik Kopseng)
+- [`84d5c82a`](https://github.com/sinonjs/sinon/commit/84d5c82a67218f12745e018c930bb3b988f41f25)
+  Add version 19.0.3 to releases (Carl-Erik Kopseng)
+
+_Released by Carl-Erik Kopseng on 2025-03-19._
+
 ## 19.0.3
 
 Basically just documentation updates
