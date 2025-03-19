@@ -283,11 +283,11 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 - [Testing Backbone applications with Jasmine and Sinon](https://tinnedfruit.com/writing/testing-backbone-apps-with-jasmine-sinon.html)
 - [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
 
-Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
+Sinon's "father", Christian Johansen, wrote the book on [Test-Driven JavaScript Development][tddjs], which covers some of the design philosophy and initial sketches for Sinon.JS.
 
 [fakes]: /releases/v{{current_major}}/fakes
 [fakexhr]: /releases/v{{current_major}}/fake-xhr-and-server
 [fakeserver]: /releases/v{{current_major}}/fake-xhr-and-server#fake-server
 [clock]: /releases/v{{current_major}}/fake-timers
 [api-docs]: /releases/v{{current_major}}
-[tddjs]: http://tddjs.com/
+[tddjs]: https://www.oreilly.com/library/view/test-driven-javascript-development/9780321684097/
