@@ -14,7 +14,7 @@ install:
 	@make check-dependencies
 
 copy-over-sinon-script:
-	@[[ -e assets/js/sinon.js ]] || npm run build && cp ../pkg/sinon.js assets/js/
+	@[ -e assets/js/sinon.js ] || npm run build && cp ../pkg/sinon.js assets/js/
 
 check-dependencies:
 	@command -v git-lfs > /dev/null || (make print S="You need to install Git LFS before committing changes" && exit 1)
