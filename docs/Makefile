@@ -26,9 +26,9 @@ deploy: check-dependencies
 	git push
 
 livereload:
-	bundle exec jekyll serve --trace --livereload --host localhost  --incremental
+	bundle exec jekyll serve --trace --livereload --host localhost  --incremental --safe
 
-# only for checking out the final build
+# only for checking out the final build and/or validating links (also works with livereload)
 # # only for checking out the final build
 build:
 	bundle exec jekyll build

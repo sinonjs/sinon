@@ -18,6 +18,10 @@ plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-toc
+
+# used with the --safe flag to mimic Github Pages
+whitelist:
+  - jekyll-redirect-from
 keep_files:
   - assets
   - releases

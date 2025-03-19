@@ -344,6 +344,7 @@ DEPENDENCIES
   github-pages
   html-proofer
   jekyll (~> 3.7)
+  jekyll-redirect-from
   jekyll-sitemap
   jekyll-toc
 
