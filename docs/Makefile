@@ -23,6 +23,7 @@ check-links: copy-over-sinon-script
 	bundle exec htmlproofer --assume-extension='.html' \
         --ignore-status-codes="403" \
         --ignore-files=./_site/releases/changelog.html \
+        --ignore-urls=/github.com/sinonjs/lolex.*/,/busterjs.org/ \
         --no-enforce-https ./_site/
 
 deploy: check-dependencies
