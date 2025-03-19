@@ -2,6 +2,12 @@
 layout: page
 title: Migrating between versions
 breadcrumb: migrating
+redirect_from:
+  - /guides/migrating-to-2.0/
+  - /guides/migrating-to-3.0/
+  - /guides/migrating-to-4.0/
+  - /guides/migrating-to-5.0/
+  - /guides/migrating-to-6.0/
 ---
 
 ## Sinon 19
