@@ -5,7 +5,7 @@ description: >-
 url: 'https://sinonjs.org'
 github_username: sinonjs
 sinon:
-  current_release: v19.0.2
+  current_release: v19.0.3
   current_major_version: 19
 markdown: kramdown
 kramdown:
@@ -18,8 +18,6 @@ plugins:
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-toc
-
-# used with the --safe flag to mimic Github Pages
 whitelist:
   - jekyll-redirect-from
 keep_files:
