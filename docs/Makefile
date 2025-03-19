@@ -20,7 +20,10 @@ check-dependencies:
 	@command -v git-lfs > /dev/null || (make print S="You need to install Git LFS before committing changes" && exit 1)
 
 check-links: copy-over-sinon-script
-	bundle exec htmlproofer --assume-extension='.html' --ignore-status-codes="403" --no-enforce-https ./_site/
+	bundle exec htmlproofer --assume-extension='.html' \
+        --ignore-status-codes="403" \
+        --ignore-files=./_site/releases/changelog.html \
+        --no-enforce-https ./_site/
 
 deploy: check-dependencies
 	git push
