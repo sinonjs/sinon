@@ -83,7 +83,7 @@ var sandbox = sinon.createSandbox({
 });
 ```
 
-The `useFakeTimers` and `useFakeServers` are **false** as opposed to the [defaults in `sinon.defaultConfig`](https://github.com/sinonjs/sinon/blob/master/lib/sinon/util/core/default-config.js):
+The `useFakeTimers` and `useFakeServers` are **false** as opposed to the [defaults in `sinon.defaultConfig`](https://github.com/sinonjs/sinon/blob/v17.0.0/lib/sinon/util/core/default-config.js):
 
 ```javascript
 sinon.defaultConfig = {
