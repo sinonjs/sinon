@@ -36,14 +36,14 @@ function copy_source_to(){
 
     # Remove .gitignore'd files from copies
     # Otherwise they will remain on the local filesytem
-    rm -r "$DIR/examples/node_modules"
-    rm "$DIR/examples/package-lock.json"
+    rm -rf "$DIR/examples/node_modules"
+    rm -f "$DIR/examples/package-lock.json"
 
     # replace `release_id: master` with `release_id: $FULL_VERSION` in
     # $FILE_PATH
     sed -i.bak "s/release_id: master/release_id: $FULL_VERSION/g" "$FILE_PATH"
     sed -i.bak "s/sort_id: master/sort_id: $MAJOR_VERSION/g" "$FILE_PATH"
-    rm "$FILE_PATH.bak"
+    rm -f "$FILE_PATH.bak"
 
     git add "$DIR"
     git add "$FILE_PATH"
