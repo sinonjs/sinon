@@ -352,7 +352,7 @@ Returns `true` if spy always returned the provided value.
 
 #### `var spyCall = spy.getCall(n);`
 
-Returns the _nth_ [call](#spycall).
+Returns the _nth_ [call](../spy-call).
 
 Accessing individual calls helps with more detailed behavior verification when the spy is called more than once.
 

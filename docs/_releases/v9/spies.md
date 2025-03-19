@@ -350,7 +350,7 @@ Returns `true` if spy always returned the provided value.
 
 #### `var spyCall = spy.getCall(n);`
 
-Returns the *nth* [call](#spycall).
+Returns the *nth* [call](../spy-call).
 
 If *n* is negative, the *nth* call from the end is returned. For example, `spy.getCall(-1)` returns the last call, and `spy.getCall(-2)` returns the second to last call.
 
