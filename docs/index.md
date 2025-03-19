@@ -280,7 +280,7 @@ You've seen the most common tasks people tackle with Sinon.JS, yet we've only sc
 
 ### Sinon.JS elsewhere
 
-- [Testing Backbone applications with Jasmine and Sinon](http://tinnedfruit.com/2011/03/03/testing-backbone-apps-with-jasmine-sinon.html)
+- [Testing Backbone applications with Jasmine and Sinon](https://tinnedfruit.com/writing/testing-backbone-apps-with-jasmine-sinon.html)
 - [Sinon.JS fake server live demo](https://github.com/ducin/sinon-backend-less-demo)
 
 Christian Johansen's book [Test-Driven JavaScript Development][tddjs] covers some of the design philosophy and initial sketches for Sinon.JS.
