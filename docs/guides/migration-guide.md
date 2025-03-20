@@ -165,7 +165,7 @@ deprecated with `sinon@2` and has been removed with `sinon@3`.
 
 ## `sinon.useFakeTimers([now, ]prop1, prop2, ...)` - Removed
 
-`sinon.useFakeTimers()` signature has changed
+`sinon.useFakeTimers()` signature has changed.
 To define which methods to fake,
 please use `config.toFake`. Other options are now available when configuring
 `useFakeTimers`. Please consult the documentation for more information.
