@@ -46,6 +46,22 @@ jobs:
       - name: ESLint
         run: |
           npm run lint
+  unused:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - name: Install dependencies
+        run: |
+          npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+      - name: Find unused files
+        run: |
+          npm run knip
 
   browser-test:
     runs-on: ubuntu-22.04
