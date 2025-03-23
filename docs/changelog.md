@@ -6,6 +6,15 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 19.0.5
+
+- [`67d19ff0`](https://github.com/sinonjs/sinon/commit/67d19ff01541fd76dceb1b753e5110b4375fb819)
+  chore: deprecate usingPromise (#2651) (Morgan Roderick)
+- [`598dddb6`](https://github.com/sinonjs/sinon/commit/598dddb6e1d65187f6410a1b7f270858ce45c857)
+  chore: deprecate useFakeXMLHttpRequest and useFakeServer (Morgan Roderick)
+
+_Released by Morgan Roderick on 2025-03-23._
+
 ## 19.0.4
 
 The release script failed half-way in 19.0.3, so re-releasing.
