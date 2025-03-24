@@ -6,8 +6,6 @@ const createStub = require("../../lib/sinon/stub");
 const assert = referee.assert;
 const refute = referee.refute;
 const globalContext = typeof global !== "undefined" ? global : window;
-const globalXHR = globalContext.XMLHttpRequest;
-const globalAXO = globalContext.ActiveXObject;
 
 describe("issues", function () {
     beforeEach(function () {
@@ -258,56 +256,6 @@ describe("issues", function () {
         });
     });
 
-    describe("#1474 - promise library should be propagated through fakes and behaviors", function () {
-        let stub;
-
-        function makeAssertions(fake, expected) {
-            assert.isFunction(fake.then);
-            assert.isFunction(fake.tap);
-
-            assert.equals(fake.tap(), expected);
-        }
-
-        before(function () {
-            if (typeof Promise === "undefined") {
-                this.skip();
-            }
-        });
-
-        beforeEach(function () {
-            const promiseLib = {
-                resolve: function (value) {
-                    const promise = Promise.resolve(value);
-                    promise.tap = function () {
-                        return `tap ${value}`;
-                    };
-
-                    return promise;
-                },
-            };
-
-            stub = sinon.stub().usingPromise(promiseLib);
-
-            stub.resolves("resolved");
-        });
-
-        it("stub.onCall", function () {
-            stub.onSecondCall().resolves("resolved again");
-
-            makeAssertions(stub(), "tap resolved");
-            makeAssertions(stub(), "tap resolved again");
-        });
-
-        it("stub.withArgs", function () {
-            stub.withArgs(42).resolves("resolved again");
-            stub.withArgs(true).resolves("okay");
-
-            makeAssertions(stub(), "tap resolved");
-            makeAssertions(stub(42), "tap resolved again");
-            makeAssertions(stub(true), "tap okay");
-        });
-    });
-
     describe("#1456", function () {
         let sandbox;
 
@@ -423,20 +371,6 @@ describe("issues", function () {
         });
     });
 
-    describe("#1531 - some copied functions on root sinon module throw", function () {
-        it("should create a fake server without throwing", function () {
-            refute.exception(function () {
-                sinon.createFakeServer();
-            });
-        });
-
-        it("should create a fake server with clock without throwing", function () {
-            refute.exception(function () {
-                sinon.createFakeServerWithClock();
-            });
-        });
-    });
-
     describe("#1442 - callThrough with a mock expectation", function () {
         it("should call original method", function () {
             const foo = {
@@ -546,16 +480,6 @@ describe("issues", function () {
                 globalContext.setTimeout,
                 "fakeTimers restored",
             );
-        });
-    });
-
-    describe("#1840 - sinon.restore useFakeXMLHttpRequest", function () {
-        it("should restore XMLHttpRequest and ActiveXObject", function () {
-            sinon.useFakeXMLHttpRequest();
-            sinon.restore();
-
-            assert.same(globalContext.XMLHttpRequest, globalXHR);
-            assert.same(globalContext.ActiveXObject, globalAXO);
         });
     });
 

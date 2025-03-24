@@ -57,31 +57,28 @@ Removes option to pass a custom formatter.
 ## Sinon 7
 
 For users upgrading to Sinon 7 the only known breaking API change is that
-**negative ticks** are not allowed in `Sinon@7` due to updating to lolex 3
+**negative ticks** are not allowed in `sinon@7` due to updating to lolex 3
 internally. This means you cannot use negative values in
-sinon.useFakeTimers().tick();
+`sinon.useFakeTimers().tick()`;
 
-If you experience any issues moving from Sinon 6 to Sinon 7, please let us
-know! https://github.com/sinonjs/sinon/issues/new?template=Bug_report.md.
+If you experience any issues moving from Sinon 6 to Sinon 7, please
+[let us know](https://github.com/sinonjs/sinon/issues/new?template=Bug_report.md)!
 
 ## Sinon 6
 
 There should be no reason for any code changes with the new Sinon 6.
 Usually, `MAJOR` releases should come with breaking changes, but there are
 no known breaking changes in `sinon@6` at the time of this writing. We chose
-to release a new major version as a pragmatic solution to some noise related
-to releasing Sinon 5.1 https://github.com/sinonjs/sinon/pull/1829#issue-
-193284761, which featured some breaking changes related to ESM (which since
+to release a new major version as a [pragmatic solution to some noise related to releasing Sinon 5.1](https://github.com/sinonjs/sinon/pull/1829#issue-193284761),
+which featured some breaking changes related to ESM (which since
 has been resolved).
 
 If you should experience any issues moving from Sinon 5 to Sinon 6, please
-let us know!
-https://github.com/sinonjs/sinon/issues/new?template=Bug_report.md.
+[let us know](https://github.com/sinonjs/sinon/issues/new?template=Bug_report.md)!
 
 ## Sinon 5
 
-As with all `MAJOR` releases in semver http://semver.org/, there are
-breaking changes in `sinon@5`.
+As with all `MAJOR` releases in [semver](http://semver.org/), there are breaking changes in `sinon@5`.
 This guide will walk you through those changes.
 
 ## `spy.reset()` is removed, use `spy.resetHistory()`
@@ -108,41 +105,43 @@ Now would be a good opportunity to tidy up your tests.
 In earlier versions, you would manually have to create sandboxes and keep
 references to them in order to restore them.
 
+```js
 const sandbox = sinon.createSandbox();
 
 describe("myFunction", function () {
-afterEach(function () {
-sandbox.restore();
-});
+  afterEach(function () {
+    sandbox.restore();
+  });
 
-it("should make pie");
+  it("should make pie");
 });
+```
 
 ### From `sinon@5.0.0`
 
+```js
 describe("myFunction", function () {
-afterEach(function () {
-sinon.restore();
-});
+  afterEach(function () {
+    sinon.restore();
+  });
 
-it("should make pie");
+  it("should make pie");
 });
+```
 
 ## Sinon 4
 
-As with all `MAJOR` releases in semver http://semver.org/, there are
-breaking changes in `sinon@4`.
+As with all `MAJOR` releases in [semver](http://semver.org/), there are breaking changes in `sinon@4`.
 This guide will walk you through those changes.
 
 ## `sinon.stub(obj, 'nonExistingProperty')` - Throws
 
-Trying to stub a non-existing property will now fail, to ensure you are
-creating
-less error-prone tests https://github.com/sinonjs/sinon/pull/1557.
+Trying to stub a non-existing property will now fail, to ensure you are creating
+[less error-prone tests](https://github.com/sinonjs/sinon/pull/1557).
 
 ## Sinon 3
 
-As with all `MAJOR` releases in semver http://semver.org/, there are
+As with all `MAJOR` releases in [semver](http://semver.org/), there are
 breaking changes in `sinon@3`.
 This guide will walk you through those changes.
 
@@ -150,21 +149,23 @@ This guide will walk you through those changes.
 
 Please use `sinon.stub(obj, "method").callsFake(func)` instead.
 
+```js
 var stub = sinon.stub(obj, "stubbedMethod").callsFake(function () {
-return 42;
+  return 42;
 });
+```
 
-A codemod is available https://github.com/hurrymaplelad/sinon-codemod to
+A [codemod is available](https://github.com/hurrymaplelad/sinon-codemod) to
 upgrade your code
 
 ## `sinon.stub(object, property, value)` - Removed
 
 Calling `sinon.stub` with three arguments will throw an Error. This was
-deprecated with `sinon@2` and has been removed with `sinon@3`
+deprecated with `sinon@2` and has been removed with `sinon@3`.
 
 ## `sinon.useFakeTimers([now, ]prop1, prop2, ...)` - Removed
 
-`sinon.useFakeTimers()` signature has changed
+`sinon.useFakeTimers()` signature has changed.
 To define which methods to fake,
 please use `config.toFake`. Other options are now available when configuring
 `useFakeTimers`. Please consult the documentation for more information.
@@ -174,15 +175,13 @@ please use `config.toFake`. Other options are now available when configuring
 The changes in configuration for fake timers implicitly affect sandbox creation.
 If your config used to look
 like `{ useFaketimers: ["setTimeout", "setInterval"]}`, you
-will now need to change it to `{ useFaketimers: { toFake: ["setTimeout",
-"setInterval"] }}`.
+will now need to change it to `{ useFaketimers: { toFake: ["setTimeout", "setInterval"] }}`.
 
 ## `sandbox.stub(obj, 'nonExistingProperty')` - Throws
 
 Trying to stub a non-existing property will now fail to ensure you are
 creating
-less error-prone tests
-https://github.com/sinonjs/sinon/issues/1537#issuecomment-323948482.
+[less error-prone tests](https://github.com/sinonjs/sinon/issues/1537#issuecomment-323948482).
 
 ## Removal of internal helpers
 
@@ -224,36 +223,39 @@ configure `FakeServer`, `FakeXMLHttpRequest` and `FakeXDomainRequest`; these
 three functions now allow the logger to be configured on a per-use basis. In
 v1.x you may have written:
 
+```js
 sinon.log = function (msg) { // your logging impl };
+```
 
 You would now individually import and configure the utility upon creation:
 
+```js
 var sinon = require("sinon");
 
 var myFakeServer = sinon.fakeServer.create({
-logger: function (msg) { // your logging impl }
+ logger: function (msg) { // your logging impl }
 });
+```
 
 ## sinon.test, sinon.testCase and sinon.config Removed
 
 `sinon.test` and `sinon.testCase` have been extracted from the Sinon API and
-moved into their own node module, sinon-test
-https://www.npmjs.com/package/sinon-test. Please refer to the sinon-test
-README https://github.com/sinonjs/sinon-test/blob/master/README.md for
-migration examples.
+moved into their own node module, [sinon-test](https://www.npmjs.com/package/sinon-test).
+Please refer to the [sinon-test README](https://github.com/sinonjs/sinon-test/blob/master/README.md) for migration examples.
 
 ## stub.callsFake replaces stub(obj, 'meth', fn)
 
 `sinon.stub(obj, 'meth', fn)` return a spy, not a full stub. Behavior could
 not be redefined. `stub.callsFake`
-now returns a full stub. Here's a codemod script
-https://github.com/hurrymaplelad/sinon-codemod to help you migrate.
-See discussion https://github.com/sinonjs/sinon/pull/823.
+now returns a full stub. Here's a [codemod script](https://github.com/hurrymaplelad/sinon-codemod) to help you migrate.
+See [discussion](https://github.com/sinonjs/sinon/pull/823).
 
+```js
 // Old
 sinon.stub(obj, "meth", fn);
 // New
 sinon.stub(obj, "meth").callsFake(fn);
+```
 
 ## stub.resetHistory replaces stub.reset
 
@@ -262,10 +264,12 @@ Previously `stub.reset()` only reset the history of the stub. Stubs now have
 separate methods for resetting the history and the behaviour. To mimic the
 old behaviour replace all `stub.reset()` calls with `stub.resetHistory()`.
 
+```js
 // Old
 stub.reset();
 // New
 stub.resetHistory();
+```
 
 ## Deprecation of internal helpers
 

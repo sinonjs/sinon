@@ -1,9 +1,6 @@
 - title: How to Test NodeJS Apps using Mocha, Chai and SinonJS
   url: https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-chai-and-sinonjs
 
-- title: How to test an Ajax request using Sinon's fake XMLHttpRequest
-  url: https://codeutopia.net/blog/2015/03/21/unit-testing-ajax-requests-with-mocha/
-
 - title: How to stub or mock complex objects, such as DOM objects
   url: https://codeutopia.net/blog/2016/05/23/sinon-js-quick-tip-how-to-stubmock-complex-objects-such-as-dom-objects/
 

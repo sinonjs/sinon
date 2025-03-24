@@ -67,12 +67,11 @@ The `sinon.createSandbox(config)` method is often an integration feature, and ca
 
 The default sandbox config has faking of XHR and timers turned off.
 
-To get a full sandbox with stubs, spies, etc. **and** fake timers and servers, you explicitly enable the additional features:
+To get a full sandbox with stubs, spies, etc. **and** fake timers, you explicitly enable the additional features:
 
 ```javascript
 const sandbox = sinon.createSandbox({
   useFakeTimers: true,
-  useFakeServer: true,
 });
 ```
 
@@ -85,7 +84,7 @@ See the example further down the page.
 
 ##### `properties`
 
-Which properties to inject into the facade object. By default empty! Note that only naming "server" here is not sufficient to have a `server` property show up in the target object, you also have to set `useFakeServer` to `true`.
+Which properties to inject into the facade object. By default empty!
 
 The list of properties that can be injected are the ones exposed by the object
 returned by the function `inject`:
@@ -104,9 +103,6 @@ console.log(Object.keys(sinon.inject(obj)))
     // If enabled:
     // sinon.useFakeTimers();
     "clock",
-    // sinon.useFakeServer();
-    "server",
-    "requests",
 ```
 
 ##### `assertOptions`
@@ -132,19 +128,6 @@ This is equivalent to specifying all the available properties in `properties` wh
 If set to `true`, the sandbox will have a `clock` property. You can optionally pass
 in a configuration object that follows the [specification for fake timers](../fake-timers),
 such as `{ toFake: ["setTimeout", "setInterval"] }`.
-
-##### `useFakeServer`
-
-If `true`, `server` and `requests` properties are added to the sandbox. Can
-also be an object to use for fake server. The default one is `sinon.fakeServer`,
-but if you're using jQuery 1.3.x or some other library that does not set the XHR's
-`onreadystatechange` handler, you might want to do:
-
-```javascript
-sinon.createSandbox({
-  useFakeServer: sinon.fakeServerWithClock,
-});
-```
 
 ##### Exposing sandbox example
 
@@ -319,26 +302,6 @@ Works exactly like `sinon.mock`
 Fakes timers and binds the `clock` object to the sandbox such that it too is restored when calling `sandbox.restore()`.
 
 Access through `sandbox.clock`.
-
-#### `sandbox.useFakeXMLHttpRequest();`
-
-Fakes XHR and binds the resulting object to the sandbox such that it too is restored when calling `sandbox.restore()`.
-
-Since 2.x, you can no longer access requests through `sandbox.requests` - use `sandbox.useFakeServer` to do this. This function maps to `sinon.useFakeXMLHttpRequest`, only with sandboxing.
-
-#### `sandbox.useFakeServer();`
-
-Fakes XHR and binds a server object to the sandbox such that it too is restored when calling `sandbox.restore()`.
-
-Access requests through `sandbox.requests` and server through `sandbox.server`
-
-#### `sandbox.usingPromise(promiseLibrary);`
-
-Causes all stubs and mocks created from the sandbox to return promises using a specific
-Promise library instead of the global one when using `stub.rejects` or
-`stub.resolves`. Returns the stub to allow chaining.
-
-_Since `sinon@2.0.0`_
 
 #### `sandbox.restore();`
 
