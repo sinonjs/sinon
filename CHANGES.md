@@ -1,5 +1,16 @@
 # Changes
 
+## 20.0.0
+
+- [`b6daed26`](https://github.com/sinonjs/sinon/commit/b6daed26cd4ba2c045d3d2fc2cadbdcbf43c61e6)
+  chore!: remove usingPromise (Morgan Roderick)
+  > Everyone should be using native promises by now, or should know how to stub natives
+- [`95d4b8fc`](https://github.com/sinonjs/sinon/commit/95d4b8fc89316c7af82c02750e8ca71e5bc76d07)
+  chore!: remove fakeXMLHttpRequest and fakeServer (Morgan Roderick)
+  > BREAKING CHANGE: remove fakeXMLHttpRequest and fakeServer from the API
+
+_Released by Morgan Roderick on 2025-03-24._
+
 ## 19.0.5
 
 - [`67d19ff0`](https://github.com/sinonjs/sinon/commit/67d19ff01541fd76dceb1b753e5110b4375fb819)
