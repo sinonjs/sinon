@@ -89,7 +89,7 @@
     "@babel/core": "^7.25.2",
     "@mochify/cli": "^0.4.1",
     "@mochify/driver-puppeteer": "^0.4.0",
-    "@mochify/driver-webdriver": "^0.1.2",
+    "@mochify/driver-webdriver": "^0.2.1",
     "@sinonjs/eslint-config": "^5.0.3",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^11.0.1",
