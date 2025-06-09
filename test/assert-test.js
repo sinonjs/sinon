@@ -57,14 +57,6 @@ describe("assert", function () {
     });
 
     describe(".fail", function () {
-        beforeEach(function () {
-            this.exceptionName = sinonAssert.failException;
-        });
-
-        afterEach(function () {
-            sinonAssert.failException = this.exceptionName;
-        });
-
         it("can be configured to limit the error message length", function () {
             const customAssert = sinonAssert.createAssertObject({
                 shouldLimitAssertionLogs: true,
@@ -85,17 +77,6 @@ describe("assert", function () {
                 {
                     name: "AssertError",
                 },
-            );
-        });
-
-        it("throws configured exception type", function () {
-            sinonAssert.failException = "CustomError";
-
-            assert.exception(
-                function () {
-                    sinonAssert.fail("Some message");
-                },
-                { name: "CustomError" },
             );
         });
     });
@@ -1352,7 +1333,6 @@ describe("assert", function () {
             sinonAssert.expose(test);
 
             assert.isFunction(test.fail);
-            assert.isString(test.failException);
             assert.isFunction(test.assertCalled);
             assert.isFunction(test.assertCalledOn);
             assert.isFunction(test.assertCalledWith);
@@ -1367,7 +1347,6 @@ describe("assert", function () {
                 includeFail: false,
             });
 
-            assert.equals(typeof failException, "undefined");
             /*eslint-disable no-undef*/
             assert.isFunction(assertCalled);
             assert.isFunction(assertCalledOn);
@@ -1401,7 +1380,6 @@ describe("assert", function () {
             sinonAssert.expose(test, { prefix: "" });
 
             assert.isFunction(test.fail);
-            assert.isString(test.failException);
             assert.isFunction(test.called);
             assert.isFunction(test.calledOn);
             assert.isFunction(test.calledWith);
