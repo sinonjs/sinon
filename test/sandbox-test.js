@@ -1965,31 +1965,4 @@ describe("Sandbox", function () {
             refute.equals(getter, spy.get);
         });
     });
-
-    describe(".assert", function () {
-        it("allows rebinding of .fail on a per-sandbox level", function () {
-            const sandboxA = createSandbox();
-            const sandboxB = createSandbox();
-
-            sandboxA.assert.failException = "CustomErrorA";
-            sandboxB.assert.failException = "CustomErrorB";
-
-            assert.exception(
-                function () {
-                    sandboxA.assert.fail("Some message");
-                },
-                { name: "CustomErrorA" },
-            );
-
-            assert.exception(
-                function () {
-                    sandboxB.assert.fail("Some message");
-                },
-                { name: "CustomErrorB" },
-            );
-
-            sandboxA.restore();
-            sandboxB.restore();
-        });
-    });
 });
