@@ -1,5 +1,20 @@
 # Changes
 
+## 21.0.0
+
+- [`fd10f13f`](https://github.com/sinonjs/sinon/commit/fd10f13f3fed7853dd489dd9e84f28c22df715c2)
+  chore!: remove assert.failException property (#2659) (Morgan Roderick)
+  > This was used for allowing customisation of the thrown error between
+  > sandboxes and for customisation for integrations (most likely from the
+  > days of BusterJS).
+  >
+  > To my knowledge and what I've been able to find on GitHub, this has
+  > never had any _production_ use by end users.
+  >
+  > BREAKING CHANGE: this removes assert.failException from the API
+
+_Released by Morgan Roderick on 2025-06-13._
+
 ## 20.0.0
 
 - [`b6daed26`](https://github.com/sinonjs/sinon/commit/b6daed26cd4ba2c045d3d2fc2cadbdcbf43c61e6)

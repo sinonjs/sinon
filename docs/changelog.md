@@ -6,6 +6,30 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 21.0.0
+
+- [`fd10f13f`](https://github.com/sinonjs/sinon/commit/fd10f13f3fed7853dd489dd9e84f28c22df715c2)
+  chore!: remove assert.failException property (#2659) (Morgan Roderick)
+  > This was used for allowing customisation of the thrown error between
+  > sandboxes and for customisation for integrations (most likely from the
+  > days of BusterJS).
+  >
+  > To my knowledge and what I've been able to find on GitHub, this has
+  > never had any _production_ use by end users.
+  >
+  > BREAKING CHANGE: this removes assert.failException from the API
+- [`c7202351`](https://github.com/sinonjs/sinon/commit/c7202351b62f171169ea1c0c6b7cb94be6a2e413)
+  Revert "chore: npm audit" (Morgan Roderick)
+  > This reverts commit 824da531173204e4106bf15ab2677b6193802893.
+- [`824da531`](https://github.com/sinonjs/sinon/commit/824da531173204e4106bf15ab2677b6193802893)
+  chore: npm audit (Morgan Roderick)
+- [`14edd78e`](https://github.com/sinonjs/sinon/commit/14edd78eaa9cc80c3810b8b020b973ddff6dfda2)
+  chore: upgrade esbuild (Morgan Roderick)
+- [`1ac5af9c`](https://github.com/sinonjs/sinon/commit/1ac5af9c24a6a66fbdbba8d4ceb9399f6272baa3)
+  npm audit (Morgan Roderick)
+
+_Released by Morgan Roderick on 2025-06-13._
+
 ## 20.0.0
 
 - [`b6daed26`](https://github.com/sinonjs/sinon/commit/b6daed26cd4ba2c045d3d2fc2cadbdcbf43c61e6)
