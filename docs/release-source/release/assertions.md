@@ -87,6 +87,12 @@ Passes if `spy` was called with the provided arguments.
 
 It's possible to assert on a dedicated spy call: `sinon.assert.calledWith(spy.firstCall, arg1, arg2, ...);`.
 
+#### `sinon.assert.calledOnceWith(spyOrSpyCall, arg1, arg2, ...);`
+
+Passes if `spy` was called once and only once with the provided arguments.
+
+It's possible to assert on a dedicated spy call: `sinon.assert.calledOnceWith(spy.firstCall, arg1, arg2, ...);`.
+
 #### `sinon.assert.alwaysCalledWith(spy, arg1, arg2, ...);`
 
 Passes if `spy` was always called with the provided arguments.
