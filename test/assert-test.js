@@ -841,6 +841,109 @@ describe("assert", function () {
             });
         });
 
+        describe(".calledOnceWith", function () {
+            // eslint-disable-next-line mocha/no-setup-in-describe
+            requiresValidFake("calledOnceWith");
+
+            it("fails when method fails", function () {
+                const object = {};
+                sinonStub(this.stub, "calledOnceWith").returns(false);
+                const stub = this.stub;
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub, object, 1);
+                });
+
+                assert(
+                    this.stub.calledOnceWith.calledOnceWithExactly(object, 1),
+                );
+                assert(sinonAssert.fail.called);
+            });
+
+            it("passes when method doesn't fail", function () {
+                const object = {};
+                sinonStub(this.stub, "calledOnceWith").returns(true);
+                const stub = this.stub;
+
+                refute.exception(function () {
+                    sinonAssert.calledOnceWith(stub, object, 1);
+                });
+
+                assert(
+                    this.stub.calledOnceWith.calledOnceWithExactly(object, 1),
+                );
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("calls pass callback", function () {
+                this.stub("yeah");
+                sinonAssert.calledOnceWith(this.stub, "yeah");
+
+                assert(sinonAssert.pass.calledOnce);
+                assert(sinonAssert.pass.calledWith("calledOnceWith"));
+            });
+
+            it("fails when method does not exist", function () {
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith();
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method is not stub", function () {
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(function () {
+                        return;
+                    });
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method was not called", function () {
+                const stub = this.stub;
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when called with more than one argument", function () {
+                const stub = this.stub;
+                stub();
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub, 1);
+                });
+            });
+
+            it("passes when method was called", function () {
+                const stub = this.stub;
+                stub();
+
+                refute.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("fails when method was called more than once", function () {
+                const stub = this.stub;
+                stub();
+                stub();
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+        });
+
         describe(".calledOnceWithExactly", function () {
             // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledOnceWithExactly");
