@@ -8,7 +8,7 @@
 
 const shell = require("shelljs");
 const readline = require("readline");
-const fs = require("fs");
+const fs = require("node:fs");
 const root = `${__dirname}/..`;
 const sourceFile = `${root}/node_modules/@sinonjs/eslint-config/.browserslistrc`;
 const compatibilityPath = `${root}/COMPATIBILITY.md`;

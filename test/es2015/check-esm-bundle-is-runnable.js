@@ -32,11 +32,11 @@ const sinonModule = fs.readFileSync("./sinon-esm.js");
 
 async function evaluatePageContent() {
     const browser = await puppeteer.launch({
-        // https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
+        // https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
         args: ["--no-sandbox"],
         // allow overriding chrome path
         executablePath: process.env.SINON_CHROME_BIN || null,
-        headless: "new",
+        headless: true,
     });
     const page = await browser.newPage();
 
@@ -49,6 +49,10 @@ async function evaluatePageContent() {
         browser.close();
         process.exit(1);
     }
+
+    page.on("pageerror", function (err) {
+        throw err;
+    });
 
     page.on("error", function (err) {
         throw err;
