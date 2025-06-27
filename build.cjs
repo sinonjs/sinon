@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 "use strict";
 /* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
-const fs = require("fs");
-const browserify = require("browserify");
+const fs = require("node:fs");
+const esbuild = require("esbuild");
+const { umdWrapper } = require("esbuild-plugin-umd-wrapper");
 const pkg = require("./package.json");
 const sinon = require("./lib/sinon");
 
@@ -23,16 +24,27 @@ try {
  * @param config
  * @param done
  */
-function makeBundle(entryPoint, config, done) {
-    browserify(entryPoint, config)
-        .exclude("timers")
-        .exclude("timers/promises")
-        .bundle(function (err, buffer) {
-            if (err) {
-                throw err;
-            }
-            done(buffer.toString());
-        });
+async function makeBundle(entryPoint, config, done) {
+    const plugins = config.standalone ? [umdWrapper({ libraryName: config.standalone })] : [];
+
+    const context = await esbuild.context({
+        absWorkingDir: process.cwd(),
+        bundle: true,
+        color: true,
+        entryPoints: [entryPoint],
+        external: ["timers", "timers/promises"],
+        minify: false,
+        plugins,
+        sourcemap: config.debug === true ? "inline" : false,
+        write: false,
+    });
+
+    const { outputFiles } = await context.rebuild();
+    const js = outputFiles[0].text;
+
+    context.dispose();
+
+    done(js);
 }
 
 makeBundle(
