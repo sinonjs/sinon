@@ -1,8 +1,8 @@
 /* eslint-disable no-process-exit, jsdoc/require-jsdoc */
 const puppeteer = require("puppeteer");
 
-const http = require("http");
-const fs = require("fs");
+const http = require("node:http");
+const fs = require("node:fs");
 const port = 3876;
 
 const htmlWithModuleScript = `
