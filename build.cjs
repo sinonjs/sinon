@@ -25,17 +25,26 @@ try {
  * @param done
  */
 async function makeBundle(entryPoint, config, done) {
-    const plugins = config.standalone ? [umdWrapper({ libraryName: config.standalone })] : [];
+    const plugins = config.standalone
+        ? [umdWrapper({ libraryName: config.standalone })]
+        : [];
 
     const context = await esbuild.context({
         absWorkingDir: process.cwd(),
+        banner: {
+            js: preamble,
+        },
         bundle: true,
         color: true,
+        define: { "process.env.NODE_DEBUG": '""' },
         entryPoints: [entryPoint],
-        external: ["timers", "timers/promises"],
+        external: ["timers", "timers/promises", "fs"],
+        format: config.format,
         minify: false,
+        platform: config.platform || "browser",
         plugins,
         sourcemap: config.debug === true ? "inline" : false,
+        // target: "es2022",
         write: false,
     });
 
@@ -52,46 +61,41 @@ makeBundle(
     {
         // Add inline source maps to the default bundle
         debug: true,
+        format: "cjs",
         // Create a UMD wrapper and install the "sinon" global:
         standalone: "sinon",
-        // Do not detect and insert globals:
-        detectGlobals: false,
     },
     function (bundle) {
-        var script = preamble + bundle;
-        fs.writeFileSync("pkg/sinon.js", script); // WebWorker can only load js files
+        fs.writeFileSync("pkg/sinon.js", bundle); // WebWorker can only load js files
     },
 );
 
 makeBundle(
     "./lib/sinon.js",
     {
+        format: "cjs",
         // Create a UMD wrapper and install the "sinon" global:
         standalone: "sinon",
-        // Do not detect and insert globals:
-        detectGlobals: false,
     },
     function (bundle) {
-        var script = preamble + bundle;
-        fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", script);
+        fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", bundle);
     },
 );
 
 makeBundle(
     "./lib/sinon-esm.js",
     {
-        // Do not detect and insert globals:
-        detectGlobals: false,
+        format: "esm",
     },
     function (bundle) {
         var intro = "let sinon;";
-        var outro = `\nexport default sinon;\n${Object.keys(sinon)
+        var outro = `\n${Object.keys(sinon)
             .map(function (key) {
-                return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
+                return `const _${key} = sinon_esm_default.${key};\nexport { _${key} as ${key} };`;
             })
             .join("\n")}`;
 
-        var script = preamble + intro + bundle + outro;
+        var script = intro + bundle + outro;
         fs.writeFileSync("pkg/sinon-esm.js", script);
     },
 );
