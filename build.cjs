@@ -91,7 +91,7 @@ makeBundle(
         var intro = "let sinon;";
         var outro = `\n${Object.keys(sinon)
             .map(function (key) {
-                return `const _${key} = sinon_esm_default.${key};\nexport { _${key} as ${key} };`;
+                return `const _${key} = require_sinon().${key};\nexport { _${key} as ${key} };`;
             })
             .join("\n")}`;
 
