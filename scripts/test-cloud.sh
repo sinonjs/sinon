@@ -1,5 +1,7 @@
 #!/bin/sh
 
-BROWSER_NAME=MicrosoftEdge mochify -C mochify.webdriver.cjs \
-&& BROWSER_NAME=chrome mochify -C mochify.webdriver.cjs \
-&& BROWSER_NAME=firefox mochify -C mochify.webdriver.cjs
+for browser in MicrosoftEdge chrome firefox; do
+    echo Running tests using $browser in the Sauce Labs cloud
+    BROWSER_NAME=$browser mochify -C mochify.webdriver.cjs
+done
+
