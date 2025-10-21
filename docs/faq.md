@@ -33,8 +33,8 @@ This error occurs when Sinon tries to stub or spy on a property that has been de
 
    ```javascript
    // Instead of this:
-   import { toBeMocked } from './module';
-   sinon.stub(module, 'toBeMocked'); // This might fail
+   import { toBeMocked } from "./module";
+   sinon.stub(module, "toBeMocked"); // This might fail
 
    // Do this:
    function myFunction(dependency = toBeMocked) {
@@ -52,8 +52,8 @@ This error occurs when Sinon tries to stub or spy on a property that has been de
 
    ```javascript
    // In your test
-   const module = await import('./module');
-   sinon.stub(module, 'toBeMocked');
+   const module = await import("./module");
+   sinon.stub(module, "toBeMocked");
    ```
 
 4. **Restructure your code**: Consider whether the code under test can be refactored to be more testable.
