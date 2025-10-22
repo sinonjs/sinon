@@ -780,7 +780,7 @@ describe("issues", function () {
             const instance =
                 createInstanceFromClassWithReadOnlyPropertyDescriptor();
 
-            // per #2491 this throws 'TypeError: Descriptor for property aMethod is non-configurable and non-writable'
+            // per #2491 this throws 'TypeError: The descriptor for property `aMethod` is non-configurable and non-writable. Sinon cannot stub properties that are immutable. See https://sinonjs.org/faq#property-descriptor-errors for help fixing this issue.'
             // that makes sense for descriptors taken from the object, but not its prototype, as we are free to change
             // the latter when setting it
             refute.exception(() => {
