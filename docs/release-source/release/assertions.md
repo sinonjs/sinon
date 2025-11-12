@@ -6,7 +6,7 @@ breadcrumb: assertions
 
 Sinon.JS ships with a set of assertions that mirror most behavior verification methods and properties on spies and stubs. The advantage of using the assertions is that failed expectations on stubs and spies can be expressed directly as assertion failures with detailed and helpful error messages.
 
-To make sure assertions integrate nicely with your test framework, you should customize either `sinon.assert.fail` or `sinon.assert.failException` and look into `sinon.assert.expose` and `sinon.assert.pass`.
+To make sure assertions integrate nicely with your test framework, you should customize `sinon.assert.fail` and look into `sinon.assert.expose` and `sinon.assert.pass`.
 
 The assertions can be used with either spies or stubs.
 
@@ -29,13 +29,7 @@ The assertions can be used with either spies or stubs.
 
 Every assertion fails by calling this method.
 
-By default it throws an error of type `sinon.assert.failException`.
-
-If the test framework looks for assertion errors by checking for a specific exception, you can override the kind of exception thrown. If that does not fit with your testing framework of choice, override the `fail` method to do the right thing.
-
-#### `sinon.assert.failException;`
-
-Defaults to `AssertError`.
+If your testing framework of choice looks for assertion errors by checking for a specific exception, you can override the `fail` method to do the right thing.
 
 #### `sinon.assert.pass(assertion);`
 
@@ -197,6 +191,6 @@ The method accepts an optional options object with two options.
     <dd>is a prefix to give assertions. By default it is "assert", so <code>sinon.assert.called</code> becomes <code>target.assertCalled</code>. By passing a blank string, the exposed method will be <code>target.called</code>.</dd>
 
     <dt>includeFail</dt>
-    <dd><code>true</code> by default, copies over the <code>fail</code> and <code>failException</code> properties</dd>
+    <dd><code>true</code> by default, copies over the <code>fail</code> property</dd>
 
 </dl>
