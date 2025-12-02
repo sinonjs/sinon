@@ -1766,6 +1766,17 @@ describe("Sandbox", function () {
 
             assert.isUndefined(o.foo.callCount);
         });
+
+        it("restores all fields of a stubbed function", function () {
+            const sandbox = new Sandbox();
+            const o = function () {};
+            o.foo = function () {};
+
+            sandbox.stub(o);
+            sandbox.restore();
+
+            assert.isUndefined(o.foo.callCount);
+        });
     });
 
     describe("configurable sandbox", function () {
