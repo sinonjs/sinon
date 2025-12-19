@@ -2,11 +2,11 @@
 
 This file is the canonical resource for compatibility goals for the libraries that make up Sinon.JS.
 
-## Moving target: ES2017+
+## Moving target: ES2023+
 
-Sinon has historically been written as [ES5][es5], but starting from Sinon 10 (March 2021) we made the breaking change to allow more modern ECMAScript versions, starting with ECMAScript [2017][es2017]. This is not a fixed level: it will change in time without us updating it here. The source version requires no transpiler or polyfills in supporting runtimes.
+Sinon has historically been written as [ES5][es5], but starting from Sinon 10 (March 2021) we made the breaking change to allow more modern ECMAScript versions, starting with ECMAScript [2017][es2017]. This is not a fixed level: it will change in time without us updating it here (though we might, from time to time). The source version requires no transpiler or polyfills in supporting runtimes.
 
-For legacy runtimes, a transpiler can be used by dependent projects., but use of newer APIs might break. If you need to support older browsers, have a look at Sinon 9.
+For legacy runtimes, a transpiler can be used by dependent projects, but use of newer APIs might break. If you need to support older browsers, have a look at Sinon 9.
 
 ## Runtimes
 
