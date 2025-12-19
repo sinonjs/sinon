@@ -6,27 +6,31 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 21.0.1
+
+- [`456a65c2`](https://github.com/sinonjs/sinon/commit/456a65c2813533fa4e946b9e707baf798a679ad3)
+  Update dependencies - except @sinonjs/samsam (#2669) (Carl-Erik Kopseng)
+- [`f04f3eb1`](https://github.com/sinonjs/sinon/commit/f04f3eb108f3d9b0402e42281b54d9057211bf16)
+  Fix issue 2618 - Remove browserify in favor of esbuild (#2661) (Artur Parkhisenko)
+- [`48b69df2`](https://github.com/sinonjs/sinon/commit/48b69df24c97ef316ebc3835418b3459337c325a)
+  fix(docs): remove `assert.failException` from documentation (#2666) (Steffen Schroeder)
+- [`13b27ccc`](https://github.com/sinonjs/sinon/commit/13b27cccd066a1bc75cfdcd207f1c8c44ab7b049)
+  Fix sandbox restore not handling stubbed functions (#2667) (thamion)
+- [`ae9e09ac`](https://github.com/sinonjs/sinon/commit/ae9e09ac00799f923a8e6b559ead720999a0e865)
+  Update compatibility target to ES2023 (Carl-Erik Kopseng)
+  > Updated compatibility target from ES2017 to ES2023 and clarified the note on breaking changes.
+- [`26055043`](https://github.com/sinonjs/sinon/commit/26055043212a03afeb2914e16ea32cb7f0a3ac44)
+  Improve error message for immutable descriptors (#2664) (Stuart Dotson)
+- [`80fa9a5b`](https://github.com/sinonjs/sinon/commit/80fa9a5b8b605eb141e556ec5c8e7cd164ca9c5c)
+  Also mirror the calledOnceWith assertion (#2660) (Benedikt Meurer)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2025-12-19._
+
 ## 21.0.0
 
 - [`fd10f13f`](https://github.com/sinonjs/sinon/commit/fd10f13f3fed7853dd489dd9e84f28c22df715c2)
   chore!: remove assert.failException property (#2659) (Morgan Roderick)
-  > This was used for allowing customisation of the thrown error between
-  > sandboxes and for customisation for integrations (most likely from the
-  > days of BusterJS).
-  >
-  > To my knowledge and what I've been able to find on GitHub, this has
-  > never had any _production_ use by end users.
-  >
   > BREAKING CHANGE: this removes assert.failException from the API
-- [`c7202351`](https://github.com/sinonjs/sinon/commit/c7202351b62f171169ea1c0c6b7cb94be6a2e413)
-  Revert "chore: npm audit" (Morgan Roderick)
-  > This reverts commit 824da531173204e4106bf15ab2677b6193802893.
-- [`824da531`](https://github.com/sinonjs/sinon/commit/824da531173204e4106bf15ab2677b6193802893)
-  chore: npm audit (Morgan Roderick)
-- [`14edd78e`](https://github.com/sinonjs/sinon/commit/14edd78eaa9cc80c3810b8b020b973ddff6dfda2)
-  chore: upgrade esbuild (Morgan Roderick)
-- [`1ac5af9c`](https://github.com/sinonjs/sinon/commit/1ac5af9c24a6a66fbdbba8d4ceb9399f6272baa3)
-  npm audit (Morgan Roderick)
 
 _Released by Morgan Roderick on 2025-06-13._
 
