@@ -241,6 +241,26 @@ const defaultBehaviors = {
 
     callThrough: function callThrough(fake) {
         fake.callsThrough = true;
+
+        fake.callArgAt = undefined;
+        fake.callsThroughWithNew = false;
+        fake.exception = undefined;
+        fake.exceptionCreator = undefined;
+        fake.fakeFn = undefined;
+        fake.reject = false;
+        fake.resolve = false;
+        fake.resolveArgAt = undefined;
+        fake.resolveThis = false;
+        fake.returnArgAt = undefined;
+        fake.returnThis = false;
+        fake.returnValue = undefined;
+        fake.throwArgAt = undefined;
+
+        fake.callArgProp = undefined;
+        fake.callbackArguments = [];
+        fake.callbackContext = undefined;
+        fake.callbackAsync = false;
+        fake.returnValueDefined = false;
     },
 
     callThroughWithNew: function callThroughWithNew(fake) {
