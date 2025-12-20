@@ -865,4 +865,209 @@ describe("issues", function () {
         assert(cb.calledOnce);
         assert.equals(cb.firstCall.args, ["Hello"]);
     });
+
+
+    describe("#2668 - callThrough", function () {
+        describe("callThrough", function () {
+            it("should clear throws(exception)", function () {
+                const instance = {
+                    foo() { return "ok"; }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                const expectedError = new Error("boom");
+                stub.throws(expectedError);
+
+                assert.exception(
+                    () => instance.foo(),
+                    err => err === expectedError,
+                );
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(instance.foo(), "ok");
+            });
+
+            it("should clear throws(exceptionFactory)", function () {
+                const instance = {
+                    foo() { return "ok"; }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                const expectedError = new Error("boom");
+                stub.throws(function () { throw expectedError; });
+
+                assert.exception(
+                    () => instance.foo(),
+                    err => err === expectedError,
+                );
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(instance.foo(), "ok");
+            });
+
+            it("should clear throwsArg", function () {
+                const instance = {
+                    foo() { return "ok"; }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.throwsArg(0);
+
+                const expectedError = new Error("boom");
+                assert.exception(
+                    () => instance.foo(expectedError),
+                    err => err === expectedError,
+                );
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(
+                    instance.foo(new Error("Should not be thrown")),
+                    "ok",
+                );
+            });
+
+            it("should clear returnsThis", function () {
+                let called = false;
+                const instance = { foo() { called = true; return this; } };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.returnsThis();
+
+                assert.equals(instance.foo(), instance);
+                assert.equals(called, false);
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.same(instance.foo(), instance);
+                assert.equals(called, true);
+            });
+
+            it("should clear resolves", async function () {
+                const instance = { foo() { return Promise.resolve("bar"); } };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.resolves("baz");
+
+                assert.equals(await instance.foo(), "baz");
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(await instance.foo(), "bar");
+            });
+
+            it("should clear resolvesArg", async function () {
+                const instance = {
+                    foo(a) { return Promise.resolve(a); }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.resolvesArg(1);
+
+                assert.equals(await instance.foo("a", "b"), "b");
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(await instance.foo("a", "b"), "a");
+            });
+
+            it("should clear resolvesThis", async function () {
+                const instance = {
+                    callCount: 0,
+                    foo() { this.callCount += 1; return Promise.resolve(this); },
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.resolvesThis();
+
+                assert.same(await instance.foo(), instance);
+                assert.equals(instance.callCount, 0);
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.same(await instance.foo(), instance);
+                assert.equals(instance.callCount, 1);
+            });
+
+            it("should clear rejects", async function () {
+                const instance = {
+                    foo() { return Promise.resolve("ok"); },
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                const error = new Error("nope");
+                stub.rejects(error);
+
+                await assert.rejects(instance.foo(), error);
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(await instance.foo(), "ok");
+            });
+
+            it("should clear returnsArg", function () {
+                const instance = {
+                    foo(a) { return `ok ${a}`; }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.returnsArg(0);
+
+                assert.equals(instance.foo("x"), "x");
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(instance.foo("z"), "ok z");
+            });
+
+            it("should clear callsFake", function () {
+                const instance = { foo() { return "orig"; } };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.callsFake(function () { return "fake"; });
+
+                assert.equals(instance.foo(), "fake");
+
+                stub.callThrough();
+
+                // Issue caused the stub to still apply.
+                assert.equals(instance.foo(), "orig");
+            });
+
+            it("should clear callsArg/yield stuff", function () {
+                const instance = {
+                    foo(cbk) {
+                        cbk();
+                        return "original";
+                    }
+                };
+
+                const stub = sinon.stub(instance, "foo");
+                stub.callsArg(0);
+                stub.returns("fake");
+
+                const cbkStub = sinon.stub();
+                assert.same(instance.foo(cbkStub), "fake");
+                assert.equals(cbkStub.callCount, 1);
+
+                stub.callThrough();
+
+                const cbkStub2 = sinon.stub();
+                assert.same(instance.foo(cbkStub2), "original");
+                // Issue was causing the callback to be called once by the function, and once by the stub.
+                assert.equals(cbkStub2.callCount, 1);
+            });
+        });
+    });
 });
