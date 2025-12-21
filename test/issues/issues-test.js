@@ -1069,5 +1069,109 @@ describe("issues", function () {
                 assert.equals(cbkStub2.callCount, 1);
             });
         });
+
+        describe("callThroughWithNew", function () {
+            it("should clear throws(exception)", async function () {
+                class OriginalClass {
+                    constructor() {
+                        this.foo = "original";
+                    }
+                }
+
+                const instance = { MyClass: OriginalClass };
+
+                const stub = sinon.stub(instance, "MyClass");
+                const expectedError = new Error("boom");
+                stub.throws(expectedError);
+                assert.exception(
+                    () => new instance.MyClass(),
+                    err => err === expectedError,
+                );
+
+                stub.callThroughWithNew();
+
+                // Issue caused the stub to still apply.
+                const obj = new instance.MyClass();
+                assert.equals(obj.foo, "original")
+            });
+
+            it("should clear throws(exceptionFactory)", function () {
+                class OriginalClass {
+                    constructor() {
+                        this.foo = "original";
+                    }
+                }
+
+                const instance = { MyClass: OriginalClass };
+
+                const stub = sinon.stub(instance, "MyClass");
+                const expectedError = new Error("boom");
+                stub.throws(function () { throw expectedError; });
+                assert.exception(
+                    () => new instance.MyClass(),
+                    err => err === expectedError,
+                );
+
+                stub.callThroughWithNew();
+
+                // Issue caused the stub to still apply.
+                const obj = new instance.MyClass();
+                assert.equals(obj.foo, "original")
+            });
+
+            it("should clear throwsArg", function () {
+                class OriginalClass {
+                    constructor() {
+                        this.foo = "original";
+                    }
+                }
+
+                const instance = { MyClass: OriginalClass };
+
+                const stub = sinon.stub(instance, "MyClass");
+                stub.throwsArg(0);
+                const expectedError = new Error("boom");
+                assert.exception(
+                    () => new instance.MyClass(expectedError),
+                    err => err === expectedError,
+                );
+
+                stub.callThroughWithNew();
+
+                // Issue caused the stub to still apply.
+                assert.equals(
+                    new instance.MyClass(new Error("Should not be thrown")).foo,
+                    "original",
+                );
+            });
+
+            it("should clear callsArg/yield stuff", function () {
+                class OriginalClass {
+                    constructor(cbk) {
+                        this.foo = "original";
+                        cbk();
+                    }
+                }
+
+                const instance = { MyClass: OriginalClass };
+
+                const stub = sinon.stub(instance, "MyClass");
+
+                stub.callsArg(0);
+                const dummyInstance = { foo: "fake" };
+                stub.returns(dummyInstance);
+
+                const cbkStub = sinon.stub();
+                assert.same(new instance.MyClass(cbkStub), dummyInstance);
+                assert.equals(cbkStub.callCount, 1);
+
+                stub.callThroughWithNew();
+
+                const cbkStub2 = sinon.stub();
+                assert.same(new instance.MyClass(cbkStub2).foo, "original");
+                // Issue was causing the callback to be called once by the constructor, and once by the stub.
+                assert.equals(cbkStub2.callCount, 1);
+            });
+        });
     });
 });
