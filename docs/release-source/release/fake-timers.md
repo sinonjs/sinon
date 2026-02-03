@@ -13,7 +13,7 @@ or `Date.now();` (if supported by the browser).
 
 > The separate Fake Timers project is constantly being added to and updated, and we have a hard time keeping these docs in sync! Therefore it might be better to just refer directly to the [fake-timer API reference][api reference], as that shows all it has to offer. The `clock` object is not wrapped, so everything `fake-timers` has to offer can be used through it.
 
-For standalone usage of fake timers it is recommended to use [fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
+For standalone usage of fake timers, it is recommended to use the [fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
 set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
 
 ```javascript
@@ -163,7 +163,7 @@ This can be used to simulate the JS engine (such as a browser) being put to slee
 
 #### `clock.next();` / `await clock.nextAsync()`
 
-Advances the clock to the the moment of the first scheduled timer, firing it.
+Advances the clock to the moment of the first scheduled timer, firing it.
 
 The `nextAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
 
