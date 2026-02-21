@@ -26,7 +26,7 @@ export function add(a, b) {
 ### Module under test: `src/calculator.mjs`
 
 ```javascript
-import { add } from './math.mjs';
+import { add } from "./math.mjs";
 
 export function calculate(a, b) {
   return add(a, b);
@@ -36,14 +36,14 @@ export function calculate(a, b) {
 ### Test file: `test/calculator.test.mjs`
 
 ```javascript
-import sinon from 'sinon';
-import * as mathModule from '../src/math.mjs';
-import { calculate } from '../src/calculator.mjs';
+import sinon from "sinon";
+import * as mathModule from "../src/math.mjs";
+import { calculate } from "../src/calculator.mjs";
 
-describe('calculator', () => {
-  it('should use the add function', () => {
+describe("calculator", () => {
+  it("should use the add function", () => {
     // This will throw: TypeError: ES Modules cannot be stubbed
-    sinon.stub(mathModule, 'add').returns(99);
+    sinon.stub(mathModule, "add").returns(99);
   });
 });
 ```
@@ -66,7 +66,7 @@ Create a file at the root of your project (e.g., `esm-loader.cjs`) that enables 
 
 ```javascript
 // esm-loader.cjs
-require = require('esm')(module, {
+require = require("esm")(module, {
   cjs: true,
   mutableNamespace: true,
 });
@@ -92,18 +92,18 @@ Now your test can use `sinon.stub()` normally against ES module exports:
 
 ```javascript
 // test/calculator.test.mjs
-import sinon from 'sinon';
-import * as mathModule from '../src/math.mjs';
-import { calculate } from '../src/calculator.mjs';
-import assert from 'assert';
+import sinon from "sinon";
+import * as mathModule from "../src/math.mjs";
+import { calculate } from "../src/calculator.mjs";
+import assert from "assert";
 
-describe('calculator', () => {
+describe("calculator", () => {
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should delegate to the add function', () => {
-    sinon.stub(mathModule, 'add').returns(99);
+  it("should delegate to the add function", () => {
+    sinon.stub(mathModule, "add").returns(99);
 
     const result = calculate(1, 2);
 
@@ -146,7 +146,7 @@ describe('calculator', () => {
 ### `esm-loader.cjs`
 
 ```javascript
-require = require('esm')(module, {
+require = require("esm")(module, {
   cjs: true,
   mutableNamespace: true,
 });
@@ -163,7 +163,7 @@ export function add(a, b) {
 ### `src/calculator.mjs`
 
 ```javascript
-import { add } from './math.mjs';
+import { add } from "./math.mjs";
 
 export function calculate(a, b) {
   return add(a, b);
@@ -173,18 +173,18 @@ export function calculate(a, b) {
 ### `test/calculator.test.mjs`
 
 ```javascript
-import sinon from 'sinon';
-import * as mathModule from '../src/math.mjs';
-import { calculate } from '../src/calculator.mjs';
-import assert from 'assert';
+import sinon from "sinon";
+import * as mathModule from "../src/math.mjs";
+import { calculate } from "../src/calculator.mjs";
+import assert from "assert";
 
-describe('calculator', () => {
+describe("calculator", () => {
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should use stubbed add function', () => {
-    sinon.stub(mathModule, 'add').returns(42);
+  it("should use stubbed add function", () => {
+    sinon.stub(mathModule, "add").returns(42);
 
     const result = calculate(10, 20);
 
@@ -192,7 +192,7 @@ describe('calculator', () => {
     assert.ok(mathModule.add.calledOnceWith(10, 20));
   });
 
-  it('should call the real add function when not stubbed', () => {
+  it("should call the real add function when not stubbed", () => {
     const result = calculate(3, 4);
 
     assert.equal(result, 7);
