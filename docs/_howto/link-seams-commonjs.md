@@ -9,7 +9,7 @@ This page describes how to isolate your system under test, by targetting the [li
 
 This guide targets the CommonJS module system, made popular by NodeJS. There are other module systems, but until recent years this was the de-facto module system and even when the actual EcmaScript Module standard arrived in 2015, transpilers and bundlers can still _output_ code as CJS modules. For instance, Typescript outputs CJS modules per default as of 2023, so it is still relevant, as your `import foo from './foo'` might still end up being transpiled into `const foo = require('./foo')` in the end.
 
-<!-- TODO: input link to the other article on stubbing ESM -->
+For ES Modules (ESM) see [How to stub ES module imports](/how-to/stub-esm-default-export/).
 
 ## Hooking into `require`
 
