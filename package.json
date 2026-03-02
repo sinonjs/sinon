@@ -110,6 +110,12 @@
     "semver": "^7.7.4",
     "shelljs": "^0.10.0"
   },
+  "overrides": {
+    "@isaacs/brace-expansion": "^5.0.1",
+    "basic-ftp": "^5.2.0",
+    "fast-xml-parser": "^5.3.8",
+    "undici": "^6.23.0"
+  },
   "files": [
     "lib",
     "pkg",
