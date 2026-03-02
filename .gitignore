@@ -9,3 +9,4 @@ _site
 docs/vendor/
 vendor/
 .bundle
+.worktrees/
