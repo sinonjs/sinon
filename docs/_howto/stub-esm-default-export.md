@@ -215,6 +215,8 @@ The `esm` package hooks into Node.js's module loading system. When `mutableNames
 
 - [How to stub a dependency of a module (CommonJS)][stub-dependency]
 - [How to stub out CommonJS modules using link seams][link-seams]
+- [Real world dependency stubbing][typescript-swc-stub] (using Typescript and SWC)
 
 [stub-dependency]: /how-to/stub-dependency/
 [link-seams]: /how-to/link-seams-commonjs/
+[typescript-swc-stub]: /how-to/typescript-swc/
