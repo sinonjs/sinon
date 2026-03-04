@@ -1,13 +1,23 @@
 "use strict";
 
 const assert = require("@sinonjs/referee").assert;
-const childProcess = require("child_process");
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
 
 describe("set-release-id-in-config-yml", function () {
     it("updates current release and major version in a config file", function () {
+        if (typeof window !== "undefined") {
+            this.skip();
+        }
+
+        const nodeRequire = module.require.bind(module);
+        const childProcess = nodeRequire("child_process");
+        const fs = nodeRequire("fs");
+        const os = nodeRequire("os");
+        const path = nodeRequire("path");
+        const packageJsonPath = path.resolve(__dirname, "../..", "package.json");
+        const expectedRelease = `v${
+            JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).version
+        }`;
+
         const fixtureDir = fs.mkdtempSync(
             path.join(os.tmpdir(), "sinon-release-config-"),
         );
@@ -43,7 +53,7 @@ describe("set-release-id-in-config-yml", function () {
 
         const written = fs.readFileSync(configPath, "utf8");
 
-        assert.match(written, /current_release: v21\.0\.2/);
+        assert.match(written, `current_release: ${expectedRelease}`);
         assert.match(written, /current_major_version: 21/);
     });
 });
