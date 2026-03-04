@@ -13,7 +13,11 @@ describe("set-release-id-in-config-yml", function () {
         const fs = nodeRequire("fs");
         const os = nodeRequire("os");
         const path = nodeRequire("path");
-        const packageJsonPath = path.resolve(__dirname, "../..", "package.json");
+        const packageJsonPath = path.resolve(
+            __dirname,
+            "../..",
+            "package.json",
+        );
         const expectedRelease = `v${
             JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).version
         }`;
