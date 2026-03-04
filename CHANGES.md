@@ -1,5 +1,69 @@
 # Changes
 
+## 21.0.2
+
+- [`2948314c`](https://github.com/sinonjs/sinon/commit/2948314cc4289bae0a27fabdd263565e07c3ba68)
+  prettier (Carl-Erik Kopseng)
+- [`024321c4`](https://github.com/sinonjs/sinon/commit/024321c48e670de35098b2555173e25f024db90d)
+  fix: skip Node specific tests in browser env (Carl-Erik Kopseng)
+- [`b836fccb`](https://github.com/sinonjs/sinon/commit/b836fccb8adabd3d116338b19ae1f6a4ccfc7d3e)
+  fix: js-yaml breaking change from v3 to v4 (Carl-Erik Kopseng)
+- [`ebf0c431`](https://github.com/sinonjs/sinon/commit/ebf0c4313f41edfdf71f206c826a8ce7d56f2d2c)
+  docs: add how-to article for stubbing ES module imports (#1832) (#2676) (Eduard Barrera)
+    >
+    > * docs: add how-to article for stubbing ES module imports with esm package
+    >
+    > Adds a comprehensive How-To guide that addresses issue #1832, documenting
+    > how to configure Node.js to allow Sinon stubs to work with ES modules.
+    >
+    > - Explains why ES module namespace bindings are immutable by spec
+    > - Shows how to use the 'esm' npm package with mutableNamespace: true
+    > - Provides a complete working example with project layout, package.json,
+    >   loader file, source modules, and a full test suite
+    > - Documents limitations (destructured imports, non-standard behavior)
+    > - Replaces the TODO comment in link-seams-commonjs.md with a cross-reference
+    >
+    > Closes #1832
+    >
+    > * style: fix prettier formatting in stub-esm-default-export.md
+    >
+    > Replace single quotes with double quotes in all JavaScript code
+    > blocks within the how-to article, as required by the project's
+    > Prettier configuration.
+    >
+    > * Add related article on Typescript and SWC stubbing
+    >
+    > Added a related article on real world dependency stubbing using Typescript and SWC.
+    >
+    > * Make linting pass: new warnings are from new rules
+    >
+    > * Update workflow actions
+    >
+    > * Fetch depth = 2
+    >
+    > ---------
+    >
+    > Co-authored-by: Eduard Barrera <eduardbar@users.noreply.github.com>
+    > Co-authored-by: Carl-Erik Kopseng <carlerik@gmail.com>
+- [`ebcd506c`](https://github.com/sinonjs/sinon/commit/ebcd506cbb55df6c7d2bda558f58386a218df9be)
+  Fix spies not being reset properly (#2673) (simon-id)
+- [`3beab2ba`](https://github.com/sinonjs/sinon/commit/3beab2ba97fe74cdb0f495420ac06652e59835aa)
+  Make doc tests pass with new jQuery (Carl-Erik Kopseng)
+- [`766715c6`](https://github.com/sinonjs/sinon/commit/766715c68a94fd66e9ca79f62c23d07fd1645d4c)
+  build: reduce transitive audit findings (Carl-Erik Kopseng)
+- [`92aaf5c9`](https://github.com/sinonjs/sinon/commit/92aaf5c9d1686a9b4a025c31cb3b0813e7fd2350)
+  build: upgrade eslint config and replace dependency-check (Carl-Erik Kopseng)
+- [`c6aaa871`](https://github.com/sinonjs/sinon/commit/c6aaa8719ea831c43112ff0d0727a35e6bf92731)
+  chore: ignore project worktrees (Carl-Erik Kopseng)
+- [`ef387e8e`](https://github.com/sinonjs/sinon/commit/ef387e8ec6eb692f63844130b4590d018729a723)
+  Upgrade most deps (Carl-Erik Kopseng)
+- [`3cf4e77d`](https://github.com/sinonjs/sinon/commit/3cf4e77d2c20a63a27c0ac14e0186f45761a0b77)
+  docs: improve writing of documentation (#2675) (Eduardo de la Cruz Palacios)
+- [`6349032f`](https://github.com/sinonjs/sinon/commit/6349032fc42f01c302e05d3146e489d92fc9dbf9)
+  Check login status before publishing steps are performed (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-03-04._
+
 ## 21.0.1
 
 - [`456a65c2`](https://github.com/sinonjs/sinon/commit/456a65c2813533fa4e946b9e707baf798a679ad3)
