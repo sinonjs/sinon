@@ -2,10 +2,10 @@ title: Sinon.JS
 description: >-
   Standalone test spies, stubs and mocks for JavaScript. Works with any unit
   testing framework.
-url: 'https://sinonjs.org'
+url: https://sinonjs.org
 github_username: sinonjs
 sinon:
-  current_release: v21.0.1
+  current_release: v21.0.2
   current_major_version: 21
 markdown: kramdown
 kramdown:
@@ -31,10 +31,10 @@ exclude:
 collections:
   howto:
     output: true
-    permalink: '/how-to/:path/'
+    permalink: /how-to/:path/
   releases:
     output: true
-    permalink: '/:collection/:path/'
+    permalink: /:collection/:path/
 sass:
   sass_dir: _sass
   style: compressed
