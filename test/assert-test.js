@@ -57,14 +57,6 @@ describe("assert", function () {
     });
 
     describe(".fail", function () {
-        beforeEach(function () {
-            this.exceptionName = sinonAssert.failException;
-        });
-
-        afterEach(function () {
-            sinonAssert.failException = this.exceptionName;
-        });
-
         it("can be configured to limit the error message length", function () {
             const customAssert = sinonAssert.createAssertObject({
                 shouldLimitAssertionLogs: true,
@@ -85,17 +77,6 @@ describe("assert", function () {
                 {
                     name: "AssertError",
                 },
-            );
-        });
-
-        it("throws configured exception type", function () {
-            sinonAssert.failException = "CustomError";
-
-            assert.exception(
-                function () {
-                    sinonAssert.fail("Some message");
-                },
-                { name: "CustomError" },
             );
         });
     });
@@ -860,6 +841,109 @@ describe("assert", function () {
             });
         });
 
+        describe(".calledOnceWith", function () {
+            // eslint-disable-next-line mocha/no-setup-in-describe
+            requiresValidFake("calledOnceWith");
+
+            it("fails when method fails", function () {
+                const object = {};
+                sinonStub(this.stub, "calledOnceWith").returns(false);
+                const stub = this.stub;
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub, object, 1);
+                });
+
+                assert(
+                    this.stub.calledOnceWith.calledOnceWithExactly(object, 1),
+                );
+                assert(sinonAssert.fail.called);
+            });
+
+            it("passes when method doesn't fail", function () {
+                const object = {};
+                sinonStub(this.stub, "calledOnceWith").returns(true);
+                const stub = this.stub;
+
+                refute.exception(function () {
+                    sinonAssert.calledOnceWith(stub, object, 1);
+                });
+
+                assert(
+                    this.stub.calledOnceWith.calledOnceWithExactly(object, 1),
+                );
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("calls pass callback", function () {
+                this.stub("yeah");
+                sinonAssert.calledOnceWith(this.stub, "yeah");
+
+                assert(sinonAssert.pass.calledOnce);
+                assert(sinonAssert.pass.calledWith("calledOnceWith"));
+            });
+
+            it("fails when method does not exist", function () {
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith();
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method is not stub", function () {
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(function () {
+                        return;
+                    });
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when method was not called", function () {
+                const stub = this.stub;
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+
+            it("fails when called with more than one argument", function () {
+                const stub = this.stub;
+                stub();
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub, 1);
+                });
+            });
+
+            it("passes when method was called", function () {
+                const stub = this.stub;
+                stub();
+
+                refute.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert.isFalse(sinonAssert.fail.called);
+            });
+
+            it("fails when method was called more than once", function () {
+                const stub = this.stub;
+                stub();
+                stub();
+
+                assert.exception(function () {
+                    sinonAssert.calledOnceWith(stub);
+                });
+
+                assert(sinonAssert.fail.called);
+            });
+        });
+
         describe(".calledOnceWithExactly", function () {
             // eslint-disable-next-line mocha/no-setup-in-describe
             requiresValidFake("calledOnceWithExactly");
@@ -1352,7 +1436,6 @@ describe("assert", function () {
             sinonAssert.expose(test);
 
             assert.isFunction(test.fail);
-            assert.isString(test.failException);
             assert.isFunction(test.assertCalled);
             assert.isFunction(test.assertCalledOn);
             assert.isFunction(test.assertCalledWith);
@@ -1367,7 +1450,6 @@ describe("assert", function () {
                 includeFail: false,
             });
 
-            assert.equals(typeof failException, "undefined");
             /*eslint-disable no-undef*/
             assert.isFunction(assertCalled);
             assert.isFunction(assertCalledOn);
@@ -1401,7 +1483,6 @@ describe("assert", function () {
             sinonAssert.expose(test, { prefix: "" });
 
             assert.isFunction(test.fail);
-            assert.isString(test.failException);
             assert.isFunction(test.called);
             assert.isFunction(test.calledOn);
             assert.isFunction(test.calledWith);

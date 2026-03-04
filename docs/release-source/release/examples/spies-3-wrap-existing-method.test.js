@@ -5,10 +5,10 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 const jsdom = require("jsdom");
 const JSDOM = jsdom.JSDOM;
-const window = new JSDOM().window;
-const document = new JSDOM("").window;
-const jQuery = require("jquery")(window);
-global.document = document;
+const window = new JSDOM("").window;
+global.window = window;
+global.document = window.document;
+const jQuery = require("jquery");
 
 describe("Wrap existing method", function () {
     beforeEach(function () {

@@ -159,9 +159,16 @@ module.exports = function shared(createSpyOrStub) {
             configurable: false,
         });
 
-        assert.exception(function () {
-            createSpyOrStub(myObj, "ignoreme");
-        }, new TypeError("Descriptor for property ignoreme is non-configurable and non-writable"));
+        assert.exception(
+            function () {
+                createSpyOrStub(myObj, "ignoreme");
+            },
+            new TypeError(
+                "The descriptor for property `ignoreme` is non-configurable and non-writable. " +
+                    "Sinon cannot stub properties that are immutable. " +
+                    "See https://sinonjs.org/faq#property-descriptor-errors for help fixing this issue.",
+            ),
+        );
     });
 
     it("throws on accessor property descriptors that are not configurable", function () {

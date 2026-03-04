@@ -145,7 +145,7 @@ Note that in dev mode tests run only in Node. Before creating your PR please ens
 
 ### Compiling a built version
 
-Build requires Node. Under the hood [Browserify](http://browserify.org/) is used.
+Build requires Node. Under the hood [esbuild](https://esbuild.github.io/) is used.
 
 To build run
 

@@ -6,6 +6,76 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 21.0.2
+
+- [`024321c4`](https://github.com/sinonjs/sinon/commit/024321c48e670de35098b2555173e25f024db90d)
+  fix: skip Node specific tests in browser env (Carl-Erik Kopseng)
+- [`b836fccb`](https://github.com/sinonjs/sinon/commit/b836fccb8adabd3d116338b19ae1f6a4ccfc7d3e)
+  fix: js-yaml breaking change from v3 to v4 (Carl-Erik Kopseng)
+- [`ebf0c431`](https://github.com/sinonjs/sinon/commit/ebf0c4313f41edfdf71f206c826a8ce7d56f2d2c)
+  docs: add how-to article for stubbing ES module imports (#1832) (#2676) (Eduard Barrera)
+  > - docs: add how-to article for stubbing ES module imports with esm package
+  >
+  > Adds a comprehensive How-To guide that addresses issue #1832, documenting
+  > how to configure Node.js to allow Sinon stubs to work with ES modules.
+  >
+  > - Explains why ES module namespace bindings are immutable by spec
+  > - Shows how to use the 'esm' npm package with mutableNamespace: true
+  > - Provides a complete working example with project layout, package.json,
+  >   loader file, source modules, and a full test suite
+  > - Documents limitations (destructured imports, non-standard behavior)
+  > - Replaces the TODO comment in link-seams-commonjs.md with a cross-reference
+  >
+  > Closes #1832
+  > Co-authored-by: Eduard Barrera <eduardbar@users.noreply.github.com>
+  > Co-authored-by: Carl-Erik Kopseng <carlerik@gmail.com>
+- [`ebcd506c`](https://github.com/sinonjs/sinon/commit/ebcd506cbb55df6c7d2bda558f58386a218df9be)
+  Fix spies not being reset properly (#2673) (simon-id)
+- [`3beab2ba`](https://github.com/sinonjs/sinon/commit/3beab2ba97fe74cdb0f495420ac06652e59835aa)
+  Make doc tests pass with new jQuery (Carl-Erik Kopseng)
+- [`766715c6`](https://github.com/sinonjs/sinon/commit/766715c68a94fd66e9ca79f62c23d07fd1645d4c)
+  build: reduce transitive audit findings (Carl-Erik Kopseng)
+- [`92aaf5c9`](https://github.com/sinonjs/sinon/commit/92aaf5c9d1686a9b4a025c31cb3b0813e7fd2350)
+  build: upgrade eslint config and replace dependency-check (Carl-Erik Kopseng)
+- [`c6aaa871`](https://github.com/sinonjs/sinon/commit/c6aaa8719ea831c43112ff0d0727a35e6bf92731)
+  chore: ignore project worktrees (Carl-Erik Kopseng)
+- [`ef387e8e`](https://github.com/sinonjs/sinon/commit/ef387e8ec6eb692f63844130b4590d018729a723)
+  Upgrade most deps (Carl-Erik Kopseng)
+- [`3cf4e77d`](https://github.com/sinonjs/sinon/commit/3cf4e77d2c20a63a27c0ac14e0186f45761a0b77)
+  docs: improve writing of documentation (#2675) (Eduardo de la Cruz Palacios)
+- [`6349032f`](https://github.com/sinonjs/sinon/commit/6349032fc42f01c302e05d3146e489d92fc9dbf9)
+  Check login status before publishing steps are performed (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-03-04._
+
+## 21.0.1
+
+- [`456a65c2`](https://github.com/sinonjs/sinon/commit/456a65c2813533fa4e946b9e707baf798a679ad3)
+  Update dependencies - except @sinonjs/samsam (#2669) (Carl-Erik Kopseng)
+- [`f04f3eb1`](https://github.com/sinonjs/sinon/commit/f04f3eb108f3d9b0402e42281b54d9057211bf16)
+  Fix issue 2618 - Remove browserify in favor of esbuild (#2661) (Artur Parkhisenko)
+- [`48b69df2`](https://github.com/sinonjs/sinon/commit/48b69df24c97ef316ebc3835418b3459337c325a)
+  fix(docs): remove `assert.failException` from documentation (#2666) (Steffen Schroeder)
+- [`13b27ccc`](https://github.com/sinonjs/sinon/commit/13b27cccd066a1bc75cfdcd207f1c8c44ab7b049)
+  Fix sandbox restore not handling stubbed functions (#2667) (thamion)
+- [`ae9e09ac`](https://github.com/sinonjs/sinon/commit/ae9e09ac00799f923a8e6b559ead720999a0e865)
+  Update compatibility target to ES2023 (Carl-Erik Kopseng)
+  > Updated compatibility target from ES2017 to ES2023 and clarified the note on breaking changes.
+- [`26055043`](https://github.com/sinonjs/sinon/commit/26055043212a03afeb2914e16ea32cb7f0a3ac44)
+  Improve error message for immutable descriptors (#2664) (Stuart Dotson)
+- [`80fa9a5b`](https://github.com/sinonjs/sinon/commit/80fa9a5b8b605eb141e556ec5c8e7cd164ca9c5c)
+  Also mirror the calledOnceWith assertion (#2660) (Benedikt Meurer)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2025-12-19._
+
+## 21.0.0
+
+- [`fd10f13f`](https://github.com/sinonjs/sinon/commit/fd10f13f3fed7853dd489dd9e84f28c22df715c2)
+  chore!: remove assert.failException property (#2659) (Morgan Roderick)
+  > BREAKING CHANGE: this removes assert.failException from the API
+
+_Released by Morgan Roderick on 2025-06-13._
+
 ## 20.0.0
 
 - [`b6daed26`](https://github.com/sinonjs/sinon/commit/b6daed26cd4ba2c045d3d2fc2cadbdcbf43c61e6)

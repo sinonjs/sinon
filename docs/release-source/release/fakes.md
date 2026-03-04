@@ -31,9 +31,9 @@ Unlike [`sinon.spy`][spies] and [`sinon.stub`][stubs] methods, the `sinon.fake` 
 
 Fakes are alternatives to the Stubs and Spies, and they can fully replace all such use cases.
 
-They are intended to be simpler to use, and avoids many bugs by having immutable behaviour.
+They are intended to be simpler to use, and avoid many bugs by having immutable behaviour.
 
-The created `fake` `Function`, with or without behavior has the same API as a (`sinon.spy`)[spies].
+The created `fake` `Function`, with or without behavior, has the same API as a [`sinon.spy`][spies].
 
 #### Using fakes instead of spies
 
