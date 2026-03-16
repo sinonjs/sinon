@@ -1,5 +1,12 @@
 # Changes
 
+## 21.0.3
+
+- [`0494251b`](https://github.com/sinonjs/sinon/commit/0494251bc54c56e7e79258586238db88f0d191b3)
+  fix(#2678): upgrade samsam to fix buffer comparisons (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-03-16._
+
 ## 21.0.2
 
 - [`024321c4`](https://github.com/sinonjs/sinon/commit/024321c48e670de35098b2555173e25f024db90d)
