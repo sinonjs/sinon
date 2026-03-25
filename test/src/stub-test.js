@@ -245,6 +245,32 @@ describe("stub", function () {
             refute(fakeFn.called);
         });
 
+        it("supersedes previous returnsArg", function () {
+            const stub = createStub();
+            stub.returnsArg(0);
+            stub.returns(42);
+
+            assert.equals(stub(99), 42);
+        });
+
+        it("supersedes previous returnsThis", function () {
+            const stub = createStub();
+            stub.returnsThis();
+            stub.returns(42);
+
+            assert.equals(stub.call({ x: 1 }), 42);
+        });
+
+        it("supersedes previous throwsArg", function () {
+            const stub = createStub();
+            stub.throwsArg(0);
+            stub.returns(42);
+
+            refute.exception(function () {
+                assert.equals(stub(new Error("should not throw")), 42);
+            });
+        });
+
         it("supersedes previous callThrough", function () {
             const obj = {
                 fn() {
@@ -819,6 +845,26 @@ describe("stub", function () {
             );
         });
 
+        it("supersedes previous returnsArg", function () {
+            const stub = createStub();
+            stub.returnsArg(0);
+            stub.throwsArg(0);
+
+            assert.exception(function () {
+                stub(new Error("expected"));
+            });
+        });
+
+        it("supersedes previous returnsThis", function () {
+            const stub = createStub();
+            stub.returnsThis();
+            stub.throwsArg(0);
+
+            assert.exception(function () {
+                stub(new Error("expected"));
+            });
+        });
+
         it("should be reset by .resetBehavior", function () {
             const stub = createStub();
 
@@ -929,6 +975,16 @@ describe("stub", function () {
 
             assert.same(obj.fn(), obj);
         });
+
+        it("supersedes previous returnsArg", function () {
+            const instance = {};
+            instance.stub = createStub();
+            instance.stub.returnsArg(0);
+            instance.stub.returnsThis();
+
+            assert.same(instance.stub("ignored"), instance);
+        });
+
     });
 
     describe(".throws", function () {
