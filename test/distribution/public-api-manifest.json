@@ -38,7 +38,7 @@
     "spy": {
       "type": "function",
       "length": 0,
-      "name": "spy"
+      "name": "spy$1"
     },
     "stub": {
       "type": "function",
@@ -48,7 +48,7 @@
     "fake": {
       "type": "function",
       "length": 1,
-      "name": "fake"
+      "name": "fake$1"
     },
     "restore": {
       "type": "function",

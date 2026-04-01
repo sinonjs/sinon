@@ -470,6 +470,19 @@ export default function Sandbox(opts = {}) {
         return clock;
     };
 
+    sandbox.mock = function mock() {
+        const m = sinonMock.apply(null, arguments);
+
+        addToCollection(m);
+
+        return m;
+    };
+
+    sandbox.reset = function reset() {
+        applyOnEach(collection, "reset");
+        applyOnEach(collection, "resetHistory");
+    };
+
     sandbox.verify = function verify() {
         applyOnEach(collection, "verify");
     };
