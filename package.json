@@ -36,6 +36,7 @@
     "test-headless": "mochify --driver puppeteer",
     "test-coverage": "nyc nyc --exclude-after-remap false mochify --driver puppeteer --bundle 'node coverage.cjs'",
     "test-cloud": "./scripts/test-cloud.sh",
+    "test-distribution": "node ./scripts/test-distribution.mjs",
     "test-webworker": "mochify --driver puppeteer --serve . test/webworker/webworker-support-assessment.js",
     "test-esm-support": "mocha test/es2015/module-support-assessment-test.mjs",
     "test-esm-browser-build": "node test/es2015/check-esm-bundle-is-runnable.js",
