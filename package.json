@@ -40,6 +40,8 @@
     "test-webworker": "mochify --driver puppeteer --serve . test/webworker/webworker-support-assessment.js",
     "test-esm-support": "mocha test/es2015/module-support-assessment-test.mjs",
     "test-esm-browser-build": "node test/es2015/check-esm-bundle-is-runnable.js",
+    "test-pkg-browser-global": "node test/distribution/browser-global-smoke.js",
+    "test-pkg-browser-esm": "node test/es2015/check-esm-bundle-is-runnable.js",
     "test-runnable-examples": "docs/release-source/release/examples/run-test.sh",
     "test-docs": "cd docs; make check-links",
     "test": "npm run test-node && npm run test-headless && npm run test-webworker",

@@ -7,21 +7,41 @@ const port = 3876;
 
 const htmlWithModuleScript = `
 <script type="module">
-import sinon, { spy } from '/sinon-esm.js';
+import sinon, { spy, stub, createSandbox } from '/sinon-esm.js';
 
-const assert = (result) => { if(!result) throw new Error("Failed test"); };
+const assert = (condition, message) => {
+    if (!condition) {
+        throw new Error("Assertion failed: " + (message || "unspecified"));
+    }
+};
 
 try {
-    const stub = sinon.stub().returns(42);
-    assert(42 === stub());
+    // Default import works
+    assert(typeof sinon === "object", "sinon should be an object");
+    assert(typeof sinon.stub === "function", "sinon.stub should be a function");
 
-    const calledSpy = spy();
-    calledSpy();
-    assert(1 === calledSpy.callCount);
+    // Named imports work
+    assert(typeof spy === "function", "spy named import should be a function");
+    assert(typeof stub === "function", "stub named import should be a function");
+    assert(typeof createSandbox === "function", "createSandbox named import should be a function");
+
+    // Basic behavior
+    const s = stub().returns(42);
+    assert(s() === 42, "stub behavior check");
+
+    const sp = spy();
+    sp();
+    assert(sp.callCount === 1, "spy behavior check");
+
+    // Sandbox behavior
+    const sandbox = createSandbox();
+    const fake = sandbox.stub().returns(7);
+    assert(7 === fake(), "sandbox stub behavior check");
+    sandbox.restore();
 
     console.log('sinon-result:works');
 } catch(err) {
-    console.log('sinon-result:fails Assertion incorrect' );
+    console.log('sinon-result:fails ' + err.message);
 }
 </script>
 `;
