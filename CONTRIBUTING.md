@@ -155,7 +155,7 @@ $ npm run test-contract
 - `test-pkg-browser-esm` validates `pkg/sinon-esm.js` in a browser module context.
 - `test-pkg-browser-global` validates `pkg/sinon.js` as a browser global.
 
-These tests are mandatory for any source-layout refactors or API changes. Any intentional API change must update the manifest in `test/distribution/public-api-manifest.json`.
+These tests are mandatory for any source-layout refactors or API changes. Any intentional API change must update the manifest in `test/distribution/public-api-manifest.json` with explicit reviewer sign-off. Source format and build-system changes are allowed only when `npm run test-contract` remains green.
 
 ### Compiling a built version
 
