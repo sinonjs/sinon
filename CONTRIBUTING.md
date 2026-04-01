@@ -143,6 +143,20 @@ Dev mode features:
 
 Note that in dev mode tests run only in Node. Before creating your PR please ensure tests are passing in Phantom and WebWorker as well. To check this please use [Run the tests](#run-the-tests) instructions.
 
+### Contract Tests
+
+To ensure Sinon's published Node and browser APIs stay compatible, we use artifact-first contract tests.
+
+```
+$ npm run test-contract
+```
+
+- `test-distribution` validates the packed npm artifact for CJS and ESM consumers.
+- `test-pkg-browser-esm` validates `pkg/sinon-esm.js` in a browser module context.
+- `test-pkg-browser-global` validates `pkg/sinon.js` as a browser global.
+
+These tests are mandatory for any source-layout refactors or API changes. Any intentional API change must update the manifest in `test/distribution/public-api-manifest.json`.
+
 ### Compiling a built version
 
 Build requires Node. Under the hood [esbuild](https://esbuild.github.io/) is used.

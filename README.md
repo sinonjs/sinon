@@ -59,7 +59,7 @@ If you have questions that are not covered by the documentation, you can [check 
 
 ## Contribute?
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute to Sinon.JS
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute to Sinon.JS. Artifact-first [contract tests](CONTRIBUTING.md#contract-tests) are used to protect public APIs during migration.
 
 ## Backers
 

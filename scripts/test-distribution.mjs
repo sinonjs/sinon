@@ -16,9 +16,6 @@ function run(command, args, cwd) {
     });
 }
 
-console.log("Building Sinon...");
-run("npm", ["run", "build"], repoRoot);
-
 console.log("Packing Sinon...");
 const packJson = execFileSync("npm", ["pack", "--json"], { cwd: repoRoot });
 const [{ filename }] = JSON.parse(packJson.toString("utf8"));
