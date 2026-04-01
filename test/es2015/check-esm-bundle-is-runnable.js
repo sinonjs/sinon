@@ -16,6 +16,11 @@ const assert = (condition, message) => {
 };
 
 try {
+    // Default and named imports agree
+    assert(sinon.spy === spy, "default and named spy should be identical");
+    assert(sinon.stub === stub, "default and named stub should be identical");
+    assert(sinon.createSandbox === createSandbox, "default and named createSandbox should be identical");
+
     // Default import works
     assert(typeof sinon === "object", "sinon should be an object");
     assert(typeof sinon.stub === "function", "sinon.stub should be a function");

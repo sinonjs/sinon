@@ -111,6 +111,16 @@ if (!failed) {
             dir: "test/distribution/fixtures/require-package-exports",
             entry: "index.cjs",
         },
+        {
+            name: "require-fake-timers-sync",
+            dir: "test/distribution/fixtures/require-fake-timers-sync",
+            entry: "index.cjs",
+        },
+        {
+            name: "import-default-and-named",
+            dir: "test/distribution/fixtures/import-default-and-named",
+            entry: "index.mjs",
+        },
     ];
 
     if (fixtures.length === 0) {
