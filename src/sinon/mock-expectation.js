@@ -1,4 +1,4 @@
-import util from "node:util";
+import { inspect } from "util";
 import commons from "@sinonjs/commons";
 import samsam from "@sinonjs/samsam";
 import proxyInvoke from "./proxy-invoke.js";
@@ -11,7 +11,6 @@ import assert from "./assert.js";
 const { prototypes: commonsPrototypes, valueToString } = commons;
 const { array: arrayProto } = commonsPrototypes;
 const { createMatcher: match, deepEqual } = samsam;
-const { inspect } = util;
 
 const every = arrayProto.every;
 const forEach = arrayProto.forEach;

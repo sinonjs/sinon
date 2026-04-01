@@ -33,17 +33,40 @@ export default {
         json(),
     ],
     external: (id, parentId, isResolved) => {
-        if (id.startsWith("src/") || path.isAbsolute(id)) {
-            return false;
+        if (id.startsWith("node:")) return true;
+        
+        // Resolve the path if possible
+        let resolvedPath;
+        if (id.startsWith("src/")) {
+            resolvedPath = path.resolve(process.cwd(), id);
+        } else if (path.isAbsolute(id)) {
+            resolvedPath = id;
+        } else if (id.startsWith(".")) {
+            resolvedPath = path.resolve(parentId ? path.dirname(parentId) : ".", id);
+        } else {
+            // Named imports (node_modules) are external
+            return true;
         }
-        if (parentId && (id.startsWith(".") || id.startsWith("/"))) {
-            let resolvedPath = path.resolve(path.dirname(parentId), id);
-            if (!resolvedPath.endsWith(".js")) resolvedPath += ".js";
-            if (!fs.existsSync(resolvedPath)) {
-                return true;
-            }
-            return false;
+
+        const srcPath = path.resolve(process.cwd(), "src");
+        if (resolvedPath.startsWith(srcPath)) {
+            // It's inside src/.
+            // If it's an entry point (no parentId), we must treat it as NOT external.
+            if (!parentId) return false;
+
+            // For other files, check if they exist in src/
+            const exists = fs.existsSync(resolvedPath) || 
+                          fs.existsSync(resolvedPath + ".js") || 
+                          fs.existsSync(resolvedPath + ".mjs");
+            
+            if (exists) return false; // Exists in src/, so transpile it
+            
+            // Doesn't exist in src/, so it must be a relative import to a file
+            // that we haven't ported yet, but will exist in lib/.
+            return true;
         }
+
+        // Everything else (outside src/) is external
         return true;
     },
 };
