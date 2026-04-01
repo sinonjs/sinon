@@ -95,6 +95,9 @@
     "@mochify/cli": "^1.0.0",
     "@mochify/driver-puppeteer": "^1.0.1",
     "@mochify/driver-webdriver": "^1.0.0",
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@sinonjs/eslint-config": "^6.0.0",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^11.0.1",
@@ -112,6 +115,7 @@
     "prettier": "^3.8.1",
     "puppeteer": "^24.37.5",
     "rimraf": "^6.1.3",
+    "rollup": "^4.60.1",
     "semver": "^7.7.4",
     "shelljs": "^0.10.0"
   },

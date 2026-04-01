@@ -2,9 +2,16 @@
 "use strict";
 /* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
 const fs = require("node:fs");
+const { execFileSync } = require("node:child_process");
 const esbuild = require("esbuild");
 const { umdWrapper } = require("esbuild-plugin-umd-wrapper");
 const pkg = require("./package.json");
+
+// Step 1: Run Rollup to generate lib/ from src/
+console.log("Generating lib/ from src/ using Rollup...");
+execFileSync("npx", ["rollup", "-c", "rollup.config.mjs"], { stdio: "inherit" });
+
+// Step 2: Load sinon from the generated lib
 const sinon = require("./lib/sinon");
 
 // YYYY-MM-DD
@@ -56,46 +63,57 @@ async function makeBundle(entryPoint, config, done) {
     done(js);
 }
 
-makeBundle(
-    "./lib/sinon.js",
-    {
-        // Add inline source maps to the default bundle
-        debug: true,
-        format: "cjs",
-        // Create a UMD wrapper and install the "sinon" global:
-        standalone: "sinon",
-    },
-    function (bundle) {
-        fs.writeFileSync("pkg/sinon.js", bundle); // WebWorker can only load js files
-    },
-);
+async function buildAll() {
+    await makeBundle(
+        "./lib/sinon.js",
+        {
+            // Add inline source maps to the default bundle
+            debug: true,
+            format: "cjs",
+            // Create a UMD wrapper and install the "sinon" global:
+            standalone: "sinon",
+        },
+        function (bundle) {
+            fs.writeFileSync("pkg/sinon.js", bundle); // WebWorker can only load js files
+        },
+    );
 
-makeBundle(
-    "./lib/sinon.js",
-    {
-        format: "cjs",
-        // Create a UMD wrapper and install the "sinon" global:
-        standalone: "sinon",
-    },
-    function (bundle) {
-        fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", bundle);
-    },
-);
+    await makeBundle(
+        "./lib/sinon.js",
+        {
+            format: "cjs",
+            // Create a UMD wrapper and install the "sinon" global:
+            standalone: "sinon",
+        },
+        function (bundle) {
+            fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", bundle);
+        },
+    );
 
-makeBundle(
-    "./lib/sinon-esm.js",
-    {
-        format: "esm",
-    },
-    function (bundle) {
-        var intro = "let sinon;";
-        var outro = `\n${Object.keys(sinon)
-            .map(function (key) {
-                return `const _${key} = require_sinon().${key};\nexport { _${key} as ${key} };`;
-            })
-            .join("\n")}`;
+    await makeBundle(
+        "./lib/sinon-esm.js",
+        {
+            format: "esm",
+        },
+        function (bundle) {
+            var intro = "let sinon;\n";
+            // Replace the bundle's own "export default" with a simple assignment to sinon
+            var baseScript = bundle.replace(/export default [^;]+;/, "sinon = require_sinon_esm();\nif (sinon.default) sinon = sinon.default;");
+            
+            var outro = `\nexport default sinon;\n${Object.keys(sinon)
+                .filter((key) => key !== "default")
+                .map(function (key) {
+                    return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
+                })
+                .join("\n")}`;
 
-        var script = intro + bundle + outro;
-        fs.writeFileSync("pkg/sinon-esm.js", script);
-    },
-);
+            var script = intro + baseScript + outro;
+            fs.writeFileSync("pkg/sinon-esm.js", script);
+        },
+    );
+}
+
+buildAll().catch((err) => {
+    console.error(err);
+    process.exit(1);
+});
