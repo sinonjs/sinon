@@ -38,17 +38,17 @@
     "spy": {
       "type": "function",
       "length": 0,
-      "name": "spy$1"
+      "name": "spy"
     },
     "stub": {
       "type": "function",
       "length": 0,
-      "name": "stub$1"
+      "name": "stub"
     },
     "fake": {
       "type": "function",
       "length": 1,
-      "name": "fake$1"
+      "name": "fake"
     },
     "restore": {
       "type": "function",

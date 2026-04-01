@@ -16,8 +16,19 @@ import createStubInstance from "./sinon/create-stub-instance.js";
  * @returns {object} The Sinon API object
  */
 export default function createApi() {
+    const sandbox = new Sandbox();
+
     const apiMethods = {
-        createSandbox: createSandbox,
+        createSandbox: function (config) {
+            const s = createSandbox.apply(null, arguments);
+            const fakes = sandbox.getFakes();
+            // eslint-disable-next-line no-console
+            console.log("ADDING NESTED SANDBOX TO COLLECTION. SIZE BEFORE:", fakes.length);
+            fakes.push(s);
+            // eslint-disable-next-line no-console
+            console.log("SIZE AFTER:", fakes.length);
+            return s;
+        },
         match: samsam.createMatcher,
         restoreObject: restoreObject,
         expectation: expectation,
@@ -31,6 +42,5 @@ export default function createApi() {
         promise: promise,
     };
 
-    const sandbox = new Sandbox();
     return extend(sandbox, apiMethods);
 }

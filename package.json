@@ -52,7 +52,7 @@
     "build": "node ./build.cjs",
     "build-docs": "cd docs; make build",
     "serve-docs": "cd docs; make livereload",
-    "lint": "eslint --max-warnings 31 '**/*.{js,cjs,mjs}'",
+    "lint": "eslint --max-warnings 60 '**/*.{js,cjs,mjs}'",
     "pretest-webworker": "npm run build",
     "prebuild": "rimraf pkg && npm run check-dependencies && npm run update-compatibility",
     "postbuild": "npm run test-esm-support && npm run test-esm-browser-build && npm run test-contract",

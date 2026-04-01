@@ -9,34 +9,11 @@ const { slice } = prototypes.array;
  *
  * When an `f` argument is supplied, this implementation will be used.
  *
- * @example
- * // create an empty fake
- * var f1 = sinon.fake();
- *
- * f1();
- *
- * f1.calledOnce()
- * // true
- *
- * @example
- * function greet(greeting) {
- *   console.log(`Hello ${greeting}`);
- * }
- *
- * // create a fake with implementation
- * var f2 = sinon.fake(greet);
- *
- * // Hello world
- * f2("world");
- *
- * f2.calledWith("world");
- * // true
- *
  * @param {Function|undefined} [f]
  * @returns {Function}
  * @namespace
  */
-export default function fake(f) {
+function fake(f) {
     if (arguments.length > 0 && typeof f !== "function") {
         throw new TypeError("Expected f argument to be a Function");
     }
@@ -47,12 +24,6 @@ export default function fake(f) {
 /**
  * Creates a `fake` that returns the provided `value`, as well as recording all
  * calls, arguments and return values.
- *
- * @example
- * var f1 = sinon.fake.returns(42);
- *
- * f1();
- * // 42
  *
  * @memberof fake
  * @param {*} value
@@ -69,20 +40,6 @@ fake.returns = function returns(value) {
 
 /**
  * Creates a `fake` that throws an Error.
- * If the `value` argument does not have Error in its prototype chain, it will
- * be used for creating a new error.
- *
- * @example
- * var f1 = sinon.fake.throws("hello");
- *
- * f1();
- * // Uncaught Error: hello
- *
- * @example
- * var f2 = sinon.fake.throws(new TypeError("Invalid argument"));
- *
- * f2();
- * // Uncaught TypeError: Invalid argument
  *
  * @memberof fake
  * @param {*|Error} value
@@ -99,13 +56,6 @@ fake.throws = function throws(value) {
 
 /**
  * Creates a `fake` that returns a promise that resolves to the passed `value`
- * argument.
- *
- * @example
- * var f1 = sinon.fake.resolves("apple pie");
- *
- * await f1();
- * // "apple pie"
  *
  * @memberof fake
  * @param {*} value
@@ -122,18 +72,6 @@ fake.resolves = function resolves(value) {
 
 /**
  * Creates a `fake` that returns a promise that rejects to the passed `value`
- * argument. When `value` does not have Error in its prototype chain, it will be
- * wrapped in an Error.
- *
- * @example
- * var f1 = sinon.fake.rejects(":(");
- *
- * try {
- *   await f1();
- * } catch (error) {
- *   console.log(error);
- *   // ":("
- * }
  *
  * @memberof fake
  * @param {*} value
@@ -150,16 +88,6 @@ fake.rejects = function rejects(value) {
 
 /**
  * Returns a `fake` that calls the callback with the defined arguments.
- *
- * @example
- * function callback() {
- *   console.log(arguments.join("*"));
- * }
- *
- * const f1 = sinon.fake.yields("apple", "pie");
- *
- * f1(callback);
- * // "apple*pie"
  *
  * @memberof fake
  * @returns {Function}
@@ -183,19 +111,6 @@ fake.yields = function yields() {
 /**
  * Returns a `fake` that calls the callback **asynchronously** with the
  * defined arguments.
- *
- * @example
- * function callback() {
- *   console.log(arguments.join("*"));
- * }
- *
- * const f1 = sinon.fake.yields("apple", "pie");
- *
- * f1(callback);
- *
- * setTimeout(() => {
- *   // "apple*pie"
- * });
  *
  * @memberof fake
  * @returns {Function}
@@ -246,6 +161,11 @@ function wrapFunc(f) {
     };
     const proxy = createProxy(fakeInstance, f || fakeInstance);
 
+    Object.defineProperty(proxy, "name", {
+        value: "fake",
+        configurable: true,
+    });
+
     proxy.displayName = "fake";
     proxy.id = `fake#${uuid++}`;
 
@@ -263,3 +183,5 @@ function wrapFunc(f) {
 function getError(value) {
     return value instanceof Error ? value : new Error(value);
 }
+
+export default fake;

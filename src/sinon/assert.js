@@ -29,7 +29,7 @@ function applyDefaults(obj, defaults) {
  * @param {CreateAssertOptions}  [opts] options bag
  * @returns {object} object with multiple assertion methods
  */
-export function createAssertObject(opts) {
+function createAssertObject(opts) {
     const cleanedAssertOptions = opts || {};
     applyDefaults(cleanedAssertOptions, {
         shouldLimitAssertionLogs: false,

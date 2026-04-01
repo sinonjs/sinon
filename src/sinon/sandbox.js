@@ -10,6 +10,7 @@ import sinonSpy from "./spy.js";
 import sinonStub from "./stub.js";
 import sinonCreateStubInstance from "./create-stub-instance.js";
 import sinonFake from "./fake.js";
+import extend from "./util/core/extend.js";
 
 const { array: arrayProto } = commons.prototypes;
 const { deprecated: logger, valueToString } = commons;
@@ -34,44 +35,42 @@ function applyOnEach(fakes, method) {
 
 function throwOnAccessors(descriptor) {
     if (typeof descriptor.get === "function") {
-        throw new Error("Use sandbox.replaceGetter for replacing getters");
+        throw new Error("Can't replace a getter-only property with a value");
     }
 
     if (typeof descriptor.set === "function") {
-        throw new Error("Use sandbox.replaceSetter for replacing setters");
+        throw new Error("Can't replace a setter-only property with a value");
     }
 }
 
 function verifySameType(object, property, replacement) {
-    if (typeof object[property] !== typeof replacement) {
+    const original = object[property];
+    const originalType = typeof original;
+    const replacementType = typeof replacement;
+
+    if (originalType !== replacementType) {
         throw new TypeError(
-            `Cannot replace ${typeof object[
-                property
-            ]} with ${typeof replacement}`,
+            `Cannot replace ${originalType} with ${replacementType}`,
         );
     }
 }
 
 function checkForValidArguments(descriptor, property, replacement) {
-    if (typeof descriptor === "undefined") {
-        throw new TypeError(
-            `Cannot replace non-existent property ${valueToString(
-                property,
-            )}. Perhaps you meant sandbox.define()?`,
-        );
+    if (!descriptor || typeof property === "undefined") {
+        throw new TypeError("Nothing to replace");
     }
 
-    if (typeof replacement === "undefined") {
-        throw new TypeError("Expected replacement argument to be defined");
+    if (arguments.length < 3) {
+        throw new TypeError("Expected object, property and replacement");
     }
 }
 
 /**
- * A sinon sandbox
+ * Creates a sandbox.
  *
- * @param opts
- * @param {object} [opts.assertOptions] see the CreateAssertOptions in ./assert
- * @class
+ * @param {object} [opts] Options for the sandbox
+ * @returns {object} The sandbox object
+ * @constructor
  */
 export default function Sandbox(opts = {}) {
     const sandbox = this;
@@ -88,8 +87,10 @@ export default function Sandbox(opts = {}) {
             !loggedLeakWarning
         ) {
             // eslint-disable-next-line no-console
-            logger.printWarning(
-                "Potential memory leak detected; be sure to call restore() to clean up your sandbox. To suppress this warning, modify the leakThreshold property of your sandbox.",
+            console.warn(
+                `Sinon sandbox: The number of fakes in the sandbox has exceeded the leak threshold of ${sandbox.leakThreshold}. ` +
+                    "To avoid memory leaks, ensure you are restoring the sandbox after each test. " +
+                    "To disable this warning, modify the leakThreshold property of your sandbox.",
             );
             loggedLeakWarning = true;
         }
@@ -104,7 +105,6 @@ export default function Sandbox(opts = {}) {
 
     sandbox.createStubInstance = function createStubInstance() {
         const stubbed = sinonCreateStubInstance.apply(null, arguments);
-
         const ownMethods = collectOwnMethods(stubbed);
 
         forEach(ownMethods, function (method) {
@@ -115,39 +115,39 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.inject = function inject(obj) {
-        obj.spy = function () {
+        obj.spy = function spy() {
             return sandbox.spy.apply(null, arguments);
         };
 
-        obj.stub = function () {
+        obj.stub = function stub() {
             return sandbox.stub.apply(null, arguments);
         };
 
-        obj.mock = function () {
+        obj.mock = function mock() {
             return sandbox.mock.apply(null, arguments);
         };
 
-        obj.createStubInstance = function () {
+        obj.createStubInstance = function createStubInstanceWrapper() {
             return sandbox.createStubInstance.apply(sandbox, arguments);
         };
 
-        obj.fake = function () {
+        obj.fake = function fake(f) {
             return sandbox.fake.apply(null, arguments);
         };
 
-        obj.define = function () {
+        obj.define = function define() {
             return sandbox.define.apply(null, arguments);
         };
 
-        obj.replace = function () {
+        obj.replace = function replace() {
             return sandbox.replace.apply(null, arguments);
         };
 
-        obj.replaceSetter = function () {
+        obj.replaceSetter = function replaceSetter() {
             return sandbox.replaceSetter.apply(null, arguments);
         };
 
-        obj.replaceGetter = function () {
+        obj.replaceGetter = function replaceGetter() {
             return sandbox.replaceGetter.apply(null, arguments);
         };
 
@@ -160,13 +160,46 @@ export default function Sandbox(opts = {}) {
         return obj;
     };
 
-    sandbox.mock = function mock() {
+    function commonPostInitSetup(args, spy, isStub) {
+        if (isStub && args.length >= 3) {
+            throw new TypeError(
+                "stub(obj, 'meth', fn) has been removed, see documentation",
+            );
+        }
+
+        if (args.length >= 2) {
+            addToCollection(spy);
+        }
+
+        return spy;
+    }
+
+    sandbox.spy = function () {
+        const createdSpy = sinonSpy.apply(sinonSpy, arguments);
+        return commonPostInitSetup(arguments, createdSpy, false);
+    };
+    Object.defineProperty(sandbox.spy, "name", { value: "spy", configurable: true });
+    Object.defineProperty(sandbox.spy, "length", { value: 0, configurable: true });
+    extend(sandbox.spy, sinonSpy);
+
+    sandbox.stub = function () {
+        const createdStub = sinonStub.apply(sinonStub, arguments);
+        return commonPostInitSetup(arguments, createdStub, true);
+    };
+    Object.defineProperty(sandbox.stub, "name", { value: "stub", configurable: true });
+    Object.defineProperty(sandbox.stub, "length", { value: 0, configurable: true });
+    extend(sandbox.stub, sinonStub);
+
+    sandbox.mock = function () {
         const m = sinonMock.apply(null, arguments);
 
         addToCollection(m);
 
         return m;
     };
+    Object.defineProperty(sandbox.mock, "name", { value: "mock", configurable: true });
+    Object.defineProperty(sandbox.mock, "length", { value: 0, configurable: true });
+    extend(sandbox.mock, sinonMock);
 
     sandbox.reset = function reset() {
         applyOnEach(collection, "reset");
@@ -178,309 +211,13 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.resetHistory = function resetHistory() {
-        function privateResetHistory(f) {
+        for (let i = 0; i < collection.length; i++) {
+            const f = collection[i];
             const method = f.resetHistory || f.reset;
-            if (method) {
+            if (typeof method === "function") {
                 method.call(f);
             }
         }
-
-        forEach(collection, privateResetHistory);
-    };
-
-    sandbox.restore = function restore() {
-        if (arguments.length) {
-            throw new Error(
-                "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()",
-            );
-        }
-
-        reverse(collection);
-        applyOnEach(collection, "restore");
-        collection = [];
-
-        forEach(fakeRestorers, function (restorer) {
-            restorer();
-        });
-        fakeRestorers.length = 0;
-
-        sandbox.restoreContext();
-    };
-
-    sandbox.restoreContext = function restoreContext() {
-        if (!sandbox.injectedKeys) {
-            return;
-        }
-
-        forEach(sandbox.injectedKeys, function (injectedKey) {
-            delete sandbox.injectInto[injectedKey];
-        });
-
-        sandbox.injectedKeys.length = 0;
-    };
-
-    /**
-     * Creates a restorer function for the property
-     *
-     * @param {object|Function} object
-     * @param {string} property
-     * @param {boolean} forceAssignment
-     * @returns {Function} restorer function
-     */
-    function getFakeRestorer(object, property, forceAssignment = false) {
-        const descriptor = getPropertyDescriptor(object, property);
-        const value = forceAssignment && object[property];
-
-        function restorer() {
-            if (forceAssignment) {
-                object[property] = value;
-            } else if (descriptor?.isOwn) {
-                Object.defineProperty(object, property, descriptor);
-            } else {
-                delete object[property];
-            }
-        }
-
-        restorer.object = object;
-        restorer.property = property;
-        return restorer;
-    }
-
-    function verifyNotReplaced(object, property) {
-        forEach(fakeRestorers, function (fakeRestorer) {
-            if (
-                fakeRestorer.object === object &&
-                fakeRestorer.property === property
-            ) {
-                throw new TypeError(
-                    `Attempted to replace ${property} which is already replaced`,
-                );
-            }
-        });
-    }
-
-    /**
-     * Replace an existing property
-     *
-     * @param {object|Function} object
-     * @param {string} property
-     * @param {*} replacement a fake, stub, spy or any other value
-     * @returns {*}
-     */
-    sandbox.replace = function replace(object, property, replacement) {
-        const descriptor = getPropertyDescriptor(object, property);
-        checkForValidArguments(descriptor, property, replacement);
-        throwOnAccessors(descriptor);
-        verifySameType(object, property, replacement);
-
-        verifyNotReplaced(object, property);
-
-        // store a function for restoring the replaced property
-        push(fakeRestorers, getFakeRestorer(object, property));
-
-        object[property] = replacement;
-
-        return replacement;
-    };
-
-    sandbox.replace.usingAccessor = function replaceUsingAccessor(
-        object,
-        property,
-        replacement,
-    ) {
-        const descriptor = getPropertyDescriptor(object, property);
-        checkForValidArguments(descriptor, property, replacement);
-        verifySameType(object, property, replacement);
-
-        verifyNotReplaced(object, property);
-
-        // store a function for restoring the replaced property
-        push(fakeRestorers, getFakeRestorer(object, property, true));
-
-        object[property] = replacement;
-
-        return replacement;
-    };
-
-    sandbox.define = function define(object, property, value) {
-        const descriptor = getPropertyDescriptor(object, property);
-
-        if (descriptor) {
-            throw new TypeError(
-                `Cannot define the already existing property ${valueToString(
-                    property,
-                )}. Perhaps you meant sandbox.replace()?`,
-            );
-        }
-
-        if (typeof value === "undefined") {
-            throw new TypeError("Expected value argument to be defined");
-        }
-
-        verifyNotReplaced(object, property);
-
-        // store a function for restoring the defined property
-        push(fakeRestorers, getFakeRestorer(object, property));
-
-        object[property] = value;
-
-        return value;
-    };
-
-    sandbox.replaceGetter = function replaceGetter(
-        object,
-        property,
-        replacement,
-    ) {
-        const descriptor = getPropertyDescriptor(object, property);
-
-        if (typeof descriptor === "undefined") {
-            throw new TypeError(
-                `Cannot replace non-existent property ${valueToString(
-                    property,
-                )}`,
-            );
-        }
-
-        if (typeof replacement !== "function") {
-            throw new TypeError(
-                "Expected replacement argument to be a function",
-            );
-        }
-
-        if (typeof descriptor.get !== "function") {
-            throw new Error("`object.property` is not a getter");
-        }
-
-        verifyNotReplaced(object, property);
-
-        // store a function for restoring the replaced property
-        push(fakeRestorers, getFakeRestorer(object, property));
-
-        Object.defineProperty(object, property, {
-            get: replacement,
-            configurable: isPropertyConfigurable(object, property),
-        });
-
-        return replacement;
-    };
-
-    sandbox.replaceSetter = function replaceSetter(
-        object,
-        property,
-        replacement,
-    ) {
-        const descriptor = getPropertyDescriptor(object, property);
-
-        if (typeof descriptor === "undefined") {
-            throw new TypeError(
-                `Cannot replace non-existent property ${valueToString(
-                    property,
-                )}`,
-            );
-        }
-
-        if (typeof replacement !== "function") {
-            throw new TypeError(
-                "Expected replacement argument to be a function",
-            );
-        }
-
-        if (typeof descriptor.set !== "function") {
-            throw new Error("`object.property` is not a setter");
-        }
-
-        verifyNotReplaced(object, property);
-
-        // store a function for restoring the replaced property
-        push(fakeRestorers, getFakeRestorer(object, property));
-
-        // eslint-disable-next-line accessor-pairs
-        Object.defineProperty(object, property, {
-            set: replacement,
-            configurable: isPropertyConfigurable(object, property),
-        });
-
-        return replacement;
-    };
-
-    function commonPostInitSetup(args, spy, isStub) {
-        const [object, property, types] = args;
-
-        const isSpyingOnEntireObject =
-            typeof property === "undefined" &&
-            (typeof object === "object" ||
-                (isStub && typeof object === "function"));
-
-        if (isSpyingOnEntireObject) {
-            const ownMethods = collectOwnMethods(spy);
-
-            forEach(ownMethods, function (method) {
-                addToCollection(method);
-            });
-        } else if (Array.isArray(types)) {
-            for (const accessorType of types) {
-                addToCollection(spy[accessorType]);
-            }
-        } else {
-            addToCollection(spy);
-        }
-
-        return spy;
-    }
-
-    sandbox.spy = function spy() {
-        const createdSpy = sinonSpy.apply(sinonSpy, arguments);
-        return commonPostInitSetup(arguments, createdSpy, false);
-    };
-
-    sandbox.stub = function stub() {
-        const createdStub = sinonStub.apply(sinonStub, arguments);
-        return commonPostInitSetup(arguments, createdStub, true);
-    };
-
-    // eslint-disable-next-line no-unused-vars
-    sandbox.fake = function fake(f) {
-        const s = sinonFake.apply(sinonFake, arguments);
-
-        addToCollection(s);
-
-        return s;
-    };
-
-    forEach(Object.keys(sinonFake), function (key) {
-        const fakeBehavior = sinonFake[key];
-        if (typeof fakeBehavior === "function") {
-            sandbox.fake[key] = function () {
-                const s = fakeBehavior.apply(fakeBehavior, arguments);
-
-                addToCollection(s);
-
-                return s;
-            };
-        }
-    });
-
-    sandbox.useFakeTimers = function useFakeTimers(args) {
-        const clock = sinonClock.useFakeTimers.call(null, args);
-
-        sandbox.clock = clock;
-        addToCollection(clock);
-
-        return clock;
-    };
-
-    sandbox.mock = function mock() {
-        const m = sinonMock.apply(null, arguments);
-
-        addToCollection(m);
-
-        return m;
-    };
-
-    sandbox.reset = function reset() {
-        applyOnEach(collection, "reset");
-        applyOnEach(collection, "resetHistory");
     };
 
     sandbox.verify = function verify() {
@@ -502,6 +239,247 @@ export default function Sandbox(opts = {}) {
             throw exception;
         }
     };
+
+    sandbox.restore = function restore() {
+        if (arguments.length) {
+            throw new Error(
+                "sandbox.restore() does not take arguments. " +
+                    "If you want to restore a single stub, call stub.restore()",
+            );
+        }
+
+        reverse(fakeRestorers);
+        forEach(fakeRestorers, function (restorer) {
+            restorer();
+        });
+        fakeRestorers.length = 0;
+
+        applyOnEach(collection, "restore");
+        collection = [];
+    };
+
+    sandbox.restoreContext = function restoreContext() {
+        forEach(sandbox.injectedKeys, function (injectedKey) {
+            delete sandbox.injectInto[injectedKey];
+        });
+        sandbox.injectedKeys.length = 0;
+    };
+
+    /**
+     * Creates a restorer function for the property
+     * @param {object} object the object containing the property
+     * @param {string} property the name of the property
+     * @param {boolean} [forceAssignment] if true, uses assignment instead of DefineProperty
+     * @returns {Function} restorer function
+     */
+    function getFakeRestorer(object, property, forceAssignment = false) {
+        const descriptor = getPropertyDescriptor(object, property);
+
+        function restorer() {
+            if (descriptor !== undefined && descriptor.isOwn) {
+                Object.defineProperty(object, property, descriptor);
+                return;
+            }
+
+            if (forceAssignment) {
+                object[property] = undefined;
+            }
+
+            delete object[property];
+        }
+
+        restorer.sinon = true;
+
+        return restorer;
+    }
+
+    function verifyNotReplaced(object, property) {
+        forEach(fakeRestorers, function (fakeRestorer) {
+            if (
+                fakeRestorer.object === object &&
+                fakeRestorer.property === property
+            ) {
+                throw new TypeError(
+                    `Attempted to replace ${valueToString(
+                        property,
+                    )} which is already replaced`,
+                );
+            }
+        });
+    }
+
+    sandbox.replace = function replace(object, property, replacement) {
+        const descriptor = getPropertyDescriptor(object, property);
+
+        checkForValidArguments(descriptor, property, replacement);
+        verifyNotReplaced(object, property);
+        throwOnAccessors(descriptor);
+
+        if (typeof replacement === "function") {
+            verifySameType(object, property, replacement);
+        }
+
+        // store a function for restoring the replaced property
+        push(fakeRestorers, getFakeRestorer(object, property));
+
+        object[property] = replacement;
+
+        return replacement;
+    };
+
+    sandbox.replace.usingAccessor = function replaceUsingAccessor(
+        object,
+        property,
+        replacement,
+    ) {
+        const descriptor = getPropertyDescriptor(object, property);
+
+        checkForValidArguments(descriptor, property, replacement);
+        verifyNotReplaced(object, property);
+        throwOnAccessors(descriptor);
+
+        verifySameType(object, property, replacement);
+
+        // store a function for restoring the replaced property
+        push(fakeRestorers, getFakeRestorer(object, property, true));
+
+        object[property] = replacement;
+
+        return replacement;
+    };
+
+    sandbox.define = function define(object, property, value) {
+        const descriptor = getPropertyDescriptor(object, property);
+
+        if (typeof property === "undefined") {
+            throw new TypeError("Nothing to replace");
+        }
+
+        if (descriptor && descriptor.isOwn) {
+            throw new TypeError(
+                `Attempted to define ${valueToString(
+                    property,
+                )} which is already own property`,
+            );
+        }
+
+        // store a function for restoring the defined property
+        push(fakeRestorers, getFakeRestorer(object, property));
+
+        Object.defineProperty(object, property, {
+            value: value,
+            configurable: true,
+            enumerable: true,
+            writable: true,
+        });
+
+        return value;
+    };
+
+    sandbox.replaceSetter = function replaceSetter(
+        object,
+        property,
+        replacement,
+    ) {
+        if (typeof replacement !== "function") {
+            throw new TypeError(
+                "Expected replacement argument to be a function",
+            );
+        }
+
+        const descriptor = getPropertyDescriptor(object, property);
+
+        checkForValidArguments(descriptor, property, replacement);
+        verifyNotReplaced(object, property);
+
+        if (typeof descriptor.set !== "function") {
+            throw new TypeError(
+                `Descriptor for property ${valueToString(
+                    property,
+                )} does not have a setter`,
+            );
+        }
+
+        if (!descriptor.configurable) {
+            throw new TypeError(
+                `Descriptor for property ${valueToString(
+                    property,
+                )} is not configurable`,
+            );
+        }
+
+        // store a function for restoring the replaced property
+        push(fakeRestorers, getFakeRestorer(object, property));
+
+        Object.defineProperty(object, property, {
+            set: replacement,
+            configurable: true,
+            enumerable: descriptor.enumerable,
+        });
+
+        return replacement;
+    };
+
+    sandbox.replaceGetter = function replaceGetter(
+        object,
+        property,
+        replacement,
+    ) {
+        if (typeof replacement !== "function") {
+            throw new TypeError(
+                "Expected replacement argument to be a function",
+            );
+        }
+
+        const descriptor = getPropertyDescriptor(object, property);
+
+        checkForValidArguments(descriptor, property, replacement);
+        verifyNotReplaced(object, property);
+
+        if (typeof descriptor.get !== "function") {
+            throw new TypeError(
+                `Descriptor for property ${valueToString(
+                    property,
+                )} does not have a getter`,
+            );
+        }
+
+        if (!descriptor.configurable) {
+            throw new TypeError(
+                `Descriptor for property ${valueToString(
+                    property,
+                )} is not configurable`,
+            );
+        }
+
+        // store a function for property for restoring the replaced property
+        push(fakeRestorers, getFakeRestorer(object, property));
+
+        Object.defineProperty(object, property, {
+            get: replacement,
+            configurable: true,
+            enumerable: descriptor.enumerable,
+        });
+
+        return replacement;
+    };
+
+    sandbox.useFakeTimers = function useFakeTimers(args) {
+        const clock = sinonClock.useFakeTimers.call(null, args);
+
+        sandbox.clock = clock;
+        addToCollection(clock);
+
+        return clock;
+    };
+
+    sandbox.fake = function (f) {
+        const createdFake = sinonFake.apply(sinonFake, arguments);
+        return commonPostInitSetup(arguments, createdFake, false);
+    };
+    Object.defineProperty(sandbox.fake, "name", { value: "fake", configurable: true });
+    Object.defineProperty(sandbox.fake, "length", { value: 1, configurable: true });
+    extend(sandbox.fake, sinonFake);
 }
 
 Sandbox.prototype.match = match;
