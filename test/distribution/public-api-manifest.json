@@ -43,7 +43,7 @@
     "stub": {
       "type": "function",
       "length": 0,
-      "name": "stub"
+      "name": "stub$1"
     },
     "fake": {
       "type": "function",

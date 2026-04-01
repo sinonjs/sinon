@@ -1,14 +1,14 @@
 // Temporary ESM wrapper for legacy CJS components
-import behavior from "../lib/sinon/behavior.js";
-import createSandbox from "../lib/sinon/create-sandbox.js";
-import extend from "../lib/sinon/util/core/extend.js";
-import fakeTimers from "../lib/sinon/util/fake-timers.js";
-import Sandbox from "../lib/sinon/sandbox.js";
-import stub from "../lib/sinon/stub.js";
-import promise from "../lib/sinon/promise.js";
+import behavior from "./sinon/behavior.js";
+import createSandbox from "./sinon/create-sandbox.js";
+import extend from "./sinon/util/core/extend.js";
+import * as fakeTimers from "./sinon/util/fake-timers.js";
+import Sandbox from "./sinon/sandbox.js";
+import stub from "./sinon/stub.js";
+import promise from "./sinon/promise.js";
 import samsam from "@sinonjs/samsam";
-import restoreObject from "../lib/sinon/restore-object.js";
-import expectation from "../lib/sinon/mock-expectation.js";
+import restoreObject from "./sinon/restore-object.js";
+import expectation from "./sinon/mock-expectation.js";
 
 /**
  * @returns {object} a configured sandbox
