@@ -1,6 +1,6 @@
 /*eslint-env worker*/
 /*global sinon*/
-"use strict";
+
 
 // Abort if we are not running in a WebWorker
 if (typeof importScripts !== "undefined") {

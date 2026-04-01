@@ -1,4 +1,4 @@
-"use strict";
+
 
 const assert = require("@sinonjs/referee").assert;
 const functionName = require("@sinonjs/commons").functionName;

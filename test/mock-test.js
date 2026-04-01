@@ -1,4 +1,4 @@
-"use strict";
+
 
 const match = require("@sinonjs/samsam").createMatcher;
 const referee = require("@sinonjs/referee");

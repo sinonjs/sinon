@@ -1,4 +1,4 @@
-"use strict";
+
 
 const referee = require("@sinonjs/referee");
 const createSpy = require("../lib/sinon/spy");

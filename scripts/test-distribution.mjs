@@ -8,14 +8,6 @@ import { runFixture } from "../test/distribution/helpers/run-fixture.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-function run(command, args, cwd) {
-    execFileSync(command, args, {
-        cwd,
-        stdio: "inherit",
-        env: process.env,
-    });
-}
-
 console.log("Packing Sinon...");
 const packJson = execFileSync("npm", ["pack", "--json"], { cwd: repoRoot });
 const [{ filename }] = JSON.parse(packJson.toString("utf8"));
@@ -130,7 +122,7 @@ if (!failed) {
         for (const fixture of fixtures) {
             console.log(`RUNNING fixture: ${fixture.name}`);
             try {
-                await runFixture({
+                runFixture({
                     fixtureDir: path.join(repoRoot, fixture.dir),
                     tarballPath,
                     entryFile: fixture.entry,

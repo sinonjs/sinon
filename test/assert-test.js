@@ -1,4 +1,4 @@
-"use strict";
+
 
 const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();

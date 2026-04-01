@@ -1,4 +1,4 @@
-"use strict";
+
 
 const referee = require("@sinonjs/referee");
 const getNextTick = require("../../../lib/sinon/util/core/get-next-tick");

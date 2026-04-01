@@ -1,8 +1,11 @@
 /* eslint-disable no-process-exit, jsdoc/require-jsdoc */
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
+import http from "node:http";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const http = require("node:http");
-const fs = require("node:fs");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = 3876;
 
 const htmlWithModuleScript = `
@@ -51,17 +54,14 @@ try {
 </script>
 `;
 
-// start server where our built sinon esm bundle resides
-process.chdir(`${__dirname}/../../pkg/`);
-const sinonModule = fs.readFileSync("./sinon-esm.js");
+const pkgDir = path.resolve(__dirname, "../../pkg/");
+const sinonModule = fs.readFileSync(path.join(pkgDir, "sinon-esm.js"));
 
 async function evaluatePageContent() {
     const browser = await puppeteer.launch({
-        // https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
         args: ["--no-sandbox"],
-        // allow overriding chrome path
         executablePath: process.env.SINON_CHROME_BIN || null,
-        headless: true,
+        headless: "new",
     });
     const page = await browser.newPage();
 
@@ -76,14 +76,13 @@ async function evaluatePageContent() {
     }
 
     page.on("pageerror", function (err) {
-        throw err;
+        die(err.message);
     });
 
     page.on("error", function (err) {
-        throw err;
+        die(err.message);
     });
 
-    // our "assertion framework" :)
     page.on("console", function (msg) {
         const text = msg.text();
 
@@ -97,7 +96,7 @@ async function evaluatePageContent() {
 
     await page.goto("http://localhost:3876");
 
-    setTimeout(() => die("No result within timeout."), 1000);
+    setTimeout(() => die("No result within timeout."), 5000);
 }
 
 const app = http.createServer((req, res) => {

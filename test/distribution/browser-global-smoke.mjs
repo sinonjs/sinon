@@ -1,8 +1,11 @@
 /* eslint-disable no-process-exit, jsdoc/require-jsdoc */
-const puppeteer = require("puppeteer");
-const http = require("node:http");
-const fs = require("node:fs");
-const path = require("node:path");
+import puppeteer from "puppeteer";
+import http from "node:http";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = 3877;
 
 const htmlWithGlobalScript = `
@@ -53,7 +56,7 @@ async function evaluatePageContent() {
     const browser = await puppeteer.launch({
         args: ["--no-sandbox"],
         executablePath: process.env.SINON_CHROME_BIN || null,
-        headless: true,
+        headless: "new",
     });
     const page = await browser.newPage();
 

@@ -1,4 +1,4 @@
-"use strict";
+
 
 const sinon = require("../lib/sinon.js");
 const createProxy = require("../lib/sinon/proxy");

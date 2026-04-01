@@ -1,4 +1,4 @@
-"use strict";
+
 const { D } = require("./../lib/sinon/spy-formatters");
 const sinon = require("../lib/sinon");
 const { assert } = require("@sinonjs/referee");
