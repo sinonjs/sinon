@@ -10,3 +10,8 @@ docs/vendor/
 vendor/
 .bundle
 .worktrees/
+.gitnexus
+.claude/
+AGENTS.md
+CLAUDE.md
+docs/superpowers/
