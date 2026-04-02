@@ -6,11 +6,17 @@ const { hasOwnProperty } = prototypes.object;
 const { push } = prototypes.array;
 
 function collectMethod(methods, object, prop, propOwner) {
+    const descriptor = getPropertyDescriptor(propOwner, prop);
+    const value = descriptor.value;
+
     if (
-        typeof getPropertyDescriptor(propOwner, prop).value === "function" &&
-        hasOwnProperty(object, prop)
+        typeof value === "function" &&
+        hasOwnProperty(object, prop) &&
+        value &&
+        value.restore &&
+        value.restore.sinon
     ) {
-        push(methods, object[prop]);
+        push(methods, value);
     }
 }
 
