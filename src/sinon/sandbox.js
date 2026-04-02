@@ -73,7 +73,7 @@ function checkForValidArguments(descriptor, property, replacement) {
  *
  * @param {object} [opts] Options for the sandbox
  * @returns {object} The sandbox object
- * @constructor
+ * @class
  */
 export default function Sandbox(opts = {}) {
     const sandbox = this;

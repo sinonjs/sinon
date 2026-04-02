@@ -46,7 +46,7 @@ const hasES5Support = "keys" in Object;
  * Wraps a method on an object with another function.
  *
  * @param {object} object The object containing the method
- * @param {string|Symbol} property The property name of the method to wrap
+ * @param {string | symbol} property The property name of the method to wrap
  * @param {Function|object} method The wrapper function or a property descriptor
  * @returns {Function} The wrapped method
  */
