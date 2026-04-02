@@ -1,4 +1,5 @@
 out/
+lib/
 pkg
 tmp/
 node_modules

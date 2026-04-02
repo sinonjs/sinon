@@ -60,6 +60,7 @@ If you have questions that are not covered by the documentation, you can [check 
 ## Contribute?
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how you can contribute to Sinon.JS. Artifact-first [contract tests](CONTRIBUTING.md#contract-tests) are used to protect public APIs during migration.
+The `lib/` directory is generated build output and is not committed to the repository; run `npm run build` to regenerate it locally when needed.
 
 ## Backers
 

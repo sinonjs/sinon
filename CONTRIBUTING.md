@@ -164,3 +164,5 @@ Build requires Node. Under the hood [esbuild](https://esbuild.github.io/) is use
 To build run
 
     $ node build.cjs
+
+The `lib/` directory is generated output. Do not commit it; rebuild it locally with `npm run build` when you need fresh artifacts. The published npm tarball still includes `lib/` via the package allowlist.
