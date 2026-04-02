@@ -1,5 +1,3 @@
-"use strict";
-
 const referee = require("@sinonjs/referee");
 const timesInWords = require("../../../lib/sinon/util/core/times-in-words");
 const assert = referee.assert;

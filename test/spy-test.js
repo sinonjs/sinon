@@ -1,5 +1,3 @@
-"use strict";
-
 const referee = require("@sinonjs/referee");
 const createSpy = require("../lib/sinon/spy");
 const createProxy = require("../lib/sinon/proxy");

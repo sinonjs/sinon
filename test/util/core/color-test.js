@@ -1,5 +1,3 @@
-"use strict";
-
 const assert = require("@sinonjs/referee").assert;
 const Colorizer = require("../../../lib/sinon/colorizer");
 

@@ -1,0 +1,62 @@
+{
+  "topLevelKeys": [
+    "addBehavior",
+    "assert",
+    "createSandbox",
+    "createStubInstance",
+    "define",
+    "expectation",
+    "fake",
+    "getFakes",
+    "inject",
+    "leakThreshold",
+    "match",
+    "mock",
+    "promise",
+    "replace",
+    "replaceGetter",
+    "replaceSetter",
+    "reset",
+    "resetBehavior",
+    "resetHistory",
+    "restore",
+    "restoreContext",
+    "restoreObject",
+    "spy",
+    "stub",
+    "timers",
+    "useFakeTimers",
+    "verify",
+    "verifyAndRestore"
+  ],
+  "functions": {
+    "createSandbox": {
+      "type": "function",
+      "length": 1,
+      "name": "createSandbox"
+    },
+    "spy": {
+      "type": "function",
+      "length": 0,
+      "name": "spy"
+    },
+    "stub": {
+      "type": "function",
+      "length": 0,
+      "name": "stub"
+    },
+    "fake": {
+      "type": "function",
+      "length": 1,
+      "name": "fake"
+    },
+    "restore": {
+      "type": "function",
+      "length": 0,
+      "name": "restore"
+    }
+  },
+  "hasTimers": true,
+  "hasPromise": true,
+  "hasMatch": true
+}

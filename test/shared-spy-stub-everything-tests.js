@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 /* eslint-disable jsdoc/require-jsdoc */
-"use strict";
 
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
