@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 const deprecated = require("@sinonjs/commons").deprecated;

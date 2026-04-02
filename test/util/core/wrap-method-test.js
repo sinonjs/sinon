@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
 const createSpy = require("../../../lib/sinon/spy");

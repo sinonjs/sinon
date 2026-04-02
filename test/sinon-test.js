@@ -1,5 +1,3 @@
-
-
 const assert = require("@sinonjs/referee").assert;
 const functionName = require("@sinonjs/commons").functionName;
 const Sandbox = require("../lib/sinon/sandbox");

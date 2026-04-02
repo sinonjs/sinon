@@ -5,7 +5,8 @@ import extend from "./util/core/extend.js";
 import { deepEqual } from "@sinonjs/samsam";
 import wrapMethod from "./util/core/wrap-method.js";
 
-const { concat, filter, forEach, every, join, push, slice, unshift } = prototypes.array;
+const { concat, filter, forEach, every, join, push, slice, unshift } =
+    prototypes.array;
 
 /**
  * Creates a mock for an object.

@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable jsdoc/require-jsdoc */
 
-
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 

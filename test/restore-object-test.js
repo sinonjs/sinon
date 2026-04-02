@@ -1,4 +1,3 @@
-
 /* eslint-disable no-empty-function */
 
 const referee = require("@sinonjs/referee");

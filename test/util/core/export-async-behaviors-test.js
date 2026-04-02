@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 const exportAsyncBehaviors = require("../../../lib/sinon/util/core/export-async-behaviors");

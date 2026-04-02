@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const proxyCall = require("../lib/sinon/proxy-call");
 const sinonSpy = require("../lib/sinon/spy");

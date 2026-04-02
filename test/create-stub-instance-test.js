@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const createStub = require("../lib/sinon/stub");
 const createStubInstance = require("../lib/sinon/create-stub-instance");

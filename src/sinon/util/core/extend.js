@@ -106,7 +106,11 @@ export default function extend(target, ...sources) {
                 prop,
             );
 
-            if (prop === "name" && (!destOwnPropertyDescriptor || !destOwnPropertyDescriptor.writable)) {
+            if (
+                prop === "name" &&
+                (!destOwnPropertyDescriptor ||
+                    !destOwnPropertyDescriptor.writable)
+            ) {
                 return;
             }
             const descriptors = {

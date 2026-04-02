@@ -1,5 +1,3 @@
-
-
 const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();
 const referee = require("@sinonjs/referee");

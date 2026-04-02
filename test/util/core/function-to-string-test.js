@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const createSpy = require("../../../lib/sinon/spy");
 const functionToString = require("../../../lib/sinon/util/core/function-to-string");

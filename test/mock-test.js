@@ -1,5 +1,3 @@
-
-
 const match = require("@sinonjs/samsam").createMatcher;
 const referee = require("@sinonjs/referee");
 const sinonMock = require("../lib/sinon/mock");

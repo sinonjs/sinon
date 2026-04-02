@@ -1,4 +1,9 @@
-import { prototypes, calledInOrder, orderByFirstCall, global as globalObject } from "@sinonjs/commons";
+import {
+    prototypes,
+    calledInOrder,
+    orderByFirstCall,
+    global as globalObject,
+} from "@sinonjs/commons";
 import { createMatcher } from "@sinonjs/samsam";
 import timesInWords from "./util/core/times-in-words.js";
 import { inspect } from "util";

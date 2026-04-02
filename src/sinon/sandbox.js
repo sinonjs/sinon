@@ -162,7 +162,12 @@ export default function Sandbox(opts = {}) {
         return obj;
     };
 
-    function commonPostInitSetup(args, spy, isStub, shouldAddToCollection = true) {
+    function commonPostInitSetup(
+        args,
+        spy,
+        isStub,
+        shouldAddToCollection = true,
+    ) {
         if (isStub && args.length >= 3) {
             throw new TypeError(
                 "stub(obj, 'meth', fn) has been removed, see documentation",
@@ -177,7 +182,10 @@ export default function Sandbox(opts = {}) {
     }
 
     function addReturnedMethodsToCollection(result) {
-        if (result && (typeof result === "object" || typeof result === "function")) {
+        if (
+            result &&
+            (typeof result === "object" || typeof result === "function")
+        ) {
             forEach(collectOwnMethods(result), addToCollection);
         }
     }
@@ -193,8 +201,14 @@ export default function Sandbox(opts = {}) {
         addReturnedMethodsToCollection(result);
         return result;
     };
-    Object.defineProperty(sandbox.spy, "name", { value: "spy", configurable: true });
-    Object.defineProperty(sandbox.spy, "length", { value: 0, configurable: true });
+    Object.defineProperty(sandbox.spy, "name", {
+        value: "spy",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.spy, "length", {
+        value: 0,
+        configurable: true,
+    });
     extend(sandbox.spy, sinonSpy);
 
     sandbox.stub = function () {
@@ -208,8 +222,14 @@ export default function Sandbox(opts = {}) {
         addReturnedMethodsToCollection(result);
         return result;
     };
-    Object.defineProperty(sandbox.stub, "name", { value: "stub", configurable: true });
-    Object.defineProperty(sandbox.stub, "length", { value: 0, configurable: true });
+    Object.defineProperty(sandbox.stub, "name", {
+        value: "stub",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.stub, "length", {
+        value: 0,
+        configurable: true,
+    });
     extend(sandbox.stub, sinonStub);
 
     sandbox.mock = function () {
@@ -219,8 +239,14 @@ export default function Sandbox(opts = {}) {
 
         return m;
     };
-    Object.defineProperty(sandbox.mock, "name", { value: "mock", configurable: true });
-    Object.defineProperty(sandbox.mock, "length", { value: 0, configurable: true });
+    Object.defineProperty(sandbox.mock, "name", {
+        value: "mock",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.mock, "length", {
+        value: 0,
+        configurable: true,
+    });
     extend(sandbox.mock, sinonMock);
 
     sandbox.reset = function reset() {
@@ -510,11 +536,23 @@ export default function Sandbox(opts = {}) {
         addToCollection(result);
         return result;
     };
-    Object.defineProperty(sandbox.fake, "name", { value: "fake", configurable: true });
-    Object.defineProperty(sandbox.fake, "length", { value: 1, configurable: true });
+    Object.defineProperty(sandbox.fake, "name", {
+        value: "fake",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.fake, "length", {
+        value: 1,
+        configurable: true,
+    });
     extend(sandbox.fake, sinonFake);
-    Object.defineProperty(sandbox.fake, "name", { value: "fake", configurable: true });
-    Object.defineProperty(sandbox.fake, "length", { value: 1, configurable: true });
+    Object.defineProperty(sandbox.fake, "name", {
+        value: "fake",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.fake, "length", {
+        value: 1,
+        configurable: true,
+    });
 
     function addFakeBehaviorToCollection(method) {
         const original = sandbox.fake[method];

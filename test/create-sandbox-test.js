@@ -1,5 +1,3 @@
-
-
 const createSandbox = require("../lib/sinon/create-sandbox");
 const { assert } = require("@sinonjs/referee");
 

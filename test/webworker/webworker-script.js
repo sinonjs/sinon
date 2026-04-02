@@ -1,7 +1,6 @@
 /*eslint-env worker*/
 /*global sinon*/
 
-
 // Abort if we are not running in a WebWorker
 if (typeof importScripts !== "undefined") {
     importScripts("/pkg/sinon.js");

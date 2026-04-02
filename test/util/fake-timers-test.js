@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 const fakeTimers = require("../../lib/sinon/util/fake-timers");
 const sinonStub = require("../../lib/sinon/stub");

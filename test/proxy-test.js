@@ -1,5 +1,3 @@
-
-
 const assert = require("@sinonjs/referee").assert;
 const extend = require("../lib/sinon/util/core/extend");
 const createProxy = require("../lib/sinon/proxy");

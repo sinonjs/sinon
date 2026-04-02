@@ -1,5 +1,3 @@
-
-
 const sinon = require("../lib/sinon.js");
 const { assert, refute } = require("@sinonjs/referee");
 

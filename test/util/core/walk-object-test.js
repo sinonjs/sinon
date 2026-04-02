@@ -1,5 +1,3 @@
-
-
 const referee = require("@sinonjs/referee");
 
 const walkObject = require("../../../lib/sinon/util/core/walk-object");
