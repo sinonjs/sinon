@@ -36,6 +36,7 @@
     "pretest-headless": "npm run build",
     "test-dev": "npm run test-node --  -n watch -n  watch-path=test --node-option watch-path=lib -R min",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",
+    "pretest-coverage": "npm run build",
     "test-coverage": "nyc nyc --exclude-after-remap false mochify --driver puppeteer --bundle 'node coverage.cjs'",
     "test-cloud": "./scripts/test-cloud.sh",
     "test-distribution": "node ./scripts/test-distribution.mjs",
