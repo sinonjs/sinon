@@ -11,6 +11,9 @@ const pkg = require("./package.json");
 console.log("Generating lib/ from src/ using Rollup...");
 execFileSync("npx", ["rollup", "-c", "rollup.config.mjs"], { stdio: "inherit" });
 
+// Step 1b: Mark the generated lib tree as CommonJS for Node.
+fs.writeFileSync("lib/package.json", JSON.stringify({ type: "commonjs" }, null, 2));
+
 // Step 2: Load sinon from the generated lib
 const sinon = require("./lib/sinon");
 

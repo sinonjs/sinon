@@ -2,6 +2,22 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../");
+const nodeEnv = {
+    ...process.env,
+    NODE_PATH: path.join(repoRoot, "node_modules"),
+};
+
+function unpackTarball(tarballPath, tempRoot) {
+    const nodeModulesDir = path.join(tempRoot, "node_modules");
+    const packageDir = path.join(nodeModulesDir, "sinon");
+
+    fs.mkdirSync(nodeModulesDir, { recursive: true });
+    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], { stdio: "ignore" });
+    fs.renameSync(path.join(nodeModulesDir, "package"), packageDir);
+}
 
 export function runFixture({
     fixtureDir,
@@ -22,15 +38,13 @@ export function runFixture({
             fs.writeFileSync(pkgPath, JSON.stringify({ name: "fixture", version: "1.0.0" }));
         }
 
-        // Install tarball
-        execFileSync("npm", ["install", "--no-package-lock", "--no-save", tarballPath], {
-            cwd: tempRoot,
-            stdio: "ignore",
-        });
+        // Unpack tarball directly into node_modules.
+        unpackTarball(tarballPath, tempRoot);
 
         // Run the entry file
         execFileSync("node", [...nodeArgs, entryFile], {
             cwd: tempRoot,
+            env: nodeEnv,
             stdio: "inherit",
         });
     } finally {

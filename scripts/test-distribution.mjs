@@ -7,9 +7,30 @@ import { fileURLToPath } from "node:url";
 import { runFixture } from "../test/distribution/helpers/run-fixture.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const nodeEnv = {
+    ...process.env,
+    NODE_PATH: path.join(repoRoot, "node_modules"),
+};
+const npmPackEnv = {
+    ...nodeEnv,
+};
+const npmConfigCacheKey = "npm_config_cache";
+npmPackEnv[npmConfigCacheKey] = path.join(os.tmpdir(), "sinon-npm-cache");
+
+function unpackTarball(tarballPath, tempRoot) {
+    const nodeModulesDir = path.join(tempRoot, "node_modules");
+    const packageDir = path.join(nodeModulesDir, "sinon");
+
+    fs.mkdirSync(nodeModulesDir, { recursive: true });
+    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], { stdio: "ignore" });
+    fs.renameSync(path.join(nodeModulesDir, "package"), packageDir);
+}
 
 console.log("Packing Sinon...");
-const packJson = execFileSync("npm", ["pack", "--json"], { cwd: repoRoot });
+const packJson = execFileSync("npm", ["pack", "--json"], {
+    cwd: repoRoot,
+    env: npmPackEnv,
+});
 const [{ filename }] = JSON.parse(packJson.toString("utf8"));
 const tarballPath = path.join(repoRoot, filename);
 
@@ -24,16 +45,14 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "sinon-dist-manifest-"));
 try {
     fs.writeFileSync(path.join(tempRoot, "package.json"), JSON.stringify({ name: "manifest-check", version: "1.0.0" }));
-    execFileSync("npm", ["install", "--no-package-lock", "--no-save", tarballPath], {
-        cwd: tempRoot,
-        stdio: "ignore",
-    });
+    unpackTarball(tarballPath, tempRoot);
 
     const extractorSource = fs.readFileSync(path.join(repoRoot, "test/distribution/helpers/read-public-api.cjs"), "utf8");
     fs.writeFileSync(path.join(tempRoot, "extract.cjs"), extractorSource);
 
     const actualManifestJson = execFileSync("node", ["-e", "console.log(JSON.stringify(require('./extract.cjs')))\n"], {
         cwd: tempRoot,
+        env: nodeEnv,
     }).toString("utf8");
     const actualManifest = JSON.parse(actualManifestJson);
 
