@@ -16,9 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
         with:
           fetch-depth: 2
+      - uses: actions/setup-node@v6
+        with:
           node-version: "lts/*"
           cache: "npm"
       - name: Install dependencies
@@ -35,9 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
         with:
           fetch-depth: 2
+      - uses: actions/setup-node@v6
+        with:
           node-version: "lts/*"
           cache: "npm"
       - name: Install dependencies
@@ -53,9 +55,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
         with:
           fetch-depth: 2
+      - uses: actions/setup-node@v6
+        with:
           node-version: "lts/*"
           cache: "npm"
       - name: Install dependencies
@@ -83,9 +86,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
         with:
           fetch-depth: 2
+      - uses: actions/setup-node@v6
+        with:
           node-version: "lts/*"
           cache: "npm"
       - name: Install dependencies
@@ -109,10 +113,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
-          fetch-depth: 2
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Install dependencies
