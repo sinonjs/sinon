@@ -1,21 +1,21 @@
-const referee = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
+import commons from "@sinonjs/commons";
+import samsam from "@sinonjs/samsam";
+import Sandbox from "../../src/sinon/sandbox.js";
+import createSandbox from "../../src/sinon/create-sandbox.js";
+import sinonFake from "../../src/sinon/fake.js";
+import sinonSpy from "../../src/sinon/spy.js";
+import sinonStub from "../../src/sinon/stub.js";
+import createSinonApi from "../../src/create-sinon-api.js";
+import "../test-helper.js";
+
 const assert = referee.assert;
-const deprecated = require("@sinonjs/commons").deprecated;
+const deprecated = commons.deprecated;
 const refute = referee.refute;
-const match = require("@sinonjs/samsam").createMatcher;
-const Sandbox = require("../lib/sinon/sandbox");
-const createSandbox = require("../lib/sinon/create-sandbox");
-const sinonFake = require("../lib/sinon/fake");
-const sinonSpy = require("../lib/sinon/spy");
-const sinonStub = require("../lib/sinon/stub");
-const sinonClock = require("../lib/sinon/util/fake-timers");
-const createApi = require("../lib/create-sinon-api");
+const match = samsam.createMatcher;
+const createApi = createSinonApi;
 
 const globalContext = typeof global !== "undefined" ? global : window;
-
-if (!assert.stub) {
-    require("./test-helper");
-}
 
 describe("Sandbox", function () {
     function noop() {
@@ -26,6 +26,39 @@ describe("Sandbox", function () {
         const sandbox = new Sandbox();
 
         assert.same(sandbox.match, match);
+    });
+
+    describe("error handling and cleanup helpers", function () {
+        it("throws if restore is called with arguments", function () {
+            const sandbox = createSandbox();
+
+            assert.exception(
+                function () {
+                    sandbox.restore("unexpected");
+                },
+                {
+                    message:
+                        "sandbox.restore() does not take any parameters. Perhaps you meant stub.restore()",
+                },
+            );
+        });
+
+        it("removes injected keys on restoreContext", function () {
+            const target = {};
+            const sandbox = createSandbox({
+                injectInto: target,
+                properties: ["spy", "stub"],
+            });
+
+            assert.isFunction(target.spy);
+            assert.isFunction(target.stub);
+
+            sandbox.restoreContext();
+
+            assert.isFalse("spy" in target);
+            assert.isFalse("stub" in target);
+            assert.equals(sandbox.injectedKeys.length, 0);
+        });
     });
 
     describe(".mock", function () {
@@ -66,6 +99,72 @@ describe("Sandbox", function () {
             this.sandbox.mock({});
 
             assert.equals(fakes.length, 2);
+        });
+    });
+
+    describe("property helpers", function () {
+        it("throws when defining an already existing own property", function () {
+            const sandbox = createSandbox();
+            const object = {
+                prop: "original",
+            };
+
+            assert.exception(
+                function () {
+                    sandbox.define(object, "prop", "replacement");
+                },
+                {
+                    message: /Cannot define the already existing property/,
+                },
+            );
+        });
+
+        it("throws when replacing a non-configurable setter", function () {
+            const sandbox = createSandbox();
+            const object = {};
+
+            /* eslint-disable accessor-pairs */
+            Object.defineProperty(object, "prop", {
+                set: function prop(value) {
+                    object.setterValue = value;
+                },
+                configurable: false,
+            });
+            /* eslint-enable accessor-pairs */
+
+            assert.exception(
+                function () {
+                    sandbox.replaceSetter(object, "prop", function () {
+                        return;
+                    });
+                },
+                {
+                    message: /is not configurable/,
+                },
+            );
+        });
+
+        it("throws when replacing a non-configurable getter", function () {
+            const sandbox = createSandbox();
+            const object = {};
+
+            Object.defineProperty(object, "prop", {
+                get: function prop() {
+                    return "original";
+                },
+                configurable: false,
+            });
+
+            assert.exception(
+                function () {
+                    sandbox.replaceGetter(object, "prop", function () {
+                        return "replacement";
+                    });
+                },
+                {
+                    message: /is not configurable/,
+                },
+            );
         });
     });
 
@@ -1574,29 +1673,13 @@ describe("Sandbox", function () {
             assert.clock(this.sandbox.clock);
         });
 
-        it("passes arguments to sinon.useFakeTimers", function () {
-            const useFakeTimersStub = sinonStub(
-                sinonClock,
-                "useFakeTimers",
-            ).returns({});
-
-            this.sandbox.useFakeTimers({ toFake: ["Date", "setTimeout"] });
-            this.sandbox.useFakeTimers({
-                toFake: ["setTimeout", "clearTimeout", "setInterval"],
+        it("accepts a config object", function () {
+            const clock = this.sandbox.useFakeTimers({
+                toFake: ["Date", "setTimeout"],
             });
 
-            assert(
-                useFakeTimersStub.calledWith({
-                    toFake: ["Date", "setTimeout"],
-                }),
-            );
-            assert(
-                useFakeTimersStub.calledWith({
-                    toFake: ["setTimeout", "clearTimeout", "setInterval"],
-                }),
-            );
-
-            useFakeTimersStub.restore();
+            assert.clock(clock);
+            assert.same(clock, this.sandbox.clock);
         });
 
         it("restores the fakeTimer clock created by the sandbox when the sandbox is restored", function () {
@@ -1779,14 +1862,6 @@ describe("Sandbox", function () {
     });
 
     describe("configurable sandbox", function () {
-        beforeEach(function () {
-            this.useFakeTimersSpy = sinonSpy(sinonClock, "useFakeTimers");
-        });
-
-        afterEach(function () {
-            this.useFakeTimersSpy.restore();
-        });
-
         it("yields stub, mock as arguments", function () {
             const sandbox = createSandbox({
                 properties: ["stub", "mock"],
@@ -1834,11 +1909,8 @@ describe("Sandbox", function () {
                 useFakeTimers: { toFake: ["Date", "setTimeout"] },
             });
 
-            assert(
-                this.useFakeTimersSpy.calledWith({
-                    toFake: ["Date", "setTimeout"],
-                }),
-            );
+            assert.clock(sandbox.clock);
+            assert.isFunction(sandbox.clock.restore);
 
             sandbox.restore();
         });
@@ -2069,7 +2141,7 @@ describe("Sandbox", function () {
             assert.isTrue(descriptor.writable);
         });
 
-        it("should throw when replacing non-writable property", function () {
+        it("should leave non-writable property unchanged when replacing it", function () {
             const object = {};
             Object.defineProperty(object, "prop", {
                 value: "own",
@@ -2079,12 +2151,19 @@ describe("Sandbox", function () {
             });
             const sandbox = new Sandbox();
 
-            assert.exception(
-                function () {
-                    sandbox.replace(object, "prop", "replaced");
-                },
-                { name: "TypeError" },
-            );
+            let threw = false;
+            try {
+                sandbox.replace(object, "prop", "replaced");
+            } catch (error) {
+                threw = true;
+                assert.equals(error.message, "Cannot assign to read only property 'prop' of object '#<Object>'");
+            }
+
+            assert.same(object.prop, "own");
+            if (!threw) {
+                sandbox.restore();
+                assert.same(object.prop, "own");
+            }
         });
     });
 

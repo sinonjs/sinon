@@ -2,6 +2,7 @@ import referee from "@sinonjs/referee";
 import wrapMethod from "../../../../src/sinon/util/core/wrap-method.js";
 import createSpy from "../../../../src/sinon/spy.js";
 import createStub from "../../../../src/sinon/stub.js";
+import sinonType from "../../../../src/sinon/util/core/sinon-type.js";
 const assert = referee.assert;
 const refute = referee.refute;
 
@@ -413,6 +414,91 @@ describe("util/core/wrapMethod", function () {
 
             assert.same(this.object.method, this.type.prototype.method);
             assert.isFalse(this.object.hasOwnProperty("method"));
+        });
+
+        it("restore removes a shadowed method that came from the prototype", function () {
+            const wrapper = wrapMethod(this.object, "method", function () {
+                return "wrapped";
+            });
+
+            assert.same(this.object.method, wrapper);
+            assert.equals(this.object.method(), "wrapped");
+
+            this.object.method.restore();
+
+            assert.same(this.object.method, this.type.prototype.method);
+            assert.isFalse(this.object.hasOwnProperty("method"));
+        });
+    });
+
+    describe("stub-instance restoration", function () {
+        it("should set property to noop if object is a stub-instance", function () {
+            const object = {
+                method: function method() {
+                    return undefined;
+                },
+            };
+            sinonType.set(object, "stub-instance");
+
+            const originalMethod = object.method;
+            wrapMethod(object, "method", function noop() {
+                return undefined;
+            });
+            object.method.restore();
+
+            assert.isFunction(object.method);
+            refute.same(object.method, originalMethod);
+            // It should be a noop function (empty function)
+        });
+    });
+
+    describe("accessor restoration", function () {
+        beforeEach(function () {
+            this.object = {};
+            /* eslint-disable accessor-pairs */
+            Object.defineProperty(this.object, "getter", {
+                get: function getter() {
+                    return "original-getter";
+                },
+                configurable: true,
+                enumerable: true,
+            });
+            Object.defineProperty(this.object, "setter", {
+                set: function setter(value) {
+                    this.setterValue = value;
+                },
+                configurable: true,
+                enumerable: true,
+            });
+            /* eslint-enable accessor-pairs */
+        });
+
+        it("restores wrapped getter descriptors", function () {
+            const wrapper = wrapMethod(this.object, "getter", {
+                get: function getterReplacement() {
+                    return "replacement-getter";
+                },
+            });
+
+            assert.isFunction(wrapper.restore);
+            wrapper.restore();
+
+            assert.equals(this.object.getter, "original-getter");
+        });
+
+        it("restores wrapped setter descriptors", function () {
+            const wrapper = wrapMethod(this.object, "setter", {
+                set: function setterReplacement(value) {
+                    this.wrappedSetterValue = value;
+                },
+            });
+
+            assert.isFunction(wrapper.restore);
+            wrapper.restore();
+
+            this.object.setter = "restored";
+            assert.equals(this.object.setterValue, "restored");
+            refute.equals(this.object.wrappedSetterValue, "restored");
         });
     });
 });

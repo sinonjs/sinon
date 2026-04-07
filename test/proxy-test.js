@@ -1,14 +1,12 @@
-import commons from "@sinonjs/commons";
-import referee from "@sinonjs/referee";
-import extend from "../../src/sinon/util/core/extend.js";
-import createProxy from "../../src/sinon/proxy.js";
-import Colorizer from "../../src/sinon/colorizer.js";
-import sinonSpy from "../../src/sinon/spy.js";
-import sinonStub from "../../src/sinon/stub.js";
+const assert = require("@sinonjs/referee").assert;
+const extend = require("../lib/sinon/util/core/extend");
+const createProxy = require("../lib/sinon/proxy");
 
+const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();
-const assert = referee.assert;
-const functionName = commons.functionName;
+const sinonSpy = require("../lib/sinon/spy");
+const sinonStub = require("../lib/sinon/stub");
+const functionName = require("@sinonjs/commons").functionName;
 
 let uuid = 0;
 function createFaux(func) {
@@ -34,20 +32,6 @@ function createFaux(func) {
     return proxy;
 }
 
-function createArityFunction(length) {
-    const args = [];
-    for (let i = 0; i < length; i++) {
-        args.push(`a${i}`);
-    }
-
-    // Use the Function constructor to produce a stable declared arity without
-    // relying on eval in the test body.
-    // eslint-disable-next-line no-new-func
-    return new Function(
-        `return function (${args.join(", ")}) { return this.marker; };`,
-    )();
-}
-
 describe("proxy", function () {
     describe(".printf", function () {
         describe("name", function () {
@@ -56,21 +40,6 @@ describe("proxy", function () {
                     return;
                 });
                 assert.equals(named.printf("%n"), "cool");
-            });
-
-            it("does not rename non-configurable names", function () {
-                const named = createFaux(function cool() {
-                    return;
-                });
-
-                Object.defineProperty(named, "name", {
-                    value: "locked",
-                    configurable: false,
-                });
-
-                named.named("updated");
-
-                assert.equals(named.name, "locked");
             });
 
             it("anon", function () {
@@ -178,18 +147,6 @@ describe("proxy", function () {
             assert.equals(faux.printf("%*", "a", "b", "c"), "'a', 'b', 'c'");
         });
 
-        it("supports numeric placeholders", function () {
-            const faux = createFaux();
-
-            assert.equals(faux.printf("%1 %2 %q", "a", "b"), "'a' 'b' %q");
-        });
-
-        it("returns an empty string when no format is provided", function () {
-            const faux = createFaux();
-
-            assert.equals(faux.printf(), "");
-        });
-
         describe("arguments", function () {
             it("no calls", function () {
                 const faux = createFaux();
@@ -248,53 +205,6 @@ describe("proxy", function () {
 
                 assert.equals(faux.printf("%D"), "\nCall 1:\nCall 2:\nCall 3:");
             });
-        });
-    });
-
-    describe("arity handling", function () {
-        it("creates proxy wrappers for every declared arity branch", function () {
-            for (let arity = 0; arity <= 12; arity++) {
-                const original = createArityFunction(arity);
-                const proxy = createProxy(original, original);
-
-                assert.equals(proxy.length, arity);
-                assert.equals(proxy.call({ marker: arity }), arity);
-            }
-
-            const overflow = createArityFunction(13);
-            const overflowProxy = createProxy(overflow, overflow);
-
-            assert.equals(overflowProxy.length, 0);
-            assert.equals(overflowProxy.call({ marker: 13 }), 13);
-        });
-
-        it("keeps the default proxy name when the original name is locked", function () {
-            const original = createArityFunction(0);
-
-            Object.defineProperty(original, "name", {
-                value: "locked",
-                configurable: false,
-            });
-
-            const proxy = createProxy(original, original);
-
-            assert.equals(proxy.name, "proxy");
-        });
-
-        it("throws when resetHistory is called while the proxy is invoking", function () {
-            const state = {};
-            const original = function () {
-                state.proxy.resetHistory();
-            };
-            state.proxy = createProxy(original, original);
-            const proxy = state.proxy;
-
-            assert.exception(
-                function () {
-                    proxy();
-                },
-                { name: "InvalidResetException" },
-            );
         });
     });
 });

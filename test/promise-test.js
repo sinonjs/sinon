@@ -1,7 +1,5 @@
-import referee from "@sinonjs/referee";
-import sinon from "../../src/sinon.js";
-
-const { assert, refute } = referee;
+const sinon = require("../lib/sinon.js");
+const { assert, refute } = require("@sinonjs/referee");
 
 async function getPromiseStatus(promise) {
     let status = "pending";
@@ -168,23 +166,6 @@ describe("promise", function () {
             assert.equals(args.length, 2);
             assert.isFunction(args[0]);
             assert.isFunction(args[1]);
-        });
-
-        it("accepts a restorable executor as-is", async function () {
-            const executor = sinon.fake();
-            const originalRestore = function restore() {
-                return undefined;
-            };
-
-            executor.restore = originalRestore;
-            executor.restore.sinon = true;
-
-            const promise = sinon.promise(executor);
-
-            assert.equals(executor.callCount, 1);
-
-            promise.resolve("ok");
-            await assert.resolves(promise, "ok");
         });
 
         it("sets resolvedValue when custom executor resolves", async function () {

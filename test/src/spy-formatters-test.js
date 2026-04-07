@@ -20,4 +20,28 @@ describe('formatter specifier "D"', function () {
 
         assert.equals(matcher.message, "something");
     });
+
+    it("keeps multiline call output separated", function () {
+        const spyInstance = {
+            callCount: 2,
+            getCall(index) {
+                return index === 0
+                    ? {
+                          toString() {
+                              return "first\nline";
+                          },
+                      }
+                    : {
+                          toString() {
+                              return "second";
+                          },
+                      };
+            },
+        };
+
+        assert.equals(
+            spyFormatters.C(spyInstance),
+            "\n    first\nline\n\n    second",
+        );
+    });
 });
