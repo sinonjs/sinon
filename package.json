@@ -33,9 +33,9 @@
   "scripts": {
     "build-artifacts": "node ./build.cjs",
     "pretest-node": "npm run build-artifacts",
-    "test-node": "mocha --recursive --parallel -R dot 'test/**/*-test.js' --ignore 'test/src/**/*-test.js' && mocha --recursive --parallel -R dot 'test/src/'",
+    "test-node": "mocha --recursive -R dot 'test/**/*-test.js'",
     "pretest-headless": "npm run build-artifacts",
-    "test-dev": "mocha --watch --recursive -R min 'test/**/*-test.js' --ignore 'test/src/**/*-test.js' 'test/src/'",
+    "test-dev": "mocha --watch --recursive -R min 'test/src'",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",
     "test-coverage": "npm run build-artifacts && nyc nyc --exclude-after-remap false mochify --driver puppeteer --bundle 'node coverage.cjs'",
     "test-cloud": "./scripts/test-cloud.sh",
