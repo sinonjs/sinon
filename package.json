@@ -35,7 +35,7 @@
     "pretest-node": "npm run build-artifacts",
     "test-node": "mocha --recursive -R dot 'test/**/*-test.js'",
     "pretest-headless": "npm run build-artifacts",
-    "test-dev": "CHOKIDAR_USEPOLLING=1 mocha --watch --recursive -R min 'test/src'",
+    "test-dev": "CHOKIDAR_USEPOLLING=1 npm run test-node -- --watch",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",
     "test-coverage": "npm run build-artifacts && nyc nyc --exclude-after-remap false mochify --driver puppeteer --bundle 'node coverage.cjs'",
     "test-cloud": "./scripts/test-cloud.sh",
