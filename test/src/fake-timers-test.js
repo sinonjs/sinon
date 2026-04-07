@@ -6,6 +6,9 @@ import sinonSpy from "../../src/sinon/spy.js";
 const assert = referee.assert;
 const refute = referee.refute;
 const GlobalDate = Date;
+const GlobalDateDescriptors = Object.getOwnPropertyDescriptors(GlobalDate);
+const GlobalProcessNextTick =
+    typeof process !== "undefined" ? process.nextTick : undefined;
 const setImmediatePresent = typeof setImmediate === "function";
 
 // `setTimeout` supports a string as the first argument, which we currently
@@ -24,6 +27,25 @@ function supportsCodeInSettimeout() {
     } catch (error) {
         return false;
     }
+}
+
+function restoreGlobalDateProperties(date) {
+    Object.getOwnPropertyNames(date).forEach(function (property) {
+        if (
+            Object.prototype.hasOwnProperty.call(
+                GlobalDateDescriptors,
+                property,
+            )
+        ) {
+            return;
+        }
+
+        delete date[property];
+    });
+
+    Object.keys(GlobalDateDescriptors).forEach(function (property) {
+        Object.defineProperty(date, property, GlobalDateDescriptors[property]);
+    });
 }
 
 const usesEvalInSettimeout = supportsCodeInSettimeout();
@@ -846,6 +868,11 @@ describe("fakeTimers.clock", function () {
             this.global.clearInterval = this.original.clearInterval;
             this.global.setImmediate = this.original.setImmediate;
             this.global.clearImmediate = this.original.clearImmediate;
+            restoreGlobalDateProperties(this.original.Date);
+            if (typeof GlobalProcessNextTick === "function") {
+                process.nextTick = GlobalProcessNextTick;
+                delete process.nextTick.clock;
+            }
 
             clearTimeout(this.timer);
             if (typeof this.dateNow === "undefined") {
