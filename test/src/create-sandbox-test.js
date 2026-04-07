@@ -1,5 +1,7 @@
-const createSandbox = require("../lib/sinon/create-sandbox");
-const { assert } = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
+import createSandbox from "../../src/sinon/create-sandbox.js";
+
+const { assert } = referee;
 
 describe("create-sandbox", function () {
     it("can be configured to limit the error message length", function () {

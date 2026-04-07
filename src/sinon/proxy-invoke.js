@@ -1,4 +1,6 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { prototypes } = commons;
 import * as proxyCallUtil from "./proxy-call-util.js";
 
 const { push, forEach, concat } = prototypes.array;

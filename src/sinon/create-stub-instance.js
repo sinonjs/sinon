@@ -1,7 +1,8 @@
 import stub from "./stub.js";
 import sinonType from "./util/core/sinon-type.js";
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 
+const { prototypes } = commons;
 const { forEach } = prototypes.array;
 
 function isStub(value) {

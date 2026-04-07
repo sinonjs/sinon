@@ -1,5 +1,5 @@
-const referee = require("@sinonjs/referee");
-const nextTick = require("../../../lib/sinon/util/core/next-tick");
+import referee from "@sinonjs/referee";
+import nextTick from "../../../../src/sinon/util/core/next-tick.js";
 const assert = referee.assert;
 
 const hasNextTick =

@@ -1,4 +1,6 @@
-import { valueToString } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { valueToString } = commons;
 
 /**
  * Throws an error if the object is null or undefined when trying to stub a property.

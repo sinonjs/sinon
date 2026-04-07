@@ -1,5 +1,7 @@
-const sinon = require("../lib/sinon.js");
-const { assert, refute } = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
+import sinon from "../../src/sinon.js";
+
+const { assert, refute } = referee;
 
 async function getPromiseStatus(promise) {
     let status = "pending";

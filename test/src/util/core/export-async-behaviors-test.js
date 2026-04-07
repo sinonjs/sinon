@@ -1,6 +1,7 @@
-const referee = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
+import exportAsyncBehaviors from "../../../../src/sinon/util/core/export-async-behaviors.js";
+
 const assert = referee.assert;
-const exportAsyncBehaviors = require("../../../lib/sinon/util/core/export-async-behaviors");
 
 describe("util/core/exportAsyncBehaviors", function () {
     describe("for methods with names starting with 'callsArg' or 'yields'", function () {

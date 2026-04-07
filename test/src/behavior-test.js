@@ -1,5 +1,7 @@
-const sinon = require("../lib/sinon");
-const assert = require("@sinonjs/referee").assert;
+import referee from "@sinonjs/referee";
+import sinon from "../../src/sinon.js";
+
+const assert = referee.assert;
 
 describe("behaviors", function () {
     it("adds and uses a custom behavior", function () {

@@ -1,7 +1,7 @@
-const referee = require("@sinonjs/referee");
-const fakeTimers = require("../../lib/sinon/util/fake-timers");
-const sinonStub = require("../../lib/sinon/stub");
-const sinonSpy = require("../../lib/sinon/spy");
+import referee from "@sinonjs/referee";
+import * as fakeTimers from "../../src/sinon/util/fake-timers.js";
+import sinonStub from "../../src/sinon/stub.js";
+import sinonSpy from "../../src/sinon/spy.js";
 
 const assert = referee.assert;
 const refute = referee.refute;

@@ -1,4 +1,6 @@
-import { functionName } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { functionName } = commons;
 import getPropertyDescriptor from "./get-property-descriptor.js";
 import walk from "./walk.js";
 

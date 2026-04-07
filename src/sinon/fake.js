@@ -1,7 +1,8 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 import createProxy from "./proxy.js";
 import nextTick from "./util/core/next-tick.js";
 
+const { prototypes } = commons;
 const { slice } = prototypes.array;
 
 /**

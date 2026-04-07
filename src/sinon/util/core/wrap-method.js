@@ -1,4 +1,6 @@
-import { prototypes, valueToString } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { prototypes, valueToString } = commons;
 import getPropertyDescriptor from "./get-property-descriptor.js";
 import extend from "./extend.js";
 import sinonType from "./sinon-type.js";

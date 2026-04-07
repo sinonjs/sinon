@@ -1,5 +1,7 @@
-const assert = require("@sinonjs/referee").assert;
-const Colorizer = require("../../../lib/sinon/colorizer");
+import referee from "@sinonjs/referee";
+import Colorizer from "../../../../src/sinon/colorizer.js";
+
+const assert = referee.assert;
 
 const colors = [
     { name: "bold", code: 1 },

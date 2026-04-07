@@ -1,5 +1,5 @@
-import { prototypes, functionName, valueToString } from "@sinonjs/commons";
-import { deepEqual } from "@sinonjs/samsam";
+import commons from "@sinonjs/commons";
+import samsam from "@sinonjs/samsam";
 import createProxy from "./proxy.js";
 import extend from "./util/core/extend.js";
 import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
@@ -8,6 +8,8 @@ import * as proxyCallUtil from "./proxy-call-util.js";
 import walkObject from "./util/core/walk-object.js";
 import wrapMethod from "./util/core/wrap-method.js";
 
+const { prototypes, functionName, valueToString } = commons;
+const { deepEqual } = samsam;
 const { forEach, pop, push, slice } = prototypes.array;
 const filter = Array.prototype.filter;
 

@@ -1,10 +1,12 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 import mockExpectation from "./mock-expectation.js";
 import createProxyCall from "./proxy-call.js";
 import extend from "./util/core/extend.js";
-import { deepEqual } from "@sinonjs/samsam";
+import samsam from "@sinonjs/samsam";
 import wrapMethod from "./util/core/wrap-method.js";
 
+const { prototypes } = commons;
+const { deepEqual } = samsam;
 const { concat, filter, forEach, every, join, push, slice, unshift } =
     prototypes.array;
 

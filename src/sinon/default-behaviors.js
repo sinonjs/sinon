@@ -1,4 +1,6 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { prototypes } = commons;
 import isPropertyConfigurable from "./util/core/is-property-configurable.js";
 import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 import extend from "./util/core/extend.js";

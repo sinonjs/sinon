@@ -1,6 +1,9 @@
-const { D } = require("./../lib/sinon/spy-formatters");
-const sinon = require("../lib/sinon");
-const { assert } = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
+import sinon from "../../src/sinon.js";
+import spyFormatters from "../../src/sinon/spy-formatters.js";
+
+const { D } = spyFormatters;
+const { assert } = referee;
 
 describe('formatter specifier "D"', function () {
     it("should not mutate matchers passed as arguments", function () {

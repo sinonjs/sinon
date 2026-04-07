@@ -1,5 +1,5 @@
-const referee = require("@sinonjs/referee");
-const timesInWords = require("../../../lib/sinon/util/core/times-in-words");
+import referee from "@sinonjs/referee";
+import timesInWords from "../../../../src/sinon/util/core/times-in-words.js";
 const assert = referee.assert;
 
 describe("util/core/timesInWords", function () {

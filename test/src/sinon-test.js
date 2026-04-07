@@ -1,10 +1,12 @@
-const assert = require("@sinonjs/referee").assert;
-const functionName = require("@sinonjs/commons").functionName;
-const Sandbox = require("../lib/sinon/sandbox");
+import commons from "@sinonjs/commons";
+import referee from "@sinonjs/referee";
+import sinon from "../../src/sinon.js";
+import Sandbox from "../../src/sinon/sandbox.js";
+
+const assert = referee.assert;
+const functionName = commons.functionName;
 
 describe("sinon module", function () {
-    let sinon;
-
     before(function () {
         if (typeof Promise !== "function") {
             this.skip();
@@ -14,8 +16,6 @@ describe("sinon module", function () {
     describe("exports", function () {
         describe("default sandbox", function () {
             it("should be an instance of Sandbox", function () {
-                sinon = require("../lib/sinon");
-
                 assert.hasPrototype(sinon, Sandbox.prototype);
             });
         });

@@ -1,5 +1,5 @@
-const referee = require("@sinonjs/referee");
-const extend = require("../lib/sinon/util/core/extend");
+import referee from "@sinonjs/referee";
+import extend from "../../src/sinon/util/core/extend.js";
 const assert = referee.assert;
 
 describe("extend", function () {

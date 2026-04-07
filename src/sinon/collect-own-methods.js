@@ -1,7 +1,8 @@
 import walk from "./util/core/walk.js";
 import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 
+const { prototypes } = commons;
 const { hasOwnProperty } = prototypes.object;
 const { push } = prototypes.array;
 

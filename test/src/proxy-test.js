@@ -1,12 +1,14 @@
-const assert = require("@sinonjs/referee").assert;
-const extend = require("../lib/sinon/util/core/extend");
-const createProxy = require("../lib/sinon/proxy");
+import commons from "@sinonjs/commons";
+import referee from "@sinonjs/referee";
+import extend from "../../src/sinon/util/core/extend.js";
+import createProxy from "../../src/sinon/proxy.js";
+import Colorizer from "../../src/sinon/colorizer.js";
+import sinonSpy from "../../src/sinon/spy.js";
+import sinonStub from "../../src/sinon/stub.js";
 
-const Colorizer = require("../lib/sinon/colorizer");
 const color = new Colorizer();
-const sinonSpy = require("../lib/sinon/spy");
-const sinonStub = require("../lib/sinon/stub");
-const functionName = require("@sinonjs/commons").functionName;
+const assert = referee.assert;
+const functionName = commons.functionName;
 
 let uuid = 0;
 function createFaux(func) {

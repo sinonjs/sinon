@@ -32,7 +32,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "pretest-node": "npm run build",
-    "test-node": "mocha --recursive -R dot \"test/**/*-test.js\"",
+    "test-node": "node ./scripts/test-node.mjs",
     "pretest-headless": "npm run build",
     "test-dev": "npm run test-node --  -n watch -n  watch-path=test --node-option watch-path=lib -R min",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",

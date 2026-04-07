@@ -1,9 +1,9 @@
 /* eslint-disable no-empty-function */
 
-const referee = require("@sinonjs/referee");
-const sinonSpy = require("../lib/sinon/spy");
-const sinonStub = require("../lib/sinon/stub");
-const restoreObject = require("../lib/sinon/restore-object.js");
+import referee from "@sinonjs/referee";
+import sinonSpy from "../../src/sinon/spy.js";
+import sinonStub from "../../src/sinon/stub.js";
+import restoreObject from "../../src/sinon/restore-object.js";
 const assert = referee.assert;
 const refute = referee.refute;
 

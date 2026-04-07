@@ -1,7 +1,7 @@
-const referee = require("@sinonjs/referee");
-const proxyCall = require("../lib/sinon/proxy-call");
-const sinonSpy = require("../lib/sinon/spy");
-const sinonStub = require("../lib/sinon/stub");
+import referee from "@sinonjs/referee";
+import proxyCall from "../../src/sinon/proxy-call.js";
+import sinonSpy from "../../src/sinon/spy.js";
+import sinonStub from "../../src/sinon/stub.js";
 const assert = referee.assert;
 const refute = referee.refute;
 

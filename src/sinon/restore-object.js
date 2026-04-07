@@ -9,5 +9,11 @@ function restore(object, property) {
 }
 
 export default function restoreObject(object) {
+    if (!object) {
+        throw new Error(
+            `Trying to restore object but received ${String(object)}`,
+        );
+    }
+
     return walkObject(restore, object, filter);
 }

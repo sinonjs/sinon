@@ -1,6 +1,6 @@
-const referee = require("@sinonjs/referee");
-const createSpy = require("../../../lib/sinon/spy");
-const functionToString = require("../../../lib/sinon/util/core/function-to-string");
+import referee from "@sinonjs/referee";
+import createSpy from "../../../../src/sinon/spy.js";
+import functionToString from "../../../../src/sinon/util/core/function-to-string.js";
 const assert = referee.assert;
 
 describe("util/core/functionToString", function () {

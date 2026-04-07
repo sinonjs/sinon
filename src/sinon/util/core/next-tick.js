@@ -1,5 +1,7 @@
-import { global as globalObject } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 import getNextTick from "./get-next-tick.js";
+
+const { global: globalObject } = commons;
 
 /**
  * A platform-agnostic next-tick function.

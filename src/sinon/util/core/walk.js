@@ -1,4 +1,6 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
+
+const { prototypes } = commons;
 
 const forEach = prototypes.array.forEach;
 

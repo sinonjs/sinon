@@ -1,6 +1,6 @@
-const referee = require("@sinonjs/referee");
-const createStub = require("../lib/sinon/stub");
-const createStubInstance = require("../lib/sinon/create-stub-instance");
+import referee from "@sinonjs/referee";
+import createStub from "../../src/sinon/stub.js";
+import createStubInstance from "../../src/sinon/create-stub-instance.js";
 const assert = referee.assert;
 const refute = referee.refute;
 

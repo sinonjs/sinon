@@ -1,7 +1,7 @@
-const referee = require("@sinonjs/referee");
-const wrapMethod = require("../../../lib/sinon/util/core/wrap-method");
-const createSpy = require("../../../lib/sinon/spy");
-const createStub = require("../../../lib/sinon/stub");
+import referee from "@sinonjs/referee";
+import wrapMethod from "../../../../src/sinon/util/core/wrap-method.js";
+import createSpy from "../../../../src/sinon/spy.js";
+import createStub from "../../../../src/sinon/stub.js";
 const assert = referee.assert;
 const refute = referee.refute;
 

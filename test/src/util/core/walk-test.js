@@ -1,6 +1,6 @@
-const referee = require("@sinonjs/referee");
-const walk = require("../../../lib/sinon/util/core/walk");
-const createSpy = require("../../../lib/sinon/spy");
+import referee from "@sinonjs/referee";
+import walk from "../../../../src/sinon/util/core/walk.js";
+import createSpy from "../../../../src/sinon/spy.js";
 const assert = referee.assert;
 
 describe("util/core/walk", function () {

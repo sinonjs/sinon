@@ -1,7 +1,9 @@
-import { prototypes, functionName, valueToString } from "@sinonjs/commons";
-import { createMatcher as match, deepEqual } from "@sinonjs/samsam";
+import commons from "@sinonjs/commons";
+import samsam from "@sinonjs/samsam";
 import { inspect } from "util";
 
+const { prototypes, functionName, valueToString } = commons;
+const { createMatcher: match, deepEqual } = samsam;
 const { concat, filter, join, map, reduce, slice } = prototypes.array;
 
 /**

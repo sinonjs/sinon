@@ -1,10 +1,12 @@
-import { prototypes } from "@sinonjs/commons";
+import commons from "@sinonjs/commons";
 import Colorizer from "./colorizer.js";
-import { createMatcher as match } from "@sinonjs/samsam";
+import samsam from "@sinonjs/samsam";
 import timesInWords from "./util/core/times-in-words.js";
 import { inspect } from "util";
 import * as jsDiff from "diff";
 
+const { prototypes } = commons;
+const { createMatcher: match } = samsam;
 const { join, map, push, slice } = prototypes.array;
 const colorizer = new Colorizer();
 

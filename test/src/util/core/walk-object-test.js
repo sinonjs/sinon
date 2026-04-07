@@ -1,6 +1,5 @@
-const referee = require("@sinonjs/referee");
-
-const walkObject = require("../../../lib/sinon/util/core/walk-object");
+import referee from "@sinonjs/referee";
+import walkObject from "../../../../src/sinon/util/core/walk-object.js";
 
 const assert = referee.assert;
 
