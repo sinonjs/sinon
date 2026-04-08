@@ -1,11 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable jsdoc/require-jsdoc */
 
-const referee = require("@sinonjs/referee");
+import referee from "@sinonjs/referee";
 const assert = referee.assert;
 const refute = referee.refute;
 
-module.exports = function shared(createSpyOrStub) {
+export default function shared(createSpyOrStub) {
     it("replaces all methods of an object when no property is given", function () {
         const obj = {
             func1: function () {
@@ -198,4 +198,4 @@ module.exports = function shared(createSpyOrStub) {
             createSpyOrStub(myObj, "ignoreme");
         }, new TypeError("Descriptor for data property ignoreme is non-writable"));
     });
-};
+}

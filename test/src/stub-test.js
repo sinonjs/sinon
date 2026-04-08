@@ -3,7 +3,7 @@ import samsam from "@sinonjs/samsam";
 import createStub from "../../src/sinon/stub.js";
 import createSpy from "../../src/sinon/spy.js";
 import createProxy from "../../src/sinon/proxy.js";
-import sharedSpyStubEverythingTests from "../shared-spy-stub-everything-tests.js";
+import sharedSpyStubEverythingTests from "./shared-spy-stub-everything-tests.js";
 
 const assert = referee.assert;
 const refute = referee.refute;

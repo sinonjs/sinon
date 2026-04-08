@@ -2,7 +2,7 @@ import referee from "@sinonjs/referee";
 import samsam from "@sinonjs/samsam";
 import createSpy from "../../src/sinon/spy.js";
 import createProxy from "../../src/sinon/proxy.js";
-import sharedSpyStubEverythingTests from "../shared-spy-stub-everything-tests.js";
+import sharedSpyStubEverythingTests from "./shared-spy-stub-everything-tests.js";
 
 const globalContext = typeof global !== "undefined" ? global : window;
 const assert = referee.assert;
