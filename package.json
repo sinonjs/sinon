@@ -33,7 +33,7 @@
   "scripts": {
     "build-artifacts": "node ./build.cjs",
     "pretest-node": "npm run build-artifacts",
-    "test-node": "mocha --recursive -R dot 'test/**/*-test.js'",
+    "test-node": "mocha --recursive -R dot 'test/{src,issues,scripts}/**/*-test.js'",
     "pretest-headless": "npm run build-artifacts",
     "test-dev": "CHOKIDAR_USEPOLLING=1 npm run test-node -- --watch",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",
@@ -72,7 +72,13 @@
     "reporter": [
       "text",
       "lcovonly"
-    ]
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "check-coverage": true,
+    "branches": 92,
+    "lines": 97
   },
   "lint-staged": {
     "**/*.{js,css,md}": "prettier --write",
@@ -84,7 +90,7 @@
     "timeout": 10000,
     "bundle": "esbuild --bundle --sourcemap=inline --define:process.env.NODE_DEBUG=\"\" --external:fs",
     "bundle_stdin": "require",
-    "spec": "test/**/*-test.js"
+    "spec": "test/{src,issues}/**/*-test.js"
   },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
