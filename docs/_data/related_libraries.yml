@@ -1,6 +1,6 @@
 - title: proxyquire — Proxies nodejs require in order to allow overriding dependencies during testing
   url: https://github.com/thlorenz/proxyquire
-  
+
 - title: inject-loader - Webpack loader that allows overriding dependencies during testing
   url: https://github.com/plasticine/inject-loader
 

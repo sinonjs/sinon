@@ -1,5 +1,3 @@
-
-
 const assert = require("node:assert/strict");
 const sinon = require("sinon");
 

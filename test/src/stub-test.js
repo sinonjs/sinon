@@ -2705,7 +2705,9 @@ describe("stub", function () {
             stub.restore();
 
             assert.same(object.prop, prototype.prop);
-            assert.isFalse(Object.prototype.hasOwnProperty.call(object, "prop"));
+            assert.isFalse(
+                Object.prototype.hasOwnProperty.call(object, "prop"),
+            );
         });
 
         it("throws for non-configurable accessors", function () {

@@ -9,10 +9,15 @@ const pkg = require("./package.json");
 
 // Step 1: Run Rollup to generate lib/ from src/
 console.log("Generating lib/ from src/ using Rollup...");
-execFileSync("npx", ["rollup", "-c", "rollup.config.mjs"], { stdio: "inherit" });
+execFileSync("npx", ["rollup", "-c", "rollup.config.mjs"], {
+    stdio: "inherit",
+});
 
 // Step 1b: Mark the generated lib tree as CommonJS for Node.
-fs.writeFileSync("lib/package.json", JSON.stringify({ type: "commonjs" }, null, 2));
+fs.writeFileSync(
+    "lib/package.json",
+    JSON.stringify({ type: "commonjs" }, null, 2),
+);
 
 // Step 2: Load sinon from the generated lib
 const sinon = require("./lib/sinon");
@@ -101,8 +106,11 @@ async function buildAll() {
         function (bundle) {
             var intro = "let sinon;\n";
             // Replace the bundle's own "export default" with a simple assignment to sinon
-            var baseScript = bundle.replace(/export default [^;]+;/, "sinon = require_sinon_esm();\nif (sinon.default) sinon = sinon.default;");
-            
+            var baseScript = bundle.replace(
+                /export default [^;]+;/,
+                "sinon = require_sinon_esm();\nif (sinon.default) sinon = sinon.default;",
+            );
+
             var outro = `\nexport default sinon;\n${Object.keys(sinon)
                 .filter((key) => key !== "default")
                 .map(function (key) {

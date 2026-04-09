@@ -30,9 +30,18 @@ context.self = context;
 vm.runInContext(sinonGlobal, context, { filename: "sinon.js" });
 
 assert(typeof context.sinon === "object", "window.sinon should exist");
-assert(typeof context.sinon.spy === "function", "sinon.spy should be a function");
-assert(typeof context.sinon.stub === "function", "sinon.stub should be a function");
-assert(typeof context.sinon.createSandbox === "function", "sinon.createSandbox should be a function");
+assert(
+    typeof context.sinon.spy === "function",
+    "sinon.spy should be a function",
+);
+assert(
+    typeof context.sinon.stub === "function",
+    "sinon.stub should be a function",
+);
+assert(
+    typeof context.sinon.createSandbox === "function",
+    "sinon.createSandbox should be a function",
+);
 
 const stub = context.sinon.stub().returns(10);
 assert(stub() === 10, "stub behavior check");

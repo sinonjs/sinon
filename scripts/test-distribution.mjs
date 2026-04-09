@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 
 import { runFixture } from "../test/distribution/helpers/run-fixture.mjs";
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repoRoot = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "..",
+);
 const nodeEnv = {
     ...process.env,
     NODE_PATH: path.join(repoRoot, "node_modules"),
@@ -22,7 +25,9 @@ function unpackTarball(tarballPath, tempRoot) {
     const packageDir = path.join(nodeModulesDir, "sinon");
 
     fs.mkdirSync(nodeModulesDir, { recursive: true });
-    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], { stdio: "ignore" });
+    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], {
+        stdio: "ignore",
+    });
     fs.renameSync(path.join(nodeModulesDir, "package"), packageDir);
 }
 
@@ -39,21 +44,34 @@ console.log(`Packed tarball: ${tarballPath}`);
 let failed = false;
 
 console.log("Verifying public API manifest...");
-const manifestPath = path.join(repoRoot, "test/distribution/public-api-manifest.json");
+const manifestPath = path.join(
+    repoRoot,
+    "test/distribution/public-api-manifest.json",
+);
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "sinon-dist-manifest-"));
 try {
-    fs.writeFileSync(path.join(tempRoot, "package.json"), JSON.stringify({ name: "manifest-check", version: "1.0.0" }));
+    fs.writeFileSync(
+        path.join(tempRoot, "package.json"),
+        JSON.stringify({ name: "manifest-check", version: "1.0.0" }),
+    );
     unpackTarball(tarballPath, tempRoot);
 
-    const extractorSource = fs.readFileSync(path.join(repoRoot, "test/distribution/helpers/read-public-api.cjs"), "utf8");
+    const extractorSource = fs.readFileSync(
+        path.join(repoRoot, "test/distribution/helpers/read-public-api.cjs"),
+        "utf8",
+    );
     fs.writeFileSync(path.join(tempRoot, "extract.cjs"), extractorSource);
 
-    const actualManifestJson = execFileSync("node", ["-e", "console.log(JSON.stringify(require('./extract.cjs')))\n"], {
-        cwd: tempRoot,
-        env: nodeEnv,
-    }).toString("utf8");
+    const actualManifestJson = execFileSync(
+        "node",
+        ["-e", "console.log(JSON.stringify(require('./extract.cjs')))\n"],
+        {
+            cwd: tempRoot,
+            env: nodeEnv,
+        },
+    ).toString("utf8");
     const actualManifest = JSON.parse(actualManifestJson);
 
     // Simple comparison
@@ -77,15 +95,21 @@ try {
     }
 
     if (manifest.hasTimers !== actualManifest.hasTimers) {
-        console.error(`Public API manifest mismatch: hasTimers. Expected ${manifest.hasTimers}, got ${actualManifest.hasTimers}`);
+        console.error(
+            `Public API manifest mismatch: hasTimers. Expected ${manifest.hasTimers}, got ${actualManifest.hasTimers}`,
+        );
         failed = true;
     }
     if (manifest.hasPromise !== actualManifest.hasPromise) {
-        console.error(`Public API manifest mismatch: hasPromise. Expected ${manifest.hasPromise}, got ${actualManifest.hasPromise}`);
+        console.error(
+            `Public API manifest mismatch: hasPromise. Expected ${manifest.hasPromise}, got ${actualManifest.hasPromise}`,
+        );
         failed = true;
     }
     if (manifest.hasMatch !== actualManifest.hasMatch) {
-        console.error(`Public API manifest mismatch: hasMatch. Expected ${manifest.hasMatch}, got ${actualManifest.hasMatch}`);
+        console.error(
+            `Public API manifest mismatch: hasMatch. Expected ${manifest.hasMatch}, got ${actualManifest.hasMatch}`,
+        );
         failed = true;
     }
 

@@ -20,9 +20,17 @@ try {
     process.exit(0);
 }
 
-const mochifyArgs = mode === "webworker"
-    ? ["mochify", "--driver", "puppeteer", "--serve", ".", "test/webworker/webworker-support-assessment.js"]
-    : ["mochify", "--driver", "puppeteer"];
+const mochifyArgs =
+    mode === "webworker"
+        ? [
+              "mochify",
+              "--driver",
+              "puppeteer",
+              "--serve",
+              ".",
+              "test/webworker/webworker-support-assessment.js",
+          ]
+        : ["mochify", "--driver", "puppeteer"];
 
 execFileSync("npx", mochifyArgs, {
     stdio: "inherit",

@@ -4,7 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../");
+const repoRoot = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../../../",
+);
 const nodeEnv = {
     ...process.env,
     NODE_PATH: path.join(repoRoot, "node_modules"),
@@ -15,7 +18,9 @@ function unpackTarball(tarballPath, tempRoot) {
     const packageDir = path.join(nodeModulesDir, "sinon");
 
     fs.mkdirSync(nodeModulesDir, { recursive: true });
-    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], { stdio: "ignore" });
+    execFileSync("tar", ["-xzf", tarballPath, "-C", nodeModulesDir], {
+        stdio: "ignore",
+    });
     fs.renameSync(path.join(nodeModulesDir, "package"), packageDir);
 }
 
@@ -35,7 +40,10 @@ export function runFixture({
         // Ensure minimal package.json if it doesn't exist
         const pkgPath = path.join(tempRoot, "package.json");
         if (!fs.existsSync(pkgPath)) {
-            fs.writeFileSync(pkgPath, JSON.stringify({ name: "fixture", version: "1.0.0" }));
+            fs.writeFileSync(
+                pkgPath,
+                JSON.stringify({ name: "fixture", version: "1.0.0" }),
+            );
         }
 
         // Unpack tarball directly into node_modules.

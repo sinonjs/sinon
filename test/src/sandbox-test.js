@@ -2118,7 +2118,9 @@ describe("Sandbox", function () {
 
             sandbox.restore();
             assert.equals(object.prop, "proto");
-            assert.isFalse(Object.prototype.hasOwnProperty.call(object, "prop"));
+            assert.isFalse(
+                Object.prototype.hasOwnProperty.call(object, "prop"),
+            );
         });
 
         it("should restore own property descriptor when restored", function () {
@@ -2156,7 +2158,10 @@ describe("Sandbox", function () {
                 sandbox.replace(object, "prop", "replaced");
             } catch (error) {
                 threw = true;
-                assert.equals(error.message, "Cannot assign to read only property 'prop' of object '#<Object>'");
+                assert.equals(
+                    error.message,
+                    "Cannot assign to read only property 'prop' of object '#<Object>'",
+                );
             }
 
             assert.same(object.prop, "own");
@@ -2213,7 +2218,7 @@ describe("Sandbox", function () {
         it("should preserve name and arity of sandboxed methods", function () {
             const sinon = createApi();
             const sandbox = sinon.createSandbox();
-            
+
             // spy and stub on sandbox have length 0 as per implementation
             assert.equals(sandbox.spy.name, "spy");
             assert.equals(sandbox.spy.length, 0);

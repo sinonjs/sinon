@@ -1,5 +1,3 @@
-
-
 const sinon = require("sinon");
 
 function describeFunction(fn) {
