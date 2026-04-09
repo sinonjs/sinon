@@ -50,7 +50,7 @@
     "test-runnable-examples": "docs/release-source/release/examples/run-test.sh",
     "test-docs": "cd docs; make check-links",
     "test": "npm run build-artifacts && npm run test-node && node ./scripts/run-browser-suite.mjs headless && node ./scripts/run-browser-suite.mjs webworker",
-    "check-dependencies": "knip --production --dependencies",
+    "check-dependencies": "knip --dependencies",
     "update-compatibility": "node ./scripts/update-compatibility.cjs",
     "build": "node ./build.cjs",
     "build-docs": "cd docs; make build",
@@ -92,6 +92,41 @@
     "bundle_stdin": "require",
     "spec": "test/{src,issues}/**/*-test.js"
   },
+  "knip": {
+    "entry": [
+      "src/sinon.js",
+      "src/sinon-esm.js",
+      "src/create-sinon-api.js",
+      "test/{src,issues,distribution,es2015,webworker}/**/*.{js,mjs,cjs}",
+      "scripts/*.{js,mjs,cjs}",
+      "test/scripts/**/*.{js,mjs,cjs}",
+      "*.{js,mjs,cjs}"
+    ],
+    "project": [
+      "src/**/*.js",
+      "test/**/*.{js,mjs,cjs}",
+      "scripts/**/*.{js,mjs,cjs}",
+      "*.{js,mjs,cjs}"
+    ],
+    "ignoreFiles": [
+      "lib/**",
+      "pkg/**"
+    ],
+    "ignoreBinaries": [
+      "eslint",
+      "make",
+      "docs/release-source/release/examples/run-test.sh"
+    ],
+    "ignoreDependencies": [
+      "@mochify/cli",
+      "@mochify/driver-puppeteer",
+      "@mochify/driver-webdriver",
+      "@sinonjs/eslint-config",
+      "@sinonjs/eslint-plugin-no-prototype-methods",
+      "@studio/changes",
+      "lint-staged"
+    ]
+  },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
     "@sinonjs/fake-timers": "^15.1.1",
@@ -100,7 +135,6 @@
     "supports-color": "^7.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
     "@mochify/cli": "^1.0.0",
     "@mochify/driver-puppeteer": "^1.0.1",
     "@mochify/driver-webdriver": "^1.0.0",
@@ -111,12 +145,12 @@
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^11.0.1",
     "@studio/changes": "^3.0.0",
-    "babel-plugin-istanbul": "^7.0.1",
     "debug": "^4.4.3",
     "esbuild": "^0.27.3",
     "esbuild-plugin-istanbul": "^0.3.0",
     "esbuild-plugin-umd-wrapper": "^3.0.0",
     "get-stdin": "^10.0.0",
+    "js-yaml": "^4.1.1",
     "knip": "^5.85.0",
     "lint-staged": "^16.3.1",
     "mocha": "^11.7.5",
