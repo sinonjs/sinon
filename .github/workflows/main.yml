@@ -98,6 +98,7 @@ jobs:
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         run: |
+          npm run build
           npm run test-cloud
 
   test:

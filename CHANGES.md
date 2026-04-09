@@ -1,5 +1,61 @@
 # Changes
 
+## 21.1.0
+
+- [`0a5526c5`](https://github.com/sinonjs/sinon/commit/0a5526c54b44885cd0e85fb3c42218e75caa93ee)
+  updated deps (Carl-Erik Kopseng)
+- [`5262204f`](https://github.com/sinonjs/sinon/commit/5262204f018503e7f22e82f53cc776edda38d88e)
+  fix: build artifacts before running bundled tests (Carl-Erik Kopseng)
+- [`819bb64b`](https://github.com/sinonjs/sinon/commit/819bb64b5b83e4811fabeaed1d21cef677647c34)
+  Migration to ECMAScript modules (ESM) (#2683) (Carl-Erik Kopseng)
+  > This allowed us to finally consume ESM-only dependencies and has broken us free from some CJS shackes. Now produce the same API surface for CJS consumers, as well, by generating `./lib`
+  >
+  > - Modern ignores 😁
+  > - test: add distribution harness
+  > - test: verify packed cjs and esm entrypoints
+  > - test: lock distribution api manifest
+  > - test: smoke test built pkg artifacts
+  > - docs: require contract tests for package migration
+  > - test: guard esm migration regressions
+  > - docs: require contract gate for esm migration
+  > - build: generate cjs lib from esm source entries
+  > - refactor: port root api surface to esm
+  > - build: clean port of root api to esm
+  > - docs: include implementation plans
+  > - fix: align lint and smoke tests with esm migration
+  > - refactor: complete esm port of all core components
+  > - refactor: finalize esm migration with sandbox and naming fixes
+  > - fix: finish esm migration stabilization
+  > - chore: stop tracking generated lib output
+  > - remove plans
+  > - prettier
+  > - linting
+  > - fix: make distribution tests self-contained
+  > - fix: build before coverage test bundle
+  > - refactor: move simple unit tests to src
+  > - refactor: flatten test and coverage script chains
+  > - refactor: use parallel mocha for node tests
+  > - test: restore fake timers cleanup
+  > - refactor: remove node test runner script
+  > - remove unneccessary clutter
+  > - fix: make mocha watch use polling
+  > - simplify
+  > - Increase coverage
+  > - Fix coverage by removing duplicated tests
+  >
+  > These were covering the generated lib/ folder.
+  >
+  > - Move shared util into esm dir
+  > - fix package dep issues
+  > - Adjust coverage
+  > - Upgrade all dependencies
+  >
+  > npx npm-check-updates -u
+- [`cd2bf5a3`](https://github.com/sinonjs/sinon/commit/cd2bf5a3025cc3f2adb51f5065cf7fb0a9721af3)
+  Use newer endpoint (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-04-09._
+
 ## 21.0.3
 
 - [`0494251b`](https://github.com/sinonjs/sinon/commit/0494251bc54c56e7e79258586238db88f0d191b3)

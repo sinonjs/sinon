@@ -40,10 +40,12 @@ $link-hover-decoration: underline !default;
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-$font-family-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif:
+    "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif: Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
-$font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$font-family-monospace:
+    Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base: $font-family-sans-serif !default;
 
 $font-size-base: 14px !default;
@@ -214,13 +216,13 @@ $input-height-base: (
 ) !default;
 //** Large `.form-control` height
 $input-height-large: (
-    ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 2) +
-        2
+    ceil($font-size-large * $line-height-large) +
+        ($padding-large-vertical * 2) + 2
 ) !default;
 //** Small `.form-control` height
 $input-height-small: (
-    floor($font-size-small * $line-height-small) + ($padding-small-vertical * 2) +
-        2
+    floor($font-size-small * $line-height-small) +
+        ($padding-small-vertical * 2) + 2
 ) !default;
 
 //** `.form-group` margin

@@ -1,5 +1,3 @@
-"use strict";
-
 const assert = require("@sinonjs/referee").assert;
 
 describe("set-release-id-in-config-yml", function () {

@@ -1,5 +1,3 @@
-"use strict";
-
 const referee = require("@sinonjs/referee");
 
 referee.add("spy", {
