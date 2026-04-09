@@ -2,7 +2,10 @@ coverage:
   status:
     project:
       default:
-        target: 92%
+        target: 97%
+    patch:
+      default:
+        target: 95%
   ignore:
     - "lib/**/*"
     - "pkg/**/*"
