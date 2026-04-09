@@ -1,4 +1,5 @@
 out/
+lib/
 pkg
 tmp/
 node_modules
@@ -10,3 +11,8 @@ docs/vendor/
 vendor/
 .bundle
 .worktrees/
+.gitnexus
+.claude/
+AGENTS.md
+CLAUDE.md
+docs/superpowers/

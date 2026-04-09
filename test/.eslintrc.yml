@@ -1,3 +1,10 @@
+parserOptions:
+  ecmaVersion: 2022
+  sourceType: module
+
+env:
+  es2022: true
+
 plugins:
   - "@sinonjs/no-prototype-methods"
 
