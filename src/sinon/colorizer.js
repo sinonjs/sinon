@@ -1,4 +1,13 @@
-import supportsColor from "supports-color";
+function getSupportsColor() {
+    if (
+        typeof process === "undefined" ||
+        typeof process.stdout === "undefined"
+    ) {
+        return { stdout: false };
+    }
+
+    return { stdout: Boolean(process.stdout.isTTY) };
+}
 
 /**
  * Utility for colorizing console output.
@@ -7,7 +16,7 @@ export default class Colorizer {
     /**
      * @param {object} [supportsColorModule] The supports-color module
      */
-    constructor(supportsColorModule = supportsColor) {
+    constructor(supportsColorModule = getSupportsColor()) {
         this.supportsColor = supportsColorModule;
     }
 
