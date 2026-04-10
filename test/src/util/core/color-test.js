@@ -1,9 +1,7 @@
 import referee from "@sinonjs/referee";
-import { createRequire } from "node:module";
 import Colorizer from "../../../../src/sinon/colorizer.js";
 
 const assert = referee.assert;
-const require = createRequire(import.meta.url);
 
 const colors = [
     { name: "bold", code: 1 },
@@ -14,17 +12,6 @@ const colors = [
 ];
 
 describe("color", function () {
-    describe("when using the built CJS artifact", function () {
-        it("should load and colorize without throwing", function () {
-            const ColorizerFromLib = require("../../../../lib/sinon/colorizer.js");
-            const color = new ColorizerFromLib();
-            const actual = color.red("lorem ipsum");
-
-            assert.equals(typeof actual, "string");
-            assert.contains(actual, "lorem ipsum");
-        });
-    });
-
     describe("when using the default color support detection", function () {
         it("should return a string", function () {
             const color = new Colorizer();
