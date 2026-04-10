@@ -1,11 +1,11 @@
-env:
-  es6: true
-
-parserOptions:
-  ecmaVersion: 2017
+root: true
 
 extends:
-  - ../../../../test/.eslintrc.yml
+  - ../../../../.eslintrc.yml
+
+env:
+  node: true
+  mocha: true
 
 rules:
   no-underscore-dangle: off

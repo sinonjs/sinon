@@ -1,12 +1,6 @@
 extends:
   - "@sinonjs/eslint-config"
 
-parserOptions:
-  ecmaVersion: 2022
-
-env:
-  es2022: true
-
 plugins:
   - "@sinonjs/no-prototype-methods"
 
