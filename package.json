@@ -132,8 +132,7 @@
     "@sinonjs/commons": "^3.0.1",
     "@sinonjs/fake-timers": "^15.3.1",
     "@sinonjs/samsam": "^10.0.1",
-    "diff": "^8.0.4",
-    "npm-run-all": "^4.1.5"
+    "diff": "^8.0.4"
   },
   "devDependencies": {
     "@mochify/cli": "^1.0.0",
@@ -155,6 +154,7 @@
     "knip": "^6.3.1",
     "lint-staged": "^16.4.0",
     "mocha": "^11.7.5",
+    "npm-run-all": "^4.1.5",
     "nyc": "^18.0.0",
     "prettier": "^3.8.2",
     "puppeteer": "^24.40.0",
