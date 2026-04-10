@@ -6,6 +6,16 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 21.1.1
+
+- [`3c8b023b`](https://github.com/sinonjs/sinon/commit/3c8b023b942b7cbd235b3804e81a36293f1c1b1a)
+  Update deps (Carl-Erik Kopseng)
+- [`2eabf5da`](https://github.com/sinonjs/sinon/commit/2eabf5dabdc242dd1cba1d6f0ffdbbfdf026da2b)
+  fix(#2692): Remove ESM-only supports-color as it breaks CJS exports (#2693) (Carl-Erik Kopseng)
+  > - fix(#2692): Remove ESM-only supports-color as it breaks CJS exports
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-04-10._
+
 ## 21.1.0
 
 - [`0a5526c5`](https://github.com/sinonjs/sinon/commit/0a5526c54b44885cd0e85fb3c42218e75caa93ee)

@@ -12,6 +12,37 @@ const colors = [
 ];
 
 describe("color", function () {
+    describe("when using the default color support detection", function () {
+        it("should return a string", function () {
+            const color = new Colorizer();
+            const actual = color.red("lorem ipsum");
+
+            assert.equals(typeof actual, "string");
+            assert.contains(actual, "lorem ipsum");
+        });
+    });
+
+    describe("when process.stdout is present", function () {
+        it("should inspect stdout tty state", function () {
+            const originalProcess = globalThis.process;
+
+            try {
+                globalThis.process = {
+                    stdout: {
+                        isTTY: true,
+                    },
+                };
+
+                const color = new Colorizer();
+                const actual = color.red("lorem ipsum");
+
+                assert.contains(actual, "31m");
+            } finally {
+                globalThis.process = originalProcess;
+            }
+        });
+    });
+
     describe("when environment supports color", function () {
         let color;
 
