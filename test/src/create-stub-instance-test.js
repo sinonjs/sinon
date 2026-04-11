@@ -84,7 +84,7 @@ describe("createStubInstance", function () {
 
         for (let i = 0; i < types.length; i++) {
             // yes, it's silly to create functions in a loop, it's also a test
-            // eslint-disable-next-line no-loop-func
+
             assert.exception(function () {
                 createStubInstance(types[i]);
             });

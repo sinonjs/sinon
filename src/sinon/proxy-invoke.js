@@ -10,12 +10,18 @@ const { bind } = Function.prototype;
 let callId = 0;
 
 /**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
  * Invokes a proxy function.
  *
- * @param {Function} func The original function
- * @param {*} thisValue The `this` context for the call
+ * @param {SinonFunction} func The original function
+ * @param {unknown} thisValue The `this` context for the call
  * @param {Array} args The arguments for the call
- * @returns {*} The return value of the function call
+ * @returns {unknown} The return value of the function call
  */
 export default function invoke(func, thisValue, args) {
     const matchings = this.matchingFakes(args);

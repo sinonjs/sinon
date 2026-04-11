@@ -380,7 +380,7 @@ describe("Sandbox", function () {
 
             for (let i = 0; i < types.length; i++) {
                 // yes, it's silly to create functions in a loop, it's also a test
-                /* eslint-disable-next-line no-loop-func */
+
                 assert.exception(function () {
                     this.sandbox.createStubInstance(types[i]);
                 });
@@ -1183,7 +1183,6 @@ describe("Sandbox", function () {
             const sandbox = createSandbox();
             let quaziPrivateStateOfObject = "original";
             const object = {
-                // eslint-disable-next-line accessor-pairs
                 get foo() {
                     return quaziPrivateStateOfObject;
                 },

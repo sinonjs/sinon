@@ -698,10 +698,6 @@ describe("fakeTimers.clock", function () {
         it("creates real Date objects when Date constructor is gone", function () {
             const OriginalDateClass = Date;
 
-            // eslint-disable-next-line no-global-assign, no-native-reassign
-            Date = function () {
-                return;
-            };
             this.global.Date = function () {
                 return;
             };

@@ -6,12 +6,18 @@ const { prototypes } = commons;
 const { slice } = prototypes.array;
 
 /**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
  * Returns a `fake` that records all calls, arguments and return values.
  *
  * When an `f` argument is supplied, this implementation will be used.
  *
- * @param {Function|undefined} [f]
- * @returns {Function}
+ * @param {SinonFunction|undefined} [f]
+ * @returns {SinonFunction}
  * @namespace
  */
 function fake(f) {
@@ -27,11 +33,10 @@ function fake(f) {
  * calls, arguments and return values.
  *
  * @memberof fake
- * @param {*} value
- * @returns {Function}
+ * @param {unknown} value
+ * @returns {SinonFunction}
  */
 fake.returns = function returns(value) {
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         return value;
     }
@@ -43,11 +48,10 @@ fake.returns = function returns(value) {
  * Creates a `fake` that throws an Error.
  *
  * @memberof fake
- * @param {*|Error} value
- * @returns {Function}
+ * @param {unknown|Error} value
+ * @returns {SinonFunction}
  */
 fake.throws = function throws(value) {
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         throw getError(value);
     }
@@ -59,11 +63,10 @@ fake.throws = function throws(value) {
  * Creates a `fake` that returns a promise that resolves to the passed `value`
  *
  * @memberof fake
- * @param {*} value
- * @returns {Function}
+ * @param {unknown} value
+ * @returns {SinonFunction}
  */
 fake.resolves = function resolves(value) {
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         return Promise.resolve(value);
     }
@@ -75,11 +78,10 @@ fake.resolves = function resolves(value) {
  * Creates a `fake` that returns a promise that rejects to the passed `value`
  *
  * @memberof fake
- * @param {*} value
- * @returns {Function}
+ * @param {unknown} value
+ * @returns {SinonFunction}
  */
 fake.rejects = function rejects(value) {
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         return Promise.reject(getError(value));
     }
@@ -91,12 +93,11 @@ fake.rejects = function rejects(value) {
  * Returns a `fake` that calls the callback with the defined arguments.
  *
  * @memberof fake
- * @returns {Function}
+ * @returns {SinonFunction}
  */
 fake.yields = function yields() {
     const values = slice(arguments);
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         const callback = arguments[arguments.length - 1];
         if (typeof callback !== "function") {
@@ -114,12 +115,11 @@ fake.yields = function yields() {
  * defined arguments.
  *
  * @memberof fake
- * @returns {Function}
+ * @returns {SinonFunction}
  */
 fake.yieldsAsync = function yieldsAsync() {
     const values = slice(arguments);
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
     function f() {
         const callback = arguments[arguments.length - 1];
         if (typeof callback !== "function") {
@@ -138,8 +138,8 @@ let uuid = 0;
  * Creates a proxy (sinon concept) from the passed function.
  *
  * @private
- * @param  {Function} f
- * @returns {Function}
+ * @param  {SinonFunction} f
+ * @returns {SinonFunction}
  */
 function wrapFunc(f) {
     const fakeInstance = function () {
@@ -178,7 +178,7 @@ function wrapFunc(f) {
  * already an Error instance.
  *
  * @private
- * @param  {*} value [description]
+ * @param  {unknown} value [description]
  * @returns {Error}       [description]
  */
 function getError(value) {

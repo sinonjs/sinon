@@ -4,11 +4,17 @@ function nextTick(callback) {
 }
 
 /**
+ * @callback NextTickFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
  * Returns a next-tick function.
  *
  * @param {object} [process] The process object
- * @param {Function} [setImmediate] The setImmediate function
- * @returns {Function} The next-tick function
+ * @param {NextTickFunction} [setImmediate] The setImmediate function
+ * @returns {NextTickFunction} The next-tick function
  */
 export default function getNextTick(process, setImmediate) {
     if (typeof process === "object" && typeof process.nextTick === "function") {

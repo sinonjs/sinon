@@ -1176,7 +1176,7 @@ describe("sinonSpy.call", function () {
         });
 
         // https://github.com/sinonjs/sinon/issues/1066
-        /* eslint-disable consistent-return */
+
         it("does not throw when the call stack is empty", async function () {
             if (typeof Promise === "undefined") {
                 this.skip();
@@ -1192,7 +1192,6 @@ describe("sinonSpy.call", function () {
                 "stub(1) => 1",
             );
         });
-        /* eslint-enable consistent-return */
 
         it("includes first stack entry from end-user code", function () {
             /* We find the first stack frame that points to end-user code and

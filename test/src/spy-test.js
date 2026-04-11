@@ -220,7 +220,6 @@ function verifyFunctionName(func, expectedName) {
     }
 }
 
-//eslint-disable-next-line mocha/max-top-level-suites
 describe("spy", function () {
     it("does not throw if called without function", function () {
         refute.exception(function () {
@@ -1002,7 +1001,6 @@ describe("spy", function () {
 
         describe("spied native function", function () {
             before(function () {
-                // eslint-disable-next-line no-restricted-syntax
                 try {
                     // eslint-disable-next-line no-console
                     console.log.apply({}, []);
@@ -2138,7 +2136,6 @@ describe("spy", function () {
         });
 
         it("is equal to getCall(0) after first call when control flow has continued after invocation", function () {
-            // eslint-disable-next-line
             const spy = createSpy(runAsserts);
 
             function runAsserts() {

@@ -12,7 +12,7 @@ function isStub(value) {
 /**
  * Creates a stub instance of a constructor.
  *
- * @param {Function} constructor The constructor function
+ * @param {new (...args: unknown[]) => object} constructor The constructor function
  * @param {object} [overrides] Optional overrides for the stubbed methods
  * @returns {object} The stubbed instance
  */
