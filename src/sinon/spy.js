@@ -13,6 +13,12 @@ const { deepEqual } = samsam;
 const { forEach, pop, push, slice } = prototypes.array;
 const filter = Array.prototype.filter;
 
+/**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
 let uuid = 0;
 
 function matches(fake, args, strict) {
@@ -71,7 +77,6 @@ const spyApi = {
     },
 };
 
-/* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
 const delegateToCalls = proxyCallUtil.delegateToCalls;
 delegateToCalls(spyApi, "callArg", false, "callArgWith", true, function () {
     throw new Error(
@@ -152,10 +157,10 @@ function createSpy(func) {
 /**
  * Creates a spy.
  *
- * @param {object|Function} [object] The object or function to spy on
+ * @param {object|SinonFunction} [object] The object or function to spy on
  * @param {string} [property] The property name to spy on
  * @param {Array} [types] Types of accessor to spy on (get, set)
- * @returns {Function|object} The spy or an object with spied accessors
+ * @returns {SinonFunction|object} The spy or an object with spied accessors
  */
 export default function spy(object, property, types) {
     if (isEsModule(object)) {

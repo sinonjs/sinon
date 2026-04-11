@@ -4,9 +4,9 @@
  * @property {boolean} configurable defaults to false
  * @property {boolean} enumerable   defaults to false
  * @property {boolean} writable     defaults to false
- * @property {*} value defaults to undefined
- * @property {Function} get defaults to undefined
- * @property {Function} set defaults to undefined
+ * @property {unknown} value defaults to undefined
+ * @property {() => unknown} get defaults to undefined
+ * @property {(value: unknown) => void} set defaults to undefined
  */
 
 /**
@@ -18,7 +18,7 @@
 /**
  * Returns a slightly modified property descriptor that one can tell is from the object or the prototype
  *
- * @param {*} object
+ * @param {unknown} object
  * @param {string} property
  * @returns {SinonPropertyDescriptor}
  */

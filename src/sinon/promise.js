@@ -6,12 +6,19 @@ const STATUS_RESOLVED = "resolved";
 const STATUS_REJECTED = "rejected";
 
 /**
+ * @callback PromiseExecutor
+ * @param {(value: unknown) => void} resolve
+ * @param {(reason: unknown) => void} reject
+ * @returns {void}
+ */
+
+/**
  * Returns a fake for a given function or undefined. If no function is given, a
  * new fake is returned. If the given function is already a fake, it is
  * returned as is. Otherwise the given function is wrapped in a new fake.
  *
- * @param {Function} [executor] The optional executor function.
- * @returns {Function}
+ * @param {PromiseExecutor} [executor] The optional executor function.
+ * @returns {PromiseExecutor}
  */
 function getFakeExecutor(executor) {
     if (isRestorable(executor)) {
@@ -28,7 +35,7 @@ function getFakeExecutor(executor) {
  * and `rejectedValue` and can be resolved or rejected from the outside by
  * calling `resolve(value)` or `reject(reason)`.
  *
- * @param {Function} [executor] The optional executor function.
+ * @param {PromiseExecutor} [executor] The optional executor function.
  * @returns {Promise}
  */
 export default function promise(executor) {
@@ -50,8 +57,8 @@ export default function promise(executor) {
      * Resolves or rejects the promise with the given status and value.
      *
      * @param {string} status
-     * @param {*} value
-     * @param {Function} callback
+     * @param {unknown} value
+     * @param {(value: unknown) => unknown} callback
      */
     function finalize(status, value, callback) {
         if (sinonPromise.status !== STATUS_PENDING) {

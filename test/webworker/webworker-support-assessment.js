@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint-disable jsdoc/require-jsdoc */
-
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
@@ -11,7 +8,6 @@ if (typeof Worker !== "undefined") {
             const worker = new Worker("/test/webworker/webworker-script.js");
 
             worker.onmessage = function (msg) {
-                // eslint-disable-next-line no-restricted-syntax
                 try {
                     assert.same(msg.data, `worker received:${sentMessage}`);
                     done();

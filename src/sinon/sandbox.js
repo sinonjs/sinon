@@ -18,6 +18,11 @@ const { createMatcher: match } = samsam;
 const DEFAULT_LEAK_THRESHOLD = 10000;
 
 const filter = arrayProto.filter;
+
+/**
+ * @callback RestorerFunction
+ * @returns {void}
+ */
 const forEach = arrayProto.forEach;
 const push = arrayProto.push;
 const reverse = arrayProto.reverse;
@@ -318,7 +323,7 @@ export default function Sandbox(opts = {}) {
      * @param {object} object the object containing the property
      * @param {string} property the name of the property
      * @param {boolean} [forceAssignment] if true, uses assignment instead of DefineProperty
-     * @returns {Function} restorer function
+     * @returns {RestorerFunction} restorer function
      */
     function getFakeRestorer(object, property, forceAssignment = false) {
         const descriptor = getPropertyDescriptor(object, property);
@@ -511,7 +516,6 @@ export default function Sandbox(opts = {}) {
         // store a function for property for restoring the replaced property
         push(fakeRestorers, getFakeRestorer(object, property));
 
-        // eslint-disable-next-line accessor-pairs
         Object.defineProperty(object, property, {
             get: replacement,
             configurable: true,

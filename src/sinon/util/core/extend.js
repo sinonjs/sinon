@@ -56,7 +56,7 @@ const hasDontEnumBug = (function () {
  * @param target
  * @param sources
  * @param doCopy
- * @returns {*} target
+ * @returns {unknown} target
  */
 function extendCommon(target, sources, doCopy) {
     let source, i, prop;

@@ -1,4 +1,3 @@
-"use strict";
 const assert = require("node:assert");
 
 assert(process.env.BROWSER_NAME);

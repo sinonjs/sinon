@@ -122,7 +122,6 @@ describe("util/core/walk", function () {
         }
         /* eslint-enable guard-for-in, no-unused-vars */
 
-        // eslint-disable-next-line no-restricted-syntax
         try {
             walk(target, iterator, rcvr);
             assert.equals(iterator.callCount, numCalls);

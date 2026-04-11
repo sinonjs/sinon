@@ -58,7 +58,7 @@ describe("issues", function () {
     });
 
     describe("#624", function () {
-        // eslint-disable-next-line mocha/no-skipped-tests
+        // eslint-disable-next-line mocha/no-pending-tests
         it.skip("useFakeTimers should be idempotent", function () {
             // Issue #624 shows that useFakeTimers is not idempotent when it comes to
             // using Date.now
@@ -164,7 +164,6 @@ describe("issues", function () {
 
             let oldWatch;
 
-            // eslint-disable-next-line no-restricted-syntax
             try {
                 oldWatch = Object.prototype.watch;
 
@@ -258,7 +257,6 @@ describe("issues", function () {
         let sandbox;
 
         function throwsOnUnconfigurableProperty() {
-            /* eslint-disable no-restricted-syntax */
             try {
                 const preDescriptor = Object.getOwnPropertyDescriptor(
                     window,
@@ -274,7 +272,6 @@ describe("issues", function () {
             } catch (err) {
                 return true;
             }
-            /* eslint-enable no-restricted-syntax */
         }
 
         beforeEach(function () {

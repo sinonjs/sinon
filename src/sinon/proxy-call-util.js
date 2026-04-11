@@ -5,6 +5,18 @@ const { prototypes } = commons;
 const { push } = prototypes.array;
 
 /**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
+ * @callback DelegateCallback
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
  * Increments the call count of a proxy and updates related properties.
  *
  * @param {object} proxy The proxy object
@@ -38,7 +50,7 @@ export function createCallProperties(proxy) {
  * @param {boolean} matchAny Whether to return true if any call matches
  * @param {string} [actual] The actual method name on the call object
  * @param {boolean} [returnsValues] Whether to return an array of return values
- * @param {Function} [notCalled] Function to call if the proxy has not been called
+ * @param {DelegateCallback} [notCalled] Function to call if the proxy has not been called
  * @param {number} [totalCallCount] The expected total call count
  */
 export function delegateToCalls(

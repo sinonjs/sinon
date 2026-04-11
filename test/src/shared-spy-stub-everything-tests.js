@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint-disable jsdoc/require-jsdoc */
-
 import referee from "@sinonjs/referee";
 const assert = referee.assert;
 const refute = referee.refute;
