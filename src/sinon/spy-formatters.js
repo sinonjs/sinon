@@ -69,7 +69,6 @@ export default {
     },
 
     n: function (spyInstance) {
-        // eslint-disable-next-line @sinonjs/no-prototype-methods/no-prototype-methods
         return spyInstance.toString();
     },
 
@@ -128,7 +127,6 @@ export default {
         const calls = [];
 
         for (let i = 0, l = spyInstance.callCount; i < l; ++i) {
-            // eslint-disable-next-line @sinonjs/no-prototype-methods/no-prototype-methods
             let stringifiedCall = `    ${spyInstance.getCall(i).toString()}`;
             if (/\n/.test(calls[i - 1])) {
                 stringifiedCall = `\n${stringifiedCall}`;

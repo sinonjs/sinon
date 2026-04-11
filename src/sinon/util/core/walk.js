@@ -4,6 +4,14 @@ const { prototypes } = commons;
 
 const forEach = prototypes.array.forEach;
 
+/**
+ * @callback WalkIterator
+ * @param {unknown} value
+ * @param {string} key
+ * @param {object} object
+ * @returns {void}
+ */
+
 function walkInternal(obj, iterator, context, originalObj, seen) {
     let prop;
     const proto = Object.getPrototypeOf(obj);
@@ -44,9 +52,12 @@ function walkInternal(obj, iterator, context, originalObj, seen) {
  * default to using a simple for..in loop.
  *
  * @param {object} obj - The object to walk the prototype chain for.
- * @param {Function} iterator - The function to be called on each pass of the walk.
+ * @param {WalkIterator} iterator - The function to be called on each pass of the walk.
  * @param {object} [context] - (Optional) When given, the iterator will be called with this object as the receiver.
+ * @returns {void} nothing
  */
-export default function walk(obj, iterator, context) {
+const walk = function (obj, iterator, context) {
     return walkInternal(obj, iterator, context, obj, {});
-}
+};
+
+export default walk;

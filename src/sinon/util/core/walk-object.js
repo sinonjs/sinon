@@ -5,14 +5,28 @@ import getPropertyDescriptor from "./get-property-descriptor.js";
 import walk from "./walk.js";
 
 /**
+ * @callback ObjectMutator
+ * @param {object} object
+ * @param {string} property
+ * @returns {void}
+ */
+
+/**
+ * @callback ObjectFilter
+ * @param {object} object
+ * @param {string} property
+ * @returns {boolean}
+ */
+
+/**
  * A utility that allows traversing an object, applying mutating functions on the properties
  *
- * @param {Function} mutator called on each property
+ * @param {ObjectMutator} mutator called on each property
  * @param {object} object the object we are walking over
- * @param {Function} filter a predicate (boolean function) that will decide whether or not to apply the mutator to the current property
+ * @param {ObjectFilter} filter a predicate (boolean function) that will decide whether or not to apply the mutator to the current property
  * @returns {void} nothing
  */
-export default function walkObject(mutator, object, filter) {
+const walkObject = function (mutator, object, filter) {
     let called = false;
     const name = functionName(mutator);
 
@@ -49,4 +63,6 @@ export default function walkObject(mutator, object, filter) {
     }
 
     return object;
-}
+};
+
+export default walkObject;

@@ -146,7 +146,6 @@ describe("util/core/wrapMethod", function () {
 
     it("replaces setter", function () {
         wrapMethod(this.object, "property", {
-            // eslint-disable-line accessor-pairs
             set: function () {
                 return;
             },
@@ -268,17 +267,14 @@ describe("util/core/wrapMethod", function () {
 
             let i = 0;
 
-            // eslint-disable-next-line no-global-assign, no-native-reassign
-            Error = TypeError = function () {
+            globalThis.Error = globalThis.TypeError = function () {
                 this.stack = `:STACK${++i}:`;
             };
         });
 
         afterEach(function () {
-            // eslint-disable-next-line no-global-assign, no-native-reassign
-            Error = this.oldError;
-            // eslint-disable-next-line no-global-assign, no-native-reassign
-            TypeError = this.oldTypeError;
+            globalThis.Error = this.oldError;
+            globalThis.TypeError = this.oldTypeError;
         });
 
         it("throws with stack trace showing original wrapMethod call", function () {

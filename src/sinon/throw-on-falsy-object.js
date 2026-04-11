@@ -5,7 +5,7 @@ const { valueToString } = commons;
 /**
  * Throws an error if the object is null or undefined when trying to stub a property.
  *
- * @param {*} object The object to check
+ * @param {unknown} object The object to check
  * @param {string} property The property name
  */
 export default function throwOnFalsyObject(object, property) {

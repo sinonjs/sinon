@@ -1,4 +1,3 @@
-"use strict";
 const configYmlPath = process.env.SINON_DOCS_CONFIG_PATH || "docs/_config.yml";
 const UTF8 = "utf8";
 

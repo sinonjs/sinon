@@ -1,4 +1,3 @@
-/* eslint-disable strict -- proxy wrappers need explicit strict mode for browser bundle semantics */
 import commons from "@sinonjs/commons";
 import extend from "./util/core/extend.js";
 import functionToString from "./util/core/function-to-string.js";
@@ -10,6 +9,12 @@ import formatters from "./spy-formatters.js";
 
 const { prototypes } = commons;
 const { push, forEach, slice } = prototypes.array;
+
+/**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
 
 const emptyFakes = [];
 
@@ -245,7 +250,7 @@ function wrapFunction(func, originalFunc) {
     // Do not change this to use an eval. Projects that depend on sinon block the use of eval.
     // ref: https://github.com/sinonjs/sinon/issues/710
     switch (arity) {
-        /*eslint-disable no-unused-vars, max-len*/
+        /*eslint-disable no-unused-vars*/
         case 0:
             p = function proxy() {
                 "use strict";
@@ -369,9 +374,9 @@ function wrapFunction(func, originalFunc) {
 /**
  * Creates a proxy function.
  *
- * @param {Function} func The original function
- * @param {Function} originalFunc The original function (for arity and name)
- * @returns {Function} The proxy function
+ * @param {SinonFunction} func The original function
+ * @param {SinonFunction} originalFunc The original function (for arity and name)
+ * @returns {SinonFunction} The proxy function
  */
 export default function createProxy(func, originalFunc) {
     const proxy = wrapFunction(func, originalFunc);

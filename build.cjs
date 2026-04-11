@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-"use strict";
-/* eslint-disable @sinonjs/no-prototype-methods/no-prototype-methods */
+ 
 const fs = require("node:fs");
 const { execFileSync } = require("node:child_process");
 const esbuild = require("esbuild");

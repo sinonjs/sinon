@@ -1,5 +1,3 @@
-"use strict";
-
 const esbuild = require("esbuild");
 const { esbuildPluginIstanbul } = require("esbuild-plugin-istanbul");
 

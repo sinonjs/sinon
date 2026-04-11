@@ -1,10 +1,16 @@
 const sinonTypeSymbolProperty = Symbol("SinonType");
 
+/**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
 export default {
     /**
      * Set the type of a Sinon object to make it possible to identify it later at runtime
      *
-     * @param {object|Function} object  object/function to set the type on
+     * @param {object|((...args: unknown[]) => unknown)} object  object/function to set the type on
      * @param {string} type the named type of the object/function
      */
     set(object, type) {

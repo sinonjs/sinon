@@ -4,8 +4,6 @@
  * Background: https://github.com/sinonjs/sinon/pull/2366
  */
 
-"use strict";
-
 const shell = require("shelljs");
 const readline = require("readline");
 const fs = require("node:fs");
@@ -28,7 +26,7 @@ const rl = readline.createInterface({
 
 let changeLogData = "";
 
-/* eslint-disable jsdoc/require-jsdoc, @sinonjs/no-prototype-methods/no-prototype-methods */
+ 
 function getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key] === value);
 }

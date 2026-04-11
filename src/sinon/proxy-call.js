@@ -7,6 +7,12 @@ const { createMatcher: match, deepEqual } = samsam;
 const { concat, filter, join, map, reduce, slice } = prototypes.array;
 
 /**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
+/**
  * @param proxy
  * @param text
  * @param args
@@ -248,11 +254,11 @@ callProto.invokeCallback = callProto.yield;
 /**
  * Creates a proxy call object.
  *
- * @param {Function} proxy The proxy function
- * @param {*} thisValue The `this` context for the call
+ * @param {(...args: unknown[]) => unknown} proxy The proxy function
+ * @param {unknown} thisValue The `this` context for the call
  * @param {Array} args The arguments for the call
- * @param {*} returnValue The return value of the call
- * @param {*} exception The exception thrown by the call
+ * @param {unknown} returnValue The return value of the call
+ * @param {unknown} exception The exception thrown by the call
  * @param {number} id The call id
  * @param {Error} errorWithCallStack Error object used for stack trace
  * @returns {object} proxyCall

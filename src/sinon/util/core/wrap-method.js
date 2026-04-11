@@ -8,6 +8,12 @@ import sinonType from "./sinon-type.js";
 const { hasOwnProperty } = prototypes.object;
 const { push } = prototypes.array;
 
+/**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
 // eslint-disable-next-line no-empty-function
 const noop = () => {};
 
@@ -49,8 +55,8 @@ const hasES5Support = "keys" in Object;
  *
  * @param {object} object The object containing the method
  * @param {string | symbol} property The property name of the method to wrap
- * @param {Function|object} method The wrapper function or a property descriptor
- * @returns {Function} The wrapped method
+ * @param {SinonFunction|object} method The wrapper function or a property descriptor
+ * @returns {SinonFunction} The wrapped method
  */
 export default function wrapMethod(object, property, method) {
     if (!object) {
@@ -108,7 +114,7 @@ export default function wrapMethod(object, property, method) {
 
     // Firefox has a problem when using hasOwn.call on objects from other frames.
     const owned = object.hasOwnProperty
-        ? object.hasOwnProperty(property) // eslint-disable-line @sinonjs/no-prototype-methods/no-prototype-methods
+        ? object.hasOwnProperty(property)
         : hasOwnProperty(object, property);
 
     if (hasES5Support) {

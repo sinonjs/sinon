@@ -1,5 +1,5 @@
 /**
- * @param {*} object
+ * @param {unknown} object
  * @param {string} property
  * @returns {boolean} whether a prop exists in the prototype chain
  */

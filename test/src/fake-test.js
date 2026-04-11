@@ -224,13 +224,11 @@ describe("fake", function () {
                 myFake();
             });
 
-            /* eslint-disable no-restricted-syntax */
             try {
                 myFake();
             } catch (error) {
                 assert.equals(error.message, expectedMessage);
             }
-            /* eslint-disable no-restricted-syntax */
         });
 
         // eslint-disable-next-line mocha/no-setup-in-describe
@@ -240,13 +238,11 @@ describe("fake", function () {
             const expected = new TypeError("hello sailor");
             const myFake = fake.throws(expected);
 
-            /* eslint-disable no-restricted-syntax */
             try {
                 myFake();
             } catch (actual) {
                 assert.isTrue(actual instanceof TypeError);
             }
-            /* eslint-disable no-restricted-syntax */
         });
 
         describe("when passed a String", function () {
@@ -254,13 +250,11 @@ describe("fake", function () {
                 const expected = "lorem ipsum";
                 const myFake = fake.throws(expected);
 
-                /* eslint-disable no-restricted-syntax */
                 try {
                     myFake();
                 } catch (actual) {
                     assert.isTrue(actual instanceof Error);
                 }
-                /* eslint-disable no-restricted-syntax */
             });
         });
     });

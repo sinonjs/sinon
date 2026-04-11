@@ -563,7 +563,6 @@ describe("sinonMock", function () {
             const expectedException = function (name) {
                 return {
                     test: function (actual) {
-                        // eslint-disable-next-line mocha/no-setup-in-describe
                         return actual.name === name;
                     },
                     toString: function () {

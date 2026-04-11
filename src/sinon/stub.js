@@ -160,7 +160,6 @@ function isDataDescriptor(descriptor) {
     );
 }
 
-/*eslint-disable no-use-before-define*/
 function getParentBehaviour(stubInstance) {
     return stubInstance.parent && getCurrentBehavior(stubInstance.parent);
 }
@@ -179,7 +178,6 @@ function getCurrentBehavior(stubInstance) {
         ? currentBehavior
         : getDefaultBehavior(stubInstance);
 }
-/*eslint-enable no-use-before-define*/
 
 const proto = {
     resetBehavior: function () {

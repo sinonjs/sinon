@@ -1,5 +1,19 @@
 # Changes
 
+## 21.1.2
+
+- [`53817f7d`](https://github.com/sinonjs/sinon/commit/53817f7d3ab9447001ae7e622361c2f148170965)
+  Upgrade to ESLint 10 and new shared config (#2696) (Carl-Erik Kopseng)
+  > - Upgrade to ESLint 10 and new shared config
+  > - Update deps
+- [`d7a682e0`](https://github.com/sinonjs/sinon/commit/d7a682e0a8e8db3111c3e7f8cb238b2c7dfddb0e)
+  fix: move npm-run-all to devDeps (#2694) (Avi Vahl)
+  > used only during dev, and caused a considerable dep count jump downstream
+- [`5b8720ec`](https://github.com/sinonjs/sinon/commit/5b8720ec579787f4830fcb40cf97c9d2744ade74)
+  use latest shared eslint-config (Carl-Erik Kopseng)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-04-11._
+
 ## 21.1.1
 
 - [`3c8b023b`](https://github.com/sinonjs/sinon/commit/3c8b023b942b7cbd235b3804e81a36293f1c1b1a)

@@ -1531,7 +1531,6 @@ describe("assert", function () {
 
             /*eslint consistent-return: "off"*/
             this.message = function (method) {
-                // eslint-disable-next-line no-restricted-syntax
                 try {
                     sinonAssert[method].apply(
                         sinonAssert,
@@ -2314,7 +2313,6 @@ describe("assert", function () {
         }
 
         function createExceptionMessage(method, arg) {
-            // eslint-disable-next-line no-restricted-syntax
             try {
                 sinonAssert[method](arg);
             } catch (e) {
