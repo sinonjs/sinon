@@ -124,7 +124,6 @@
       "@mochify/driver-webdriver",
       "@sinonjs/eslint-config",
       "@sinonjs/eslint-plugin-no-prototype-methods",
-      "@studio/changes",
       "lint-staged"
     ]
   },
