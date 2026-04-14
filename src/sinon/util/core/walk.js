@@ -28,7 +28,13 @@ function walkInternal(obj, iterator, context, originalObj, seen) {
     }
 
     forEach(Object.getOwnPropertyNames(obj), function (k) {
-        if (seen[k] !== true) {
+        // Skip __proto__ because:
+        // - It's not currently useful in this project.
+        // - It's automatic, problematic, and deprecated.
+        // - Assigning to it has special effects (or no effect for non-object)
+        //   which may not be expected/handled properly by iterator callback.
+        // - Getting it throws Error with node --disable-proto=throw.
+        if (k !== "__proto__" && seen[k] !== true) {
             seen[k] = true;
             const target =
                 typeof Object.getOwnPropertyDescriptor(obj, k).get ===
