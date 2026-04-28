@@ -57,7 +57,7 @@ function walkInternal(obj, iterator, context, originalObj, seen) {
  * @returns {void} nothing
  */
 const walk = function (obj, iterator, context) {
-    return walkInternal(obj, iterator, context, obj, {});
+    return walkInternal(obj, iterator, context, obj, Object.create(null));
 };
 
 export default walk;

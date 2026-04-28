@@ -860,4 +860,29 @@ describe("issues", function () {
         assert(cb.calledOnce);
         assert.equals(cb.firstCall.args, ["Hello"]);
     });
+
+    it("#2702 - stub creation should ignore inherited non-writable Object prototype properties", function () {
+        const descriptor = Object.getOwnPropertyDescriptor(
+            Object.prototype,
+            "someFlag",
+        );
+
+        Object.defineProperty(Object.prototype, "someFlag", {
+            value: "x",
+            writable: false,
+            configurable: true,
+        });
+
+        try {
+            refute.exception(function () {
+                sinon.stub();
+            });
+        } finally {
+            if (descriptor) {
+                Object.defineProperty(Object.prototype, "someFlag", descriptor);
+            } else {
+                delete Object.prototype.someFlag;
+            }
+        }
+    });
 });
