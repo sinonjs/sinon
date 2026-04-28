@@ -1,5 +1,5 @@
 #!/usr/bin/env node
- 
+
 const fs = require("node:fs");
 const { execFileSync } = require("node:child_process");
 const esbuild = require("esbuild");
@@ -8,7 +8,8 @@ const pkg = require("./package.json");
 
 // Step 1: Run Rollup to generate lib/ from src/
 console.log("Generating lib/ from src/ using Rollup...");
-execFileSync("npx", ["rollup", "-c", "rollup.config.mjs"], {
+const rollupCli = require.resolve("rollup/dist/bin/rollup");
+execFileSync(process.execPath, [rollupCli, "-c", "rollup.config.mjs"], {
     stdio: "inherit",
 });
 

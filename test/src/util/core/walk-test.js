@@ -2,6 +2,7 @@ import referee from "@sinonjs/referee";
 import walk from "../../../../src/sinon/util/core/walk.js";
 import createSpy from "../../../../src/sinon/spy.js";
 const assert = referee.assert;
+const refute = referee.refute;
 
 describe("util/core/walk", function () {
     it("should call iterator with value, key, and obj, with context as the receiver", function () {
@@ -162,5 +163,36 @@ describe("util/core/walk", function () {
         propertyNames.forEach(function (name, index) {
             assert.equals(index, propertyNames.lastIndexOf(name));
         });
+    });
+
+    it("tracks visited names without inheriting Object.prototype properties", function () {
+        const target = {};
+        const iterator = createSpy();
+        const descriptor = Object.getOwnPropertyDescriptor(
+            Object.prototype,
+            "someFlag",
+        );
+
+        // eslint-disable-next-line no-extend-native
+        Object.defineProperty(Object.prototype, "someFlag", {
+            value: "x",
+            writable: false,
+            configurable: true,
+        });
+
+        try {
+            refute.exception(function () {
+                walk(target, iterator);
+            });
+
+            assert(iterator.calledWith("someFlag", Object.prototype));
+        } finally {
+            if (descriptor) {
+                // eslint-disable-next-line no-extend-native
+                Object.defineProperty(Object.prototype, "someFlag", descriptor);
+            } else {
+                delete Object.prototype.someFlag;
+            }
+        }
     });
 });
