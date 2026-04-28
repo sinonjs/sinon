@@ -33,7 +33,7 @@
   "scripts": {
     "build-artifacts": "node ./build.cjs",
     "pretest-node": "npm run build-artifacts",
-    "test-node": "mocha --recursive -R dot 'test/{src,issues,scripts}/**/*-test.js'",
+    "test-node": "mocha --recursive -R dot \"test/{src,issues,scripts}/**/*-test.js\"",
     "pretest-headless": "npm run build-artifacts",
     "test-dev": "CHOKIDAR_USEPOLLING=1 npm run test-node -- --watch",
     "test-headless": "node ./scripts/run-browser-suite.mjs headless",
@@ -56,7 +56,7 @@
     "build": "npm run build-artifacts",
     "build-docs": "cd docs; make build",
     "serve-docs": "cd docs; make livereload",
-    "lint": "eslint --max-warnings 0 '**/*.{js,cjs,mjs}'",
+    "lint": "eslint --max-warnings 0 \"**/*.{js,cjs,mjs}\"",
     "pretest-webworker": "npm run build-artifacts",
     "prebuild": "rimraf pkg && npm run update-compatibility",
     "postbuild": "run-s test-esm-support test-esm-browser-build test-contract check-dependencies",
