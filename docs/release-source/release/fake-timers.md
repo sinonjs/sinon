@@ -59,7 +59,12 @@ As above, but allows further configuration options.
 
 - `config.now` - _Number/Date_ - installs `fake-timers` with the specified unix epoch (default: 0)
 - `config.toFake` - _String[ ]_ - an array with explicit function names to fake. By default `fake-timers` will automatically fake _all_ methods (changed in v19).
+- `config.toNotFake` - _String[ ]_ - an array with explicit function names to **not** fake.
+- `config.loopLimit` - _Number_ - the maximum number of timers that will be run when calling `runAll()` before assuming an infinite loop and throwing an error (default: 1000).
 - `config.shouldAdvanceTime` - _Boolean_ - tells `fake-timers` to increment mocked time automatically based on the real system time shift (default: false). When used in conjunction with `config.toFake`, it will only work if `'setInterval'` is included in `config.toFake`.
+- `config.advanceTimeDelta` - _Number_ - increment (in ms) used when `shouldAdvanceTime` is true (default: 20).
+- `config.shouldClearNativeTimers` - _Boolean_ - if set to `true`, `fake-timers` will clear any native timers that were already scheduled when the fake timers are installed (default: false).
+- `config.ignoreMissingTimers` - _Boolean_ - if set to `true`, `fake-timers` will not throw an error if a method to fake is missing from the environment (default: false).
 - **`config.global`** - _Object_ - use `global` instead of the usual global object. This is useful if you use JSDOM along with Node.
 
 The options are basically all of those supported by the `install()` method of our `fake-timers` library, with the sole exception of `global`.
@@ -177,6 +182,32 @@ This runs all pending timers until there are none remaining. If new timers are a
 This makes it easier to run asynchronous tests to completion without worrying about the number of timers they use, or the delays in those timers.
 
 The `runAllAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
+
+#### `clock.runToLast();` / `await clock.runToLastAsync()`
+
+This runs all pending timers until the last timer has been fired. If new timers are added while it is executing they will be run as well.
+
+The `runToLastAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
+
+#### `clock.runToFrame();`
+
+Advances the clock to the next animation frame (standard 16ms).
+
+#### `clock.runMicrotasks();`
+
+Runs all pending microtasks (e.g. `process.nextTick` or `Promise` callbacks).
+
+#### `clock.countTimers();`
+
+Returns the number of waiting timers.
+
+#### `clock.setSystemTime([now]);`
+
+This allows you to change the system time to the provided `now` (number or Date) without firing any timers.
+
+#### `clock.reset();`
+
+Resets the clock to its initial `now` value and clears all pending timers.
 
 #### `clock.restore();`
 
