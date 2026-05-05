@@ -87,3 +87,11 @@ export const timers = {
 addIfDefined(timers, "setImmediate");
 addIfDefined(timers, "clearImmediate");
 addIfDefined(timers, "Temporal");
+addIfDefined(timers, "performance");
+addIfDefined(timers, "requestAnimationFrame");
+addIfDefined(timers, "cancelAnimationFrame");
+addIfDefined(timers, "requestIdleCallback");
+addIfDefined(timers, "cancelIdleCallback");
+addIfDefined(timers, "hrtime");
+addIfDefined(timers, "nextTick");
+addIfDefined(timers, "queueMicrotask");
