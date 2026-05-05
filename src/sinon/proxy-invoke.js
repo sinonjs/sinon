@@ -8,6 +8,7 @@ const ErrorConstructor = Error.prototype.constructor;
 const { bind } = Function.prototype;
 
 let callId = 0;
+const maxSafeInteger = Number.MAX_SAFE_INTEGER;
 
 /**
  * @callback SinonFunction
@@ -25,7 +26,8 @@ let callId = 0;
  */
 export default function invoke(func, thisValue, args) {
     const matchings = this.matchingFakes(args);
-    const currentCallId = callId++;
+    const currentCallId = callId;
+    callId = callId >= maxSafeInteger ? 0 : callId + 1;
     let exception, returnValue;
 
     proxyCallUtil.incrementCallCount(this);
