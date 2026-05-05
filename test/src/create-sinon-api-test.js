@@ -17,12 +17,26 @@ describe("create-sinon-api", function () {
         assert.isFunction(sinon.expectation.create);
     });
 
-    it("tracks created sandboxes in the root sandbox collection", function () {
+    it("does not track created sandboxes in the root sandbox collection", function () {
+        // Sub-sandboxes are isolated by design: pushing them into the root
+        // sandbox's collection caused `sinon.restore()` to cascade-restore
+        // sub-sandbox stubs (regression in 21.1.0, see #2701).
         const sinon = createApi();
         const fakes = sinon.getFakes();
         const sandbox = sinon.createSandbox();
 
-        assert.equals(fakes.indexOf(sandbox) !== -1, true);
+        assert.equals(fakes.indexOf(sandbox), -1);
+    });
+
+    it("does not restore sub-sandboxes when the root sandbox is restored", function () {
+        const sinon = createApi();
+        const sandbox = sinon.createSandbox();
+        const target = { method: () => "original" };
+        sandbox.stub(target, "method").returns("stubbed");
+
+        sinon.restore();
+
+        assert.equals(target.method(), "stubbed");
     });
 
     it("tracks stub instance methods in the root sandbox collection", function () {
