@@ -86,3 +86,4 @@ export const timers = {
 };
 addIfDefined(timers, "setImmediate");
 addIfDefined(timers, "clearImmediate");
+addIfDefined(timers, "Temporal");

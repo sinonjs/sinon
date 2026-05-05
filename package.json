@@ -130,7 +130,7 @@
   },
   "dependencies": {
     "@sinonjs/commons": "^3.0.1",
-    "@sinonjs/fake-timers": "^15.3.2",
+    "@sinonjs/fake-timers": "^15.4.0",
     "@sinonjs/samsam": "^10.0.2",
     "diff": "^9.0.0"
   },
