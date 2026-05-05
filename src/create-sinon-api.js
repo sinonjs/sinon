@@ -20,11 +20,12 @@ export default function createApi() {
     const sandbox = new Sandbox();
 
     const apiMethods = {
-        createSandbox: function createSandbox(config) {
-            const s = createConfiguredSandbox(config);
-            sandbox.getFakes().push(s);
-            return s;
-        },
+        // `createSandbox` returns an isolated sandbox: its fakes are tracked
+        // on its own collection so consumers can rely on `subSandbox.restore()`
+        // (and only that) for cleanup. Don't push it into the global sandbox's
+        // collection — doing so caused `sinon.restore()` to cascade-restore
+        // sub-sandboxes (regression in 21.1.0, see #2701).
+        createSandbox: createConfiguredSandbox,
         match: samsam.createMatcher,
         restoreObject: restoreObject,
         expectation: expectation,

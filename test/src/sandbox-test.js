@@ -2048,7 +2048,11 @@ describe("Sandbox", function () {
     });
 
     describe("nested sandboxes", function () {
-        it("should restore nested sandboxes when the parent is restored", function () {
+        // Sub-sandboxes returned by `parent.createSandbox()` are isolated:
+        // the parent's `restore()` / `resetHistory()` / `verifyAndRestore()`
+        // must not touch the child's fakes or timers. Cascading was a
+        // regression in 21.1.0 (see #2701) and is now reverted.
+        it("should not restore nested sandboxes when the parent is restored", function () {
             const parent = createApi(); // parent is a "sinon-like" sandbox
             const child = parent.createSandbox();
 
@@ -2059,10 +2063,13 @@ describe("Sandbox", function () {
 
             parent.restore();
 
+            assert.equals(myObj.method(), "stubbed");
+
+            child.restore();
             assert.equals(myObj.method(), "original");
         });
 
-        it("should reset history of nested sandboxes when the parent resetHistory is called", function () {
+        it("should not reset history of nested sandboxes when the parent resetHistory is called", function () {
             const parent = createApi();
             const child = parent.createSandbox();
 
@@ -2073,10 +2080,10 @@ describe("Sandbox", function () {
 
             parent.resetHistory();
 
-            assert.isFalse(spy.called);
+            assert.isTrue(spy.calledOnce);
         });
 
-        it("should restore nested sandboxes when the parent verifyAndRestore is called", function () {
+        it("should not restore nested sandboxes when the parent verifyAndRestore is called", function () {
             const parent = createApi();
             const child = parent.createSandbox();
 
@@ -2087,10 +2094,13 @@ describe("Sandbox", function () {
 
             parent.verifyAndRestore();
 
+            assert.equals(myObj.method(), "stubbed");
+
+            child.restore();
             assert.equals(myObj.method(), "original");
         });
 
-        it("should restore fake timers when the parent sandbox is restored", function () {
+        it("should not restore fake timers when the parent sandbox is restored", function () {
             const parent = createApi();
             const child = parent.createSandbox();
 
@@ -2101,6 +2111,9 @@ describe("Sandbox", function () {
 
             parent.restore();
 
+            refute.same(globalContext.Date, originalDate);
+
+            child.restore();
             assert.same(globalContext.Date, originalDate);
         });
     });
