@@ -27,7 +27,7 @@ const maxSafeInteger = Number.MAX_SAFE_INTEGER;
 export default function invoke(func, thisValue, args) {
     const matchings = this.matchingFakes(args);
     const currentCallId = callId;
-    callId = callId === maxSafeInteger ? 0 : callId + 1;
+    callId = callId >= maxSafeInteger ? 0 : callId + 1;
     let exception, returnValue;
 
     proxyCallUtil.incrementCallCount(this);
