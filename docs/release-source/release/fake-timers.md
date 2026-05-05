@@ -8,8 +8,7 @@ Fake timers are synchronous implementations of `setTimeout` and friends that
 Sinon.JS can overwrite the global functions with to allow you to more easily
 test code using them. It also has utilities for working with `async`/Promise code.
 
-Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects created through either `new Date();`
-or `Date.now();` (if supported by the browser).
+Fake timers provide a `clock` object to pass time, which can also be used to control `Date` objects (e.g. `new Date()`) and the `Temporal` API (e.g. `Temporal.Now.instant()`).
 
 > The separate Fake Timers project is constantly being added to and updated, and we have a hard time keeping these docs in sync! Therefore it might be better to just refer directly to the [fake-timer API reference][api reference], as that shows all it has to offer. The `clock` object is not wrapped, so everything `fake-timers` has to offer can be used through it.
 
@@ -45,7 +44,7 @@ set of features (Sinon uses it under the hood) and was previously extracted from
 
 #### `var clock = sinon.useFakeTimers();`
 
-Causes Sinon to replace the global `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate`, `process.hrtime`, `performance.now`(when available) and `Date` with a custom implementation which is bound to the returned `clock` object.
+Causes Sinon to replace the global `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`, `setImmediate`, `clearImmediate`, `process.hrtime`, `performance.now`(when available), `Date`, and `Temporal` (when available) with a custom implementation which is bound to the returned `clock` object.
 
 Starts the clock at the UNIX epoch (timestamp of `0`).
 
@@ -150,7 +149,11 @@ Note that in the above example, the synchronous `clock.tick(200)` would only pri
 
 Tick the clock ahead `time` milliseconds.
 
-Causes all timers scheduled within the affected time range to be called. `time` may be the number of milliseconds to advance the clock by or a human-readable string. Valid string formats are "08" for eight seconds, "01:00" for one minute and "02:34:10" for two hours, 34 minutes and ten seconds.
+Causes all timers scheduled within the affected time range to be called. `time` may be the number of milliseconds to advance the clock by, a human-readable string, or a `Temporal.Duration` object. Valid string formats are "08" for eight seconds, "01:00" for one minute and "02:34:10" for two hours, 34 minutes and ten seconds.
+
+```javascript
+clock.tick(Temporal.Duration.from({ hours: 1, minutes: 30 }));
+```
 
 The `tickAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
 
