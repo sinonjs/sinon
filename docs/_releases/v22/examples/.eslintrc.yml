@@ -1,0 +1,17 @@
+root: true
+
+extends:
+  - ../../../../.eslintrc.yml
+
+env:
+  node: true
+  mocha: true
+
+rules:
+  no-underscore-dangle: off
+  no-console: off
+  no-empty-function: off
+  mocha/no-setup-in-describe: off
+  no-var: error
+  prefer-const: error
+  strict: off # cannot use strict mode in RunKit due to it using `with` tricks
