@@ -6,6 +6,99 @@ permalink: /releases/changelog
 
 # Changelog
 
+## 22.0.0
+
+- [`ed911df5`](https://github.com/sinonjs/sinon/commit/ed911df50d2967d52f9ca341f1f15c8b4def8878)
+  Update Ruby gems (Carl-Erik Kopseng)
+- [`75a1e5b8`](https://github.com/sinonjs/sinon/commit/75a1e5b80d9aab698fadd8bb8c30998f109e1841)
+  Update to Node 26 (Carl-Erik Kopseng)
+- [`197d6608`](https://github.com/sinonjs/sinon/commit/197d660899fc8f9ac523e8ad9712f600c72cdbd2)
+  Update documentation on faking timers to reflect the current state of fake-timers (Carl-Erik Kopseng)
+- [`c5ddf80b`](https://github.com/sinonjs/sinon/commit/c5ddf80bd8653ad9a3e539103a3c801e7bec112c)
+  Update fake-timers@15.4: includes new Temporal API (Carl-Erik Kopseng)
+- [`f4ab02f6`](https://github.com/sinonjs/sinon/commit/f4ab02f6b78d4602401369d5797bbbb2a1110c7e)
+  Update updatable packages (Carl-Erik Kopseng)
+- [`0536afc8`](https://github.com/sinonjs/sinon/commit/0536afc8fedd1db7dbc3557a2d162d1d8a1d12aa)
+  Quality: Global mutable call id can grow unbounded across long-lived processes (#2691) (tuanaiseo)
+  > - refactor: global mutable call id can grow unbounded across l
+  >
+  > `callId` is module-scoped and incremented on every invocation. In long-running test runners or embedded usage, this can grow indefinitely and eventually lose integer precision semantics for strict ordering comparisons.
+  >
+  > Affected files: proxy-invoke.js
+  >
+  > Signed-off-by: tuanaiseo <221258316+tuanaiseo@users.noreply.github.com>
+  >
+  > - Wrap around for all values that are too high
+  >
+  > ***
+  >
+  > Signed-off-by: tuanaiseo <221258316+tuanaiseo@users.noreply.github.com>
+  > Co-authored-by: Carl-Erik Kopseng <carlerik@gmail.com>
+- [`f4f7d93b`](https://github.com/sinonjs/sinon/commit/f4f7d93bc6bd664400e74d153fd5812dae84d222)
+  Perform additional cleanup when calling callThrough() (#2670) (Cyrille)
+- [`6199e9e4`](https://github.com/sinonjs/sinon/commit/6199e9e43db4440ea350961e2ef204236ca4ca4f)
+  improve GitHubworkflows by introducing zizmor for monitoring (#2686) (Till!)
+  > - fix(workflows): fetch-depth is for actions/checkout
+  > - chore(workflows): update
+  >
+  > * pin all actions to precise commits
+  > * avoid credential leakage from actions/checkout
+  > * group action updates going forward
+  > * add zimor config to ignore "secrets outside env"
+  > * add job to keep validating workflows
+- [`f7476b59`](https://github.com/sinonjs/sinon/commit/f7476b59deda4893f9fa5b1e1dcfa74a059d4d4e)
+  Use path.normalize() for path normalization (Carl-Erik Kopseng)
+- [`2c975393`](https://github.com/sinonjs/sinon/commit/2c975393f19b33c611cf7c4221f585cdffa3a619)
+  fix: make build and node test scripts cross-platform (laplace young)
+- [`a7692917`](https://github.com/sinonjs/sinon/commit/a76929179340333cb7e9d55d8c00791683d674a5)
+  fix: isolate walk state from Object prototype (laplace young)
+- [`66df977a`](https://github.com/sinonjs/sinon/commit/66df977a5cb7139de221512f80ca36504e8eb671)
+  Fix sinon.restore() cascade-restoring sub-sandboxes (#2704) (Charlie Leitheiser)
+  > The ESM port of `createApi` (#2683, shipped in 21.1.0) replaced `createSandbox: createSandbox` with a wrapper that pushes every newly-created sandbox into the root sandbox's fake collection:
+  >
+  >     createSandbox: function createSandbox(config) {
+  >         const s = createConfiguredSandbox(config);
+  >         sandbox.getFakes().push(s);
+  >         return s;
+  >     }
+  >
+  > `Sandbox#restore` then walks that collection and calls `.restore()` on each entry. Because a sub-sandbox is itself an entry, every top-level `sinon.restore()` cascades into every sub-sandbox and undoes its stubs/timers/etc. — defeating the whole point of having an isolated sub-sandbox. The same cascade hits `resetHistory` and
+  > `verifyAndRestore`. This is the regression reported in #2701.
+  >
+  > Restore the pre-21.1 behaviour: hand the root API a direct reference to `createConfiguredSandbox`. Sub-sandboxes are now isolated; only `subSandbox.restore()` (or `verifyAndRestore`) clears their fakes.
+  >
+  > Also flip the four sandbox tests that were locking in the buggy cascade: they now assert the parent's restore/resetHistory leaves the child untouched, with an explicit child-side cleanup at the
+  > end.
+  >
+  > Closes #2701
+- [`f0bd6e1b`](https://github.com/sinonjs/sinon/commit/f0bd6e1b67155804f04e4b00623c4fb1d2549f97)
+  fix: exclude **proto** from walk() (#2699) (Kevin Locke)
+  > [`__proto__`] is a special property to access an object's prototype. It
+  > has many pitfalls:
+  >
+  > - Setting it to an object value changes an object's prototype, which is
+  >   generally discouraged and may be unexpected by the `iterator` callback.
+  > - Setting it to a non-object value does nothing (meaning `seen[k] =
+true` has no effect).
+  > - When Node.js is run with the [`--disable-proto=throw`] option, getting
+  >   or setting `__proto__` causes an exception with code
+  >   `ERR_PROTO_ACCESS` to be thrown.
+  >
+  > Additionally, since this property (and all properties of
+  > `Object.prototype`) are currently unused in this project by consumers of
+  > `walk()`, it is both safe and preferable to exclude.
+  >
+  > [`__proto__`]: https://tc39.es/ecma262/multipage/fundamental-objects.html#sec-object.prototype.__proto__
+  > [`--disable-proto=throw`]: https://nodejs.org/api/cli.html#disable-protomode
+  >
+  > Fixes: #2695
+  >
+  > Signed-off-by: Kevin Locke <kevin@kevinlocke.name>
+- [`1f8afd50`](https://github.com/sinonjs/sinon/commit/1f8afd50683aac84dbd501676399f39ae2b942bd)
+  chore: add context7.json for ownership confirmation (Morgan Roderick)
+
+_Released by [Carl-Erik Kopseng](https://github.com/fatso83) on 2026-05-05._
+
 ## 21.1.2
 
 - [`53817f7d`](https://github.com/sinonjs/sinon/commit/53817f7d3ab9447001ae7e622361c2f148170965)
