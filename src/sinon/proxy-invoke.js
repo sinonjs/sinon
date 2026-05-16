@@ -7,8 +7,10 @@ const { push, forEach, concat } = prototypes.array;
 const ErrorConstructor = Error.prototype.constructor;
 const { bind } = Function.prototype;
 
-let callId = 0;
 const maxSafeInteger = Number.MAX_SAFE_INTEGER;
+
+// Default context for backward compatibility when used outside a sandbox
+const defaultContext = { callId: 0 };
 
 /**
  * @callback SinonFunction
@@ -26,8 +28,10 @@ const maxSafeInteger = Number.MAX_SAFE_INTEGER;
  */
 export default function invoke(func, thisValue, args) {
     const matchings = this.matchingFakes(args);
-    const currentCallId = callId;
-    callId = callId >= maxSafeInteger ? 0 : callId + 1;
+    // Use the proxy's context if available, otherwise fall back to the default
+    const ctx = this.sinonContext || defaultContext;
+    const currentCallId = ctx.callId;
+    ctx.callId = ctx.callId >= maxSafeInteger ? 0 : ctx.callId + 1;
     let exception, returnValue;
 
     proxyCallUtil.incrementCallCount(this);

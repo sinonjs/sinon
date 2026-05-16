@@ -244,6 +244,13 @@ delegateToCalls(proxyApi, "alwaysReturned", false, "returned");
 delegateToCalls(proxyApi, "calledWithNew", true);
 delegateToCalls(proxyApi, "alwaysCalledWithNew", false, "calledWithNew");
 
+/**
+ * Wraps a function with a proxy that preserves arity.
+ *
+ * @param {SinonFunction} func The function to wrap
+ * @param {SinonFunction} originalFunc The original function (for arity)
+ * @returns {SinonFunction} The wrapped proxy function
+ */
 function wrapFunction(func, originalFunc) {
     const arity = originalFunc.length;
     let p;
@@ -376,9 +383,10 @@ function wrapFunction(func, originalFunc) {
  *
  * @param {SinonFunction} func The original function
  * @param {SinonFunction} originalFunc The original function (for arity and name)
+ * @param {object} [context] The sinon context for callId tracking (typically a sandbox)
  * @returns {SinonFunction} The proxy function
  */
-export default function createProxy(func, originalFunc) {
+export default function createProxy(func, originalFunc, context) {
     const proxy = wrapFunction(func, originalFunc);
 
     // Inherit function properties:
@@ -387,6 +395,11 @@ export default function createProxy(func, originalFunc) {
     proxy.prototype = func.prototype;
 
     extend.nonEnum(proxy, proxyApi);
+
+    // Store context for use in invoke (for parallel test support)
+    if (context) {
+        extend.nonEnum(proxy, { sinonContext: context });
+    }
 
     return proxy;
 }
