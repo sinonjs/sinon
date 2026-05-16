@@ -10,7 +10,35 @@ const { slice } = prototypes.array;
 const useLeftMostCallback = -1;
 const useRightMostCallback = -2;
 
+/**
+ * Resets all mutually exclusive "return behavior" flags so that the most
+ * recently called behavior setter always takes effect ("last call wins").
+ *
+ * Without this, flags like `returnArgAt` (set by `returnsArg()`) can silently
+ * persist and override a later `.returns()` call because `returnArgAt` is
+ * checked first in behavior.invoke().
+ *
+ * @param {object} fake - the stub behavior object
+ */
+function resetReturnBehavior(fake) {
+    fake.returnArgAt = undefined;
+    fake.returnThis = false;
+    fake.throwArgAt = undefined;
+    fake.fakeFn = undefined;
+    fake.returnValue = undefined;
+    fake.returnValueDefined = false;
+    fake.resolve = false;
+    fake.reject = false;
+    fake.resolveArgAt = undefined;
+    fake.resolveThis = false;
+    fake.exception = undefined;
+    fake.exceptionCreator = undefined;
+    fake.callsThrough = false;
+    fake.callsThroughWithNew = false;
+}
+
 function throwsException(fake, error, message) {
+    resetReturnBehavior(fake);
     if (typeof error === "function") {
         fake.exceptionCreator = error;
     } else if (typeof error === "string") {
@@ -32,10 +60,8 @@ function throwsException(fake, error, message) {
 
 const defaultBehaviors = {
     callsFake: function callsFake(fake, fn) {
+        resetReturnBehavior(fake);
         fake.fakeFn = fn;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.callsThrough = false;
     },
 
     callsArg: function callsArg(fake, index) {
@@ -143,22 +169,16 @@ const defaultBehaviors = {
     throwsException: throwsException,
 
     returns: function returns(fake, value) {
-        fake.callsThrough = false;
+        resetReturnBehavior(fake);
         fake.returnValue = value;
-        fake.resolve = false;
-        fake.reject = false;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
     },
 
     returnsArg: function returnsArg(fake, index) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
-        fake.callsThrough = false;
-
+        resetReturnBehavior(fake);
         fake.returnArgAt = index;
     },
 
@@ -166,42 +186,29 @@ const defaultBehaviors = {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
-        fake.callsThrough = false;
-
+        resetReturnBehavior(fake);
         fake.throwArgAt = index;
     },
 
     returnsThis: function returnsThis(fake) {
+        resetReturnBehavior(fake);
         fake.returnThis = true;
-        fake.callsThrough = false;
     },
 
     resolves: function resolves(fake, value) {
+        resetReturnBehavior(fake);
         fake.returnValue = value;
         fake.resolve = true;
-        fake.resolveThis = false;
-        fake.reject = false;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     resolvesArg: function resolvesArg(fake, index) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
+        resetReturnBehavior(fake);
         fake.resolveArgAt = index;
-        fake.returnValue = undefined;
         fake.resolve = true;
-        fake.resolveThis = false;
-        fake.reject = false;
-        fake.returnValueDefined = false;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     rejects: function rejects(fake, error, message) {
@@ -214,29 +221,17 @@ const defaultBehaviors = {
         } else {
             reason = error;
         }
+        resetReturnBehavior(fake);
         fake.returnValue = reason;
-        fake.resolve = false;
-        fake.resolveThis = false;
         fake.reject = true;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
 
         return fake;
     },
 
     resolvesThis: function resolvesThis(fake) {
-        fake.returnValue = undefined;
-        fake.resolve = false;
+        resetReturnBehavior(fake);
         fake.resolveThis = true;
-        fake.reject = false;
-        fake.returnValueDefined = false;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     callThrough: function callThrough(fake) {
