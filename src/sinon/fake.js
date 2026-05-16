@@ -17,16 +17,41 @@ const { slice } = prototypes.array;
  * When an `f` argument is supplied, this implementation will be used.
  *
  * @param {SinonFunction|undefined} [f]
+ * @param {object} [context] The sinon context for callId tracking
+ * @returns {SinonFunction}
+ * @namespace
+ */
+function fakeImpl(f, context) {
+    if (typeof f !== "undefined" && typeof f !== "function") {
+        throw new TypeError("Expected f argument to be a Function");
+    }
+
+    return wrapFunc(f, context);
+}
+
+/**
+ * Returns a `fake` that records all calls, arguments and return values.
+ *
+ * When an `f` argument is supplied, this implementation will be used.
+ *
+ * @param {SinonFunction|undefined} [f]
  * @returns {SinonFunction}
  * @namespace
  */
 function fake(f) {
-    if (arguments.length > 0 && typeof f !== "function") {
-        throw new TypeError("Expected f argument to be a Function");
-    }
-
-    return wrapFunc(f);
+    return fakeImpl(f, undefined);
 }
+
+/**
+ * Creates a fake with a specific context (for sandbox use).
+ *
+ * @param {object} context The sinon context for callId tracking
+ * @param {SinonFunction|undefined} [f]
+ * @returns {SinonFunction}
+ */
+fake.withContext = function (context, f) {
+    return fakeImpl(f, context);
+};
 
 /**
  * Creates a `fake` that returns the provided `value`, as well as recording all
@@ -34,14 +59,15 @@ function fake(f) {
  *
  * @memberof fake
  * @param {unknown} value
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction}
  */
-fake.returns = function returns(value) {
+fake.returns = function returns(value, context) {
     function f() {
         return value;
     }
 
-    return wrapFunc(f);
+    return wrapFunc(f, context);
 };
 
 /**
@@ -49,14 +75,15 @@ fake.returns = function returns(value) {
  *
  * @memberof fake
  * @param {unknown|Error} value
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction}
  */
-fake.throws = function throws(value) {
+fake.throws = function throws(value, context) {
     function f() {
         throw getError(value);
     }
 
-    return wrapFunc(f);
+    return wrapFunc(f, context);
 };
 
 /**
@@ -64,14 +91,15 @@ fake.throws = function throws(value) {
  *
  * @memberof fake
  * @param {unknown} value
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction}
  */
-fake.resolves = function resolves(value) {
+fake.resolves = function resolves(value, context) {
     function f() {
         return Promise.resolve(value);
     }
 
-    return wrapFunc(f);
+    return wrapFunc(f, context);
 };
 
 /**
@@ -79,14 +107,15 @@ fake.resolves = function resolves(value) {
  *
  * @memberof fake
  * @param {unknown} value
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction}
  */
-fake.rejects = function rejects(value) {
+fake.rejects = function rejects(value, context) {
     function f() {
         return Promise.reject(getError(value));
     }
 
-    return wrapFunc(f);
+    return wrapFunc(f, context);
 };
 
 /**
@@ -138,10 +167,11 @@ let uuid = 0;
  * Creates a proxy (sinon concept) from the passed function.
  *
  * @private
- * @param  {SinonFunction} f
+ * @param {SinonFunction} f
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction}
  */
-function wrapFunc(f) {
+function wrapFunc(f, context) {
     const fakeInstance = function () {
         let firstArg, lastArg;
 
@@ -160,7 +190,7 @@ function wrapFunc(f) {
 
         return f && f.apply(this, arguments);
     };
-    const proxy = createProxy(fakeInstance, f || fakeInstance);
+    const proxy = createProxy(fakeInstance, f || fakeInstance, context);
 
     Object.defineProperty(proxy, "name", {
         value: "fake",

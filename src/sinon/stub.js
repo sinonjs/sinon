@@ -21,9 +21,22 @@ const pop = arrayProto.pop;
 const slice = arrayProto.slice;
 const sort = arrayProto.sort;
 
+/**
+ * @callback SinonFunction
+ * @param {...unknown} args
+ * @returns {unknown}
+ */
+
 let uuid = 0;
 
-function createStub(originalFunc) {
+/**
+ * Creates a stub from a function.
+ *
+ * @param {SinonFunction} originalFunc The function to stub
+ * @param {object} [context] The sinon context for callId tracking
+ * @returns {SinonFunction} The stub
+ */
+function createStub(originalFunc, context) {
     // eslint-disable-next-line prefer-const
     let proxy;
 
@@ -42,16 +55,21 @@ function createStub(originalFunc) {
         return getCurrentBehavior(fnStub).invoke(this, arguments);
     }
 
-    proxy = createProxy(functionStub, originalFunc || functionStub);
+    proxy = createProxy(functionStub, originalFunc || functionStub, context);
     // Inherit spy API:
     extend.nonEnum(proxy, spy);
     // Inherit stub API:
     extend.nonEnum(proxy, stub);
 
+    // Create a bound instantiateFake that preserves context
+    const instantiateFake = function (f) {
+        return createStub(f, context);
+    };
+
     const name = originalFunc ? functionName(originalFunc) : null;
     extend.nonEnum(proxy, {
         fakes: [],
-        instantiateFake: createStub,
+        instantiateFake: instantiateFake,
         displayName: name || "stub",
         defaultBehavior: null,
         behaviors: [],
@@ -63,18 +81,20 @@ function createStub(originalFunc) {
     return proxy;
 }
 
-export default function stub(object, property) {
-    if (arguments.length > 2) {
-        throw new TypeError(
-            "stub(obj, 'meth', fn) has been removed, see documentation",
-        );
-    }
-
+/**
+ * Implementation of stub with optional context.
+ *
+ * @param {object|undefined} object The object to stub
+ * @param {string|undefined} property The property name to stub
+ * @param {object} [context] The sinon context for callId tracking
+ * @returns {SinonFunction} The stub
+ */
+function stubImpl(object, property, context) {
     if (isEsModule(object)) {
         throw new TypeError("ES Modules cannot be stubbed");
     }
 
-    throwOnFalsyObject.apply(null, arguments);
+    throwOnFalsyObject(object, property);
 
     if (isNonExistentProperty(object, property)) {
         throw new TypeError(
@@ -98,18 +118,20 @@ export default function stub(object, property) {
             typeof actualDescriptor.value !== "function");
 
     if (isStubbingEntireObject) {
-        return walkObject(stub, object);
+        return walkObject(function (obj, prop) {
+            return stubImpl(obj, prop, context);
+        }, object);
     }
 
     if (isCreatingNewStub) {
-        return createStub();
+        return createStub(undefined, context);
     }
 
     const func =
         typeof actualDescriptor.value === "function"
             ? actualDescriptor.value
             : null;
-    const s = createStub(func);
+    const s = createStub(func, context);
 
     extend.nonEnum(s, {
         rootObj: object,
@@ -127,6 +149,34 @@ export default function stub(object, property) {
 
     return isStubbingNonFuncProperty ? s : wrapMethod(object, property, s);
 }
+
+/**
+ * Creates a stub (public API, backward compatible).
+ *
+ * @param {object} [object] The object to stub
+ * @param {string} [property] The property name to stub
+ * @returns {SinonFunction} The stub
+ */
+export default function stub(object, property) {
+    if (arguments.length > 2) {
+        throw new TypeError(
+            "stub(obj, 'meth', fn) has been removed, see documentation",
+        );
+    }
+    return stubImpl(object, property, undefined);
+}
+
+/**
+ * Creates a stub with a specific context (for sandbox use).
+ *
+ * @param {object} context The sinon context for callId tracking
+ * @param {object} [object] The object to stub
+ * @param {string} [property] The property name to stub
+ * @returns {SinonFunction} The stub
+ */
+stub.withContext = function (context, object, property) {
+    return stubImpl(object, property, context);
+};
 
 function assertValidPropertyDescriptor(descriptor, property) {
     if (!descriptor || !property) {

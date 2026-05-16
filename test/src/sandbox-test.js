@@ -2242,4 +2242,69 @@ describe("Sandbox", function () {
             assert.equals(sandbox.fake.length, 1);
         });
     });
+
+    describe("call order isolation between sandboxes (issue #2472)", function () {
+        it("calledImmediatelyBefore works correctly with separate sandboxes", function () {
+            const sandbox1 = createSandbox();
+            const sandbox2 = createSandbox();
+
+            const spy1a = sandbox1.spy();
+            const spy1b = sandbox1.spy();
+            const spy2a = sandbox2.spy();
+            const spy2b = sandbox2.spy();
+
+            spy1a();
+            spy2a();
+            spy1b();
+            spy2b();
+
+            assert.isTrue(spy1a.calledImmediatelyBefore(spy1b));
+            assert.isTrue(spy2a.calledImmediatelyBefore(spy2b));
+
+            sandbox1.restore();
+            sandbox2.restore();
+        });
+
+        it("calledImmediatelyAfter works correctly with separate sandboxes", function () {
+            const sandbox1 = createSandbox();
+            const sandbox2 = createSandbox();
+
+            const spy1a = sandbox1.spy();
+            const spy1b = sandbox1.spy();
+            const spy2a = sandbox2.spy();
+            const spy2b = sandbox2.spy();
+
+            spy1a();
+            spy2a();
+            spy1b();
+            spy2b();
+
+            assert.isTrue(spy1b.calledImmediatelyAfter(spy1a));
+            assert.isTrue(spy2b.calledImmediatelyAfter(spy2a));
+
+            sandbox1.restore();
+            sandbox2.restore();
+        });
+
+        it("stubs in different sandboxes have isolated callIds", function () {
+            const sandbox1 = createSandbox();
+            const sandbox2 = createSandbox();
+
+            const stub1a = sandbox1.stub();
+            const stub1b = sandbox1.stub();
+            const stub2a = sandbox2.stub();
+            const stub2b = sandbox2.stub();
+
+            stub1a();
+            stub2a();
+            stub1b();
+            stub2b();
+
+            assert.isTrue(stub1a.calledImmediatelyBefore(stub1b));
+            assert.isTrue(stub2a.calledImmediatelyBefore(stub2b));
+
+            sandbox1.restore();
+            sandbox2.restore();
+        });
+    });
 });

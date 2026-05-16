@@ -129,7 +129,14 @@ delegateToCalls(
     },
 );
 
-function createSpy(func) {
+/**
+ * Creates a spy from a function.
+ *
+ * @param {SinonFunction} func The function to spy on
+ * @param {object} [context] The sinon context for callId tracking
+ * @returns {SinonFunction} The spy
+ */
+function createSpy(func, context) {
     let name;
     let funk = func;
 
@@ -141,14 +148,19 @@ function createSpy(func) {
         name = functionName(funk);
     }
 
-    const proxy = createProxy(funk, funk);
+    const proxy = createProxy(funk, funk, context);
+
+    // Create a bound instantiateFake that preserves context
+    const instantiateFake = function (f) {
+        return createSpy(f, context);
+    };
 
     // Inherit spy API:
     extend.nonEnum(proxy, spyApi);
     extend.nonEnum(proxy, {
         displayName: name || "spy",
         fakes: [],
-        instantiateFake: createSpy,
+        instantiateFake: instantiateFake,
         id: `spy#${uuid++}`,
     });
     return proxy;
@@ -160,39 +172,71 @@ function createSpy(func) {
  * @param {object|SinonFunction} [object] The object or function to spy on
  * @param {string} [property] The property name to spy on
  * @param {Array} [types] Types of accessor to spy on (get, set)
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {SinonFunction|object} The spy or an object with spied accessors
  */
-export default function spy(object, property, types) {
+function spyImpl(object, property, types, context) {
     if (isEsModule(object)) {
         throw new TypeError("ES Modules cannot be spied");
     }
 
     if (!property && typeof object === "function") {
-        return createSpy(object);
+        return createSpy(object, context);
     }
 
     if (!property && typeof object === "object") {
-        return walkObject(spy, object);
+        return walkObject(function (obj, prop, propTypes) {
+            return spyImpl(obj, prop, propTypes, context);
+        }, object);
     }
 
     if (!object && !property) {
         return createSpy(function () {
             return;
-        });
+        }, context);
     }
 
     if (!types) {
-        return wrapMethod(object, property, createSpy(object[property]));
+        return wrapMethod(
+            object,
+            property,
+            createSpy(object[property], context),
+        );
     }
 
     const descriptor = {};
     const methodDesc = getPropertyDescriptor(object, property);
 
     forEach(types, function (type) {
-        descriptor[type] = createSpy(methodDesc[type]);
+        descriptor[type] = createSpy(methodDesc[type], context);
     });
 
     return wrapMethod(object, property, descriptor);
 }
+
+/**
+ * Creates a spy (public API, backward compatible).
+ *
+ * @param {object|SinonFunction} [object] The object or function to spy on
+ * @param {string} [property] The property name to spy on
+ * @param {Array} [types] Types of accessor to spy on (get, set)
+ * @returns {SinonFunction|object} The spy or an object with spied accessors
+ */
+export default function spy(object, property, types) {
+    return spyImpl(object, property, types, undefined);
+}
+
+/**
+ * Creates a spy with a specific context (for sandbox use).
+ *
+ * @param {object} context The sinon context for callId tracking
+ * @param {object|SinonFunction} [object] The object or function to spy on
+ * @param {string} [property] The property name to spy on
+ * @param {Array} [types] Types of accessor to spy on (get, set)
+ * @returns {SinonFunction|object} The spy or an object with spied accessors
+ */
+spy.withContext = function (context, object, property, types) {
+    return spyImpl(object, property, types, context);
+};
 
 extend(spy, spyApi);

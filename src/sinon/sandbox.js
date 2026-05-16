@@ -89,6 +89,9 @@ export default function Sandbox(opts = {}) {
     let loggedLeakWarning = false;
     sandbox.leakThreshold = DEFAULT_LEAK_THRESHOLD;
 
+    // Context object for this sandbox, used to isolate callId between parallel tests
+    const sandboxContext = { callId: 0 };
+
     function addToCollection(object) {
         if (
             push(collection, object) > sandbox.leakThreshold &&
@@ -196,7 +199,12 @@ export default function Sandbox(opts = {}) {
     }
 
     sandbox.spy = function () {
-        const createdSpy = sinonSpy.apply(sinonSpy, arguments);
+        // Use withContext to pass sandbox context for isolated callId tracking
+        const args = arrayProto.concat(
+            [sandboxContext],
+            arrayProto.slice(arguments),
+        );
+        const createdSpy = sinonSpy.withContext.apply(sinonSpy, args);
         const result = commonPostInitSetup(
             arguments,
             createdSpy,
@@ -217,7 +225,12 @@ export default function Sandbox(opts = {}) {
     extend(sandbox.spy, sinonSpy);
 
     sandbox.stub = function () {
-        const createdStub = sinonStub.apply(sinonStub, arguments);
+        // Use withContext to pass sandbox context for isolated callId tracking
+        const args = arrayProto.concat(
+            [sandboxContext],
+            arrayProto.slice(arguments),
+        );
+        const createdStub = sinonStub.withContext.apply(sinonStub, args);
         const result = commonPostInitSetup(
             arguments,
             createdStub,
@@ -535,7 +548,12 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.fake = function fake() {
-        const createdFake = sinonFake.apply(sinonFake, arguments);
+        // Use withContext to pass sandbox context for isolated callId tracking
+        const args = arrayProto.concat(
+            [sandboxContext],
+            arrayProto.slice(arguments),
+        );
+        const createdFake = sinonFake.withContext.apply(sinonFake, args);
         const result = commonPostInitSetup(arguments, createdFake, false);
         addToCollection(result);
         return result;
@@ -559,10 +577,11 @@ export default function Sandbox(opts = {}) {
     });
 
     function addFakeBehaviorToCollection(method) {
-        const original = sandbox.fake[method];
-
         sandbox.fake[method] = function () {
-            const result = original.apply(sinonFake, arguments);
+            // Add sandboxContext as the second argument for context-aware fakes
+            const args = arrayProto.slice(arguments);
+            args.push(sandboxContext);
+            const result = sinonFake[method].apply(sinonFake, args);
             addToCollection(result);
             return result;
         };
