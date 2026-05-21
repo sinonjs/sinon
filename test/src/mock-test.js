@@ -1234,6 +1234,51 @@ describe("sinonMock", function () {
                 object.method(42);
             });
         });
+
+        it("returns callsFake values from ordered matching expectations", function () {
+            const object = {
+                accumulator: [],
+                accumulate: function (thing) {
+                    this.accumulator.push(thing);
+                    return `added ${thing}`;
+                },
+            };
+            const mock = sinonMock(object);
+
+            mock.expects("accumulate")
+                .withArgs("first thing")
+                .onCall(0)
+                .callsFake(function (thing) {
+                    return `mock-added ${thing}`;
+                });
+            mock.expects("accumulate")
+                .withArgs("second thing")
+                .onCall(1)
+                .callsFake(function (thing) {
+                    return `mock-added ${thing}`;
+                });
+            mock.expects("accumulate")
+                .withArgs("third thing")
+                .onCall(2)
+                .callsFake(function (thing) {
+                    return `mock-added ${thing}`;
+                });
+
+            assert.equals(object.accumulator.length, 0);
+            assert.equals(
+                object.accumulate("first thing"),
+                "mock-added first thing",
+            );
+            assert.equals(
+                object.accumulate("second thing"),
+                "mock-added second thing",
+            );
+            assert.equals(
+                object.accumulate("third thing"),
+                "mock-added third thing",
+            );
+            mock.verify();
+        });
     });
 
     describe("mock function", function () {
