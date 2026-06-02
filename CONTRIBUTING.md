@@ -3,8 +3,7 @@
 There are several ways of contributing to Sinon.JS
 
 - Look into [issues tagged `help-wanted`](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+wanted%22)
-- Help [improve the documentation](https://github.com/sinonjs/sinon/tree/master/docs) published
-  at [the Sinon.JS website](https://sinonjs.org). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
+- Help [improve the documentation](https://sinonjs.org) built with [VitePress](https://vitepress.dev). [Documentation issues](https://github.com/sinonjs/sinon/issues?q=is%3Aopen+is%3Aissue+label%3ADocumentation).
 - Help someone understand and use Sinon.JS on [Stack Overflow](https://stackoverflow.com/questions/tagged/sinon)
 - Report an issue, please read instructions below
 - Help with triaging the [issues](https://github.com/sinonjs/sinon/issues). The clearer they are, the more likely they are to be fixed soon.
@@ -106,12 +105,11 @@ To ensure consistent reporting of lint warnings, you should use the same version
 
 ### Tooling
 
-To transparently handle all issues with different tool versions we recommend using [_ASDF: The Multiple Runtime Manager_][asdf]. You would then need the Ruby and Node plugins.
+To transparently handle all issues with different tool versions we recommend using [_ASDF: The Multiple Runtime Manager_][asdf]. You would then need the Node plugin.
 
 <details>
 
 ```
-asdf plugin add ruby
 asdf plugin add nodejs
 asdf install
 ```
@@ -166,3 +164,42 @@ To build run
     $ node build.cjs
 
 The `lib/` directory is generated output. Do not commit it; rebuild it locally with `npm run build` when you need fresh artifacts. The published npm tarball still includes `lib/` via the package allowlist.
+
+## Contributing to documentation
+
+The documentation is built with [VitePress](https://vitepress.dev).
+
+### Local setup
+
+```sh
+cd docs
+npm install
+npm run docs:dev
+```
+
+All docs commands (`docs:build`, `test:docs`, etc.) should be run from the `docs/` directory.
+
+### Build and preview
+
+```sh
+npm run docs:build
+npm run docs:preview
+```
+
+### Testing documentation examples
+
+```sh
+npm run test:docs
+```
+
+### Checking links
+
+Link checking requires [lychee](https://lychee.cli.rs/installation/), which is not installed via npm. Install it separately, then run:
+
+```sh
+npm run docs:link-check
+```
+
+### Deploying
+
+The site is deployed automatically via GitHub Actions when changes are merged to `main`.
