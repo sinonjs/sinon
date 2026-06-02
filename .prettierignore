@@ -3,7 +3,5 @@ out/
 pkg/
 tmp/
 .sass-cache
-docs/_site/
-docs/js/
-docs/assets/js/
+docs/
 vendor
