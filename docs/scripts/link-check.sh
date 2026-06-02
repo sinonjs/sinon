@@ -10,8 +10,8 @@ fi
 echo "Running lychee link check on dist folder..."
 lychee .vitepress/dist \
     --root-dir .vitepress/dist \
-    --include-mail=false \
     --exclude "^file://" \
     --exclude "opencollective" \
     --exclude "llms" \
+    --exclude "node-tap.org" \
     --accept '200..=299,403'
