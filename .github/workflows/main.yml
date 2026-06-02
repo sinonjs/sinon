@@ -72,6 +72,7 @@ jobs:
       - name: Integration
         run: |
           export SINON_CHROME_BIN=$(which google-chrome-stable)
+          export PUPPETEER_EXECUTABLE_PATH="$SINON_CHROME_BIN"
 
           # test-coverage runs test-headless in Chrome
           npm run test-coverage  -- --chrome "$SINON_CHROME_BIN" --allow-chrome-as-root
