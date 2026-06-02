@@ -1,0 +1,322 @@
+# Sinon.JS
+
+> Sinon.js documentation
+
+## Table of Contents
+
+### Spies
+
+- [Spies](/concepts/spies.md): Test spies that record arguments, return values, and exceptions for all calls. Wrap existing methods or create anonymous spies.
+
+#### API
+
+##### Methods
+
+- [spy.alwaysCalledOn](/concepts/spies/api/always-called-on.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was always called with `object` as `this`.
+- [spy.alwaysCalledWith](/concepts/spies/api/always-called-with.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was always called with the provided arguments.
+- [spy.alwaysCalledWithExactly](/concepts/spies/api/always-called-with-exactly.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was always called with the exact provided arguments.
+- [spy.alwaysCalledWithMatch](/concepts/spies/api/always-called-with-match.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was always called with matching arguments (and possibly others).
+- [spy.alwaysReturned](/concepts/spies/api/always-returned.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) always returned the provided value.
+- [spy.alwaysThrew](/concepts/spies/api/always-threw.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) always threw an exception.
+- [spy.calledAfter](/concepts/spies/api/called-after.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called after another, otherwise returns `false`.
+- [spy.calledBefore](/concepts/spies/api/called-before.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called before another, otherwise returns `false`.
+- [spy.calledImmediatelyAfter](/concepts/spies/api/called-immediately-after.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called after another, and no [`calls`](/concepts/spy-call/) occurred between them.
+- [spy.calledImmediatelyBefore](/concepts/spies/api/called-immediately-before.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called before another, and no [`calls`](/concepts/spy-call/) occurred between them.
+- [spy.calledOn](/concepts/spies/api/called-on.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called at least once with `object` as `this`.
+- [spy.calledOnceWithExactly](/concepts/spies/api/called-once-with-exactly.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called exactly once in total and that one call was using the exact provided arguments and no others.
+- [spy.calledWith](/concepts/spies/api/called-with.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called at least once with the provided arguments.
+- [spy.calledWithExactly](/concepts/spies/api/called-with-exactly.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called at least once with the provided arguments and no others.
+- [spy.calledWithMatchMatch](/concepts/spies/api/called-with-match.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called with matching arguments (and possibly others).
+- [spy.calledWithNew](/concepts/spies/api/called-with-new.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called the `new` operator.
+- [spy.calledOnceWith](/concepts/spies/api/called-once-with.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called exactly once and that one call was made using the provided arguments.
+- [spy.getCall](/concepts/spies/api/get-call.md): Returns the _nth_ (zero-indexed) [call](/concepts/spy-call/) recorded by the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.getCalls](/concepts/spies/api/get-calls.md): Returns an `Array` of all [calls](/concepts/spy-call/) recorded by the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.neverCalledWith](/concepts/spies/api/never-called-with.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was never called with the provided arguments.
+- [spy.neverCalledWithMatch](/concepts/spies/api/never-called-with-match.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was never called with matching arguments.
+- [spy.printf](/concepts/spies/api/printf.md): `spy.printf("format string", [arg1, arg2, ...]);`
+- [spy.resetHistory](/concepts/spies/api/reset-history.md): Resets the state of a [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.restore](/concepts/spies/api/restore.md): Replaces the [`spy`](../) or [`stub`](/concepts/stubs/) with the original method. Only available if the [`spy`](../) or [`stub`](/concepts/stubs/) replaced an existing method.
+- [spy.returned](/concepts/spies/api/returned.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) returned the provided value at least once.
+- [spy.threw](/concepts/spies/api/threw.md): Returns `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) threw an exception at least once.
+- [spy.withArgs](/concepts/spies/api/with-args.md): Creates a [`spy`](../) or [`stub`](/concepts/stubs/) that only records [calls](/concepts/spy-call/) when the received arguments match those passed to `withArgs`. This is useful to be more expressive in your ...
+
+##### Properties
+
+- [spy.args](/concepts/spies/api/args.md): Array of arguments received, `spy.args[0]` is an array of arguments received in the first [call](/concepts/spy-call/) of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.callCount](/concepts/spies/api/call-count.md): The number of recorded [calls](/concepts/spy-call/) recorded by the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.called](/concepts/spies/api/called.md): `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) was called one or more times.
+- [spy.calledOnce](/concepts/spies/api/called-once.md): `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) has been called exactly once.
+- [spy.calledThrice](/concepts/spies/api/called-thrice.md): `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) has been called exactly thrice.
+- [spy.calledTwice](/concepts/spies/api/called-twice.md): True when the fake, spy, or stub has been called exactly twice.
+- [spy.exceptions](/concepts/spies/api/exceptions.md): Array of exception objects thrown, `spy.exceptions[0]` is the exception thrown by the first [call](/concepts/spy-call/) of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.firstCall](/concepts/spies/api/first-call.md): The first [`call`](/concepts/spy-call/) object of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.lastCall](/concepts/spies/api/last-call.md): The last [`call`](/concepts/spy-call/) object of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.notCalled](/concepts/spies/api/not-called.md): `true`, when the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/) has not been called.
+- [spy.returnValues](/concepts/spies/api/return-values.md): Array of return values, `spy.returnValues[0]` is the return value of the first [call](/concepts/spy-call/) of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.secondCall](/concepts/spies/api/second-call.md): The second [`call`](/concepts/spy-call/) object of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.thirdCall](/concepts/spies/api/third-call.md): The third [`call`](/concepts/spy-call/) object of the [`fake`](/concepts/fakes/), [`spy`](../) or [`stub`](/concepts/stubs/).
+- [spy.thisValues](/concepts/spies/api/this-values.md): Array of `this` objects, `spy.thisValues[0]` is the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) object for the first [call](/concepts/spy-call/).
+
+### Stubs
+
+- [Stubs](/concepts/stubs.md): Functions with pre-programmed behavior. Like spies but with methods to configure return values, exceptions, and callbacks.
+
+#### API
+
+##### Methods
+
+- [stub.addBehavior](/concepts/stubs/api/add-behavior.md): Add a custom behavior. The name will be available as a function on stubs, and the chaining mechanism will be set up for you (e.g. no need to return anything from your function, its return value wil...
+- [stub.callArg](/concepts/stubs/api/call-arg.md): Invokes a callback passed to the `stub` at a given `index`.
+- [stub.callArgWith](/concepts/stubs/api/call-arg-with.md): Invokes a callback passed to the `stub` at a given `index`, with given arguments.
+- [stub.callsArg](/concepts/stubs/api/calls-arg.md): Causes the stub to call the argument at the provided `index` as a callback function.
+- [stub.callsArgAsync](/concepts/stubs/api/calls-arg-async.md): Causes the stub to call the argument at the provided `index` as a callback function, asynchronously.
+- [stub.callsArgOn](/concepts/stubs/api/calls-arg-on.md): Causes the stub to call the argument at the provided `index` as a callback function, with an additional `object` parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) context.
+- [stub.callsArgOnWith](/concepts/stubs/api/calls-arg-on-with.md): Causes the stub to call the argument at the provided `index` as a callback function, with the argument(s) provided and an additional `object` parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+- [stub.callsArgOnWithAsync](/concepts/stubs/api/calls-arg-on-with-async.md): Causes the stub to call the argument at the provided index as a callback function, with the argument(s) provided and an additional `object` parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this.
+- [stub.callsArgWith](/concepts/stubs/api/calls-arg-with.md): Causes the stub to call the argument at the provided `index` as a callback function, with the argument(s) provided.
+- [stub.callsArgWithAsync](/concepts/stubs/api/calls-arg-with-async.md): Causes the stub to call the argument at the provided `index` as a callback function, with the argument(s) provided, asynchronously.
+- [stub.callsFake](/concepts/stubs/api/calls-fake.md): Makes the stub call the provided `fakeFunction` when invoked.
+- [stub.callsThrough](/concepts/stubs/api/calls-through.md): Causes the original method wrapped into the stub to be called when none of the conditional stubs are matched.
+- [stub.callThroughWithNew](/concepts/stubs/api/call-through-with-new.md): Causes the original method wrapped into the stub to be called using the `new` operator, when none of the conditional stubs are matched.
+- [stub.get](/concepts/stubs/api/get.md): Replaces a getter for an object property.
+- [stub.onCall](/concepts/stubs/api/on-call.md): Defines the behavior of the stub on the _nth_ call. Useful for testing sequential interactions.
+- [stub.onFirstCall](/concepts/stubs/api/on-first-call.md): `onFirstCall` is an alias for [`onCall(0)`](./on-call).
+- [stub.onSecondCall](/concepts/stubs/api/on-second-call.md): `onSecondCall` is an alias for [`onCall(1)`](./on-call).
+- [stub.onThirdCall](/concepts/stubs/api/on-third-call.md): `onThirdCall` is an alias for [`onCall(2)`](./on-call).
+- [stub.rejects](/concepts/stubs/api/rejects.md): <!-- TODO: update this after https://github.com/sinonjs/sinon/issues/1679 is resolved -->
+- [stub.reset](/concepts/stubs/api/reset.md): Resets both behavior and history of the stub.
+- [stub.resetBehavior](/concepts/stubs/api/reset-behavior.md): Resets the stub's behavior to the default behavior
+- [stub.resetHistory](/concepts/stubs/api/reset-history.md): Resets the stub's history
+- [stub.resolves](/concepts/stubs/api/resolves.md): Causes the stub to return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which resolves to the provided value.
+- [stub.resolvesArg](/concepts/stubs/api/resolves-arg.md): Causes the stub to return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which resolves to the argument at the
+- [stub.returns](/concepts/stubs/api/returns.md): Makes the stub return the provided value.
+- [stub.returnsThis](/concepts/stubs/api/returns-this.md): Causes the stub to return its <code>this</code> value.
+- [stub.set](/concepts/stubs/api/set.md): Replaces a setter for an object property.
+- [stub.throws](/concepts/stubs/api/throws.md): Causes the stub to throw an Error.
+- [stub.throwsArg](/concepts/stubs/api/throws-arg.md): Causes the stub to throw the argument at the provided `index.
+- [stub.value](/concepts/stubs/api/value.md): Defines a new value for this stub.
+- [stub.withArgs](/concepts/stubs/api/with-args.md): Stubs the method only for the provided arguments.
+- [stub.yield](/concepts/stubs/api/yield.md): Invoke callbacks passed to the `stub` with the given argument(s).
+- [stub.yieldTo](/concepts/stubs/api/yield-to.md): Invokes callbacks passed as a property name on an object to the stub.
+- [stub.yields](/concepts/stubs/api/yields.md): Causes the stub to call the first callback it receives with any provided arguments.
+- [stub.yieldsAsync](/concepts/stubs/api/yields-async.md): Causes the stub to call the first callback it receives with any provided arguments, asynchronously.
+- [stub.yieldsOn](/concepts/stubs/api/yields-on.md): Causes the stub to call the first callback it receives with any provided arguments, with an additional parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+- [stub.yieldsOnAsync](/concepts/stubs/api/yields-on-async.md): Causes the stub to call the first callback it receives with any provided arguments, with an additional parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+- [stub.yieldsRight](/concepts/stubs/api/yields-right.md): Causes the stub to call the last callback it receives with any provided arguments.
+- [stub.yieldsTo](/concepts/stubs/api/yields-to.md): Causes the spy to invoke a callback passed as a property of an object to the spy.
+- [stub.yieldsToAsync](/concepts/stubs/api/yields-to-async.md): Causes the spy to invoke a callback passed as a property of an object to the spy.
+- [stub.yieldsToOn](/concepts/stubs/api/yields-to-on.md): Causes the spy to invoke a callback passed as a property of an object to the spy.
+- [stub.yieldsToOnAsync](/concepts/stubs/api/yields-to-on-async.md): Causes the spy to invoke a callback passed as a property of an object to the spy.
+
+##### Properties
+
+- [stub.wrappedMethod](/concepts/stubs/api/wrapped-method.md): Holds a reference to the original method/function this stub has wrapped.
+
+### Fakes
+
+- [Fakes](/concepts/fakes.md): Simple, immutable test doubles that replace spies and stubs. Records arguments, return values, and exceptions for all calls.
+- [Error Handling](/concepts/fakes/error-handling.md): Fakes validate their usage and throw errors when used incorrectly. Learn about common fakes errors and how to fix them.
+
+#### API
+
+##### Methods
+
+- [fake.rejects](/concepts/fakes/api/rejects.md): Creates a fake that returns a rejected `Promise` for the passed value.
+- [fake.resolves](/concepts/fakes/api/resolves.md): Creates a fake that returns a resolved `Promise` for the passed value.
+- [fake.returns](/concepts/fakes/api/returns.md): Creates a fake that returns the provided value.
+- [fake.throws](/concepts/fakes/api/throws.md): Creates a fake, that throws an `Error` with the provided value as the `message` property.
+- [fake.yields](/concepts/fakes/api/yields.md): Makes a fake call the callback with the provided values. The last argument must be a callback function.
+- [fake.yieldsAsync](/concepts/fakes/api/yields-async.md): Similar to [`fake.yields`][yields], `fake.yieldsAsync` also returns a function that when invoked, expects its last argument to be a callback, and invokes that callback with the same previously give...
+
+### Mocks
+
+- [Mocks](/concepts/mocks.md): Fake methods with pre-programmed behavior and expectations. Fails tests if not used as expected.
+
+#### API
+
+##### Methods
+
+- [mock.expects](/concepts/mocks/api/expects.md): Overrides `obj.method` with an [expectation][expectation] (mock function) and returns it.
+- [mock.restore](/concepts/mocks/api/restore.md): Restores all mocked methods.
+- [mock.verify](/concepts/mocks/api/verify.md): Verifies all expectations on the mock and restores all mocked methods.
+
+##### Properties
+
+- [Expectations](/concepts/mocks/api/expectations.md): All the expectation methods return an expectation instance, meaning you can chain them.
+
+### Matchers
+
+- [Matchers](/concepts/matchers.md): Flexible argument matching for assertions. Make tests more expressive with fuzzy or specific value matching.
+
+#### API
+
+##### Methods
+
+- [sinon.match.any](/concepts/matchers/api/any.md): Matches anything.
+- [sinon.match.array](/concepts/matchers/api/array.md): Requires the value to be an `Array`.
+- [sinon.bool](/concepts/matchers/api/bool.md): Requires the value to be a `Boolean`
+- [sinon.match.defined](/concepts/matchers/api/defined.md): Requires the value to be defined.
+- [sinon.match.every](/concepts/matchers/api/every.md): Requires **every** element of an `Array`, `Set` or `Map`, or alternatively **every** value of an `Object` to match the given `matcher`.
+- [sinon.bool](/concepts/matchers/api/bool.md): Requires the value to be a `Boolean`
+- [sinon.match.hasNested](/concepts/matchers/api/has-nested.md): Requires the value to define the given `propertyPath`. Dot (`prop.prop`) and bracket (`prop[0]`) notations are supported as in [Lodash.get](https://lodash.com/docs/4.4.2#get).
+- [sinon.match.hasOwn](/concepts/matchers/api/has-own.md): Same as `sinon.match.has` but the property must be defined by the value itself. Inherited properties are ignored.
+- [sinon.match.has](/concepts/matchers/api/has.md): Requires the value to define the given `property`.
+- [sinon.match.in](/concepts/matchers/api/in.md): Requires the value to be in the `array`.
+- [sinon.match.instanceOf](/concepts/matchers/api/instance-of.md): Requires the value to be an instance of the given `type`.
+- [sinon.match.map](/concepts/matchers/api/map.md): Requires the value to be a `Map`.
+- [sinon.match](/concepts/matchers/api/match.md): Requires the value to be == to the given number.
+- [sinon.match.number](/concepts/matchers/api/number.md): Requires the value to be a `Number`.
+- [sinon.match.object](/concepts/matchers/api/object.md): Requires the value to be an `Object`.
+- [sinon.match.regexp](/concepts/matchers/api/regexp.md): Requires the value to be a regular expression.
+- [sinon.match.same](/concepts/matchers/api/same.md): Requires the value to strictly equal `ref`.
+- [sinon.match.set](/concepts/matchers/api/set.md): Requires the value to be a `Set`.
+- [sinon.match.some](/concepts/matchers/api/some.md): Requires **any** element of an `Array`, `Set` or `Map`, or alternatively **any** value of an `Object` to match the given `matcher`.
+- [sinon.match.string](/concepts/matchers/api/string.md): Requires the value to be a `String`.
+- [sinon.match.symbol](/concepts/matchers/api/symbol.md): Requires the value to be a `Symbol`.
+- [sinon.match.truthy](/concepts/matchers/api/truthy.md): Requires the value to be truthy.
+- [sinon.match.typeOf](/concepts/matchers/api/type-of.md): Requires the value to be of the given type, where `type` can be one of `"undefined"`, `"null"`, `"boolean"`, `"number"`, `"string"`, `"object"`, `"function"`,
+
+### Assertions
+
+- [Assertions](/concepts/assertions.md): Built-in assertions that mirror spy/stub behavior. Provides detailed error messages when assertions fail.
+
+#### API
+
+##### Methods
+
+- [assert.alwaysCalledOn](/concepts/assertions/api/always-called-on.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] has only been called with `object` as its `this` value.
+- [assert.alwaysCalledWith](/concepts/assertions/api/always-called-with.md): Passes when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] has **always** been called with the provided arguments.
+- [assert.alwaysCalledWithExactly](/concepts/assertions/api/always-called-with-exactly.md): Passes when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] has **always, only** been called with the provided arguments.
+- [assert.alwaysCalledWithMatch](/concepts/assertions/api/always-called-with-match.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was always called with matching arguments.
+- [assert.alwaysThrew](/concepts/assertions/api/always-threw.md): Like above, only required for all calls to the spy.
+- [assert.callCount](/concepts/assertions/api/call-count.md): Passes if the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly `num` times.
+- [assert.called](/concepts/assertions/api/called.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called at least once.
+- [assert.calledOn](/concepts/assertions/api/called-on.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called at least once with `object` as `this`.
+- [assert.calledOnce](/concepts/assertions/api/called-once.md): Passes if the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly once.
+- [assert.calledOnceWithExactly](/concepts/assertions/api/called-once-with-exactly.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly once, with exactly the provided arguments.
+- [assert.calledOnceWithMatch](/concepts/assertions/api/called-once-with-match.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly once with matching arguments.
+- [assert.calledTwice](/concepts/assertions/api/called-twice.md): Passes if the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly twice.
+- [assert.calledThrice](/concepts/assertions/api/called-thrice.md): Passes if the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly three times.
+- [assert.calledWith](/concepts/assertions/api/called-with.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called with the provided arguments.
+- [assert.calledWithExactly](/concepts/assertions/api/called-with-exactly.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called with exactly the provided arguments.
+- [assert.calledWithMatch](/concepts/assertions/api/called-with-match.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called with matching arguments.
+- [assert.calledWithNew](/concepts/assertions/api/called-with-new.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called with the `new` operator.
+- [assert.callOrder](/concepts/assertions/api/call-order.md): Passes, when provided [`fakes`][fakes], [`spies`][spies] or [`stubs`][stubs] are called in the specified order.
+- [assert.expose](/concepts/assertions/api/expose.md): Exposes assertions into another object, to allow for integration with a test framework.
+- [assert.fail](/concepts/assertions/api/fail.md): This convenience method can cause a test library to fail a test.
+- [assert.match](/concepts/assertions/api/match.md): Uses [`sinon.match`][matchers] to test if the arguments can be considered a match.
+- [assert.neverCalledWith](/concepts/assertions/api/never-called-with.md): Passes when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] has never been called with the provided arguments.
+- [assert.neverCalledWithMatch](/concepts/assertions/api/never-called-with-match.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was never called with matching arguments.
+- [assert.notCalled](/concepts/assertions/api/not-called.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] has not been called.
+- [assert.pass](/concepts/assertions/api/pass.md): Called every time `assertion` passes.
+- [assert.threw](/concepts/assertions/api/threw.md): Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] threw the given exception.
+
+### Sandboxes
+
+- [Sandboxes](/concepts/sandboxes.md): Manage multiple fakes, spies, and stubs with automatic cleanup. Simplifies test teardown by grouping related fakes.
+
+#### API
+
+##### Methods
+
+- [sandbox.createStubInstance](/concepts/sandboxes/api/create-stub-instance.md): Works exactly like the utility [`sinon.createStubInstance`](../../utils).
+- [sandbox.mock](/concepts/sandboxes/api/mock.md): Works exactly like [`sinon.mock`](/concepts/mocks/)
+- [sandbox.replace](/concepts/sandboxes/api/replace.md): Replaces `property` on `object` with `replacement` argument.
+- [sandbox.replaceGetter](/concepts/sandboxes/api/replace-getter.md): Replaces getter for `property` on `object` with `replacement` argument. Attempting to replace an already replaced getter causes an exception.
+- [sandbox.replaceSetter](/concepts/sandboxes/api/replace-setter.md): Replaces setter for `property` on `object` with `replacement` argument. Attempting to replace an already replaced setter causes an exception.
+- [sandbox.reset](/concepts/sandboxes/api/reset.md): Resets the mutable behavior in [`stubs`](/concepts/stubs/) as well as the history of all [`fakes`](/concepts/fakes/), [`spies`](/concepts/spies/) and [`stubs`](/concepts/stubs/) created using the sandbox.
+- [sandbox.resetBehavior](/concepts/sandboxes/api/reset-behavior.md): Resets the behavior of all stubs created through the sandbox.
+- [sandbox.resetHistory](/concepts/sandboxes/api/reset-history.md): Resets the history of all [`fakes`](/concepts/fakes/), [`spies`](/concepts/spies/) and [`stubs`](/concepts/stubs/) created using the sandbox.
+- [sandbox.restore](/concepts/sandboxes/api/restore.md): Restores all [`fakes`](/concepts/fakes/), [`spies`](/concepts/spies/) and [`stubs`](/concepts/stubs/) created through the sandbox.
+- [sandbox.spy](/concepts/sandboxes/api/spy.md): Works exactly like [`sinon.spy`](/concepts/spies/)
+- [sandbox.stub](/concepts/sandboxes/api/stub.md): Works exactly like [`sinon.stub`](/concepts/stubs/).
+- [sandbox.useFakeTimers](/concepts/sandboxes/api/use-fake-timers.md): Fakes the native timers and binds the `clock` object to the sandbox so it is restored when calling `sandbox.restore()`.
+- [sandbox.verify](/concepts/sandboxes/api/verify.md): Verifies all mocks created through the sandbox.
+- [sandbox.verifyAndRestore](/concepts/sandboxes/api/verify-and-restore.md): Verifies all mocks and restores all fakes created through the sandbox.
+
+##### Properties
+
+- [sandbox.assert](/concepts/sandboxes/api/assert.md): A convenience reference for [sinon.assert](/concepts/assertions/)
+- [sandbox.leakThreshold](/concepts/sandboxes/api/leak-threshold.md): Gets/sets the threshold at which memory leak detection warnings are logged.
+
+### Spy Calls
+
+- [Spy call](/concepts/spy-call.md): Access individual call details including arguments, return values, this context, and exceptions for each invocation.
+
+#### API
+
+##### Methods
+
+- [spyCall.calledAfter](/concepts/spy-call/api/called-after.md): Returns `true`, when the spy call occurred after another spy call.
+- [spyCall.calledBefore](/concepts/spy-call/api/called-before.md): Returns `true`, when the spy call occurred before another spy call.
+- [spyCall.calledImmediatelyAfter](/concepts/spy-call/api/called-immediately-after.md): Returns `true`, when the spy call occurred after another call, and no calls to any spy occurred in between.
+- [spyCall.calledImmediatelyBefore](/concepts/spy-call/api/called-immediately-before.md): Returns `true`, when the spy call occurred before another call, and no calls to any spy occurred in between.
+- [spyCall.calledOn](/concepts/spy-call/api/called-on.md): Returns `true` when `obj` was context (`this`) for the call.
+- [spyCall.calledWith](/concepts/spy-call/api/called-with.md): Returns `true`, when the spy call received provided arguments in same positions, (and possibly further arguments).
+- [spyCall.calledWithExactly](/concepts/spy-call/api/called-with-exactly.md): Returns `true`, when the spy call received provided arguments in exact same order and received no other arguments.
+- [spyCall.calledWithMatch](/concepts/spy-call/api/called-with-match.md): Returns `true`, when the spy call received matching arguments (and possibly others).
+- [spyCall.notCalledWith](/concepts/spy-call/api/not-called-with.md): Returns `true`, when the spy call did not receive provided arguments.
+- [spyCall.notCalledWithMatch](/concepts/spy-call/api/not-called-with-match.md): Returns `true`, when the spyt call did not receive matching arguments. This behaves the same as [`spyCall.notCalledWith(sinon.match(arg1), sinon.match(arg2), ...)`](./not-called-with).
+- [spyCall.returned](/concepts/spy-call/api/returned.md): Returns `true`, when the spied function returned the provided `value` on this call.
+- [spyCall.threw](/concepts/spy-call/api/threw.md): Returns `true`, when the spied function threw on this call.
+
+##### Properties
+
+- [spyCall.args](/concepts/spy-call/api/args.md): This property contains an array of arrays containing received arguments for each call.
+- [spyCall.callback](/concepts/spy-call/api/callback.md): This property is a convenience for a call's callback.
+- [spyCall.exception](/concepts/spy-call/api/exception.md): <!-- TODO: add spyCall.error and deprecate this one -->
+- [spyCall.firstArg](/concepts/spy-call/api/first-arg.md): This property contains a reference to the first argument of the call.
+- [spyCall.lastArg](/concepts/spy-call/api/last-arg.md): This property contains a reference to the last argument of the call.
+- [spyCall.returnValue](/concepts/spy-call/api/return-value.md): This property contains a reference to the value returned from the call.
+- [spyCall.thisValue](/concepts/spy-call/api/this-value.md): <!-- TODO: deprecate `thisValue` in favour of `context` -->
+
+### Fake Timers
+
+- [Fake timers](/concepts/fake-timers.md): Replace setTimeout, setInterval, and Date with controllable fake implementations for time-based testing.
+- [sinon.useFakeTimers()](/concepts/fake-timers/use-fake-timers.md): Replaces global timers with fake implementations. Configurable with now, toFake, shouldAdvanceTime, and more.
+
+#### API
+
+- [clock.next()](/concepts/fake-timers/next.md): Advances the clock to the next scheduled timer and fires it. Use nextAsync for promise-based callbacks.
+- [clock.now](/concepts/fake-timers/now.md): Returns the current fake time in milliseconds.
+- [clock.restore()](/concepts/fake-timers/restore.md): Restores the faked methods, returning time to normal.
+- [clock.runAll()](/concepts/fake-timers/run-all.md): Runs all pending timers until there are none remaining. Use runAllAsync for promise-based callbacks.
+- [clock.tick(time)](/concepts/fake-timers/tick.md): Advances the clock by the specified time in milliseconds. Supports human-readable strings like "01:00".
+
+### Utils
+
+- [Utilities](/concepts/utils.md): Internal utilities like createStubInstance and restoreObject. May change without notice.
+
+### Promises
+
+- [Promises](/concepts/promises.md): Create fake promises with controllable resolution and rejection for testing async code.
+
+### Other
+
+- [Assertions API](/concepts/assertions/api.md): Built-in assertion methods for verifying spy, stub, and mock behavior. Provides detailed error messages on failure.
+- [Assertions API](/concepts/assertions/api/_index.md)
+- [Combining matchers](/concepts/matchers/combining-matchers.md): Combine multiple matchers using and(), or(), and not() for complex argument matching logic.
+- [Custom matchers](/concepts/matchers/custom-matchers.md): Create custom matcher functions using sinon.match() to define flexible matching logic for your tests.
+- [Error Handling](/concepts/mocks/error-handling.md): Mocks throw errors when expectations aren't met or when used incorrectly. Learn about common mock errors and how to fix them.
+- [Error Handling](/concepts/spies/error-handling.md): Spies validate their usage and throw errors when used incorrectly. Learn about common spy errors and how to fix them.
+- [Error Handling](/concepts/stubs/error-handling.md): Stubs validate their usage and throw errors when used incorrectly. Learn about common stub errors and how to fix them.
+- [Fakes API](/concepts/fakes/api.md): Create and configure fake functions with returns, throws, yields, and async behavior.
+- [Getting started](/getting-started.md): Learn how to install and set up Sinon.JS with your test runner. Includes examples using Node-Tap, Mocha, Jest, and more.
+- [index](/concepts/mocks/api.md): Create a mock for the provided object.
+- [index](/concepts/sandboxes/api.md): Since `sinon@5.0.0`, the `sinon` object is a default sandbox. Unless you have a very advanced setup or need a special configuration, you probably want to only use that one.
+- [index](/concepts/spies/api.md): Spy objects are objects returned from `sinon.spy()`. When spying on existing methods with `sinon.spy(object, method)`, the following properties and methods
+- [index](/concepts/stubs/api.md): Creates an anonymous stub function
+- [Matchers API](/concepts/matchers/api.md): Flexible argument matching for assertions. Includes matchers for types, values, arrays, objects, and custom logic.
+- [Migrating from Mocks](/concepts/mocks/migrating-from-mocks.md): Guide for migrating from mocks to fakes with explicit assertions. Learn why separating concerns leads to better tests.
+- [Migrating to Fakes](/concepts/spies/migrating-to-fakes.md): Guide for migrating from spies to fakes. Learn why fakes are preferred and see code examples for common migration patterns.
+- [Migrating to Fakes](/concepts/stubs/migrating-to-fakes.md): Guide for migrating from stubs to fakes. Learn why fakes are preferred and see code examples for common migration patterns.
+- [Mock API](/concepts/mocks/api/_index.md)
+- [Sandbox API](/concepts/sandboxes/api/_index.md)
+- [sinon.createSandbox](/concepts/sandboxes/create-sandbox.md): Creates a sandbox for grouping fakes, spies, and stubs with automatic cleanup. Use only for advanced scenarios.
+- [sinon.match.date](/concepts/matchers/api/date.md): Requires the value to be a `Date` object.
+- [sinon.match.falsy](/concepts/matchers/api/falsy.md): Requires the value to be falsy.
+- [sinon.match.func](/concepts/matchers/api/func.md): Requires the value to be a `Function`.
+- [Sponsors](/sponsors.md): Thank you to the individuals and organizations who sponsor Sinon.JS development.
+- [SpyCall API](/concepts/spy-call/api.md): Access call details like arguments, return value, this context, and exceptions for each spy invocation.
+- [stub.callsArgOnAsync](/concepts/stubs/api/calls-arg-on-async.md): Causes the stub to call the argument at the provided `index` as a callback function, with an additional `object` parameter to pass the [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) context, asynchronously.
+- [stub.returnsArg](/concepts/stubs/api/returns-arg.md): Causes the stub to return the argument at the provided index.
