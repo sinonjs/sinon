@@ -65,7 +65,11 @@ export default defineConfig({
     ],
     sidebar: sidebarConfig,
     search: { provider: "local" },
-    socialLinks: [{ icon: "github", link: "https://github.com/sinonjs/sinon" }]
+    socialLinks: [{ icon: "github", link: "https://github.com/sinonjs/sinon" }],
+    carbonAds: {
+      code: "CE7D453M",
+      placement: "sinonjsorg"
+    }
   },
   editLink: {
     pattern: "https://github.com/sinonjs/sinon/edit/main/docs/:path",
