@@ -116,6 +116,10 @@ function getConceptDisplayName(section) {
   );
 }
 
+function kebabToCamel(str) {
+  return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+}
+
 function generateSidebar() {
   const sidebar = {};
 
@@ -226,7 +230,7 @@ function generateSidebar() {
     // Add use-fake-timers as first item after Introduction
     if (rootFiles.includes("use-fake-timers.md")) {
       sectionItems.push({
-        text: "use fake timers",
+        text: "useFakeTimers",
         link: "/concepts/fake-timers/use-fake-timers",
         collapsed: false
       });
@@ -240,7 +244,7 @@ function generateSidebar() {
       const apiItems = remainingItems.map((f) => {
         const name = f.replace(".md", "");
         return {
-          text: name.replace(/-/g, " "),
+          text: kebabToCamel(name),
           link: `/concepts/fake-timers/${name}`
         };
       });
