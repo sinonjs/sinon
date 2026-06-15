@@ -13,3 +13,5 @@ Fake timers provide a `clock` object to pass time, which can also be used to con
 
 For standalone usage of fake timers it is recommended to use [fake-timers](https://github.com/sinonjs/fake-timers) package instead. It provides the same
 set of features (Sinon uses it under the hood) and was previously extracted from Sinon.JS.
+
+<<< ../../.vitepress/tests/docs/fake-timers/_index.test.js
