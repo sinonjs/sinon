@@ -20,14 +20,3 @@ npm install sinon
 ## Quick Start
 
 <<< @/.vitepress/tests/docs/index-quick-start.test.js
-
-## Documentation Sections
-
-- [Getting Started](/getting-started) - How to use Sinon
-- [Spies](/concepts/spies/) - Test spies
-- [Stubs](/concepts/stubs/) - Test stubs
-- [Fakes](/concepts/fakes/) - Test fakes (recommended)
-- [Mocks](/concepts/mocks/) - Test mocks
-- [Matchers](/concepts/matchers/) - Argument matchers
-- [Assertions](/concepts/assertions/) - Test assertions
-- [Sandboxes](/concepts/sandboxes/) - Managing multiple fakes
