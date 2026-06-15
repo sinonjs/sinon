@@ -1,4 +1,5 @@
-
-# Ignore all HTML files, as they contain Liquid templating language
-
-*.html
+node_modules/
+.tap/
+package-lock.json
+.vitepress/dist/
+.vitepress/cache/
