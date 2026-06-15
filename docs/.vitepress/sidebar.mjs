@@ -950,6 +950,14 @@ export default {
           "collapsed": false,
           "items": [
             {
+              "text": "count timers",
+              "link": "/concepts/fake-timers/count-timers"
+            },
+            {
+              "text": "jump",
+              "link": "/concepts/fake-timers/jump"
+            },
+            {
               "text": "next",
               "link": "/concepts/fake-timers/next"
             },
@@ -958,12 +966,32 @@ export default {
               "link": "/concepts/fake-timers/now"
             },
             {
+              "text": "reset",
+              "link": "/concepts/fake-timers/reset"
+            },
+            {
               "text": "restore",
               "link": "/concepts/fake-timers/restore"
             },
             {
               "text": "run all",
               "link": "/concepts/fake-timers/run-all"
+            },
+            {
+              "text": "run microtasks",
+              "link": "/concepts/fake-timers/run-microtasks"
+            },
+            {
+              "text": "run to frame",
+              "link": "/concepts/fake-timers/run-to-frame"
+            },
+            {
+              "text": "run to last",
+              "link": "/concepts/fake-timers/run-to-last"
+            },
+            {
+              "text": "set system time",
+              "link": "/concepts/fake-timers/set-system-time"
             },
             {
               "text": "tick",
