@@ -18,11 +18,12 @@ const { slice } = prototypes.array;
  *
  * @param {SinonFunction|undefined} [f]
  * @param {object} [context] The sinon context for callId tracking
+ * @param {boolean} hasFunctionArgument
  * @returns {SinonFunction}
  * @namespace
  */
-function fakeImpl(f, context) {
-    if (typeof f !== "undefined" && typeof f !== "function") {
+function fakeImpl(f, context, hasFunctionArgument) {
+    if (hasFunctionArgument && typeof f !== "function") {
         throw new TypeError("Expected f argument to be a Function");
     }
 
@@ -39,7 +40,7 @@ function fakeImpl(f, context) {
  * @namespace
  */
 function fake(f) {
-    return fakeImpl(f, undefined);
+    return fakeImpl(f, undefined, arguments.length > 0);
 }
 
 /**
@@ -50,7 +51,7 @@ function fake(f) {
  * @returns {SinonFunction}
  */
 fake.withContext = function (context, f) {
-    return fakeImpl(f, context);
+    return fakeImpl(f, context, arguments.length > 1);
 };
 
 /**
