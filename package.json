@@ -20,10 +20,10 @@
   "author": "Christian Johansen",
   "repository": {
     "type": "git",
-    "url": "http://github.com/sinonjs/sinon.git"
+    "url": "git+https://github.com/sinonjs/sinon.git"
   },
   "bugs": {
-    "url": "http://github.com/sinonjs/sinon/issues"
+    "url": "https://github.com/sinonjs/sinon/issues"
   },
   "funding": {
     "type": "opencollective",
