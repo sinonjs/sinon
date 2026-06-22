@@ -3668,6 +3668,25 @@ describe("stub", function () {
 
             assert.equals(myObj.prop, "bar");
         });
+
+        it("records calls to the stubbed getter on stub.getter", function () {
+            const myObj = {
+                prop: "foo",
+            };
+
+            const stub = createStub(myObj, "prop").get(function getterFn() {
+                return "bar";
+            });
+
+            const first = myObj.prop;
+            const second = myObj.prop;
+
+            assert.equals(first, "bar");
+            assert.equals(second, "bar");
+            assert.equals(myObj.prop, "bar");
+            assert.equals(stub.getter.callCount, 3);
+            assert(stub.getter.calledThrice);
+        });
     });
 
     describe(".set", function () {
@@ -3756,6 +3775,24 @@ describe("stub", function () {
 
             myObj.prop = "foo";
             assert.equals(myObj.otherProp, "bar");
+        });
+
+        it("records calls to the stubbed setter on stub.setter", function () {
+            const myObj = {
+                prop: "foo",
+            };
+
+            const stub = createStub(myObj, "prop").set(function setterFn(val) {
+                myObj.example = val;
+            });
+
+            myObj.prop = "bar";
+            myObj.prop = "baz";
+
+            assert.equals(myObj.example, "baz");
+            assert.equals(stub.setter.callCount, 2);
+            assert(stub.setter.calledTwice);
+            assert(stub.setter.calledWith("baz"));
         });
     });
 
