@@ -1,5 +1,5 @@
 import referee from "@sinonjs/referee";
-import walkObject from "../../../../src/sinon/util/core/walk-object.js";
+import { walkObjectStrict } from "../../../../src/sinon/util/core/walk-object.js";
 
 const assert = referee.assert;
 
@@ -32,14 +32,14 @@ describe("util/core/walk-object", function () {
         it("should still identify functions in environments", function () {
             assert.exception(
                 function () {
-                    walkObject(fnWithNoName, false);
+                    walkObjectStrict(fnWithNoName, false);
                 },
                 { message: "Trying to fnWithNoName object but received false" },
             );
 
             assert.exception(
                 function () {
-                    walkObject(fnWithNoName, {});
+                    walkObjectStrict(fnWithNoName, {});
                 },
                 {
                     message:
@@ -51,14 +51,14 @@ describe("util/core/walk-object", function () {
         it("should work with anonymous functions", function () {
             assert.exception(
                 function () {
-                    walkObject(anonymousFn, false);
+                    walkObjectStrict(anonymousFn, false);
                 },
                 { message: "Trying to undefined object but received false" },
             );
 
             assert.exception(
                 function () {
-                    walkObject(anonymousFn, {});
+                    walkObjectStrict(anonymousFn, {});
                 },
                 {
                     message:

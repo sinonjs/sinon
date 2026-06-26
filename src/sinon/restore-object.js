@@ -1,4 +1,4 @@
-import walkObject from "./util/core/walk-object.js";
+import { walkObject } from "./util/core/walk-object.js";
 
 function filter(object, property) {
     return object[property].restore && object[property].restore.sinon;

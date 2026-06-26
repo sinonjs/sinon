@@ -18,15 +18,7 @@ import walk from "./walk.js";
  * @returns {boolean}
  */
 
-/**
- * A utility that allows traversing an object, applying mutating functions on the properties
- *
- * @param {ObjectMutator} mutator called on each property
- * @param {object} object the object we are walking over
- * @param {ObjectFilter} filter a predicate (boolean function) that will decide whether or not to apply the mutator to the current property
- * @returns {void} nothing
- */
-const walkObject = function (mutator, object, filter) {
+const applyMutations = function (mutator, object, filter) {
     let called = false;
     const name = functionName(mutator);
 
@@ -56,7 +48,33 @@ const walkObject = function (mutator, object, filter) {
         }
     });
 
-    if (!called) {
+    return called;
+};
+
+/**
+ * A utility that allows traversing an object, applying mutating functions on the properties
+ *
+ * @param {ObjectMutator} mutator called on each property
+ * @param {object} object the object we are walking over
+ * @param {ObjectFilter} filter a predicate (boolean function) that will decide whether or not to apply the mutator to the current property
+ * @returns {void} nothing
+ */
+export const walkObject = function (mutator, object, filter) {
+    applyMutations(mutator, object, filter);
+
+    return object;
+};
+
+/**
+ * Like walkObject, but throws if the mutator was never applied to any property
+ *
+ * @param {ObjectMutator} mutator called on each property
+ * @param {object} object the object we are walking over
+ * @param {ObjectFilter} filter a predicate (boolean function) that will decide whether or not to apply the mutator to the current property
+ * @returns {void} nothing
+ */
+export const walkObjectStrict = function (mutator, object, filter) {
+    if (!applyMutations(mutator, object, filter)) {
         throw new Error(
             `Found no methods on object to which we could apply mutations`,
         );
@@ -64,5 +82,3 @@ const walkObject = function (mutator, object, filter) {
 
     return object;
 };
-
-export default walkObject;

@@ -5,7 +5,7 @@ import extend from "./util/core/extend.js";
 import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
 import isEsModule from "./util/core/is-es-module.js";
 import * as proxyCallUtil from "./proxy-call-util.js";
-import walkObject from "./util/core/walk-object.js";
+import { walkObjectStrict } from "./util/core/walk-object.js";
 import wrapMethod from "./util/core/wrap-method.js";
 
 const { prototypes, functionName, valueToString } = commons;
@@ -185,7 +185,7 @@ function spyImpl(object, property, types, context) {
     }
 
     if (!property && typeof object === "object") {
-        return walkObject(function (obj, prop, propTypes) {
+        return walkObjectStrict(function (obj, prop, propTypes) {
             return spyImpl(obj, prop, propTypes, context);
         }, object);
     }

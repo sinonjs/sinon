@@ -10,7 +10,7 @@ import isEsModule from "./util/core/is-es-module.js";
 import sinonType from "./util/core/sinon-type.js";
 import wrapMethod from "./util/core/wrap-method.js";
 import throwOnFalsyObject from "./throw-on-falsy-object.js";
-import walkObject from "./util/core/walk-object.js";
+import { walkObjectStrict } from "./util/core/walk-object.js";
 
 const { prototypes: commonsPrototypes, functionName, valueToString } = commons;
 const { array: arrayProto, object: objectProto } = commonsPrototypes;
@@ -118,7 +118,7 @@ function stubImpl(object, property, context) {
             typeof actualDescriptor.value !== "function");
 
     if (isStubbingEntireObject) {
-        return walkObject(function (obj, prop) {
+        return walkObjectStrict(function (obj, prop) {
             return stubImpl(obj, prop, context);
         }, object);
     }
