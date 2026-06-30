@@ -4,6 +4,7 @@ const { prototypes } = commons;
 import isPropertyConfigurable from "./util/core/is-property-configurable.js";
 import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 import extend from "./util/core/extend.js";
+import spy from "./spy.js";
 
 const { slice } = prototypes.array;
 
@@ -280,8 +281,15 @@ const defaultBehaviors = {
     get: function get(fake, getterFunction) {
         const rootStub = fake.stub || fake;
 
+        // Wrap the replacement getter in a spy so that reading the property
+        // records the access (callCount, calledOnce, ...). The spy is exposed
+        // on the stub as `stub.getter`, mirroring the `spy.get` accessor that
+        // `sinon.spy(obj, "prop", ["get"])` produces. See #1741.
+        const getterSpy = spy(getterFunction);
+        rootStub.getter = getterSpy;
+
         Object.defineProperty(rootStub.rootObj, rootStub.propName, {
-            get: getterFunction,
+            get: getterSpy,
             configurable: isPropertyConfigurable(
                 rootStub.rootObj,
                 rootStub.propName,
@@ -294,12 +302,19 @@ const defaultBehaviors = {
     set: function set(fake, setterFunction) {
         const rootStub = fake.stub || fake;
 
+        // Wrap the replacement setter in a spy so that writing the property
+        // records the access (callCount, calledWith, ...). The spy is exposed
+        // on the stub as `stub.setter`, mirroring the `spy.set` accessor that
+        // `sinon.spy(obj, "prop", ["set"])` produces. See #1741.
+        const setterSpy = spy(setterFunction);
+        rootStub.setter = setterSpy;
+
         Object.defineProperty(
             rootStub.rootObj,
             rootStub.propName,
             // eslint-disable-next-line accessor-pairs
             {
-                set: setterFunction,
+                set: setterSpy,
                 configurable: isPropertyConfigurable(
                     rootStub.rootObj,
                     rootStub.propName,
