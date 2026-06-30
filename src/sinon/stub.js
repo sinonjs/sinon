@@ -223,7 +223,11 @@ function getDefaultBehavior(stubInstance) {
 }
 
 function getCurrentBehavior(stubInstance) {
-    const currentBehavior = stubInstance.behaviors[stubInstance.callCount - 1];
+    const currentCall =
+        typeof stubInstance.behaviorCallIndex === "number"
+            ? stubInstance.behaviorCallIndex
+            : stubInstance.callCount - 1;
+    const currentBehavior = stubInstance.behaviors[currentCall];
     return currentBehavior && currentBehavior.isPresent()
         ? currentBehavior
         : getDefaultBehavior(stubInstance);

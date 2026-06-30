@@ -7,7 +7,7 @@ import wrapMethod from "./util/core/wrap-method.js";
 
 const { prototypes } = commons;
 const { deepEqual } = samsam;
-const { concat, filter, forEach, every, join, push, slice, unshift } =
+const { concat, filter, forEach, every, join, push, reduce, slice, unshift } =
     prototypes.array;
 
 /**
@@ -125,6 +125,13 @@ extend(mock, {
                 ? this.expectations[method]
                 : [];
         const currentArgs = args || [];
+        const callIndex = reduce(
+            expectations,
+            function (count, expectation) {
+                return count + expectation.callCount;
+            },
+            0,
+        );
         let available;
 
         const expectationsWithMatchingArgs = filter(
@@ -151,7 +158,12 @@ extend(mock, {
         );
 
         if (expectationsToApply.length > 0) {
-            return expectationsToApply[0].apply(thisValue, args);
+            return invokeExpectation(
+                expectationsToApply[0],
+                thisValue,
+                args,
+                callIndex,
+            );
         }
 
         const messages = [];
@@ -166,7 +178,7 @@ extend(mock, {
         });
 
         if (available && exhausted === 0) {
-            return available.apply(thisValue, args);
+            return invokeExpectation(available, thisValue, args, callIndex);
         }
 
         forEach(expectations, function (expectation) {
@@ -202,3 +214,12 @@ extend(mock, {
         mockExpectation.fail(join(messages, "\n"));
     },
 });
+
+function invokeExpectation(expectation, thisValue, args, callIndex) {
+    expectation.behaviorCallIndex = callIndex;
+    try {
+        return expectation.apply(thisValue, args);
+    } finally {
+        delete expectation.behaviorCallIndex;
+    }
+}
