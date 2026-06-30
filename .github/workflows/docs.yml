@@ -60,6 +60,30 @@ jobs:
       - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
         id: deployment
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: docs/package-lock.json
+      - name: Install root dependencies
+        run: npm ci
+        working-directory: .
+      - name: Build sinon
+        run: npm run build-artifacts
+        working-directory: .
+      - name: Install docs dependencies
+        run: npm ci
+        working-directory: docs
+      - name: Run docs tests
+        run: npm run test:docs
+        working-directory: docs
+
   link-check:
     runs-on: ubuntu-latest
     steps:
