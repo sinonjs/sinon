@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const API_DIR = "concepts";
+const GUIDES_DIR = "guides";
 
 const SECTIONS = [
   "spies",
@@ -266,6 +267,69 @@ function generateSidebar() {
           },
           ...sectionItems
         ]
+      }
+    ];
+  }
+
+  // Guides sidebar
+  if (fs.existsSync(GUIDES_DIR)) {
+    const guideItems = [];
+
+    // How-to sub-directory (first)
+    const howToDir = path.join(GUIDES_DIR, "how-to");
+    if (fs.existsSync(howToDir)) {
+      const howToFiles = fs
+        .readdirSync(howToDir)
+        .filter((f) => f.endsWith(".md") && f !== "index.md")
+        .sort();
+
+      const howToDisplayNames = {
+        "stub-dependency": "Stub a dependency",
+        "link-seams-commonjs": "Link seams (CommonJS)",
+        "stub-esm": "Stub ES module imports",
+        "fake-timers-async": "Async functions with fake timers",
+        "typescript-swc": "TypeScript and SWC",
+      };
+
+      const howToItems = howToFiles.map((f) => {
+        const name = f.replace(".md", "");
+        return {
+          text: howToDisplayNames[name] || name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, " "),
+          link: `/guides/how-to/${name}`
+        };
+      });
+
+      guideItems.push({
+        text: "How-to articles",
+        collapsed: false,
+        items: [
+          { text: "Overview", link: "/guides/how-to/" },
+          ...howToItems
+        ]
+      });
+    }
+
+    // Top-level guide pages in specified order
+    const topLevelOrder = ["faq", "migration", "external-resources"];
+    const topLevelDisplayNames = {
+      faq: "FAQ",
+      migration: "Migration",
+      "external-resources": "External resources",
+    };
+
+    for (const name of topLevelOrder) {
+      if (fs.existsSync(path.join(GUIDES_DIR, `${name}.md`))) {
+        guideItems.push({
+          text: topLevelDisplayNames[name],
+          link: `/guides/${name}`
+        });
+      }
+    }
+
+    sidebar["/guides/"] = [
+      {
+        text: "Guides",
+        items: guideItems
       }
     ];
   }

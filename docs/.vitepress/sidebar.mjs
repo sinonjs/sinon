@@ -1002,6 +1002,55 @@ export default {
       ]
     }
   ],
+  "/guides/": [
+    {
+      "text": "Guides",
+      "items": [
+        {
+          "text": "How-to articles",
+          "collapsed": false,
+          "items": [
+            {
+              "text": "Overview",
+              "link": "/guides/how-to/"
+            },
+            {
+              "text": "Async functions with fake timers",
+              "link": "/guides/how-to/fake-timers-async"
+            },
+            {
+              "text": "Link seams (CommonJS)",
+              "link": "/guides/how-to/link-seams-commonjs"
+            },
+            {
+              "text": "Stub a dependency",
+              "link": "/guides/how-to/stub-dependency"
+            },
+            {
+              "text": "Stub ES module imports",
+              "link": "/guides/how-to/stub-esm"
+            },
+            {
+              "text": "TypeScript and SWC",
+              "link": "/guides/how-to/typescript-swc"
+            }
+          ]
+        },
+        {
+          "text": "FAQ",
+          "link": "/guides/faq"
+        },
+        {
+          "text": "Migration",
+          "link": "/guides/migration"
+        },
+        {
+          "text": "External resources",
+          "link": "/guides/external-resources"
+        }
+      ]
+    }
+  ],
   "/concepts/utils/": [
     {
       "text": "Utils",
