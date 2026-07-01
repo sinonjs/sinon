@@ -28,6 +28,15 @@ export default defineConfig({
     nav: [
       { text: "Getting Started", link: "/getting-started" },
       {
+        text: "Guides",
+        items: [
+          { text: "How-to articles", link: "/guides/how-to/" },
+          { text: "FAQ", link: "/guides/faq" },
+          { text: "Migration", link: "/guides/migration" },
+          { text: "External resources", link: "/guides/external-resources" }
+        ]
+      },
+      {
         text: "Concepts",
         activeMatch: "/concepts/",
         items: [
