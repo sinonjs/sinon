@@ -106,5 +106,7 @@ jobs:
             --exclude "opencollective"
             --exclude "llms"
             --exclude "node-tap.org"
+            --exclude "reqres.in"
+            --exclude "somepage"
             --accept '200..=299,403'
           fail: true

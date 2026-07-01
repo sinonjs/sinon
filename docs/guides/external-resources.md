@@ -7,7 +7,6 @@ description: Curated list of external articles and related libraries for Sinon.J
 
 ## Articles elsewhere on the web
 
-- [How to Test NodeJS Apps using Mocha, Chai and SinonJS](https://scotch.io/tutorials/how-to-test-nodejs-apps-using-mocha-chai-and-sinonjs)
 - [How to stub or mock complex objects, such as DOM objects](https://codeutopia.net/blog/2016/05/23/sinon-js-quick-tip-how-to-stubmock-complex-objects-such-as-dom-objects/)
 - [Using Sinon.js with Promises](https://www.sitepoint.com/promises-in-javascript-unit-tests-the-definitive-guide/)
 - [Best practices for spies, stubs and mocks](https://semaphoreci.com/community/tutorials/best-practices-for-spies-stubs-and-mocks-in-sinon-js)
