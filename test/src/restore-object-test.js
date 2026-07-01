@@ -35,19 +35,15 @@ describe("restore-object", function () {
         );
     });
 
-    it("throws with no spies or stubs", function () {
-        assert.exception(
-            function () {
-                restoreObject({
-                    catpants: function () {},
-                    meh: "okay",
-                });
-            },
-            {
-                message:
-                    "Found no methods on object to which we could apply mutations",
-            },
-        );
+    it("is a no-op with no spies or stubs", function () {
+        const object = {
+            catpants: function () {},
+            meh: "okay",
+        };
+
+        refute.exception(function () {
+            restoreObject(object);
+        });
     });
 
     it("works with mixed spies and stubs", function () {
