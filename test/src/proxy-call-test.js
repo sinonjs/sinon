@@ -613,6 +613,53 @@ describe("sinonSpy.call", function () {
         });
     });
 
+    describe("call.throwArg", function () {
+        beforeEach(spyCallCallSetup);
+
+        it("throws argument at specified index", function () {
+            const expectedError = new TypeError("catpants");
+            this.args.push(1, expectedError, 2);
+            const call = this.call;
+
+            assert.exception(
+                function () {
+                    call.throwArg(1);
+                },
+                { message: "catpants" },
+            );
+        });
+
+        it("throws if index equals the number of arguments", function () {
+            this.args.push(1, 2);
+            const call = this.call;
+
+            assert.exception(
+                function () {
+                    call.throwArg(2);
+                },
+                {
+                    name: "TypeError",
+                    message: "Not enough arguments: 2 required but only 2 present",
+                },
+            );
+        });
+
+        it("throws if there aren't enough arguments", function () {
+            this.args.push(1, 2);
+            const call = this.call;
+
+            assert.exception(
+                function () {
+                    call.throwArg(3);
+                },
+                {
+                    name: "TypeError",
+                    message: "Not enough arguments: 3 required but only 2 present",
+                },
+            );
+        });
+    });
+
     describe("call.yieldTest", function () {
         beforeEach(spyCallCallSetup);
 

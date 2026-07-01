@@ -140,7 +140,7 @@ const callProto = {
     },
 
     throwArg: function (pos) {
-        if (pos > this.args.length) {
+        if (pos >= this.args.length) {
             throw new TypeError(
                 `Not enough arguments: ${pos} required but only ${this.args.length} present`,
             );
