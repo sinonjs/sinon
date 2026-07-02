@@ -145,6 +145,7 @@ const defaultBehaviors = {
     returns: function returns(fake, value) {
         fake.callsThrough = false;
         fake.returnValue = value;
+        fake.returnArgAt = undefined;
         fake.resolve = false;
         fake.reject = false;
         fake.returnValueDefined = true;

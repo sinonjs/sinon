@@ -721,6 +721,15 @@ describe("stub", function () {
             assert.equals(obj.fn("myarg"), "myarg");
         });
 
+        it("is superseded by returns", function () {
+            const stub = createStub();
+
+            stub.returnsArg(0);
+            stub.returns(42);
+
+            assert.equals(stub("myarg"), 42);
+        });
+
         it("throws if no index is specified", function () {
             const stub = createStub();
 
