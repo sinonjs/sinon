@@ -23,4 +23,4 @@ done
 npm run lint
 npm test
 npm run test-cloud
-npm run test-runnable-examples
+npm --prefix docs run test:docs
