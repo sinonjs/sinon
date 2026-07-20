@@ -639,7 +639,8 @@ describe("sinonSpy.call", function () {
                 },
                 {
                     name: "TypeError",
-                    message: "Not enough arguments: 2 required but only 2 present",
+                    message:
+                        "Not enough arguments: 2 required but only 2 present",
                 },
             );
         });
@@ -654,7 +655,8 @@ describe("sinonSpy.call", function () {
                 },
                 {
                     name: "TypeError",
-                    message: "Not enough arguments: 3 required but only 2 present",
+                    message:
+                        "Not enough arguments: 3 required but only 2 present",
                 },
             );
         });
