@@ -1,14 +1,12 @@
 import t from "tap";
 import sinon from "sinon";
 
-t.test("restoreObject throws when object has no restorable methods", (t) => {
+t.test("restoreObject is a no-op when object has no restorable methods", (t) => {
   const emptyObj = {};
 
-  // Verify it throws an error
-  t.throws(
+  t.doesNotThrow(
     () => sinon.restoreObject(emptyObj),
-    /no methods/i,
-    "should throw error about no methods to restore"
+    "should be a no-op when object has no restorable methods"
   );
 
   t.end();

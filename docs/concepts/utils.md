@@ -23,8 +23,8 @@ Restores all methods of an object and returns the restored object.
 
 <<< ../.vitepress/tests/docs/utils-2.test.js
 
-Throws an error if the object contains no restorable methods (spies, stubs, etc).
+Does nothing if the object contains no restorable methods (spies, stubs, etc).
 
 <<< ../.vitepress/tests/docs/utils-3.test.js
 
-Throws an error if the object contains no restorable methods (spies, stubs, etc).
+Does nothing if the object contains no restorable methods (spies, stubs, etc).
