@@ -1015,6 +1015,10 @@ export default {
               "link": "/guides/how-to/"
             },
             {
+              "text": "Dependency injection with Sinon",
+              "link": "/guides/how-to/dependency-injection"
+            },
+            {
               "text": "Async functions with fake timers",
               "link": "/guides/how-to/fake-timers-async"
             },
