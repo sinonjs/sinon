@@ -10,7 +10,52 @@ const { slice } = prototypes.array;
 const useLeftMostCallback = -1;
 const useRightMostCallback = -2;
 
+// The fields `behavior.js#invoke` consults to decide what a call *returns or
+// throws*. These are mutually exclusive -- only the most recently set one
+// should apply -- so every setter below resets this whole set first, then
+// sets only its own field(s). Individual setters clearing only the specific
+// fields they happened to think of caused repeated regressions (e.g. #2566,
+// #2656): `returnsArg` followed by `throwsArg`/`callsFake`/`returnsThis`/
+// `resolves` left `returnArgAt` in place, which `invoke` checks before any of
+// those.
+//
+// This intentionally excludes callArgAt/callArgProp/callbackArguments/
+// callbackContext/callbackAsync (the callsArg*/yields* config): yielding a
+// callback is a separate, additive side effect that's meant to combine with
+// any of these return/throw behaviors regardless of call order (see
+// "returnsArg takes precedent over yielded return value" and similar tests),
+// not another mutually-exclusive choice in this same set.
+function resetBehavior(fake) {
+    fake.callsThrough = false;
+    fake.callsThroughWithNew = false;
+    fake.exception = undefined;
+    fake.exceptionCreator = undefined;
+    fake.fakeFn = undefined;
+    fake.reject = false;
+    fake.resolve = false;
+    fake.resolveArgAt = undefined;
+    fake.resolveThis = false;
+    fake.returnArgAt = undefined;
+    fake.returnThis = false;
+    fake.returnValue = undefined;
+    fake.returnValueDefined = false;
+    fake.throwArgAt = undefined;
+}
+
+// callThrough/callThroughWithNew additionally clear the callback-yielding
+// config, since "call the real method" is meant to replace all stub
+// customization, unlike the behaviors above, which are meant to coexist with
+// a separately configured yielded callback.
+function resetCallbackConfig(fake) {
+    fake.callArgAt = undefined;
+    fake.callArgProp = undefined;
+    fake.callbackArguments = [];
+    fake.callbackContext = undefined;
+    fake.callbackAsync = false;
+}
+
 function throwsException(fake, error, message) {
+    resetBehavior(fake);
     if (typeof error === "function") {
         fake.exceptionCreator = error;
     } else if (typeof error === "string") {
@@ -32,10 +77,8 @@ function throwsException(fake, error, message) {
 
 const defaultBehaviors = {
     callsFake: function callsFake(fake, fn) {
+        resetBehavior(fake);
         fake.fakeFn = fn;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.callsThrough = false;
     },
 
     callsArg: function callsArg(fake, index) {
@@ -143,23 +186,17 @@ const defaultBehaviors = {
     throwsException: throwsException,
 
     returns: function returns(fake, value) {
-        fake.callsThrough = false;
+        resetBehavior(fake);
         fake.returnValue = value;
-        fake.returnArgAt = undefined;
-        fake.resolve = false;
-        fake.reject = false;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
     },
 
     returnsArg: function returnsArg(fake, index) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
-        fake.callsThrough = false;
 
+        resetBehavior(fake);
         fake.returnArgAt = index;
     },
 
@@ -167,42 +204,31 @@ const defaultBehaviors = {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
-        fake.callsThrough = false;
 
+        resetBehavior(fake);
         fake.throwArgAt = index;
     },
 
     returnsThis: function returnsThis(fake) {
+        resetBehavior(fake);
         fake.returnThis = true;
-        fake.callsThrough = false;
     },
 
     resolves: function resolves(fake, value) {
+        resetBehavior(fake);
         fake.returnValue = value;
         fake.resolve = true;
-        fake.resolveThis = false;
-        fake.reject = false;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     resolvesArg: function resolvesArg(fake, index) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
+
+        resetBehavior(fake);
         fake.resolveArgAt = index;
-        fake.returnValue = undefined;
         fake.resolve = true;
-        fake.resolveThis = false;
-        fake.reject = false;
-        fake.returnValueDefined = false;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     rejects: function rejects(fake, error, message) {
@@ -215,67 +241,30 @@ const defaultBehaviors = {
         } else {
             reason = error;
         }
+
+        resetBehavior(fake);
         fake.returnValue = reason;
-        fake.resolve = false;
-        fake.resolveThis = false;
         fake.reject = true;
         fake.returnValueDefined = true;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
 
         return fake;
     },
 
     resolvesThis: function resolvesThis(fake) {
-        fake.returnValue = undefined;
-        fake.resolve = false;
+        resetBehavior(fake);
         fake.resolveThis = true;
-        fake.reject = false;
-        fake.returnValueDefined = false;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.callsThrough = false;
     },
 
     callThrough: function callThrough(fake) {
+        resetBehavior(fake);
+        resetCallbackConfig(fake);
         fake.callsThrough = true;
-
-        fake.callArgAt = undefined;
-        fake.callsThroughWithNew = false;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.fakeFn = undefined;
-        fake.reject = false;
-        fake.resolve = false;
-        fake.resolveArgAt = undefined;
-        fake.resolveThis = false;
-        fake.returnArgAt = undefined;
-        fake.returnThis = false;
-        fake.returnValue = undefined;
-        fake.throwArgAt = undefined;
-
-        fake.callArgProp = undefined;
-        fake.callbackArguments = [];
-        fake.callbackContext = undefined;
-        fake.callbackAsync = false;
-        fake.returnValueDefined = false;
     },
 
     callThroughWithNew: function callThroughWithNew(fake) {
+        resetBehavior(fake);
+        resetCallbackConfig(fake);
         fake.callsThroughWithNew = true;
-
-        fake.callArgAt = undefined;
-        fake.exception = undefined;
-        fake.exceptionCreator = undefined;
-        fake.throwArgAt = undefined;
-
-        fake.callArgProp = undefined;
-        fake.callbackArguments = [];
-        fake.callbackContext = undefined;
-        fake.callbackAsync = false;
     },
 
     get: function get(fake, getterFunction) {

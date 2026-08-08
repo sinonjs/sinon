@@ -730,6 +730,53 @@ describe("stub", function () {
             assert.equals(stub("myarg"), 42);
         });
 
+        it("is superseded by throwsArg", function () {
+            const stub = createStub();
+
+            stub.returnsArg(0);
+            stub.throwsArg(1);
+            const expectedError = new Error("boom");
+
+            assert.exception(
+                function () {
+                    stub("myarg", expectedError);
+                },
+                function (err) {
+                    return err.message === expectedError.message;
+                },
+            );
+        });
+
+        it("is superseded by callsFake", function () {
+            const stub = createStub();
+
+            stub.returnsArg(0);
+            stub.callsFake(function () {
+                return "fake-result";
+            });
+
+            assert.equals(stub("myarg"), "fake-result");
+        });
+
+        it("is superseded by resolves", async function () {
+            const stub = createStub();
+
+            stub.returnsArg(0);
+            stub.resolves("resolved");
+
+            assert.equals(await stub("myarg"), "resolved");
+        });
+
+        it("is superseded by returnsThis", function () {
+            const obj = {};
+            const stub = createStub();
+
+            stub.returnsArg(0);
+            stub.returnsThis();
+
+            assert.same(stub.call(obj, "myarg"), obj);
+        });
+
         it("throws if no index is specified", function () {
             const stub = createStub();
 
@@ -778,6 +825,30 @@ describe("stub", function () {
             const stub = createStub();
 
             assert.same(stub.throwsArg(0), stub);
+        });
+
+        it("is superseded by returns", function () {
+            const stub = createStub();
+
+            stub.throwsArg(0);
+            stub.returns("normal");
+
+            refute.exception(function () {
+                assert.equals(stub(new Error("boom")), "normal");
+            });
+        });
+
+        it("is superseded by callsFake", function () {
+            const stub = createStub();
+
+            stub.throwsArg(0);
+            stub.callsFake(function () {
+                return "fake-result";
+            });
+
+            refute.exception(function () {
+                assert.equals(stub(new Error("boom")), "fake-result");
+            });
         });
 
         it("throws TypeError if no index is specified", function () {
