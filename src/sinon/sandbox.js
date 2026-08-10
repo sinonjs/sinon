@@ -115,7 +115,10 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.createStubInstance = function createStubInstance(...args) {
-        const stubbed = sinonCreateStubInstance(...args);
+        const stubbed = sinonCreateStubInstance.withContext(
+            sandboxContext,
+            ...args,
+        );
         const ownMethods = collectOwnMethods(stubbed);
 
         forEach(ownMethods, (method) => {
