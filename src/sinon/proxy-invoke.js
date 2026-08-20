@@ -33,6 +33,7 @@ export default function invoke(func, thisValue, args) {
     const currentCallId = ctx.callId;
     ctx.callId = ctx.callId >= maxSafeInteger ? 0 : ctx.callId + 1;
     let exception, returnValue;
+    let didThrow = false;
 
     proxyCallUtil.incrementCallCount(this);
     push(this.thisValues, thisValue);
@@ -72,14 +73,17 @@ export default function invoke(func, thisValue, args) {
         }
     } catch (e) {
         exception = e;
+        didThrow = true;
     } finally {
         delete this.invoking;
     }
 
     push(this.exceptions, exception);
+    push(this.didThrowValues, didThrow);
     push(this.returnValues, returnValue);
     forEach(matchings, function (matching) {
         push(matching.exceptions, exception);
+        push(matching.didThrowValues, didThrow);
         push(matching.returnValues, returnValue);
     });
 
@@ -101,7 +105,7 @@ export default function invoke(func, thisValue, args) {
     proxyCallUtil.createCallProperties(this);
     forEach(matchings, proxyCallUtil.createCallProperties);
 
-    if (exception !== undefined) {
+    if (didThrow) {
         throw exception;
     }
 

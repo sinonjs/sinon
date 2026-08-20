@@ -1586,6 +1586,78 @@ describe("spy", function () {
 
             assert.isFalse(this.spyWithStringError.threw("not the error"));
         });
+
+        // referee's own assert.exception tests the caught value for
+        // truthiness, so it cannot observe a thrown falsy value. These
+        // cases capture the throw directly instead.
+        it("returns true for every falsy thrown value", function () {
+            [undefined, null, 0, "", false, NaN].forEach(function (value) {
+                const spy = createSpy(function () {
+                    throw value;
+                });
+                let propagated = false;
+
+                try {
+                    spy();
+                } catch (e) {
+                    propagated = true;
+                }
+
+                assert(
+                    propagated,
+                    `throwing ${String(value)} should reach the caller`,
+                );
+                assert(
+                    spy.threw(),
+                    `threw() should be true after throwing ${String(value)}`,
+                );
+            });
+        });
+
+        it("returns true when a falsy thrown value matches", function () {
+            [null, 0, "", false].forEach(function (value) {
+                const spy = createSpy(function () {
+                    throw value;
+                });
+
+                try {
+                    spy();
+                } catch (e) {
+                    /* empty */
+                }
+
+                assert(
+                    spy.threw(value),
+                    `threw(${String(value)}) should be true`,
+                );
+            });
+        });
+
+        it("returns false when a nullish thrown value is compared to a type name", function () {
+            [undefined, null].forEach(function (value) {
+                const spy = createSpy(function () {
+                    throw value;
+                });
+
+                try {
+                    spy();
+                } catch (e) {
+                    /* empty */
+                }
+
+                assert.isFalse(spy.threw("TypeError"));
+            });
+        });
+
+        it("returns false when the spy returned undefined", function () {
+            const spy = createSpy(function () {
+                return undefined;
+            });
+
+            spy();
+
+            assert.isFalse(spy.threw());
+        });
     });
 
     describe(".alwaysThrew", function () {
