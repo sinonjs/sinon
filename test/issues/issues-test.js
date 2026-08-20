@@ -1227,4 +1227,29 @@ describe("issues", function () {
             }
         }
     });
+
+    it("#2471 - a spy should record a thrown undefined as having thrown", function () {
+        const spy = sinon.spy(function () {
+            // eslint-disable-next-line no-throw-literal
+            throw undefined;
+        });
+        let propagated = false;
+
+        // 1. the throw has to reach the caller
+        try {
+            spy();
+        } catch (e) {
+            propagated = true;
+        }
+        assert(propagated);
+
+        // 2. and the call has to be recorded as having thrown
+        refute.exception(function () {
+            sinon.assert.threw(spy);
+        });
+
+        // the thrown value itself is left untouched in the public array
+        assert.equals(spy.exceptions.length, 1);
+        assert.isUndefined(spy.exceptions[0]);
+    });
 });

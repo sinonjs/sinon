@@ -61,6 +61,7 @@ const spyApi = {
             push(fakeInstance.args, arg);
             push(fakeInstance.returnValues, original.returnValues[i]);
             push(fakeInstance.exceptions, original.exceptions[i]);
+            push(fakeInstance.didThrowValues, original.didThrowValues[i]);
             push(fakeInstance.callIds, original.callIds[i]);
         });
 
