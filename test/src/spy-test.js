@@ -830,6 +830,29 @@ describe("spy", function () {
             assert.equals(matching.lastCall.stack, spy.lastCall.stack);
         });
 
+        it("records thrown undefined in matching and backfilled calls", function () {
+            const spy = createSpy((n) => {
+                if (n === 1) {
+                    // eslint-disable-next-line no-throw-literal
+                    throw undefined;
+                }
+                try {
+                    spy(1);
+                } catch (exception) {
+                    assert.isUndefined(exception);
+                }
+            });
+            const matching = spy.withArgs();
+
+            spy(0);
+
+            refute(spy.firstCall.threw());
+            assert(spy.lastCall.threw());
+            refute(matching.firstCall.threw());
+            assert(matching.lastCall.threw());
+            assert(spy.withArgs(1).firstCall.threw());
+        });
+
         it("makes call properties available when each call starts", function () {
             const spy = createSpy((n) => {
                 const matching = spy.withArgs();
@@ -1282,7 +1305,7 @@ describe("spy", function () {
                     return this.counter;
                 };
             }
-            const object = { SomeClass: SomeClass };
+            const object = { SomeClass };
             createSpy(object, "SomeClass");
 
             const instance = new object.SomeClass();
@@ -1299,14 +1322,13 @@ describe("spy", function () {
 
         it("is the created instance when spying on a class constructor", function () {
             class SomeClass {
-                constructor() {
-                    this.counter = 0;
-                }
+                counter = 0;
+
                 inc() {
                     this.counter++;
                 }
             }
-            const object = { SomeClass: SomeClass };
+            const object = { SomeClass };
             createSpy(object, "SomeClass");
 
             const instance = new object.SomeClass();
@@ -1826,6 +1848,60 @@ describe("spy", function () {
             assert.exception(this.spyWithStringError);
 
             assert.isFalse(this.spyWithStringError.threw("not the error"));
+        });
+
+        it("returns true for every falsy thrown value", function () {
+            for (const value of [undefined, null, 0, "", false, NaN, 0n]) {
+                const spy = createSpy(() => {
+                    throw value;
+                });
+                let propagated = false;
+
+                // Referee's assert.exception cannot observe falsy throws.
+                try {
+                    spy();
+                } catch (exception) {
+                    assert.isTrue(Object.is(exception, value));
+                    propagated = true;
+                }
+
+                assert(
+                    propagated,
+                    `throwing ${String(value)} should reach the caller`,
+                );
+                assert(
+                    spy.threw(),
+                    `threw() should be true after throwing ${String(value)}`,
+                );
+                assert(
+                    spy.threw(value),
+                    `threw(${String(value)}) should be true`,
+                );
+            }
+        });
+
+        it("returns false when a nullish thrown value is compared to a type name", function () {
+            for (const value of [undefined, null]) {
+                const spy = createSpy(() => {
+                    throw value;
+                });
+
+                try {
+                    spy();
+                } catch {
+                    /* empty */
+                }
+
+                assert.isFalse(spy.threw("TypeError"));
+            }
+        });
+
+        it("returns false when the spy returned undefined", function () {
+            const spy = createSpy(() => undefined);
+
+            spy();
+
+            assert.isFalse(spy.threw());
         });
     });
 

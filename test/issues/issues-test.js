@@ -1218,4 +1218,23 @@ describe("issues", function () {
             }
         }
     });
+
+    it("#2471 - a spy should record a thrown undefined as having thrown", function () {
+        const spy = sinon.spy(() => {
+            // eslint-disable-next-line no-throw-literal
+            throw undefined;
+        });
+        let propagated = false;
+
+        try {
+            spy();
+        } catch (exception) {
+            assert.isUndefined(exception);
+            propagated = true;
+        }
+        assert(propagated);
+        sinon.assert.threw(spy);
+        assert.equals(spy.exceptions.length, 1);
+        assert.isUndefined(spy.exceptions[0]);
+    });
 });
