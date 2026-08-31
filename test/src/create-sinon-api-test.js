@@ -57,6 +57,24 @@ describe("create-sinon-api", function () {
         assert.isFunction(stubbed.method.restore);
     });
 
+    it("shares call order between root spies and stub instances", function () {
+        const sinon = createApi();
+        class Class {
+            method() {
+                return;
+            }
+        }
+        const spy = sinon.spy();
+        const stubbed = sinon.createStubInstance(Class);
+
+        spy();
+        stubbed.method();
+        spy();
+
+        assert.isTrue(stubbed.method.firstCall.calledAfter(spy.firstCall));
+        assert.isTrue(stubbed.method.firstCall.calledBefore(spy.secondCall));
+    });
+
     it("allows adding a custom behavior to stubs", function () {
         const sinon = createApi();
 

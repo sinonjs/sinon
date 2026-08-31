@@ -1,7 +1,5 @@
 import behavior from "./sinon/behavior.js";
 import createConfiguredSandbox from "./sinon/create-sandbox.js";
-import createStubInstanceImpl from "./sinon/create-stub-instance.js";
-import collectOwnMethods from "./sinon/collect-own-methods.js";
 import extend from "./sinon/util/core/extend.js";
 import * as fakeTimers from "./sinon/util/fake-timers.js";
 import Sandbox from "./sinon/sandbox.js";
@@ -18,6 +16,7 @@ import expectation from "./sinon/mock-expectation.js";
  */
 export default function createApi() {
     const sandbox = new Sandbox();
+    const sandboxCreateStubInstance = sandbox.createStubInstance;
 
     const apiMethods = {
         // `createSandbox` returns an isolated sandbox: its fakes are tracked
@@ -31,13 +30,7 @@ export default function createApi() {
         expectation: expectation,
         timers: fakeTimers.timers,
         createStubInstance: function createStubInstance() {
-            const stubbed = createStubInstanceImpl.apply(null, arguments);
-
-            for (const method of collectOwnMethods(stubbed)) {
-                sandbox.getFakes().push(method);
-            }
-
-            return stubbed;
+            return sandboxCreateStubInstance.apply(sandbox, arguments);
         },
 
         addBehavior: function (name, fn) {

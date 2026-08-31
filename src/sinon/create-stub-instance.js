@@ -14,9 +14,10 @@ function isStub(value) {
  *
  * @param {new (...args: unknown[]) => object} constructor The constructor function
  * @param {object} [overrides] Optional overrides for the stubbed methods
+ * @param {object} [context] The sinon context for callId tracking
  * @returns {object} The stubbed instance
  */
-export default function createStubInstance(constructor, overrides) {
+export default function createStubInstance(constructor, overrides, context) {
     if (typeof constructor !== "function") {
         throw new TypeError("The constructor should be a function.");
     }
@@ -24,7 +25,7 @@ export default function createStubInstance(constructor, overrides) {
     const stubInstance = Object.create(constructor.prototype);
     sinonType.set(stubInstance, "stub-instance");
 
-    const stubbedObject = stub(stubInstance);
+    const stubbedObject = stub.withContext(context, stubInstance);
 
     forEach(Object.keys(overrides || {}), function (propertyName) {
         if (propertyName in stubbedObject) {

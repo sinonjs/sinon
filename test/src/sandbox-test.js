@@ -279,6 +279,25 @@ describe("Sandbox", function () {
             assert.equals(3, stub.method());
         });
 
+        it("shares call order with other sandbox fakes", function () {
+            class Class {
+                method() {
+                    return;
+                }
+            }
+            const spy = this.sandbox.spy();
+            const stubbed = this.sandbox.createStubInstance(Class);
+
+            spy();
+            stubbed.method();
+            spy();
+
+            assert.isTrue(stubbed.method.firstCall.calledAfter(spy.firstCall));
+            assert.isTrue(
+                stubbed.method.firstCall.calledBefore(spy.secondCall),
+            );
+        });
+
         it("should require a function", function () {
             const sandbox = this.sandbox;
 
