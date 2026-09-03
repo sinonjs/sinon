@@ -3543,6 +3543,26 @@ describe("stub", function () {
 
             assert.equals(reference, myObj);
         });
+
+        it("calls original function when set on a specific call", function () {
+            let callCount = 0;
+            const originalFunc = function increaseCallCount() {
+                callCount++;
+                return 1337;
+            };
+
+            const myObj = {
+                prop: originalFunc,
+            };
+
+            const propStub = createStub(myObj, "prop").returns("default");
+            propStub.onFirstCall().callThrough();
+
+            assert.equals(myObj.prop(), 1337);
+            assert.equals(callCount, 1);
+            assert.equals(myObj.prop(), "default");
+            assert.equals(callCount, 1);
+        });
     });
 
     describe(".callThroughWithNew", function () {
@@ -3595,6 +3615,29 @@ describe("stub", function () {
                 assert.equals(callArgs[1], ["definitely", "not", "foo"]);
                 assert.equals(result.foo, "baz");
             });
+        });
+
+        it("calls original function with new when set on a specific call", function () {
+            let callCount = 0;
+
+            function OriginalClass() {
+                callCount++;
+                this.foo = "baz";
+            }
+
+            const myObj = {
+                MyClass: OriginalClass,
+            };
+
+            const propStub = createStub(myObj, "MyClass").returns({
+                foo: "default",
+            });
+            propStub.onFirstCall().callThroughWithNew();
+
+            assert.equals(new myObj.MyClass().foo, "baz");
+            assert.equals(callCount, 1);
+            assert.equals(new myObj.MyClass().foo, "default");
+            assert.equals(callCount, 1);
         });
     });
 
