@@ -68,8 +68,9 @@ Create a file at the root of your project (e.g., `esm-loader.cjs`) that enables 
 ```javascript
 // esm-loader.cjs
 require = require("esm")(module, {
-  cjs: true,
-  mutableNamespace: true,
+  cjs: {
+    mutableNamespace: true,
+  },
 });
 ```
 
@@ -148,8 +149,9 @@ describe("calculator", () => {
 
 ```javascript
 require = require("esm")(module, {
-  cjs: true,
-  mutableNamespace: true,
+  cjs: {
+    mutableNamespace: true,
+  },
 });
 ```
 
