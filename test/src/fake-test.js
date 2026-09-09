@@ -73,6 +73,30 @@ describe("fake", function () {
         });
     });
 
+    describe("recursive calls", function () {
+        it("associates return values with their arguments", function () {
+            const recursive = fake(function (n) {
+                if (n < 2) {
+                    recursive(n + 1);
+                }
+                return n;
+            });
+
+            assert.equals(recursive(0), 0);
+
+            assert.equals(
+                recursive.getCalls().map(function (call) {
+                    return [call.args[0], call.returnValue];
+                }),
+                [
+                    [0, 0],
+                    [1, 1],
+                    [2, 2],
+                ],
+            );
+        });
+    });
+
     describe("when passed no value", function () {
         // eslint-disable-next-line mocha/no-setup-in-describe
         verifyProxy(fake);
