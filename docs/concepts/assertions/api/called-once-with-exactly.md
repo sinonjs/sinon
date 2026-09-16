@@ -3,18 +3,18 @@ title: assert.calledOnceWithExactly
 description: Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly once, with exactly the provided arguments.
 ---
 
-# `assert.calledOnceWithExactly(spyOrSpyCall, arg1, arg2, ...);`
+# `assert.calledOnceWithExactly(spy, arg1, arg2, ...);`
 
 Passes, when the [`fake`][fake], [`spy`][spy] or [`stub`][stub] was called exactly once, with exactly the provided arguments.
 
-It's possible to assert on a dedicated [spyCall][spy-call]: `sinon.assert.calledOnceWithExactly(call, arg1, arg2, ...);`.
+This assertion requires a fake, spy or stub, not an individual [spy call][spy-call]. To check the arguments of an individual call, use [`sinon.assert.calledWithExactly(call, arg1, arg2, ...)`](./called-with-exactly).
 
 ```js
 import * as sinon from "sinon";
 const fake = sinon.fake();
 
 sinon.assert.calledOnceWithExactly(fake, "apple pie");
-// => Uncaught Error [AssertError]: expected fake to be called with exact arguments
+// => Uncaught Error [AssertError]: expected fake to be called once and with exact arguments
 
 fake("apple pie");
 
@@ -42,7 +42,7 @@ fake("apple pie");
 const call = fake.firstCall;
 
 // Generates no error
-sinon.assert.calledOnceWithExactly(fake, "apple pie");
+sinon.assert.calledWithExactly(call, "apple pie");
 ```
 
 ## Example using test framework

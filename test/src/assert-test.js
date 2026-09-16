@@ -3,6 +3,7 @@ import samsam from "@sinonjs/samsam";
 import Colorizer from "../../src/sinon/colorizer.js";
 import sinonStub from "../../src/sinon/stub.js";
 import sinonSpy from "../../src/sinon/spy.js";
+import sinonFake from "../../src/sinon/fake.js";
 import sinonAssert from "../../src/sinon/assert.js";
 import { inspect } from "util";
 
@@ -15,6 +16,95 @@ function requiresValidFake(method) {
     it("should fail with non-function fake", function () {
         assert.exception(function () {
             sinonAssert[method]({});
+        });
+    });
+}
+
+function requiresSpy(method) {
+    const args = method === "calledOnce" ? [] : [42, "hello"];
+    const message = `${method} requires a spy, not a spy call`;
+
+    it("rejects a spy call with a meaningful exception", function () {
+        const spy = sinonSpy();
+        spy(...args);
+
+        assert.exception(() => sinonAssert[method](spy.firstCall, ...args), {
+            name: "AssertError",
+            message,
+        });
+    });
+
+    it("rejects a spy call after multiple calls", function () {
+        const spy = sinonSpy();
+        spy(...args);
+        spy(...args);
+
+        assert.exception(() => sinonAssert[method](spy.lastCall, ...args), {
+            name: "AssertError",
+            message,
+        });
+    });
+
+    it("accepts spies, stubs and fakes", function () {
+        for (const createFake of [sinonSpy, sinonStub, sinonFake]) {
+            const fake = createFake();
+            fake(...args);
+
+            refute.exception(() => sinonAssert[method](fake, ...args));
+        }
+    });
+
+    it("accepts spies, stubs and fakes with a proxy property", function () {
+        for (const createFake of [sinonSpy, sinonStub, sinonFake]) {
+            const fake = createFake();
+            fake.proxy = sinonSpy();
+            fake(...args);
+
+            refute.exception(() => sinonAssert[method](fake, ...args));
+        }
+    });
+
+    it("uses a custom failure handler", function () {
+        const customAssert = sinonAssert.createAssertObject();
+        const spy = sinonSpy();
+        spy(...args);
+        customAssert.fail = function (msg) {
+            throw new TypeError(msg);
+        };
+
+        assert.exception(() => customAssert[method](spy.firstCall, ...args), {
+            name: "TypeError",
+            message,
+        });
+    });
+
+    it("does not report a pass when a failure handler returns", function () {
+        const customAssert = sinonAssert.createAssertObject();
+        const spy = sinonSpy();
+        spy(...args);
+        customAssert.fail = sinonSpy();
+        customAssert.pass = sinonSpy();
+
+        customAssert[method](spy.firstCall, ...args);
+
+        assert(customAssert.fail.calledOnceWithExactly(message));
+        refute(customAssert.pass.called);
+    });
+
+    it("uses the failure handler of exposed assertions", function () {
+        const target = {
+            fail: function (msg) {
+                assert.same(this, target);
+                throw new TypeError(msg);
+            },
+        };
+        const spy = sinonSpy();
+        spy(...args);
+        sinonAssert.expose(target, { prefix: "", includeFail: false });
+
+        assert.exception(() => target[method](spy.firstCall, ...args), {
+            name: "TypeError",
+            message,
         });
     });
 }
@@ -53,6 +143,7 @@ describe("assert", function () {
 
         refute.exception(function () {
             sinonAssert.calledOnce(api.method);
+            sinonAssert.calledOnceWithExactly(api.method);
         });
     });
 
@@ -76,6 +167,35 @@ describe("assert", function () {
                 },
                 {
                     name: "AssertError",
+                },
+            );
+        });
+    });
+
+    describe("spy-only assertions", function () {
+        describe(".calledOnce", function () {
+            // eslint-disable-next-line mocha/no-setup-in-describe
+            requiresSpy("calledOnce");
+        });
+
+        describe(".calledOnceWithExactly", function () {
+            // eslint-disable-next-line mocha/no-setup-in-describe
+            requiresSpy("calledOnceWithExactly");
+        });
+
+        it("supports calledWithExactly on an individual call", function () {
+            const spy = sinonSpy();
+            spy("first");
+            spy("second");
+
+            refute.exception(() =>
+                sinonAssert.calledWithExactly(spy.lastCall, "second"),
+            );
+            assert.exception(
+                () => sinonAssert.calledWithExactly(spy.lastCall, "first"),
+                {
+                    name: "AssertError",
+                    message: match("to be called with exact arguments"),
                 },
             );
         });
