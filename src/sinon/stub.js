@@ -243,6 +243,8 @@ const proto = {
         delete this.throwArgAt;
         delete this.resolveArgAt;
         delete this.fakeFn;
+        delete this.getter;
+        delete this.setter;
         this.returnThis = false;
         this.resolveThis = false;
 
