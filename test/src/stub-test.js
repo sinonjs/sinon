@@ -3313,6 +3313,17 @@ describe("stub", function () {
             assert.isUndefined(instance.stub());
         });
 
+        it("cleans stubbed getter and setter spies", function () {
+            const stub = createStub();
+            stub.getter = createSpy();
+            stub.setter = createSpy();
+
+            stub.resetBehavior();
+
+            assert.isUndefined(stub.getter);
+            assert.isUndefined(stub.setter);
+        });
+
         describe("does not touch properties that are reset by 'reset'", function () {
             it(".calledOnce", function () {
                 const stub = createStub();
