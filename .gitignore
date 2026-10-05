@@ -13,6 +13,7 @@ vendor/
 .worktrees/
 .gitnexus
 .claude/
+.amp/portals/*
 AGENTS.md
 CLAUDE.md
 docs/superpowers/

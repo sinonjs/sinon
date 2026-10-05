@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+echo "Installing root dependencies..."
+time PUPPETEER_SKIP_DOWNLOAD=true npm ci
+
+echo "Installing documentation dependencies..."
+time PUPPETEER_SKIP_DOWNLOAD=true npm --prefix docs ci
+
+echo "Installing Puppeteer Chrome..."
+chrome_path="$(node --input-type=module -e 'import puppeteer from "puppeteer"; process.stdout.write(puppeteer.executablePath())')"
+chrome_install_dir="$(dirname "$(dirname "$chrome_path")")"
+
+if [[ -d "$chrome_install_dir" && ! -x "$chrome_path" ]]; then
+    rm -rf "$chrome_install_dir"
+fi
+
+time npx puppeteer browsers install chrome
+
+if [[ ! -x "$chrome_path" ]]; then
+    build_id="${chrome_install_dir##*/}"
+    archive="$(dirname "$chrome_install_dir")/${build_id#linux-}-chrome-linux64.zip"
+    echo "Puppeteer left an incomplete extraction; extracting the downloaded archive..."
+    rm -rf "$chrome_install_dir"
+    mkdir -p "$chrome_install_dir"
+    unzip -q "$archive" -d "$chrome_install_dir"
+fi
+
+"$chrome_path" --version
+echo "Orb setup complete."
