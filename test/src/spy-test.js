@@ -655,6 +655,139 @@ describe("spy", function () {
         });
     });
 
+    describe("recursive calls", function () {
+        it("records return values in call order", function () {
+            const spy = createSpy(function (n) {
+                if (n < 2) {
+                    spy(n + 1);
+                }
+                return n;
+            });
+
+            assert.equals(spy(0), 0);
+
+            assert.equals(spy.args, [[0], [1], [2]]);
+            assert.equals(spy.returnValues, [0, 1, 2]);
+            assert.equals(spy.firstCall.returnValue, 0);
+            assert.equals(spy.secondCall.returnValue, 1);
+            assert.equals(spy.thirdCall.returnValue, 2);
+            assert.equals(spy.lastCall.returnValue, 2);
+        });
+
+        it("records an inner exception separately from an outer return", function () {
+            const error = new Error("inner call");
+            const spy = createSpy(function (n) {
+                if (n === 1) {
+                    throw error;
+                }
+                assert.exception(function () {
+                    spy(1);
+                }, error);
+                return n;
+            });
+
+            assert.equals(spy(0), 0);
+
+            assert.equals(spy.exceptions, [undefined, error]);
+            assert.equals(spy.returnValues, [0, undefined]);
+            refute(spy.firstCall.threw());
+            assert(spy.lastCall.threw(error));
+            assert(spy.firstCall.returned(0));
+        });
+
+        it("uses each matching fake's own call order", function () {
+            const spy = createSpy(function (label, n) {
+                if (n > 0) {
+                    spy(n % 2 ? "same" : "skip", n - 1);
+                }
+                return n;
+            });
+            const matching = spy.withArgs("same");
+            const innermost = spy.withArgs("same", 0);
+
+            spy("skip", 3);
+
+            assert.equals(matching.args, [
+                ["same", 2],
+                ["same", 0],
+            ]);
+            assert.equals(matching.returnValues, [2, 0]);
+            assert.equals(matching.firstCall.returnValue, 2);
+            assert.equals(matching.lastCall.returnValue, 0);
+            assert.equals(matching.firstCall.callId, spy.getCall(1).callId);
+            assert.equals(matching.lastCall.callId, spy.getCall(3).callId);
+            assert.equals(innermost.returnValues, [0]);
+            assert.equals(innermost.firstCall.callId, matching.lastCall.callId);
+        });
+
+        it("records an inner exception at the matching fake's call index", function () {
+            const error = new Error("inner matching call");
+            const spy = createSpy(function (label, n) {
+                if (n === 0) {
+                    throw error;
+                }
+                if (n === 1) {
+                    assert.exception(function () {
+                        spy("same", 0);
+                    }, error);
+                } else {
+                    spy(n % 2 ? "same" : "skip", n - 1);
+                }
+                return n;
+            });
+            const matching = spy.withArgs("same");
+
+            spy("skip", 3);
+
+            assert.equals(matching.exceptions, [undefined, error]);
+            assert.equals(matching.returnValues, [2, undefined]);
+            refute(matching.firstCall.threw());
+            assert(matching.lastCall.threw(error));
+        });
+
+        it("records each call's stack in call order", function () {
+            function invokeInner(spy) {
+                spy(1);
+            }
+            const spy = createSpy(function (n) {
+                if (n === 0) {
+                    invokeInner(spy);
+                }
+            });
+            const matching = spy.withArgs();
+
+            spy(0);
+
+            refute.match(spy.firstCall.stack, "invokeInner");
+            assert.match(spy.lastCall.stack, "invokeInner");
+            assert.equals(matching.firstCall.stack, spy.firstCall.stack);
+            assert.equals(matching.lastCall.stack, spy.lastCall.stack);
+        });
+
+        it("makes call properties available when each call starts", function () {
+            const spy = createSpy(function (n) {
+                const matching = spy.withArgs();
+                assert.equals(spy.callCount, n + 1);
+                assert.equals(spy.getCall(n).args, [n]);
+                assert.equals(spy.firstCall.args, [0]);
+                assert.equals(spy.lastCall.args, [n]);
+                assert.equals(matching.lastCall.args, [n]);
+                assert.isUndefined(spy.getCall(n).returnValue);
+                assert.isUndefined(matching.lastCall.exception);
+                if (n < 2) {
+                    spy(n + 1);
+                }
+                return n;
+            });
+            spy.withArgs();
+
+            spy(0);
+
+            assert.equals(spy.callCount, 3);
+            assert.equals(spy.withArgs().callCount, 3);
+        });
+    });
+
     describe(".called", function () {
         beforeEach(function () {
             this.spy = createSpy();
