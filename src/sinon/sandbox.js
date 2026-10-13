@@ -180,18 +180,7 @@ export default function Sandbox(opts = {}) {
         return obj;
     };
 
-    function commonPostInitSetup(
-        args,
-        spy,
-        isStub,
-        shouldAddToCollection = true,
-    ) {
-        if (isStub && args.length >= 3) {
-            throw new TypeError(
-                "stub(obj, 'meth', fn) has been removed, see documentation",
-            );
-        }
-
+    function commonPostInitSetup(spy, shouldAddToCollection = true) {
         if (shouldAddToCollection) {
             addToCollection(spy);
         }
@@ -212,9 +201,7 @@ export default function Sandbox(opts = {}) {
         // Use withContext to pass sandbox context for isolated callId tracking
         const createdSpy = sinonSpy.withContext(sandboxContext, ...args);
         const result = commonPostInitSetup(
-            args,
             createdSpy,
-            false,
             !(args.length === 1 && typeof args[0] === "object"),
         );
         addReturnedMethodsToCollection(result);
@@ -231,12 +218,16 @@ export default function Sandbox(opts = {}) {
     extend(sandbox.spy, sinonSpy);
 
     sandbox.stub = function (...args) {
+        if (args.length >= 3) {
+            throw new TypeError(
+                "stub(obj, 'meth', fn) has been removed, see documentation",
+            );
+        }
+
         // Use withContext to pass sandbox context for isolated callId tracking
         const createdStub = sinonStub.withContext(sandboxContext, ...args);
         const result = commonPostInitSetup(
-            args,
             createdStub,
-            true,
             !(args.length === 1 && typeof args[0] === "object"),
         );
         addReturnedMethodsToCollection(result);
@@ -552,7 +543,7 @@ export default function Sandbox(opts = {}) {
     sandbox.fake = function fake(...args) {
         // Use withContext to pass sandbox context for isolated callId tracking
         const createdFake = sinonFake.withContext(sandboxContext, ...args);
-        const result = commonPostInitSetup(args, createdFake, false);
+        const result = commonPostInitSetup(createdFake);
         addToCollection(result);
         return result;
     };
