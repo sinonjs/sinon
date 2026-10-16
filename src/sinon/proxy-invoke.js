@@ -66,6 +66,20 @@ export default function invoke(func, thisValue, args) {
                 typeof returnValue !== "function"
             ) {
                 returnValue = thisValue;
+            } else if (returnValue instanceof this) {
+                // The bound construction ran the constructor on a new
+                // instance, not on the `this` handed to the proxy, which
+                // is discarded when the proxy returns an object. Record
+                // the instance the constructor actually ran on (and the
+                // caller receives) so thisValues and calledOn reflect it.
+                // A constructor returning an unrelated object keeps the
+                // original thisValue: that object was never the
+                // constructor's `this`.
+                this.thisValues[this.thisValues.length - 1] = returnValue;
+                forEach(matchings, function (matching) {
+                    matching.thisValues[matching.thisValues.length - 1] =
+                        returnValue;
+                });
             }
         } else {
             returnValue = (this.func || func).apply(thisValue, args);
