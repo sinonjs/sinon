@@ -4,6 +4,46 @@ title: Migrating between versions
 
 # Migrating between versions
 
+## Sinon 20
+
+### Fake XMLHttpRequest and fake server are no longer bundled
+
+Sinon 20 removed `sinon.useFakeXMLHttpRequest()`, `sinon.FakeXMLHttpRequest`,
+`sinon.fakeServer` and `sinon.fakeServerWithClock`. The corresponding sandbox
+methods and the `useFakeServer` sandbox option were also removed.
+
+Existing XMLHttpRequest-based tests can use [nise](https://github.com/sinonjs/nise)
+directly. It is the library that previously supplied these APIs to Sinon:
+
+```sh
+npm install --save-dev nise
+```
+
+For example, replace `sinon.fakeServer.create()` with `nise.fakeServer.create()`:
+
+```js
+const nise = require("nise");
+
+let server;
+
+beforeEach(function () {
+  server = nise.fakeServer.create();
+});
+
+afterEach(function () {
+  server.restore();
+});
+```
+
+Use `nise.fakeXhr.useFakeXMLHttpRequest()` instead of
+`sinon.useFakeXMLHttpRequest()`, and `nise.fakeXhr.FakeXMLHttpRequest` instead of
+`sinon.FakeXMLHttpRequest`. The clock-enabled server is available as
+`nise.fakeServerWithClock`.
+
+These fakes are no longer managed by a Sinon sandbox. Restore the nise server or
+XHR fake explicitly in your test cleanup; `sinon.restore()` and
+`sandbox.restore()` do not restore them. nise fakes XMLHttpRequest, not `fetch`.
+
 ## Sinon 19
 
 ### All timers are stubbed by default
