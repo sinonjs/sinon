@@ -11,7 +11,7 @@ function getAllFiles(dir, fileList = []) {
         if (fs.statSync(filePath).isDirectory()) {
             getAllFiles(filePath, fileList);
         } else if (filePath.endsWith(".js")) {
-            fileList.push(path.normalize(filePath));
+            fileList.push(path.resolve(filePath));
         }
     }
     return fileList;
