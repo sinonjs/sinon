@@ -39,8 +39,9 @@ via [npm](https://github.com/npm/npm)
 
     $ npm install sinon
 
-or via Sinon's browser builds available for download on the [homepage](https://sinonjs.org/releases/).
-There are also [npm based CDNs](https://sinonjs.org/releases#npm-cdns) one can use.
+or via Sinon's browser build, shipped in the package's `pkg/` directory and served by
+npm based CDNs such as [jsDelivr](https://cdn.jsdelivr.net/npm/sinon/pkg/sinon.js) and
+[unpkg](https://unpkg.com/sinon/pkg/sinon.js).
 
 ## Usage
 
