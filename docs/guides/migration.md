@@ -19,6 +19,9 @@ directly. It is the library that previously supplied these APIs to Sinon:
 npm install --save-dev nise
 ```
 
+In Node, faking `XMLHttpRequest` requires an `XMLHttpRequest` global, which test
+environments like jsdom or happy-dom provide; browsers have one natively.
+
 For example, replace `sinon.fakeServer.create()` with `nise.fakeServer.create()`:
 
 ```js
