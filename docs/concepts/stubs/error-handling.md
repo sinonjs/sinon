@@ -29,15 +29,7 @@ const wrapper = { someMethod };
 sinon.stub(wrapper, "someMethod");
 ```
 
-Or use `sinon.replace()`:
-
-```javascript
-import * as myModule from "./my-module.js";
-import * as sinon from "sinon";
-
-const fake = sinon.fake.returns("mocked value");
-sinon.replace(myModule, "someMethod", fake);
-```
+`sinon.replace()` does not help here: it fails on a module namespace object for the same reason. See [How to stub ES module imports](/guides/how-to/stub-esm) for approaches that work.
 
 ## Removed Three-Argument Form
 
@@ -82,7 +74,7 @@ const obj = { existingMethod() {} };
 sinon.stub(obj, "nonExistentMethod");
 ```
 
-**Solution:** Ensure the property exists first, or use `sinon.replace()`:
+**Solution:** Ensure the property exists first, or use `sinon.define()`:
 
 ```javascript
 const obj = { existingMethod() {} };
@@ -91,19 +83,19 @@ const obj = { existingMethod() {} };
 obj.nonExistentMethod = function () {};
 sinon.stub(obj, "nonExistentMethod");
 
-// Or use replace which handles non-existent properties
-sinon.replace(obj, "nonExistentMethod", sinon.stub());
+// Or use define, which adds a property that does not exist yet
+sinon.define(obj, "nonExistentMethod", sinon.stub());
 ```
 
 ## Stubbing Non-Function Properties
 
-Stubs can only replace functions, not regular properties.
+Stubbing a property that is not a function does not throw, but it does not change the value either.
 
 ```javascript
 const obj = { name: "Alice" };
 
-// This will throw an error
 sinon.stub(obj, "name");
+obj.name; // Still 'Alice'
 ```
 
 **Solution:** Use `sinon.stub().get()` or `sinon.stub().value()` for properties:
