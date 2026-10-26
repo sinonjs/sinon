@@ -37,7 +37,7 @@ Use a stub when you want to:
    try {
      o.greet("Eleanor Rigby");
    } catch (error) {
-     console.log(error);
+     console.log(error.message);
      // => I lost my pie :(
    }
    ```
@@ -46,7 +46,7 @@ Use a stub when you want to:
 
    ```js
    import * as sinon from "sinon";
-   import * as fs from "fs";
+   import fs from "fs";
 
    // stub out the readFile method
    sinon.stub(fs, "readFile").callsFake(function () {
