@@ -62,6 +62,23 @@ in asynchronous tests that stopped resolving in Sinon 19.
 _If you want the old behavior, specify the timers you want to fake in the `toFake`
 option and leave out the name of the timers giving you trouble_.
 
+For example, if an asynchronous test only needs to freeze the current date, fake
+`Date` explicitly. Faking event-loop APIs such as `process.nextTick`,
+`queueMicrotask`, or `setImmediate` can otherwise prevent asynchronous operations
+from completing until the clock is advanced, causing the test to time out.
+
+```js
+const now = new Date("2024-01-01T00:00:00Z");
+const clock = sinon.useFakeTimers({ now, toFake: ["Date"] });
+
+try {
+  console.log(new Date()); // 2024-01-01T00:00:00.000Z
+  // Timers and event-loop APIs still use their real implementations.
+} finally {
+  clock.restore();
+}
+```
+
 ### New implementation of the fake Date class
 
 The new version of fake-timers also no longer creating dates using the original Date
