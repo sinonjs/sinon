@@ -6,7 +6,7 @@ title: How to stub a dependency of a module
 
 Sinon is a stubbing library, not a module interception library. Stubbing dependencies is highly dependent on your environment and the implementation. For Node environments, we usually recommend solutions targeting [link seams](./link-seams-commonjs) or explicit dependency injection. Though in some more basic cases, you can get away with only using Sinon by modifying the module exports of the dependency.
 
-To stub a dependency (imported module) of a module under test you have to import it explicitly in your test and stub the desired method. For the stubbing to work, the stubbed method cannot be [destructured](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), neither in the module under test nor in the test.
+The CommonJS examples below use `require()` to obtain the dependency's exported object. The test replaces a method on that object, and the module under test calls the method through the same object. Copying the method into a local variable before it is stubbed, including through [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), keeps a reference to the original function instead. See [why the property lookup matters](#why-the-property-lookup-matters) and [the distinction for ES modules](#es-modules-and-transpiled-code) below.
 
 ## An example
 
@@ -55,6 +55,46 @@ describe("moduleUnderTest", function () {
   });
 });
 ```
+
+## Why the property lookup matters
+
+In the example above, `getTheSecret()` looks up `dependencyModule.getSecretNumber` each time it runs. After `sinon.stub(dependencyModule, "getSecretNumber")`, that property holds the stub.
+
+Changing `moduleUnderTest.js` to the following would keep the original function when the module is loaded, before the test installs its stub:
+
+```javascript
+const { getSecretNumber } = require("./dependencyModule");
+
+function getTheSecret() {
+  return `The secret was: ${getSecretNumber()}`;
+}
+
+module.exports = { getTheSecret };
+```
+
+Replacing `dependencyModule.getSecretNumber` later does not change this local `getSecretNumber` variable. Assigning `const getSecretNumber = dependencyModule.getSecretNumber` before stubbing has the same effect; the issue is the copied function reference, not just the destructuring syntax.
+
+The test also needs the dependency object so it can replace the property used by the module under test. `sinon.stub(dependencyModule, "getSecretNumber")` does that. Creating a separate stub does not replace an already captured function reference.
+
+Destructuring an object is different from copying one of its methods. For example, if another dependency exports `{ service }`, both the test and the module under test can keep the same `service` object:
+
+```javascript
+const { service } = require("./serviceModule");
+
+function getTheSecret() {
+  return `The secret was: ${service.getSecretNumber()}`;
+}
+```
+
+The test can use `sinon.stub(service, "getSecretNumber")` on that same object. The call still looks up the property that the stub replaces. Likewise, destructuring `getTheSecret` in the original test is fine: that is the function being tested, and it still looks up the dependency's method when called.
+
+## ES modules and transpiled code
+
+An ES module named import such as `import { getSecretNumber } from "./dependencyModule.js"` is not a destructuring assignment. Its binding follows different rules. Native ES module namespace objects cannot have their exports replaced with `sinon.stub`; named imports are not a workaround for that restriction.
+
+If an ES module exports a mutable object, importing that object and stubbing one of its methods is a different operation: it changes a property on the exported object, not the module's export binding. As in the CommonJS example, the module under test must call the method through the same object for the stub to take effect.
+
+Transpilers can turn imports into different property accesses or descriptors. Inspect the emitted JavaScript rather than inferring whether it can be stubbed from the import syntax alone. The [TypeScript and SWC case study](./typescript-swc) walks through these differences and possible approaches when a dependency cannot be replaced directly.
 
 ## A complex example with asynchronous code
 
