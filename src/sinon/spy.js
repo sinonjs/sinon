@@ -36,7 +36,12 @@ function matches(fake, args, strict) {
 const spyApi = {
     withArgs: function () {
         const args = slice(arguments);
-        const matching = pop(this.matchingFakes(args, true));
+        // Reusing a configuration requires equality in both directions.
+        const matching = pop(
+            filter.call(this.matchingFakes(args, true), function (fake) {
+                return deepEqual(fake.matchingArguments, args);
+            }),
+        );
         if (matching) {
             return matching;
         }
