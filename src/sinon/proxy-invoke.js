@@ -3,7 +3,7 @@ import commons from "@sinonjs/commons";
 const { prototypes } = commons;
 import * as proxyCallUtil from "./proxy-call-util.js";
 
-const { push, forEach, concat } = prototypes.array;
+const { push, forEach, map, concat } = prototypes.array;
 const ErrorConstructor = Error.prototype.constructor;
 const { bind } = Function.prototype;
 
@@ -28,6 +28,7 @@ const defaultContext = { callId: 0 };
  */
 export default function invoke(func, thisValue, args) {
     const matchings = this.matchingFakes(args);
+    const callIndex = this.callCount;
     // Use the proxy's context if available, otherwise fall back to the default
     const ctx = this.sinonContext || defaultContext;
     const currentCallId = ctx.callId;
@@ -38,11 +39,12 @@ export default function invoke(func, thisValue, args) {
     push(this.thisValues, thisValue);
     push(this.args, args);
     push(this.callIds, currentCallId);
-    forEach(matchings, function (matching) {
+    const matchingCallIndices = map(matchings, function (matching) {
         proxyCallUtil.incrementCallCount(matching);
         push(matching.thisValues, thisValue);
         push(matching.args, args);
         push(matching.callIds, currentCallId);
+        return matching.callCount - 1;
     });
 
     // Make call properties available from within the spied function:
@@ -52,7 +54,7 @@ export default function invoke(func, thisValue, args) {
     try {
         this.invoking = true;
 
-        const thisCall = this.getCall(this.callCount - 1);
+        const thisCall = this.getCall(callIndex);
 
         if (thisCall.calledWithNew()) {
             // Call through with `new`
@@ -76,11 +78,12 @@ export default function invoke(func, thisValue, args) {
         delete this.invoking;
     }
 
-    push(this.exceptions, exception);
-    push(this.returnValues, returnValue);
-    forEach(matchings, function (matching) {
-        push(matching.exceptions, exception);
-        push(matching.returnValues, returnValue);
+    // Recursive calls finish first, but their results must stay in call order.
+    this.exceptions[callIndex] = exception;
+    this.returnValues[callIndex] = returnValue;
+    forEach(matchings, function (matching, i) {
+        matching.exceptions[matchingCallIndices[i]] = exception;
+        matching.returnValues[matchingCallIndices[i]] = returnValue;
     });
 
     const err = new ErrorConstructor();
@@ -92,9 +95,9 @@ export default function invoke(func, thisValue, args) {
     } catch (e) {
         /* empty */
     }
-    push(this.errorsWithCallStack, err);
-    forEach(matchings, function (matching) {
-        push(matching.errorsWithCallStack, err);
+    this.errorsWithCallStack[callIndex] = err;
+    forEach(matchings, function (matching, i) {
+        matching.errorsWithCallStack[matchingCallIndices[i]] = err;
     });
 
     // Make return value and exception available in the calls:
