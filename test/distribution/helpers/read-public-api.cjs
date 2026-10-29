@@ -16,6 +16,7 @@ module.exports = {
         stub: describeFunction(sinon.stub),
         fake: describeFunction(sinon.fake),
         restore: describeFunction(sinon.restore),
+        "[Symbol.dispose]": describeFunction(sinon[Symbol.dispose]),
     },
     hasTimers: Object.prototype.hasOwnProperty.call(sinon, "timers"),
     hasPromise: Object.prototype.hasOwnProperty.call(sinon, "promise"),
