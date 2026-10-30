@@ -578,10 +578,8 @@ export default function Sandbox(opts = {}) {
 
     function addFakeBehaviorToCollection(method) {
         sandbox.fake[method] = function () {
-            // Add sandboxContext as the second argument for context-aware fakes
-            const args = arrayProto.slice(arguments);
-            args.push(sandboxContext);
-            const result = sinonFake[method].apply(sinonFake, args);
+            const result = sinonFake[method].apply(sinonFake, arguments);
+            extend.nonEnum(result, { sinonContext: sandboxContext });
             addToCollection(result);
             return result;
         };
