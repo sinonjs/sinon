@@ -214,6 +214,14 @@ function createAssertObject(opts) {
 
             verifyIsValidAssertion(name, args);
 
+            if (
+                (name === "calledOnce" || name === "calledOnceWithExactly") &&
+                typeof fake !== "function"
+            ) {
+                failAssertion(this, `${name} requires a spy, not a spy call`);
+                return;
+            }
+
             if (typeof meth === "function") {
                 failed = !meth(fake);
             } else {
