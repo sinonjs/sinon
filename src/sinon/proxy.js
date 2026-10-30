@@ -62,6 +62,7 @@ const proxyApi = {
             this.exceptions[i],
             this.callIds[i],
             this.errorsWithCallStack[i],
+            this.didThrowValues[i],
         );
     },
 
@@ -163,6 +164,7 @@ const proxyApi = {
         this.returnValues = [];
         this.thisValues = [];
         this.exceptions = [];
+        this.didThrowValues = [];
         this.callIds = [];
         this.errorsWithCallStack = [];
 
@@ -372,6 +374,7 @@ function wrapFunction(func, originalFunc) {
         returnValues: [],
         thisValues: [],
         exceptions: [],
+        didThrowValues: [],
         callIds: [],
         errorsWithCallStack: [],
     });
