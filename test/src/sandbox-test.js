@@ -473,6 +473,53 @@ describe("Sandbox", function () {
         });
     });
 
+    describe("invalid stub arguments", function () {
+        for (const { name: apiName, create } of [
+            { name: "sandbox", create: createSandbox },
+            { name: "default Sinon API", create: createApi },
+        ]) {
+            for (const { name: argumentName, args } of [
+                { name: "a third function argument", args: [() => 7] },
+                {
+                    name: "an explicit undefined third argument",
+                    args: [undefined],
+                },
+                { name: "four arguments", args: [() => 7, undefined] },
+            ]) {
+                it(`${apiName} rejects ${argumentName} without replacing the method`, function () {
+                    const sandbox = create();
+                    const original = () => 42;
+                    const object = { method: original };
+                    const existingStub = sandbox.stub();
+                    const fakes = sandbox.getFakes().slice();
+
+                    assert.exception(
+                        function () {
+                            sandbox.stub(object, "method", ...args);
+                        },
+                        {
+                            name: "TypeError",
+                            message:
+                                "stub(obj, 'meth', fn) has been removed, see documentation",
+                        },
+                    );
+                    assert.same(object.method, original);
+                    assert.equals(object.method(), 42);
+                    assert.equals(sandbox.getFakes(), fakes);
+                    assert.same(sandbox.getFakes()[0], existingStub);
+                    sandbox.restore();
+                    assert.same(object.method, original);
+
+                    sandbox.stub(object, "method").returns(7);
+                    assert.equals(object.method(), 7);
+                    sandbox.restore();
+                    assert.same(object.method, original);
+                    assert.equals(sandbox.getFakes().length, 0);
+                });
+            }
+        }
+    });
+
     describe(".stub", function () {
         beforeEach(function () {
             this.sandbox = createSandbox();
