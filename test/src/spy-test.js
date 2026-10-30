@@ -1076,6 +1076,52 @@ describe("spy", function () {
 
             assert.equals(this.spy.thisValues, [this].concat(objects));
         });
+
+        it("is the created instance when spying on a constructor", function () {
+            function SomeClass() {
+                this.counter = 0;
+                this.inc = function () {
+                    this.counter++;
+                };
+                this.getCounter = function () {
+                    return this.counter;
+                };
+            }
+            const object = { SomeClass: SomeClass };
+            createSpy(object, "SomeClass");
+
+            const instance = new object.SomeClass();
+            instance.inc();
+
+            assert.same(object.SomeClass.thisValues[0], instance);
+            assert.equals(object.SomeClass.thisValues[0].counter, 1);
+            assert.equals(object.SomeClass.thisValues[0].getCounter(), 1);
+            assert(object.SomeClass.calledOn(instance));
+
+            instance.inc();
+            assert.equals(object.SomeClass.thisValues[0].counter, 2);
+        });
+
+        it("is the created instance when spying on a class constructor", function () {
+            class SomeClass {
+                constructor() {
+                    this.counter = 0;
+                }
+                inc() {
+                    this.counter++;
+                }
+            }
+            const object = { SomeClass: SomeClass };
+            createSpy(object, "SomeClass");
+
+            const instance = new object.SomeClass();
+            instance.inc();
+
+            assert.same(object.SomeClass.thisValues[0], instance);
+            assert.equals(object.SomeClass.thisValues[0].counter, 1);
+            assert(object.SomeClass.calledOn(instance));
+            assert(object.SomeClass.calledWithNew());
+        });
     });
 
     // eslint-disable-next-line mocha/no-setup-in-describe
