@@ -471,6 +471,43 @@ describe("Sandbox", function () {
             refute.exception(stubInstance.getValue);
             assert.isUndefined(stubInstance.getValue());
         });
+
+        it("shares callId context with sandbox.spy for call order assertions", function () {
+            const sandbox = this.sandbox;
+            class Service {
+                doSomething() {
+                    return;
+                }
+            }
+
+            const spy = sandbox.spy();
+            const service = sandbox.createStubInstance(Service);
+
+            spy();
+            service.doSomething();
+
+            assert.isTrue(service.doSomething.calledAfter(spy));
+            assert.isTrue(spy.calledBefore(service.doSomething));
+        });
+
+        it("isolates callId context between different sandboxes", function () {
+            const sandbox1 = createSandbox();
+            const sandbox2 = createSandbox();
+            class Service {
+                doSomething() {
+                    return;
+                }
+            }
+
+            const service1 = sandbox1.createStubInstance(Service);
+            const service2 = sandbox2.createStubInstance(Service);
+
+            service1.doSomething();
+            service2.doSomething();
+
+            assert.equals(service1.doSomething.callIds, [0]);
+            assert.equals(service2.doSomething.callIds, [0]);
+        });
     });
 
     describe(".stub", function () {

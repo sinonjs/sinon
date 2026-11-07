@@ -9,14 +9,7 @@ function isStub(value) {
     return sinonType.get(value) === "stub";
 }
 
-/**
- * Creates a stub instance of a constructor.
- *
- * @param {new (...args: unknown[]) => object} constructor The constructor function
- * @param {object} [overrides] Optional overrides for the stubbed methods
- * @returns {object} The stubbed instance
- */
-export default function createStubInstance(constructor, overrides) {
+function createStubInstanceImpl(constructor, overrides, context) {
     if (typeof constructor !== "function") {
         throw new TypeError("The constructor should be a function.");
     }
@@ -24,7 +17,7 @@ export default function createStubInstance(constructor, overrides) {
     const stubInstance = Object.create(constructor.prototype);
     sinonType.set(stubInstance, "stub-instance");
 
-    const stubbedObject = stub(stubInstance);
+    const stubbedObject = stub.withContext(context, stubInstance);
 
     forEach(Object.keys(overrides || {}), function (propertyName) {
         if (propertyName in stubbedObject) {
@@ -42,3 +35,26 @@ export default function createStubInstance(constructor, overrides) {
     });
     return stubbedObject;
 }
+
+/**
+ * Creates a stub instance of a constructor.
+ *
+ * @param {new (...args: unknown[]) => object} constructor The constructor function
+ * @param {object} [overrides] Optional overrides for the stubbed methods
+ * @returns {object} The stubbed instance
+ */
+export default function createStubInstance(constructor, overrides) {
+    return createStubInstanceImpl(constructor, overrides, undefined);
+}
+
+/**
+ * Creates a stub instance of a constructor with a specific context.
+ *
+ * @param {object} context The sinon context for callId tracking
+ * @param {new (...args: unknown[]) => object} constructor The constructor function
+ * @param {object} [overrides] Optional overrides for the stubbed methods
+ * @returns {object} The stubbed instance
+ */
+createStubInstance.withContext = function (context, constructor, overrides) {
+    return createStubInstanceImpl(constructor, overrides, context);
+};
