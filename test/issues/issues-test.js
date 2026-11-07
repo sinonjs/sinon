@@ -1227,4 +1227,21 @@ describe("issues", function () {
             }
         }
     });
+
+    it("#2760 - createStubInstance receives callId context, preserving calledAfter/calledBefore order with spy", function () {
+        class Foo {
+            bar() {
+                return;
+            }
+        }
+
+        const spy1 = sinon.spy();
+        spy1();
+
+        const stubInst = sinon.createStubInstance(Foo);
+        stubInst.bar();
+
+        assert.isTrue(stubInst.bar.calledAfter(spy1));
+        assert.isTrue(spy1.calledBefore(stubInst.bar));
+    });
 });
