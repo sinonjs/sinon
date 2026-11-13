@@ -191,9 +191,9 @@ function spyImpl(object, property, types, context) {
     }
 
     if (!object && !property) {
-        return createSpy(function () {
-            return;
-        }, context);
+        // createSpy supplies an anonymous no-op function, which keeps the spy
+        // constructible for calledWithNew() and its display name as "spy"
+        return createSpy(undefined, context);
     }
 
     if (!types) {

@@ -1930,7 +1930,7 @@ describe("spy", function () {
         });
 
         it("contains the created object for spied constructors", function () {
-            const Spy = createSpy(function () {
+            const Spy = createSpy(function Constructor() {
                 return;
             });
 
@@ -1940,7 +1940,7 @@ describe("spy", function () {
         });
 
         it("contains the return value for spied constructors that explicitly return objects", function () {
-            const Spy = createSpy(function () {
+            const Spy = createSpy(function Constructor() {
                 return { isExplicitlyCreatedValue: true };
             });
 
@@ -1951,7 +1951,7 @@ describe("spy", function () {
         });
 
         it("contains the created object for spied constructors that explicitly return primitive values", function () {
-            const Spy = createSpy(function () {
+            const Spy = createSpy(function Constructor() {
                 return 10;
             });
 
