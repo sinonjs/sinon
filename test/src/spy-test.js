@@ -677,45 +677,35 @@ describe("spy", function () {
         });
 
         it("retains function length 0", function () {
-            const spy = createSpy(() => {
-                return;
-            });
+            const spy = createSpy(() => undefined);
 
             assert.equals(spy.length, 0);
         });
 
         it("retains function length 1", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy((a) => {
-                return;
-            });
+            const spy = createSpy((a) => undefined);
 
             assert.equals(spy.length, 1);
         });
 
         it("retains function length 2", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy((a, b) => {
-                return;
-            });
+            const spy = createSpy((a, b) => undefined);
 
             assert.equals(spy.length, 2);
         });
 
         it("retains function length 3", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy((a, b, c) => {
-                return;
-            });
+            const spy = createSpy((a, b, c) => undefined);
 
             assert.equals(spy.length, 3);
         });
 
         it("retains function length 4", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy((a, b, c, d) => {
-                return;
-            });
+            const spy = createSpy((a, b, c, d) => undefined);
 
             assert.equals(spy.length, 4);
         });

@@ -82,11 +82,11 @@ describe("createStubInstance", function () {
     it("throws exception for non function params", function () {
         const types = [{}, 3, "hi!"];
 
-        for (const type_ of types) {
+        for (const nonFunction of types) {
             // yes, it's silly to create functions in a loop, it's also a test
 
             assert.exception(() => {
-                createStubInstance(type_);
+                createStubInstance(nonFunction);
             });
         }
     });

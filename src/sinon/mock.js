@@ -65,8 +65,8 @@ extend(mock, {
             this.expectations[method] = [];
             const mockObject = this;
 
-            wrapMethod(this.object, method, function () {
-                return mockObject.invokeMethod(method, this, arguments);
+            wrapMethod(this.object, method, function (...args) {
+                return mockObject.invokeMethod(method, this, args);
             });
 
             push(this.proxies, method);

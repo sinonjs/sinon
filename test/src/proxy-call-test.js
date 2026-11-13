@@ -12,9 +12,7 @@ function spyCallSetUp() {
         return;
     };
     this.call = proxyCall(
-        () => {
-            return;
-        },
+        () => undefined,
         this.thisValue,
         this.args,
         this.returnValue,
@@ -128,29 +126,14 @@ describe("sinonSpy.call", function () {
         });
 
         it("stores given call id", function () {
-            const call = proxyCall(
-                () => {
-                    return;
-                },
-                {},
-                [],
-                null,
-                null,
-                42,
-            );
+            const call = proxyCall(() => undefined, {}, [], null, null, 42);
 
             assert.same(call.callId, 42);
         });
 
         it("throws if callId is undefined", function () {
             assert.exception(() => {
-                proxyCall.create(
-                    () => {
-                        return;
-                    },
-                    {},
-                    [],
-                );
+                proxyCall.create(() => undefined, {}, []);
             });
         });
 
@@ -259,31 +242,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns true for no arguments", function () {
-            const call = proxyCall(
-                () => {
-                    return;
-                },
-                {},
-                [],
-                null,
-                null,
-                0,
-            );
+            const call = proxyCall(() => undefined, {}, [], null, null, 0);
 
             assert(call.calledWithExactly());
         });
 
         it("returns false when called with no args but matching one", function () {
-            const call = proxyCall(
-                () => {
-                    return;
-                },
-                {},
-                [],
-                null,
-                null,
-                0,
-            );
+            const call = proxyCall(() => undefined, {}, [], null, null, 0);
 
             assert.isFalse(call.calledWithExactly({}));
         });
@@ -748,16 +713,7 @@ describe("sinonSpy.call", function () {
 
     describe("call.invokeCallback", function () {
         it("is alias for yield", function () {
-            const call = proxyCall(
-                () => {
-                    return;
-                },
-                {},
-                [],
-                null,
-                null,
-                0,
-            );
+            const call = proxyCall(() => undefined, {}, [], null, null, 0);
 
             assert.same(call.yield, call.invokeCallback);
         });

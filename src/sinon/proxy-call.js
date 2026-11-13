@@ -4,7 +4,7 @@ import { inspect } from "util";
 
 const { prototypes, functionName, valueToString } = commons;
 const { createMatcher: match, deepEqual } = samsam;
-const { concat, filter, join, map, reduce, slice } = prototypes.array;
+const { filter, join, map, reduce, slice } = prototypes.array;
 
 /**
  * @callback SinonFunction
@@ -33,9 +33,8 @@ const callProto = {
         return this.thisValue === thisValue;
     },
 
-    calledWith: function calledWith() {
+    calledWith: function calledWith(...calledWithArgs) {
         const self = this;
-        const calledWithArgs = slice(arguments);
 
         if (calledWithArgs.length > self.args.length) {
             return false;
@@ -48,9 +47,8 @@ const callProto = {
         );
     },
 
-    calledWithMatch: function calledWithMatch() {
+    calledWithMatch: function calledWithMatch(...calledWithMatchArgs) {
         const self = this;
-        const calledWithMatchArgs = slice(arguments);
 
         if (calledWithMatchArgs.length > self.args.length) {
             return false;
@@ -67,19 +65,16 @@ const callProto = {
         );
     },
 
-    calledWithExactly: function calledWithExactly() {
-        return (
-            arguments.length === this.args.length &&
-            this.calledWith.apply(this, arguments)
-        );
+    calledWithExactly: function calledWithExactly(...args) {
+        return args.length === this.args.length && this.calledWith(...args);
     },
 
-    notCalledWith: function notCalledWith() {
-        return !this.calledWith.apply(this, arguments);
+    notCalledWith: function notCalledWith(...args) {
+        return !this.calledWith(...args);
     },
 
-    notCalledWithMatch: function notCalledWithMatch() {
-        return !this.calledWithMatch.apply(this, arguments);
+    notCalledWithMatch: function notCalledWithMatch(...args) {
+        return !this.calledWithMatch(...args);
     },
 
     returned: function returned(value) {
@@ -124,16 +119,12 @@ const callProto = {
         return this.args[pos].apply(thisValue);
     },
 
-    callArgWith(pos) {
-        return this.callArgOnWith.apply(
-            this,
-            concat([pos, null], slice(arguments, 1)),
-        );
+    callArgWith(pos, ...args) {
+        return this.callArgOnWith(pos, null, ...args);
     },
 
-    callArgOnWith(pos, thisValue) {
+    callArgOnWith(pos, thisValue, ...args) {
         this.ensureArgIsAFunction(pos);
-        const args = slice(arguments, 2);
         return this.args[pos].apply(thisValue, args);
     },
 
@@ -147,11 +138,11 @@ const callProto = {
         throw this.args[pos];
     },
 
-    yield() {
-        return this.yieldOn.apply(this, concat([null], slice(arguments, 0)));
+    yield(...yieldArgs) {
+        return this.yieldOn(null, ...yieldArgs);
     },
 
-    yieldOn(thisValue) {
+    yieldOn(thisValue, ...yieldArgs) {
         const args = slice(this.args);
         const yieldFn = filter(args, (arg) => typeof arg === "function")[0];
 
@@ -163,17 +154,14 @@ const callProto = {
             );
         }
 
-        return yieldFn.apply(thisValue, slice(arguments, 1));
+        return yieldFn.apply(thisValue, yieldArgs);
     },
 
-    yieldTo(prop) {
-        return this.yieldToOn.apply(
-            this,
-            concat([prop, null], slice(arguments, 1)),
-        );
+    yieldTo(prop, ...yieldArgs) {
+        return this.yieldToOn(prop, null, ...yieldArgs);
     },
 
-    yieldToOn(prop, thisValue) {
+    yieldToOn(prop, thisValue, ...yieldArgs) {
         const args = slice(this.args);
         const yieldArg = filter(
             args,
@@ -191,7 +179,7 @@ const callProto = {
             );
         }
 
-        return yieldFn.apply(thisValue, slice(arguments, 2));
+        return yieldFn.apply(thisValue, yieldArgs);
     },
 
     toString() {

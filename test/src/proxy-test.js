@@ -74,9 +74,7 @@ describe("proxy", function () {
             });
 
             it("anon", function () {
-                const anon = sinonSpy(() => {
-                    return;
-                });
+                const anon = sinonSpy(() => undefined);
                 assert.equals(anon.printf("%n"), "spy");
 
                 const noFn = sinonSpy();

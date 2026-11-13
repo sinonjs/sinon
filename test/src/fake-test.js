@@ -55,9 +55,7 @@ describe("fake", function () {
 
     describe("when passed a Function", function () {
         // eslint-disable-next-line mocha/no-setup-in-describe
-        verifyProxy(fake, () => {
-            return;
-        });
+        verifyProxy(fake, () => undefined);
 
         it("should keep the `this` context of the wrapped function", function () {
             function method() {
@@ -327,9 +325,7 @@ describe("fake", function () {
             const callback = sinon.spy();
             const myFake = fake.yields();
 
-            myFake(() => {
-                return;
-            }, callback);
+            myFake(() => undefined, callback);
 
             sinon.assert.calledOnce(callback);
         });
@@ -338,9 +334,7 @@ describe("fake", function () {
             const myFake = fake.yields();
 
             assert.exception(() => {
-                myFake(() => {
-                    return;
-                }, "not a function");
+                myFake(() => undefined, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });
@@ -369,9 +363,7 @@ describe("fake", function () {
             const callback = sinon.spy();
             const myFake = fake.yieldsAsync();
 
-            myFake(() => {
-                return;
-            }, callback);
+            myFake(() => undefined, callback);
 
             sinon.assert.notCalled(callback);
 
@@ -386,9 +378,7 @@ describe("fake", function () {
             const myFake = fake.yieldsAsync();
 
             assert.exception(() => {
-                myFake(() => {
-                    return;
-                }, "not a function");
+                myFake(() => undefined, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });

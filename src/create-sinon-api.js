@@ -30,8 +30,8 @@ export default function createApi() {
         restoreObject,
         expectation,
         timers: fakeTimers.timers,
-        createStubInstance: function createStubInstance() {
-            const stubbed = createStubInstanceImpl.apply(null, arguments);
+        createStubInstance: function createStubInstance(...args) {
+            const stubbed = createStubInstanceImpl(...args);
 
             for (const method of collectOwnMethods(stubbed)) {
                 sandbox.getFakes().push(method);

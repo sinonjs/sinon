@@ -1,13 +1,8 @@
-import commons from "@sinonjs/commons";
-
-const { prototypes } = commons;
 import isPropertyConfigurable from "./util/core/is-property-configurable.js";
 import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
 import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 import extend from "./util/core/extend.js";
 import spy from "./spy.js";
-
-const { slice } = prototypes.array;
 
 const useLeftMostCallback = -1;
 const useRightMostCallback = -2;
@@ -66,35 +61,35 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    callsArgWith: function callsArgWith(fake, index) {
+    callsArgWith: function callsArgWith(fake, index, ...args) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
 
         fake.callArgAt = index;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
         fake.callsThrough = false;
     },
 
-    callsArgOnWith: function callsArgWith(fake, index, context) {
+    callsArgOnWith: function callsArgWith(fake, index, context, ...args) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
 
         fake.callArgAt = index;
-        fake.callbackArguments = slice(arguments, 3);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
         fake.callsThrough = false;
     },
 
-    yields(fake) {
+    yields(fake, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 1);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -102,9 +97,9 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    yieldsRight(fake) {
+    yieldsRight(fake, ...args) {
         fake.callArgAt = useRightMostCallback;
-        fake.callbackArguments = slice(arguments, 1);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -112,9 +107,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsOn(fake, context) {
+    yieldsOn(fake, context, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -122,9 +117,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsTo(fake, prop) {
+    yieldsTo(fake, prop, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = prop;
         fake.callbackAsync = false;
@@ -132,9 +127,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsToOn(fake, prop, context) {
+    yieldsToOn(fake, prop, context, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 3);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = prop;
         fake.callbackAsync = false;

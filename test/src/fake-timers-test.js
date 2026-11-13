@@ -147,9 +147,7 @@ describe("fakeTimers.clock", function () {
 
         if (typeof setImmediate === "function") {
             it("returns a timer whose primitive representation is a number", function () {
-                const result = this.clock.setImmediate(() => {
-                    return;
-                });
+                const result = this.clock.setImmediate(() => undefined);
 
                 assert.isNumber(Number(result));
             });

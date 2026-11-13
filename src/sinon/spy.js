@@ -34,8 +34,7 @@ function matches(fake, args, strict) {
 
 // Public API
 const spyApi = {
-    withArgs() {
-        const args = slice(arguments);
+    withArgs(...args) {
         const matching = pop(this.matchingFakes(args, true));
         if (matching) {
             return matching;
@@ -47,8 +46,8 @@ const spyApi = {
         fakeInstance.parent = this;
         push(this.fakes, fakeInstance);
 
-        fakeInstance.withArgs = function () {
-            return original.withArgs.apply(original, arguments);
+        fakeInstance.withArgs = function (...withArgs) {
+            return original.withArgs(...withArgs);
         };
 
         forEach(original.args, (arg, i) => {

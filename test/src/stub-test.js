@@ -3492,8 +3492,8 @@ describe("stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
             let callArgs = [];
 
-            const originalFunc = function increaseCallCount() {
-                callArgs = arguments;
+            const originalFunc = function increaseCallCount(...args) {
+                callArgs = args;
             };
 
             const myObj = {
@@ -3560,8 +3560,8 @@ describe("stub", function () {
                 // We need a function here because we can't wrap properties that are already stubs
                 let callArgs = [];
 
-                function OriginalClass() {
-                    callArgs = arguments;
+                function OriginalClass(...args) {
+                    callArgs = args;
                     this.foo = "baz";
                 }
 

@@ -134,9 +134,7 @@ describe("Sandbox", function () {
 
             assert.exception(
                 () => {
-                    sandbox.replaceSetter(object, "prop", () => {
-                        return;
-                    });
+                    sandbox.replaceSetter(object, "prop", () => undefined);
                 },
                 {
                     message: /is not configurable/,
@@ -376,11 +374,11 @@ describe("Sandbox", function () {
         it("throws exception for non function params", function () {
             const types = [{}, 3, "hi!"];
 
-            for (const type_ of types) {
+            for (const nonFunction of types) {
                 // yes, it's silly to create functions in a loop, it's also a test
 
                 assert.exception(function () {
-                    this.sandbox.createStubInstance(type_);
+                    this.sandbox.createStubInstance(nonFunction);
                 });
             }
         });

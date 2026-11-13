@@ -80,7 +80,7 @@ const mockExpectation = {
     invoke: function invoke(func, thisValue, args) {
         this.verifyCallAllowed(thisValue, args);
 
-        return proxyInvoke.apply(this, arguments);
+        return proxyInvoke.call(this, func, thisValue, args);
     },
 
     atLeast: function atLeast(num) {
@@ -256,13 +256,13 @@ const mockExpectation = {
         });
     },
 
-    withArgs: function withArgs() {
-        this.expectedArguments = slice(arguments);
+    withArgs: function withArgs(...args) {
+        this.expectedArguments = args;
         return this;
     },
 
-    withExactArgs: function withExactArgs() {
-        this.withArgs.apply(this, arguments);
+    withExactArgs: function withExactArgs(...args) {
+        this.withArgs(...args);
         this.expectsExactArgCount = true;
         return this;
     },

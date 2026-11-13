@@ -67,15 +67,15 @@ function createAssertObject(opts) {
             return;
         },
 
-        callOrder: function assertCallOrder() {
-            verifyIsStub.apply(null, arguments);
+        callOrder: function assertCallOrder(...spies) {
+            verifyIsStub(...spies);
             let expected = "";
             let actual = "";
 
-            if (!calledInOrder(arguments)) {
+            if (!calledInOrder(spies)) {
                 try {
-                    expected = join(arguments, ", ");
-                    const calls = arraySlice(arguments);
+                    expected = join(spies, ", ");
+                    const calls = arraySlice(spies);
                     let i = calls.length;
                     while (i) {
                         if (!calls[--i].called) {
@@ -155,9 +155,7 @@ function createAssertObject(opts) {
         },
     };
 
-    function verifyIsStub() {
-        const args = arraySlice(arguments);
-
+    function verifyIsStub(...args) {
         forEach(args, (method) => {
             if (!method) {
                 assert.fail("fake is not a spy");
@@ -211,10 +209,9 @@ function createAssertObject(opts) {
             meth = name;
         }
 
-        assert[name] = function (fake) {
+        assert[name] = function (fake, ...args) {
             verifyIsStub(fake);
 
-            const args = arraySlice(arguments, 1);
             let failed = false;
 
             verifyIsValidAssertion(name, args);
@@ -224,7 +221,7 @@ function createAssertObject(opts) {
             } else {
                 failed =
                     typeof fake[meth] === "function"
-                        ? !fake[meth].apply(fake, args)
+                        ? !fake[meth](...args)
                         : !fake[meth];
             }
 

@@ -1,9 +1,5 @@
-import commons from "@sinonjs/commons";
 import createProxy from "./proxy.js";
 import nextTick from "./util/core/next-tick.js";
-
-const { prototypes } = commons;
-const { slice } = prototypes.array;
 
 /**
  * @callback SinonFunction
@@ -123,18 +119,17 @@ fake.rejects = function rejects(value, context) {
  * Returns a `fake` that calls the callback with the defined arguments.
  *
  * @memberof fake
+ * @param {...unknown} values The arguments to call the callback with
  * @returns {SinonFunction}
  */
-fake.yields = function yields() {
-    const values = slice(arguments);
-
-    function f() {
-        const callback = arguments[arguments.length - 1];
+fake.yields = function yields(...values) {
+    function f(...args) {
+        const callback = args.at(-1);
         if (typeof callback !== "function") {
             throw new TypeError("Expected last argument to be a function");
         }
 
-        callback.apply(null, values);
+        callback(...values);
     }
 
     return wrapFunc(f);
@@ -145,18 +140,17 @@ fake.yields = function yields() {
  * defined arguments.
  *
  * @memberof fake
+ * @param {...unknown} values The arguments to call the callback with
  * @returns {SinonFunction}
  */
-fake.yieldsAsync = function yieldsAsync() {
-    const values = slice(arguments);
-
-    function f() {
-        const callback = arguments[arguments.length - 1];
+fake.yieldsAsync = function yieldsAsync(...values) {
+    function f(...args) {
+        const callback = args.at(-1);
         if (typeof callback !== "function") {
             throw new TypeError("Expected last argument to be a function");
         }
         nextTick(() => {
-            callback.apply(null, values);
+            callback(...values);
         });
     }
 
@@ -173,12 +167,12 @@ let uuid = 0;
  * @returns {SinonFunction}
  */
 function wrapFunc(f, context) {
-    const fakeInstance = function () {
+    const fakeInstance = function (...args) {
         let firstArg, lastArg;
 
-        if (arguments.length > 0) {
-            firstArg = arguments[0];
-            lastArg = arguments[arguments.length - 1];
+        if (args.length > 0) {
+            firstArg = args[0];
+            lastArg = args.at(-1);
         }
 
         const callback =
@@ -189,7 +183,7 @@ function wrapFunc(f, context) {
         proxy.lastArg = lastArg;
         proxy.callback = callback;
 
-        return f && f.apply(this, arguments);
+        return f && f.apply(this, args);
     };
     const proxy = createProxy(fakeInstance, f || fakeInstance, context);
 

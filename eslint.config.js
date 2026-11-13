@@ -112,6 +112,15 @@ export default [
         },
     },
     {
+        // The arity-preserving proxies need a "use strict" directive, because
+        // the browser bundle is not strict, and a function with rest
+        // parameters cannot have one
+        files: ["src/sinon/proxy.js"],
+        rules: {
+            "prefer-rest-params": "off",
+        },
+    },
+    {
         files: [
             "src/sinon/util/core/walk-object.js",
             "src/sinon/util/core/walk.js",

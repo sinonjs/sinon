@@ -119,9 +119,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.called(() => {
-                        return;
-                    });
+                    sinonAssert.called(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -184,9 +182,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.notCalled(() => {
-                        return;
-                    });
+                    sinonAssert.notCalled(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -244,9 +240,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.calledOnce(() => {
-                        return;
-                    });
+                    sinonAssert.calledOnce(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -516,9 +510,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "calledOn");
 
                 assert.exception(() => {
-                    sinonAssert.calledOn(() => {
-                        return;
-                    }, object);
+                    sinonAssert.calledOn(() => undefined, object);
                 });
 
                 assert.isFalse(this.stub.calledOn.calledWith(object));
@@ -600,9 +592,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "calledWithNew");
 
                 assert.exception(() => {
-                    sinonAssert.calledWithNew(() => {
-                        return;
-                    });
+                    sinonAssert.calledWithNew(() => undefined);
                 });
 
                 assert.isFalse(this.stub.calledWithNew.called);
@@ -679,9 +669,7 @@ describe("assert", function () {
                 sinonStub(this.stub, "alwaysCalledWithNew");
 
                 assert.exception(() => {
-                    sinonAssert.alwaysCalledWithNew(() => {
-                        return;
-                    });
+                    sinonAssert.alwaysCalledWithNew(() => undefined);
                 });
 
                 assert.isFalse(this.stub.alwaysCalledWithNew.called);
@@ -893,9 +881,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.calledOnceWith(() => {
-                        return;
-                    });
+                    sinonAssert.calledOnceWith(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -1002,9 +988,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.calledOnceWithExactly(() => {
-                        return;
-                    });
+                    sinonAssert.calledOnceWithExactly(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -1111,9 +1095,7 @@ describe("assert", function () {
 
             it("fails when method is not stub", function () {
                 assert.exception(() => {
-                    sinonAssert.calledOnceWithMatch(() => {
-                        return;
-                    });
+                    sinonAssert.calledOnceWithMatch(() => undefined);
                 });
 
                 assert(sinonAssert.fail.called);
@@ -1300,9 +1282,7 @@ describe("assert", function () {
 
             it("fails if method is not fake", function () {
                 assert.exception(() => {
-                    sinonAssert.alwaysCalledOn(() => {
-                        return;
-                    }, {});
+                    sinonAssert.alwaysCalledOn(() => undefined, {});
                 });
             });
 
@@ -1355,9 +1335,7 @@ describe("assert", function () {
 
         it("fails if method is not fake", function () {
             assert.exception(() => {
-                sinonAssert.alwaysCalledWith(() => {
-                    return;
-                });
+                sinonAssert.alwaysCalledWith(() => undefined);
             });
         });
 
@@ -1530,12 +1508,9 @@ describe("assert", function () {
             sinonSpy(this.obj, "doSomething");
 
             /*eslint consistent-return: "off"*/
-            this.message = function (method) {
+            this.message = function (method, ...args) {
                 try {
-                    sinonAssert[method].apply(
-                        sinonAssert,
-                        [].slice.call(arguments, 1),
-                    );
+                    sinonAssert[method](...args);
                 } catch (e) {
                     /* We sometimes append stack frames to the message and they
                      * make assertions messy, so strip those off here

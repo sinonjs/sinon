@@ -119,9 +119,8 @@ const proxyApi = {
     },
 
     formatters,
-    printf(format) {
+    printf(format, ...args) {
         const spyInstance = this;
-        const args = slice(arguments, 1);
         let formatter;
 
         return (format || "").replaceAll(/%(.)/g, (match, specifier) => {

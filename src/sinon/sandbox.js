@@ -114,8 +114,8 @@ export default function Sandbox(opts = {}) {
         return collection;
     };
 
-    sandbox.createStubInstance = function createStubInstance() {
-        const stubbed = sinonCreateStubInstance.apply(null, arguments);
+    sandbox.createStubInstance = function createStubInstance(...args) {
+        const stubbed = sinonCreateStubInstance(...args);
         const ownMethods = collectOwnMethods(stubbed);
 
         forEach(ownMethods, (method) => {
@@ -126,40 +126,40 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.inject = function inject(obj) {
-        obj.spy = function spy() {
-            return sandbox.spy.apply(null, arguments);
+        obj.spy = function spy(...args) {
+            return sandbox.spy.apply(null, args);
         };
 
-        obj.stub = function stub() {
-            return sandbox.stub.apply(null, arguments);
+        obj.stub = function stub(...args) {
+            return sandbox.stub.apply(null, args);
         };
 
-        obj.mock = function mock() {
-            return sandbox.mock.apply(null, arguments);
+        obj.mock = function mock(...args) {
+            return sandbox.mock.apply(null, args);
         };
 
-        obj.createStubInstance = function createStubInstanceWrapper() {
-            return sandbox.createStubInstance.apply(sandbox, arguments);
+        obj.createStubInstance = function createStubInstanceWrapper(...args) {
+            return sandbox.createStubInstance(...args);
         };
 
-        obj.fake = function fake() {
-            return sandbox.fake.apply(null, arguments);
+        obj.fake = function fake(...args) {
+            return sandbox.fake.apply(null, args);
         };
 
-        obj.define = function define() {
-            return sandbox.define.apply(null, arguments);
+        obj.define = function define(...args) {
+            return sandbox.define.apply(null, args);
         };
 
-        obj.replace = function replace() {
-            return sandbox.replace.apply(null, arguments);
+        obj.replace = function replace(...args) {
+            return sandbox.replace.apply(null, args);
         };
 
-        obj.replaceSetter = function replaceSetter() {
-            return sandbox.replaceSetter.apply(null, arguments);
+        obj.replaceSetter = function replaceSetter(...args) {
+            return sandbox.replaceSetter.apply(null, args);
         };
 
-        obj.replaceGetter = function replaceGetter() {
-            return sandbox.replaceGetter.apply(null, arguments);
+        obj.replaceGetter = function replaceGetter(...args) {
+            return sandbox.replaceGetter.apply(null, args);
         };
 
         if (sandbox.clock) {
@@ -199,18 +199,14 @@ export default function Sandbox(opts = {}) {
         }
     }
 
-    sandbox.spy = function () {
+    sandbox.spy = function (...args) {
         // Use withContext to pass sandbox context for isolated callId tracking
-        const args = arrayProto.concat(
-            [sandboxContext],
-            arrayProto.slice(arguments),
-        );
-        const createdSpy = sinonSpy.withContext.apply(sinonSpy, args);
+        const createdSpy = sinonSpy.withContext(sandboxContext, ...args);
         const result = commonPostInitSetup(
-            arguments,
+            args,
             createdSpy,
             false,
-            !(arguments.length === 1 && typeof arguments[0] === "object"),
+            !(args.length === 1 && typeof args[0] === "object"),
         );
         addReturnedMethodsToCollection(result);
         return result;
@@ -225,18 +221,14 @@ export default function Sandbox(opts = {}) {
     });
     extend(sandbox.spy, sinonSpy);
 
-    sandbox.stub = function () {
+    sandbox.stub = function (...args) {
         // Use withContext to pass sandbox context for isolated callId tracking
-        const args = arrayProto.concat(
-            [sandboxContext],
-            arrayProto.slice(arguments),
-        );
-        const createdStub = sinonStub.withContext.apply(sinonStub, args);
+        const createdStub = sinonStub.withContext(sandboxContext, ...args);
         const result = commonPostInitSetup(
-            arguments,
+            args,
             createdStub,
             true,
-            !(arguments.length === 1 && typeof arguments[0] === "object"),
+            !(args.length === 1 && typeof args[0] === "object"),
         );
         addReturnedMethodsToCollection(result);
         return result;
@@ -251,8 +243,8 @@ export default function Sandbox(opts = {}) {
     });
     extend(sandbox.stub, sinonStub);
 
-    sandbox.mock = function () {
-        const m = sinonMock.apply(null, arguments);
+    sandbox.mock = function (...args) {
+        const m = sinonMock(...args);
 
         addToCollection(m);
 
@@ -548,14 +540,10 @@ export default function Sandbox(opts = {}) {
         return clock;
     };
 
-    sandbox.fake = function fake() {
+    sandbox.fake = function fake(...args) {
         // Use withContext to pass sandbox context for isolated callId tracking
-        const args = arrayProto.concat(
-            [sandboxContext],
-            arrayProto.slice(arguments),
-        );
-        const createdFake = sinonFake.withContext.apply(sinonFake, args);
-        const result = commonPostInitSetup(arguments, createdFake, false);
+        const createdFake = sinonFake.withContext(sandboxContext, ...args);
+        const result = commonPostInitSetup(args, createdFake, false);
         addToCollection(result);
         return result;
     };
@@ -578,11 +566,9 @@ export default function Sandbox(opts = {}) {
     });
 
     function addFakeBehaviorToCollection(method) {
-        sandbox.fake[method] = function () {
+        sandbox.fake[method] = function (...args) {
             // Add sandboxContext as the second argument for context-aware fakes
-            const args = arrayProto.slice(arguments);
-            args.push(sandboxContext);
-            const result = sinonFake[method].apply(sinonFake, args);
+            const result = sinonFake[method](...args, sandboxContext);
             addToCollection(result);
             return result;
         };

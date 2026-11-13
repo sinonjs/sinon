@@ -72,7 +72,7 @@ export default function createSandbox(config) {
     }
 
     const configuredSandbox = prepareSandboxFromConfig(config);
-    configuredSandbox.args = configuredSandbox.args || [];
+    configuredSandbox.args ||= [];
     configuredSandbox.injectedKeys = [];
     configuredSandbox.injectInto = config.injectInto;
     const exposed = configuredSandbox.inject({});

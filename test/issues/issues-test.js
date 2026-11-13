@@ -1095,8 +1095,6 @@ describe("issues", function () {
         describe("callThroughWithNew", function () {
             it("should clear throws(exception)", function () {
                 class OriginalClass {
-                    constructor() {}
-
                     foo = "original";
                 }
 
@@ -1119,8 +1117,6 @@ describe("issues", function () {
 
             it("should clear throws(exceptionFactory)", function () {
                 class OriginalClass {
-                    constructor() {}
-
                     foo = "original";
                 }
 
@@ -1145,8 +1141,6 @@ describe("issues", function () {
 
             it("should clear throwsArg", function () {
                 class OriginalClass {
-                    constructor() {}
-
                     foo = "original";
                 }
 

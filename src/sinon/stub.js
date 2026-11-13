@@ -18,7 +18,6 @@ const { hasOwnProperty } = objectProto;
 
 const forEach = arrayProto.forEach;
 const pop = arrayProto.pop;
-const slice = arrayProto.slice;
 const sort = arrayProto.sort;
 
 /**
@@ -40,8 +39,7 @@ function createStub(originalFunc, context) {
     // eslint-disable-next-line prefer-const
     let proxy;
 
-    function functionStub() {
-        const args = slice(arguments);
+    function functionStub(...args) {
         const matchings = proxy.matchingFakes(args);
 
         const fnStub =
@@ -52,7 +50,7 @@ function createStub(originalFunc, context) {
                         a.matchingArguments.length - b.matchingArguments.length,
                 ),
             ) || proxy;
-        return getCurrentBehavior(fnStub).invoke(this, arguments);
+        return getCurrentBehavior(fnStub).invoke(this, args);
     }
 
     proxy = createProxy(functionStub, originalFunc || functionStub, context);
@@ -279,11 +277,10 @@ const proto = {
         return this.onCall(2);
     },
 
-    withArgs: function withArgs() {
-        const fake = spy.withArgs.apply(this, arguments);
+    withArgs: function withArgs(...args) {
+        const fake = spy.withArgs.apply(this, args);
         if (this.defaultBehavior && this.defaultBehavior.promiseLibrary) {
-            fake.defaultBehavior =
-                fake.defaultBehavior || behavior.create(fake);
+            fake.defaultBehavior ||= behavior.create(fake);
             fake.defaultBehavior.promiseLibrary =
                 this.defaultBehavior.promiseLibrary;
         }

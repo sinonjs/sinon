@@ -635,9 +635,7 @@ describe("sinonMock", function () {
                     match.string,
                     match.func,
                 );
-                this.expectation(1, "test", () => {
-                    return;
-                });
+                this.expectation(1, "test", () => undefined);
 
                 assert(this.expectation.met());
             });
