@@ -5,10 +5,6 @@ export default [
     {
         ignores: [
             "eslint.config.js",
-            "coverage/**",
-            ".worktrees/**",
-            "**/.worktrees/**",
-            "out/**",
             "pkg/**",
             "lib/**",
             "tmp/**",
