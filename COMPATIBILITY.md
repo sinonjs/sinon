@@ -15,12 +15,7 @@ Sinon.JS aims at supporting the following runtimes (from our shared [eslint-conf
 <!-- browserslist start -->
 
 ```
-> 0.5%
-last 2 versions
-Firefox ESR
-not dead
-not IE 11
-not op_mini all
+baseline 2024
 maintained node versions
 ```
 
