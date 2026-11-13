@@ -10,6 +10,7 @@ updates:
           - "*"
         update-types:
           - "patch"
+          - "minor"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -23,3 +24,4 @@ updates:
           - "*"
         update-types:
           - "patch"
+          - "minor"
