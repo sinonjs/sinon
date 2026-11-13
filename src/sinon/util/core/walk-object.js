@@ -28,7 +28,7 @@ const applyMutations = function (mutator, object, filter) {
         );
     }
 
-    walk(object, function (prop, propOwner) {
+    walk(object, (prop, propOwner) => {
         // we don't want to stub things like toString(), valueOf(), etc. so we only stub if the object
         // is not Object.prototype
         if (

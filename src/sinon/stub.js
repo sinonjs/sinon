@@ -46,11 +46,11 @@ function createStub(originalFunc, context) {
 
         const fnStub =
             pop(
-                sort(matchings, function (a, b) {
-                    return (
-                        a.matchingArguments.length - b.matchingArguments.length
-                    );
-                }),
+                sort(
+                    matchings,
+                    (a, b) =>
+                        a.matchingArguments.length - b.matchingArguments.length,
+                ),
             ) || proxy;
         return getCurrentBehavior(fnStub).invoke(this, arguments);
     }
@@ -69,7 +69,7 @@ function createStub(originalFunc, context) {
     const name = originalFunc ? functionName(originalFunc) : null;
     extend.nonEnum(proxy, {
         fakes: [],
-        instantiateFake: instantiateFake,
+        instantiateFake,
         displayName: name || "stub",
         defaultBehavior: null,
         behaviors: [],
@@ -118,9 +118,10 @@ function stubImpl(object, property, context) {
             typeof actualDescriptor.value !== "function");
 
     if (isStubbingEntireObject) {
-        return walkObjectStrict(function (obj, prop) {
-            return stubImpl(obj, prop, context);
-        }, object);
+        return walkObjectStrict(
+            (obj, prop) => stubImpl(obj, prop, context),
+            object,
+        );
     }
 
     if (isCreatingNewStub) {
@@ -234,7 +235,7 @@ function getCurrentBehavior(stubInstance) {
 }
 
 const proto = {
-    resetBehavior: function () {
+    resetBehavior() {
         this.defaultBehavior = null;
         this.behaviors = [];
 
@@ -248,12 +249,12 @@ const proto = {
         this.returnThis = false;
         this.resolveThis = false;
 
-        forEach(this.fakes, function (fake) {
+        forEach(this.fakes, (fake) => {
             fake.resetBehavior();
         });
     },
 
-    reset: function () {
+    reset() {
         this.resetHistory();
         this.resetBehavior();
     },
@@ -290,7 +291,7 @@ const proto = {
     },
 };
 
-forEach(Object.keys(behavior), function (method) {
+forEach(Object.keys(behavior), (method) => {
     if (
         hasOwnProperty(behavior, method) &&
         !hasOwnProperty(proto, method) &&
@@ -301,7 +302,7 @@ forEach(Object.keys(behavior), function (method) {
     }
 });
 
-forEach(Object.keys(behaviors), function (method) {
+forEach(Object.keys(behaviors), (method) => {
     if (hasOwnProperty(behaviors, method) && !hasOwnProperty(proto, method)) {
         behavior.addBehavior(stub, method, behaviors[method]);
     }

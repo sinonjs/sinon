@@ -33,17 +33,17 @@ function getCallback(behavior, args) {
 
     const callArgProp = behavior.callArgProp;
 
-    for (let i = 0, l = argumentList.length; i < l; ++i) {
-        if (!callArgProp && typeof argumentList[i] === "function") {
-            return argumentList[i];
+    for (const element of argumentList) {
+        if (!callArgProp && typeof element === "function") {
+            return element;
         }
 
         if (
             callArgProp &&
-            argumentList[i] &&
-            typeof argumentList[i][callArgProp] === "function"
+            element &&
+            typeof element[callArgProp] === "function"
         ) {
-            return argumentList[i][callArgProp];
+            return element[callArgProp];
         }
     }
 
@@ -101,7 +101,7 @@ function callCallback(behavior, args) {
         }
 
         if (behavior.callbackAsync) {
-            nextTick(function () {
+            nextTick(() => {
                 func.apply(
                     behavior.callbackContext,
                     behavior.callbackArguments,

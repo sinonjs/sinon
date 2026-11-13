@@ -28,11 +28,12 @@ const push = arrayProto.push;
 const reverse = arrayProto.reverse;
 
 function applyOnEach(fakes, method) {
-    const matchingFakes = filter(fakes, function (fake) {
-        return typeof fake[method] === "function";
-    });
+    const matchingFakes = filter(
+        fakes,
+        (fake) => typeof fake[method] === "function",
+    );
 
-    forEach(matchingFakes, function (fake) {
+    forEach(matchingFakes, (fake) => {
         fake[method]();
     });
 }
@@ -117,7 +118,7 @@ export default function Sandbox(opts = {}) {
         const stubbed = sinonCreateStubInstance.apply(null, arguments);
         const ownMethods = collectOwnMethods(stubbed);
 
-        forEach(ownMethods, function (method) {
+        forEach(ownMethods, (method) => {
             addToCollection(method);
         });
 
@@ -277,8 +278,7 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.resetHistory = function resetHistory() {
-        for (let i = 0; i < collection.length; i++) {
-            const f = collection[i];
+        for (const f of collection) {
             const method = f.resetHistory || f.reset;
             if (typeof method === "function") {
                 method.call(f);
@@ -314,7 +314,7 @@ export default function Sandbox(opts = {}) {
         }
 
         reverse(fakeRestorers);
-        forEach(fakeRestorers, function (restorer) {
+        forEach(fakeRestorers, (restorer) => {
             restorer();
         });
         fakeRestorers.length = 0;
@@ -325,7 +325,7 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.restoreContext = function restoreContext() {
-        forEach(sandbox.injectedKeys, function (injectedKey) {
+        forEach(sandbox.injectedKeys, (injectedKey) => {
             delete sandbox.injectInto[injectedKey];
         });
         sandbox.injectedKeys.length = 0;
@@ -360,7 +360,7 @@ export default function Sandbox(opts = {}) {
     }
 
     function verifyNotReplaced(object, property) {
-        forEach(fakeRestorers, function (fakeRestorer) {
+        forEach(fakeRestorers, (fakeRestorer) => {
             if (
                 fakeRestorer.object === object &&
                 fakeRestorer.property === property
@@ -434,7 +434,7 @@ export default function Sandbox(opts = {}) {
         push(fakeRestorers, getFakeRestorer(object, property));
 
         Object.defineProperty(object, property, {
-            value: value,
+            value,
             configurable: true,
             enumerable: true,
             writable: true,

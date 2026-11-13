@@ -12,7 +12,7 @@ function spyCallSetUp() {
         return;
     };
     this.call = proxyCall(
-        function () {
+        () => {
             return;
         },
         this.thisValue,
@@ -129,7 +129,7 @@ describe("sinonSpy.call", function () {
 
         it("stores given call id", function () {
             const call = proxyCall(
-                function () {
+                () => {
                     return;
                 },
                 {},
@@ -143,9 +143,9 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if callId is undefined", function () {
-            assert.exception(function () {
+            assert.exception(() => {
                 proxyCall.create(
-                    function () {
+                    () => {
                         return;
                     },
                     {},
@@ -176,9 +176,7 @@ describe("sinonSpy.call", function () {
                 spy.call({});
             }
 
-            const calls = [0, 1, 2, 3].map(function (idx) {
-                return spy.getCall(idx);
-            });
+            const calls = [0, 1, 2, 3].map((idx) => spy.getCall(idx));
 
             assert.isTrue(calls[1].calledBefore(calls[3]));
             assert.isFalse(calls[1].calledBefore(calls[0]));
@@ -262,7 +260,7 @@ describe("sinonSpy.call", function () {
 
         it("returns true for no arguments", function () {
             const call = proxyCall(
-                function () {
+                () => {
                     return;
                 },
                 {},
@@ -277,7 +275,7 @@ describe("sinonSpy.call", function () {
 
         it("returns false when called with no args but matching one", function () {
             const call = proxyCall(
-                function () {
+                () => {
                     return;
                 },
                 {},
@@ -308,7 +306,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArg(0);
                 },
                 {
@@ -322,7 +320,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArg();
                 },
                 { name: "TypeError" },
@@ -330,9 +328,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const callback = sinonSpy(function () {
-                return "useful value";
-            });
+            const callback = sinonSpy(() => "useful value");
             this.args.push(1, 2, callback);
 
             const returnValue = this.call.callArg(2);
@@ -344,7 +340,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArg({});
                 },
                 { name: "TypeError" },
@@ -372,7 +368,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgOn(0, thisObj);
                 },
                 {
@@ -383,9 +379,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const callback = sinonSpy(function () {
-                return "useful value";
-            });
+            const callback = sinonSpy(() => "useful value");
             const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(1, 2, callback);
 
@@ -399,7 +393,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgOn({}, thisObj);
                 },
                 { name: "TypeError" },
@@ -442,9 +436,7 @@ describe("sinonSpy.call", function () {
 
         it("returns callbacks return value", function () {
             const object = {};
-            const callback = sinonSpy(function () {
-                return "useful value";
-            });
+            const callback = sinonSpy(() => "useful value");
             this.args.push(1, callback);
 
             const returnValue = this.call.callArgWith(1, object);
@@ -456,7 +448,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgWith();
                 },
                 { name: "TypeError" },
@@ -467,7 +459,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgWith({});
                 },
                 { name: "TypeError" },
@@ -517,9 +509,7 @@ describe("sinonSpy.call", function () {
         it("returns callbacks return value", function () {
             const object = {};
             const thisObj = { name1: "value1", name2: "value2" };
-            const callback = sinonSpy(function () {
-                return "useful value";
-            });
+            const callback = sinonSpy(() => "useful value");
             this.args.push(1, callback);
 
             const returnValue = this.call.callArgOnWith(1, thisObj, object);
@@ -533,7 +523,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgOnWith(2, thisObj);
                 },
                 {
@@ -548,7 +538,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.callArgOnWith({}, thisObj);
                 },
                 { name: "TypeError" },
@@ -622,7 +612,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.throwArg(1);
                 },
                 { message: "catpants" },
@@ -634,7 +624,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.throwArg(2);
                 },
                 {
@@ -650,7 +640,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.throwArg(3);
                 },
                 {
@@ -679,7 +669,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.yield();
                 },
                 {
@@ -694,7 +684,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.yield();
                 },
                 {
@@ -736,9 +726,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const spy = sinonSpy(function () {
-                return "useful value";
-            });
+            const spy = sinonSpy(() => "useful value");
             this.args.push(24, {}, spy);
 
             const returnValue = this.call.yield();
@@ -747,12 +735,12 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if callback throws", function () {
-            this.args.push(function () {
+            this.args.push(() => {
                 throw new Error("d'oh!");
             });
             const call = this.call;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 call.yield();
             });
         });
@@ -761,7 +749,7 @@ describe("sinonSpy.call", function () {
     describe("call.invokeCallback", function () {
         it("is alias for yield", function () {
             const call = proxyCall(
-                function () {
+                () => {
                     return;
                 },
                 {},
@@ -795,7 +783,7 @@ describe("sinonSpy.call", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldOn(thisObj);
                 },
                 {
@@ -811,7 +799,7 @@ describe("sinonSpy.call", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldOn(thisObj);
                 },
                 {
@@ -859,9 +847,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const spy = sinonSpy(function () {
-                return "useful value";
-            });
+            const spy = sinonSpy(() => "useful value");
             const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, spy);
 
@@ -871,13 +857,13 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if callback throws", function () {
-            this.args.push(function () {
+            this.args.push(() => {
                 throw new Error("d'oh!");
             });
             const call = this.call;
             const thisObj = { name1: "value1", name2: "value2" };
 
-            assert.exception(function () {
+            assert.exception(() => {
                 call.yieldOn(thisObj);
             });
         });
@@ -902,7 +888,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldTo("success");
                 },
                 {
@@ -918,7 +904,7 @@ describe("sinonSpy.call", function () {
             const call = this.call;
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldTo("success");
                 },
                 {
@@ -961,9 +947,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const spy = sinonSpy(function () {
-                return "useful value";
-            });
+            const spy = sinonSpy(() => "useful value");
             this.args.push(24, {}, { success: spy });
 
             const returnValue = this.call.yieldTo("success");
@@ -973,13 +957,13 @@ describe("sinonSpy.call", function () {
 
         it("throws if callback throws", function () {
             this.args.push({
-                success: function () {
+                success() {
                     throw new Error("d'oh!");
                 },
             });
             const call = this.call;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 call.yieldTo("success");
             });
         });
@@ -1007,7 +991,7 @@ describe("sinonSpy.call", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldToOn("success", thisObj);
                 },
                 {
@@ -1023,7 +1007,7 @@ describe("sinonSpy.call", function () {
                 const symbol = Symbol("apple pie");
 
                 assert.exception(
-                    function () {
+                    () => {
                         call.yieldToOn(symbol, {});
                     },
                     {
@@ -1041,7 +1025,7 @@ describe("sinonSpy.call", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     call.yieldToOn("success", thisObj);
                 },
                 {
@@ -1090,9 +1074,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("returns callbacks return value", function () {
-            const spy = sinonSpy(function () {
-                return "useful value";
-            });
+            const spy = sinonSpy(() => "useful value");
             const thisObj = { name1: "value1", name2: "value2" };
             this.args.push(24, {}, { success: spy });
 
@@ -1103,14 +1085,14 @@ describe("sinonSpy.call", function () {
 
         it("throws if callback throws", function () {
             this.args.push({
-                success: function () {
+                success() {
                     throw new Error("d'oh!");
                 },
             });
             const call = this.call;
             const thisObj = { name1: "value1", name2: "value2" };
 
-            assert.exception(function () {
+            assert.exception(() => {
                 call.yieldToOn("success", thisObj);
             });
         });
@@ -1128,7 +1110,7 @@ describe("sinonSpy.call", function () {
             object.doIt();
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt()",
             );
         });
@@ -1138,7 +1120,7 @@ describe("sinonSpy.call", function () {
             object.doIt(42);
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt(42)",
             );
         });
@@ -1148,7 +1130,7 @@ describe("sinonSpy.call", function () {
             object.doIt(42, "Hey");
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt(42, 'Hey')",
             );
         });
@@ -1158,7 +1140,7 @@ describe("sinonSpy.call", function () {
             object.doIt(42, "Hey");
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt(42, 'Hey') => 42",
             );
         });
@@ -1168,7 +1150,7 @@ describe("sinonSpy.call", function () {
             object.doIt(42, "Hey");
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt(42, 'Hey') => ''",
             );
         });
@@ -1176,12 +1158,12 @@ describe("sinonSpy.call", function () {
         it("includes exception", function () {
             const object = { doIt: sinonStub().throws("TypeError") };
 
-            assert.exception(function () {
+            assert.exception(() => {
                 object.doIt();
             });
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt() !TypeError(Sinon-provided TypeError)",
             );
         });
@@ -1191,12 +1173,12 @@ describe("sinonSpy.call", function () {
                 doIt: sinonStub().throws("TypeError", "Oh noes!"),
             };
 
-            assert.exception(function () {
+            assert.exception(() => {
                 object.doIt();
             });
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt() !TypeError(Oh noes!)",
             );
         });
@@ -1208,7 +1190,7 @@ describe("sinonSpy.call", function () {
             object.doIt(42);
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt(42)",
             );
         });
@@ -1219,7 +1201,7 @@ describe("sinonSpy.call", function () {
             object.doIt();
 
             assert.equals(
-                object.doIt.getCall(0).toString().replace(/ at.*/g, ""),
+                object.doIt.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "doIt() => 42",
             );
         });
@@ -1237,7 +1219,7 @@ describe("sinonSpy.call", function () {
             await stub2(await stub1());
 
             assert.equals(
-                stub2.getCall(0).toString().replace(/ at.*/g, ""),
+                stub2.getCall(0).toString().replaceAll(/ at.*/g, ""),
                 "stub(1) => 1",
             );
         });
@@ -1339,7 +1321,7 @@ describe("sinonSpy.call", function () {
         it("throws if spying on non-existent property", function () {
             const myObj = {};
 
-            assert.exception(function () {
+            assert.exception(() => {
                 sinonSpy(myObj, "ouch");
             });
 
@@ -1347,14 +1329,14 @@ describe("sinonSpy.call", function () {
         });
 
         it("throws if spying on non-existent object", function () {
-            assert.exception(function () {
+            assert.exception(() => {
                 sinonSpy(undefined, "ouch");
             });
         });
 
         it("haves toString method", function () {
             const obj = {
-                meth: function () {
+                meth() {
                     return;
                 },
             };
@@ -1493,17 +1475,17 @@ describe("sinonSpy.call", function () {
         });
 
         it("records filtered spy when original throws", function () {
-            const spy = sinonSpy(function () {
+            const spy = sinonSpy(() => {
                 throw new Error("Oops");
             });
 
             const argSpy = spy.withArgs({}, []);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 spy(1);
             });
 
-            assert.exception(function () {
+            assert.exception(() => {
                 spy({}, []);
             });
 
@@ -1611,9 +1593,7 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with return values", function () {
-            const spy = sinonSpy(function (value) {
-                return value;
-            });
+            const spy = sinonSpy((value) => value);
             spy("a");
             spy("b");
             spy("b");
@@ -1640,19 +1620,19 @@ describe("sinonSpy.call", function () {
         });
 
         it("initializes filtered spy with exceptions", function () {
-            const spy = sinonSpy(function (x, y) {
+            const spy = sinonSpy((x, y) => {
                 const error = new Error();
                 error.name = y;
                 throw error;
             });
 
-            assert.exception(function () {
+            assert.exception(() => {
                 spy("a", "1");
             });
-            assert.exception(function () {
+            assert.exception(() => {
                 spy("b", "2");
             });
-            assert.exception(function () {
+            assert.exception(() => {
                 spy("b", "3");
             });
 

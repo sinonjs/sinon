@@ -243,7 +243,7 @@ const mockExpectation = {
             return false;
         }
 
-        return every(expectedArguments, function (expectedArgument, i) {
+        return every(expectedArguments, (expectedArgument, i) => {
             if (!verifyMatcher(expectedArgument, _args[i])) {
                 return false;
             }
@@ -272,7 +272,7 @@ const mockExpectation = {
         return this;
     },
 
-    toString: function () {
+    toString() {
         const args = slice(this.expectedArguments || []);
 
         if (!this.expectsExactArgCount) {
@@ -281,7 +281,7 @@ const mockExpectation = {
 
         const callStr = proxyCall.toString.call({
             proxy: this.method || "anonymous mock expectation",
-            args: args,
+            args,
         });
 
         const message = `${callStr.replace(

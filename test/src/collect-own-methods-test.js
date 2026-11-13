@@ -13,7 +13,7 @@ describe("collectOwnMethods", function () {
         };
         method.restore.sinon = true;
         const obj = {
-            method: method,
+            method,
         };
 
         const methods = collectOwnMethods(obj);
@@ -30,7 +30,7 @@ describe("collectOwnMethods", function () {
         };
         method.restore.sinon = true;
         const proto = {
-            method: method,
+            method,
         };
         const obj = Object.create(proto);
 
@@ -43,7 +43,7 @@ describe("collectOwnMethods", function () {
             return undefined;
         };
         const obj = {
-            method: method,
+            method,
         };
 
         const methods = collectOwnMethods(obj);

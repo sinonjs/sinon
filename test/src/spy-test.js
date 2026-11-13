@@ -4,7 +4,7 @@ import createSpy from "../../src/sinon/spy.js";
 import createProxy from "../../src/sinon/proxy.js";
 import sharedSpyStubEverythingTests from "./shared-spy-stub-everything-tests.js";
 
-const globalContext = typeof global !== "undefined" ? global : window;
+const globalContext = typeof global !== "undefined" ? globalThis : globalThis;
 const assert = referee.assert;
 const refute = referee.refute;
 const match = samsam.createMatcher;
@@ -86,12 +86,12 @@ function spyCalledTests(method) {
 
                 spy[method]({
                     foo: 1,
-                    objectWithoutPrototype: objectWithoutPrototype,
+                    objectWithoutPrototype,
                 });
 
-                refute.exception(function () {
+                refute.exception(() => {
                     spy.calledWithMatch({
-                        objectWithoutPrototype: objectWithoutPrototype,
+                        objectWithoutPrototype,
                     });
                 });
             });
@@ -222,7 +222,7 @@ function verifyFunctionName(func, expectedName) {
 
 describe("spy", function () {
     it("does not throw if called without function", function () {
-        refute.exception(function () {
+        refute.exception(() => {
             createSpy();
         });
     });
@@ -445,7 +445,7 @@ describe("spy", function () {
         });
 
         it("creates a spy for Error", function () {
-            refute.exception(function () {
+            refute.exception(() => {
                 createSpy(globalContext, "Error");
             });
         });
@@ -469,7 +469,7 @@ describe("spy", function () {
             assert.equals(spy.getCall(3).args[0], 1);
             assert.equals(spy.getCall(3).args[1], 2);
             assert.isUndefined(spy.getCall(3).args[2]);
-            ["args", "callId"].forEach(function (propName) {
+            ["args", "callId"].forEach((propName) => {
                 assert.equals(
                     spy.withArgs(1).getCall(0)[propName],
                     spy.getCall(1)[propName],
@@ -539,10 +539,10 @@ describe("spy", function () {
         }
 
         const object = {
-            f1: function () {
+            f1() {
                 return;
             },
-            f2: function () {
+            f2() {
                 return;
             },
         };
@@ -594,7 +594,7 @@ describe("spy", function () {
         it("calls underlying function", function () {
             let called = false;
 
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 called = true;
             });
 
@@ -658,7 +658,7 @@ describe("spy", function () {
 
         it("throws if function throws", function () {
             const err = new Error();
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw err;
             });
 
@@ -677,7 +677,7 @@ describe("spy", function () {
         });
 
         it("retains function length 0", function () {
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 return;
             });
 
@@ -686,7 +686,7 @@ describe("spy", function () {
 
         it("retains function length 1", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy(function (a) {
+            const spy = createSpy((a) => {
                 return;
             });
 
@@ -695,7 +695,7 @@ describe("spy", function () {
 
         it("retains function length 2", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy(function (a, b) {
+            const spy = createSpy((a, b) => {
                 return;
             });
 
@@ -704,7 +704,7 @@ describe("spy", function () {
 
         it("retains function length 3", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy(function (a, b, c) {
+            const spy = createSpy((a, b, c) => {
                 return;
             });
 
@@ -713,7 +713,7 @@ describe("spy", function () {
 
         it("retains function length 4", function () {
             // eslint-disable-next-line no-unused-vars
-            const spy = createSpy(function (a, b, c, d) {
+            const spy = createSpy((a, b, c, d) => {
                 return;
             });
 
@@ -918,7 +918,7 @@ describe("spy", function () {
                 this.spy();
                 this.spy.call({});
                 this.spy.call(object);
-                this.spy.call(window);
+                this.spy.call(globalThis);
 
                 assert(this.spy.calledOn(object));
             });
@@ -933,18 +933,14 @@ describe("spy", function () {
         });
 
         it("is true if called with matcher that returns true", function () {
-            const matcher = match(function () {
-                return true;
-            });
+            const matcher = match(() => true);
             this.spy();
 
             assert(this.spy.calledOn(matcher));
         });
 
         it("is false if called with matcher that returns false", function () {
-            const matcher = match(function () {
-                return false;
-            });
+            const matcher = match(() => false);
             this.spy();
 
             assert.isFalse(this.spy.calledOn(matcher));
@@ -956,7 +952,7 @@ describe("spy", function () {
             this.spy.call(expected);
 
             this.spy.calledOn(
-                match(function (value) {
+                match((value) => {
                     actual = value;
                 }),
             );
@@ -1032,7 +1028,7 @@ describe("spy", function () {
                 return;
             }
             MyThing.prototype = {};
-            const ns = { MyThing: MyThing };
+            const ns = { MyThing };
             createSpy(ns, "MyThing");
 
             const result = new ns.MyThing(); // eslint-disable-line no-unused-vars
@@ -1057,7 +1053,7 @@ describe("spy", function () {
                 this.spy();
                 const a = new this.spy(); // eslint-disable-line no-unused-vars, new-cap
                 this.spy(object);
-                this.spy(window);
+                this.spy(globalThis);
 
                 assert(this.spy.calledWithNew());
             });
@@ -1067,7 +1063,7 @@ describe("spy", function () {
             function MyThing() {
                 return {};
             }
-            const object = { MyThing: MyThing };
+            const object = { MyThing };
             createSpy(object, "MyThing");
 
             const result = new object.MyThing(); // eslint-disable-line no-unused-vars
@@ -1080,7 +1076,7 @@ describe("spy", function () {
                 try {
                     // eslint-disable-next-line no-console
                     console.log.apply({}, []);
-                } catch (e) {
+                } catch {
                     this.skip();
                 }
             });
@@ -1195,7 +1191,7 @@ describe("spy", function () {
         Object.seal(object);
 
         assert.exception(
-            function () {
+            () => {
                 createSpy(object);
             },
             {
@@ -1599,11 +1595,11 @@ describe("spy", function () {
         beforeEach(function () {
             this.spy = createSpy();
 
-            this.spyWithTypeError = createSpy(function () {
+            this.spyWithTypeError = createSpy(() => {
                 throw new TypeError();
             });
 
-            this.spyWithStringError = createSpy(function () {
+            this.spyWithStringError = createSpy(() => {
                 // eslint-disable-next-line no-throw-literal
                 throw "error";
             });
@@ -1612,7 +1608,7 @@ describe("spy", function () {
         it("returns exception thrown by function", function () {
             const err = new Error();
 
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw err;
             });
 
@@ -1668,7 +1664,7 @@ describe("spy", function () {
         beforeEach(function () {
             this.spy = createSpy();
 
-            this.spyWithTypeError = createSpy(function () {
+            this.spyWithTypeError = createSpy(() => {
                 throw new TypeError();
             });
         });
@@ -1676,7 +1672,7 @@ describe("spy", function () {
         it("returns true when spy threw", function () {
             const err = new Error();
 
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw err;
             });
 
@@ -1718,7 +1714,7 @@ describe("spy", function () {
         it("returns false if some calls did not throw", function () {
             let callCount = 0;
 
-            this.spy = createSpy(function () {
+            this.spy = createSpy(() => {
                 callCount += 1;
                 if (callCount === 1) {
                     throw new Error("throwing on first call");
@@ -1754,7 +1750,7 @@ describe("spy", function () {
             this.spy = createSpy();
             const error = (this.error = {});
 
-            this.spyWithTypeError = createSpy(function () {
+            this.spyWithTypeError = createSpy(() => {
                 throw error;
             });
         });
@@ -1776,7 +1772,7 @@ describe("spy", function () {
             let calls = 0;
             const err = this.error;
 
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -1827,9 +1823,7 @@ describe("spy", function () {
                     return;
                 },
             ];
-            const spy = createSpy(function () {
-                return values[spy.callCount];
-            });
+            const spy = createSpy(() => values[spy.callCount]);
 
             spy();
             spy();
@@ -1848,9 +1842,7 @@ describe("spy", function () {
                     return;
                 },
             ];
-            const spy = createSpy(function () {
-                return values[spy.callCount];
-            });
+            const spy = createSpy(() => values[spy.callCount]);
 
             spy();
             spy();
@@ -1862,9 +1854,7 @@ describe("spy", function () {
 
         it("returns true when value is returned several times", function () {
             const object = { id: 42 };
-            const spy = createSpy(function () {
-                return object;
-            });
+            const spy = createSpy(() => object);
 
             spy();
             spy();
@@ -1875,9 +1865,7 @@ describe("spy", function () {
 
         it("compares values deeply", function () {
             const object = { deep: { id: 42 } };
-            const spy = createSpy(function () {
-                return object;
-            });
+            const spy = createSpy(() => object);
 
             spy();
 
@@ -1886,9 +1874,7 @@ describe("spy", function () {
 
         it("compares values strictly using match.same", function () {
             const object = { id: 42 };
-            const spy = createSpy(function () {
-                return object;
-            });
+            const spy = createSpy(() => object);
 
             spy();
 
@@ -1909,9 +1895,7 @@ describe("spy", function () {
         it("contains return value", function () {
             const object = { id: 42 };
 
-            const spy = createSpy(function () {
-                return object;
-            });
+            const spy = createSpy(() => object);
 
             spy();
 
@@ -1919,7 +1903,7 @@ describe("spy", function () {
         });
 
         it("contains undefined when function throws", function () {
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw new Error();
             });
 
@@ -1965,7 +1949,7 @@ describe("spy", function () {
             let calls = 0;
 
             /*eslint consistent-return: "off"*/
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 calls += 1;
 
                 if (calls % 2 === 0) {
@@ -2224,7 +2208,7 @@ describe("spy", function () {
         });
 
         it("is tracked even if exceptions are thrown", function () {
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw new Error("an exception");
             });
 
@@ -2234,9 +2218,7 @@ describe("spy", function () {
         });
 
         it("has correct returnValue", function () {
-            const spy = createSpy(function () {
-                return 42;
-            });
+            const spy = createSpy(() => 42);
 
             spy();
 
@@ -2246,7 +2228,7 @@ describe("spy", function () {
 
         it("has correct exception", function () {
             const err = new Error();
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 throw err;
             });
 
@@ -2460,7 +2442,7 @@ describe("spy", function () {
             spy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArg(1);
                 },
                 { name: "TypeError" },
@@ -2471,7 +2453,7 @@ describe("spy", function () {
             const spy = createSpy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArg(0);
                 },
                 {
@@ -2483,14 +2465,14 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
             const spy = createSpy(api, "someMethod");
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArg(0);
                 },
                 {
@@ -2505,7 +2487,7 @@ describe("spy", function () {
             spy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArg("");
                 },
                 { name: "TypeError" },
@@ -2527,7 +2509,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -2567,7 +2549,7 @@ describe("spy", function () {
             spy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArgOn(1, thisObj);
                 },
                 { name: "TypeError" },
@@ -2579,7 +2561,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArgOn(0, thisObj);
                 },
                 {
@@ -2591,7 +2573,7 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
@@ -2599,7 +2581,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArgOn(0, thisObj);
                 },
                 {
@@ -2615,7 +2597,7 @@ describe("spy", function () {
             spy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.callArg("", thisObj);
                 },
                 { name: "TypeError" },
@@ -2639,7 +2621,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -2692,7 +2674,7 @@ describe("spy", function () {
             const spy = createSpy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.yield();
                 },
                 {
@@ -2703,14 +2685,14 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
             const spy = createSpy(api, "someMethod");
 
             assert.exception(
-                function () {
+                () => {
                     spy.yield();
                 },
                 {
@@ -2735,7 +2717,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -2782,7 +2764,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldOn(thisObj);
                 },
                 {
@@ -2793,7 +2775,7 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
@@ -2801,7 +2783,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldOn(thisObj);
                 },
                 {
@@ -2828,7 +2810,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -2865,7 +2847,7 @@ describe("spy", function () {
             const spy = createSpy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldTo("success");
                 },
                 {
@@ -2877,14 +2859,14 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
             const spy = createSpy(api, "someMethod");
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldTo("success");
                 },
                 {
@@ -2902,7 +2884,7 @@ describe("spy", function () {
             const spy = createSpy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldTo(Symbol("apple pie"));
                 },
                 {
@@ -2927,7 +2909,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -2966,7 +2948,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldToOn("success", thisObj);
                 },
                 {
@@ -2978,7 +2960,7 @@ describe("spy", function () {
 
         it("includes spy name in error message", function () {
             const api = {
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             };
@@ -2986,7 +2968,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldToOn("success", thisObj);
                 },
                 {
@@ -3005,7 +2987,7 @@ describe("spy", function () {
             const thisObj = { name1: "value1", name2: "value2" };
 
             assert.exception(
-                function () {
+                () => {
                     spy.yieldToOn(Symbol("apple pie"), thisObj);
                 },
                 {
@@ -3032,7 +3014,7 @@ describe("spy", function () {
         it("returns callbacks return values for all calls", function () {
             const spy = createSpy();
             let i = 0;
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 i++;
                 return `useful value ${i}`;
             });
@@ -3057,15 +3039,12 @@ describe("spy", function () {
             const spy = createSpy();
 
             assert.exception(
-                function () {
+                () => {
                     spy.throwArg(0);
                 },
-                function (error) {
-                    return (
-                        error.message ===
-                        "spy cannot throw arg since it was not yet invoked."
-                    );
-                },
+                (error) =>
+                    error.message ===
+                    "spy cannot throw arg since it was not yet invoked.",
             );
         });
 
@@ -3075,15 +3054,12 @@ describe("spy", function () {
             spy("only", "four", "arguments", "here");
 
             assert.exception(
-                function () {
+                () => {
                     spy.throwArg(7);
                 },
-                function (error) {
-                    return (
-                        error.message ===
-                        "Not enough arguments: 7 required but only 4 present"
-                    );
-                },
+                (error) =>
+                    error.message ===
+                    "Not enough arguments: 7 required but only 4 present",
             );
         });
 
@@ -3093,15 +3069,12 @@ describe("spy", function () {
 
             spy(true, false, null, expectedError, "meh");
             assert.exception(
-                function () {
+                () => {
                     spy.throwArg(3);
                 },
-                function (error) {
-                    return (
-                        error instanceof TypeError &&
-                        error.message === expectedError.message
-                    );
-                },
+                (error) =>
+                    error instanceof TypeError &&
+                    error.message === expectedError.message,
             );
         });
     });
@@ -3115,7 +3088,7 @@ describe("spy", function () {
         });
 
         it("throws if called during spy invocation", function () {
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 spy.resetHistory();
             });
 
@@ -3133,7 +3106,7 @@ describe("spy", function () {
         it("matches the function length", function () {
             const api = {
                 // eslint-disable-next-line no-unused-vars
-                someMethod: function (a, b, c) {
+                someMethod(a, b, c) {
                     return;
                 },
             };
@@ -3231,7 +3204,7 @@ describe("spy", function () {
             assert.equals(Object.keys(spy), Object.keys(func));
             assert.equals(Object.keys(spy), ["aProp"]);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 spy();
             });
             assert(spy.threw());

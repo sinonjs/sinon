@@ -26,7 +26,7 @@ export default function createStubInstance(constructor, overrides) {
 
     const stubbedObject = stub(stubInstance);
 
-    forEach(Object.keys(overrides || {}), function (propertyName) {
+    forEach(Object.keys(overrides || {}), (propertyName) => {
         if (propertyName in stubbedObject) {
             const value = overrides[propertyName];
             if (isStub(value)) {

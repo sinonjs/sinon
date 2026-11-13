@@ -26,7 +26,6 @@ const rl = readline.createInterface({
 
 let changeLogData = "";
 
- 
 function getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key] === value);
 }
@@ -69,7 +68,7 @@ rl.on("line", (line) => {
     changeLogData += output === NOOP ? "" : `${output}\n`;
 });
 
-rl.on("close", function () {
+rl.on("close", () => {
     debug(`Updated file content:\n${changeLogData}`);
     if (process.env.DRY_RUN) {
         return;

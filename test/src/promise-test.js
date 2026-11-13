@@ -7,15 +7,15 @@ async function getPromiseStatus(promise) {
     let status = "pending";
     let value = null;
     promise
-        .then(function (val) {
+        .then((val) => {
             status = "resolved";
             value = val;
         })
-        .catch(function (reason) {
+        .catch((reason) => {
             status = "rejected";
             value = reason;
         });
-    await new Promise(function (resolve) {
+    await new Promise((resolve) => {
         setTimeout(resolve, 0);
     });
     return { status, value };

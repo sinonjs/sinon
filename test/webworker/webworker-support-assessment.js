@@ -2,9 +2,9 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 
 if (typeof Worker !== "undefined") {
-    describe("WebWorker support", function () {
+    describe("WebWorker support", () => {
         const sentMessage = "whatever";
-        it("should not crash", function (done) {
+        it("should not crash", (done) => {
             const worker = new Worker("/test/webworker/webworker-script.js");
 
             worker.onmessage = function (msg) {

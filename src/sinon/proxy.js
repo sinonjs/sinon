@@ -40,7 +40,7 @@ const proxyApi = {
      * Hook for derived implementation to return fake instances matching the
      * given arguments.
      */
-    matchingFakes: function (/*args, strict*/) {
+    matchingFakes(/*args, strict*/) {
         return emptyFakes;
     },
 
@@ -65,7 +65,7 @@ const proxyApi = {
         );
     },
 
-    getCalls: function () {
+    getCalls() {
         const calls = [];
         let i;
 
@@ -85,7 +85,7 @@ const proxyApi = {
             return true;
         }
 
-        return this.callIds[0] < proxy.callIds[proxy.callIds.length - 1];
+        return this.callIds[0] < proxy.callIds.at(-1);
     },
 
     calledAfter: function calledAfter(proxy) {
@@ -118,18 +118,18 @@ const proxyApi = {
         );
     },
 
-    formatters: formatters,
-    printf: function (format) {
+    formatters,
+    printf(format) {
         const spyInstance = this;
         const args = slice(arguments, 1);
         let formatter;
 
-        return (format || "").replace(/%(.)/g, function (match, specifier) {
+        return (format || "").replaceAll(/%(.)/g, (match, specifier) => {
             formatter = proxyApi.formatters[specifier];
 
             if (typeof formatter === "function") {
                 return String(formatter(spyInstance, args));
-            } else if (!isNaN(parseInt(specifier, 10))) {
+            } else if (!Number.isNaN(parseInt(specifier, 10))) {
                 return inspect(args[specifier - 1]);
             }
 
@@ -137,7 +137,7 @@ const proxyApi = {
         });
     },
 
-    resetHistory: function () {
+    resetHistory() {
         if (this.invoking) {
             const err = new Error(
                 "Cannot reset Sinon function while invoking it. " +
@@ -167,7 +167,7 @@ const proxyApi = {
         this.errorsWithCallStack = [];
 
         if (this.fakes) {
-            forEach(this.fakes, function (fake) {
+            forEach(this.fakes, (fake) => {
                 fake.resetHistory();
             });
         }
@@ -223,9 +223,7 @@ delegateToCalls(
     false,
     "notCalledWith",
     false,
-    function () {
-        return true;
-    },
+    () => true,
 );
 delegateToCalls(
     proxyApi,
@@ -233,9 +231,7 @@ delegateToCalls(
     false,
     "notCalledWithMatch",
     false,
-    function () {
-        return true;
-    },
+    () => true,
 );
 delegateToCalls(proxyApi, "threw", true);
 delegateToCalls(proxyApi, "alwaysThrew", false, "threw");

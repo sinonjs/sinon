@@ -24,12 +24,12 @@ describe("extend", function () {
     it("should copy toString method into target", function () {
         const target = {
             hello: "world",
-            toString: function () {
+            toString() {
                 return "hello world";
             },
         };
         const source = {
-            toString: function () {
+            toString() {
                 return "hello source";
             },
         };
@@ -102,10 +102,10 @@ describe("extend", function () {
         Object.defineProperty(obj, "bound", {
             configurable: true,
             enumerable: true,
-            get: function () {
+            get() {
                 return this.private;
             },
-            set: function (value) {
+            set(value) {
                 this.private = value;
             },
         });

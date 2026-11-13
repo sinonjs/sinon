@@ -24,7 +24,7 @@ describe("createStubInstance", function () {
         };
 
         assert.exception(
-            function () {
+            () => {
                 createStubInstance(Class);
             },
             {
@@ -44,7 +44,7 @@ describe("createStubInstance", function () {
         };
 
         const stub = createStubInstance(Class);
-        refute.exception(function () {
+        refute.exception(() => {
             stub.method(3);
         });
     });
@@ -65,7 +65,7 @@ describe("createStubInstance", function () {
 
     it("has no side effects on the prototype", function () {
         const proto = {
-            method: function () {
+            method() {
                 throw new Error("error");
             },
         };
@@ -82,11 +82,11 @@ describe("createStubInstance", function () {
     it("throws exception for non function params", function () {
         const types = [{}, 3, "hi!"];
 
-        for (let i = 0; i < types.length; i++) {
+        for (const type_ of types) {
             // yes, it's silly to create functions in a loop, it's also a test
 
-            assert.exception(function () {
-                createStubInstance(types[i]);
+            assert.exception(() => {
+                createStubInstance(type_);
             });
         }
     });
@@ -145,7 +145,7 @@ describe("createStubInstance", function () {
         };
 
         assert.exception(
-            function () {
+            () => {
                 createStubInstance(Class, {
                     foo: createStub().returns(3),
                 });

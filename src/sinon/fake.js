@@ -155,7 +155,7 @@ fake.yieldsAsync = function yieldsAsync() {
         if (typeof callback !== "function") {
             throw new TypeError("Expected last argument to be a function");
         }
-        nextTick(function () {
+        nextTick(() => {
             callback.apply(null, values);
         });
     }

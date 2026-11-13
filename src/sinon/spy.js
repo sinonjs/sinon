@@ -34,7 +34,7 @@ function matches(fake, args, strict) {
 
 // Public API
 const spyApi = {
-    withArgs: function () {
+    withArgs() {
         const args = slice(arguments);
         const matching = pop(this.matchingFakes(args, true));
         if (matching) {
@@ -51,7 +51,7 @@ const spyApi = {
             return original.withArgs.apply(original, arguments);
         };
 
-        forEach(original.args, function (arg, i) {
+        forEach(original.args, (arg, i) => {
             if (!matches(fakeInstance, arg)) {
                 return;
             }
@@ -70,10 +70,10 @@ const spyApi = {
     },
 
     // Override proxy default implementation
-    matchingFakes: function (args, strict) {
-        return filter.call(this.fakes, function (fakeInstance) {
-            return matches(fakeInstance, args, strict);
-        });
+    matchingFakes(args, strict) {
+        return filter.call(this.fakes, (fakeInstance) =>
+            matches(fakeInstance, args, strict),
+        );
     },
 };
 
@@ -160,7 +160,7 @@ function createSpy(func, context) {
     extend.nonEnum(proxy, {
         displayName: name || "spy",
         fakes: [],
-        instantiateFake: instantiateFake,
+        instantiateFake,
         id: `spy#${uuid++}`,
     });
     return proxy;
@@ -185,9 +185,10 @@ function spyImpl(object, property, types, context) {
     }
 
     if (!property && typeof object === "object") {
-        return walkObjectStrict(function (obj, prop, propTypes) {
-            return spyImpl(obj, prop, propTypes, context);
-        }, object);
+        return walkObjectStrict(
+            (obj, prop, propTypes) => spyImpl(obj, prop, propTypes, context),
+            object,
+        );
     }
 
     if (!object && !property) {
@@ -207,7 +208,7 @@ function spyImpl(object, property, types, context) {
     const descriptor = {};
     const methodDesc = getPropertyDescriptor(object, property);
 
-    forEach(types, function (type) {
+    forEach(types, (type) => {
         descriptor[type] = createSpy(methodDesc[type], context);
     });
 

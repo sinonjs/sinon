@@ -47,9 +47,14 @@ function createAssertObject(opts) {
         fail: function fail(message) {
             let msg = message;
             if (cleanedAssertOptions.shouldLimitAssertionLogs) {
-                msg = message.substring(
+                msg = message.slice(
                     0,
-                    cleanedAssertOptions.assertionLogLimit,
+                    Math.max(
+                        0,
+                        cleanedAssertOptions.assertionLogLimit === undefined
+                            ? Infinity
+                            : cleanedAssertOptions.assertionLogLimit,
+                    ),
                 );
             }
             const error = new Error(msg);
@@ -78,7 +83,7 @@ function createAssertObject(opts) {
                         }
                     }
                     actual = join(orderByFirstCall(calls), ", ");
-                } catch (e) {
+                } catch {
                     // If this fails, we'll just fall back to the blank string
                 }
 
@@ -122,7 +127,7 @@ function createAssertObject(opts) {
                 typeof o.includeFail === "undefined" || Boolean(o.includeFail);
             const instance = this;
 
-            forEach(Object.keys(instance), function (method) {
+            forEach(Object.keys(instance), (method) => {
                 if (
                     method !== "expose" &&
                     (includeFail || !/^(fail)/.test(method))
@@ -153,7 +158,7 @@ function createAssertObject(opts) {
     function verifyIsStub() {
         const args = arraySlice(arguments);
 
-        forEach(args, function (method) {
+        forEach(args, (method) => {
             if (!method) {
                 assert.fail("fake is not a spy");
             }
@@ -238,7 +243,7 @@ function createAssertObject(opts) {
     }
 
     function exposedName(prefix, prop) {
-        return !prefix || /^fail/.test(prop)
+        return !prefix || prop.startsWith("fail")
             ? prop
             : prefix +
                   stringSlice(prop, 0, 1).toUpperCase() +
@@ -251,9 +256,7 @@ function createAssertObject(opts) {
     );
     mirrorPropAsAssertion(
         "notCalled",
-        function (spy) {
-            return !spy.called;
-        },
+        (spy) => !spy.called,
         "expected %n to not have been called but was called %c%C",
     );
     mirrorPropAsAssertion(

@@ -43,9 +43,7 @@ const callProto = {
 
         return reduce(
             calledWithArgs,
-            function (prev, arg, i) {
-                return prev && deepEqual(self.args[i], arg);
-            },
+            (prev, arg, i) => prev && deepEqual(self.args[i], arg),
             true,
         );
     },
@@ -60,7 +58,7 @@ const callProto = {
 
         return reduce(
             calledWithMatchArgs,
-            function (prev, expectation, i) {
+            (prev, expectation, i) => {
                 const actual = self.args[i];
 
                 return prev && match(expectation).test(actual);
@@ -100,46 +98,46 @@ const callProto = {
         return this.proxy.prototype && this.thisValue instanceof this.proxy;
     },
 
-    calledBefore: function (other) {
+    calledBefore(other) {
         return this.callId < other.callId;
     },
 
-    calledAfter: function (other) {
+    calledAfter(other) {
         return this.callId > other.callId;
     },
 
-    calledImmediatelyBefore: function (other) {
+    calledImmediatelyBefore(other) {
         return this.callId === other.callId - 1;
     },
 
-    calledImmediatelyAfter: function (other) {
+    calledImmediatelyAfter(other) {
         return this.callId === other.callId + 1;
     },
 
-    callArg: function (pos) {
+    callArg(pos) {
         this.ensureArgIsAFunction(pos);
         return this.args[pos]();
     },
 
-    callArgOn: function (pos, thisValue) {
+    callArgOn(pos, thisValue) {
         this.ensureArgIsAFunction(pos);
         return this.args[pos].apply(thisValue);
     },
 
-    callArgWith: function (pos) {
+    callArgWith(pos) {
         return this.callArgOnWith.apply(
             this,
             concat([pos, null], slice(arguments, 1)),
         );
     },
 
-    callArgOnWith: function (pos, thisValue) {
+    callArgOnWith(pos, thisValue) {
         this.ensureArgIsAFunction(pos);
         const args = slice(arguments, 2);
         return this.args[pos].apply(thisValue, args);
     },
 
-    throwArg: function (pos) {
+    throwArg(pos) {
         if (pos >= this.args.length) {
             throw new TypeError(
                 `Not enough arguments: ${pos} required but only ${this.args.length} present`,
@@ -149,15 +147,13 @@ const callProto = {
         throw this.args[pos];
     },
 
-    yield: function () {
+    yield() {
         return this.yieldOn.apply(this, concat([null], slice(arguments, 0)));
     },
 
-    yieldOn: function (thisValue) {
+    yieldOn(thisValue) {
         const args = slice(this.args);
-        const yieldFn = filter(args, function (arg) {
-            return typeof arg === "function";
-        })[0];
+        const yieldFn = filter(args, (arg) => typeof arg === "function")[0];
 
         if (!yieldFn) {
             throwYieldError(
@@ -170,18 +166,19 @@ const callProto = {
         return yieldFn.apply(thisValue, slice(arguments, 1));
     },
 
-    yieldTo: function (prop) {
+    yieldTo(prop) {
         return this.yieldToOn.apply(
             this,
             concat([prop, null], slice(arguments, 1)),
         );
     },
 
-    yieldToOn: function (prop, thisValue) {
+    yieldToOn(prop, thisValue) {
         const args = slice(this.args);
-        const yieldArg = filter(args, function (arg) {
-            return arg && typeof arg[prop] === "function";
-        })[0];
+        const yieldArg = filter(
+            args,
+            (arg) => arg && typeof arg[prop] === "function",
+        )[0];
         const yieldFn = yieldArg && yieldArg[prop];
 
         if (!yieldFn) {
@@ -197,15 +194,13 @@ const callProto = {
         return yieldFn.apply(thisValue, slice(arguments, 2));
     },
 
-    toString: function () {
+    toString() {
         if (!this.args) {
             return ":(";
         }
 
         let callStr = this.proxy ? `${String(this.proxy)}(` : "";
-        const formattedArgs = map(this.args, function (arg) {
-            return inspect(arg);
-        });
+        const formattedArgs = map(this.args, (arg) => inspect(arg));
 
         callStr = `${callStr + join(formattedArgs, ", ")})`;
 
@@ -232,7 +227,7 @@ const callProto = {
         return callStr;
     },
 
-    ensureArgIsAFunction: function (pos) {
+    ensureArgIsAFunction(pos) {
         if (typeof this.args[pos] !== "function") {
             throw new TypeError(
                 `Expected argument at position ${pos} to be a Function, but was ${typeof this
@@ -244,7 +239,7 @@ const callProto = {
 Object.defineProperty(callProto, "stack", {
     enumerable: true,
     configurable: true,
-    get: function () {
+    get() {
         return (this.errorWithCallStack && this.errorWithCallStack.stack) || "";
     },
 });
@@ -280,7 +275,7 @@ export default function createProxyCall(
 
     if (args.length > 0) {
         firstArg = args[0];
-        lastArg = args[args.length - 1];
+        lastArg = args.at(-1);
     }
 
     const proxyCall = Object.create(callProto);

@@ -92,7 +92,7 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    yields: function (fake) {
+    yields(fake) {
         fake.callArgAt = useLeftMostCallback;
         fake.callbackArguments = slice(arguments, 1);
         fake.callbackContext = undefined;
@@ -102,7 +102,7 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    yieldsRight: function (fake) {
+    yieldsRight(fake) {
         fake.callArgAt = useRightMostCallback;
         fake.callbackArguments = slice(arguments, 1);
         fake.callbackContext = undefined;
@@ -112,7 +112,7 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsOn: function (fake, context) {
+    yieldsOn(fake, context) {
         fake.callArgAt = useLeftMostCallback;
         fake.callbackArguments = slice(arguments, 2);
         fake.callbackContext = context;
@@ -122,7 +122,7 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsTo: function (fake, prop) {
+    yieldsTo(fake, prop) {
         fake.callArgAt = useLeftMostCallback;
         fake.callbackArguments = slice(arguments, 2);
         fake.callbackContext = undefined;
@@ -132,7 +132,7 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsToOn: function (fake, prop, context) {
+    yieldsToOn(fake, prop, context) {
         fake.callArgAt = useLeftMostCallback;
         fake.callbackArguments = slice(arguments, 3);
         fake.callbackContext = context;
@@ -142,7 +142,7 @@ const defaultBehaviors = {
     },
 
     throws: throwsException,
-    throwsException: throwsException,
+    throwsException,
 
     returns: function returns(fake, value) {
         fake.callsThrough = false;

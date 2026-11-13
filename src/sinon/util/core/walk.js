@@ -27,7 +27,7 @@ function walkInternal(obj, iterator, context, originalObj, seen) {
         return;
     }
 
-    forEach(Object.getOwnPropertyNames(obj), function (k) {
+    forEach(Object.getOwnPropertyNames(obj), (k) => {
         // Skip __proto__ because:
         // - It's not currently useful in this project.
         // - It's automatic, problematic, and deprecated.

@@ -5,7 +5,7 @@ const assert = referee.assert;
 describe("util/core/get-next-tick", function () {
     it("should use process.nextTick when available", function () {
         const mockProcess = {
-            nextTick: function () {
+            nextTick() {
                 return;
             },
         };

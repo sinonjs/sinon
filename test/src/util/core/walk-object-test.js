@@ -31,14 +31,14 @@ describe("util/core/walk-object", function () {
 
         it("should still identify functions in environments", function () {
             assert.exception(
-                function () {
+                () => {
                     walkObjectStrict(fnWithNoName, false);
                 },
                 { message: "Trying to fnWithNoName object but received false" },
             );
 
             assert.exception(
-                function () {
+                () => {
                     walkObjectStrict(fnWithNoName, {});
                 },
                 {
@@ -50,14 +50,14 @@ describe("util/core/walk-object", function () {
 
         it("should work with anonymous functions", function () {
             assert.exception(
-                function () {
+                () => {
                     walkObjectStrict(anonymousFn, false);
                 },
                 { message: "Trying to undefined object but received false" },
             );
 
             assert.exception(
-                function () {
+                () => {
                     walkObjectStrict(anonymousFn, {});
                 },
                 {

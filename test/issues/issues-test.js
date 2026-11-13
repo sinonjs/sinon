@@ -3,7 +3,7 @@ const sinon = require("../../lib/sinon");
 const createStub = require("../../lib/sinon/stub");
 const assert = referee.assert;
 const refute = referee.refute;
-const globalContext = typeof global !== "undefined" ? global : window;
+const globalContext = typeof global !== "undefined" ? globalThis : globalThis;
 
 describe("issues", function () {
     beforeEach(function () {
@@ -41,7 +41,7 @@ describe("issues", function () {
             beforeEach(function () {
                 try {
                     require("fs");
-                } catch (_) {
+                } catch {
                     this.skip();
                 }
             });
@@ -50,7 +50,7 @@ describe("issues", function () {
                 const fs = require("fs");
                 const testCase = this;
 
-                refute.exception(function () {
+                refute.exception(() => {
                     testCase.sandbox.stub(fs, "readFileSync");
                 });
             });
@@ -91,7 +91,7 @@ describe("issues", function () {
                 return;
             };
 
-            refute.exception(function () {
+            refute.exception(() => {
                 sinon.createStubInstance(B);
             });
         });
@@ -106,7 +106,7 @@ describe("issues", function () {
                 return;
             };
 
-            refute.exception(function () {
+            refute.exception(() => {
                 sinon.createStubInstance(A);
                 sinon.createStubInstance(A);
             });
@@ -175,7 +175,7 @@ describe("issues", function () {
                 }
 
                 const stubbedObject = sinon.stub({
-                    watch: function () {
+                    watch() {
                         return;
                     },
                 });
@@ -247,7 +247,7 @@ describe("issues", function () {
             s2();
             s1();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 sinon.assert.callOrder(s2, s1, s2);
             });
         });
@@ -259,17 +259,17 @@ describe("issues", function () {
         function throwsOnUnconfigurableProperty() {
             try {
                 const preDescriptor = Object.getOwnPropertyDescriptor(
-                    window,
+                    globalThis,
                     "innerHeight",
                 ); //backup val
-                Object.defineProperty(window, "innerHeight", {
+                Object.defineProperty(globalThis, "innerHeight", {
                     value: 10,
                     configurable: true,
                     writeable: true,
                 });
-                Object.defineProperty(window, "innerHeight", preDescriptor); //restore
+                Object.defineProperty(globalThis, "innerHeight", preDescriptor); //restore
                 return false;
-            } catch (err) {
+            } catch {
                 return true;
             }
         }
@@ -292,7 +292,7 @@ describe("issues", function () {
         });
 
         it("stub window innerHeight", function () {
-            sandbox.stub(window, "innerHeight").value(111);
+            sandbox.stub(globalThis, "innerHeight").value(111);
 
             assert.equals(window.innerHeight, 111);
         });
@@ -333,7 +333,7 @@ describe("issues", function () {
 
         it("can stub methods on the prototype", function () {
             const proto = {
-                someFunction: function () {
+                someFunction() {
                     return;
                 },
             };
@@ -359,9 +359,7 @@ describe("issues", function () {
 
         it("should be possible stub filter", function () {
             const stub = sinon.stub(Array.prototype, "filter");
-            [1, 2, 3].filter(function () {
-                return false;
-            });
+            [1, 2, 3].filter(() => false);
             assert(stub.calledOnce);
         });
     });
@@ -369,7 +367,7 @@ describe("issues", function () {
     describe("#1442 - callThrough with a mock expectation", function () {
         it("should call original method", function () {
             const foo = {
-                bar: function () {
+                bar() {
                     return;
                 },
             };
@@ -386,7 +384,7 @@ describe("issues", function () {
     describe("#1648 - resetHistory ", function () {
         it("should reset property spies", function () {
             const obj = {
-                func: function () {
+                func() {
                     return;
                 },
                 get prop() {
@@ -498,7 +496,7 @@ describe("issues", function () {
         it("it should not fail with RangeError", function () {
             const stub = sinon.stub(Array.prototype, "sort");
 
-            refute.exception(function () {
+            refute.exception(() => {
                 [1, 2, 3].sort();
             });
 
@@ -575,7 +573,7 @@ describe("issues", function () {
         it("should allow callThrough on a withArgs fake", function () {
             let calledThrough = false;
             const obj = {
-                method: function () {
+                method() {
                     calledThrough = true;
                 },
             };
@@ -651,7 +649,7 @@ describe("issues", function () {
 
         it("should support calling without object binding", function () {
             const createStubInstance = sinon.createStubInstance;
-            refute.exception(function () {
+            refute.exception(() => {
                 createStubInstance(Foo);
             });
         });
@@ -749,7 +747,7 @@ describe("issues", function () {
         function createInstanceFromClassWithReadOnlyPropertyDescriptor() {
             class BaseClass {}
             Object.defineProperty(BaseClass.prototype, "aMethod", {
-                value: function () {
+                value() {
                     return 42;
                 },
             });
@@ -802,7 +800,7 @@ describe("issues", function () {
             Object.defineProperty(instance, "aMethod", {
                 writable: true,
                 configurable: false,
-                value: function () {
+                value() {
                     return 42;
                 },
             });
@@ -894,7 +892,7 @@ describe("issues", function () {
 
                 const stub = sinon.stub(instance, "foo");
                 const expectedError = new Error("boom");
-                stub.throws(function () {
+                stub.throws(() => {
                     throw expectedError;
                 });
 
@@ -1059,9 +1057,7 @@ describe("issues", function () {
                 };
 
                 const stub = sinon.stub(instance, "foo");
-                stub.callsFake(function () {
-                    return "fake";
-                });
+                stub.callsFake(() => "fake");
 
                 assert.equals(instance.foo(), "fake");
 
@@ -1099,9 +1095,9 @@ describe("issues", function () {
         describe("callThroughWithNew", function () {
             it("should clear throws(exception)", function () {
                 class OriginalClass {
-                    constructor() {
-                        this.foo = "original";
-                    }
+                    constructor() {}
+
+                    foo = "original";
                 }
 
                 const instance = { MyClass: OriginalClass };
@@ -1123,16 +1119,16 @@ describe("issues", function () {
 
             it("should clear throws(exceptionFactory)", function () {
                 class OriginalClass {
-                    constructor() {
-                        this.foo = "original";
-                    }
+                    constructor() {}
+
+                    foo = "original";
                 }
 
                 const instance = { MyClass: OriginalClass };
 
                 const stub = sinon.stub(instance, "MyClass");
                 const expectedError = new Error("boom");
-                stub.throws(function () {
+                stub.throws(() => {
                     throw expectedError;
                 });
                 assert.exception(
@@ -1149,9 +1145,9 @@ describe("issues", function () {
 
             it("should clear throwsArg", function () {
                 class OriginalClass {
-                    constructor() {
-                        this.foo = "original";
-                    }
+                    constructor() {}
+
+                    foo = "original";
                 }
 
                 const instance = { MyClass: OriginalClass };
@@ -1176,9 +1172,10 @@ describe("issues", function () {
             it("should clear callsArg/yield stuff", function () {
                 class OriginalClass {
                     constructor(cbk) {
-                        this.foo = "original";
                         cbk();
                     }
+
+                    foo = "original";
                 }
 
                 const instance = { MyClass: OriginalClass };
@@ -1216,7 +1213,7 @@ describe("issues", function () {
         });
 
         try {
-            refute.exception(function () {
+            refute.exception(() => {
                 sinon.stub();
             });
         } finally {

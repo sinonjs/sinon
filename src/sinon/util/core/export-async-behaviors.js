@@ -13,7 +13,7 @@ const { reduce } = prototypes.array;
 export default function exportAsyncBehaviors(behaviorMethods) {
     return reduce(
         Object.keys(behaviorMethods),
-        function (acc, method) {
+        (acc, method) => {
             // need to avoid creating another async versions of the newly added async methods
             if (method.match(/^(callsArg|yields)/) && !method.match(/Async/)) {
                 acc[`${method}Async`] = function () {

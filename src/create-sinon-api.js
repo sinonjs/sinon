@@ -27,8 +27,8 @@ export default function createApi() {
         // sub-sandboxes (regression in 21.1.0, see #2701).
         createSandbox: createConfiguredSandbox,
         match: samsam.createMatcher,
-        restoreObject: restoreObject,
-        expectation: expectation,
+        restoreObject,
+        expectation,
         timers: fakeTimers.timers,
         createStubInstance: function createStubInstance() {
             const stubbed = createStubInstanceImpl.apply(null, arguments);
@@ -40,11 +40,11 @@ export default function createApi() {
             return stubbed;
         },
 
-        addBehavior: function (name, fn) {
+        addBehavior(name, fn) {
             behavior.addBehavior(stub, name, fn);
         },
 
-        promise: promise,
+        promise,
     };
 
     Object.defineProperty(apiMethods.createSandbox, "name", {

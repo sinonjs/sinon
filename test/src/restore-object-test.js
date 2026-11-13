@@ -14,21 +14,21 @@ describe("restore-object", function () {
 
     it("throws on falsy input", function () {
         assert.exception(
-            function () {
+            () => {
                 restoreObject(false);
             },
             { message: "Trying to restore object but received false" },
         );
 
         assert.exception(
-            function () {
+            () => {
                 restoreObject(null);
             },
             { message: "Trying to restore object but received null" },
         );
 
         assert.exception(
-            function () {
+            () => {
                 restoreObject();
             },
             { message: "Trying to restore object but received undefined" },
@@ -37,27 +37,27 @@ describe("restore-object", function () {
 
     it("is a no-op with no spies or stubs", function () {
         const object = {
-            catpants: function () {},
+            catpants() {},
             meh: "okay",
         };
 
-        refute.exception(function () {
+        refute.exception(() => {
             restoreObject(object);
         });
     });
 
     it("works with mixed spies and stubs", function () {
         let object = {
-            who: function () {},
-            what: function () {},
-            when: function () {},
+            who() {},
+            what() {},
+            when() {},
             why: "I don't know",
         };
 
         sinonSpy(object, "who");
         sinonStub(object, "what");
 
-        refute.exception(function () {
+        refute.exception(() => {
             object = restoreObject(object);
         });
 
@@ -68,8 +68,8 @@ describe("restore-object", function () {
 
     it("restores entire spied object", function () {
         let object = sinonSpy({
-            foo: function () {},
-            bar: function () {},
+            foo() {},
+            bar() {},
         });
 
         object = restoreObject(object);
@@ -80,8 +80,8 @@ describe("restore-object", function () {
 
     it("restores entire stubbed object", function () {
         let object = sinonStub({
-            foo: function () {},
-            bar: function () {},
+            foo() {},
+            bar() {},
         });
 
         object = restoreObject(object);
