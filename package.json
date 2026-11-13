@@ -133,7 +133,7 @@
   "devDependencies": {
     "@mochify/cli": "^1.0.0",
     "@mochify/driver-puppeteer": "^1.0.1",
-    "@mochify/driver-webdriver": "^1.0.0",
+    "@mochify/driver-webdriver": "^2.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
