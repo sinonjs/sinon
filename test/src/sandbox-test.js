@@ -699,6 +699,54 @@ describe("Sandbox", function () {
     });
 
     describe(".fake", function () {
+        for (const method of ["yields", "yieldsAsync"]) {
+            for (const [name, values] of [
+                ["passes no callback arguments when none are supplied", []],
+                [
+                    "passes only the supplied callback arguments",
+                    [null, { callId: 42 }, false],
+                ],
+            ]) {
+                it(`${method} ${name}`, function (done) {
+                    const sandbox = createSandbox();
+                    const fake = sandbox.fake[method](...values);
+
+                    fake(function (...actual) {
+                        assert.equals(actual, values);
+                        done();
+                    });
+                });
+            }
+
+            it(`${method} shares call order with other sandbox fakes`, function (done) {
+                const sandbox = createSandbox();
+                const before = sandbox.spy();
+                const fake = sandbox.fake[method]();
+                const callback = sandbox.spy(function () {
+                    assert.isTrue(fake.calledImmediatelyAfter(before));
+                    assert.isTrue(callback.calledImmediatelyAfter(fake));
+                    done();
+                });
+
+                before();
+                fake(callback);
+            });
+        }
+
+        it("returns no value when no return value is supplied", function () {
+            const sandbox = createSandbox();
+            const fake = sandbox.fake.returns();
+
+            assert.isUndefined(fake());
+        });
+
+        it("resolves to undefined when no value is supplied", async function () {
+            const sandbox = createSandbox();
+            const fake = sandbox.fake.resolves();
+
+            assert.isUndefined(await fake());
+        });
+
         it("should return a fake", function () {
             const sandbox = createSandbox();
             const fake = sandbox.fake();
