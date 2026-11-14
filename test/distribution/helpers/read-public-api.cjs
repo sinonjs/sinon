@@ -17,7 +17,7 @@ module.exports = {
         fake: describeFunction(sinon.fake),
         restore: describeFunction(sinon.restore),
     },
-    hasTimers: Object.prototype.hasOwnProperty.call(sinon, "timers"),
-    hasPromise: Object.prototype.hasOwnProperty.call(sinon, "promise"),
-    hasMatch: Object.prototype.hasOwnProperty.call(sinon, "match"),
+    hasTimers: Object.hasOwn(sinon, "timers"),
+    hasPromise: Object.hasOwn(sinon, "promise"),
+    hasMatch: Object.hasOwn(sinon, "match"),
 };

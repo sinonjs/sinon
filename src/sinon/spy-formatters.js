@@ -36,7 +36,7 @@ function colorSinonMatchText(matcher, calledArg, calledArgMessage) {
  * @returns {string} the colored diff
  */
 function colorDiffText(diff) {
-    const objects = map(diff, function (part) {
+    const objects = map(diff, (part) => {
         let text = part.value;
         if (part.added) {
             text = colorizer.green(text);
@@ -64,15 +64,15 @@ function quoteStringValue(value) {
 }
 
 export default {
-    c: function (spyInstance) {
+    c(spyInstance) {
         return timesInWords(spyInstance.callCount);
     },
 
-    n: function (spyInstance) {
+    n(spyInstance) {
         return spyInstance.toString();
     },
 
-    D: function (spyInstance, args) {
+    D(spyInstance, args) {
         let message = "";
 
         for (let i = 0, l = spyInstance.callCount; i < l; ++i) {
@@ -123,7 +123,7 @@ export default {
         return message;
     },
 
-    C: function (spyInstance) {
+    C(spyInstance) {
         const calls = [];
 
         for (let i = 0, l = spyInstance.callCount; i < l; ++i) {
@@ -137,7 +137,7 @@ export default {
         return calls.length > 0 ? `\n${join(calls, "\n")}` : "";
     },
 
-    t: function (spyInstance) {
+    t(spyInstance) {
         const objects = [];
 
         for (let i = 0, l = spyInstance.callCount; i < l; ++i) {
@@ -147,11 +147,9 @@ export default {
         return join(objects, ", ");
     },
 
-    "*": function (spyInstance, args) {
+    "*"(spyInstance, args) {
         return join(
-            map(args, function (arg) {
-                return inspect(arg);
-            }),
+            map(args, (arg) => inspect(arg)),
             ", ",
         );
     },

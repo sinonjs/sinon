@@ -9,7 +9,7 @@ const assert = referee.assert;
 const refute = referee.refute;
 const fail = referee.fail;
 const match = samsam.createMatcher;
-const globalContext = typeof global !== "undefined" ? global : window;
+const globalContext = typeof global !== "undefined" ? globalThis : globalThis;
 
 function verifyFunctionName(func, expectedName) {
     const descriptor = Object.getOwnPropertyDescriptor(func, "name");
@@ -38,7 +38,7 @@ describe("stub", function () {
 
     it("fails if stubbing property on null", function () {
         assert.exception(
-            function () {
+            () => {
                 createStub(null, "prop");
             },
             {
@@ -53,7 +53,7 @@ describe("stub", function () {
         }
 
         assert.exception(
-            function () {
+            () => {
                 createStub(null, Symbol("apple pie"));
             },
             {
@@ -71,7 +71,7 @@ describe("stub", function () {
         Object.seal(object);
 
         assert.exception(
-            function () {
+            () => {
                 createStub(object);
             },
             {
@@ -232,7 +232,7 @@ describe("stub", function () {
             const stub = createStub();
             stub.throws().returns(1);
 
-            refute.exception(function () {
+            refute.exception(() => {
                 stub();
             });
         });
@@ -261,7 +261,7 @@ describe("stub", function () {
             stub.returns("no exception");
             stub.onFirstCall().throws();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub();
             });
 
@@ -288,7 +288,7 @@ describe("stub", function () {
             const object = {};
             stub.resolves(object);
 
-            return stub().then(function (actual) {
+            return stub().then((actual) => {
                 assert.same(actual, object);
             });
         });
@@ -303,7 +303,7 @@ describe("stub", function () {
             const stub = createStub();
             stub.throws().resolves(1);
 
-            refute.exception(function () {
+            refute.exception(() => {
                 stub();
             });
         });
@@ -323,7 +323,7 @@ describe("stub", function () {
             };
             const stub = createStub(obj, "fn").callThrough().resolves(2);
 
-            return stub().then(function (actual) {
+            return stub().then((actual) => {
                 assert.equals(actual, 2);
             });
         });
@@ -332,7 +332,7 @@ describe("stub", function () {
             const fakeFn = createStub().resolves(2);
             const stub = createStub().callsFake(fakeFn).resolves(1);
 
-            return stub().then(function (actual) {
+            return stub().then((actual) => {
                 assert.same(actual, 1);
                 refute(fakeFn.called);
             });
@@ -373,10 +373,10 @@ describe("stub", function () {
             stub.rejects(reason);
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("this should not resolve");
                 })
-                .catch(function (actual) {
+                .catch((actual) => {
                     assert.same(actual, reason);
                 });
         });
@@ -393,10 +393,10 @@ describe("stub", function () {
             stub.rejects("Error", message);
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("Expected stub to reject");
                 })
-                .catch(function (reason) {
+                .catch((reason) => {
                     assert.equals(reason.message, message);
                 });
         });
@@ -406,10 +406,10 @@ describe("stub", function () {
             stub.rejects("Error");
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("Expected stub to reject");
                 })
-                .catch(function (reason) {
+                .catch((reason) => {
                     assert.equals(reason.message, "");
                 });
         });
@@ -419,10 +419,10 @@ describe("stub", function () {
             stub.rejects();
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("Expected stub to reject");
                 })
-                .catch(function (reason) {
+                .catch((reason) => {
                     assert.equals(reason.name, "Error");
                 });
         });
@@ -440,10 +440,10 @@ describe("stub", function () {
             const stub = createStub().callsFake(fakeFn).rejects(reason);
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("this should not resolve");
                 })
-                .catch(function (actual) {
+                .catch((actual) => {
                     assert.same(actual, reason);
                     refute(fakeFn.called);
                 });
@@ -459,10 +459,10 @@ describe("stub", function () {
             const stub = createStub(obj, "fn").callThrough().rejects(reason);
 
             return stub()
-                .then(function () {
+                .then(() => {
                     referee.fail("this should not resolve");
                 })
-                .catch(function (actual) {
+                .catch((actual) => {
                     assert.same(actual, reason);
                 });
         });
@@ -494,7 +494,7 @@ describe("stub", function () {
             instance.stub = createStub();
             instance.stub.resolvesThis();
 
-            return instance.stub().then(function (actual) {
+            return instance.stub().then((actual) => {
                 assert.same(actual, instance);
             });
         });
@@ -504,7 +504,7 @@ describe("stub", function () {
             stub.resolvesThis();
             const object = {};
 
-            return stub.call(object).then(function (actual) {
+            return stub.call(object).then((actual) => {
                 assert.same(actual, object);
             });
         });
@@ -514,7 +514,7 @@ describe("stub", function () {
             stub.resolvesThis();
             const object = {};
 
-            return stub.apply(object).then(function (actual) {
+            return stub.apply(object).then((actual) => {
                 assert.same(actual, object);
             });
         });
@@ -529,7 +529,7 @@ describe("stub", function () {
             const instance = {};
             instance.stub = createStub().throws(new Error()).resolvesThis();
 
-            return instance.stub().then(function (actual) {
+            return instance.stub().then((actual) => {
                 assert.same(actual, instance);
             });
         });
@@ -538,7 +538,7 @@ describe("stub", function () {
             const instance = {};
             instance.stub = createStub().throws().resolvesThis();
 
-            return instance.stub().then(function (actual) {
+            return instance.stub().then((actual) => {
                 assert.same(actual, instance);
             });
         });
@@ -551,7 +551,7 @@ describe("stub", function () {
             };
             createStub(obj, "fn").callThrough().resolvesThis();
 
-            return obj.fn().then(function (actual) {
+            return obj.fn().then((actual) => {
                 assert.same(actual, obj);
             });
         });
@@ -562,7 +562,7 @@ describe("stub", function () {
             const instance = {};
             instance.stub = createStub().callsFake(fakeFn).resolvesThis();
 
-            return instance.stub().then(function (actual) {
+            return instance.stub().then((actual) => {
                 assert.same(actual, instance);
                 refute(fakeFn.called);
             });
@@ -587,7 +587,7 @@ describe("stub", function () {
             const object = {};
             stub.resolvesArg(0);
 
-            return stub(object).then(function (actual) {
+            return stub(object).then((actual) => {
                 assert.same(actual, object);
             });
         });
@@ -597,11 +597,9 @@ describe("stub", function () {
             const object = {};
             stub.resolvesArg(2);
 
-            return stub("ignored", "ignored again", object).then(
-                function (actual) {
-                    assert.same(actual, object);
-                },
-            );
+            return stub("ignored", "ignored again", object).then((actual) => {
+                assert.same(actual, object);
+            });
         });
 
         it("should return the same stub", function () {
@@ -614,7 +612,7 @@ describe("stub", function () {
             const stub = createStub();
             stub.throws().resolvesArg(1);
 
-            refute.exception(function () {
+            refute.exception(() => {
                 stub("zero", "one");
             });
         });
@@ -623,7 +621,7 @@ describe("stub", function () {
             const stub = createStub();
             stub.rejects(Error("should be superseded")).resolvesArg(1);
 
-            return stub("zero", "one").then(function (actual) {
+            return stub("zero", "one").then((actual) => {
                 assert.same(actual, "one");
             });
         });
@@ -632,7 +630,7 @@ describe("stub", function () {
             const fakeFn = createStub().resolves("fake");
             const stub = createStub().callsFake(fakeFn).resolvesArg(1);
 
-            return stub("zero", "one").then(function (actual) {
+            return stub("zero", "one").then((actual) => {
                 assert.same(actual, "one");
                 refute(fakeFn.called);
             });
@@ -646,7 +644,7 @@ describe("stub", function () {
             };
             createStub(obj, "fn").callThrough().resolvesArg(1);
 
-            return obj.fn("zero", "one").then(function (actual) {
+            return obj.fn("zero", "one").then((actual) => {
                 assert.same(actual, "one");
             });
         });
@@ -663,7 +661,7 @@ describe("stub", function () {
             const stub = createStub();
 
             assert.exception(
-                function () {
+                () => {
                     stub.resolvesArg();
                 },
                 { name: "TypeError" },
@@ -675,7 +673,7 @@ describe("stub", function () {
             stub.resolvesArg(3);
 
             assert.exception(
-                function () {
+                () => {
                     stub("zero", "one", "two");
                 },
                 {
@@ -734,7 +732,7 @@ describe("stub", function () {
             const stub = createStub();
 
             assert.exception(
-                function () {
+                () => {
                     stub.returnsArg();
                 },
                 { name: "TypeError" },
@@ -746,7 +744,7 @@ describe("stub", function () {
             stub.returnsArg(3);
 
             assert.exception(
-                function () {
+                () => {
                     stub("only", "two arguments");
                 },
                 {
@@ -765,12 +763,10 @@ describe("stub", function () {
             const expectedError = new Error("The expected error message");
 
             assert.exception(
-                function () {
+                () => {
                     stub(expectedError);
                 },
-                function (err) {
-                    return err.message === expectedError.message;
-                },
+                (err) => err.message === expectedError.message,
             );
         });
 
@@ -784,7 +780,7 @@ describe("stub", function () {
             const stub = createStub();
 
             assert.exception(
-                function () {
+                () => {
                     stub.throwsArg();
                 },
                 { name: "TypeError" },
@@ -796,7 +792,7 @@ describe("stub", function () {
             stub.throwsArg(3);
 
             assert.exception(
-                function () {
+                () => {
                     stub("only", "two arguments");
                 },
                 {
@@ -814,17 +810,15 @@ describe("stub", function () {
             stub.returns(1);
             stub.onSecondCall().throwsArg(1);
 
-            refute.exception(function () {
+            refute.exception(() => {
                 assert.equals(1, stub(null, expectedError));
             });
 
             assert.exception(
-                function () {
+                () => {
                     stub(null, expectedError);
                 },
-                function (error) {
-                    return error.message === expectedError.message;
-                },
+                (error) => error.message === expectedError.message,
             );
         });
 
@@ -834,7 +828,7 @@ describe("stub", function () {
             stub.throwsArg(0);
             stub.resetBehavior();
 
-            refute.exception(function () {
+            refute.exception(() => {
                 stub(new Error("catpants"));
             });
         });
@@ -845,12 +839,10 @@ describe("stub", function () {
             const expectedError = new Error("catpants");
 
             assert.exception(
-                function () {
+                () => {
                     stub(null, expectedError);
                 },
-                function (error) {
-                    return error.message === expectedError.message;
-                },
+                (error) => error.message === expectedError.message,
             );
 
             refute(fakeFn.called);
@@ -866,12 +858,10 @@ describe("stub", function () {
             const expectedError = new Error("catpants");
 
             assert.exception(
-                function () {
+                () => {
                     obj.fn(null, expectedError);
                 },
-                function (error) {
-                    return error.message === expectedError.message;
-                },
+                (error) => error.message === expectedError.message,
             );
         });
     });
@@ -960,7 +950,7 @@ describe("stub", function () {
             const exceptionType = "TypeError";
             stub.throws(exceptionType);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub();
             }, exceptionType);
         });
@@ -971,7 +961,7 @@ describe("stub", function () {
             stub.throws("Error", message);
 
             assert.exception(stub, {
-                message: message,
+                message,
             });
         });
 
@@ -994,9 +984,7 @@ describe("stub", function () {
         it("throws an exception created using a function", function () {
             const stub = createStub();
 
-            stub.throws(function () {
-                return new Error("not implemented");
-            });
+            stub.throws(() => new Error("not implemented"));
 
             assert.exception(stub, {
                 message: "not implemented",
@@ -1011,7 +999,7 @@ describe("stub", function () {
             stub.withArgs(1).throws("TypeError");
 
             assert.exception(
-                function () {
+                () => {
                     stub(1);
                 },
                 {
@@ -1059,9 +1047,7 @@ describe("stub", function () {
             it("uses a lazily created exception provided by a function", function () {
                 const stub = createStub();
 
-                stub.throws(function () {
-                    return new Error("not implemented");
-                });
+                stub.throws(() => new Error("not implemented"));
 
                 assert.isFalse(errorSpy.called);
                 assert.exception(stub, {
@@ -1149,7 +1135,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArg();
                 },
                 { name: "TypeError" },
@@ -1160,7 +1146,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArg({});
                 },
                 { name: "TypeError" },
@@ -1172,7 +1158,7 @@ describe("stub", function () {
             stub.callsArg(3);
 
             assert.exception(
-                function () {
+                () => {
                     stub("only", "two arguments");
                 },
                 {
@@ -1251,7 +1237,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArgWith();
                 },
                 { name: "TypeError" },
@@ -1262,7 +1248,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArgWith({});
                 },
                 { name: "TypeError" },
@@ -1352,7 +1338,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArgOn();
                 },
                 { name: "TypeError" },
@@ -1487,7 +1473,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArgOnWith();
                 },
                 { name: "TypeError" },
@@ -1498,7 +1484,7 @@ describe("stub", function () {
             const stub = this.stub;
 
             assert.exception(
-                function () {
+                () => {
                     stub.callsArgOnWith({});
                 },
                 { name: "TypeError" },
@@ -1620,7 +1606,7 @@ describe("stub", function () {
             const object = this.object;
 
             assert.exception(
-                function () {
+                () => {
                     createStub(object, "method", 1);
                 },
                 {
@@ -1657,9 +1643,7 @@ describe("stub", function () {
 
         it("handles threw properly for lazily instantiated Errors", function () {
             const stub = createStub(this.object, "method");
-            stub.throws(function () {
-                return new TypeError();
-            });
+            stub.throws(() => new TypeError());
 
             assert.exception(this.object.method);
 
@@ -1675,20 +1659,18 @@ describe("stub", function () {
 
         it("successfully stubs falsy properties", function () {
             const obj = {
-                0: function () {
+                0() {
                     return;
                 },
             };
 
-            createStub(obj, 0).callsFake(function () {
-                return "stubbed value";
-            });
+            createStub(obj, 0).callsFake(() => "stubbed value");
 
             assert.equals(obj[0](), "stubbed value");
         });
 
         it("does not stub string", function () {
-            assert.exception(function () {
+            assert.exception(() => {
                 createStub("test");
             });
         });
@@ -1732,9 +1714,7 @@ describe("stub", function () {
                 },
             };
 
-            const stub = createStub(obj, "prop").get(function () {
-                return 43;
-            });
+            const stub = createStub(obj, "prop").get(() => 43);
             assert.equals(obj.prop, 43);
 
             stub.restore();
@@ -1744,7 +1724,7 @@ describe("stub", function () {
     describe("stubbed function", function () {
         it("has toString method", function () {
             const obj = {
-                meth: function () {
+                meth() {
                     return;
                 },
             };
@@ -1788,14 +1768,14 @@ describe("stub", function () {
 
         it("includes stub name and actual arguments in error", function () {
             const myObj = {
-                somethingAwesome: function () {
+                somethingAwesome() {
                     return;
                 },
             };
             const stub = createStub(myObj, "somethingAwesome").yields();
 
             assert.exception(
-                function () {
+                () => {
                     stub(23, 42);
                 },
                 {
@@ -1838,7 +1818,7 @@ describe("stub", function () {
             const stub = createStub().yields(obj, "Crazy");
             const callback = createStub().throws();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(callback);
             });
         });
@@ -1847,7 +1827,7 @@ describe("stub", function () {
             const stub = createStub().throws().yields();
             const callback = createStub().returns("return value");
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(callback);
             });
             assert(callback.calledOnce);
@@ -1932,14 +1912,14 @@ describe("stub", function () {
 
         it("includes stub name and actual arguments in error", function () {
             const myObj = {
-                somethingAwesome: function () {
+                somethingAwesome() {
                     return;
                 },
             };
             const stub = createStub(myObj, "somethingAwesome").yieldsRight();
 
             assert.exception(
-                function () {
+                () => {
                     stub(23, 42);
                 },
                 {
@@ -1982,7 +1962,7 @@ describe("stub", function () {
             const stub = createStub().yieldsRight(obj, "Crazy");
             const callback = createStub().throws();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(callback);
             });
         });
@@ -1991,7 +1971,7 @@ describe("stub", function () {
             const stub = createStub().yieldsRight().throws();
             const callback = createStub().returns("return value");
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(callback);
             });
             assert(callback.calledOnce);
@@ -2092,7 +2072,7 @@ describe("stub", function () {
 
         it("includes stub name and actual arguments in error", function () {
             const myObj = {
-                somethingAwesome: function () {
+                somethingAwesome() {
                     return;
                 },
             };
@@ -2101,7 +2081,7 @@ describe("stub", function () {
             );
 
             assert.exception(
-                function () {
+                () => {
                     stub(23, 42);
                 },
                 {
@@ -2160,7 +2140,7 @@ describe("stub", function () {
             const stub = this.stub.throws().yieldsOn(this.fakeContext);
             const callback = createStub().returns("return value");
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(callback);
             });
             assert(callback.calledOnce);
@@ -2264,7 +2244,7 @@ describe("stub", function () {
 
         it("includes stub name and actual arguments in error", function () {
             const myObj = {
-                somethingAwesome: function () {
+                somethingAwesome() {
                     return;
                 },
             };
@@ -2273,7 +2253,7 @@ describe("stub", function () {
             );
 
             assert.exception(
-                function () {
+                () => {
                     stub(23, 42);
                 },
                 {
@@ -2318,7 +2298,7 @@ describe("stub", function () {
             const stub = createStub().yieldsTo("error", obj, "Crazy");
             const callback = createStub().throws();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub({ error: callback });
             });
         });
@@ -2327,7 +2307,7 @@ describe("stub", function () {
             const stub = createStub().throws().yieldsTo("success");
             const callback = createStub().returns("return value");
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub({ success: callback });
             });
             assert(callback.calledOnce);
@@ -2442,7 +2422,7 @@ describe("stub", function () {
 
         it("includes stub name and actual arguments in error", function () {
             const myObj = {
-                somethingAwesome: function () {
+                somethingAwesome() {
                     return;
                 },
             };
@@ -2452,7 +2432,7 @@ describe("stub", function () {
             );
 
             assert.exception(
-                function () {
+                () => {
                     stub(23, 42);
                 },
                 {
@@ -2515,7 +2495,7 @@ describe("stub", function () {
                 .yieldsToOn("success", this.fakeContext);
             const callback = createStub().returns("return value");
 
-            assert.exception(function () {
+            assert.exception(() => {
                 stub({ success: callback });
             });
             assert(callback.calledOnce);
@@ -2623,7 +2603,7 @@ describe("stub", function () {
             stub.withArgs(42).throws();
 
             refute.exception(stub);
-            assert.exception(function () {
+            assert.exception(() => {
                 stub(42);
             });
         });
@@ -2670,7 +2650,7 @@ describe("stub", function () {
             const promiseLibrary = {};
 
             stub.defaultBehavior = {
-                promiseLibrary: promiseLibrary,
+                promiseLibrary,
             };
 
             const filtered = stub.withArgs("value");
@@ -2692,7 +2672,7 @@ describe("stub", function () {
             });
 
             assert.exception(
-                function () {
+                () => {
                     createStub(object, "prop");
                 },
                 {
@@ -2714,9 +2694,7 @@ describe("stub", function () {
             stub.restore();
 
             assert.same(object.prop, prototype.prop);
-            assert.isFalse(
-                Object.prototype.hasOwnProperty.call(object, "prop"),
-            );
+            assert.isFalse(Object.hasOwn(object, "prop"));
         });
 
         it("throws for non-configurable accessors", function () {
@@ -2729,7 +2707,7 @@ describe("stub", function () {
             });
 
             assert.exception(
-                function () {
+                () => {
                     createStub(object, "prop");
                 },
                 {
@@ -2765,7 +2743,7 @@ describe("stub", function () {
             const array = [];
             this.stub.callsArgWithAsync(1, object, array);
 
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 assert(callback.calledWith(object, array));
                 done();
             });
@@ -2788,7 +2766,7 @@ describe("stub", function () {
             const context = this.fakeContext;
             this.stub.callsArgOnAsync(2, context);
 
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 assert(callback.calledOn(context));
                 done();
             });
@@ -2810,7 +2788,7 @@ describe("stub", function () {
             const context = this.fakeContext;
             this.stub.callsArgOnWithAsync(1, context, object);
 
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 assert(callback.calledOn(context));
                 assert(callback.calledWith(object));
                 done();
@@ -2844,7 +2822,7 @@ describe("stub", function () {
             const context = this.fakeContext;
             this.stub.yieldsOnAsync(context);
 
-            const spy = createSpy(function () {
+            const spy = createSpy(() => {
                 assert(spy.calledOnce);
                 assert(spy.calledOn(context));
                 assert.equals(spy.args[0].length, 0);
@@ -2861,7 +2839,7 @@ describe("stub", function () {
         it("asynchronously yields to property of object argument", function (done) {
             const stub = createStub().yieldsToAsync("success");
 
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 assert(callback.calledOnce);
                 assert.equals(callback.args[0].length, 0);
                 done();
@@ -2883,7 +2861,7 @@ describe("stub", function () {
             const context = this.fakeContext;
             this.stub.yieldsToOnAsync("success", context);
 
-            const callback = createSpy(function () {
+            const callback = createSpy(() => {
                 assert(callback.calledOnce);
                 assert(callback.calledOn(context));
                 assert.equals(callback.args[0].length, 0);
@@ -2932,9 +2910,7 @@ describe("stub", function () {
 
             stub();
 
-            assert.exception(stub, function (e) {
-                return e === error;
-            });
+            assert.exception(stub, (e) => e === error);
         });
 
         it("supports chained declaration of behavior", function () {
@@ -3024,7 +3000,7 @@ describe("stub", function () {
 
             it("throws an understandable error when trying to use withArgs on behavior", function () {
                 assert.exception(
-                    function () {
+                    () => {
                         createStub().onFirstCall().withArgs(1);
                     },
                     {
@@ -3185,7 +3161,7 @@ describe("stub", function () {
     describe(".reset", function () {
         it("resets behavior", function () {
             const obj = {
-                a: function () {
+                a() {
                     return;
                 },
             };
@@ -3390,7 +3366,7 @@ describe("stub", function () {
 
         it("retains function length 0", function () {
             const object = {
-                test: function () {
+                test() {
                     return;
                 },
             };
@@ -3403,7 +3379,7 @@ describe("stub", function () {
         it("retains function length 1", function () {
             const object = {
                 // eslint-disable-next-line no-unused-vars
-                test: function (a) {
+                test(a) {
                     return;
                 },
             };
@@ -3416,7 +3392,7 @@ describe("stub", function () {
         it("retains function length 2", function () {
             const object = {
                 // eslint-disable-next-line no-unused-vars
-                test: function (a, b) {
+                test(a, b) {
                     return;
                 },
             };
@@ -3429,7 +3405,7 @@ describe("stub", function () {
         it("retains function length 3", function () {
             const object = {
                 // eslint-disable-next-line no-unused-vars
-                test: function (a, b, c) {
+                test(a, b, c) {
                     return;
                 },
             };
@@ -3442,7 +3418,7 @@ describe("stub", function () {
         it("retains function length 4", function () {
             const object = {
                 // eslint-disable-next-line no-unused-vars
-                test: function (a, b, c, d) {
+                test(a, b, c, d) {
                     return;
                 },
             };
@@ -3516,8 +3492,8 @@ describe("stub", function () {
             // We need a function here because we can't wrap properties that are already stubs
             let callArgs = [];
 
-            const originalFunc = function increaseCallCount() {
-                callArgs = arguments;
+            const originalFunc = function increaseCallCount(...args) {
+                callArgs = args;
             };
 
             const myObj = {
@@ -3584,8 +3560,8 @@ describe("stub", function () {
                 // We need a function here because we can't wrap properties that are already stubs
                 let callArgs = [];
 
-                function OriginalClass() {
-                    callArgs = arguments;
+                function OriginalClass(...args) {
+                    callArgs = args;
                     this.foo = "baz";
                 }
 
@@ -4019,9 +3995,7 @@ describe("stub", function () {
                     return "foo";
                 },
             };
-            createStub(myObj, "prop").get(function () {
-                return "bar";
-            });
+            createStub(myObj, "prop").get(() => "bar");
             assert.isUndefined(myObj.prop.wrappedMethod);
         });
     });

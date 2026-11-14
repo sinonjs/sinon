@@ -29,7 +29,7 @@ describe("sinonMock", function () {
 
         it("throws without object", function () {
             assert.exception(
-                function () {
+                () => {
                     sinonMock.create();
                 },
                 { name: "TypeError" },
@@ -40,7 +40,7 @@ describe("sinonMock", function () {
     describe(".expects", function () {
         beforeEach(function () {
             this.mock = sinonMock.create({
-                someMethod: function () {
+                someMethod() {
                     return;
                 },
             });
@@ -50,7 +50,7 @@ describe("sinonMock", function () {
             const mock = this.mock;
 
             assert.exception(
-                function () {
+                () => {
                     mock.expects();
                 },
                 { name: "TypeError" },
@@ -67,7 +67,7 @@ describe("sinonMock", function () {
         it("throws if expecting a non-existent method", function () {
             const mock = this.mock;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 mock.expects("someMethod2");
             });
         });
@@ -91,7 +91,7 @@ describe("sinonMock", function () {
             anonMock.once();
 
             assert.exception(
-                function () {
+                () => {
                     anonMock.verify();
                 },
                 {
@@ -110,7 +110,7 @@ describe("sinonMock", function () {
         it("is invokable", function () {
             const expectation = this.expectation;
 
-            refute.exception(function () {
+            refute.exception(() => {
                 expectation();
             });
         });
@@ -139,7 +139,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -162,7 +162,7 @@ describe("sinonMock", function () {
                 expectation.never();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -181,7 +181,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -201,7 +201,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -222,7 +222,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -242,7 +242,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -257,7 +257,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.exactly();
                     },
                     { name: "TypeError" },
@@ -268,7 +268,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.exactly("12");
                     },
                     { name: "TypeError" },
@@ -280,15 +280,12 @@ describe("sinonMock", function () {
                     const expectation = this.expectation;
 
                     assert.exception(
-                        function () {
+                        () => {
                             expectation.exactly(Symbol("apple pie"));
                         },
-                        function (err) {
-                            return (
-                                err.message ===
-                                "'Symbol(apple pie)' is not a number"
-                            );
-                        },
+                        (err) =>
+                            err.message ===
+                            "'Symbol(apple pie)' is not a number",
                     );
                 }
             });
@@ -299,7 +296,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.atLeast();
                     },
                     { name: "TypeError" },
@@ -310,7 +307,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.atLeast({});
                     },
                     { name: "TypeError" },
@@ -322,15 +319,11 @@ describe("sinonMock", function () {
                     const expectation = this.expectation;
 
                     assert.exception(
-                        function () {
+                        () => {
                             expectation.atLeast(Symbol("apple pie"));
                         },
-                        function (err) {
-                            return (
-                                err.message ===
-                                "'Symbol(apple pie)' is not number"
-                            );
-                        },
+                        (err) =>
+                            err.message === "'Symbol(apple pie)' is not number",
                     );
                 }
             });
@@ -345,7 +338,7 @@ describe("sinonMock", function () {
                 expectation();
                 expectation();
 
-                refute.exception(function () {
+                refute.exception(() => {
                     expectation();
                     expectation();
                 });
@@ -377,7 +370,7 @@ describe("sinonMock", function () {
 
             it("should not throw when exceeding at least expectation", function () {
                 const obj = {
-                    foobar: function () {
+                    foobar() {
                         return;
                     },
                 };
@@ -386,7 +379,7 @@ describe("sinonMock", function () {
 
                 obj.foobar();
 
-                refute.exception(function () {
+                refute.exception(() => {
                     obj.foobar();
                     mock.verify();
                 });
@@ -394,7 +387,7 @@ describe("sinonMock", function () {
 
             it("should not throw when exceeding at least expectation and withargs", function () {
                 const obj = {
-                    foobar: function () {
+                    foobar() {
                         return;
                     },
                 };
@@ -416,7 +409,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.atMost();
                     },
                     { name: "TypeError" },
@@ -427,7 +420,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.atMost({});
                     },
                     { name: "TypeError" },
@@ -439,15 +432,11 @@ describe("sinonMock", function () {
                     const expectation = this.expectation;
 
                     assert.exception(
-                        function () {
+                        () => {
                             expectation.atMost(Symbol("apple pie"));
                         },
-                        function (err) {
-                            return (
-                                err.message ===
-                                "'Symbol(apple pie)' is not number"
-                            );
-                        },
+                        (err) =>
+                            err.message === "'Symbol(apple pie)' is not number",
                     );
                 }
             });
@@ -460,7 +449,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
                 expectation.atMost(2);
 
-                refute.exception(function () {
+                refute.exception(() => {
                     expectation();
                 });
             });
@@ -487,7 +476,7 @@ describe("sinonMock", function () {
                 this.expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -531,7 +520,7 @@ describe("sinonMock", function () {
                 expectation();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -562,10 +551,10 @@ describe("sinonMock", function () {
         describe(".withArgs", function () {
             const expectedException = function (name) {
                 return {
-                    test: function (actual) {
+                    test(actual) {
                         return actual.name === name;
                     },
-                    toString: function () {
+                    toString() {
                         return name;
                     },
                 };
@@ -587,7 +576,7 @@ describe("sinonMock", function () {
                 expectation.withArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -599,7 +588,7 @@ describe("sinonMock", function () {
                 expectation.withArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(1, 2);
                     },
                     { name: "ExpectationError" },
@@ -610,7 +599,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
                 expectation.withArgs(1, 2, 3);
 
-                assert.exception(function () {
+                assert.exception(() => {
                     expectation(2, 2, 3);
                 }, expectedException("ExpectationError"));
             });
@@ -619,7 +608,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
                 expectation.withArgs(1, 2, 3);
 
-                refute.exception(function () {
+                refute.exception(() => {
                     expectation(1, 2, 3, 4);
                 });
             });
@@ -635,7 +624,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
                 expectation.withArgs();
 
-                refute.exception(function () {
+                refute.exception(() => {
                     expectation(1, 2, 3);
                 });
             });
@@ -646,9 +635,7 @@ describe("sinonMock", function () {
                     match.string,
                     match.func,
                 );
-                this.expectation(1, "test", function () {
-                    return;
-                });
+                this.expectation(1, "test", () => undefined);
 
                 assert(this.expectation.met());
             });
@@ -662,7 +649,7 @@ describe("sinonMock", function () {
                     match.func,
                 );
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(1, 2, 3);
                     },
                     { name: "ExpectationError" },
@@ -671,14 +658,14 @@ describe("sinonMock", function () {
 
             it("should not throw when expectation withArgs using matcher", function () {
                 const obj = {
-                    foobar: function () {
+                    foobar() {
                         return;
                     },
                 };
                 const mock = sinonMock(obj);
                 mock.expects("foobar").withArgs(match.string);
 
-                refute.exception(function () {
+                refute.exception(() => {
                     obj.foobar("arg1");
                 });
             });
@@ -704,7 +691,7 @@ describe("sinonMock", function () {
                 expectation.withExactArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -716,7 +703,7 @@ describe("sinonMock", function () {
                 expectation.withExactArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(1, 2);
                     },
                     { name: "ExpectationError" },
@@ -728,7 +715,7 @@ describe("sinonMock", function () {
                 expectation.withExactArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(2, 2, 3);
                     },
                     { name: "ExpectationError" },
@@ -740,7 +727,7 @@ describe("sinonMock", function () {
                 expectation.withExactArgs(1, 2, 3);
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(1, 2, 3, 4);
                     },
                     { name: "ExpectationError" },
@@ -759,7 +746,7 @@ describe("sinonMock", function () {
                 expectation.withExactArgs();
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation(1, 2, 3);
                     },
                     { name: "ExpectationError" },
@@ -784,7 +771,7 @@ describe("sinonMock", function () {
                 expectation.on({});
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation();
                     },
                     { name: "ExpectationError" },
@@ -797,15 +784,12 @@ describe("sinonMock", function () {
                     expectation.on(Symbol("apple pie"));
 
                     assert.exception(
-                        function () {
+                        () => {
                             expectation.call(Symbol("pear pie"));
                         },
-                        function (err) {
-                            return (
-                                err.message ===
-                                "method called with Symbol(pear pie) as thisValue, expected Symbol(apple pie)"
-                            );
-                        },
+                        (err) =>
+                            err.message ===
+                            "method called with Symbol(pear pie) as thisValue, expected Symbol(apple pie)",
                     );
                 }
             });
@@ -827,7 +811,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.verify();
                     },
                     { name: "ExpectationError" },
@@ -838,7 +822,7 @@ describe("sinonMock", function () {
                 const expectation = this.expectation;
 
                 assert.exception(
-                    function () {
+                    () => {
                         expectation.verify();
                     },
                     {
@@ -882,7 +866,7 @@ describe("sinonMock", function () {
             mock.expects("method");
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 { name: "ExpectationError" },
@@ -897,7 +881,7 @@ describe("sinonMock", function () {
             mock.expects("method").once().withArgs(42);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -913,7 +897,7 @@ describe("sinonMock", function () {
             mock.expects("method").once().withExactArgs(42);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -928,7 +912,7 @@ describe("sinonMock", function () {
             this.object.method(42);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -944,7 +928,7 @@ describe("sinonMock", function () {
             mock.expects("method").thrice().withExactArgs(42);
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                 },
                 {
@@ -963,7 +947,7 @@ describe("sinonMock", function () {
             object.method(1);
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                 },
                 {
@@ -983,7 +967,7 @@ describe("sinonMock", function () {
             this.object.method(1);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -998,7 +982,7 @@ describe("sinonMock", function () {
             mock.expects("method").atLeast(1);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -1015,7 +999,7 @@ describe("sinonMock", function () {
             mock.expects("method").atMost(2);
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                     object.method();
                     object.method();
@@ -1035,7 +1019,7 @@ describe("sinonMock", function () {
             mock.expects("method").withArgs(2).once();
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                     object.method(2);
                     object.method(2);
@@ -1054,7 +1038,7 @@ describe("sinonMock", function () {
             mock.expects("method").atLeast(1).atMost(2);
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 {
@@ -1072,12 +1056,12 @@ describe("sinonMock", function () {
 
             object.method();
 
-            assert.exception(function () {
+            assert.exception(() => {
                 object.method();
             });
 
             assert.exception(
-                function () {
+                () => {
                     mock.verify();
                 },
                 { name: "ExpectationError" },
@@ -1141,7 +1125,7 @@ describe("sinonMock", function () {
             this.object.method();
             const mock = this.mock;
 
-            refute.exception(function () {
+            refute.exception(() => {
                 assert(mock.verify());
             });
         });
@@ -1151,7 +1135,7 @@ describe("sinonMock", function () {
             const mock = this.mock;
 
             assert.exception(
-                function () {
+                () => {
                     assert(mock.verify());
                 },
                 { name: "ExpectationError" },
@@ -1174,7 +1158,7 @@ describe("sinonMock", function () {
         it("queues expectations", function () {
             const object = this.object;
 
-            refute.exception(function () {
+            refute.exception(() => {
                 object.method();
             });
         });
@@ -1184,7 +1168,7 @@ describe("sinonMock", function () {
             object.method();
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                 },
                 { name: "ExpectationError" },
@@ -1197,7 +1181,7 @@ describe("sinonMock", function () {
             object.method.call(this.thisValue);
 
             assert.exception(
-                function () {
+                () => {
                     object.method();
                 },
                 { name: "ExpectationError" },
@@ -1206,7 +1190,7 @@ describe("sinonMock", function () {
 
         it("allows mock calls in any order", function () {
             const object = {
-                method: function () {
+                method() {
                     return;
                 },
             };
@@ -1214,23 +1198,23 @@ describe("sinonMock", function () {
             mock.expects("method").once().withArgs(42);
             mock.expects("method").twice().withArgs("Yeah");
 
-            refute.exception(function () {
+            refute.exception(() => {
                 object.method("Yeah");
             });
 
-            refute.exception(function () {
+            refute.exception(() => {
                 object.method(42);
             });
 
-            assert.exception(function () {
+            assert.exception(() => {
                 object.method(1);
             });
 
-            refute.exception(function () {
+            refute.exception(() => {
                 object.method("Yeah");
             });
 
-            assert.exception(function () {
+            assert.exception(() => {
                 object.method(42);
             });
         });
@@ -1238,7 +1222,7 @@ describe("sinonMock", function () {
         it("returns callsFake values from ordered matching expectations", function () {
             const object = {
                 accumulator: [],
-                accumulate: function (thing) {
+                accumulate(thing) {
                     this.accumulator.push(thing);
                     return `added ${thing}`;
                 },
@@ -1248,21 +1232,15 @@ describe("sinonMock", function () {
             mock.expects("accumulate")
                 .withArgs("first thing")
                 .onCall(0)
-                .callsFake(function (thing) {
-                    return `mock-added ${thing}`;
-                });
+                .callsFake((thing) => `mock-added ${thing}`);
             mock.expects("accumulate")
                 .withArgs("second thing")
                 .onCall(1)
-                .callsFake(function (thing) {
-                    return `mock-added ${thing}`;
-                });
+                .callsFake((thing) => `mock-added ${thing}`);
             mock.expects("accumulate")
                 .withArgs("third thing")
                 .onCall(2)
-                .callsFake(function (thing) {
-                    return `mock-added ${thing}`;
-                });
+                .callsFake((thing) => `mock-added ${thing}`);
 
             assert.equals(object.accumulator.length, 0);
             assert.equals(

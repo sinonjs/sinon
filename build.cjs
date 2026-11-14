@@ -30,7 +30,7 @@ const preamble = `/* Sinon.JS ${pkg.version}, ${date}, @license BSD-3 */`;
 
 try {
     fs.mkdirSync("pkg");
-} catch (ignore) {
+} catch {
     // We seem to have it already
 }
 
@@ -81,7 +81,7 @@ async function buildAll() {
             // Create a UMD wrapper and install the "sinon" global:
             standalone: "sinon",
         },
-        function (bundle) {
+        (bundle) => {
             fs.writeFileSync("pkg/sinon.js", bundle); // WebWorker can only load js files
         },
     );
@@ -93,7 +93,7 @@ async function buildAll() {
             // Create a UMD wrapper and install the "sinon" global:
             standalone: "sinon",
         },
-        function (bundle) {
+        (bundle) => {
             fs.writeFileSync("pkg/sinon-no-sourcemaps.cjs", bundle);
         },
     );
@@ -103,22 +103,23 @@ async function buildAll() {
         {
             format: "esm",
         },
-        function (bundle) {
-            var intro = "let sinon;\n";
+        (bundle) => {
+            const intro = "let sinon;\n";
             // Replace the bundle's own "export default" with a simple assignment to sinon
-            var baseScript = bundle.replace(
+            const baseScript = bundle.replace(
                 /export default [^;]+;/,
                 "sinon = require_sinon_esm();\nif (sinon.default) sinon = sinon.default;",
             );
 
-            var outro = `\nexport default sinon;\n${Object.keys(sinon)
+            const outro = `\nexport default sinon;\n${Object.keys(sinon)
                 .filter((key) => key !== "default")
-                .map(function (key) {
-                    return `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`;
-                })
+                .map(
+                    (key) =>
+                        `const _${key} = sinon.${key};\nexport { _${key} as ${key} };`,
+                )
                 .join("\n")}`;
 
-            var script = intro + baseScript + outro;
+            const script = intro + baseScript + outro;
             fs.writeFileSync("pkg/sinon-esm.js", script);
         },
     );

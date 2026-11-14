@@ -22,8 +22,8 @@ const { assert, refute } = referee;
  * @param action {string} the export on the `sinon` namespace to test
  */
 function createTestSuite(action) {
-    var stub;
-    var errorRegEx = /TypeError: ES Modules cannot be (stubbed|spied)/;
+    let stub;
+    const errorRegEx = /TypeError: ES Modules cannot be (stubbed|spied)/;
 
     describe(`sinon.${action}()`, function () {
         afterEach(function () {
@@ -34,13 +34,13 @@ function createTestSuite(action) {
 
         describe("Modules with objects as their default export", function () {
             it("should NOT result in error", function () {
-                refute.exception(function () {
+                refute.exception(() => {
                     stub = sinon[action](aModuleWithDefaultExport, "anExport");
                 });
             });
 
             it("should NOT result in error with a custom toStringTag", function () {
-                refute.exception(function () {
+                refute.exception(() => {
                     stub = sinon[action](aModuleWithToStringTag, "anExport");
                 });
             });
@@ -55,7 +55,7 @@ function createTestSuite(action) {
 
         describe("Modules without default export", function () {
             it("should give a proper error message", function () {
-                assert.exception(function () {
+                assert.exception(() => {
                     sinon[action](aModule, "anExport");
                 }, errorRegEx);
             });
@@ -63,7 +63,7 @@ function createTestSuite(action) {
 
         describe("Modules that exports a function as their default export", function () {
             it("should not be possible to spy/stub the default export using a wrapper for the exports", function () {
-                assert.exception(function () {
+                assert.exception(() => {
                     stub = sinon[action](functionModuleAlternative, "default");
                 }, errorRegEx);
             });

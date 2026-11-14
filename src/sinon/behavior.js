@@ -6,7 +6,6 @@ import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 const { prototypes: commonsPrototypes, functionName, valueToString } = commons;
 const { array: arrayProto } = commonsPrototypes;
 
-const concat = arrayProto.concat;
 const join = arrayProto.join;
 const reverse = arrayProto.reverse;
 const slice = arrayProto.slice;
@@ -33,17 +32,17 @@ function getCallback(behavior, args) {
 
     const callArgProp = behavior.callArgProp;
 
-    for (let i = 0, l = argumentList.length; i < l; ++i) {
-        if (!callArgProp && typeof argumentList[i] === "function") {
-            return argumentList[i];
+    for (const element of argumentList) {
+        if (!callArgProp && typeof element === "function") {
+            return element;
         }
 
         if (
             callArgProp &&
-            argumentList[i] &&
-            typeof argumentList[i][callArgProp] === "function"
+            element &&
+            typeof element[callArgProp] === "function"
         ) {
-            return argumentList[i][callArgProp];
+            return element[callArgProp];
         }
     }
 
@@ -101,7 +100,7 @@ function callCallback(behavior, args) {
         }
 
         if (behavior.callbackAsync) {
-            nextTick(function () {
+            nextTick(() => {
                 func.apply(
                     behavior.callbackContext,
                     behavior.callbackArguments,
@@ -195,11 +194,7 @@ const proto = {
             // Turn the arguments object into a normal array
             const argsArray = slice(args);
             // Call the constructor
-            const F = WrappedClass.bind.apply(
-                WrappedClass,
-                concat([null], argsArray),
-            );
-            return new F();
+            return new WrappedClass(...argsArray);
         } else if (typeof this.returnValue !== "undefined") {
             return this.returnValue;
         } else if (typeof this.callArgAt === "number") {
@@ -244,19 +239,16 @@ const proto = {
 };
 
 function createBehavior(behaviorMethod) {
-    return function () {
-        this.defaultBehavior = this.defaultBehavior || proto.create(this);
-        this.defaultBehavior[behaviorMethod].apply(
-            this.defaultBehavior,
-            arguments,
-        );
+    return function (...args) {
+        this.defaultBehavior ||= proto.create(this);
+        this.defaultBehavior[behaviorMethod](...args);
         return this;
     };
 }
 
 function addBehavior(stub, name, fn) {
-    proto[name] = function () {
-        fn.apply(this, concat([this], slice(arguments)));
+    proto[name] = function (...args) {
+        fn.call(this, this, ...args);
         return this.stub || this;
     };
 
