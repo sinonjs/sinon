@@ -54,6 +54,11 @@
       "type": "function",
       "length": 0,
       "name": "restore"
+    },
+    "[Symbol.dispose]": {
+      "type": "function",
+      "length": 0,
+      "name": "restore"
     }
   },
   "hasTimers": true,
