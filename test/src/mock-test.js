@@ -57,6 +57,37 @@ describe("sinonMock", function () {
             );
         });
 
+        for (const method of [
+            "toString",
+            "hasOwnProperty",
+            "constructor",
+            "__proto__",
+        ]) {
+            it(`mocks and restores a method named ${method}`, function () {
+                const original = () => 42;
+                const object = {};
+                Object.defineProperty(object, method, {
+                    value: original,
+                    configurable: true,
+                    writable: true,
+                });
+                const mock = sinonMock(object);
+
+                try {
+                    mock.expects(method).once().withExactArgs(1).returns(7);
+                    mock.expects(method).once().withExactArgs(2).returns(8);
+
+                    assert.equals(object[method](1), 7);
+                    assert.equals(object[method](2), 8);
+                    assert(mock.verify());
+                    assert.same(object[method], original);
+                    assert.equals(object[method](), 42);
+                } finally {
+                    mock.restore();
+                }
+            });
+        }
+
         it("returns expectation", function () {
             const result = this.mock.expects("someMethod");
 
