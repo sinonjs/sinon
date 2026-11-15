@@ -55,9 +55,7 @@ describe("fake", function () {
 
     describe("when passed a Function", function () {
         // eslint-disable-next-line mocha/no-setup-in-describe
-        verifyProxy(fake, function () {
-            return;
-        });
+        verifyProxy(fake, () => undefined);
 
         it("should keep the `this` context of the wrapped function", function () {
             function method() {
@@ -90,8 +88,8 @@ describe("fake", function () {
             null,
         ];
 
-        nonFuncs.forEach(function (nf) {
-            assert.exception(function () {
+        nonFuncs.forEach((nf) => {
+            assert.exception(() => {
                 fake(nf);
             });
         });
@@ -130,7 +128,7 @@ describe("fake", function () {
                 fake.yieldsAsync(42),
             ];
 
-            fakes.forEach(function (f) {
+            fakes.forEach((f) => {
                 assert.equals(f.displayName, "fake");
             });
         });
@@ -220,7 +218,7 @@ describe("fake", function () {
             const expectedMessage = "42";
             const myFake = fake.throws(expectedMessage);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 myFake();
             });
 
@@ -266,7 +264,7 @@ describe("fake", function () {
             const expected = 42;
             const myFake = fake.resolves(expected);
 
-            return myFake().then(function (actual) {
+            return myFake().then((actual) => {
                 assert.equals(actual, expected);
             });
         });
@@ -282,7 +280,7 @@ describe("fake", function () {
             const expectedMessage = "42";
             const myFake = fake.rejects(expectedMessage);
 
-            return myFake().catch(function (actual) {
+            return myFake().catch((actual) => {
                 assert.equals(actual.message, expectedMessage);
             });
         });
@@ -294,7 +292,7 @@ describe("fake", function () {
             const expected = new TypeError("hello world");
             const myFake = fake.rejects(expected);
 
-            return myFake().catch(function (actual) {
+            return myFake().catch((actual) => {
                 assert.isTrue(actual instanceof TypeError);
             });
         });
@@ -303,7 +301,7 @@ describe("fake", function () {
             const expected = "lorem ipsum";
             const myFake = fake.rejects(expected);
 
-            return myFake().catch(function (actual) {
+            return myFake().catch((actual) => {
                 assert.isTrue(actual instanceof Error);
             });
         });
@@ -327,9 +325,7 @@ describe("fake", function () {
             const callback = sinon.spy();
             const myFake = fake.yields();
 
-            myFake(function () {
-                return;
-            }, callback);
+            myFake(() => undefined, callback);
 
             sinon.assert.calledOnce(callback);
         });
@@ -337,10 +333,8 @@ describe("fake", function () {
         it("should throw if the last argument is not a function", function () {
             const myFake = fake.yields();
 
-            assert.exception(function () {
-                myFake(function () {
-                    return;
-                }, "not a function");
+            assert.exception(() => {
+                myFake(() => undefined, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });
@@ -357,7 +351,7 @@ describe("fake", function () {
 
             sinon.assert.notCalled(callback);
 
-            setTimeout(function () {
+            setTimeout(() => {
                 sinon.assert.calledOnce(callback);
                 sinon.assert.calledWith(callback, "one", "two", "three");
 
@@ -369,13 +363,11 @@ describe("fake", function () {
             const callback = sinon.spy();
             const myFake = fake.yieldsAsync();
 
-            myFake(function () {
-                return;
-            }, callback);
+            myFake(() => undefined, callback);
 
             sinon.assert.notCalled(callback);
 
-            setTimeout(function () {
+            setTimeout(() => {
                 sinon.assert.calledOnce(callback);
 
                 done();
@@ -385,10 +377,8 @@ describe("fake", function () {
         it("should throw if the last argument is not a function", function () {
             const myFake = fake.yieldsAsync();
 
-            assert.exception(function () {
-                myFake(function () {
-                    return;
-                }, "not a function");
+            assert.exception(() => {
+                myFake(() => undefined, "not a function");
             }, /TypeError: Expected last argument to be a function/);
         });
     });
@@ -437,14 +427,14 @@ describe("fake", function () {
         });
 
         it("should pass sinon.assert.callOrder", function () {
-            refute.exception(function () {
+            refute.exception(() => {
                 sinon.assert.callOrder(fakeA, fakeB);
             });
         });
 
         it("should fail sinon.assert.callOrder", function () {
             assert.exception(
-                function () {
+                () => {
                     sinon.assert.callOrder(fakeB, fakeA);
                 },
                 {

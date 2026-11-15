@@ -72,13 +72,13 @@ export default function createSandbox(config) {
     }
 
     const configuredSandbox = prepareSandboxFromConfig(config);
-    configuredSandbox.args = configuredSandbox.args || [];
+    configuredSandbox.args ||= [];
     configuredSandbox.injectedKeys = [];
     configuredSandbox.injectInto = config.injectInto;
     const exposed = configuredSandbox.inject({});
 
     if (config.properties) {
-        forEach(config.properties, function (prop) {
+        forEach(config.properties, (prop) => {
             const value =
                 exposed[prop] || (prop === "sandbox" && configuredSandbox);
             exposeValue(configuredSandbox, config, prop, value);

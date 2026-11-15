@@ -155,12 +155,10 @@ describe("util/core/walk", function () {
 
         walk(child, iterator);
 
-        const propertyNames = iterator.args.map(function (call) {
-            return call[0];
-        });
+        const propertyNames = iterator.args.map((call) => call[0]);
 
         // make sure that each property name only exists once
-        propertyNames.forEach(function (name, index) {
+        propertyNames.forEach((name, index) => {
             assert.equals(index, propertyNames.lastIndexOf(name));
         });
     });
@@ -181,7 +179,7 @@ describe("util/core/walk", function () {
         });
 
         try {
-            refute.exception(function () {
+            refute.exception(() => {
                 walk(target, iterator);
             });
 

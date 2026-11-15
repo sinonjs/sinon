@@ -3,11 +3,9 @@ if (typeof importScripts !== "undefined") {
     importScripts("/pkg/sinon.js");
 
     const sinon = globalThis.sinon;
-    const mySpy = sinon.spy(function (msg) {
-        return `worker received:${msg}`;
-    });
+    const mySpy = sinon.spy((msg) => `worker received:${msg}`);
 
-    self.onmessage = function (e) {
+    globalThis.onmessage = function (e) {
         postMessage(mySpy(e.data));
     };
 }

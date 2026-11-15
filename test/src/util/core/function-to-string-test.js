@@ -40,7 +40,7 @@ describe("util/core/functionToString", function () {
 
         Object.defineProperty(obj, "foo", {
             enumerable: true,
-            get: function () {
+            get() {
                 throw new Error();
             },
         });

@@ -24,26 +24,21 @@ function supportsCodeInSettimeout() {
         const id = setTimeout("console.log('hello');", 100);
         clearTimeout(id);
         return true;
-    } catch (error) {
+    } catch {
         return false;
     }
 }
 
 function restoreGlobalDateProperties(date) {
-    Object.getOwnPropertyNames(date).forEach(function (property) {
-        if (
-            Object.prototype.hasOwnProperty.call(
-                GlobalDateDescriptors,
-                property,
-            )
-        ) {
+    Object.getOwnPropertyNames(date).forEach((property) => {
+        if (Object.hasOwn(GlobalDateDescriptors, property)) {
             return;
         }
 
         delete date[property];
     });
 
-    Object.keys(GlobalDateDescriptors).forEach(function (property) {
+    Object.keys(GlobalDateDescriptors).forEach((property) => {
         Object.defineProperty(date, property, GlobalDateDescriptors[property]);
     });
 }
@@ -52,7 +47,7 @@ const usesEvalInSettimeout = supportsCodeInSettimeout();
 
 describe("fakeTimers.clock", function () {
     beforeEach(function () {
-        this.global = typeof global !== "undefined" ? global : window;
+        this.global = typeof global !== "undefined" ? globalThis : globalThis;
     });
 
     describe(".setTimeout", function () {
@@ -68,7 +63,7 @@ describe("fakeTimers.clock", function () {
         it("throws if no arguments", function () {
             const clock = this.clock;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 clock.setTimeout();
             });
         });
@@ -108,9 +103,9 @@ describe("fakeTimers.clock", function () {
                 const string = "apple pie";
 
                 assert.exception(
-                    function () {
+                    () => {
                         this.clock.setTimeout(string, 10);
-                    }.bind(this),
+                    },
                     {
                         message:
                             "[ERR_INVALID_CALLBACK]: Callback must be a function. Received apple pie of type string",
@@ -152,9 +147,7 @@ describe("fakeTimers.clock", function () {
 
         if (typeof setImmediate === "function") {
             it("returns a timer whose primitive representation is a number", function () {
-                const result = this.clock.setImmediate(function () {
-                    return;
-                });
+                const result = this.clock.setImmediate(() => undefined);
 
                 assert.isNumber(Number(result));
             });
@@ -171,7 +164,7 @@ describe("fakeTimers.clock", function () {
             it("throws if no arguments", function () {
                 const clock = this.clock;
 
-                assert.exception(function () {
+                assert.exception(() => {
                     clock.setImmediate();
                 });
             });
@@ -289,7 +282,7 @@ describe("fakeTimers.clock", function () {
         it("triggers multiple simultaneous timers with zero callAt", function () {
             const test = this;
             const spies = [
-                sinonSpy(function () {
+                sinonSpy(() => {
                     test.clock.setTimeout(spies[1], 0);
                 }),
                 sinonSpy(),
@@ -345,7 +338,7 @@ describe("fakeTimers.clock", function () {
             clock.setTimeout(stubs[0], 100);
             clock.setTimeout(stubs[1], 120);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 clock.tick(120);
             });
 
@@ -358,7 +351,7 @@ describe("fakeTimers.clock", function () {
             const stub = sinonStub().throws();
             clock.setTimeout(stub, 100);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 clock.tick(100);
             });
 
@@ -378,8 +371,8 @@ describe("fakeTimers.clock", function () {
         it("creates updated Date while ticking", function () {
             const spy = sinonSpy();
 
-            this.clock.setInterval(function () {
-                spy(new Date().getTime());
+            this.clock.setInterval(() => {
+                spy(Date.now());
             }, 10);
 
             this.clock.tick(100);
@@ -412,12 +405,12 @@ describe("fakeTimers.clock", function () {
             const spy13 = sinonSpy();
             const spy10 = sinonSpy();
 
-            this.clock.setInterval(function () {
-                spy13(new Date().getTime());
+            this.clock.setInterval(() => {
+                spy13(Date.now());
             }, 13);
 
-            this.clock.setInterval(function () {
-                spy10(new Date().getTime());
+            this.clock.setInterval(() => {
+                spy10(Date.now());
             }, 10);
 
             this.clock.tick(500);
@@ -447,7 +440,7 @@ describe("fakeTimers.clock", function () {
         it("does not fire canceled intervals", function () {
             // eslint-disable-next-line prefer-const
             let id;
-            const callback = sinonSpy(function () {
+            const callback = sinonSpy(() => {
                 if (callback.callCount === 3) {
                     clearInterval(id);
                 }
@@ -493,7 +486,7 @@ describe("fakeTimers.clock", function () {
             this.clock.setInterval(spy, 10000);
             const test = this;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 test.clock.tick("12:02:34:10");
             });
 
@@ -505,7 +498,7 @@ describe("fakeTimers.clock", function () {
             this.clock.setInterval(spy, 10000);
             const test = this;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 test.clock.tick("67:10");
             });
 
@@ -517,7 +510,7 @@ describe("fakeTimers.clock", function () {
             this.clock.setInterval(spy, 10000);
             const test = this;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 test.clock.tick("-7:10");
             });
 
@@ -536,7 +529,7 @@ describe("fakeTimers.clock", function () {
 
             const callback = function () {
                 ++i;
-                clock.setTimeout(function () {
+                clock.setTimeout(() => {
                     callback();
                 }, 100);
             };
@@ -551,11 +544,11 @@ describe("fakeTimers.clock", function () {
         it("does not silently catch exceptions", function () {
             const clock = this.clock;
 
-            clock.setTimeout(function () {
+            clock.setTimeout(() => {
                 throw new Error("oh no!");
             }, 1000);
 
-            assert.exception(function () {
+            assert.exception(() => {
                 clock.tick(1000);
             });
         });
@@ -610,7 +603,7 @@ describe("fakeTimers.clock", function () {
         it("throws if no arguments", function () {
             const clock = this.clock;
 
-            assert.exception(function () {
+            assert.exception(() => {
                 clock.setInterval();
             });
         });
@@ -644,7 +637,7 @@ describe("fakeTimers.clock", function () {
             const clock = this.clock;
             // eslint-disable-next-line
             let id;
-            const stub = sinonSpy(function () {
+            const stub = sinonSpy(() => {
                 if (stub.callCount === 3) {
                     clock.clearInterval(id);
                 }
@@ -690,6 +683,7 @@ describe("fakeTimers.clock", function () {
         });
 
         it("creates date strings when called as function", function () {
+            // eslint-disable-next-line new-cap -- calling Date as a function returns a string
             const date = this.clock.Date();
 
             assert.isString(date);
@@ -1169,7 +1163,7 @@ describe("fakeTimers.clock", function () {
             it("installs nextTick by default", function () {
                 this.clock = fakeTimers.useFakeTimers();
                 let called = false;
-                process.nextTick(function () {
+                process.nextTick(() => {
                     called = true;
                 });
                 this.clock.runAll();
@@ -1180,30 +1174,24 @@ describe("fakeTimers.clock", function () {
 
         it("installs clock in advancing mode and triggers setTimeout", function (done) {
             this.clock = fakeTimers.useFakeTimers({ shouldAdvanceTime: true });
-            this.clock.setTimeout(
-                function () {
-                    this.clock.restore();
-                    done();
-                }.bind(this),
-                10,
-            );
+            this.clock.setTimeout(() => {
+                this.clock.restore();
+                done();
+            }, 10);
         });
 
         it("installs clock in advancing mode and triggers setInterval", function (done) {
             this.clock = fakeTimers.useFakeTimers({ shouldAdvanceTime: true });
             let counter = 0;
             const iterations = 3;
-            const id = this.clock.setInterval(
-                function () {
-                    if (counter++ < iterations) {
-                        return;
-                    }
-                    this.clock.clearInterval(id);
-                    this.clock.restore();
-                    done();
-                }.bind(this),
-                10,
-            );
+            const id = this.clock.setInterval(() => {
+                if (counter++ < iterations) {
+                    return;
+                }
+                this.clock.clearInterval(id);
+                this.clock.restore();
+                done();
+            }, 10);
         });
 
         it("installs clock in advancing mode and triggers setImmediate", function (done) {
@@ -1212,12 +1200,10 @@ describe("fakeTimers.clock", function () {
             }
 
             this.clock = fakeTimers.useFakeTimers({ shouldAdvanceTime: true });
-            this.clock.setImmediate(
-                function () {
-                    this.clock.restore();
-                    done();
-                }.bind(this),
-            );
+            this.clock.setImmediate(() => {
+                this.clock.restore();
+                done();
+            });
         });
 
         it("throws on old useFakeTimers signatures", function () {
@@ -1225,28 +1211,28 @@ describe("fakeTimers.clock", function () {
                 "useFakeTimers expected epoch or config object. See https://github.com/sinonjs/sinon";
 
             assert.exception(
-                function () {
+                () => {
                     fakeTimers.useFakeTimers("setImmediate");
                 },
                 { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
-                function () {
+                () => {
                     fakeTimers.useFakeTimers("setImmediate", "Date");
                 },
                 { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
-                function () {
+                () => {
                     fakeTimers.useFakeTimers(1000, "setImmediate", "Date");
                 },
                 { name: "TypeError", message: expectedError },
             );
 
             assert.exception(
-                function () {
+                () => {
                     fakeTimers.useFakeTimers(
                         new Date(10000000),
                         "setImmediate",

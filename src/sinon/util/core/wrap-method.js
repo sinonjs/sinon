@@ -32,19 +32,39 @@ function mirrorProperties(target, source) {
     }
 }
 
-function getAccessor(object, property, method) {
+function getAccessor(object, property, method, originalDescriptor) {
+    if (originalDescriptor && hasOwnProperty(originalDescriptor, "value")) {
+        return null;
+    }
+
     const accessors = ["get", "set"];
     const descriptor = getPropertyDescriptor(object, property);
 
-    for (let i = 0; i < accessors.length; i++) {
-        if (
-            descriptor[accessors[i]] &&
-            descriptor[accessors[i]].name === method.name
-        ) {
-            return accessors[i];
+    for (const accessor of accessors) {
+        if (descriptor[accessor] && descriptor[accessor].name === method.name) {
+            return accessor;
         }
     }
     return null;
+}
+
+function restoreInheritedAccessor(
+    object,
+    property,
+    accessor,
+    originalDescriptor,
+) {
+    const descriptor = getPropertyDescriptor(object, property);
+    descriptor[accessor] = originalDescriptor[accessor];
+
+    if (
+        descriptor.get === originalDescriptor.get &&
+        descriptor.set === originalDescriptor.set
+    ) {
+        delete object[property];
+    } else {
+        Object.defineProperty(object, property, descriptor);
+    }
 }
 
 // Cheap way to detect if we have ES5 support.
@@ -174,7 +194,12 @@ export default function wrapMethod(object, property, method) {
     }
 
     function restore() {
-        accessor = getAccessor(object, property, this.wrappedMethod);
+        accessor = getAccessor(
+            object,
+            property,
+            this.wrappedMethod,
+            wrappedMethodDesc,
+        );
         let descriptor;
         // For prototype properties try to reset by delete first.
         // If this fails (ex: localStorage on mobile safari) then force a reset
@@ -183,8 +208,13 @@ export default function wrapMethod(object, property, method) {
             if (!owned) {
                 try {
                     // In some cases `delete` may throw an error
-                    delete object[property][accessor];
-                } catch (e) {} // eslint-disable-line no-empty
+                    restoreInheritedAccessor(
+                        object,
+                        property,
+                        accessor,
+                        wrappedMethodDesc,
+                    );
+                } catch {} // eslint-disable-line no-empty
                 // For native code functions `delete` fails without throwing an error
                 // on Chrome < 43, PhantomJS, etc.
             } else if (hasES5Support) {
@@ -209,7 +239,7 @@ export default function wrapMethod(object, property, method) {
             if (!owned) {
                 try {
                     delete object[property];
-                } catch (e) {} // eslint-disable-line no-empty
+                } catch {} // eslint-disable-line no-empty
             } else if (hasES5Support) {
                 Object.defineProperty(object, property, wrappedMethodDesc);
             }
@@ -244,7 +274,7 @@ export default function wrapMethod(object, property, method) {
                 // code the original method was created on.
                 stackTraceError: new Error("Stack Trace for original"),
 
-                restore: restore,
+                restore,
             });
 
             target.restore.sinon = true;

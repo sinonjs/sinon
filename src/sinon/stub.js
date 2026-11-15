@@ -18,7 +18,6 @@ const { hasOwnProperty } = objectProto;
 
 const forEach = arrayProto.forEach;
 const pop = arrayProto.pop;
-const slice = arrayProto.slice;
 const sort = arrayProto.sort;
 
 /**
@@ -40,19 +39,18 @@ function createStub(originalFunc, context) {
     // eslint-disable-next-line prefer-const
     let proxy;
 
-    function functionStub() {
-        const args = slice(arguments);
+    function functionStub(...args) {
         const matchings = proxy.matchingFakes(args);
 
         const fnStub =
             pop(
-                sort(matchings, function (a, b) {
-                    return (
-                        a.matchingArguments.length - b.matchingArguments.length
-                    );
-                }),
+                sort(
+                    matchings,
+                    (a, b) =>
+                        a.matchingArguments.length - b.matchingArguments.length,
+                ),
             ) || proxy;
-        return getCurrentBehavior(fnStub).invoke(this, arguments);
+        return getCurrentBehavior(fnStub).invoke(this, args);
     }
 
     proxy = createProxy(functionStub, originalFunc || functionStub, context);
@@ -69,7 +67,7 @@ function createStub(originalFunc, context) {
     const name = originalFunc ? functionName(originalFunc) : null;
     extend.nonEnum(proxy, {
         fakes: [],
-        instantiateFake: instantiateFake,
+        instantiateFake,
         displayName: name || "stub",
         defaultBehavior: null,
         behaviors: [],
@@ -118,9 +116,10 @@ function stubImpl(object, property, context) {
             typeof actualDescriptor.value !== "function");
 
     if (isStubbingEntireObject) {
-        return walkObjectStrict(function (obj, prop) {
-            return stubImpl(obj, prop, context);
-        }, object);
+        return walkObjectStrict(
+            (obj, prop) => stubImpl(obj, prop, context),
+            object,
+        );
     }
 
     if (isCreatingNewStub) {
@@ -234,7 +233,7 @@ function getCurrentBehavior(stubInstance) {
 }
 
 const proto = {
-    resetBehavior: function () {
+    resetBehavior() {
         this.defaultBehavior = null;
         this.behaviors = [];
 
@@ -248,12 +247,12 @@ const proto = {
         this.returnThis = false;
         this.resolveThis = false;
 
-        forEach(this.fakes, function (fake) {
+        forEach(this.fakes, (fake) => {
             fake.resetBehavior();
         });
     },
 
-    reset: function () {
+    reset() {
         this.resetHistory();
         this.resetBehavior();
     },
@@ -278,11 +277,10 @@ const proto = {
         return this.onCall(2);
     },
 
-    withArgs: function withArgs() {
-        const fake = spy.withArgs.apply(this, arguments);
+    withArgs: function withArgs(...args) {
+        const fake = spy.withArgs.apply(this, args);
         if (this.defaultBehavior && this.defaultBehavior.promiseLibrary) {
-            fake.defaultBehavior =
-                fake.defaultBehavior || behavior.create(fake);
+            fake.defaultBehavior ||= behavior.create(fake);
             fake.defaultBehavior.promiseLibrary =
                 this.defaultBehavior.promiseLibrary;
         }
@@ -290,7 +288,7 @@ const proto = {
     },
 };
 
-forEach(Object.keys(behavior), function (method) {
+forEach(Object.keys(behavior), (method) => {
     if (
         hasOwnProperty(behavior, method) &&
         !hasOwnProperty(proto, method) &&
@@ -301,7 +299,7 @@ forEach(Object.keys(behavior), function (method) {
     }
 });
 
-forEach(Object.keys(behaviors), function (method) {
+forEach(Object.keys(behaviors), (method) => {
     if (hasOwnProperty(behaviors, method) && !hasOwnProperty(proto, method)) {
         behavior.addBehavior(stub, method, behaviors[method]);
     }
