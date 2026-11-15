@@ -82,11 +82,11 @@ const callProto = {
     },
 
     threw: function threw(error) {
-        if (typeof error === "undefined" || !this.exception) {
-            return Boolean(this.exception);
+        if (typeof error === "undefined" || !this.didThrow) {
+            return this.didThrow;
         }
 
-        return this.exception === error || this.exception.name === error;
+        return this.exception === error || this.exception?.name === error;
     },
 
     calledWithNew: function calledWithNew() {
@@ -244,6 +244,7 @@ callProto.invokeCallback = callProto.yield;
  * @param {unknown} exception The exception thrown by the call
  * @param {number} id The call id
  * @param {Error} errorWithCallStack Error object used for stack trace
+ * @param {boolean} didThrow Whether the call terminated by throwing
  * @returns {object} proxyCall
  */
 export default function createProxyCall(
@@ -254,6 +255,7 @@ export default function createProxyCall(
     exception,
     id,
     errorWithCallStack,
+    didThrow,
 ) {
     if (typeof id !== "number") {
         throw new TypeError("Call id is not a number");
@@ -278,6 +280,7 @@ export default function createProxyCall(
     proxyCall.callback = callback;
     proxyCall.returnValue = returnValue;
     proxyCall.exception = exception;
+    proxyCall.didThrow = Boolean(didThrow);
     proxyCall.callId = id;
     proxyCall.errorWithCallStack = errorWithCallStack;
 
