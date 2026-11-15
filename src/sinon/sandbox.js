@@ -115,7 +115,11 @@ export default function Sandbox(opts = {}) {
     };
 
     sandbox.createStubInstance = function createStubInstance(...args) {
-        const stubbed = sinonCreateStubInstance(...args);
+        // Use withContext to pass sandbox context for isolated callId tracking
+        const stubbed = sinonCreateStubInstance.withContext(
+            sandboxContext,
+            ...args,
+        );
         const ownMethods = collectOwnMethods(stubbed);
 
         forEach(ownMethods, (method) => {
@@ -124,6 +128,15 @@ export default function Sandbox(opts = {}) {
 
         return stubbed;
     };
+    Object.defineProperty(sandbox.createStubInstance, "name", {
+        value: "createStubInstance",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.createStubInstance, "length", {
+        value: 1,
+        configurable: true,
+    });
+    extend(sandbox.createStubInstance, sinonCreateStubInstance);
 
     sandbox.inject = function inject(obj) {
         obj.spy = function spy(...args) {

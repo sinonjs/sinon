@@ -153,4 +153,23 @@ describe("createStubInstance", function () {
             { message: "Cannot stub foo. Property does not exist!" },
         );
     });
+
+    describe(".withContext", function () {
+        it("tracks callId on the provided context", function () {
+            const Class = function () {
+                return;
+            };
+            Class.prototype.method = function () {
+                return;
+            };
+
+            const context = { callId: 42 };
+            const stub = createStubInstance.withContext(context, Class);
+
+            stub.method();
+
+            assert.equals(stub.method.callIds, [42]);
+            assert.equals(context.callId, 43);
+        });
+    });
 });
