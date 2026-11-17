@@ -10,6 +10,8 @@ For legacy runtimes, a transpiler can be used by dependent projects, but use of 
 
 ## Runtimes
 
+Node.js 22 or later is required. Sinon tests the maintained Node.js LTS releases.
+
 Sinon.JS aims at supporting the following runtimes (from our shared [eslint-config][shared-config]).
 
 <!-- browserslist start -->
