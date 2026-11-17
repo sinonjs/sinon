@@ -4,6 +4,49 @@ title: Migrating between versions
 
 # Migrating between versions
 
+## Sinon 20
+
+### Fake XMLHttpRequest and fake server are no longer bundled
+
+Sinon 20 removed `sinon.useFakeXMLHttpRequest()`, `sinon.FakeXMLHttpRequest`,
+`sinon.fakeServer` and `sinon.fakeServerWithClock`. The corresponding sandbox
+methods and the `useFakeServer` sandbox option were also removed.
+
+Existing XMLHttpRequest-based tests can use [nise](https://github.com/sinonjs/nise)
+directly. It is the library that previously supplied these APIs to Sinon:
+
+```sh
+npm install --save-dev nise
+```
+
+In Node, faking `XMLHttpRequest` requires an `XMLHttpRequest` global, which test
+environments like jsdom or happy-dom provide; browsers have one natively.
+
+For example, replace `sinon.fakeServer.create()` with `nise.fakeServer.create()`:
+
+```js
+const nise = require("nise");
+
+let server;
+
+beforeEach(function () {
+  server = nise.fakeServer.create();
+});
+
+afterEach(function () {
+  server.restore();
+});
+```
+
+Use `nise.fakeXhr.useFakeXMLHttpRequest()` instead of
+`sinon.useFakeXMLHttpRequest()`, and `nise.fakeXhr.FakeXMLHttpRequest` instead of
+`sinon.FakeXMLHttpRequest`. The clock-enabled server is available as
+`nise.fakeServerWithClock`.
+
+These fakes are no longer managed by a Sinon sandbox. Restore the nise server or
+XHR fake explicitly in your test cleanup; `sinon.restore()` and
+`sandbox.restore()` do not restore them. nise fakes XMLHttpRequest, not `fetch`.
+
 ## Sinon 19
 
 ### All timers are stubbed by default
@@ -18,6 +61,23 @@ in asynchronous tests that stopped resolving in Sinon 19.
 
 _If you want the old behavior, specify the timers you want to fake in the `toFake`
 option and leave out the name of the timers giving you trouble_.
+
+For example, if an asynchronous test only needs to freeze the current date, fake
+`Date` explicitly. Faking event-loop APIs such as `process.nextTick`,
+`queueMicrotask`, or `setImmediate` can otherwise prevent asynchronous operations
+from completing until the clock is advanced, causing the test to time out.
+
+```js
+const now = new Date("2024-01-01T00:00:00Z");
+const clock = sinon.useFakeTimers({ now, toFake: ["Date"] });
+
+try {
+  console.log(new Date()); // 2024-01-01T00:00:00.000Z
+  // Timers and event-loop APIs still use their real implementations.
+} finally {
+  clock.restore();
+}
+```
 
 ### New implementation of the fake Date class
 

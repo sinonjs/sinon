@@ -10,34 +10,34 @@ const push = arrayProto.push;
 // Adapted from https://developer.mozilla.org/en/docs/ECMAScript_DontEnum_attribute#JScript_DontEnum_Bug
 const hasDontEnumBug = (function () {
     const obj = {
-        constructor: function () {
+        constructor() {
             return "0";
         },
-        toString: function () {
+        toString() {
             return "1";
         },
-        valueOf: function () {
+        valueOf() {
             return "2";
         },
-        toLocaleString: function () {
+        toLocaleString() {
             return "3";
         },
-        prototype: function () {
+        prototype() {
             return "4";
         },
-        isPrototypeOf: function () {
+        isPrototypeOf() {
             return "5";
         },
-        propertyIsEnumerable: function () {
+        propertyIsEnumerable() {
             return "6";
         },
-        hasOwnProperty: function () {
+        hasOwnProperty() {
             return "7";
         },
-        length: function () {
+        length() {
             return "8";
         },
-        unique: function () {
+        unique() {
             return "9";
         },
     };

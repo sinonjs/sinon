@@ -38,7 +38,7 @@ export default function invoke(func, thisValue, args) {
     push(this.thisValues, thisValue);
     push(this.args, args);
     push(this.callIds, currentCallId);
-    forEach(matchings, function (matching) {
+    forEach(matchings, (matching) => {
         proxyCallUtil.incrementCallCount(matching);
         push(matching.thisValues, thisValue);
         push(matching.args, args);
@@ -78,7 +78,7 @@ export default function invoke(func, thisValue, args) {
 
     push(this.exceptions, exception);
     push(this.returnValues, returnValue);
-    forEach(matchings, function (matching) {
+    forEach(matchings, (matching) => {
         push(matching.exceptions, exception);
         push(matching.returnValues, returnValue);
     });
@@ -89,11 +89,11 @@ export default function invoke(func, thisValue, args) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Stack
     try {
         throw err;
-    } catch (e) {
+    } catch {
         /* empty */
     }
     push(this.errorsWithCallStack, err);
-    forEach(matchings, function (matching) {
+    forEach(matchings, (matching) => {
         push(matching.errorsWithCallStack, err);
     });
 

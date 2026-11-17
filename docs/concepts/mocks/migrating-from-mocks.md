@@ -174,6 +174,7 @@ assert.ok(fake.calledOnce);
 ```javascript
 mock
   .expects("fetch")
+  .twice()
   .onFirstCall()
   .returns("first")
   .onSecondCall()

@@ -60,7 +60,7 @@ describe("create-sinon-api", function () {
     it("allows adding a custom behavior to stubs", function () {
         const sinon = createApi();
 
-        sinon.addBehavior("returnsSeven", function (fake) {
+        sinon.addBehavior("returnsSeven", (fake) => {
             fake.returns(7);
         });
 

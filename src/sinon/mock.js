@@ -7,7 +7,7 @@ import wrapMethod from "./util/core/wrap-method.js";
 
 const { prototypes } = commons;
 const { deepEqual } = samsam;
-const { concat, filter, forEach, every, join, push, slice, unshift } =
+const { concat, filter, forEach, every, join, push, reduce, slice, unshift } =
     prototypes.array;
 
 /**
@@ -35,9 +35,7 @@ function arrayEquals(arr1, arr2, compareLength) {
         return false;
     }
 
-    return every(arr1, function (element, i) {
-        return deepEqual(arr2[i], element);
-    });
+    return every(arr1, (element, i) => deepEqual(arr2[i], element));
 }
 
 extend(mock, {
@@ -46,7 +44,7 @@ extend(mock, {
             throw new TypeError("object is null");
         }
 
-        const mockObject = extend.nonEnum({}, mock, { object: object });
+        const mockObject = extend.nonEnum({}, mock, { object });
         delete mockObject.create;
 
         return mockObject;
@@ -67,8 +65,8 @@ extend(mock, {
             this.expectations[method] = [];
             const mockObject = this;
 
-            wrapMethod(this.object, method, function () {
-                return mockObject.invokeMethod(method, this, arguments);
+            wrapMethod(this.object, method, function (...args) {
+                return mockObject.invokeMethod(method, this, args);
             });
 
             push(this.proxies, method);
@@ -84,7 +82,7 @@ extend(mock, {
     restore: function restore() {
         const object = this.object;
 
-        each(this.proxies, function (proxy) {
+        each(this.proxies, (proxy) => {
             if (typeof object[proxy].restore === "function") {
                 object[proxy].restore();
             }
@@ -96,8 +94,8 @@ extend(mock, {
         const messages = this.failures ? slice(this.failures) : [];
         const met = [];
 
-        each(this.proxies, function (proxy) {
-            each(expectations[proxy], function (expectation) {
+        each(this.proxies, (proxy) => {
+            each(expectations[proxy], (expectation) => {
                 if (!expectation.met()) {
                     push(messages, String(expectation));
                 } else {
@@ -125,11 +123,16 @@ extend(mock, {
                 ? this.expectations[method]
                 : [];
         const currentArgs = args || [];
+        const callIndex = reduce(
+            expectations,
+            (count, expectation) => count + expectation.callCount,
+            0,
+        );
         let available;
 
         const expectationsWithMatchingArgs = filter(
             expectations,
-            function (expectation) {
+            (expectation) => {
                 const expectedArgs = expectation.expectedArguments || [];
 
                 return arrayEquals(
@@ -142,34 +145,35 @@ extend(mock, {
 
         const expectationsToApply = filter(
             expectationsWithMatchingArgs,
-            function (expectation) {
-                return (
-                    !expectation.met() &&
-                    expectation.allowsCall(thisValue, args)
-                );
-            },
+            (expectation) =>
+                !expectation.met() && expectation.allowsCall(thisValue, args),
         );
 
         if (expectationsToApply.length > 0) {
-            return expectationsToApply[0].apply(thisValue, args);
+            return invokeExpectation(
+                expectationsToApply[0],
+                thisValue,
+                args,
+                callIndex,
+            );
         }
 
         const messages = [];
         let exhausted = 0;
 
-        forEach(expectationsWithMatchingArgs, function (expectation) {
+        forEach(expectationsWithMatchingArgs, (expectation) => {
             if (expectation.allowsCall(thisValue, args)) {
-                available = available || expectation;
+                available ||= expectation;
             } else {
                 exhausted += 1;
             }
         });
 
         if (available && exhausted === 0) {
-            return available.apply(thisValue, args);
+            return invokeExpectation(available, thisValue, args, callIndex);
         }
 
-        forEach(expectations, function (expectation) {
+        forEach(expectations, (expectation) => {
             push(messages, `    ${String(expectation)}`);
         });
 
@@ -177,7 +181,7 @@ extend(mock, {
             messages,
             `Unexpected call: ${createProxyCall.toString.call({
                 proxy: method,
-                args: args,
+                args,
             })}`,
         );
 
@@ -186,7 +190,7 @@ extend(mock, {
             // PhantomJS does not serialize the stack trace until the error has been thrown
             try {
                 throw err;
-            } catch (e) {
+            } catch {
                 /* empty */
             }
         }
@@ -194,7 +198,7 @@ extend(mock, {
             this.failures,
             `Unexpected call: ${createProxyCall.toString.call({
                 proxy: method,
-                args: args,
+                args,
                 stack: err.stack,
             })}`,
         );
@@ -202,3 +206,12 @@ extend(mock, {
         mockExpectation.fail(join(messages, "\n"));
     },
 });
+
+function invokeExpectation(expectation, thisValue, args, callIndex) {
+    expectation.behaviorCallIndex = callIndex;
+    try {
+        return expectation.apply(thisValue, args);
+    } finally {
+        delete expectation.behaviorCallIndex;
+    }
+}

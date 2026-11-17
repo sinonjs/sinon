@@ -62,10 +62,10 @@ export function delegateToCalls(
     notCalled,
     totalCallCount,
 ) {
-    proxy[method] = function () {
+    proxy[method] = function (...args) {
         if (!this.called) {
             if (notCalled) {
-                return notCalled.apply(this, arguments);
+                return notCalled.apply(this, args);
             }
             return false;
         }
@@ -80,10 +80,7 @@ export function delegateToCalls(
 
         for (let i = 0, l = this.callCount; i < l; i += 1) {
             currentCall = this.getCall(i);
-            const returnValue = currentCall[actual || method].apply(
-                currentCall,
-                arguments,
-            );
+            const returnValue = currentCall[actual || method](...args);
             push(returnValues, returnValue);
             if (returnValue) {
                 matches += 1;

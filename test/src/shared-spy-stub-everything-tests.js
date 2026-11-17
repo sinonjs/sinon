@@ -5,13 +5,13 @@ const refute = referee.refute;
 export default function shared(createSpyOrStub) {
     it("replaces all methods of an object when no property is given", function () {
         const obj = {
-            func1: function () {
+            func1() {
                 return;
             },
-            func2: function () {
+            func2() {
                 return;
             },
-            func3: function () {
+            func3() {
                 return;
             },
         };
@@ -39,7 +39,7 @@ export default function shared(createSpyOrStub) {
 
     it("returns object", function () {
         const object = {
-            func1: function () {
+            func1() {
                 return;
             },
         };
@@ -50,7 +50,7 @@ export default function shared(createSpyOrStub) {
     it("only replaces functions", function () {
         const object = {
             foo: "bar",
-            baz: function () {
+            baz() {
                 return;
             },
         };
@@ -62,16 +62,16 @@ export default function shared(createSpyOrStub) {
 
     it("handles non-enumerable properties", function () {
         const obj = {
-            func1: function () {
+            func1() {
                 return;
             },
-            func2: function () {
+            func2() {
                 return;
             },
         };
 
         Object.defineProperty(obj, "func3", {
-            value: function () {
+            value() {
                 return;
             },
             writable: true,
@@ -90,7 +90,7 @@ export default function shared(createSpyOrStub) {
             return;
         }
         Object.defineProperty(Obj.prototype, "func1", {
-            value: function () {
+            value() {
                 return;
             },
             writable: true,
@@ -106,7 +106,7 @@ export default function shared(createSpyOrStub) {
 
     it("does not replace non-enumerable properties from Object.prototype", function () {
         const obj = {
-            noop: function () {
+            noop() {
                 return;
             },
         };
@@ -120,7 +120,7 @@ export default function shared(createSpyOrStub) {
 
     it("does not fail on overrides", function () {
         const parent = {
-            func: function () {
+            func() {
                 return;
             },
         };
@@ -129,19 +129,19 @@ export default function shared(createSpyOrStub) {
             return;
         };
 
-        refute.exception(function () {
+        refute.exception(() => {
             createSpyOrStub(child);
         });
     });
 
     it("throws on non-existent property", function () {
         const myObj = {
-            ignoreme: function () {
+            ignoreme() {
                 return;
             },
         };
 
-        assert.exception(function () {
+        assert.exception(() => {
             createSpyOrStub(myObj, "ouch");
         });
 
@@ -156,7 +156,7 @@ export default function shared(createSpyOrStub) {
         });
 
         assert.exception(
-            function () {
+            () => {
                 createSpyOrStub(myObj, "ignoreme");
             },
             new TypeError(
@@ -170,16 +170,16 @@ export default function shared(createSpyOrStub) {
     it("throws on accessor property descriptors that are not configurable", function () {
         const myObj = {};
         Object.defineProperty(myObj, "ignoreme", {
-            get: function (key) {
+            get(key) {
                 return this[key];
             },
-            set: function (key, val) {
+            set(key, val) {
                 this[key] = val;
             },
             configurable: false,
         });
 
-        assert.exception(function () {
+        assert.exception(() => {
             createSpyOrStub(myObj, "ignoreme");
         }, new TypeError("Descriptor for accessor property ignoreme is non-configurable"));
     });
@@ -191,7 +191,7 @@ export default function shared(createSpyOrStub) {
             configurable: false,
         });
 
-        assert.exception(function () {
+        assert.exception(() => {
             createSpyOrStub(myObj, "ignoreme");
         }, new TypeError("Descriptor for data property ignoreme is non-writable"));
     });

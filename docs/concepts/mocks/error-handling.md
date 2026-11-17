@@ -10,12 +10,12 @@ Mocks have strict verification requirements and will throw errors when expectati
 
 ## Null or Undefined Object
 
-Attempting to create a mock for a null or undefined object will fail.
+Passing `null` or `undefined` to `sinon.mock()` does not throw. Like calling `sinon.mock()` with no arguments, it returns an anonymous expectation instead of a mock for an object.
 
 ```javascript
-// This will throw: "object is null"
-sinon.mock(null);
-sinon.mock(undefined);
+const mock = sinon.mock(null);
+
+mock.expects("method"); // Throws: "mock.expects is not a function"
 ```
 
 **Solution:** Provide a valid object:
@@ -85,7 +85,7 @@ const mock = sinon.mock(obj);
 
 mock.expects("greet").withExactArgs("Alice");
 
-// This throws immediately: "Unexpected call: greet(Bob)"
+// This throws immediately: "Unexpected call: greet('Bob')"
 obj.greet("Bob");
 ```
 
@@ -132,11 +132,12 @@ obj.method(); // Returns 'original', not a mock
 
 **This is by design.** The expectation is that verify is your last action with the mock.
 
-**Problem:** Calling verify() twice will fail on the second call:
+**Problem:** Calls made after `verify()` are not recorded, because the original method is back in place:
 
 ```javascript
-mock.verify(); // First call succeeds and restores
-mock.verify(); // Second call throws - mock is already restored
+mock.verify(); // Verifies and restores
+obj.method(); // Calls the original method, not the mock
+mock.verify(); // Checks the same recorded calls again
 ```
 
 **Solution:** Only call `verify()` once per mock, typically in test cleanup:
@@ -264,11 +265,11 @@ assert.ok(fake.called);
 ### Brittle Tests
 
 ```javascript
-// BAD: Test breaks when call order changes
+// BAD: Test breaks when the code stops calling any of these
 mock.expects("a").once();
 mock.expects("b").once();
 mock.expects("c").once();
-// Now code must call in exact order: a, b, c
+// Now code must call each of a, b and c exactly once
 
 // GOOD: Test the outcome, not the path
 const result = await service.process();

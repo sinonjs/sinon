@@ -284,6 +284,7 @@ function generateSidebar() {
         .sort();
 
       const howToDisplayNames = {
+        "dependency-injection": "Dependency injection with Sinon",
         "stub-dependency": "Stub a dependency",
         "link-seams-commonjs": "Link seams (CommonJS)",
         "stub-esm": "Stub ES module imports",

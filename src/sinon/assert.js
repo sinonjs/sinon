@@ -47,9 +47,14 @@ function createAssertObject(opts) {
         fail: function fail(message) {
             let msg = message;
             if (cleanedAssertOptions.shouldLimitAssertionLogs) {
-                msg = message.substring(
+                msg = message.slice(
                     0,
-                    cleanedAssertOptions.assertionLogLimit,
+                    Math.max(
+                        0,
+                        cleanedAssertOptions.assertionLogLimit === undefined
+                            ? Infinity
+                            : cleanedAssertOptions.assertionLogLimit,
+                    ),
                 );
             }
             const error = new Error(msg);
@@ -62,15 +67,15 @@ function createAssertObject(opts) {
             return;
         },
 
-        callOrder: function assertCallOrder() {
-            verifyIsStub.apply(null, arguments);
+        callOrder: function assertCallOrder(...spies) {
+            verifyIsStub(...spies);
             let expected = "";
             let actual = "";
 
-            if (!calledInOrder(arguments)) {
+            if (!calledInOrder(spies)) {
                 try {
-                    expected = join(arguments, ", ");
-                    const calls = arraySlice(arguments);
+                    expected = join(spies, ", ");
+                    const calls = arraySlice(spies);
                     let i = calls.length;
                     while (i) {
                         if (!calls[--i].called) {
@@ -78,7 +83,7 @@ function createAssertObject(opts) {
                         }
                     }
                     actual = join(orderByFirstCall(calls), ", ");
-                } catch (e) {
+                } catch {
                     // If this fails, we'll just fall back to the blank string
                 }
 
@@ -122,7 +127,7 @@ function createAssertObject(opts) {
                 typeof o.includeFail === "undefined" || Boolean(o.includeFail);
             const instance = this;
 
-            forEach(Object.keys(instance), function (method) {
+            forEach(Object.keys(instance), (method) => {
                 if (
                     method !== "expose" &&
                     (includeFail || !/^(fail)/.test(method))
@@ -150,10 +155,8 @@ function createAssertObject(opts) {
         },
     };
 
-    function verifyIsStub() {
-        const args = arraySlice(arguments);
-
-        forEach(args, function (method) {
+    function verifyIsStub(...args) {
+        forEach(args, (method) => {
             if (!method) {
                 assert.fail("fake is not a spy");
             }
@@ -206,10 +209,9 @@ function createAssertObject(opts) {
             meth = name;
         }
 
-        assert[name] = function (fake) {
+        assert[name] = function (fake, ...args) {
             verifyIsStub(fake);
 
-            const args = arraySlice(arguments, 1);
             let failed = false;
 
             verifyIsValidAssertion(name, args);
@@ -219,7 +221,7 @@ function createAssertObject(opts) {
             } else {
                 failed =
                     typeof fake[meth] === "function"
-                        ? !fake[meth].apply(fake, args)
+                        ? !fake[meth](...args)
                         : !fake[meth];
             }
 
@@ -238,7 +240,7 @@ function createAssertObject(opts) {
     }
 
     function exposedName(prefix, prop) {
-        return !prefix || /^fail/.test(prop)
+        return !prefix || prop.startsWith("fail")
             ? prop
             : prefix +
                   stringSlice(prop, 0, 1).toUpperCase() +
@@ -251,9 +253,7 @@ function createAssertObject(opts) {
     );
     mirrorPropAsAssertion(
         "notCalled",
-        function (spy) {
-            return !spy.called;
-        },
+        (spy) => !spy.called,
         "expected %n to not have been called but was called %c%C",
     );
     mirrorPropAsAssertion(

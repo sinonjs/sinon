@@ -18,7 +18,7 @@ fake("apple pie", "cherry pie");
 
 // Generates no error
 sinon.assert.alwaysCalledWith(fake, "apple pie");
-sinon.assert.alwaysCalledWith(fake, "cherry pie");
+sinon.assert.alwaysCalledWith(fake, "apple pie", "cherry pie");
 
 fake("lemon meringue pie");
 sinon.assert.alwaysCalledWith(fake, "apple pie");

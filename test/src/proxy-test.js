@@ -74,9 +74,7 @@ describe("proxy", function () {
             });
 
             it("anon", function () {
-                const anon = sinonSpy(function () {
-                    return;
-                });
+                const anon = sinonSpy(() => undefined);
                 assert.equals(anon.printf("%n"), "spy");
 
                 const noFn = sinonSpy();
@@ -88,7 +86,7 @@ describe("proxy", function () {
             // Throwing just to make sure it has no effect.
             const faux = createFaux(sinonStub().throws());
             function call() {
-                assert.exception(function () {
+                assert.exception(() => {
                     faux();
                 });
             }
@@ -109,7 +107,7 @@ describe("proxy", function () {
                     const faux = createFaux();
                     faux(arg);
                     assert.equals(
-                        faux.printf("%C").replace(/ at.*/g, ""),
+                        faux.printf("%C").replaceAll(/ at.*/g, ""),
                         `\n    ${expected}`,
                     );
                 }
@@ -135,7 +133,7 @@ describe("proxy", function () {
                 faux(str);
 
                 assert.equals(
-                    faux.printf("%C").replace(/ at.*/g, ""),
+                    faux.printf("%C").replaceAll(/ at.*/g, ""),
                     "\n    faux('faux\\ntest')\n    faux('faux\\ntest')\n    faux('faux\\ntest')",
                 );
 
@@ -146,7 +144,7 @@ describe("proxy", function () {
                 faux("faux\ntest");
 
                 assert.equals(
-                    faux.printf("%C").replace(/ at.*/g, ""),
+                    faux.printf("%C").replaceAll(/ at.*/g, ""),
                     "\n    faux('test')\n    faux('faux\\ntest')\n    faux('faux\\ntest')",
                 );
             });
@@ -290,7 +288,7 @@ describe("proxy", function () {
             const proxy = state.proxy;
 
             assert.exception(
-                function () {
+                () => {
                     proxy();
                 },
                 { name: "InvalidResetException" },

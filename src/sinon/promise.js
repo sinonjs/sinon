@@ -44,11 +44,11 @@ export default function promise(executor) {
 
     sinonPromise.status = STATUS_PENDING;
     sinonPromise
-        .then(function (value) {
+        .then((value) => {
             sinonPromise.status = STATUS_RESOLVED;
             sinonPromise.resolvedValue = value;
         })
-        .catch(function (reason) {
+        .catch((reason) => {
             sinonPromise.status = STATUS_REJECTED;
             sinonPromise.rejectedValue = reason;
         });
@@ -78,7 +78,7 @@ export default function promise(executor) {
         finalize(STATUS_REJECTED, reason, fakeExecutor.firstCall.args[1]);
         // Return a new promise that resolves when the sinon promise was
         // rejected, so that callers can await it:
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             sinonPromise.catch(() => resolve());
         });
     };
