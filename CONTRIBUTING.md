@@ -194,7 +194,7 @@ npm run test:docs
 
 ### Checking links
 
-Link checking requires [lychee](https://lychee.cli.rs/installation/), which is not installed via npm. Install it separately, then run:
+Link checking requires [lychee](https://lychee.cli.rs/guides/getting-started/), which is not installed via npm. Install it separately, then run:
 
 ```sh
 npm run docs:link-check
