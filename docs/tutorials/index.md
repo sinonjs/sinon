@@ -1,5 +1,21 @@
 # Tutorials
 
+This page is the entry point for the Sinon tutorials. Each tutorial introduces a core concept and links to the corresponding documentation.
+
+## Core concepts
+
+- [Fakes](../concepts/fakes/) - Create test doubles with built-in behavior.
+- [Spies](../concepts/spies/) - Record calls to functions without changing their behavior.
+- [Stubs](../concepts/stubs/) - Replace functions with programmable behavior.
+- [Sandboxes](../concepts/sandboxes/) - Isolate and restore test doubles.
+- [Faking time](../concepts/fake-timers/) - Control timers and dates in tests.
+- [Mocks](../concepts/mocks/) - Set expectations on objects.
+- [Spy calls](../concepts/spy-call/) - Inspect individual calls made to spies and stubs.
+- [Assertions](../concepts/assertions/) - Assert on spies, stubs, and fakes.
+- [Matchers](../concepts/matchers/) - Match arguments with flexible criteria.
+- [Promises](../concepts/promises.md) - Work with promise-returning fakes and stubs.
+# Tutorials
+
 These tutorials introduce the core concepts in Sinon.JS and link to the detailed documentation for each one.
 
 ## Core concepts
