@@ -319,6 +319,10 @@ export default function Sandbox(opts = {}) {
         collection = [];
     };
 
+    if (typeof Symbol.dispose === "symbol") {
+        sandbox[Symbol.dispose] = sandbox.restore;
+    }
+
     sandbox.restoreContext = function restoreContext() {
         forEach(sandbox.injectedKeys, (injectedKey) => {
             delete sandbox.injectInto[injectedKey];
