@@ -5,7 +5,7 @@ description: Advances the clock to the next scheduled timer and fires it. Use ne
 
 # `clock.next()` / `await clock.nextAsync()`
 
-Advances the clock to the the moment of the first scheduled timer, firing it.
+Advances the clock to the moment of the first scheduled timer, firing it.
 
 The `nextAsync()` will also break the event loop, allowing any scheduled promise callbacks to execute _before_ running the timers.
 
