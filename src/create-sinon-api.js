@@ -1,7 +1,5 @@
 import behavior from "./sinon/behavior.js";
 import createConfiguredSandbox from "./sinon/create-sandbox.js";
-import createStubInstanceImpl from "./sinon/create-stub-instance.js";
-import collectOwnMethods from "./sinon/collect-own-methods.js";
 import extend from "./sinon/util/core/extend.js";
 import * as fakeTimers from "./sinon/util/fake-timers.js";
 import Sandbox from "./sinon/sandbox.js";
@@ -27,24 +25,16 @@ export default function createApi() {
         // sub-sandboxes (regression in 21.1.0, see #2701).
         createSandbox: createConfiguredSandbox,
         match: samsam.createMatcher,
-        restoreObject: restoreObject,
-        expectation: expectation,
+        restoreObject,
+        expectation,
         timers: fakeTimers.timers,
-        createStubInstance: function createStubInstance() {
-            const stubbed = createStubInstanceImpl.apply(null, arguments);
+        createStubInstance: sandbox.createStubInstance,
 
-            for (const method of collectOwnMethods(stubbed)) {
-                sandbox.getFakes().push(method);
-            }
-
-            return stubbed;
-        },
-
-        addBehavior: function (name, fn) {
+        addBehavior(name, fn) {
             behavior.addBehavior(stub, name, fn);
         },
 
-        promise: promise,
+        promise,
     };
 
     Object.defineProperty(apiMethods.createSandbox, "name", {

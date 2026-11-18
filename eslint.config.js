@@ -5,10 +5,6 @@ export default [
     {
         ignores: [
             "eslint.config.js",
-            "coverage/**",
-            ".worktrees/**",
-            "**/.worktrees/**",
-            "out/**",
             "pkg/**",
             "lib/**",
             "tmp/**",
@@ -109,6 +105,15 @@ export default [
         files: ["test/src/shared-spy-stub-everything-tests.js"],
         rules: {
             "mocha/no-exports": "off",
+        },
+    },
+    {
+        // The arity-preserving proxies need a "use strict" directive, because
+        // the browser bundle is not strict, and a function with rest
+        // parameters cannot have one
+        files: ["src/sinon/proxy.js"],
+        rules: {
+            "prefer-rest-params": "off",
         },
     },
     {

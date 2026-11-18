@@ -1,12 +1,8 @@
-import commons from "@sinonjs/commons";
-
-const { prototypes } = commons;
 import isPropertyConfigurable from "./util/core/is-property-configurable.js";
+import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
 import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 import extend from "./util/core/extend.js";
 import spy from "./spy.js";
-
-const { slice } = prototypes.array;
 
 const useLeftMostCallback = -1;
 const useRightMostCallback = -2;
@@ -65,35 +61,35 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    callsArgWith: function callsArgWith(fake, index) {
+    callsArgWith: function callsArgWith(fake, index, ...args) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
 
         fake.callArgAt = index;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
         fake.callsThrough = false;
     },
 
-    callsArgOnWith: function callsArgWith(fake, index, context) {
+    callsArgOnWith: function callsArgWith(fake, index, context, ...args) {
         if (typeof index !== "number") {
             throw new TypeError("argument index is not number");
         }
 
         fake.callArgAt = index;
-        fake.callbackArguments = slice(arguments, 3);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
         fake.callsThrough = false;
     },
 
-    yields: function (fake) {
+    yields(fake, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 1);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -101,9 +97,9 @@ const defaultBehaviors = {
         fake.callsThrough = false;
     },
 
-    yieldsRight: function (fake) {
+    yieldsRight(fake, ...args) {
         fake.callArgAt = useRightMostCallback;
-        fake.callbackArguments = slice(arguments, 1);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -111,9 +107,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsOn: function (fake, context) {
+    yieldsOn(fake, context, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = undefined;
         fake.callbackAsync = false;
@@ -121,9 +117,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsTo: function (fake, prop) {
+    yieldsTo(fake, prop, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 2);
+        fake.callbackArguments = args;
         fake.callbackContext = undefined;
         fake.callArgProp = prop;
         fake.callbackAsync = false;
@@ -131,9 +127,9 @@ const defaultBehaviors = {
         fake.fakeFn = undefined;
     },
 
-    yieldsToOn: function (fake, prop, context) {
+    yieldsToOn(fake, prop, context, ...args) {
         fake.callArgAt = useLeftMostCallback;
-        fake.callbackArguments = slice(arguments, 3);
+        fake.callbackArguments = args;
         fake.callbackContext = context;
         fake.callArgProp = prop;
         fake.callbackAsync = false;
@@ -141,7 +137,7 @@ const defaultBehaviors = {
     },
 
     throws: throwsException,
-    throwsException: throwsException,
+    throwsException,
 
     returns: function returns(fake, value) {
         fake.callsThrough = false;
@@ -281,6 +277,10 @@ const defaultBehaviors = {
 
     get: function get(fake, getterFunction) {
         const rootStub = fake.stub || fake;
+        const descriptor = getPropertyDescriptor(
+            rootStub.rootObj,
+            rootStub.propName,
+        ) || { configurable: true };
 
         // Wrap the replacement getter in a spy so that reading the property
         // records the access (callCount, calledOnce, ...). The spy is exposed
@@ -291,10 +291,9 @@ const defaultBehaviors = {
 
         Object.defineProperty(rootStub.rootObj, rootStub.propName, {
             get: getterSpy,
-            configurable: isPropertyConfigurable(
-                rootStub.rootObj,
-                rootStub.propName,
-            ),
+            set: descriptor.set,
+            enumerable: descriptor.enumerable,
+            configurable: descriptor.configurable,
         });
 
         return fake;
@@ -302,6 +301,10 @@ const defaultBehaviors = {
 
     set: function set(fake, setterFunction) {
         const rootStub = fake.stub || fake;
+        const descriptor = getPropertyDescriptor(
+            rootStub.rootObj,
+            rootStub.propName,
+        ) || { configurable: true };
 
         // Wrap the replacement setter in a spy so that writing the property
         // records the access (callCount, calledWith, ...). The spy is exposed
@@ -310,18 +313,12 @@ const defaultBehaviors = {
         const setterSpy = spy(setterFunction);
         rootStub.setter = setterSpy;
 
-        Object.defineProperty(
-            rootStub.rootObj,
-            rootStub.propName,
-            // eslint-disable-next-line accessor-pairs
-            {
-                set: setterSpy,
-                configurable: isPropertyConfigurable(
-                    rootStub.rootObj,
-                    rootStub.propName,
-                ),
-            },
-        );
+        Object.defineProperty(rootStub.rootObj, rootStub.propName, {
+            get: descriptor.get,
+            set: setterSpy,
+            enumerable: descriptor.enumerable,
+            configurable: descriptor.configurable,
+        });
 
         return fake;
     },

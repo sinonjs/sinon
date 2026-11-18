@@ -30,6 +30,9 @@
     "url": "https://opencollective.com/sinon"
   },
   "license": "BSD-3-Clause",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build-artifacts": "node ./build.cjs",
     "pretest-node": "npm run build-artifacts",
@@ -131,13 +134,13 @@
     "diff": "^9.0.0"
   },
   "devDependencies": {
-    "@mochify/cli": "^1.0.0",
-    "@mochify/driver-puppeteer": "^1.0.1",
-    "@mochify/driver-webdriver": "^1.0.0",
+    "@mochify/cli": "^2.0.0",
+    "@mochify/driver-puppeteer": "^2.0.0",
+    "@mochify/driver-webdriver": "^2.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "@sinonjs/eslint-config": "^7.0.3",
+    "@sinonjs/eslint-config": "^8.0.0",
     "@sinonjs/eslint-plugin-no-prototype-methods": "^0.1.1",
     "@sinonjs/referee": "^11.0.2",
     "@studio/changes": "^3.0.0",
@@ -145,16 +148,16 @@
     "esbuild": "^0.28.0",
     "esbuild-plugin-istanbul": "^0.3.0",
     "esbuild-plugin-umd-wrapper": "^3.0.0",
-    "eslint": "^10.3.0",
+    "eslint": "^10.14.0",
     "get-stdin": "^10.0.0",
-    "js-yaml": "^4.1.1",
+    "js-yaml": "^5.5.0",
     "knip": "^6.11.0",
-    "lint-staged": "^16.4.0",
-    "mocha": "^11.7.5",
-    "npm-run-all2": "^8.0.4",
+    "lint-staged": "^17.6.1",
+    "mocha": "^12.0.3",
+    "npm-run-all2": "^9.0.4",
     "nyc": "^18.0.0",
     "prettier": "^3.8.3",
-    "puppeteer": "^24.42.0",
+    "puppeteer": "^25.17.0",
     "rollup": "^4.60.3",
     "semver": "^7.7.4",
     "shelljs": "^0.10.0"

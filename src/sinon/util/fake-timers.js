@@ -72,17 +72,17 @@ export function useFakeTimers(dateOrConfig) {
 }
 
 export const clock = {
-    create: function (now) {
+    create(now) {
         return FakeTimers.createClock(now);
     },
 };
 
 export const timers = {
-    setTimeout: setTimeout,
-    clearTimeout: clearTimeout,
-    setInterval: setInterval,
-    clearInterval: clearInterval,
-    Date: Date,
+    setTimeout,
+    clearTimeout,
+    setInterval,
+    clearInterval,
+    Date,
 };
 addIfDefined(timers, "setImmediate");
 addIfDefined(timers, "clearImmediate");

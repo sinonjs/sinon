@@ -53,7 +53,7 @@ describe("color", function () {
         });
 
         // eslint-disable-next-line mocha/no-setup-in-describe
-        colors.forEach(function (method) {
+        colors.forEach((method) => {
             describe(method.name, function () {
                 it("should return a colored string", function () {
                     const string = "lorem ipsum";
@@ -75,7 +75,7 @@ describe("color", function () {
         });
 
         // eslint-disable-next-line mocha/no-setup-in-describe
-        colors.forEach(function (method) {
+        colors.forEach((method) => {
             describe(method.name, function () {
                 it("should return a regular string", function () {
                     const string = "lorem ipsum";

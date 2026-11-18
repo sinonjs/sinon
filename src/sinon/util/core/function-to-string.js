@@ -17,7 +17,7 @@ export default function functionToString() {
                     if (thisValue[prop] === this) {
                         return prop;
                     }
-                } catch (e) {
+                } catch {
                     // no-op - accessing props can throw an error, nothing to do here
                 }
             }

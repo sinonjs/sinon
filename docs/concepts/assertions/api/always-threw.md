@@ -20,7 +20,7 @@ const f1 = sinon.fake();
 f1("apple pie");
 
 sinon.assert.alwaysThrew(f1, "TypeError");
-// => Uncaught Error [AssertError]: fake did not throw exception
+// => Uncaught Error [AssertError]: fake did not always throw exception
 
 const f2 = sinon.fake.throws(new TypeError("not an apple pie"));
 

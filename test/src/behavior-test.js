@@ -5,7 +5,7 @@ const assert = referee.assert;
 
 describe("behaviors", function () {
     it("adds and uses a custom behavior", function () {
-        sinon.addBehavior("returnsNum", function (fake, n) {
+        sinon.addBehavior("returnsNum", (fake, n) => {
             fake.returns(n);
         });
 

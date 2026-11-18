@@ -53,7 +53,7 @@ Sinon correctly raises an error here because, per the ES module spec, namespace 
 
 ## The solution: use the `esm` package with `mutableNamespace`
 
-The [`esm`](https://github.com/standard-things/esm) package is a fast, production-ready ES module loader for Node.js. It offers a `mutableNamespace` option that makes module namespace objects writable, which is what Sinon needs to install stubs.
+The [`esm`](https://github.com/standard-things/esm) package is a fast, production-ready ES module loader for Node.js. It offers a `cjs.mutableNamespace` option that makes module namespace objects writable, which is what Sinon needs to install stubs.
 
 ### Step 1: Install the `esm` package
 
@@ -63,13 +63,12 @@ npm install --save-dev esm
 
 ### Step 2: Create a loader / setup file
 
-Create a file at the root of your project (e.g., `esm-loader.cjs`) that enables the `mutableNamespace` option:
+Create a file at the root of your project (e.g., `esm-loader.cjs`) that enables the `cjs.mutableNamespace` option:
 
 ```javascript
 // esm-loader.cjs
 require = require("esm")(module, {
-  cjs: true,
-  mutableNamespace: true,
+  cjs: { mutableNamespace: true },
 });
 ```
 
@@ -148,8 +147,7 @@ describe("calculator", () => {
 
 ```javascript
 require = require("esm")(module, {
-  cjs: true,
-  mutableNamespace: true,
+  cjs: { mutableNamespace: true },
 });
 ```
 
@@ -203,7 +201,7 @@ describe("calculator", () => {
 
 ## Why does this work?
 
-The `esm` package hooks into Node.js's module loading system. When `mutableNamespace: true` is set, it wraps ES module namespace objects with a `Proxy` that allows property assignment. Sinon's `stub()` function replaces the property on the namespace object; with the proxy in place, this assignment succeeds instead of throwing.
+The `esm` package hooks into Node.js's module loading system. When `cjs.mutableNamespace` is set to `true`, it wraps ES module namespace objects with a `Proxy` that allows property assignment. Sinon's `stub()` function replaces the property on the namespace object; with the proxy in place, this assignment succeeds instead of throwing.
 
 ## Limitations and caveats
 

@@ -15,7 +15,7 @@ Creates a new sandbox object with spies, stubs, and mocks.
 
 # `sinon.createSandbox(config)`
 
-Creates a new sandbox object with it's own set of spies, stubs, and mocks.
+Creates a new sandbox object with its own set of spies, stubs, and mocks.
 
 The `createSandbox` method is mostly an integration feature, and can be used for advanced scenarios including a global object to coordinate all fakes through.
 
