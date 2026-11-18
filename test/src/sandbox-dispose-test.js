@@ -10,7 +10,7 @@ describe("Sandbox disposal", function () {
     beforeEach(function () {
         this.sandbox = createSandbox();
         this.object = {
-            method: function () {
+            method() {
                 return "original";
             },
         };
@@ -36,9 +36,7 @@ describe("Sandbox disposal", function () {
             };
             this.sandbox.stub(object, "stubbed").returns("stubbed");
             this.sandbox.spy(object, "spied");
-            this.sandbox.replace(object, "replaced", function () {
-                return "replaced";
-            });
+            this.sandbox.replace(object, "replaced", () => "replaced");
 
             this.sandbox[Symbol.dispose]();
 
@@ -148,7 +146,7 @@ describe("Sandbox disposal", function () {
             const sandbox = this.sandbox;
             const object = this.object;
 
-            usingSandbox(sandbox, function () {
+            usingSandbox(sandbox, () => {
                 sandbox.stub(object, "method").returns("temporary");
                 assert.equals(object.method(), "temporary");
             });
@@ -163,7 +161,7 @@ describe("Sandbox disposal", function () {
             let caught;
 
             try {
-                usingSandbox(sandbox, function () {
+                usingSandbox(sandbox, () => {
                     sandbox.stub(object, "method");
                     throw error;
                 });
@@ -179,7 +177,7 @@ describe("Sandbox disposal", function () {
             const sandbox = this.sandbox;
             const object = this.object;
 
-            usingSandbox(sandbox, function () {
+            usingSandbox(sandbox, () => {
                 sandbox.stub(object, "method");
                 sandbox.restore();
             });
@@ -194,17 +192,14 @@ describe("Sandbox disposal", function () {
             const otherObject = { method: this.original };
 
             try {
-                usingSandbox(
-                    sandbox,
-                    function () {
-                        sandbox.stub(object, "method").returns("outer");
-                        usingSandbox(otherSandbox, function () {
-                            otherSandbox.stub(otherObject, "method");
-                        });
-                        assert.same(otherObject.method, this.original);
-                        assert.equals(object.method(), "outer");
-                    }.bind(this),
-                );
+                usingSandbox(sandbox, () => {
+                    sandbox.stub(object, "method").returns("outer");
+                    usingSandbox(otherSandbox, () => {
+                        otherSandbox.stub(otherObject, "method");
+                    });
+                    assert.same(otherObject.method, this.original);
+                    assert.equals(object.method(), "outer");
+                });
 
                 assert.same(object.method, this.original);
             } finally {
@@ -225,7 +220,7 @@ describe("Sandbox disposal", function () {
         try {
             sandbox.stub(this.object, "method").returns("temporary");
             assert.equals(this.object.method(), "temporary");
-            refute(Object.prototype.hasOwnProperty.call(sandbox, "undefined"));
+            refute(Object.hasOwn(sandbox, "undefined"));
 
             sandbox.restore();
 
