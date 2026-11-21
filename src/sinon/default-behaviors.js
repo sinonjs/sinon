@@ -1,4 +1,3 @@
-import isPropertyConfigurable from "./util/core/is-property-configurable.js";
 import getPropertyDescriptor from "./util/core/get-property-descriptor.js";
 import exportAsyncBehaviors from "./util/core/export-async-behaviors.js";
 import extend from "./util/core/extend.js";
@@ -325,14 +324,20 @@ const defaultBehaviors = {
 
     value: function value(fake, newVal) {
         const rootStub = fake.stub || fake;
+        const descriptor = getPropertyDescriptor(
+            rootStub.rootObj,
+            rootStub.propName,
+        ) || { configurable: true };
 
         Object.defineProperty(rootStub.rootObj, rootStub.propName, {
             value: newVal,
-            enumerable: true,
+            enumerable:
+                descriptor.isOwn && !descriptor.configurable
+                    ? descriptor.enumerable
+                    : true,
             writable: true,
             configurable:
-                rootStub.shadowsPropOnPrototype ||
-                isPropertyConfigurable(rootStub.rootObj, rootStub.propName),
+                rootStub.shadowsPropOnPrototype || descriptor.configurable,
         });
 
         return fake;
