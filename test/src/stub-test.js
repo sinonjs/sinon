@@ -3954,6 +3954,89 @@ describe("stub", function () {
             createStub(myObj, "prop").value("newString");
             assert.equals(myObj.prop, "newString");
         });
+
+        it("preserves non-enumerable non-configurable own properties", function () {
+            for (const prop of ["prop", Symbol("prop")]) {
+                const myObj = {};
+                const descriptor = {
+                    configurable: false,
+                    enumerable: false,
+                    writable: true,
+                    value: "original",
+                };
+                Object.defineProperty(myObj, prop, descriptor);
+
+                const stub = createStub(myObj, prop).value("replacement");
+
+                assert.equals(Object.getOwnPropertyDescriptor(myObj, prop), {
+                    ...descriptor,
+                    value: "replacement",
+                });
+
+                stub.value("updated");
+                assert.equals(myObj[prop], "updated");
+                stub.restore();
+
+                assert.equals(
+                    Object.getOwnPropertyDescriptor(myObj, prop),
+                    descriptor,
+                );
+            }
+        });
+
+        it("keeps configurable property replacements enumerable", function () {
+            const myObj = {};
+            Object.defineProperty(myObj, "prop", {
+                configurable: true,
+                enumerable: false,
+                writable: true,
+                value: "original",
+            });
+            const descriptor = Object.getOwnPropertyDescriptor(myObj, "prop");
+
+            const stub = createStub(myObj, "prop").value("replacement");
+
+            assert.equals(Object.getOwnPropertyDescriptor(myObj, "prop"), {
+                ...descriptor,
+                enumerable: true,
+                value: "replacement",
+            });
+            stub.restore();
+
+            assert.equals(
+                Object.getOwnPropertyDescriptor(myObj, "prop"),
+                descriptor,
+            );
+        });
+
+        it("shadows non-configurable inherited properties with permissive values", function () {
+            const prototype = {};
+            const descriptor = {
+                configurable: false,
+                enumerable: false,
+                writable: true,
+                value: "original",
+            };
+            Object.defineProperty(prototype, "prop", descriptor);
+            const myObj = Object.create(prototype);
+
+            const stub = createStub(myObj, "prop").value("replacement");
+
+            assert.equals(Object.getOwnPropertyDescriptor(myObj, "prop"), {
+                configurable: true,
+                enumerable: true,
+                writable: true,
+                value: "replacement",
+            });
+            stub.restore();
+
+            refute(Object.hasOwn(myObj, "prop"));
+            assert.equals(myObj.prop, "original");
+            assert.equals(
+                Object.getOwnPropertyDescriptor(prototype, "prop"),
+                descriptor,
+            );
+        });
     });
 
     describe(".id", function () {
