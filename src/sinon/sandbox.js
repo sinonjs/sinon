@@ -127,6 +127,14 @@ export default function Sandbox(opts = {}) {
 
         return stubbed;
     };
+    Object.defineProperty(sandbox.createStubInstance, "name", {
+        value: "createStubInstance",
+        configurable: true,
+    });
+    Object.defineProperty(sandbox.createStubInstance, "length", {
+        value: 1,
+        configurable: true,
+    });
 
     sandbox.inject = function inject(obj) {
         obj.spy = function spy(...args) {
@@ -141,9 +149,7 @@ export default function Sandbox(opts = {}) {
             return sandbox.mock.apply(null, args);
         };
 
-        obj.createStubInstance = function createStubInstanceWrapper(...args) {
-            return sandbox.createStubInstance(...args);
-        };
+        obj.createStubInstance = sandbox.createStubInstance;
 
         obj.fake = function fake(...args) {
             return sandbox.fake.apply(null, args);
