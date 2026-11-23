@@ -50,6 +50,14 @@ export default function createStubInstance(constructor, overrides) {
     return createStubInstanceImpl(constructor, overrides);
 }
 
+/**
+ * Creates a stub instance of a constructor with a specific context.
+ *
+ * @param {object} context The sinon context for callId tracking
+ * @param {new (...args: unknown[]) => object} constructor The constructor function
+ * @param {object} [overrides] Optional overrides for the stubbed methods
+ * @returns {object} The stubbed instance
+ */
 createStubInstance.withContext = function (context, constructor, overrides) {
     return createStubInstanceImpl(constructor, overrides, context);
 };

@@ -46,14 +46,5 @@ export default function createApi() {
         configurable: true,
     });
 
-    Object.defineProperty(apiMethods.createStubInstance, "name", {
-        value: "createStubInstance",
-        configurable: true,
-    });
-    Object.defineProperty(apiMethods.createStubInstance, "length", {
-        value: 1,
-        configurable: true,
-    });
-
     return extend(sandbox, apiMethods);
 }

@@ -1850,6 +1850,11 @@ describe("Sandbox", function () {
             assert.isFunction(this.obj.replace);
             assert.isFunction(this.obj.replaceSetter);
             assert.isFunction(this.obj.replaceGetter);
+            assert.equals(
+                this.obj.createStubInstance.name,
+                "createStubInstance",
+            );
+            assert.equals(this.obj.createStubInstance.length, 1);
         });
 
         it("should inject callable functions", function () {
@@ -2353,6 +2358,11 @@ describe("Sandbox", function () {
             assert.equals(sandbox.mock.length, 0);
             assert.equals(sandbox.fake.name, "fake");
             assert.equals(sandbox.fake.length, 1);
+            assert.equals(
+                sandbox.createStubInstance.name,
+                "createStubInstance",
+            );
+            assert.equals(sandbox.createStubInstance.length, 1);
         });
     });
 
