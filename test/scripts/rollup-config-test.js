@@ -8,6 +8,12 @@ describe("Rollup source entries", function () {
     it("builds every source entry into the matching CommonJS module", async function () {
         this.timeout(10000);
         const { default: config } = await import("../../rollup.config.mjs");
+        for (const entry of config.input) {
+            assert.isTrue(
+                path.isAbsolute(entry),
+                `Expected an absolute entry: ${entry}`,
+            );
+        }
         const bundle = await rollup(config);
         try {
             const { output } = await bundle.generate(config.output);
