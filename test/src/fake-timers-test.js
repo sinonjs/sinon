@@ -683,7 +683,6 @@ describe("fakeTimers.clock", function () {
         });
 
         it("creates date strings when called as function", function () {
-            // eslint-disable-next-line new-cap -- calling Date as a function returns a string
             const date = this.clock.Date();
 
             assert.isString(date);
