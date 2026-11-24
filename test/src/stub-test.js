@@ -3952,7 +3952,12 @@ describe("stub", function () {
             });
 
             createStub(myObj, "prop").value("newString");
-            assert.equals(myObj.prop, "newString");
+            assert.equals(Object.getOwnPropertyDescriptor(myObj, "prop"), {
+                configurable: false,
+                enumerable: true,
+                writable: true,
+                value: "newString",
+            });
         });
 
         it("preserves non-enumerable non-configurable own properties", function () {
