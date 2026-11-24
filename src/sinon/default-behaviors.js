@@ -329,6 +329,12 @@ const defaultBehaviors = {
             rootStub.propName,
         ) || { configurable: true };
 
+        if (typeof rootStub.wrappedMethod === "function") {
+            throw new TypeError(
+                `${rootStub.propName} is a function and should not be overridden by .value(). Use .returns() when creating a function that returns a value`,
+            );
+        }
+
         Object.defineProperty(rootStub.rootObj, rootStub.propName, {
             value: newVal,
             enumerable:
