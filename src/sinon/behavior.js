@@ -143,6 +143,8 @@ const proto = {
             this.resolveThis ||
             typeof this.throwArgAt === "number" ||
             this.fakeFn ||
+            this.callsThrough ||
+            this.callsThroughWithNew ||
             this.returnValueDefined
         );
     },
