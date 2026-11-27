@@ -3985,6 +3985,94 @@ describe("stub", function () {
             assert.equals(myFunc.prop, "rawString");
         });
 
+        it("throws when the stubbed property is a method", function () {
+            const myObj = {
+                method() {
+                    return "rawString";
+                },
+            };
+            const stub = createStub(myObj, "method");
+
+            assert.exception(
+                () => {
+                    stub.value("newString");
+                },
+                {
+                    name: "TypeError",
+                    message:
+                        "method is a function and should not be overridden by .value(). Use .returns() when creating a function that returns a value",
+                },
+            );
+
+            stub.restore();
+            assert.equals(myObj.method(), "rawString");
+        });
+
+        it("throws when a per-call behaviour of a method is given a value", function () {
+            const myObj = {
+                method() {
+                    return "rawString";
+                },
+            };
+            const stub = createStub(myObj, "method");
+
+            assert.exception(
+                () => {
+                    stub.onCall(0).value("newString");
+                },
+                {
+                    name: "TypeError",
+                    message:
+                        "method is a function and should not be overridden by .value(). Use .returns() when creating a function that returns a value",
+                },
+            );
+        });
+
+        it("throws when the stubbed property inherits a method", function () {
+            const myObj = Object.create({
+                method() {
+                    return "rawString";
+                },
+            });
+
+            assert.exception(
+                () => {
+                    createStub(myObj, "method").value("newString");
+                },
+                {
+                    name: "TypeError",
+                    message:
+                        "method is a function and should not be overridden by .value(). Use .returns() when creating a function that returns a value",
+                },
+            );
+        });
+
+        it("allows stubbing getters with a value", function () {
+            const myObj = {
+                get prop() {
+                    return "rawString";
+                },
+            };
+
+            createStub(myObj, "prop").value("newString");
+
+            assert.equals(myObj.prop, "newString");
+        });
+
+        it("allows replacing a function value on a data property", function () {
+            const myObj = {
+                prop: "rawString",
+            };
+            const stub = createStub(myObj, "prop");
+
+            stub.value(function replacement() {
+                return;
+            });
+            stub.value("newString");
+
+            assert.equals(myObj.prop, "newString");
+        });
+
         it("allows stubbing object props with configurable false", function () {
             const myObj = {};
             Object.defineProperty(myObj, "prop", {
