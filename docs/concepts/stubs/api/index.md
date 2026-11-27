@@ -23,6 +23,26 @@ The original function can be restored by calling `object.method.restore()` (or `
 
 Stubs all the object's methods.
 
+`obj` can also be a function or a class, in which case its own static methods are stubbed:
+
+```js
+class MyUtility {
+  static format(value) {
+    return value.trim();
+  }
+}
+
+const stubs = sinon.stub(MyUtility);
+
+MyUtility.format(" hi "); // undefined: the static method is stubbed
+
+stubs.format.restore();
+
+MyUtility.format(" hi "); // " hi ": the original static method is restored
+```
+
+When the stubs are created through a sandbox, `sandbox.restore()` restores them.
+
 Note that it's usually better practice to stub individual methods, particularly on objects that you don't understand or control all the methods for (e.g. library dependencies).
 
 Stubbing individual methods shows intent more precisely and is less susceptible to unexpected behavior as the object's code evolves.
