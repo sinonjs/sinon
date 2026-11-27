@@ -2,7 +2,6 @@ import referee from "@sinonjs/referee";
 import commons from "@sinonjs/commons";
 import createSandbox from "../../src/sinon/create-sandbox.js";
 import createApi from "../../src/create-sinon-api.js";
-import sinonStub from "../../src/sinon/stub.js";
 
 const { assert, refute } = referee;
 
@@ -209,18 +208,19 @@ describe("Sandbox disposal", function () {
     });
 
     it("supports manual cleanup when Symbol.dispose is unavailable", function () {
-        const symbolStub = sinonStub(commons.global, "Symbol").value({});
+        const dispose = Symbol.dispose;
+        this.sandbox.replace(commons.global, "Symbol", () => undefined);
         let sandbox;
         try {
             sandbox = createSandbox();
         } finally {
-            symbolStub.restore();
+            this.sandbox.restore();
         }
 
         try {
             sandbox.stub(this.object, "method").returns("temporary");
             assert.equals(this.object.method(), "temporary");
-            refute(Object.hasOwn(sandbox, "undefined"));
+            refute(Object.hasOwn(sandbox, dispose));
 
             sandbox.restore();
 
