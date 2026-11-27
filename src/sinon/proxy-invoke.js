@@ -34,6 +34,7 @@ export default function invoke(func, thisValue, args) {
     const currentCallId = ctx.callId;
     ctx.callId = ctx.callId >= maxSafeInteger ? 0 : ctx.callId + 1;
     let exception, returnValue;
+    let didThrow = false;
 
     proxyCallUtil.incrementCallCount(this);
     push(this.thisValues, thisValue);
@@ -78,7 +79,7 @@ export default function invoke(func, thisValue, args) {
                 // original thisValue: that object was never the
                 // constructor's `this`.
                 this.thisValues[this.thisValues.length - 1] = returnValue;
-                forEach(matchings, function (matching) {
+                forEach(matchings, (matching) => {
                     matching.thisValues[matching.thisValues.length - 1] =
                         returnValue;
                 });
@@ -88,16 +89,20 @@ export default function invoke(func, thisValue, args) {
         }
     } catch (e) {
         exception = e;
+        didThrow = true;
     } finally {
         delete this.invoking;
     }
 
     // Recursive calls finish first, but their results must stay in call order.
     this.exceptions[callIndex] = exception;
+    this.didThrowValues[callIndex] = didThrow;
     this.returnValues[callIndex] = returnValue;
     forEach(matchings, (matching, i) => {
-        matching.exceptions[matchingCallIndices[i]] = exception;
-        matching.returnValues[matchingCallIndices[i]] = returnValue;
+        const matchingCallIndex = matchingCallIndices[i];
+        matching.exceptions[matchingCallIndex] = exception;
+        matching.didThrowValues[matchingCallIndex] = didThrow;
+        matching.returnValues[matchingCallIndex] = returnValue;
     });
 
     const err = new ErrorConstructor();
@@ -118,7 +123,7 @@ export default function invoke(func, thisValue, args) {
     proxyCallUtil.createCallProperties(this);
     forEach(matchings, proxyCallUtil.createCallProperties);
 
-    if (exception !== undefined) {
+    if (didThrow) {
         throw exception;
     }
 
