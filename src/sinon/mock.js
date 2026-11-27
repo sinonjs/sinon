@@ -56,7 +56,7 @@ extend(mock, {
         }
 
         if (!this.expectations) {
-            this.expectations = {};
+            this.expectations = Object.create(null);
             this.proxies = [];
             this.failures = [];
         }
