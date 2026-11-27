@@ -93,7 +93,7 @@ function requiresSpy(method) {
 
     it("uses the failure handler of exposed assertions", function () {
         const target = {
-            fail: function (msg) {
+            fail(msg) {
                 assert.same(this, target);
                 throw new TypeError(msg);
             },

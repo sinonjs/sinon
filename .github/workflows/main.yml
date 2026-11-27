@@ -52,6 +52,8 @@ jobs:
       - name: ESLint
         run: |
           npm run lint
+      - name: Knip
+        run: npm run check-dependencies
 
   browser-test:
     runs-on: ubuntu-22.04
