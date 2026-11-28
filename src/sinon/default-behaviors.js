@@ -17,11 +17,14 @@ const useRightMostCallback = -2;
 // those.
 //
 // This intentionally excludes callArgAt/callArgProp/callbackArguments/
-// callbackContext/callbackAsync (the callsArg*/yields* config): yielding a
-// callback is a separate, additive side effect that's meant to combine with
-// any of these return/throw behaviors regardless of call order (see
-// "returnsArg takes precedent over yielded return value" and similar tests),
-// not another mutually-exclusive choice in this same set.
+// callbackContext/callbackAsync (the callsArg*/yields* config). Those are a
+// separate, additive side effect: return/throw setters leave them in place, so
+// e.g. yields().returnsArg(0) and returnsArg(0).callsArg(1) both keep the
+// callback config (see "returnsArg takes precedent over yielded return value"
+// and similar tests). The converse is not fully symmetric today: yields*/
+// yieldsTo* still clear fakeFn (legacy), while callsArg* do not — so
+// callsFake().yields() drops the fake, whereas yields().callsFake() retains
+// both. That asymmetry is out of scope for this mutual-exclusion fix.
 function resetBehavior(fake) {
     fake.callsThrough = false;
     fake.callsThroughWithNew = false;
